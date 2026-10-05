@@ -1,10 +1,13 @@
+import { buildHarborLife } from "./neon-harbor/build-harbor-life.js";
+import { buildWaterfront } from "./neon-harbor/build-waterfront.js";
+import { buildCityProps } from "./neon-harbor/build-city-props.js";
 // Place-specific scenery only. Shared road, walls, progression and contact
 // surfaces remain in the engine; the shuttle uses the same hazard pose as AI.
-import { addGlow, createContactShadowMesh } from "../rendering/visual-effects.js";
+import { addGlow } from "../rendering/visual-effects.js";
 
 export default function buildWorld(context) {
   const { THREE, scene, scenery, track, kit, hazardAt, textures = {} } = context;
-  const { material, mesh, box, groupAt, sectorT, batch, align, asset } = kit;
+  const { material, mesh, box, groupAt, sectorT, batch, asset } = kit;
   const steel = material("#344d68", {
     map: textures.metal ?? null,
     metalness: 0.42,
@@ -34,7 +37,7 @@ export default function buildWorld(context) {
     dark = material("#18283a");
   const cloth = material("#f9c1ba", { roughness: 0.96 });
   const glass = material("#284c6a", { metalness: 0.35, roughness: 0.29 });
-  const window = material("#ffe4a0", { emissive: "#edac57", emissiveIntensity: 0.85 });
+  const windowLight = material("#ffe4a0", { emissive: "#edac57", emissiveIntensity: 0.85 });
   const skin = material("#edc5a7", { roughness: 0.88 });
   const sphere = new THREE.SphereGeometry(1, 10, 6);
   const cylinder = new THREE.CylinderGeometry(1, 1, 1, 10);
@@ -44,141 +47,32 @@ export default function buildWorld(context) {
     craneHooks = [];
   const industrialModels = ["building-a", "building-e", "building-m", "building-q"];
 
-  function groundShadow(parent, width, depth, y = 0.035) {
-    const shadow = createContactShadowMesh({ width, depth, opacity: 0.24 });
-    shadow.position.y = y;
-    parent.add(shadow);
-  }
-
-  // Test the complete circumscribed footprint against every route segment.
-  // Large buildings can otherwise overlap an adjacent street on an S-bend.
-  function safeGroup(t, offset, radius) {
-    const pose = track.poseAt(t * track.TRACK, offset, 0);
-    const p = track.projectTrack(pose.p, t * track.TRACK, true);
-    const edge = p.offset > 0 ? p.rightEdge : -p.leftEdge;
-    if (p.distance < edge + radius + 2) return null;
-    return kit.landGroup ? kit.landGroup(t, offset, scenery) : groupAt(t, offset, scenery);
-  }
-  function building(t, offset, width, height, depth, index) {
-    const g = safeGroup(t, offset, Math.hypot(width, depth) / 2);
-    if (!g) return;
-    if (Math.abs(offset) < 50) groundShadow(g, width * 1.35, depth * 1.35);
-    box(index % 3 ? masonry : paleMasonry, g, [0, height / 2, 0], [width, height, depth]);
-    // Light edge strips suggest chamfered corners and dressed masonry.
-    for (const x of [-width / 2 + 0.14, width / 2 - 0.14])
-      for (const z of [-depth / 2 + 0.14, depth / 2 - 0.14])
-        box(trim, g, [x, height / 2, z], [0.28, height, 0.28]);
-    for (const y of [1.4, Math.min(height - 1, 8), height - 0.35])
-      box(trim, g, [0, y, 0], [width + 0.4, 0.24, depth + 0.4]);
-    box(dark, g, [0, height + 0.35, 0], [width + 1, 0.7, depth + 1]);
-    if (index % 3 === 0) {
-      box(concrete, g, [0, height + 2.1, 0], [width * 0.7, 3.5, depth * 0.7]);
-      box(blue, g, [0, height + 4, 0], [width * 0.75, 0.35, depth * 0.75]);
-      box(cyan, g, [0, height + 3.6, depth * 0.355], [width * 0.58, 0.25, 0.08]);
-    } else if (index % 3 === 1) {
-      for (const side of [-1, 1]) {
-        const roof = box(
-          blue,
-          g,
-          [side * width * 0.23, height + 1.5, 0],
-          [width * 0.55, 0.35, depth * 0.96],
-        );
-        roof.rotation.z = side * -0.27;
-      }
-    } else {
-      mesh(cylinder, steel, g, [width * 0.18, height + 2, 0], [1.5, 3.4, 1.5]);
-      box(amber, g, [-width * 0.23, height + 1.3, -depth * 0.15], [2.5, 1.8, 2.5]);
-      box(steel, g, [-width * 0.23, height + 2.7, -depth * 0.15], [0.2, 1, 0.2]);
-    }
-    for (let row = 0; row < Math.floor(height / 4); row++)
-      for (let col = 0; col < Math.floor(width / 3); col++) {
-        if ((row + col + index) % 4 === 0) continue;
-        for (const side of [-1, 1]) {
-          const x = -width / 2 + 1.6 + col * 3,
-            y = 2 + row * 4,
-            z = side * (depth / 2 + 0.08);
-          box(glass, g, [x, y, z], [1.65, 2.1, 0.08]);
-          box(window, g, [x, y, z + side * 0.06], [1.24, 1.65, 0.06]);
-          box(trim, g, [x, y - 1.12, z + side * 0.08], [1.85, 0.16, 0.22]);
-          box(steel, g, [x, y, z + side * 0.1], [0.08, 1.85, 0.05]);
-        }
-      }
-    box(
-      index % 3 ? cyan : pink,
-      g,
-      [0, Math.min(height - 1, 7), depth / 2 + 0.1],
-      [width * 0.85, 0.25, 0.12],
-    );
-    // Street-level recessed storefront, canopy, ducts and fire-escape frames
-    // distinguish the facade from a stack of repeated glowing rectangles.
-    box(dark, g, [0, 1.9, depth / 2 + 0.07], [width * 0.65, 3.3, 0.13]);
-    box(glass, g, [0, 1.9, depth / 2 + 0.17], [width * 0.59, 2.9, 0.08]);
-    box(index % 2 ? cyan : window, g, [0, 3.5, depth / 2 + 0.2], [width * 0.62, 0.12, 0.12]);
-    for (const x of [-width * 0.21, 0, width * 0.21])
-      box(trim, g, [x, 1.9, depth / 2 + 0.23], [0.12, 3.2, 0.1]);
-    const canopy = box(
-      index % 2 ? blue : cloth,
-      g,
-      [0, 3.9, depth / 2 + 0.8],
-      [width * 0.72, 0.16, 1.7],
-    );
-    canopy.rotation.x = 0.1;
-    for (let floor = 0; floor < Math.floor(height / 7); floor++) {
-      box(steel, g, [width / 2 + 0.65, 4 + floor * 6, 0], [1.4, 0.17, depth * 0.55]);
-      box(steel, g, [width / 2 + 1.26, 4.8 + floor * 6, 0], [0.1, 1.5, depth * 0.55]);
-      box(amber, g, [width / 2 + 0.08, 4.8 + floor * 6, -depth * 0.3], [0.22, 1.2, 0.6]);
-    }
-    box(steel, g, [-width * 0.27, height + 1.1, depth * 0.22], [2.2, 1.6, 2.7]);
-    for (let j = 0; j < 4; j++)
-      box(trim, g, [-width * 0.27, height + 1.95, depth * 0.08 + j * 0.27], [2, 0.08, 0.1]);
-    // Shape-only luminous rooftop symbol; no roadside text is needed.
-    const emblem = mesh(ring, index % 2 ? pink : cyan, g, [0, height + 3.5, depth * 0.3]);
-    box(steel, g, [0, height + 1.6, depth * 0.3], [0.15, 3, 0.15]);
-    emblem.rotation.z = index * 0.27;
-    if (Math.abs(offset) < 50 && index % 3 === 0)
-      addGlow(g, {
-        color: index % 2 ? "#ff7dc8" : "#76f0ed",
-        size: 5.2,
-        opacity: 0.24,
-        position: [0, height + 3.5, depth * 0.3 + 0.2],
-      });
-    batch(g);
-  }
-  // The industrial kit's factory silhouettes add authored roof shapes and
-  // window color breakup to the port skyline. Fit each source mesh to the
-  // established scenery footprint so camera clearance and road splines stay
-  // under course control.
-  function industrialBuilding(t, offset, width, height, depth, index) {
-    const g = safeGroup(t, offset, Math.hypot(width, depth) / 2);
-    if (!g || !asset) return null;
-    const model = industrialModels[Math.abs(index) % industrialModels.length];
-    const imported = asset(
-      `kenney:city-kit-industrial/${model}`,
-      g,
-      [0, 0, 0],
-      [width, height, depth],
-    );
-    if (imported) {
-      if (Math.abs(offset) < 50) groundShadow(g, width * 1.35, depth * 1.35);
-      batch(g);
-    }
-    return imported;
-  }
-  function lamp(t, offset, index) {
-    const g = safeGroup(t, offset, 1.3);
-    if (!g) return;
-    box(steel, g, [0, 4.5, 0], [0.22, 9, 0.22]);
-    box(steel, g, [-Math.sign(offset) * 0.65, 8.8, 0], [1.4, 0.18, 0.2]);
-    box(index % 2 ? cyan : window, g, [-Math.sign(offset) * 1.1, 8.65, 0], [0.7, 0.18, 0.55]);
-    if (index % 2 === 0) {
-      addGlow(g, {
-        color: "#ffe4a0",
-        size: 3.6,
-        opacity: 0.28,
-        position: [-Math.sign(offset) * 1.1, 8.58, 0],
-      });
-    }
-  }
+  const palette = {
+    amber,
+    blue,
+    cloth,
+    concrete,
+    cyan,
+    dark,
+    glass,
+    masonry,
+    paleMasonry,
+    pink,
+    rust,
+    skin,
+    steel,
+    trim,
+    window: windowLight,
+  };
+  const geometry = { cylinder, ring, sphere };
+  const { safeGroup, groundShadow, building, industrialBuilding, lamp } = buildCityProps({
+    industrialModels,
+    kit,
+    scenery,
+    track,
+    palette,
+    geometry,
+  });
   // Promenade: waterfront lamps and a city skyline, with open sightlines.
   for (let i = 0; i < 20; i++) {
     const t = sectorT(0, (i + 0.5) / 20);
@@ -217,7 +111,7 @@ export default function buildWorld(context) {
     }
     for (const x of [-1.7, 1.7]) {
       box(steel, g, [x, 4.05, 0], [0.07, 0.6, 0.07]);
-      mesh(sphere, window, g, [x, 3.6, 0], [0.28, 0.4, 0.28]);
+      mesh(sphere, windowLight, g, [x, 3.6, 0], [0.28, 0.4, 0.28]);
       if (i % 3 === 0)
         addGlow(g, { color: "#ffe4a0", size: 1.6, opacity: 0.3, position: [x, 3.6, 0] });
     }
@@ -254,7 +148,7 @@ export default function buildWorld(context) {
   }
   box(steel, hall, [0, 13.6, 0], [32, 1.2, 30]);
   for (const z of [-14, 0, 14]) box(concrete, hall, [0, 13.4, z], [28, 0.8, 0.5]);
-  for (const x of [-7, 7]) box(window, hall, [x, 13.05, 0], [0.3, 0.08, 25]);
+  for (const x of [-7, 7]) box(windowLight, hall, [x, 13.05, 0], [0.3, 0.08, 25]);
   batch(hall);
   for (let i = 0; i < 10; i++) {
     const t = sectorT(2, 0.12 + i * 0.075),
@@ -292,102 +186,20 @@ export default function buildWorld(context) {
     }
   }
 
-  // Supported deck: no embankment under the declared elevated arc. Supports
-  // are below the shared continuous road, never decorative road obstacles.
-  for (let i = 0; i < 20; i++) {
-    const t = sectorT(3, 0.04 + (0.84 * i) / 19),
-      g = groupAt(t, 0, scenery);
-    const height = Math.max(3, track.frameAt(t).p.y + 1.7);
-    box(concrete, g, [0, -0.5, 0], [17.5, 0.9, 1.4]);
-    for (const x of [-6, 6]) box(steel, g, [x, -height / 2 - 0.3, 0], [1, height, 1]);
-    box(steel, g, [0, -2, 0], [13, 0.6, 0.7]);
-    for (const side of [-1, 1]) {
-      const brace = box(amber, g, [side * 4, -4, 0], [0.35, 5, 0.35]);
-      brace.rotation.z = side * -0.5;
-    }
-    if (i % 2 === 0) lamp(t, 12, i);
-  }
-  // Water sits below the panorama, on the outside/south of the quay. Ships
-  // and cranes sit beyond route footprints rather than becoming obstacles.
-  const harborPose = track.poseAt(sectorT(3, 0.48) * track.TRACK, -90, 0);
-  const waterMaterial = material("#1b657d", {
-    map: textures.water ?? null,
-    metalness: 0.42,
-    roughness: 0.19,
-    emissive: "#0b3549",
-    emissiveIntensity: 0.2,
+  const { harborPose } = buildWaterfront({
+    THREE,
+    animated,
+    craneHooks,
+    ferries,
+    lamp,
+    safeGroup,
+    scenery,
+    textures,
+    track,
+    kit,
+    palette,
+    geometry,
   });
-  const water = mesh(new THREE.PlaneGeometry(370, 125), waterMaterial, scenery, [
-    harborPose.p.x,
-    -1.48,
-    harborPose.p.z,
-  ]);
-  water.rotation.x = -Math.PI / 2;
-  water.castShadow = false;
-  const waterUV = water.geometry.attributes.uv;
-  for (let i = 0; i < waterUV.count; i++)
-    waterUV.setXY(i, waterUV.getX(i) * 18, waterUV.getY(i) * 6);
-  animated.push(water);
-  for (let i = 0; i < 3; i++) {
-    const t = sectorT(3, 0.21 + i * 0.26),
-      g = safeGroup(t, -58 - i * 13, 20);
-    if (!g) continue;
-    g.position.y = -1.1;
-    box(steel, g, [0, 2, 0], [12, 4, 34]);
-    box(rust, g, [0, 4.2, -2], [10, 1.2, 27]);
-    box(concrete, g, [0, 7, 10], [8, 5, 9]);
-    box(window, g, [0, 8.3, 14.55], [7, 0.7, 0.08]);
-    for (let j = 0; j < 4; j++) box(j % 2 ? rust : blue, g, [0, 6, -11 + j * 5], [9, 3.5, 4]);
-    box(steel, g, [0, 12, 10], [0.4, 8, 0.4]);
-    for (const x of [-5.6, 5.6]) box(trim, g, [x, 4.4, 0], [0.12, 0.22, 29]);
-    for (const z of [-10, -3, 4]) mesh(cylinder, steel, g, [6.1, 2.5, z], [0.6, 0.35, 0.6]);
-    mesh(cylinder, amber, g, [0, 10, 10], [0.8, 2, 0.8]);
-    batch(g);
-    animated.push(g);
-    ferries.push({ g, x: g.position.x, z: g.position.z, phase: i * 2.1 });
-  }
-  for (let i = 0; i < 4; i++) {
-    const t = sectorT(3, 0.13 + i * 0.22),
-      g = safeGroup(t, -35, 10);
-    if (!g) continue;
-    g.position.y = -1.1;
-    for (const x of [-4, 4]) box(amber, g, [x, 14, 0], [1, 28, 1]);
-    box(amber, g, [0, 28, 0], [10, 1, 1]);
-    box(amber, g, [0, 27, 8], [1, 1, 20]);
-    for (const side of [-1, 1]) {
-      const brace = box(steel, g, [side * 2, 20, 0], [0.35, 14, 0.35]);
-      brace.rotation.z = side * 0.29;
-    }
-    for (let j = 0; j < 5; j++) box(steel, g, [0, 27, 1 + j * 3.1], [3, 0.25, 0.3]);
-    box(cyan, g, [0, 28.7, 0], [3, 0.15, 1.1]);
-    batch(g);
-    // Hook assembly moves entirely over the water; it never sweeps the road.
-    if (i % 2 === 0) {
-      const hook = groupAt(t, -35, scenery);
-      hook.position.y = -1.1;
-      box(steel, hook, [0, 19, 16], [0.15, 16, 0.15]);
-      box(amber, hook, [0, 10.4, 16], [2.3, 0.55, 1.2]);
-      box(blue, hook, [0, 8.5, 16], [4, 3, 4]);
-      batch(hook);
-      animated.push(hook);
-      craneHooks.push({ g: hook, phase: i * 1.3 });
-    } else box(steel, g, [0, 19, 16], [0.15, 16, 0.15]);
-  }
-  // Downloaded low-poly shoreline blocks break up the waterfront silhouette.
-  if (asset)
-    for (let i = 0; i < 12; i++) {
-      const t = sectorT(3, 0.06 + (0.85 * i) / 12),
-        g = safeGroup(t, -40 - (i % 3) * 5, 5);
-      if (!g) continue;
-      g.position.y = -1.2;
-      const rock = asset(
-        i % 2 ? "rock-a" : "rock-b",
-        g,
-        [0, 0, 0],
-        [4 + (i % 3), 2.5 + (i % 2), 4],
-      );
-      rock.rotation.y = i * 0.7;
-    }
   // Terminal: alternating tall container walls and an open crossing yard.
   for (let i = 0; i < 20; i++) {
     const t = sectorT(4, (i + 0.5) / 20),
@@ -551,193 +363,19 @@ export default function buildWorld(context) {
       batch(g);
     }
 
-  // Bounded animated city life. Instanced figures share just two draw calls.
-  const people = [],
-    personBody = new THREE.CylinderGeometry(0.22, 0.29, 0.85, 6);
-  const crowdMaterial = material("#df9bc6", { emissive: "#592842", emissiveIntensity: 0.2 });
-  for (let i = 0; i < 18; i++) {
-    const district = i < 12 ? 1 : 0,
-      t = sectorT(district, 0.08 + (i % 12) * 0.075),
-      side = i % 2 ? 1 : -1;
-    const s = track.surfaceAt(t),
-      edge = side > 0 ? s.rightEdge : -s.leftEdge;
-    const g = safeGroup(t, side * (edge + 6.6), 1.4);
-    if (!g) continue;
-    people.push({ p: g.position.clone(), q: g.quaternion.clone(), phase: i * 1.9 });
-    scenery.remove(g);
-  }
-  const bodies = new THREE.InstancedMesh(personBody, crowdMaterial, people.length);
-  const heads = new THREE.InstancedMesh(sphere, skin, people.length);
-  bodies.frustumCulled = heads.frustumCulled = false;
-  scenery.add(bodies, heads);
-  animated.push(bodies, heads);
-  const dummy = new THREE.Object3D();
-  const rippleAxis = new THREE.Vector3(1, 0, 0);
-  const coatColors = ["#d987b9", "#739bdd", "#e0b764", "#69b7aa"];
-  for (let i = 0; i < people.length; i++) bodies.setColorAt(i, new THREE.Color(coatColors[i % 4]));
-
-  // An understated intersection signal gives the market a daily rhythm.
-  // Its colors are atmospheric only, with no compulsory stopping for racers.
-  const signalRed = material("#a86670", { emissive: "#ff4763", emissiveIntensity: 0.4 });
-  const signalGreen = material("#6fa9a3", { emissive: "#4ee7c8", emissiveIntensity: 0.4 });
-  for (const [district, f] of [
-    [0, 0.94],
-    [1, 0.86],
-    [5, 0.06],
-  ])
-    for (const side of [-1, 1]) {
-      const t = sectorT(district, f),
-        s = track.surfaceAt(t),
-        edge = side > 0 ? s.rightEdge : -s.leftEdge;
-      const g = safeGroup(t, side * (edge + 2.7), 0.8);
-      if (!g) continue;
-      box(steel, g, [0, 3.8, 0], [0.18, 7.6, 0.18]);
-      box(dark, g, [0, 7.4, 0], [0.7, 2.1, 0.6]);
-      mesh(sphere, signalRed, g, [0, 8, 0.33], [0.2, 0.2, 0.1]);
-      mesh(sphere, amber, g, [0, 7.4, 0.33], [0.2, 0.2, 0.1]);
-      mesh(sphere, signalGreen, g, [0, 6.8, 0.33], [0.2, 0.2, 0.1]);
-    }
-
-  // One small particle buffer carries steam from sidewalk vents and a
-  // warehouse exhaust. The soft sprite is generated without canvas or DOM.
-  const spriteBytes = new Uint8Array(32 * 32 * 4);
-  for (let y = 0; y < 32; y++)
-    for (let x = 0; x < 32; x++) {
-      const k = (y * 32 + x) * 4,
-        r = Math.hypot((x - 15.5) / 15.5, (y - 15.5) / 15.5);
-      spriteBytes[k] = spriteBytes[k + 1] = spriteBytes[k + 2] = 255;
-      spriteBytes[k + 3] = Math.round(Math.max(0, 1 - r) ** 2 * 170);
-    }
-  const smokeMap = new THREE.DataTexture(spriteBytes, 32, 32);
-  smokeMap.needsUpdate = true;
-  const vents = [];
-  for (const [district, f, side] of [
-    [0, 0.5, -1],
-    [1, 0.2, 1],
-    [1, 0.84, -1],
-    [2, 0.8, -1],
-    [5, 0.86, 1],
-  ]) {
-    const t = sectorT(district, f),
-      s = track.surfaceAt(t),
-      edge = side > 0 ? s.rightEdge : -s.leftEdge;
-    const g = safeGroup(t, side * (edge + 5), 1.8);
-    if (!g) continue;
-    box(steel, g, [0, 0.18, 0], [1.7, 0.3, 1.1]);
-    for (let j = 0; j < 6; j++) box(dark, g, [-0.65 + j * 0.25, 0.34, 0], [0.12, 0.04, 0.95]);
-    vents.push(g.position.clone());
-  }
-  const steamPositions = new Float32Array(vents.length * 9 * 3);
-  const steamGeometry = new THREE.BufferGeometry();
-  steamGeometry.setAttribute("position", new THREE.BufferAttribute(steamPositions, 3));
-  const steam = new THREE.Points(
-    steamGeometry,
-    new THREE.PointsMaterial({
-      color: "#9fbed1",
-      size: 2.7,
-      map: smokeMap,
-      transparent: true,
-      opacity: 0.38,
-      depthWrite: false,
-    }),
-  );
-  steam.frustumCulled = false;
-  scenery.add(steam);
-  animated.push(steam);
-
-  // Cheap world-space moving highlights read as harbor ripples and distant
-  // ferry wake. No overlapping full-water transparent layers are involved.
-  const rippleMaterial = material("#418d9f", {
-    emissive: "#397b96",
-    emissiveIntensity: 0.28,
-    roughness: 0.3,
-  });
-  const ripples = new THREE.InstancedMesh(new THREE.PlaneGeometry(1, 1), rippleMaterial, 45);
-  scenery.add(ripples);
-  animated.push(ripples);
-  ripples.castShadow = false;
-  ripples.frustumCulled = false;
-
-  // The visual shuttle body matches the engine contact box (2.7 × 4.3 m).
-  const shuttle = new THREE.Group();
-  scene.add(shuttle);
-  box(steel, shuttle, [0, 0.7, 0], [2.7, 1.1, 4.3]);
-  box(blue, shuttle, [0, 1.6, -0.7], [2.4, 0.8, 2.5]);
-  box(amber, shuttle, [0, 1.55, 1.35], [2.2, 0.8, 1.25]);
-  for (const x of [-1.1, 1.1])
-    for (const z of [-1.4, 1.4]) {
-      const wheel = mesh(cylinder, dark, shuttle, [x, 0.35, z], [0.38, 0.35, 0.38]);
-      wheel.rotation.z = Math.PI / 2;
-    }
-  box(glass, shuttle, [0, 1.6, 2.03], [2, 0.62, 0.09]);
-  box(window, shuttle, [0, 1.6, 2.09], [1.8, 0.5, 0.06]);
-  for (const x of [-0.95, 0.95]) box(cyan, shuttle, [x, 0.9, 2.1], [0.35, 0.18, 0.08]);
-  for (const x of [-1.25, 1.25]) box(amber, shuttle, [x, 0.55, 0], [0.08, 0.18, 3.8]);
-  batch(shuttle);
-  const warningMaterial = material("#ffc04e", { emissive: "#ff9a22", emissiveIntensity: 0 });
-  const warning = groupAt(track.CART_T, 15, scenery);
-  box(steel, warning, [0, 2.5, 0], [0.25, 5, 0.25]);
-  mesh(sphere, warningMaterial, warning, [0, 5.2, 0], [0.48, 0.48, 0.48]);
-  batch(scenery, animated);
-  animated.push(shuttle);
-  return {
+  return buildHarborLife({
+    THREE,
     animated,
-    update(time) {
-      const state = hazardAt(time);
-      align(shuttle, state);
-      warningMaterial.emissiveIntensity = state.warning ? 1.6 + Math.sin(time * 14) * 0.7 : 0;
-      signalRed.emissiveIntensity = time % 16 < 8 ? 0.2 : 1.15;
-      signalGreen.emissiveIntensity = time % 16 < 8 ? 1.15 : 0.2;
-      for (const ferry of ferries) {
-        ferry.g.position.y = -1.1 + Math.sin(time * 0.8 + ferry.phase) * 0.15;
-        ferry.g.position.x = ferry.x + Math.sin(time * 0.09 + ferry.phase) * 0.6;
-        ferry.g.position.z = ferry.z + Math.cos(time * 0.11 + ferry.phase) * 0.5;
-        ferry.g.rotation.z = Math.sin(time * 0.7 + ferry.phase) * 0.009;
-      }
-      for (const crane of craneHooks) {
-        const scale = 1 + Math.sin(time * 0.36 + crane.phase) * 0.11;
-        crane.g.scale.y = scale;
-        crane.g.position.y = -1.1 + 27 * (1 - scale);
-      }
-      for (let i = 0; i < people.length; i++) {
-        const person = people[i];
-        dummy.position.copy(person.p);
-        dummy.quaternion.copy(person.q);
-        dummy.position.x += Math.sin(time * 0.32 + person.phase) * 0.4;
-        dummy.position.y += 0.8 + Math.sin(time * 2 + person.phase) * 0.035;
-        dummy.scale.set(1, 1, 1);
-        dummy.updateMatrix();
-        bodies.setMatrixAt(i, dummy.matrix);
-        dummy.position.y += 0.7;
-        dummy.scale.set(0.24, 0.28, 0.24);
-        dummy.updateMatrix();
-        heads.setMatrixAt(i, dummy.matrix);
-      }
-      bodies.instanceMatrix.needsUpdate = heads.instanceMatrix.needsUpdate = true;
-      for (let v = 0; v < vents.length; v++)
-        for (let j = 0; j < 9; j++) {
-          const rise = (time * 0.7 + j * 0.47 + v * 0.8) % 4.7,
-            k = (v * 9 + j) * 3,
-            p = vents[v];
-          steamPositions[k] = p.x + Math.sin(time * 0.38 + j * 1.7) * (0.15 + rise * 0.18);
-          steamPositions[k + 1] = p.y + 0.4 + rise;
-          steamPositions[k + 2] = p.z + Math.cos(time * 0.3 + j) * (0.1 + rise * 0.17);
-        }
-      steamGeometry.attributes.position.needsUpdate = true;
-      for (let i = 0; i < 45; i++) {
-        const x = ((i * 37.1) % 340) - 170,
-          z = ((i * 17.7) % 110) - 55;
-        dummy.position.set(
-          harborPose.p.x + x + Math.sin(time * 0.4 + i) * 0.8,
-          -1.44,
-          harborPose.p.z + z,
-        );
-        dummy.quaternion.setFromAxisAngle(rippleAxis, -Math.PI / 2);
-        dummy.scale.set(2 + Math.sin(time * 0.6 + i) * 0.7, 0.08, 1);
-        dummy.updateMatrix();
-        ripples.setMatrixAt(i, dummy.matrix);
-      }
-      ripples.instanceMatrix.needsUpdate = true;
-    },
-  };
+    craneHooks,
+    ferries,
+    harborPose,
+    hazardAt,
+    safeGroup,
+    scene,
+    scenery,
+    track,
+    kit,
+    palette,
+    geometry,
+  });
 }

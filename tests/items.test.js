@@ -10,7 +10,7 @@ import {
   MAX_QUEUED_BOOST,
 } from "../src/simulation/items.js";
 import { initializeRacer } from "../src/simulation/simulation.js";
-import { poseAt, frameAt, yawFor, projectTrack, collisionBounds } from "../src/track/track.js";
+import { poseAt, frameAt, projectTrack, collisionBounds } from "../src/track/track.js";
 import { FIXED_DT } from "../src/simulation/physics.js";
 
 test("green shells keep their firing heading and reflect at physical barriers", () => {

@@ -1,0 +1,54 @@
+/* Keep race status above the thumbs, including landscape phones and tablets. */
+@media (pointer: coarse) {
+  .place-box {
+    bottom: max(210px, calc(env(safe-area-inset-bottom) + 198px));
+  }
+  .hud-right {
+    bottom: max(216px, calc(env(safe-area-inset-bottom) + 204px));
+  }
+  .item-box kbd {
+    display: none;
+  }
+}
+@media (max-height: 540px) and (pointer: coarse), (max-height: 540px) and (max-width: 700px) {
+  .place-box {
+    bottom: max(158px, calc(env(safe-area-inset-bottom) + 146px));
+  }
+  .place-box strong {
+    font-size: 58px;
+  }
+  .place-box small {
+    font-size: 20px;
+  }
+  .hud-right {
+    bottom: max(164px, calc(env(safe-area-inset-bottom) + 152px));
+  }
+  .speed-box strong {
+    font-size: 28px;
+  }
+  .item-box {
+    grid-template-columns: 52px auto;
+    grid-template-rows: 52px auto;
+  }
+  .item-icon {
+    width: 52px;
+    height: 52px;
+    font-size: 32px;
+    border-radius: 15px;
+  }
+  .lap-box {
+    top: max(54px, calc(env(safe-area-inset-top) + 42px));
+  }
+  .lap-box strong {
+    font-size: 40px;
+  }
+  #radar.active {
+    width: 82px;
+    height: 70px;
+    bottom: max(178px, calc(env(safe-area-inset-bottom) + 166px));
+  }
+  .toast {
+    top: 68px;
+    font-size: 18px;
+  }
+}

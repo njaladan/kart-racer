@@ -1,0 +1,357 @@
+@media (max-width: 700px) {
+  .topline,
+  .bottomline {
+    left: 20px;
+    right: 20px;
+  }
+  .topline {
+    top: 18px;
+  }
+  .title-card {
+    left: 8%;
+    width: 84%;
+    top: 52%;
+  }
+  h1 {
+    font-size: clamp(72px, 18vw, 110px);
+  }
+  .title-card p {
+    font-size: 12px;
+  }
+  .track-tag {
+    font-size: 8px;
+  }
+  .corner-note {
+    display: none;
+  }
+  .place-box {
+    left: max(16px, env(safe-area-inset-left));
+    bottom: max(210px, calc(env(safe-area-inset-bottom) + 198px));
+    min-width: 78px;
+  }
+  .place-box strong {
+    font-size: 70px;
+    -webkit-text-stroke-width: 4px;
+  }
+  .place-box small {
+    font-size: 23px;
+    margin-top: 9px;
+  }
+  .place-box > span {
+    font-size: 11px;
+  }
+  .lap-box {
+    top: max(76px, calc(env(safe-area-inset-top) + 64px));
+    right: max(16px, env(safe-area-inset-right));
+    width: 104px;
+  }
+  .lap-box strong {
+    font-size: 46px;
+  }
+  .lap-box i {
+    font-size: 28px;
+  }
+  .hud-right {
+    left: max(112px, calc(env(safe-area-inset-left) + 108px));
+    bottom: max(216px, calc(env(safe-area-inset-bottom) + 204px));
+    gap: 5px;
+  }
+  .speed-box strong {
+    font-size: 31px;
+  }
+  .speed-box > span {
+    font-size: 9px;
+  }
+  .race-time {
+    font-size: 9px;
+    padding: 4px 6px;
+  }
+  .item-box {
+    top: max(76px, calc(env(safe-area-inset-top) + 64px));
+    left: max(18px, env(safe-area-inset-left));
+    grid-template-columns: 60px auto;
+    grid-template-rows: 60px auto;
+  }
+  .item-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    font-size: 38px;
+  }
+  .item-label {
+    font-size: 11px;
+  }
+  .toast {
+    top: 180px;
+    max-width: 80%;
+    font-size: 20px;
+  }
+  .bottomline {
+    font-size: 7px;
+  }
+  .title-foot {
+    gap: 10px;
+    font-size: 7px;
+  }
+  .primary-button {
+    min-width: 210px;
+  }
+  .screen {
+    background: linear-gradient(90deg, rgba(5, 13, 25, 0.75), rgba(5, 13, 25, 0.25));
+  }
+}
+#touch-controls {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  inset: auto max(12px, env(safe-area-inset-right))
+    max(24px, calc(env(safe-area-inset-bottom) + 12px)) max(12px, env(safe-area-inset-left));
+  justify-content: space-between;
+  align-items: flex-end;
+  pointer-events: none;
+}
+#touch-controls button {
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  appearance: none;
+  border-radius: 18px;
+  color: #fff;
+  background: #081726b8;
+  border: 1px solid #ffffff50;
+  font:
+    700 12px "DM Mono",
+    monospace;
+  backdrop-filter: blur(6px);
+  transition:
+    background-color 80ms,
+    box-shadow 80ms;
+}
+#touch-controls button.is-held,
+#touch-controls button:active {
+  background: #345367e8;
+  border-color: #d5fa51;
+  box-shadow:
+    inset 0 0 0 2px #d5fa5180,
+    0 0 18px #d5fa5126;
+}
+#touch-controls .touch-gas.is-held,
+#touch-controls .touch-gas:active {
+  background: #edffac;
+  box-shadow:
+    inset 0 0 0 3px #95b42b,
+    0 0 22px #d5fa5140;
+}
+.touch-steer,
+.touch-drive {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+#touch-controls .touch-steer button {
+  width: clamp(58px, 17vw, 76px);
+  height: 84px;
+  font-size: 42px;
+}
+.touch-drive {
+  display: grid;
+  grid-template-columns: repeat(2, clamp(58px, 17vw, 76px));
+}
+.touch-drive button {
+  width: 100%;
+  min-height: 60px;
+  padding: 0 4px;
+}
+#touch-controls .touch-gas {
+  height: 84px;
+  background: #d5fa51;
+  color: #101b20;
+  font-weight: 800;
+}
+.touch-gas span {
+  font-size: 18px;
+}
+#touch-controls .touch-item {
+  color: #d5fa51;
+  height: 84px;
+}
+#touch-controls .touch-drift {
+  color: #d8e2e7;
+}
+@media (max-width: 700px) {
+  .racing #touch-controls {
+    display: flex;
+  }
+} /* Driving controls remain reachable on small and landscape touch screens. */
+#game {
+  touch-action: none;
+}
+.controls-help {
+  font-family: "DM Mono", monospace !important;
+  font-size: 9px !important;
+  line-height: 1.8 !important;
+  color: #e0e7e8 !important;
+  margin: 17px 0 0 !important;
+}
+.title-foot {
+  margin-top: 20px;
+}
+.race-actions {
+  display: none;
+  position: absolute;
+  right: 5.2%;
+  top: 27px;
+  gap: 8px;
+  z-index: 3;
+}
+.racing .race-actions {
+  display: flex;
+}
+.racing .track-tag {
+  display: none;
+}
+.race-actions button {
+  cursor: pointer;
+  border: 1px solid #ffffff40;
+  background: #081726b8;
+  color: #fff7e9;
+  padding: 5px 9px;
+  font:
+    700 10px "DM Mono",
+    monospace;
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+.race-actions kbd {
+  font: inherit;
+  color: #d5fa51;
+  margin-left: 6px;
+}
+.paused #touch-controls {
+  display: none !important;
+}
+.primary-button:focus-visible,
+.race-actions button:focus-visible,
+#touch-controls button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+}
+.touch-brake {
+  color: #ffb193 !important;
+}
+#radar {
+  background: transparent;
+}
+.screen:not(.hidden) ~ .race-actions {
+  pointer-events: none;
+}
+@media (pointer: coarse) {
+  .racing #touch-controls {
+    display: flex;
+  }
+}
+.mobile-help {
+  display: none;
+}
+@media (pointer: coarse), (max-width: 700px) {
+  .mobile-help {
+    display: block;
+  }
+  .desktop-help {
+    display: none;
+  }
+  .race-actions {
+    top: max(12px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
+  }
+  #radar.active {
+    bottom: max(184px, calc(env(safe-area-inset-bottom) + 172px));
+    right: max(12px, env(safe-area-inset-right));
+    width: 100px;
+    height: 86px;
+  }
+}
+@media (max-width: 700px) {
+  #game-shell {
+    min-height: 0;
+  }
+  #touch-controls .touch-drive button {
+    font-size: 10px;
+  }
+  .title-card {
+    transform: translateY(-50%);
+  }
+  .controls-help {
+    font-size: 8px !important;
+  }
+}
+@media (max-height: 540px) {
+  .topline {
+    top: 12px;
+  }
+  .bottomline {
+    bottom: 10px;
+  }
+  .title-card {
+    top: 49%;
+    width: min(470px, 64vw);
+  }
+  h1 {
+    font-size: clamp(62px, 14vh, 90px);
+    margin: 12px 0;
+  }
+  .title-card p {
+    margin-bottom: 12px;
+  }
+  .title-foot {
+    margin-top: 12px;
+  }
+  .primary-button {
+    padding: 13px 16px;
+  }
+  .controls-help {
+    margin-top: 12px !important;
+  }
+  .place-box {
+    bottom: 32px;
+  }
+  .hud-right {
+    bottom: 38px;
+  }
+  .item-box,
+  .lap-box {
+    top: 64px;
+  }
+  .toast {
+    top: 68px;
+  }
+  #radar {
+    bottom: 93px;
+    width: 110px;
+    height: 95px;
+  }
+  .finish-card,
+  .pause-card {
+    padding: 20px;
+  }
+  .finish-card h2,
+  .pause-card h2 {
+    font-size: 48px;
+    margin: 15px 0;
+  }
+  .finish-stats {
+    padding: 12px 0;
+  }
+  .pause-card p {
+    margin-bottom: 15px;
+  }
+  .race-actions {
+    top: 10px;
+  }
+}

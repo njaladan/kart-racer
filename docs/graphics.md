@@ -16,7 +16,8 @@ physics and race progression still use the existing course contract.
   queries used by the simulation.
   `terrain-height.js` matches scenery placement to the rendered terrain's
   linear cross-section, including banking; it does not change driving surfaces.
-- `style.css` and `race-hud.js` own race presentation while retaining the HUD's
+- `style.css` declares the cascade order for the focused files under `styles/`.
+  `race-hud.js` owns race presentation while retaining the HUD's
   DOM IDs and update interface.
 
 ## Shared effects

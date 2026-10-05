@@ -1,11 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import * as THREE from "../vendor/three/three.module.js";
-import {
-  ParticlePool,
-  bakeVertexShade,
-  createStableShadowFollower,
-} from "../src/rendering/graphics.js";
+import { ParticlePool } from "../src/rendering/particle-pool.js";
+import { bakeVertexShade } from "../src/rendering/vertex-shading.js";
+import { createStableShadowFollower } from "../src/rendering/shadow-follower.js";
 import { batchStaticMeshes } from "../src/rendering/visuals.js";
 
 test("sparks remain bounded and expire without allocating or leaking scene objects", () => {

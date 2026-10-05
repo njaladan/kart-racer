@@ -1,0 +1,98 @@
+.course-picker {
+  display: block;
+  margin: 16px 0;
+  color: #cae6e4;
+  font: 700 11px sans-serif;
+  letter-spacing: 0.12em;
+}
+.course-picker select {
+  display: block;
+  width: 100%;
+  margin-top: 7px;
+  padding: 12px 14px;
+  border: 1px solid #668884;
+  border-radius: 8px;
+  background: #102333;
+  color: #f5ffe9;
+  font: 700 15px sans-serif;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+.course-picker select:focus-visible {
+  outline: 3px solid #d5fa51;
+  outline-offset: 3px;
+}
+@media (max-height: 760px) {
+  .title-card h1 {
+    font-size: clamp(40px, 8vh, 72px);
+  }
+  .title-card {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .title-card .controls-help {
+    margin-top: 14px;
+  }
+}
+
+.secondary-button {
+  display: block;
+  margin: 15px auto 0;
+  padding: 10px;
+  border: 1px solid #6e8b91;
+  border-radius: 4px;
+  background: #152837;
+  color: #e6f1df;
+  cursor: pointer;
+  font: 700 11px sans-serif;
+  letter-spacing: 0.06em;
+}
+@media (max-height: 540px) {
+  .course-picker {
+    margin: 8px 0;
+    font-size: 9px;
+  }
+  .course-picker select {
+    padding: 8px 12px;
+  }
+  .title-card h1 {
+    font-size: clamp(38px, 10vh, 54px);
+    margin: 10px 0;
+  }
+  .title-card p {
+    margin-bottom: 8px;
+    font-size: 11px;
+  }
+  .title-foot {
+    margin-top: 8px;
+  }
+}
+
+.primary-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+  transform: none;
+}
+
+.race-pickers {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 12px;
+}
+.race-pickers .course-picker select {
+  font-size: 13px;
+  padding-left: 10px;
+  padding-right: 4px;
+}
+@media (max-width: 600px) {
+  .race-pickers {
+    gap: 8px;
+  }
+  .race-pickers .course-picker {
+    letter-spacing: 0.06em;
+    font-size: 9px;
+  }
+  .race-pickers .course-picker select {
+    font-size: 12px;
+  }
+}

@@ -63,12 +63,12 @@ export function bindGameInput({
   });
   windowRef.addEventListener("blur", () => {
     clear();
-    if (canPause() && !(testMode && windowRef.parent !== windowRef)) onPause();
+    if (canPause() && !(testMode && windowRef.parent !== windowRef)) onPause(true);
   });
   documentRef.addEventListener("visibilitychange", () => {
     if (!documentRef.hidden) return;
     clear();
-    if (canPause()) onPause();
+    if (canPause()) onPause(true);
   });
 
   touchButtons.forEach((button) => {

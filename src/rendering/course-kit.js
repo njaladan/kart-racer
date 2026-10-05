@@ -1,6 +1,6 @@
 import * as THREE from "../../vendor/three/three.module.js";
 import { batchStaticMeshes } from "./visuals.js";
-import { bakeVertexShade } from "./graphics.js";
+import { bakeVertexShade } from "./vertex-shading.js";
 import { sceneryGroundHeight } from "./terrain-height.js";
 
 // Scenery authors get placement and reusable primitives, never engine globals.

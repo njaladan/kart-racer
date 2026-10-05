@@ -32,6 +32,7 @@ test("game input owns keyboard, pointer, and reset behavior through callbacks", 
   let itemsUsed = 0;
   let recoveries = 0;
   let pauses = 0;
+  const pauseValues = [];
   const input = bindGameInput({
     canvas,
     keys,
@@ -40,7 +41,10 @@ test("game input owns keyboard, pointer, and reset behavior through callbacks", 
     documentRef,
     isRunning: () => true,
     canPause: () => true,
-    onPause: () => pauses++,
+    onPause: (value) => {
+      pauses++;
+      pauseValues.push(value);
+    },
     onUseItem: () => itemsUsed++,
     canRecover: () => true,
     onRecover: () => recoveries++,
@@ -64,6 +68,10 @@ test("game input owns keyboard, pointer, and reset behavior through callbacks", 
   assert.equal(recoveries, 1);
   assert.equal(pauses, 1);
   assert.equal(pointer.steer, 1);
+  windowRef.fire("blur");
+  documentRef.hidden = true;
+  documentRef.fire("visibilitychange");
+  assert.deepEqual(pauseValues, [undefined, true, true]);
 
   input.clear();
   assert.deepEqual(Object.keys(keys), []);

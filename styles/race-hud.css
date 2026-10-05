@@ -1,0 +1,264 @@
+.hud {
+  --hud-outline: #153047;
+  --hud-shadow: 0 3px 0 #153047, 0 5px 12px #07132380;
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+}
+.hud.hidden {
+  display: none;
+}
+/* Race information floats over the course; only the item gets a solid badge. */
+.hud-left,
+.hud-center {
+  position: absolute;
+  inset: 0;
+}
+.place-box {
+  position: absolute;
+  left: 5.2%;
+  bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 98px;
+  transform: rotate(-6deg);
+}
+.place-box strong,
+.lap-box strong,
+.speed-box strong {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+  paint-order: stroke fill;
+  -webkit-text-stroke: 5px var(--hud-outline);
+  text-shadow: var(--hud-shadow);
+}
+.place-box strong {
+  font-size: 94px;
+  line-height: 0.9;
+  color: #ffe064;
+  letter-spacing: -0.025em;
+}
+.place-box small {
+  display: inline-block;
+  font-size: 30px;
+  vertical-align: top;
+  margin-top: 12px;
+  margin-left: 3px;
+  letter-spacing: 0;
+  -webkit-text-stroke-width: 3px;
+}
+.place-box > span,
+.lap-box > span,
+.speed-box > span {
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: white;
+  text-shadow:
+    0 2px 2px var(--hud-outline),
+    0 0 5px var(--hud-outline);
+}
+.place-box > span {
+  margin-top: 6px;
+}
+.lap-box {
+  position: absolute;
+  top: 88px;
+  right: 5.2%;
+  width: 128px;
+  text-align: right;
+}
+.lap-box strong {
+  display: block;
+  font-size: 58px;
+  line-height: 1;
+  color: #fff7e9;
+  -webkit-text-stroke-width: 4px;
+}
+.lap-box i {
+  font-size: 34px;
+  font-style: inherit;
+  color: #ffe064;
+}
+.lap-meter {
+  height: 5px;
+  background: #15304790;
+  border-radius: 4px;
+  margin-top: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px #07132360;
+}
+.lap-meter b {
+  display: block;
+  height: 100%;
+  background: #ffe064;
+  width: 0;
+  border-radius: inherit;
+}
+.hud-right {
+  position: absolute;
+  left: calc(5.2% + 126px);
+  bottom: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.speed-box {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.speed-box strong {
+  font-size: 42px;
+  line-height: 1;
+  -webkit-text-stroke-width: 3px;
+}
+.speed-box > span {
+  font-size: 11px;
+  letter-spacing: 0.03em;
+}
+.race-time {
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: white;
+  padding: 4px 8px;
+  background: #15304780;
+  border-radius: 12px;
+  text-shadow: 0 1px 2px #071323;
+}
+.item-box {
+  position: absolute;
+  top: 84px;
+  left: 5.2%;
+  display: grid;
+  grid-template-columns: 76px auto;
+  grid-template-rows: 76px auto;
+  align-items: center;
+  column-gap: 8px;
+  row-gap: 7px;
+}
+.item-icon {
+  display: grid;
+  place-items: center;
+  grid-column: 1;
+  grid-row: 1;
+  width: 76px;
+  height: 76px;
+  border: 4px solid #fff7e9;
+  border-radius: 22px;
+  background: radial-gradient(circle at 35% 25%, #fcffff, #d9edf5 70%);
+  box-shadow:
+    0 0 0 3px #153047,
+    0 5px 0 #153047,
+    0 8px 15px #07132370;
+  color: #197ac4;
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 2px 0 #15304750;
+  transform: rotate(-5deg);
+}
+.item-label {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  justify-self: start;
+  white-space: nowrap;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  color: white;
+  text-shadow:
+    0 2px 2px #153047,
+    0 0 5px #153047;
+}
+.item-box kbd {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: end;
+  font:
+    700 11px "DM Mono",
+    monospace;
+  border: 1px solid #ffffff70;
+  border-radius: 5px;
+  padding: 4px 6px;
+  color: white;
+  background: #15304780;
+}
+.toast {
+  position: absolute;
+  top: 92px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 42%;
+  text-align: center;
+  color: #ffe064;
+  font-family: "Barlow Condensed", sans-serif;
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: 0.06em;
+  paint-order: stroke fill;
+  -webkit-text-stroke: 3px #153047;
+  text-shadow: var(--hud-shadow);
+}
+.countdown {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  top: 43%;
+  transform: translate(-50%, -50%);
+  font: 900 clamp(88px, 16vw, 180px)/0.8 "Barlow Condensed";
+  color: var(--lime);
+  text-shadow: 0 5px 30px #0008;
+}
+.countdown.hidden {
+  display: none;
+}
+#radar {
+  position: absolute;
+  z-index: 2;
+  left: auto;
+  top: auto;
+  right: 5.2%;
+  bottom: 48px;
+  width: 176px;
+  height: 152px;
+  opacity: 0;
+  transform: translateY(7px);
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
+  pointer-events: none;
+}
+#radar.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+.drift-meter {
+  height: 4px;
+  margin-top: 5px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #15304790;
+}
+.drift-meter b {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #43dff8, #ff9b49);
+  transition: width 0.08s;
+}
+@media (max-width: 700px) {
+  #radar {
+    width: 116px;
+    height: 100px;
+    right: 12px;
+    bottom: 126px;
+  }
+}

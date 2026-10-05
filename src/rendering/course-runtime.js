@@ -1,7 +1,7 @@
 import * as THREE from "../../vendor/three/three.module.js";
 import { createCourseKit, batchScenery } from "./course-kit.js";
 import { cartAt } from "../simulation/hazards.js";
-import { addCourseWorld } from "./course-world.js";
+import { buildWindmillWorld } from "../courses/windmill-wilds/world.js";
 import { createRailGeometry } from "./course-rails.js";
 import { addDetailedScenery } from "./detailed-scenery.js";
 import { TERRAIN_VERGE_WIDTH } from "./terrain-height.js";
@@ -18,7 +18,15 @@ export function buildCourseWorld({
 }) {
   const course = track.course;
   if (course.id === "windmill-wilds") {
-    const world = addCourseWorld(scene, renderer, mats, textures, commonAssets?.nature, assets);
+    const world = buildWindmillWorld({
+      scene,
+      renderer,
+      materials: mats,
+      textures,
+      track,
+      nature: commonAssets?.nature,
+      assets,
+    });
     addDetailedScenery(scene, track, assets);
     return world;
   }

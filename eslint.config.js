@@ -12,8 +12,8 @@ export default [
       globals: { ...globals.browser, ...globals.node },
     },
     rules: {
-      // Legacy rendering callbacks intentionally accept unused context fields.
-      "no-unused-vars": ["warn", { args: "none", varsIgnorePattern: "^_" }],
+      // Callbacks may accept context fields without consuming every argument.
+      "no-unused-vars": ["error", { args: "none", varsIgnorePattern: "^_" }],
       "no-var": "error",
       eqeqeq: ["error", "always", { null: "ignore" }],
       camelcase: ["error", { properties: "never", ignoreDestructuring: true }],

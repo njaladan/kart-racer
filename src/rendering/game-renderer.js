@@ -126,6 +126,7 @@ export function createGameRenderer({
         });
       }
       for (const box of boxes) {
+        box.group.visible = frameState.started && box.active;
         if (!box.active) continue;
         const pose = poseAt(
           box.s,

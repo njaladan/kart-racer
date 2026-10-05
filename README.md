@@ -55,4 +55,5 @@ Requires Node.js. Tests cover course layouts, physics, race progress, AI, items,
 Original procedural artwork and adapted CC0 assets. See [asset credits](assets/CREDITS.md), [course assets](assets/courses/LICENSES.md), and [materials and props](assets/living/LICENSES.md) for sources and licenses. Three.js and font licenses are included under `vendor/`.
 
 For design and development details, see the [art direction](proposals/art-direction.md), [course proposal](proposals/windmill-wilds.md), and [course authoring contract](src/courses/CONTRACT.md).
+For module ownership and development conventions, see [project architecture](docs/architecture.md).
 For renderer ownership, reusable effect APIs, and visual checks, see [graphics tuning](docs/graphics.md).

@@ -13,7 +13,7 @@ import {
 } from "../src/simulation/physics.js";
 import { progressDelta, ranking, finishRacer, lapNumber } from "../src/simulation/race.js";
 import { initializeRacer, advanceRacer, botInput } from "../src/simulation/simulation.js";
-import { frameAt, projectTrack, poseAt, TRACK, WORLD_PER_UNIT } from "../src/track/track.js";
+import { frameAt, projectTrack, poseAt, TRACK } from "../src/track/track.js";
 const flat = { offroad: false, bank: 0, slope: 0 };
 const input = { throttle: true, brake: false, steer: 0, drift: false };
 function body() {

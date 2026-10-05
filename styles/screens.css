@@ -1,0 +1,172 @@
+.screen {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(
+    90deg,
+    rgba(5, 13, 25, 0.72) 0%,
+    rgba(5, 13, 25, 0.38) 50%,
+    rgba(5, 13, 25, 0.04) 100%
+  );
+  transition:
+    opacity 0.35s,
+    visibility 0.35s;
+}
+.screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.title-card {
+  position: absolute;
+  left: 11%;
+  top: 50%;
+  transform: translateY(-46%);
+  width: min(470px, 42vw);
+}
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: "DM Mono", monospace;
+  color: var(--lime);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+}
+.eyebrow span {
+  width: 18px;
+  height: 1px;
+  background: var(--lime);
+}
+h1,
+h2 {
+  font-family: "Barlow Condensed", sans-serif;
+  line-height: 0.8;
+  letter-spacing: -0.035em;
+  margin: 23px 0 18px;
+  font-weight: 800;
+}
+h1 {
+  font-size: clamp(74px, 10vw, 142px);
+}
+h1 em,
+h2 em {
+  font-style: normal;
+  color: var(--lime);
+}
+.title-card p,
+.pause-card p,
+.finish-card p {
+  color: #c0c8ce;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 0 0 26px;
+}
+.primary-button {
+  appearance: none;
+  border: 0;
+  background: var(--lime);
+  color: #101b20;
+  padding: 16px 20px;
+  min-width: 238px;
+  text-align: left;
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  cursor: pointer;
+  transition:
+    transform 0.18s,
+    background 0.18s;
+}
+.primary-button span {
+  float: right;
+  font-size: 16px;
+  line-height: 10px;
+}
+.primary-button:hover {
+  transform: translateY(-3px);
+  background: #e3ff85;
+}
+.title-foot {
+  display: flex;
+  gap: 17px;
+  margin-top: 30px;
+  color: #e0e2dc;
+  font-family: "DM Mono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+.corner-note {
+  position: absolute;
+  right: 5.2%;
+  bottom: 70px;
+  font-family: "DM Mono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  color: #fff9;
+  writing-mode: vertical-rl;
+}
+.finish-card,
+.pause-card {
+  width: min(440px, 90vw);
+  padding: 42px;
+  background: rgba(5, 14, 25, 0.94);
+  border: 1px solid #ffffff25;
+  box-shadow: 0 25px 80px #0008;
+}
+.finish-card {
+  text-align: center;
+}
+.finish-card .eyebrow,
+.pause-card .eyebrow {
+  justify-content: center;
+}
+.finish-card h2,
+.pause-card h2 {
+  font-size: 64px;
+  margin: 22px 0 14px;
+}
+.finish-card p,
+.pause-card p {
+  margin-bottom: 25px;
+}
+.finish-stats {
+  display: flex;
+  justify-content: center;
+  gap: 52px;
+  padding: 20px 0 27px;
+  margin-bottom: 5px;
+  border-top: 1px solid #ffffff20;
+}
+.finish-stats div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.finish-stats span {
+  font: 8px "DM Mono";
+  letter-spacing: 0.12em;
+  color: #aab3bd;
+}
+.finish-stats strong {
+  font: 700 24px "Barlow Condensed";
+  color: var(--lime);
+}
+.finish-card .primary-button {
+  width: 100%;
+}
+.pause-card {
+  text-align: center;
+}
+.pause-card h2 {
+  font-size: 67px;
+}
+.pause-card p {
+  margin-bottom: 23px;
+}
+.pause-card .primary-button {
+  text-align: center;
+}

@@ -1,12 +1,10 @@
 import * as THREE from "../../vendor/three/three.module.js";
 import { surfaceTexture } from "./textures.js";
-import {
-  loadGraphicsAssets,
-  createStableShadowFollower,
-  addGradientSky,
-  addAmbientWeather,
-  addRaceFinish,
-} from "./graphics.js";
+import { loadGraphicsAssets } from "./shared-assets.js";
+import { createStableShadowFollower } from "./shadow-follower.js";
+import { addGradientSky } from "./sky.js";
+import { addAmbientWeather } from "./ambient-weather.js";
+import { addRaceFinish } from "./display-finish.js";
 import { loadCourseAssets } from "./course-assets.js";
 import { loadLivingAssets } from "./living-assets.js";
 

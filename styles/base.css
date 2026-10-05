@@ -1,0 +1,177 @@
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(../vendor/fonts/font-0.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../vendor/fonts/font-1.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../vendor/fonts/font-2.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(../vendor/fonts/font-3.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url(../vendor/fonts/font-4.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../vendor/fonts/font-5.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(../vendor/fonts/font-6.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../vendor/fonts/font-7.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(../vendor/fonts/font-8.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(../vendor/fonts/font-9.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(../vendor/fonts/font-10.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(../vendor/fonts/font-11.ttf) format("truetype");
+}
+
+:root {
+  --cream: #fff7e9;
+  --ink: #071323;
+  --lime: #d5fa51;
+  --muted: #aab3bd;
+  --orange: #ff7549;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: #06101e;
+  color: var(--cream);
+  font-family: "DM Sans", sans-serif;
+  overflow: hidden;
+}
+#game-shell {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: #0c1b2b;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  overscroll-behavior: none;
+}
+canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.topline,
+.bottomline {
+  position: absolute;
+  left: 5.2%;
+  right: 5.2%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.topline {
+  top: 28px;
+}
+.brand {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+}
+.brand b {
+  color: var(--lime);
+}
+.brand-mark {
+  display: inline-grid;
+  place-items: center;
+  margin-right: 7px;
+  width: 23px;
+  height: 23px;
+  border: 1px solid #ffffff50;
+  border-radius: 50%;
+  color: var(--lime);
+  font-size: 14px;
+}
+.track-tag,
+.bottomline {
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: #d5dae0;
+}
+.live-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin: 0 8px 1px 0;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 10px var(--lime);
+}
+.bottomline {
+  bottom: 19px;
+  font-size: 8px;
+  color: #ffffff85;
+}
