@@ -42,7 +42,9 @@ npm test
 
 The Node tests cover every course’s length, section pacing, five-driver race completion, shared collision boundaries, real single-mushroom shortcuts, asset integrity and scenery assembly, alongside acceleration, reverse, grip, airborne momentum, bounded boosted jumps, collision-related takeoff prevention, wall impulses, single-use drift turbos, continuous track progress, finish ranking, AI race completion, frame-rate independence, shell bounces, homing steering, and swept projectile collision.
 
-The living-world build passes **54 Node tests**, including five isolated AI drivers finishing three laps on each course, widened route ground / barrier coherence, shell reflection at the new edges, and integrity / UV preservation of the downloaded assets. Headless Chromium checks cover course rendering and shader compilation. These software-rendered checks do not establish a hardware frame-rate target; real-device performance and human racing-line tuning still need playtesting.
+The living-world build passes **63 Node tests**, including five isolated AI drivers finishing three laps on each course, widened route ground / barrier coherence, shell reflection at the new edges, and integrity / UV preservation of the downloaded assets. Headless Chromium checks cover course rendering and shader compilation. These software-rendered checks do not establish a hardware frame-rate target; real-device performance and human racing-line tuning still need playtesting.
+
+The game is split across focused scene, kart, input, renderer, audio, HUD, racer-state, and course-contract modules. See [the code quality review](CODE_QUALITY.md) for the findings addressed and the remaining race-session coordination boundary.
 
 For interactive integration checks, open `/tests/browser.html` on the same local server. It exposes held inputs, autodriving, a targeted boosted-ramp scenario, item use, pause/resume, hit recovery, and visible state/render counters. These controls are enabled only for the embedded game with the explicit `?test` query; they are absent from ordinary play.
 
