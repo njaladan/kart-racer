@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { surfaceTexture } from "./textures.js";
 import {
   bevelBox,
   contactShadow,
@@ -106,46 +107,23 @@ import {
   scene.add(sun.target);
   const mat = (color, roughness = 0.74, extra = {}) =>
     new THREE.MeshStandardMaterial({ color, roughness, ...extra });
-  function speckleTexture(base, colors, count, repeat) {
-    const c = document.createElement("canvas");
-    c.width = c.height = 256;
-    const x = c.getContext("2d");
-    x.fillStyle = base;
-    x.fillRect(0, 0, 256, 256);
-    for (let i = 0; i < count; i++) {
-      x.fillStyle = colors[Math.floor(Math.random() * colors.length)];
-      const size = 0.5 + Math.random() * 2.2;
-      x.fillRect(Math.random() * 256, Math.random() * 256, size, size);
-    }
-    const tex = new THREE.CanvasTexture(c);
-    tex.colorSpace = THREE.SRGBColorSpace;
-    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-    tex.repeat.set(repeat, repeat);
-    tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
-    return tex;
-  }
-  const grassTexture = speckleTexture(
-      "#79b547",
-      ["#85be50", "#72ab42", "#90c655", "#79b149"],
-      2600,
-      1,
+  const textures = Object.fromEntries(
+    ['grass', 'asphalt', 'bark', 'leaves', 'fabric', 'tire', 'paint'].map(
+      (kind) => [kind, surfaceTexture(kind, renderer)],
     ),
-    asphaltTexture = speckleTexture(
-      "#667180",
-      ["#6e7a86", "#5f6c7c", "#7a8490", "#627180"],
-      2400,
-      1,
-    );
+  );
+  const grassTexture = textures.grass, asphaltTexture = textures.asphalt;
+  const surface = (map, bumpScale = 0.025) => ({ map, bumpMap: map, bumpScale });
   const mats = {
-    grass: mat("#ffffff", 0.96, { map: grassTexture }),
-    road: mat("#ffffff", 0.96, { map: asphaltTexture }),
-    roadside: mat("#9ba89d"),
+    grass: mat("#ffffff", 0.96, surface(grassTexture, 0.06)),
+    road: mat("#ffffff", 0.96, surface(asphaltTexture, 0.035)),
+    roadside: mat("#b1afa0", 0.95, surface(asphaltTexture)),
     white: mat("#fff4d4", 0.65),
     red: mat("#fa634f"),
     rail: mat("#e7e5d9", 0.4, { metalness: 0.22 }),
-    pine: mat("#238451"),
-    pine2: mat("#4aa650"),
-    trunk: mat("#795540"),
+    pine: mat("#b4d7ad", 0.85, surface(textures.leaves, 0.04)),
+    pine2: mat("#d4e7b8", 0.85, surface(textures.leaves, 0.04)),
+    trunk: mat("#ffffff", 0.9, surface(textures.bark, 0.07)),
     gold: mat("#f7d65b", 0.3, {
       metalness: 0.32,
       emissive: "#aa771b",
@@ -270,12 +248,12 @@ import {
         count,
       ),
       lower = new THREE.InstancedMesh(
-        new THREE.ConeGeometry(1, 1.7, 10),
+        new THREE.ConeGeometry(1, 1.7, 16, 3),
         mats.pine,
         count,
       ),
       upper = new THREE.InstancedMesh(
-        new THREE.ConeGeometry(0.76, 1.55, 10),
+        new THREE.ConeGeometry(0.76, 1.55, 16, 3),
         mats.pine2,
         count,
       );
@@ -353,9 +331,20 @@ import {
       clouds.push(g);
     }
     // Banked roadside guardrails, spaced enough to leave the landscape visible.
-    const railGeom = new THREE.BoxGeometry(0.24, 0.85, 7.2),
-      railCount = 290,
-      railMesh = new THREE.InstancedMesh(railGeom, mats.rail, railCount);
+    // Pressed-metal guardrails have a corrugated profile and visible support posts.
+    const railShape = new THREE.Shape();
+    const profile = [[0, -0.425], [0.02, -0.34], [0.12, -0.26], [0.12, -0.16],
+      [0.02, -0.07], [0.02, 0.07], [0.12, 0.16], [0.12, 0.26],
+      [0.02, 0.34], [0, 0.425]];
+    railShape.moveTo(...profile[0]);
+    for (const p of profile.slice(1)) railShape.lineTo(...p);
+    for (const [x, y] of [...profile].reverse()) railShape.lineTo(x - 0.04, y);
+    railShape.closePath();
+    const railGeom = new THREE.ExtrudeGeometry(railShape, { depth: 7.2, bevelEnabled: false, steps: 1 });
+    railGeom.translate(0, 0, -3.6);
+    const railCount = 290,
+      railMesh = new THREE.InstancedMesh(railGeom, mats.rail, railCount),
+      railPosts = new THREE.InstancedMesh(new THREE.BoxGeometry(0.15, 1.15, 0.18), mats.rail, railCount);
     for (let i = 0; i < railCount; i++) {
       const f = frameAt(i / railCount),
         side = i % 2 ? 1 : -1,
@@ -374,10 +363,14 @@ import {
       tempObj.scale.set(1, 1, 1);
       tempObj.updateMatrix();
       railMesh.setMatrixAt(i, tempObj.matrix);
+      tempObj.position.addScaledVector(f.up, -0.23);
+      tempObj.updateMatrix(); railPosts.setMatrixAt(i, tempObj.matrix);
     }
     railMesh.instanceMatrix.needsUpdate = true;
-    scene.add(railMesh);
-    landscape = addLandscape(scene, renderer, mats.grass);
+    railMesh.receiveShadow = true;
+    railPosts.castShadow = true;
+    scene.add(railMesh, railPosts);
+    landscape = addLandscape(scene, renderer, mats.grass, textures);
     addFinishArch();
     addPads();
     addItemBoxes();
@@ -546,16 +539,16 @@ import {
   function buildKart(color, name, isPlayer = false) {
     const root = new THREE.Group();
     root.name = name;
-    const paint = mat(color, 0.34, { metalness: 0.2 }),
+    const paint = mat(color, 0.34, { metalness: 0.2, map: textures.paint }),
       highlight = mat(
         new THREE.Color(color).lerp(new THREE.Color("#ffffff"), 0.42),
         0.32,
         { metalness: 0.25 },
       ),
-      dark = mat("#18242e", 0.48),
-      rubber = mat("#11161a", 0.92),
+      dark = mat("#18242e", 0.68, surface(textures.fabric, 0.012)),
+      rubber = mat("#ffffff", 0.92, surface(textures.tire, 0.035)),
       skin = mat("#e4ad7c", 0.8),
-      helmet = mat(color, 0.25, { metalness: 0.25 });
+      helmet = mat(color, 0.25, { metalness: 0.25, map: textures.paint });
     const body = addMesh(bevelBox(1.6, 0.48, 2.22), paint, root);
     body.position.y = 0.73;
     const nose = addMesh(bevelBox(1.08, 0.23, 0.75), highlight, root);
@@ -602,7 +595,7 @@ import {
         b = new THREE.Vector3(...end),
         delta = b.clone().sub(a),
         mesh = addMesh(
-          new THREE.CylinderGeometry(r * 0.8, r, delta.length(), 7),
+          new THREE.CylinderGeometry(r * 0.8, r, delta.length(), 12),
           material,
           root,
         );
@@ -620,7 +613,7 @@ import {
         0.14,
         highlight,
       );
-      const glove = addMesh(new THREE.SphereGeometry(0.14, 7, 6), dark, root);
+      const glove = addMesh(new THREE.SphereGeometry(0.14, 12, 8), dark, root);
       glove.position.set(side * 0.34, 1.16, -0.5);
     }
     const steering = addMesh(
@@ -634,7 +627,52 @@ import {
     dashBoard.position.set(0, 1.06, -0.46);
     const badge = addMesh(bevelBox(0.31, 0.035, 0.035), mats.gold, root);
     badge.position.set(0, 0.94, -1.02);
-    const wheelGeo = new THREE.CylinderGeometry(0.42, 0.42, 0.32, 20),
+    const chrome = mat("#b8c9d2", 0.3, { metalness: 0.65 });
+    // Sculpted side pods, vents, suspension and a visible rear engine.
+    for (const side of [-1, 1]) {
+      const pod = addMesh(bevelBox(0.34, 0.34, 1.1, 0.14), paint, root);
+      pod.position.set(side * 0.82, 0.77, 0.05);
+      for (let i = 0; i < 4; i++) {
+        const vent = addMesh(bevelBox(0.025, 0.09, 0.12, 0.01), dark, root);
+        vent.position.set(side * 1.0, 0.8, 0.1 + i * 0.16);
+        vent.rotation.x = -0.25;
+      }
+      limb([side * 0.45, 0.51, -0.65], [side * 0.87, 0.44, -0.65], 0.055, chrome);
+      const endPlate = addMesh(bevelBox(0.08, 0.28, 0.48, 0.035), paint, root);
+      endPlate.position.set(side * 0.73, 1.4, 0.9);
+      const stripe = addMesh(bevelBox(0.14, 0.015, 0.64, 0.004), mats.white, root);
+      stripe.position.set(side * 0.25, 0.944, -1.12);
+    }
+    const engine = addMesh(bevelBox(0.64, 0.38, 0.48, 0.07), chrome, root);
+    engine.position.set(0, 0.92, 0.99);
+    for (let i = 0; i < 5; i++) {
+      const fin = addMesh(bevelBox(0.73, 0.035, 0.45, 0.008), dark, root);
+      fin.position.set(0, 0.78 + i * 0.065, 1.01);
+    }
+    const decalCanvas = document.createElement('canvas');
+    decalCanvas.width = decalCanvas.height = 128;
+    const dc = decalCanvas.getContext('2d');
+    dc.fillStyle = '#fff8dc'; dc.beginPath(); dc.arc(64, 64, 56, 0, TAU); dc.fill();
+    dc.strokeStyle = color; dc.lineWidth = 7; dc.stroke();
+    dc.fillStyle = '#243a4b'; dc.font = 'italic 900 76px sans-serif';
+    dc.textAlign = 'center'; dc.textBaseline = 'middle'; dc.fillText(String(karts.length + 1), 60, 68);
+    const decalTexture = new THREE.CanvasTexture(decalCanvas);
+    decalTexture.colorSpace = THREE.SRGBColorSpace;
+    const decalMaterial = mat('#ffffff', 0.6, { map: decalTexture, transparent: true, depthWrite: false });
+    const number = addMesh(new THREE.PlaneGeometry(0.47, 0.47), decalMaterial, root);
+    number.rotation.x = -Math.PI / 2;
+    number.position.set(0, 0.977, -0.79);
+    number.castShadow = false;
+    for (const side of [-1, 1]) {
+      const patch = addMesh(new THREE.PlaneGeometry(0.31, 0.31), decalMaterial, root);
+      patch.rotation.y = side * Math.PI / 2;
+      patch.position.set(side * 1.003, 0.78, -0.24);
+      patch.castShadow = false;
+    }
+    const wheelGeo = new THREE.LatheGeometry(
+      [[0.24, -0.18], [0.35, -0.18], [0.41, -0.13], [0.43, -0.07],
+       [0.43, 0.07], [0.41, 0.13], [0.35, 0.18], [0.24, 0.18]]
+        .map(([r, y]) => new THREE.Vector2(r, y)), 32),
       wheels = [];
     for (const z of [-0.68, 0.76])
       for (const x of [-0.82, 0.82]) {
@@ -656,6 +694,18 @@ import {
           spin,
         );
         cap.rotation.z = Math.PI / 2;
+        for (const side of [-1, 1]) {
+          const rim = addMesh(new THREE.TorusGeometry(0.255, 0.025, 6, 24), chrome, spin);
+          rim.rotation.y = Math.PI / 2;
+          rim.position.x = side * 0.185;
+          for (let i = 0; i < 5; i++) {
+            const a = i * TAU / 5;
+            const spoke = addMesh(bevelBox(0.028, 0.19, 0.045, 0.008), chrome, spin);
+            spoke.rotation.x = a;
+            spoke.position.set(side * 0.19, Math.cos(a) * 0.14, Math.sin(a) * 0.14);
+          }
+        }
+        batchStaticMeshes(spin);
         root.add(pivot);
         wheels.push({ pivot, spin, front: z < 0 });
       }

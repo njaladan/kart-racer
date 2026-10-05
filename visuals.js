@@ -1,4 +1,5 @@
 import * as THREE from "./vendor/three/three.module.js";
+import { surfaceTexture } from "./textures.js";
 import { frameAt, projectTrack } from "./track.js";
 
 export function bevelBox(width, height, depth, radius = 0.12) {
@@ -14,7 +15,7 @@ export function bevelBox(width, height, depth, radius = 0.12) {
   const geometry = new THREE.ExtrudeGeometry(shape, {
     depth: depth - 2 * r,
     bevelEnabled: true,
-    bevelSegments: 3,
+    bevelSegments: 4,
     steps: 1,
     bevelSize: r,
     bevelThickness: r,
@@ -36,9 +37,16 @@ export function contactShadow() {
   ctx.fillRect(0, 0, 64, 64);
   return new THREE.CanvasTexture(canvas);
 }
-export function addLandscape(scene, renderer, grassMaterial) {
+export function addLandscape(scene, renderer, grassMaterial, sharedTextures = {}) {
   const standard = (color, extra = {}) =>
     new THREE.MeshStandardMaterial({ color, roughness: 0.8, ...extra });
+  const maps = Object.fromEntries(
+    ['bark', 'leaves', 'brick', 'roof', 'water', 'fabric'].map(
+      (kind) => [kind, sharedTextures[kind] || surfaceTexture(kind, renderer)],
+    ),
+  );
+  const textured = (kind, color = '#ffffff', extra = {}) =>
+    standard(color, { map: maps[kind], bumpMap: maps[kind], bumpScale: 0.045, ...extra });
   const mesh = (geometry, material, parent = scene) => {
     const m = new THREE.Mesh(geometry, material);
     m.castShadow = true;
@@ -108,39 +116,63 @@ export function addLandscape(scene, renderer, grassMaterial) {
 
   const lake = mesh(
     new THREE.CircleGeometry(30, 64),
-    standard("#29bfd1", { roughness: 0.26, metalness: 0.25 }),
+    textured("water", "#ffffff", { roughness: 0.28, metalness: 0.15, bumpScale: 0.025 }),
   );
   lake.rotation.x = -Math.PI / 2;
   lake.position.set(0, -1.6, 4);
   lake.scale.set(1, 0.7, 1);
   lake.castShadow = false;
-  const island = mesh(new THREE.SphereGeometry(1, 24, 12), standard("#8bc44b"));
+  const island = mesh(new THREE.SphereGeometry(1, 24, 12), grassMaterial);
   island.position.set(10, -2.7, 3);
   island.scale.set(10, 2.5, 8);
   island.castShadow = false;
   const windmill = new THREE.Group();
   windmill.position.set(10, -0.3, 3);
   const tower = mesh(
-    new THREE.CylinderGeometry(1.1, 1.7, 8, 12),
-    standard("#fff1c6"),
+    new THREE.CylinderGeometry(1.1, 1.7, 8, 24, 4),
+    textured("brick"),
     windmill,
   );
   tower.position.y = 4;
   const roof = mesh(
-    new THREE.ConeGeometry(2, 2.3, 12),
-    standard("#f8795c"),
+    new THREE.ConeGeometry(2, 2.3, 24, 4),
+    textured("roof"),
     windmill,
   );
   roof.position.y = 9;
+  const trim = standard('#fff5da'), glass = standard('#315d77', { roughness: 0.24, metalness: 0.35 });
+  for (const y of [3, 5.2, 7.3]) {
+    for (let i = 0; i < 4; i++) {
+      const a = i * Math.PI / 2, radius = 1.7 - y * 0.075;
+      const frame = mesh(bevelBox(0.65, 0.94, 0.12, 0.07), trim, windmill);
+      frame.position.set(Math.sin(a) * radius, y, Math.cos(a) * radius);
+      frame.rotation.y = a;
+      const pane = mesh(bevelBox(0.45, 0.72, 0.13, 0.045), glass, windmill);
+      pane.position.copy(frame.position).add(new THREE.Vector3(Math.sin(a) * 0.06, 0, Math.cos(a) * 0.06));
+      pane.rotation.y = a;
+      const crossbar = mesh(bevelBox(0.48, 0.05, 0.15, 0.01), trim, windmill);
+      crossbar.position.copy(pane.position); crossbar.rotation.y = a;
+    }
+  }
+  const door = mesh(bevelBox(0.85, 1.6, 0.18, 0.15), textured('bark'), windmill);
+  door.position.set(0, 0.8, 1.66);
+  const ledge = mesh(new THREE.CylinderGeometry(1.19, 1.19, 0.2, 24), trim, windmill);
+  ledge.position.y = 7.95;
   const rotor = new THREE.Group();
   rotor.position.set(0, 7, -1.2);
   windmill.add(rotor);
-  const blades = standard("#fff7dc");
+  const blades = textured("fabric", "#fff7dc");
   for (let i = 0; i < 4; i++) {
     const blade = mesh(bevelBox(0.8, 4.5, 0.12, 0.05), blades, rotor);
     const a = (i * Math.PI) / 2;
     blade.position.set(Math.sin(a) * 2.25, Math.cos(a) * 2.25, 0);
     blade.rotation.z = -a;
+    for (let j = 0; j < 5; j++) {
+      const rung = mesh(bevelBox(0.86, 0.05, 0.15, 0.015), trim, rotor);
+      const d = 0.65 + j * 0.73;
+      rung.position.set(Math.sin(a) * d, Math.cos(a) * d, -0.08);
+      rung.rotation.z = -a;
+    }
   }
   mesh(new THREE.SphereGeometry(0.35, 12, 8), standard("#bd674b"), rotor);
   scene.add(windmill);
@@ -148,18 +180,19 @@ export function addLandscape(scene, renderer, grassMaterial) {
   // Batch small scenery, with a road-clearance check at generation time.
   const dummy = new THREE.Object3D();
   const treeCount = 80,
-    wood = standard("#996549"),
-    leaves = standard("#49a347");
+    wood = textured("bark"),
+    leaves = textured("leaves");
   const treeTrunks = new THREE.InstancedMesh(
-    new THREE.CylinderGeometry(0.18, 0.3, 3, 8),
+    new THREE.CylinderGeometry(0.18, 0.3, 3, 12),
     wood,
     treeCount,
   );
   const crowns = new THREE.InstancedMesh(
-    new THREE.SphereGeometry(1, 12, 8),
+    new THREE.SphereGeometry(1, 20, 14),
     leaves,
     treeCount,
   );
+  const crownLobes = new THREE.InstancedMesh(crowns.geometry, leaves, treeCount * 3);
   for (let i = 0; i < treeCount; i++) {
     const f = frameAt(i / treeCount),
       offset = (i % 2 ? 1 : -1) * (15 + Math.random() * 12),
@@ -179,21 +212,40 @@ export function addLandscape(scene, renderer, grassMaterial) {
     dummy.scale.set(2.6 * scale, 2.3 * scale, 2.4 * scale);
     dummy.updateMatrix();
     crowns.setMatrixAt(i, dummy.matrix);
+    for (let j = 0; j < 3; j++) {
+      const a = j * Math.PI * 2 / 3 + i;
+      dummy.position.set(p.x + Math.cos(a) * 1.25 * scale, base + (3.6 + j * 0.16) * scale, p.z + Math.sin(a) * 1.25 * scale);
+      dummy.scale.set(1.7 * scale, 1.55 * scale, 1.7 * scale);
+      dummy.updateMatrix(); crownLobes.setMatrixAt(i * 3 + j, dummy.matrix);
+      crownLobes.setColorAt(i * 3 + j, new THREE.Color().setHSL(0.25 + j * 0.015, 0.18, 0.84));
+    }
     crowns.setColorAt(
       i,
-      new THREE.Color().setHSL(0.25 + Math.random() * 0.07, 0.56, 0.62),
+      new THREE.Color().setHSL(0.25 + Math.random() * 0.07, 0.22, 0.82),
     );
   }
   treeTrunks.castShadow = true;
   crowns.castShadow = true;
-  scene.add(treeTrunks, crowns);
+  crownLobes.castShadow = true;
+  scene.add(treeTrunks, crowns, crownLobes);
   dummy.rotation.set(0, 0, 0);
   const blossomMaterials = ["#ffcb49", "#ff8eaf", "#fff0dc"].map((c) =>
     standard(c),
   );
+  const flower = new THREE.Group();
+  for (let i = 0; i < 5; i++) {
+    const a = i * Math.PI * 2 / 5;
+    const petal = new THREE.Mesh(new THREE.SphereGeometry(0.11, 10, 6), blossomMaterials[0]);
+    petal.position.set(Math.cos(a) * 0.13, 0, Math.sin(a) * 0.13);
+    petal.scale.set(1, 0.5, 1); flower.add(petal);
+  }
+  const center = new THREE.Mesh(new THREE.SphereGeometry(0.075, 10, 6), blossomMaterials[0]);
+  center.position.y = 0.035; flower.add(center);
+  batchStaticMeshes(flower);
+  const flowerGeometry = flower.children[0].geometry;
   const blossoms = blossomMaterials.map(
     (m) =>
-      new THREE.InstancedMesh(new THREE.SphereGeometry(0.18, 6, 4), m, 180),
+      new THREE.InstancedMesh(flowerGeometry, m, 180),
   );
   for (let i = 0; i < 180; i++) {
     const f = frameAt(i / 180),
@@ -240,6 +292,14 @@ export function addLandscape(scene, renderer, grassMaterial) {
     const ctx = c.getContext("2d");
     ctx.fillStyle = color;
     ctx.fillRect(0, 0, 512, 160);
+    const sheen = ctx.createLinearGradient(0, 0, 0, 160);
+    sheen.addColorStop(0, 'rgba(255,255,255,.28)');
+    sheen.addColorStop(1, 'rgba(0,20,50,.18)');
+    ctx.fillStyle = sheen; ctx.fillRect(0, 0, 512, 160);
+    for (let x = 0; x < 512; x += 20) {
+      ctx.fillStyle = x % 40 ? '#ffffff' : '#203b55';
+      ctx.fillRect(x, 133, 20, 13);
+    }
     ctx.strokeStyle = "#ffffff";
     ctx.lineWidth = 8;
     ctx.strokeRect(8, 8, 496, 144);
@@ -286,7 +346,7 @@ export function addLandscape(scene, renderer, grassMaterial) {
       const bench = mesh(bevelBox(1.0, 0.38, 14, 0.1), seats, g);
       bench.position.set(side * row * 1.05, 0.6 + row * 0.6, 0);
     }
-    const canopy = mesh(bevelBox(6, 0.25, 16, 0.1), standard("#fff3d4"), g);
+    const canopy = mesh(bevelBox(6, 0.25, 16, 0.1), textured("fabric", "#fff3d4"), g);
     canopy.position.set(side * 1.5, 4.9, 0);
     for (const z of [-7, 7]) {
       const post = mesh(
@@ -310,7 +370,7 @@ export function addLandscape(scene, renderer, grassMaterial) {
       g,
     );
     balloon.scale.y = 1.25;
-    const basket = mesh(bevelBox(0.9, 0.65, 0.9, 0.12), standard("#c08c5e"), g);
+    const basket = mesh(bevelBox(0.9, 0.65, 0.9, 0.12), textured("bark", "#eac593"), g);
     basket.position.y = -3.5;
     for (const x of [-0.35, 0.35]) {
       const rope = mesh(
