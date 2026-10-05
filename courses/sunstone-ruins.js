@@ -4,7 +4,7 @@ import { buildWorld } from './sunstone-ruins-world.js';
 // the inside, while the temple approach faces the monument from the ridge.
 export default {
   id: 'sunstone-ruins', name: 'Sunstone Ruins',
-  description: 'An oasis, a sandstone canyon, and an ancient temple revealed from the ridge.',
+  description: 'Skim an oasis shore, wind through layered canyons, and enter a living sun temple before cutting the dunes.',
   targetLength: 1500,
   controls: [
     [-170,1,-170],[-125,1,-185],[-70,1,-195],[-10,2,-185],[45,2,-170],
@@ -30,6 +30,12 @@ export default {
     {section:2,fraction:.25},{section:3,fraction:.12},{section:3,fraction:.78},
     {section:4,fraction:.90},{section:5,fraction:.80}],
   shortcut:{section:5,startFraction:.28,endFraction:.65,extraWidth:22},
+  // Two additional choices have different surfaces and scenery: the shore is
+  // a loose sandy racing shoulder; the temple line is a paved procession apron.
+  verges:[
+    {section:0,startFraction:.22,endFraction:.72,side:-1,extraWidth:6,material:'sand',grip:8,drag:.85},
+    {section:3,startFraction:.42,endFraction:.82,side:1,extraWidth:8,material:'paving',grip:12,drag:.65},
+  ],
   hazard:{section:4,fraction:.64,kind:'stone',label:'ANCIENT SHUTTLE',parkOffset:12,minOffset:0,
     halfWidth:1.35,halfLength:2.15,safeLane:-5.5,activation:30,period:12,warningSeconds:2},
   theme:{terrain:'sand',sky:'#e3bd82',fog:'#e5c493',ground:'#d7b56d',road:'#ead9bb',shoulder:'#efe0af',

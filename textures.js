@@ -22,8 +22,14 @@ export function surfaceTexture(kind, renderer) {
     brick: ['#f2e3c4', '#fff8e4', '#bca688'],
     roof: ['#ce7258', '#efaa7d', '#934e43'],
     water: ['#4bbdce', '#aaedf0', '#238baf'],
+    wood: ['#b89160', '#e4c798', '#79583b'],
+    rock: ['#b8ad94', '#e0d5bd', '#786f60'],
+    gravel: ['#b5b3a1', '#e3dac4', '#767d73'],
+    needles: ['#7c8960', '#b6b179', '#475d41'],
+    paving: ['#abb9bd', '#d7ddd4', '#74838a'],
+    blossom: ['#f4c5cf', '#fff1e7', '#d78fba'],
   };
-  const [base, light, dark] = palettes[kind];
+  const [base, light, dark] = palettes[kind] || palettes.rock;
   ctx.fillStyle = base;
   ctx.fillRect(0, 0, 512, 512);
   // Wrapped soft patches avoid a visible edge when the texture repeats.
@@ -89,6 +95,69 @@ export function surfaceTexture(kind, renderer) {
       ctx.stroke();
     }
   }
+  // Construction marks and large-scale variation stay visible from a moving camera.
+  if (kind === 'wood') {
+    for (let x = 0; x < 512; x += 128) {
+      ctx.fillStyle = dark; ctx.fillRect(x, 0, 3, 512);
+      ctx.fillStyle = light; ctx.globalAlpha = 0.4; ctx.fillRect(x + 3, 0, 2, 512);
+      ctx.globalAlpha = 0.22;
+      for (let j = 0; j < 18; j++) {
+        ctx.strokeStyle = j % 3 ? dark : light; ctx.lineWidth = 1 + random();
+        ctx.beginPath();
+        for (let y = 0; y <= 512; y += 8) ctx.lineTo(x + 8 + j * 6 + Math.sin(y / 55 + j) * 2.5, y);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 0.48; ctx.strokeStyle = dark;
+      ctx.beginPath(); ctx.ellipse(x + 63, 195 + (x % 93), 8, 23, 0, 0, Math.PI * 2); ctx.stroke();
+      for (const y of [14, 498]) {
+        ctx.fillStyle = dark; ctx.beginPath(); ctx.arc(x + 12, y, 2.2, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+  }
+  if (kind === 'sand' || kind === 'snow' || kind === 'rock') {
+    ctx.globalAlpha = kind === 'rock' ? 0.15 : 0.11;
+    for (let y = -20; y < 540; y += kind === 'rock' ? 42 : 13) {
+      ctx.strokeStyle = y % 2 ? light : dark; ctx.lineWidth = kind === 'rock' ? 5 : 2;
+      ctx.beginPath();
+      for (let x = 0; x <= 512; x += 8)
+        ctx.lineTo(x, y + Math.sin(x * Math.PI / 128 + y * 0.015) * (kind === 'rock' ? 8 : 5));
+      ctx.stroke();
+    }
+  }
+  if (kind === 'gravel') {
+    for (let i = 0; i < 2800; i++) {
+      const x = random() * 512, y = random() * 512, r = 1 + random() * 3.5;
+      ctx.globalAlpha = 0.3 + random() * 0.25; ctx.fillStyle = i % 3 ? light : dark;
+      ctx.beginPath(); ctx.ellipse(x, y, r, r * 0.65, random() * Math.PI, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+  if (kind === 'needles') {
+    ctx.globalAlpha = 0.38;
+    for (let i = 0; i < 3400; i++) {
+      const x = random() * 512, y = random() * 512, angle = random() * Math.PI * 2;
+      ctx.strokeStyle = i % 3 ? '#baa577' : '#52643c'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(angle) * 10, y + Math.sin(angle) * 10); ctx.stroke();
+    }
+  }
+  if (kind === 'paving') {
+    ctx.globalAlpha = 0.6; ctx.lineWidth = 4; ctx.strokeStyle = dark;
+    for (let y = 0; y <= 512; y += 64) {
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(512, y); ctx.stroke();
+      for (let x = ((y / 64) % 2) * 64; x <= 512; x += 128) {
+        ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, y + 64); ctx.stroke();
+      }
+    }
+  }
+  if (kind === 'blossom') {
+    for (let i = 0; i < 700; i++) {
+      const x = random() * 512, y = random() * 512, r = 3 + random() * 4;
+      ctx.globalAlpha = 0.23; ctx.fillStyle = i % 2 ? light : dark;
+      for (let k = 0; k < 5; k++) {
+        ctx.beginPath(); ctx.ellipse(x + Math.cos(k * 1.257) * r, y + Math.sin(k * 1.257) * r, r, r * 0.65, k * 1.257, 0, Math.PI * 2); ctx.fill();
+      }
+    }
+  }
+  ctx.globalAlpha = 1;
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;

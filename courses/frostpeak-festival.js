@@ -5,7 +5,7 @@ import { buildWorld } from './frostpeak-festival-world.js';
 export default {
   id: 'frostpeak-festival',
   name: 'Frostpeak Festival',
-  description: 'Snowy slalom, a summit reveal, and a playful mountain descent.',
+  description: 'A living alpine resort: gondola climb, powder slalom, summit panorama and an ice-rink finale.',
   targetLength: 1540,
   controls: [
     [-205,2,-80],[-195,2,-155],[-145,2,-205],[-80,3,-210],[-35,4,-190],
@@ -22,6 +22,10 @@ export default {
     {controlIndex:15,id:'descent',name:'PANORAMIC DESCENT',hint:'Bank through the sweep · soft landing',halfWidth:8.5,material:'asphalt',color:'#ffd36e'},
     {controlIndex:19,id:'rink',name:'ICE-RINK BEND',hint:'Blue ice · recover before the groomer',halfWidth:9.5,material:'asphalt',color:'#8cdef6'},
     {controlIndex:23,id:'grandstands',name:'GRANDSTAND FINISH',hint:'Inside powder cut · outside turbo',halfWidth:9,material:'asphalt',color:'#f88fa2'},
+  ],
+  verges:[
+    {section:1,startFraction:.56,endFraction:.79,side:-1,extraWidth:4.5,material:'snow',grip:10,drag:1.15},
+    {section:2,startFraction:.59,endFraction:.88,side:1,extraWidth:5.5,material:'gravel',grip:11,drag:.8},
   ],
   surfaces:[{section:4,startFraction:.12,endFraction:.45,material:'ice',grip:8.5}],
   ramps:[{section:1,fraction:.50,halfLength:8,height:.7},{section:3,fraction:.30,halfLength:10,height:.8}],

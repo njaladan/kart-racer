@@ -1,0 +1,615 @@
+{
+  "license": "CC0-1.0",
+  "sources": [
+    {
+      "key": "grass",
+      "source": "https://ambientcg.com/view?id=Grass004",
+      "license": "CC0-1.0",
+      "evidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/grass/info.json",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/grass/info.json",
+          "sha256": "b7868515b14e6aa5b96ec27dae95c297eca69e298b1a8c0b1c17758a28f898e4",
+          "bytes": 503
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/grass/albedo.jpg",
+          "sha256": "9e1c60da44b34a9738b1256ba827541f097dc583521b1d281e61b5f4b4217bc5",
+          "bytes": 1985561
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/grass/normal.jpg",
+          "sha256": "8014a81d896a5c589b60612a769bc39eb1213e48d96f6146f485ea36e9e9610f",
+          "bytes": 2339612
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/grass/roughness.jpg",
+          "sha256": "706580983860f942e141acdd68c4128dd683be50fcc5d85b7c67a9a3a8c7bac0",
+          "bytes": 851664
+        }
+      ]
+    },
+    {
+      "key": "asphalt",
+      "source": "https://ambientcg.com/view?id=Asphalt031",
+      "license": "CC0-1.0",
+      "evidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/asphalt_light/info.json",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/asphalt_light/info.json",
+          "sha256": "04910c70d365a0cb5b099263b2cf10be1bbcc55bd36a67773807a6aa3458831d",
+          "bytes": 111
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/asphalt_light/albedo.jpg",
+          "sha256": "d8301ee35f486ba073bdd5fda3ea9ed7e40f768aa1def75c420bcc5c055e3534",
+          "bytes": 855584
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/asphalt_light/normal.jpg",
+          "sha256": "8afb3f4090793dc9055b861220f5ada95fce232c02e3b3095e2bb10e8fc69775",
+          "bytes": 2010745
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/asphalt_light/roughness.jpg",
+          "sha256": "b6211415277cad253d6d41330ac1b4b8b3edf631ac56561f7193670935e3d200",
+          "bytes": 838751
+        }
+      ]
+    },
+    {
+      "key": "wood",
+      "source": "https://ambientcg.com/view?id=Planks021",
+      "license": "CC0-1.0",
+      "evidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/wood_planks/info.json",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/wood_planks/info.json",
+          "sha256": "cefe1346b3dc0ef7f40fa7fcf1f331952c9275b75b7616031068b992f715e6bf",
+          "bytes": 187
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/wood_planks/color.jpg",
+          "sha256": "6b097e51414d636635831cec06874908297107463b3bf11406301e0c18d24ca4",
+          "bytes": 1303570
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/wood_planks/normal.jpg",
+          "sha256": "969e44589937ff5b25a976cc26e5bb04198b51dd5927414ff874991f898a6cb8",
+          "bytes": 1621032
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/wood_planks/roughness.jpg",
+          "sha256": "a2d7ed6f260a90e94be5726f48d7348efce8afc77ece42e91254055c578bac36",
+          "bytes": 450338
+        }
+      ]
+    },
+    {
+      "key": "paving",
+      "source": "https://ambientcg.com/view?id=PavingStones128",
+      "license": "CC0-1.0",
+      "evidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/paving_cobble/info.json",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/paving_cobble/info.json",
+          "sha256": "ef02400598138b5d5388d27efdf6587c32ba747087ae1c73d4876a7f1544c267",
+          "bytes": 594
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/paving_cobble/albedo.jpg",
+          "sha256": "eef877d5807627e97b0f1813b14ff4d1855836c9af4976df65e8503f2022d0a3",
+          "bytes": 1270215
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/paving_cobble/normal.jpg",
+          "sha256": "406df32c554c7faa64c39bcd3b5c4eebc41527b4df9448a9a6e2b16c98c9fff3",
+          "bytes": 1936800
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/paving_cobble/roughness.jpg",
+          "sha256": "19eca04e678297ee9662c33cac3e84e3f887d9fb9746e5b000f48073b0f3d497",
+          "bytes": 594270
+        }
+      ]
+    },
+    {
+      "key": "sand",
+      "source": "https://ambientcg.com/view?id=Ground055S",
+      "license": "CC0-1.0",
+      "evidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/sand/info.json",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/sand/info.json",
+          "sha256": "db777a0d68a11740fc974f78567eb314f8ebe168abecaa0bcf001a05600f54d7",
+          "bytes": 189
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/sand/color.jpg",
+          "sha256": "98076fc8b859351efacee3fb1d976f18b4fcb62edd3a60bd3b3e1130a992e98a",
+          "bytes": 845616
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/sand/normal.jpg",
+          "sha256": "3816a80a59067090d65f0bb81d82906182203235df2553a5ae2eba72aa393336",
+          "bytes": 1662571
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/sand/roughness.jpg",
+          "sha256": "436b9896c0033c29c05e2bd2e0021842231cab5d1ea7694c2c9c932709fc3310",
+          "bytes": 452089
+        }
+      ]
+    },
+    {
+      "key": "needles",
+      "source": "https://ambientcg.com/view?id=Ground038",
+      "license": "CC0-1.0",
+      "evidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/forest_floor/info.json",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/forest_floor/info.json",
+          "sha256": "7f2525ade70dbe68897a79081825defb2cce41c48becf5f2b96df0d7eaf4e71f",
+          "bytes": 187
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/forest_floor/color.jpg",
+          "sha256": "4cf3da5f6a5249d0d9ab0862e43db7263948da30fb2ac161acb955afd7ac0dac",
+          "bytes": 2024214
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/forest_floor/normal.jpg",
+          "sha256": "73707860797b6e231747bb723fe60896ba817d0cea9d7244ae8a5318cfdbd6e7",
+          "bytes": 2366394
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/forest_floor/roughness.jpg",
+          "sha256": "c160e1a9308fe95a779a55be4dd664f56baf6fad5e617f5bae0ba26d90a705d3",
+          "bytes": 624875
+        }
+      ]
+    },
+    {
+      "key": "rock",
+      "source": "https://ambientcg.com/view?id=Rock035",
+      "license": "CC0-1.0",
+      "evidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/Rock035/info.json",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/Rock035/info.json",
+          "sha256": "2e90e8edae09db70c9efb346877bee6545bd86a0b7ba113ce7252df1015210a4",
+          "bytes": 490
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/Rock035/color.jpg",
+          "sha256": "7d387e01cad601ce49c35d9d9161f7f8f097de0e32e60f8f2108ae1787854ccf",
+          "bytes": 1453569
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/Rock035/normal.jpg",
+          "sha256": "003dcaa856ce97d2673379a26a444cc0637f0cdd46d7f5de5c3dd263dfbf3f76",
+          "bytes": 2522360
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/Rock035/roughness.jpg",
+          "sha256": "1b3834e6d15be99c06653688ed6c43b492163f6eaacfa56bd7397cf59165e8d6",
+          "bytes": 668189
+        }
+      ]
+    },
+    {
+      "key": "brick",
+      "source": "https://ambientcg.com/view?id=Bricks075A",
+      "license": "CC0-1.0",
+      "evidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/bricks_yellow/info.json",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/bricks_yellow/info.json",
+          "sha256": "ca22c309522a24a3b8b6f7b5946a266cc1164e025cd833b0c3216a509cb38e6a",
+          "bytes": 189
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/bricks_yellow/color.jpg",
+          "sha256": "9e5e42ea1ec80a8657b52cd074738ba32752d610b2c16f9a5024ff2ac2ec3cb2",
+          "bytes": 846181
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/bricks_yellow/normal.jpg",
+          "sha256": "1dfe375828b87c3188e2c9f52da2d5a6c1389ea1c004403d7a6f51174801984b",
+          "bytes": 1124816
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/bricks_yellow/roughness.jpg",
+          "sha256": "67deb6be49bf50987f3b7efe070f47cea15333410cac76816127b2b4b4c1bdf6",
+          "bytes": 315755
+        }
+      ]
+    },
+    {
+      "key": "roof",
+      "source": "https://ambientcg.com/view?id=RoofingTiles013A",
+      "license": "CC0-1.0",
+      "evidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/roof_tiles_clay/info.json",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/roof_tiles_clay/info.json",
+          "sha256": "bbf2fe15e88bd8ac3ce70210d0942a01b37ef316db60252c182d521c16b56679",
+          "bytes": 215
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/roof_tiles_clay/color.jpg",
+          "sha256": "13779a23d342e1f80001d380889744eb6795460e8b8b993f7b9bb89da78089d4",
+          "bytes": 403258
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/roof_tiles_clay/normal.jpg",
+          "sha256": "08d9718bd62c5de5c4cc886a68cf3dbad5996136f52f16249b07a896e0c29005",
+          "bytes": 718594
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/roof_tiles_clay/roughness.jpg",
+          "sha256": "4cb93f5e8d84b97f3247aad4051c3805ea51f88a05a6c703abe32ab0bcec65c6",
+          "bytes": 564671
+        }
+      ]
+    },
+    {
+      "key": "gravel",
+      "source": "https://ambientcg.com/view?id=Gravel022",
+      "license": "CC0-1.0",
+      "evidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/simulation/tex/Gravel022/info.json",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/simulation/tex/Gravel022/info.json",
+          "sha256": "2d5bba267e3487f6e0ee56ba871872380ae998124341ac5d0b46eba5a02523c4",
+          "bytes": 516
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/simulation/tex/Gravel022/Color.jpg",
+          "sha256": "5906254cb658d14ea9cd4531d04b296d86db7ec8d55acfa000c27f029fb82ee7",
+          "bytes": 1424058
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/simulation/tex/Gravel022/NormalGL.jpg",
+          "sha256": "46dc87e9a36b93dea4967b37ba5aaf23abf31c0327ff9e36b0cb8b36c9da5059",
+          "bytes": 2460248
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/simulation/tex/Gravel022/Roughness.jpg",
+          "sha256": "582fc37a8c90839eea0aea1ad027f32527126845c916d5288d36f049f18ca93e",
+          "bytes": 542531
+        }
+      ]
+    },
+    {
+      "key": "painted_wooden_bench",
+      "source": "https://polyhaven.com/a/painted_wooden_bench",
+      "author": {
+        "Kirill Sannikov": "All"
+      },
+      "license": "CC0-1.0",
+      "evidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/painted_wooden_bench/info.json",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/painted_wooden_bench/painted_wooden_bench_1k.gltf",
+          "sha256": "2289ab82f3fe3045bf18f7b9541743d2c65b9f071cb34bbe424d2bc998f3e507",
+          "bytes": 2835
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/painted_wooden_bench/info.json",
+          "sha256": "750e2d700ddaccc6e9a026da5646c0ca9eb0b3ecda71b0318e612544df72cda7",
+          "bytes": 249
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/painted_wooden_bench/painted_wooden_bench.bin",
+          "sha256": "5799bcb20924105cccd6424de8cdb8e67eb57fddc19c395befeac634a7b2e013",
+          "bytes": 25444
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/painted_wooden_bench/textures/painted_wooden_bench_diff_1k.jpg",
+          "sha256": "9bc533313091ee71eaca5fa6334b71d27935d9d75311f64df6a53c28a67c435c",
+          "bytes": 545216
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/painted_wooden_bench/textures/painted_wooden_bench_nor_gl_1k.jpg",
+          "sha256": "a0f53740d77fc61aac01de0b7e1ae6109445d1756839f739ae31fdf10c9911f2",
+          "bytes": 830104
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/painted_wooden_bench/textures/painted_wooden_bench_arm_1k.jpg",
+          "sha256": "878785565eeff706b8f1e4db7e3d794a544e9cf0e56cee424d9a271ab4ead47e",
+          "bytes": 586040
+        }
+      ]
+    },
+    {
+      "key": "street_lamp_02",
+      "source": "https://polyhaven.com/a/street_lamp_02",
+      "author": {
+        "Josh Dean": "All"
+      },
+      "license": "CC0-1.0",
+      "evidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/street_lamp_02/info.json",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/street_lamp_02/street_lamp_02_1k.gltf",
+          "sha256": "3a8a42486c5dc4538a8b44aeeef502c64a1c9d0d42fa5610e37886c355337ff8",
+          "bytes": 6429
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/street_lamp_02/info.json",
+          "sha256": "2f1d22d2605c1feeb05392dcdc1f80687d05623f8b60f0b735448b9f86036089",
+          "bytes": 225
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/street_lamp_02/street_lamp_02.bin",
+          "sha256": "e544c04855dcf728ff2724f691f6784690b8ba3ac323a9a332e56b271ffe1d7c",
+          "bytes": 530092
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/street_lamp_02/textures/street_lamp_02_diff_1k.jpg",
+          "sha256": "19882567313dd43fef60f9fa41a4c55f81a957f9fee539e931fc36a32e386b6c",
+          "bytes": 303714
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/street_lamp_02/textures/street_lamp_02_nor_gl_1k.jpg",
+          "sha256": "fdd9fb26ca853020ed156fdd84e90ce3f9a68bf94edf71c0ffe72add67e316c6",
+          "bytes": 372301
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/street_lamp_02/textures/street_lamp_02_arm_1k.jpg",
+          "sha256": "a1e2d654e7d5d48a1fdfbf720840192d171df54e5ea5f055145d0472d617eede",
+          "bytes": 657710
+        }
+      ]
+    },
+    {
+      "key": "planter_box_01",
+      "source": "https://polyhaven.com/a/planter_box_01",
+      "author": {
+        "James Ray Cock": "All"
+      },
+      "license": "CC0-1.0",
+      "evidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/planter_box_01/info.json",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/planter_box_01/planter_box_01_1k.gltf",
+          "sha256": "15c7ff7396d872e5cad6743c796ff0f42e1f3f831fd334a26aa1fdbd11834a1f",
+          "bytes": 2787
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/planter_box_01/info.json",
+          "sha256": "3c929ff67dde5014b06223f102e96d428c0164b635fa6ebfc3df1062087dd211",
+          "bytes": 230
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/planter_box_01/planter_box_01.bin",
+          "sha256": "cc97bc9ee05a90c78e27ca575a83eba86955e863dea8a12826f6ff02c2c11db3",
+          "bytes": 250580
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/planter_box_01/textures/planter_box_01_diff_1k.jpg",
+          "sha256": "5ad77068bf07ca371e18322c04641754a7758f4479e2835b93f671b4a5143bee",
+          "bytes": 633117
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/planter_box_01/textures/planter_box_01_nor_gl_1k.jpg",
+          "sha256": "7d2ad01fdfc8ea9e39af0ddc1db710380afad859dc3848302ff72d21a6e21a27",
+          "bytes": 707323
+        },
+        {
+          "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/models/planter_box_01/textures/planter_box_01_arm_1k.jpg",
+          "sha256": "b80b08f88166360af32a076082daaed820f0d364a5bef0acea651485017ccbd6",
+          "bytes": 745610
+        }
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "path": "index.json",
+      "bytes": 4709,
+      "sha256": "23a48c337ae2cd8b63f17b8ae0cf2476c5e8509119bcd7c57ab6396f8cc2e8f8"
+    },
+    {
+      "path": "props/painted_wooden_bench-painted_wooden_bench_arm_1k.webp",
+      "bytes": 31240,
+      "sha256": "ad9bf921b6c0650c4f87f9ecbc1edbe0a80aedf322fbbff17bfa4bfb04186410"
+    },
+    {
+      "path": "props/painted_wooden_bench-painted_wooden_bench_diff_1k.webp",
+      "bytes": 25728,
+      "sha256": "79366e79c2e347791bf54cc7b31d6a98fe99363e1ab4110c58629aa9577269db"
+    },
+    {
+      "path": "props/painted_wooden_bench-painted_wooden_bench_nor_gl_1k.webp",
+      "bytes": 351820,
+      "sha256": "016c714b629c81e697b444dcfd6c9fb0d2b27ae78da012bafe9093c4d69fa22d"
+    },
+    {
+      "path": "props/planter_box_01-planter_box_01_arm_1k.webp",
+      "bytes": 57306,
+      "sha256": "1898e27af00e511c28bf107c3a6d04f242f5a385138b01375f2f15c5bf9b0384"
+    },
+    {
+      "path": "props/planter_box_01-planter_box_01_diff_1k.webp",
+      "bytes": 43584,
+      "sha256": "f14b9084e8005c5e44388b0c83daa84cac49c8856c127bc323fef3653265911a"
+    },
+    {
+      "path": "props/planter_box_01-planter_box_01_nor_gl_1k.webp",
+      "bytes": 332686,
+      "sha256": "43219023a437ccd32bc84a30a8e65d6deaa777f4d87e4bf2491aae8aa04a5d76"
+    },
+    {
+      "path": "props/street_lamp_02-street_lamp_02_arm_1k.webp",
+      "bytes": 55448,
+      "sha256": "be1f7f69ac5f035444fecb39e590715de667c69cc839a01da8aa9fac410fd690"
+    },
+    {
+      "path": "props/street_lamp_02-street_lamp_02_diff_1k.webp",
+      "bytes": 16492,
+      "sha256": "eccc9729bcdb4efb068551ee78991325d959a564390865f93c7414f5c86f7db1"
+    },
+    {
+      "path": "props/street_lamp_02-street_lamp_02_nor_gl_1k.webp",
+      "bytes": 184282,
+      "sha256": "36a83cfa6efffc335a3b4cdb6dab7c2ce323399a39c898cb3fbbfe0783262a2c"
+    },
+    {
+      "path": "props.bin",
+      "bytes": 2789952,
+      "sha256": "9d23633d510022a468a0bf37935028b4b4c9df6ac0984bb74404222b92926714"
+    },
+    {
+      "path": "textures/asphalt-color.webp",
+      "bytes": 413794,
+      "sha256": "f1a82ea293e4e131ef8e5fbe74c241afc68aee02c25e75b3c03055a6c6682a53"
+    },
+    {
+      "path": "textures/asphalt-normal.webp",
+      "bytes": 470804,
+      "sha256": "b342d7b35a18ca8e1808bde93baef47f5db9cf08b7ad29d7526c04d8b8df7815"
+    },
+    {
+      "path": "textures/asphalt-roughness.webp",
+      "bytes": 104998,
+      "sha256": "b4e7f84659e04dfbe31b9833b37cc5b902e2488a735c7601b6cb35f3472258c9"
+    },
+    {
+      "path": "textures/brick-color.webp",
+      "bytes": 296674,
+      "sha256": "e15abde640deb0f310a2fb040a9ab5ec33a74d9e89c3818458807ca682db435a"
+    },
+    {
+      "path": "textures/brick-normal.webp",
+      "bytes": 544652,
+      "sha256": "1ffdc052ed7e2023001643a007feae64b819f5d899691979b92d26622fb51c6e"
+    },
+    {
+      "path": "textures/brick-roughness.webp",
+      "bytes": 61004,
+      "sha256": "97db2fd6ad975328c0036c5e9e8660619a17b30a4367c8af2a2bea540447ac91"
+    },
+    {
+      "path": "textures/grass-color.webp",
+      "bytes": 441678,
+      "sha256": "c99fe4c3a3f73ef3cc752084ce6fc90f8ac1c8b5854a26773c91145fdc356681"
+    },
+    {
+      "path": "textures/grass-normal.webp",
+      "bytes": 609120,
+      "sha256": "14622e323fc7a0abbec781da662af02accfc5fce69d7be7da5626300d171a2e1"
+    },
+    {
+      "path": "textures/grass-roughness.webp",
+      "bytes": 108366,
+      "sha256": "38711ffd4b0f4abea08e0f9010e382cffb1f1c29c61a5d3832acfeff51a4717d"
+    },
+    {
+      "path": "textures/gravel-color.webp",
+      "bytes": 318008,
+      "sha256": "d13200390a668fb777099c42ccaf5f93ba342920189b2c0bf505af0d3314e7b8"
+    },
+    {
+      "path": "textures/gravel-normal.webp",
+      "bytes": 649628,
+      "sha256": "7c915888bcbb17e6d030838e712735f56e415d1b50dcdb6b2b99b6817161b9f5"
+    },
+    {
+      "path": "textures/gravel-roughness.webp",
+      "bytes": 55752,
+      "sha256": "afff68ff457cac5757ac467f1308311409e03406d7d58d1109df56b9d4e5a976"
+    },
+    {
+      "path": "textures/needles-color.webp",
+      "bytes": 578618,
+      "sha256": "b24a639d5e82e311b1fd6ff1b316b17ee28d2f8b94e0516fbfb1259622ba55a8"
+    },
+    {
+      "path": "textures/needles-normal.webp",
+      "bytes": 569106,
+      "sha256": "48c267a961ef1d28ab9e133c7718d5eb99e76cc6c481a051b25cdcfecb77e57c"
+    },
+    {
+      "path": "textures/needles-roughness.webp",
+      "bytes": 50438,
+      "sha256": "a4279cbb77ad4181af999246249e4e264512cf158b5bb0fd69b9be990356ef6d"
+    },
+    {
+      "path": "textures/paving-color.webp",
+      "bytes": 253768,
+      "sha256": "735755a09ec588a8ec69d25aae72ae2a4eba77a9893257aa21687c94ddbfabe8"
+    },
+    {
+      "path": "textures/paving-normal.webp",
+      "bytes": 433814,
+      "sha256": "2106b04e010c62ed22bb4f1612bf7ec37c31d79526bae77f3b3fd0d92f2344a8"
+    },
+    {
+      "path": "textures/paving-roughness.webp",
+      "bytes": 41374,
+      "sha256": "b86f9b751e7f5c3d7add0608571faa4c10d15b00bce48fd80ed30dae5b050a1e"
+    },
+    {
+      "path": "textures/rock-color.webp",
+      "bytes": 293790,
+      "sha256": "b0ad5c0de64d5568d72d8d67f67f98cb013927e2288e106a02b84828c5f62d77"
+    },
+    {
+      "path": "textures/rock-normal.webp",
+      "bytes": 634122,
+      "sha256": "edd302f2faa77c5ab2e4a70e952107def84799b0e0f1fd19026162706202cbb2"
+    },
+    {
+      "path": "textures/rock-roughness.webp",
+      "bytes": 73400,
+      "sha256": "c3374b5bf18e1ea82d6ece0ad35f871847442bcf8852f888da4686a00cb4b58e"
+    },
+    {
+      "path": "textures/roof-color.webp",
+      "bytes": 25442,
+      "sha256": "48c54f67d90810a08cd865a24f13955634d411f4cede153803fcbf0b92a8fe9e"
+    },
+    {
+      "path": "textures/roof-normal.webp",
+      "bytes": 195832,
+      "sha256": "abe23472dbb72a7391ef6ccf3edeadaef50b6fa3c627d457c1a542600069e07f"
+    },
+    {
+      "path": "textures/roof-roughness.webp",
+      "bytes": 38282,
+      "sha256": "f6b84ca9e4b23253d0531d884413cbd953e528da8e30847826b2ddcf78426715"
+    },
+    {
+      "path": "textures/sand-color.webp",
+      "bytes": 34300,
+      "sha256": "b286cb69d0f8b72d241af05d7f8fab35d90cad1cd4e24c701a86f19dfb7408f2"
+    },
+    {
+      "path": "textures/sand-normal.webp",
+      "bytes": 373168,
+      "sha256": "29cff61b558dfde8cbb2c2f4049cb1b0af7884b8090e4e66716bd3197942dfca"
+    },
+    {
+      "path": "textures/sand-roughness.webp",
+      "bytes": 19604,
+      "sha256": "1c5e9c7aa73ae157e6cc71bf020a83e2b21595865ff8c97b9f14a4528a309bb4"
+    },
+    {
+      "path": "textures/wood-color.webp",
+      "bytes": 155486,
+      "sha256": "f2b9846a0d6d4af2d732de06f8572f1dc03a70a387725800a38240b3496dbdea"
+    },
+    {
+      "path": "textures/wood-normal.webp",
+      "bytes": 328034,
+      "sha256": "c4ca43570ff0f1fda7bf28dfc738173a8a4c4dddb719d89a41c0d9f837e7bb87"
+    },
+    {
+      "path": "textures/wood-roughness.webp",
+      "bytes": 28638,
+      "sha256": "171caa1f1b1638fcb4184ee64a62ad7abef5d62ee478af6c598af6d3b63c4c5c"
+    }
+  ]
+}

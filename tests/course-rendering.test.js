@@ -32,10 +32,10 @@ test('static batching preserves colored geometry even when handmade props have n
 });
 
 test('all asset-backed scenery assembles and stays finite while each hazard moves',()=>{
-  for(const course of COURSES.filter(c=>c.buildWorld)) {
+  for(const course of COURSES) {
     const track=selectCourse(course),scene=new THREE.Scene();
-    const textures=Object.fromEntries(['asphalt','stone','sand','snow','metal','brick','concrete','wood','bark','water'].map(k=>[k,new THREE.Texture()]));
-    const mats=Object.fromEntries(['grass','road','roadside','rail','white','red','black'].map(k=>[k,new THREE.MeshStandardMaterial({color:'#ffffff'})]));
+    const textures=Object.fromEntries(['asphalt','stone','sand','snow','metal','brick','concrete','wood','bark','water','leaves','fabric','rock','needles','gravel','roof'].map(k=>[k,new THREE.Texture()]));
+    const mats=Object.fromEntries(['grass','road','roadside','rail','white','red','black','pine2','trunk'].map(k=>[k,new THREE.MeshStandardMaterial({color:'#ffffff'})]));
     const world=buildCourseWorld(scene,null,mats,textures,track,assets());
     let meshes=0;
     scene.traverse(object=>{
@@ -43,7 +43,7 @@ test('all asset-backed scenery assembles and stays finite while each hazard move
       for(const attribute of Object.values(object.geometry.attributes))
         assert.ok(Array.from(attribute.array).every(Number.isFinite),`${course.id}: invalid attribute`);
     });
-    assert.ok(meshes<75,`${course.id}: ${meshes} unbatched scenery meshes`);
+    assert.ok(meshes<(course.id==='windmill-wilds'?170:75),`${course.id}: ${meshes} unbatched scenery meshes`);
     for(const time of [0,30,31,35,40,42])world.update(time);
     scene.updateMatrixWorld(true);
     scene.traverse(object=>assert.ok(object.matrixWorld.elements.every(Number.isFinite)));

@@ -24,3 +24,5 @@ temporary source directory and are not shipped to the browser.
 The kart number atlas, sky gradient, signs, flames, and remaining procedural
 graphics are original Turbo Trail artwork. Three.js and fonts retain their
 existing licenses under `vendor/`.
+
+The living-world upgrade adds ten downloaded 1K ambientCG PBR material sets and three textured Poly Haven props. See [their credits, source and conversion details](living/LICENSES.md) and `living/manifest.json`. These are served locally and retain separate normal and roughness maps.

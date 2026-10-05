@@ -28,6 +28,13 @@ export default {
   itemRows:[{section:0,fraction:.30},{section:1,fraction:.12},{section:1,fraction:.88},{section:2,fraction:.75},
     {section:3,fraction:.13},{section:4,fraction:.12},{section:4,fraction:.88},{section:5,fraction:.78}],
   shortcut:{section:5,startFraction:.36,endFraction:.72,extraWidth:10},
+  // The cobbled delivery lane opens through the market's turn reversal.
+  // Its continuous surface offers passing space with lower traction; the
+  // loading apron offers recovery before the separate cargo-shuttle yard.
+  verges:[
+    {section:1,startFraction:.28,endFraction:.76,side:-1,extraWidth:5,material:'paving',grip:10.2,drag:.72},
+    {section:4,startFraction:.04,endFraction:.30,side:1,extraWidth:4,material:'paving',grip:11,drag:.78},
+  ],
   elevated:[{section:3,startFraction:.04,endFraction:.88}],
   hazard:{section:4,fraction:.59,kind:'cargo-shuttle',label:'CARGO SHUTTLE · KEEP LEFT',
     parkOffset:12,minOffset:0,halfWidth:1.35,halfLength:2.15,safeLane:-5.5,activation:30,period:12,warningSeconds:2},

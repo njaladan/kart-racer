@@ -42,7 +42,7 @@ npm test
 
 The Node tests cover every course’s length, section pacing, five-driver race completion, shared collision boundaries, real single-mushroom shortcuts, asset integrity and scenery assembly, alongside acceleration, reverse, grip, airborne momentum, bounded boosted jumps, collision-related takeoff prevention, wall impulses, single-use drift turbos, continuous track progress, finish ranking, AI race completion, frame-rate independence, shell bounces, homing steering, and swept projectile collision.
 
-The integrated build passes 51 Node tests. Headless Chromium completed a three-lap race on all four courses with items enabled and no console or asset-request errors, then returned to the course picker. Portrait (390×844) and landscape (844×390) checks verified visible touch controls and pause; keyboard course selection preserves test/benchmark queries. A deliberately failed required texture load showed the retry state and recovered successfully after retry. These are software-rendered integration checks, not a hardware frame-rate benchmark or human playtest.
+The living-world build passes **54 Node tests**, including five isolated AI drivers finishing three laps on each course, widened route ground / barrier coherence, shell reflection at the new edges, and integrity / UV preservation of the downloaded assets. Headless Chromium checks cover course rendering and shader compilation. These software-rendered checks do not establish a hardware frame-rate target; real-device performance and human racing-line tuning still need playtesting.
 
 For interactive integration checks, open `/tests/browser.html` on the same local server. It exposes held inputs, autodriving, a targeted boosted-ramp scenario, item use, pause/resume, hit recovery, and visible state/render counters. These controls are enabled only for the embedded game with the explicit `?test` query; they are absent from ordinary play.
 
@@ -50,25 +50,24 @@ The visuals combine original procedural artwork with adapted CC0 assets. They bo
 
 ## Graphics
 
-Rounded kart bodies and tires, alloy spokes, side vents, engine fins and numbered racing decals sit alongside layered pine canopies, orchard blossoms, a supported timber bridge and a detailed mill spanning the road. Shared 512px procedural textures add painted variation, grass blades, asphalt aggregate, bark grain, foliage, woven fabric, tire tread, masonry and roof tiles. Subtle bump mapping provides surface depth; instanced scenery and merged static kart parts keep draw calls contained.
+The shared [art-direction brief](ART_DIRECTION.md) keeps the bright arcade style while giving the four courses different atmospheres and environmental life. A layered animated sky supplies clouds, sun or moon, stars and horizon haze. Sector transitions smoothly change fog and ambient fill; bounded snow, sand, sea spray or forest motes complement the scenery. Gentle chase-camera banking, air anticipation, turbo widening and restrained edge streaks reinforce speed without blurring the racing line.
 
-The grass and asphalt now use palette-matched 256px ambientCG textures; the pine,
-oak, and blossom scenery uses Kenney Nature Kit geometry, with spatial instance
-batches that preserve culling. Vertex colors provide fixed underside shading,
-road wear, and broad grass variation without an extra rendering pass. Warm
-sunlight, cooler ambient light, and a painted sky gradient establish depth.
-Kart paint, helmets, visors and metal use one small Poly Haven reflection map,
-prefiltered once at startup. Number decals share one atlas. The existing 2048px
-shadow map follows the kart in texel-sized steps in light space to reduce shimmer.
-Rear-wheel drift sparks are pooled in one draw call, and dual exhaust flames
-combine a pale core and orange tip in one mesh per kart.
+The upgrade bundles **ten downloaded ambientCG material sets** with 1024px photographic color maps plus separate 512px OpenGL normal and roughness maps: grass, worn asphalt, actual plank wood, cobbled paving, sand, forest floor, rock, brick, roof tiles and gravel. Materials retain the existing arcade palette with modest color adjustments. **Three textured Poly Haven props** add real benches, ornate street lamps and planters at focal places. Original Kenney trees / rocks / palms and the Poly Haven reflection environment remain part of the landscape. The additional bundle is about 11.5 MiB; no asset-provider requests occur during play.
 
-All downloaded assets are bundled locally: normal play makes no requests to
-asset providers. See [asset credits](assets/CREDITS.md) for creators, licenses,
-sources and reproduction instructions. The combined downloaded runtime assets
-are about 105 KiB for the shared graphics. The new courses add about 162 KiB of local assets: nine 512px textures and four normalized Kenney Nature Kit models. Their palette-matched concrete, masonry, sand, snow, timber and metal support detailed harbor buildings, carved temples and snowy chalets. See [course asset licenses and sources](assets/courses/LICENSES.md) and the [reproducible preparation script](tools/prepare-course-assets.py). A missing optional shared asset falls back to procedural artwork; a required course load failure offers a retry.
-Open `/tests/browser.html?benchmark=1` to hold pixel density fixed and skip the
-countdown while comparing graphics; normal play retains adaptive resolution.
+| Course | New scenery and motion | Additional driveable lines |
+| --- | --- | --- |
+| Windmill Wilds | Striped fair stalls, waving spectators, sheep pasture, flower beds, fern and mushroom understory, layered limestone, viewing terrace, dock craft, bobbing boats, working waterwheel and gears, butterflies, birds and orchard petals | Meadow grass, forest-floor bypass and ridge gravel overlook |
+| Neon Harbor | Detailed storefronts, fire escapes, rooftop hardware, waterfront benches / lamps / planters, market goods, distant skyline, moving ferries, crane hooks, pedestrians, steam, signals and water highlights | Cobbled market delivery lane and loading apron |
+| Sunstone Ruins | Sculpted dunes, oasis reeds and ripples, wind-blown palm crowns and cloth, carved temple cornices, arcades, torches, courtyard machinery, dust and circling birds | Sandy oasis shore and paved processional line |
+| Frostpeak Festival | Log-course chalets, balconies, snowy shutters, irregular alpine peaks and cornices, working gondolas / cable towers, summit lodge, skating pond, cheering crowds and rippling banners | Powder slalom edge and summit gravel overtaking line |
+
+These nine additional side routes open and rejoin continuously. Their rendered ground, surface grip / drag, kart barriers, shell barriers and ordered race progress share the same metadata. They supplement the original boost-dependent final shortcuts; the existing centerline layouts and clean-lap pacing are preserved.
+
+Static scenery and imported props are batched; trees, city crowds and water highlights use instances. Rural cheering limbs merge into a few animated batches, and particles stay bounded. The 2048px shadow map follows in texel-sized steps; adaptive pixel density now measures actual display-frame duration. A small performance increase is expected from denser geometry and PBR maps; device-specific frame rates are not asserted.
+
+See [asset credits](assets/CREDITS.md), [new downloaded-asset licenses and sources](assets/living/LICENSES.md), and `assets/living/manifest.json` for exact URLs and hashes. `python3 tools/prepare-living-assets.py` reproduces the new bundle with Pillow and numpy. The older [course bundle](assets/courses/LICENSES.md) retains its own credits. Missing optional shared assets have procedural fallbacks; a required local bundle failure offers a retry.
+
+Open `/tests/browser.html?benchmark=1` to skip the countdown and hold pixel density fixed. The repaired course picker selects all four worlds. Test-only section seeking accepts `offset` for side-route inspection and `snapCamera` for deterministic chase views; ordinary play has no test controls.
 
 ## Windmill Wilds
 

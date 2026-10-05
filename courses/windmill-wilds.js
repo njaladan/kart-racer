@@ -27,6 +27,11 @@ export default {
   pads: [{section:0,fraction:.70,offset:-3.3,duration:.8},{section:2,fraction:.72,offset:0,duration:.8},{section:3,fraction:.78,offset:0,duration:.8},...[.27,.40,.53].map(fraction=>({section:5,fraction,offset:-5.1,duration:.7}))],
   itemRows: [[0,.23],[1,.12],[1,.85],[2,.32],[3,.12],[3,.90],[4,.87],[5,.72]].map(([section,fraction])=>({section,fraction})),
   shortcut: {section:5,startFraction:.10,endFraction:.36,extraWidth:22},
+  verges: [
+    {section:0,startFraction:.42,endFraction:.69,side:1,extraWidth:11,material:'grass',grip:6,drag:1},
+    {section:1,startFraction:.29,endFraction:.63,side:-1,extraWidth:7,material:'needles',grip:8,drag:.8},
+    {section:2,startFraction:.37,endFraction:.59,side:-1,extraWidth:5,material:'gravel',grip:10,drag:.7},
+  ],
   hazard: {section:4,fraction:.70,kind:'cart',label:'CART CROSSING',parkOffset:10,minOffset:-3,halfWidth:1.35,halfLength:2.15,safeLane:-6,activation:30,period:12,warningSeconds:2},
   theme: {sky:'#56ace2',fog:'#c2e1e6',ground:'#ffffff',road:'#ffffff',shoulder:'#b1afa0',hemisphere:'#bddcf5',ambientGround:'#7e8c6b',ambientIntensity:1.4,sun:'#fff0d5',sunIntensity:2.3,exposure:1.02},
 };

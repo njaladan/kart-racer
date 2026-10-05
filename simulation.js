@@ -109,6 +109,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     {
       offroad: before.offroad,
       offroadDrag: before.offroadDrag,
+      offroadGrip: before.offroadGrip,
       grip: before.grip,
       bank: -before.frame.up.dot(before.horizontalRight),
       slope: before.frame.tangent.y,

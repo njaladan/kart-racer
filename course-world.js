@@ -3,8 +3,10 @@ import { batchStaticMeshes } from './visuals.js';
 import { surfaceTexture } from './textures.js';
 import { createRailGeometry } from './course-rails.js';
 import { bakeVertexShade } from './graphics.js';
+import { createCourseKit, batchScenery } from './course-kit.js';
+import buildWindmillLife from './courses/windmill-wilds-world.js';
 import { TRACK, COURSE_LENGTH, SECTIONS, frameAt, poseAt, roadHalfWidth,
-  surfaceAt, shortcutWidth, projectTrack, MILL_T, BRIDGE_RANGE } from './track.js';
+  surfaceAt, shortcutWidth, projectTrack, MILL_T, BRIDGE_RANGE, activeTrack, VERGES, vergeWidth } from './track.js';
 import { cartAt } from './hazards.js';
 
 // Every road edge, rail, shortcut and moving prop uses the simulation's data.
@@ -13,13 +15,14 @@ export function addCourseWorld(scene, renderer, mats, textures, nature = null) {
   scene.add(scenery);
   let seed = 8127;
   const random = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
-  const mat = (color, map = null) => new THREE.MeshStandardMaterial({ color, map, roughness: 0.87, vertexColors: true });
-  const wood = mat('#d6b784'), darkWood = mat('#76573b');
+  const mat = (color, map = null) => new THREE.MeshStandardMaterial({ color, map,
+    ...(map?.userData?.pbr||{}),roughness: 0.87, vertexColors: true });
+  const wood = mat('#d6b784',textures.wood), darkWood = mat('#76573b',textures.wood);
   // Tight inner bends can reverse the edge direction; keep both faces visible.
   const railMaterials = [mats.rail.clone(), darkWood.clone()], bridgeRailMaterial = wood.clone();
   for (const material of [...railMaterials, bridgeRailMaterial]) material.side = THREE.DoubleSide;
-  const stone = mat('#e8d9bf', surfaceTexture('brick', renderer));
-  const roof = mat('#e67851', surfaceTexture('roof', renderer));
+  const stone = mat('#e8d9bf', textures.brick || (renderer ? surfaceTexture('brick', renderer) : null));
+  const roof = mat('#e67851', textures.roof || (renderer ? surfaceTexture('roof', renderer) : null));
   const ochre = mat('#ebc875'), cream = mat('#fff1c9'), red = mat('#ed644b');
   const leaf = mat('#6d9d57', textures.leaves), pine = mat('#609782', textures.leaves);
   const flower = mat('#ffc2bd'), fruit = mat('#e66941'), rock = mat('#a2ae9c');
@@ -52,15 +55,16 @@ export function addCourseWorld(scene, renderer, mats, textures, nature = null) {
   const groundPos = ground.geometry.getAttribute('position');
   for (let i = 0; i < groundUV.count; i++) groundUV.setXY(i, groundPos.getX(i) / 6, -groundPos.getY(i) / 6);
 
-  function ribbon(edgeA, edgeB, materials, lift = 0.045, terrain = false) {
-    const pos = [], uv = [], colors = [], indices = [], groups = [], n = 1800;
+  function ribbon(edgeA, edgeB, materials, lift = 0.045, terrain = false, startT=0, endT=1) {
+    const pos = [], uv = [], colors = [], indices = [], groups = [], n = Math.max(8,Math.ceil(1800*(endT-startT)));
     const grassy = materials === mats.grass;
     for (let i = 0; i <= n; i++) {
-      const t = i / n, frame = frameAt(t);
+      const t = THREE.MathUtils.lerp(startT,endT,i/n), frame = frameAt(t);
       for (const [j, edge] of [edgeA(t), edgeB(t)].entries()) {
         const p = frame.p.clone().addScaledVector(frame.right, edge);
         if (terrain) {
-          const distance = Math.abs(edge) - (roadHalfWidth(t) + (edge > 0 ? shortcutWidth(t) : 0));
+          const surface=surfaceAt(t);
+          const distance = Math.abs(edge) - (edge > 0 ? surface.rightEdge : -surface.leftEdge);
           p.y = THREE.MathUtils.lerp(p.y - 0.06, -1.7, THREE.MathUtils.smoothstep(distance, 0, 38));
         } else p.addScaledVector(frame.up, lift);
         pos.push(p.x, p.y, p.z);
@@ -73,7 +77,7 @@ export function addCourseWorld(scene, renderer, mats, textures, nature = null) {
         colors.push(shade, shade, shade);
       }
       if (i < n) {
-        if (terrain && inBridge((i + 0.5) / n)) continue;
+        if (terrain && inBridge(THREE.MathUtils.lerp(startT,endT,(i + 0.5) / n))) continue;
         const a = i * 2, start = indices.length;
         if (edgeB(t) >= edgeA(t)) indices.push(a, a + 1, a + 2, a + 1, a + 3, a + 2);
         else indices.push(a, a + 2, a + 1, a + 1, a + 2, a + 3);
@@ -97,8 +101,11 @@ export function addCourseWorld(scene, renderer, mats, textures, nature = null) {
   ribbon(t => -roadHalfWidth(t) - 0.55, t => roadHalfWidth(t) + 0.55, mats.roadside, -0.02);
   ribbon(t => -roadHalfWidth(t), t => roadHalfWidth(t), [mats.road, wood, stone]);
   ribbon(t => roadHalfWidth(t), t => roadHalfWidth(t) + shortcutWidth(t), mats.grass, 0.035);
+  const vergeMaterials={grass:mats.grass,needles:mat('#b7b792',textures.needles),gravel:mat('#ccc9b6',textures.gravel)};
+  for(const v of VERGES) ribbon(t=>v.side*roadHalfWidth(t),
+    t=>v.side*(roadHalfWidth(t)+vergeWidth(t,v.side)),vergeMaterials[v.material]||mats.grass,.04,false,v.start,v.end);
   for (const side of [-1, 1]) {
-    const edge = t => side * (roadHalfWidth(t) + 0.55 + (side > 0 ? shortcutWidth(t) : 0));
+    const edge = t => side < 0 ? surfaceAt(t).leftEdge : surfaceAt(t).rightEdge;
     ribbon(t => edge(t), t => edge(t) + side * 38, mats.grass, 0, true);
     // A low continuous rail marks the actual physical limit, including the grass cut.
     mesh(createRailGeometry(side, { width: 0.15, height: 0.32, above: 0.72 }), railMaterials);
@@ -119,7 +126,7 @@ export function addCourseWorld(scene, renderer, mats, textures, nature = null) {
     } else {
       if (i % 2 === 0) box(cream, g, [0, 0.065, 0], [0.13, 0.025, 2.4]);
       for (const side of [-1, 1]) {
-        if (side > 0 && shortcutWidth(t) > 0.1) continue;
+        if (vergeWidth(t,side)>.1 || (side > 0 && shortcutWidth(t) > 0.1)) continue;
         box(i % 2 ? red : cream, g, [side * (half + 0.25), 0.07, 0], [0.5, 0.04, COURSE_LENGTH / 330 + 0.1]);
       }
     }
@@ -134,15 +141,15 @@ export function addCourseWorld(scene, renderer, mats, textures, nature = null) {
   }
   const lakeFrame = poseAt(sectorT(3, 0.38) * TRACK, 39, 0);
   const lake = mesh(new THREE.CircleGeometry(1, 64), new THREE.MeshStandardMaterial({
-    color: '#4aa9bf', roughness: 0.28, metalness: 0.25, map: surfaceTexture('water', renderer),
+    color: '#4aa9bf', roughness: 0.28, metalness: 0.25, map: textures.water,
   }), scenery, [lakeFrame.p.x, -1.55, lakeFrame.p.z], [63, 51, 1]);
   lake.rotation.x = -Math.PI / 2; lake.castShadow = false;
 
   function baseAt(p) {
     const surface = projectTrack(p, 0, true);
-    const edge = surface.halfWidth + (surface.offset > 0 ? shortcutWidth(surface.t) : 0);
+    const edge = surface.offset > 0 ? surface.rightEdge : -surface.leftEdge;
     return { surface, y: THREE.MathUtils.lerp(surface.height - 0.12, -1.7,
-      THREE.MathUtils.smoothstep(surface.distance - edge - 0.55, 0, 38)) };
+      THREE.MathUtils.smoothstep(surface.distance - edge, 0, 38)) };
   }
   const treeBuckets = new Map(), fruitBuckets = new Map();
   const treeMaterial = new THREE.MeshStandardMaterial({ color: '#ffffff', vertexColors: true, roughness: 0.92 });
@@ -154,7 +161,7 @@ export function addCourseWorld(scene, renderer, mats, textures, nature = null) {
   }
   function tree(t, offset, kind, size) {
     const p = poseAt(t * TRACK, offset, 0).p, base = baseAt(p);
-    if (base.surface.distance < base.surface.halfWidth + 3 + (base.surface.offset > 0 ? shortcutWidth(base.surface.t) : 0)) return;
+    if (base.surface.distance < (base.surface.offset > 0 ? base.surface.rightEdge : -base.surface.leftEdge) + size*2.6) return;
     if (nature) {
       const type = kind === 'pine' ? 2 : kind === 'blossom' ? 3 : (Math.floor(t * 193) % 2);
       // A sector-sized batch balances culling with a low draw-call count.
@@ -214,7 +221,7 @@ export function addCourseWorld(scene, renderer, mats, textures, nature = null) {
   }
   // Ridge rock faces lean away from the road; the outside is an open valley view.
   for (let i = 0; i < 45; i++) {
-    const t = sectorT(2, random()), p = poseAt(t * TRACK, -17 - random() * 15, 0).p, base = baseAt(p);
+    const t = sectorT(2, random()), p = poseAt(t * TRACK, surfaceAt(t).leftEdge-12-random()*15, 0).p, base = baseAt(p);
     const m = mesh(new THREE.IcosahedronGeometry(1, 0), rock, scenery, [p.x, base.y + 2, p.z], [4 + random() * 5, 3 + random() * 9, 4 + random() * 5]);
     m.rotation.y = random() * 6;
   }
@@ -234,7 +241,7 @@ export function addCourseWorld(scene, renderer, mats, textures, nature = null) {
   }
   barn(sectorT(0, 0.3), -29, 1.4);
   for (let i = 0; i < 12; i++) {
-    const g = groupAt(sectorT(0, 0.4 + i * 0.012), 14 + i % 3 * 4);
+    const t=sectorT(0, 0.4 + i * 0.012),g = groupAt(t, surfaceAt(t).rightEdge+5+i%3*4);
     mesh(cylinderGeo, ochre, g, [0, 1.1, 0], [1.1, 2.5, 1.1]).rotation.z = Math.PI / 2;
   }
   // Festival stands and pennants form a lively wide first sector.
@@ -247,7 +254,7 @@ export function addCourseWorld(scene, renderer, mats, textures, nature = null) {
     }
   }
   for (let i = 0; i < 20; i++) {
-    const g = groupAt(sectorT(0, i / 20), (i % 2 ? 1 : -1) * 12);
+    const t=sectorT(0,i/20),side=i%2?1:-1,g = groupAt(t,side<0?surfaceAt(t).leftEdge-3:surfaceAt(t).rightEdge+3);
     box(wood, g, [0, 2.2, 0], [0.13, 4.4, 0.13]);
     box(i % 2 ? cream : red, g, [0.6, 3.7, 0], [1.2, 0.75, 0.035]);
   }
@@ -297,20 +304,16 @@ export function addCourseWorld(scene, renderer, mats, textures, nature = null) {
     for (let j = 0; j < 4; j++) mesh(sphereGeo, cream, g, [j * 5, Math.sin(j) * 2, 0], [5.5, 2.8, 3.2]);
     batchStaticMeshes(g);
   }
-  // Flatten static groups and merge by material, keeping animated mill/cart separate.
-  scenery.updateMatrixWorld(true);
-  const staticMeshes = [];
-  scenery.traverse(m => { if (m.isMesh && !mill.getObjectById(m.id)) staticMeshes.push(m); });
-  const combined = new THREE.Group(); scene.add(combined);
-  for (const m of staticMeshes) {
-    m.matrixWorld.decompose(m.position, m.quaternion, m.scale); combined.add(m);
-  }
-  batchStaticMeshes(combined);
+  const life=buildWindmillLife({THREE,scene,scenery,track:activeTrack,
+    kit:createCourseKit(scenery,activeTrack),textures});
+  batchScenery(scenery,[mill,...life.animated]);
   return {
     update(time) {
       rotor.rotation.z = time * 0.75;
       const state = cartAt(time); align(cart, state);
       warningMaterial.emissiveIntensity = state.warning ? 1.5 + Math.sin(time * 12) : 0;
+      if(lake.material.map)lake.material.map.offset.set(time*.006,time*.003);
+      life.update(time);
     },
   };
 }

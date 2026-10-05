@@ -1,0 +1,178 @@
+{
+  "textures": {
+    "grass": {
+      "color": "textures/grass-color.webp",
+      "normal": "textures/grass-normal.webp",
+      "roughness": "textures/grass-roughness.webp"
+    },
+    "asphalt": {
+      "color": "textures/asphalt-color.webp",
+      "normal": "textures/asphalt-normal.webp",
+      "roughness": "textures/asphalt-roughness.webp"
+    },
+    "wood": {
+      "color": "textures/wood-color.webp",
+      "normal": "textures/wood-normal.webp",
+      "roughness": "textures/wood-roughness.webp"
+    },
+    "paving": {
+      "color": "textures/paving-color.webp",
+      "normal": "textures/paving-normal.webp",
+      "roughness": "textures/paving-roughness.webp"
+    },
+    "sand": {
+      "color": "textures/sand-color.webp",
+      "normal": "textures/sand-normal.webp",
+      "roughness": "textures/sand-roughness.webp"
+    },
+    "needles": {
+      "color": "textures/needles-color.webp",
+      "normal": "textures/needles-normal.webp",
+      "roughness": "textures/needles-roughness.webp"
+    },
+    "rock": {
+      "color": "textures/rock-color.webp",
+      "normal": "textures/rock-normal.webp",
+      "roughness": "textures/rock-roughness.webp"
+    },
+    "brick": {
+      "color": "textures/brick-color.webp",
+      "normal": "textures/brick-normal.webp",
+      "roughness": "textures/brick-roughness.webp"
+    },
+    "roof": {
+      "color": "textures/roof-color.webp",
+      "normal": "textures/roof-normal.webp",
+      "roughness": "textures/roof-roughness.webp"
+    },
+    "gravel": {
+      "color": "textures/gravel-color.webp",
+      "normal": "textures/gravel-normal.webp",
+      "roughness": "textures/gravel-roughness.webp"
+    }
+  },
+  "stride": 8,
+  "models": [
+    {
+      "name": "painted_wooden_bench",
+      "size": [
+        1.1649435758590698,
+        0.8892914750613272,
+        0.4965430945158005
+      ],
+      "materials": [
+        {
+          "color": [
+            1,
+            1,
+            1
+          ],
+          "roughness": 1,
+          "metalness": 0,
+          "map": "props/painted_wooden_bench-painted_wooden_bench_diff_1k.webp",
+          "normalMap": "props/painted_wooden_bench-painted_wooden_bench_nor_gl_1k.webp",
+          "armMap": "props/painted_wooden_bench-painted_wooden_bench_arm_1k.webp"
+        }
+      ],
+      "primitives": [
+        {
+          "offset": 0,
+          "vertices": 1890,
+          "material": 0
+        }
+      ]
+    },
+    {
+      "name": "street_lamp_02",
+      "size": [
+        0.38649316132068634,
+        1.6750419437885284,
+        0.8067893021069672
+      ],
+      "materials": [
+        {
+          "color": [
+            1,
+            1,
+            1
+          ],
+          "roughness": 1,
+          "metalness": 1,
+          "map": "props/street_lamp_02-street_lamp_02_diff_1k.webp",
+          "normalMap": "props/street_lamp_02-street_lamp_02_nor_gl_1k.webp",
+          "armMap": "props/street_lamp_02-street_lamp_02_arm_1k.webp"
+        },
+        {
+          "color": [
+            1,
+            1,
+            1
+          ],
+          "roughness": 1,
+          "metalness": 1,
+          "map": "props/street_lamp_02-street_lamp_02_diff_1k.webp",
+          "normalMap": "props/street_lamp_02-street_lamp_02_nor_gl_1k.webp",
+          "armMap": "props/street_lamp_02-street_lamp_02_arm_1k.webp"
+        },
+        {
+          "color": [
+            1,
+            1,
+            1
+          ],
+          "roughness": 1,
+          "metalness": 1,
+          "map": "props/street_lamp_02-street_lamp_02_diff_1k.webp",
+          "normalMap": "props/street_lamp_02-street_lamp_02_nor_gl_1k.webp",
+          "armMap": "props/street_lamp_02-street_lamp_02_arm_1k.webp"
+        }
+      ],
+      "primitives": [
+        {
+          "offset": 60480,
+          "vertices": 59334,
+          "material": 0
+        },
+        {
+          "offset": 1959168,
+          "vertices": 1008,
+          "material": 1
+        },
+        {
+          "offset": 1991424,
+          "vertices": 672,
+          "material": 2
+        }
+      ]
+    },
+    {
+      "name": "planter_box_01",
+      "size": [
+        0.9126113951206207,
+        0.42496823612600565,
+        0.4136679768562317
+      ],
+      "materials": [
+        {
+          "color": [
+            1,
+            1,
+            1
+          ],
+          "roughness": 1,
+          "metalness": 1,
+          "map": "props/planter_box_01-planter_box_01_diff_1k.webp",
+          "normalMap": "props/planter_box_01-planter_box_01_nor_gl_1k.webp",
+          "armMap": "props/planter_box_01-planter_box_01_arm_1k.webp"
+        }
+      ],
+      "primitives": [
+        {
+          "offset": 2012928,
+          "vertices": 24282,
+          "material": 0
+        }
+      ]
+    }
+  ]
+}

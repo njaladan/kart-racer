@@ -60,11 +60,12 @@ export function batchStaticMeshes(parent, excluded = []) {
     let offset = 0;
     for (const m of meshes) {
       const g = m.geometry.clone().applyMatrix4(m.matrix);
-      positions.push(...g.attributes.position.array);
-      normals.push(...g.attributes.normal.array);
-      if (g.attributes.uv) uv.push(...g.attributes.uv.array);
+      // Imported detailed props can exceed JavaScript's argument-count limit.
+      for(const value of g.attributes.position.array)positions.push(value);
+      for(const value of g.attributes.normal.array)normals.push(value);
+      if (g.attributes.uv) for(const value of g.attributes.uv.array)uv.push(value);
       else for (let i = 0; i < g.attributes.position.count; i++) uv.push(0, 0);
-      if (g.attributes.color) colors.push(...g.attributes.color.array);
+      if (g.attributes.color) for(const value of g.attributes.color.array)colors.push(value);
       else for (let i = 0; i < g.attributes.position.count; i++) colors.push(1, 1, 1);
       if (g.index)
         for (const index of g.index.array) indices.push(index + offset);

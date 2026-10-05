@@ -1,13 +1,14 @@
 import * as THREE from "three";
 import { surfaceTexture } from "./textures.js";
 import { loadGraphicsAssets, bakeVertexShade, createKartDecalAtlas,
-  ParticlePool, createStableShadowFollower, addGradientSky } from "./graphics.js";
+  ParticlePool, createStableShadowFollower, addGradientSky, addAmbientWeather, addRaceFinish } from "./graphics.js";
 import {
   bevelBox,
   contactShadow,
   batchStaticMeshes,
 } from "./visuals.js";
 import { loadCourseAssets } from "./course-assets.js";
+import { loadLivingAssets } from "./living-assets.js";
 import { buildCourseWorld } from "./course-runtime.js";
 import { COURSES, courseById } from "./courses/registry.js";
 import { selectCourse, activeTrack } from "./track.js";
@@ -81,7 +82,8 @@ import {
     countdown = 0,
     toastLeft = 0,
     shake = 0,
-    driftCamera = 0;
+    driftCamera = 0,
+    cameraBank = 0;
   let testAutodrive = false,
     testFreeze = false,
     testTricks = { started: 0, landed: 0 },
@@ -117,7 +119,10 @@ import {
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = theme.exposure;
-  scene.add(new THREE.HemisphereLight(theme.hemisphere, theme.ambientGround, theme.ambientIntensity ?? 1.55));
+  const ambientLight = new THREE.HemisphereLight(theme.hemisphere, theme.ambientGround, theme.ambientIntensity ?? 1.55);
+  scene.add(ambientLight);
+  const rim = new THREE.DirectionalLight(theme.terrain === 'concrete' ? '#98bfff' : '#a8d4ee', .24);
+  rim.position.set(65, 35, -55); scene.add(rim);
   const sun = new THREE.DirectionalLight(theme.sun, theme.sunIntensity);
   sun.position.set(-75, 130, 75);
   sun.castShadow = true;
@@ -134,22 +139,35 @@ import {
   scene.add(sun.target);
   const followShadow = createStableShadowFollower(sun);
   const assets = await loadGraphicsAssets(renderer);
-  addGradientSky(scene,theme);
+  const sky = addGradientSky(scene, theme);
+  const weather = addAmbientWeather(scene, theme);
+  const displayFinish = addRaceFinish(scene);
   const mat = (color, roughness = 0.74, extra = {}) =>
     new THREE.MeshStandardMaterial({ color, roughness, vertexColors: true, ...extra });
   const textures = Object.fromEntries(
-    ['grass', 'snow', 'sand', 'concrete', 'water', 'asphalt', 'bark', 'leaves', 'fabric', 'tire', 'paint'].map(
+    ['grass', 'snow', 'sand', 'concrete', 'water', 'asphalt', 'bark', 'leaves', 'fabric', 'tire', 'paint', 'wood', 'rock', 'gravel', 'needles', 'paving', 'blossom', 'brick', 'roof'].map(
       (kind) => [kind, assets[kind] || surfaceTexture(kind, renderer)],
     ),
   );
   const groundKind = theme.terrain || 'grass';
-  const courseAssets = chosenCourse.buildWorld ? await loadCourseAssets(renderer) : {models:{},textures:{}};
+  const courseAssets = await loadCourseAssets(renderer);
   Object.assign(textures,courseAssets.textures);
+  const livingAssets=await loadLivingAssets(renderer);
+  Object.assign(textures,livingAssets.textures);
+  Object.assign(courseAssets.models,livingAssets.models);
+  textures.stone ||= textures.rock;
+  textures.cloth ||= textures.fabric;
+  textures.canvas ||= textures.fabric;
+  textures.metal ||= textures.paint;
   const grassTexture = textures[groundKind], asphaltTexture = textures.asphalt;
-  const surface = (map, bumpScale = 0.025) => ({ map, bumpMap: map, bumpScale });
+  const surface = (map, bumpScale = 0.025) => map?.userData?.pbr
+    ? {map,...map.userData.pbr} : { map, bumpMap: map, bumpScale };
   const mats = {
     grass: mat(theme.ground, 0.96, surface(grassTexture, 0.06)),
-    road: mat(theme.road, 0.96, surface(asphaltTexture, 0.035)),
+    road: mat(theme.road, theme.terrain === 'concrete' ? .34 : .96, {
+      ...surface(asphaltTexture, theme.terrain === 'concrete' ? .016 : .035),
+      ...(theme.terrain === 'concrete' ? { envMap: assets.environment, envMapIntensity: .13, metalness: .16 } : {}),
+    }),
     roadside: mat(theme.shoulder, 0.95, surface(asphaltTexture)),
     white: mat("#fff4d4", 0.65),
     red: mat("#fa634f"),
@@ -354,7 +372,7 @@ import {
   }
 
   const decals = createKartDecalAtlas(['#38d9ca', '#fa6551', '#edc748', '#9e83ff', '#42d7b4', '#ff8bbc']);
-  const reflective = { envMap: assets.environment, envMapIntensity: 0.45 };
+  const reflective = { envMap: assets.environment, envMapIntensity: theme.terrain === 'concrete' ? .24 : 0.55 };
   const particles = new ParticlePool(scene);
   const karts = [],
     projectiles = [],
@@ -984,6 +1002,7 @@ import {
     toastLeft = 0;
     shake = 0;
     driftCamera = 0;
+    cameraBank = 0;
     testTricks = { started: 0, landed: 0 };
     ui.toast.textContent = "";
     syncItem();
@@ -1654,14 +1673,18 @@ import {
       const look = player.worldPos
         .clone()
         .addScaledVector(forward, panoramic ? 4.5 : 6);
-      look.y += 1.15;
+      look.y += 1.15 + (player.grounded ? 0 : .15);
+      // A little steering anticipation exposes the inside of a bend without
+      // changing the established chase distance or hiding the next road exit.
+      look.addScaledVector(frameAt(trackT(player.s)).right, -player.steering * Math.min(.65, player.speed * .009));
       const desired = player.worldPos
         .clone()
         .addScaledVector(
           forward,
           -(panoramic ? 10.5 : 8.7) - player.speed * 0.017 - driftCamera * 0.65,
         );
-      desired.y += 4.7;
+      desired.y += 4.7 + (player.grounded ? 0 : .22);
+      desired.y += Math.sin(raceTime * 11) * Math.min(.025, player.speed * .0003);
       camera.position.lerp(desired, 1 - Math.exp(-6 * dt));
       cameraLook.lerp(look, 1 - Math.exp(-9 * dt));
       const cameraTrack = projectTrack(camera.position, player.s);
@@ -1674,15 +1697,31 @@ import {
         (1 - Math.exp(-3 * dt));
       camera.updateProjectionMatrix();
       camera.lookAt(cameraLook);
+      const bankTarget = player.grounded && player.spin <= 0 ? -player.steering * Math.min(.021, player.speed * .0003) : 0;
+      cameraBank += (bankTarget - cameraBank) * (1 - Math.exp(-5 * dt));
+      camera.rotation.z += cameraBank;
       if (shake) {
         camera.rotation.z += (Math.random() - 0.5) * shake * 0.05;
       }
     }
-    const forest = sectionAt(trackT(player.s)).id === "forest";
-    scene.fog.far += ((forest ? 260 : 600) - scene.fog.far) * (1 - Math.exp(-2 * dt));
+    const section = sectionAt(trackT(player.s));
+    const forest = section.id === "forest" || section.id === "pines";
+    const enclosed = forest || ['warehouse', 'temple', 'canyon'].includes(section.id);
+    const atmosphereBlend = 1 - Math.exp(-1.5 * dt);
+    const fogFar = forest ? 330 : theme.terrain === 'concrete' ? 520 : theme.terrain === 'sand' ? 670 : 720;
+    scene.fog.far += (fogFar - scene.fog.far) * atmosphereBlend;
+    scene.fog.near += ((enclosed ? 95 : 180) - scene.fog.near) * atmosphereBlend;
+    const fogColor = new THREE.Color(theme.fog);
+    if (forest) fogColor.lerp(new THREE.Color(theme.terrain === 'snow' ? '#b0cbdc' : '#91b5ac'), .3);
+    if (section.id === 'temple') fogColor.lerp(new THREE.Color('#b5a7a0'), .22);
+    scene.fog.color.lerp(fogColor, atmosphereBlend);
+    ambientLight.intensity += (((theme.ambientIntensity ?? 1.55) * (enclosed ? .85 : 1)) - ambientLight.intensity) * atmosphereBlend;
+    sky.update(raceTime);
+    weather.update(raceTime, camera.position, forest);
+    displayFinish.update(raceTime, running && !finished ? player.speed : 0, player.boost > 0 && running && !finished, camera.aspect);
     followShadow(player.worldPos);
     particles.sync();
-    renderer.shadowMap.autoUpdate = !paused && !finished;
+    renderer.shadowMap.autoUpdate = !paused && !finished && !testFreeze;
     renderer.render(scene, camera);
   }
   function clamp(v, a, b) {
@@ -1720,13 +1759,14 @@ import {
             tricks: testTricks,
             pickups: { total: boxes.length, active: boxes.filter((b) => b.active).length },
             projectiles: projectiles.length,
-            camera: { driftEffect: driftCamera, fov: camera.fov },
+            camera: { driftEffect: driftCamera, fov: camera.fov, bank: cameraBank,
+              position:camera.position.toArray(),playerVisible:playerKart.root.visible },
             bots: bots.map((b) => ({ s: b.s, finished: b.finished })),
             effects: particles.count + bananas.length + projectiles.length,
             render: {
               geometries: renderer.info.memory.geometries,
               textures: renderer.info.memory.textures,
-              pixelRatio: dpr, particles: particles.count,
+              pixelRatio: dpr, particles: particles.count, weather: weather.object.visible ? weather.object.geometry.attributes.position.count : 0,
               drawCalls: renderer.info.render.calls,
               triangles: renderer.info.render.triangles,
               fps: testFrameStats.frames / Math.max(0.01, testFrameStats.total),
@@ -1749,7 +1789,7 @@ import {
     }
     render(paused ? 0 : dt);
     if (!paused && dt > 0) {
-      performanceTime += dt;
+      performanceTime += frameSeconds;
       performanceFrames++;
       if (performanceTime > 3) {
         const average = performanceTime / performanceFrames;
@@ -1798,13 +1838,23 @@ import {
       }
       if (message.type === "test-seek" && running && Number.isFinite(message.t)) {
         player.s = Math.max(0, Math.min(0.999, message.t)) * TRACK;
-        player.x = 0;
-        player.worldPos.copy(poseAt(player.s, 0, 0.065).p);
+        const offset=Number.isFinite(message.offset)?message.offset:0;
+        player.x = offset/6.25;
+        player.worldPos.copy(poseAt(player.s, offset, 0.065).p);
         player.renderFrom.copy(player.worldPos);
         resetMotion(player);
         resetRaceProgress(player, TRACK);
         player.yaw = yawFor(frameAt(trackT(player.s)).tangent);
         player.speed = 0;
+        // Optional deterministic chase view for software-browser screenshots.
+        if(message.snapCamera) {
+          const forward=new THREE.Vector3(-Math.sin(player.yaw),0,-Math.cos(player.yaw));
+          camera.position.copy(player.worldPos).addScaledVector(forward,-8.7);camera.position.y+=4.7;
+          cameraLook.copy(player.worldPos).addScaledVector(forward,6);cameraLook.y+=1.15;
+          camera.fov=63;camera.updateProjectionMatrix();camera.lookAt(cameraLook);
+          renderer.shadowMap.needsUpdate=true;
+          updateVehicle(player,playerKart,0);render(0);reportTestState();
+        }
       }
       if (message.type === "test-step" && started && !finished && !paused) {
         const seconds = Math.max(0, Math.min(5, Number(message.seconds) || 0));

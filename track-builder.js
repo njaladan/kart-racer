@@ -36,7 +36,27 @@ export function createTrack(course) {
   const ITEM_ROWS = course.itemRows.map(p=>sectorT(p.section,p.fraction));
   const SURFACES = (course.surfaces || []).map(s => ({...s,start:sectorT(s.section,s.startFraction),end:sectorT(s.section,s.endFraction)}));
   const ELEVATED = (course.elevated || []).map(s => ({...s,start:sectorT(s.section,s.startFraction),end:sectorT(s.section,s.endFraction)}));
+  const VERGES = (course.verges || []).map(v => ({...v,
+    start:sectorT(v.section,v.startFraction),end:sectorT(v.section,v.endFraction)}));
   const smooth = (a, b, v) => THREE.MathUtils.smoothstep(v, a, b);
+  // Taper route choices over world metres, sharing their geometry with physics.
+  function vergePatchWidth(v, t) {
+    const taper = Math.min(12 / lengths.at(-1), (v.end - v.start) / 3);
+    return v.extraWidth * smooth(v.start, v.start + taper, t)
+      * (1 - smooth(v.end - taper, v.end, t));
+  }
+  function vergeWidth(t, side) {
+    t = wrap01(t);
+    return VERGES.reduce((width,v) => v.side === side
+      ? Math.max(width,vergePatchWidth(v,t)) : width, 0);
+  }
+  function vergeAt(t, offset) {
+    t = wrap01(t);
+    const side = offset < 0 ? -1 : 1, excess = Math.abs(offset) - roadHalfWidth(t);
+    if (excess <= 0) return null;
+    return VERGES.find(v => v.side === side && excess <= vergePatchWidth(v,t) + .55
+      && t > v.start && t < v.end) || null;
+  }
   function shortcutWidth(t) {
     return SHORTCUT.extraWidth * smooth(SHORTCUT.start, SHORTCUT.start + 0.018, t)
       * (1 - smooth(SHORTCUT.end - 0.018, SHORTCUT.end, t));
@@ -51,10 +71,14 @@ export function createTrack(course) {
     t = wrap01(t);
     const halfWidth = roadHalfWidth(t), section = sectionAt(t);
     const patch = SURFACES.find(s => t >= s.start && t < s.end);
+    const verge = vergeAt(t,offset);
     return { section, halfWidth, offroad: Math.abs(offset) > halfWidth,
-      leftEdge: -halfWidth - 0.55, rightEdge: halfWidth + 0.55 + shortcutWidth(t),
-      offroadDrag: shortcutWidth(t) > 0 ? (course.shortcut.drag ?? 1) : 1,
-      material: patch?.material ?? section.material, grip: patch?.grip ?? section.grip ?? 12 };
+      leftEdge: -halfWidth - 0.55 - vergeWidth(t,-1),
+      rightEdge: halfWidth + 0.55 + Math.max(shortcutWidth(t),vergeWidth(t,1)),
+      offroadDrag: verge?.drag ?? (offset > halfWidth && shortcutWidth(t) > 0 ? (course.shortcut.drag ?? 1) : 1),
+      material: verge?.material ?? patch?.material ?? section.material,
+      grip: verge?.grip ?? patch?.grip ?? section.grip ?? 12,
+      offroadGrip: verge?.grip ?? 5, verge };
   }
   // Vehicle centers respect body size; shells use the same actual road edges.
   function collisionBounds(t, radius = 0.9) {
@@ -62,7 +86,7 @@ export function createTrack(course) {
     return { left: surface.leftEdge + radius, right: surface.rightEdge - radius };
   }
   function bankAt(t) {
-    if (shortcutWidth(wrap01(t)) > 0) return 0;
+    if (shortcutWidth(wrap01(t)) > 0 || vergeWidth(t,-1) > 0 || vergeWidth(t,1) > 0) return 0;
     const a = curve.getTangentAt(wrap01(t - 0.005)), b = curve.getTangentAt(wrap01(t + 0.005));
     return THREE.MathUtils.clamp(progressDelta(yawFor(b), yawFor(a), Math.PI * 2) * -0.6, -0.14, 0.14);
   }
@@ -124,5 +148,5 @@ export function createTrack(course) {
     return { t, frame, offset, height, horizontalRight, distance: Math.sqrt(best), ...surfaceAt(t, offset) };
   }
 
-  return {SURFACES,ELEVATED,course,TRACK,trackT,laneWidth,yawFor,WORLD_PER_UNIT,metresToProgress,SECTIONS,sectionAt,RAMPS,MILL_T,CART_T,BRIDGE_RANGE,SHORTCUT,BOOST_PADS,ITEM_ROWS,shortcutWidth,roadHalfWidth,surfaceAt,collisionBounds,bankAt,rampHeight,routePoint,SAMPLE_COUNT,COURSE_LENGTH,frameAt,poseAt,projectTrack,sectorT};
+  return {SURFACES,ELEVATED,VERGES,vergeWidth,vergeAt,course,TRACK,trackT,laneWidth,yawFor,WORLD_PER_UNIT,metresToProgress,SECTIONS,sectionAt,RAMPS,MILL_T,CART_T,BRIDGE_RANGE,SHORTCUT,BOOST_PADS,ITEM_ROWS,shortcutWidth,roadHalfWidth,surfaceAt,collisionBounds,bankAt,rampHeight,routePoint,SAMPLE_COUNT,COURSE_LENGTH,frameAt,poseAt,projectTrack,sectorT};
 }

@@ -5,7 +5,8 @@ import { bakeVertexShade } from './graphics.js';
 // Scenery authors get placement and reusable primitives, never engine globals.
 export function createCourseKit(scenery, track, assets = {models:{}}) {
   const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = (color, extra = {}) => new THREE.MeshStandardMaterial({color, roughness: .85, vertexColors:true, ...extra});
+  const material = (color, extra = {}) => new THREE.MeshStandardMaterial({color, roughness: .85, vertexColors:true,
+    ...(extra.map?.userData?.pbr || {}), ...Object.fromEntries(Object.entries(extra).filter(([,v])=>v!==undefined))});
   const mesh = (geometry, mat, parent = scenery, position = [0,0,0], scale = [1,1,1]) => {
     if(!geometry.getAttribute('color') && geometry.getAttribute('normal')) bakeVertexShade(geometry,.14);
     const m = new THREE.Mesh(geometry, mat);
@@ -21,12 +22,31 @@ export function createCourseKit(scenery, track, assets = {models:{}}) {
     const g = new THREE.Group(); align(g,track.poseAt(t*track.TRACK,offset,0)); parent.add(g); return g;
   };
   const sectorT = (index,fraction) => track.sectorT(index,fraction);
+  // Scenic structures stay upright and are planted on the rendered embankment.
+  const landGroup = (t,offset,parent = scenery) => {
+    const pose=track.poseAt(t*track.TRACK,offset,0), surface=track.projectTrack(pose.p,0,true);
+    const edge=surface.offset>0?surface.rightEdge:-surface.leftEdge;
+    const g=new THREE.Group();g.position.copy(pose.p);
+    g.position.y=THREE.MathUtils.lerp(surface.height-.12,-1.7,
+      THREE.MathUtils.smoothstep(surface.distance-edge,0,38));
+    g.rotation.y=track.yawFor(pose.tangent);parent.add(g);return g;
+  };
+  const safeGroup = (t,offset,footprint=1,parent = scenery) => {
+    const p=track.poseAt(t*track.TRACK,offset,0).p,s=track.projectTrack(p,0,true);
+    const edge=s.offset>0?s.rightEdge:-s.leftEdge;
+    return s.distance>edge+footprint+1?landGroup(t,offset,parent):null;
+  };
   const asset = (name,parent = scenery,position = [0,0,0],scale = [1,1,1]) => {
     const model=assets.models[name];
     if(!model) throw new Error(`Unknown course scenery asset: ${name}`);
+    if(model.isObject3D) {
+      const instance=model.clone(true);instance.position.set(...position);instance.scale.set(...scale);
+      parent.add(instance);return instance;
+    }
     return mesh(model.geometry,model.material,parent,position,scale);
   };
-  return {material,mesh,box,align,groupAt,sectorT,asset,batch:batchStaticMeshes};
+  return {material,mesh,box,align,groupAt,landGroup,safeGroup,sectorT,asset,
+    hasAsset:name=>!!assets.models[name],batch:batchStaticMeshes};
 }
 
 export function batchScenery(scenery, animated = []) {

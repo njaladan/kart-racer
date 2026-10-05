@@ -101,7 +101,7 @@ export function drive(state, input, surface, dt) {
     const targetYaw =
       state.spin > 0 ? 5 : clamp(desiredYaw, -yawLimit, yawLimit);
     state.yawRate += (targetYaw - state.yawRate) * (1 - Math.exp(-8 * dt));
-    const grip = surface.offroad && !boosted ? 5 : sliding ? 2.5 : (surface.grip || 12);
+    const grip = surface.offroad && !boosted ? (surface.offroadGrip ?? 5) : sliding ? 2.5 : (surface.grip || 12);
     lateral *= Math.exp(-grip * dt);
     const parked =
       !input.throttle &&
