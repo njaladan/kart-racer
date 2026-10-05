@@ -97,6 +97,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     "boost",
     "star",
     "spin",
+    "hitDecel",
     "invulnerable",
     "contactCooldown",
     "padCooldown",

@@ -25,6 +25,8 @@ export function createRacerState(configuration = {}) {
     boost: 0,
     star: 0,
     spin: 0,
+    spinDirection: 1,
+    hitDecel: 0,
     drift: 0,
     driftTier: 0,
     driftBoost: 0,

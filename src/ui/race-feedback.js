@@ -101,8 +101,19 @@ export function createRaceFeedback({ player, audio, particles, toast, terrain })
     },
     hit(who) {
       if (who !== player) return;
-      shake = 0.22;
+      shake = 0.42;
       audio.play("hit");
+      const origin = who.worldPos.clone().add(new THREE.Vector3(0, 0.75, 0));
+      for (let n = 0; n < 18; n++) {
+        const angle = (n / 18) * Math.PI * 2 + Math.random() * 0.2;
+        const speed = 1.5 + Math.random() * 3.5;
+        const velocity = new THREE.Vector3(
+          Math.cos(angle) * speed,
+          0.5 + Math.random() * 2.2,
+          Math.sin(angle) * speed,
+        );
+        spawnParticle(origin, n % 3 ? "#ffd66b" : "#ff824d", 0.48, 0.12, velocity);
+      }
     },
     contact(closing) {
       shake = 0.08;

@@ -59,9 +59,13 @@ export function createRaceSession({
   function hitRacer(racer, seconds = 1.1) {
     if (racer.invulnerable > 0 || racer.star > 0 || racer.finished) return false;
     racer.spin = seconds;
+    racer.spinDirection = Math.sign(racer.steering || racer.yawRate || 1);
+    racer.yawRate = racer.spinDirection * 15;
+    racer.hitDecel = 0.85;
     racer.invulnerable = seconds + 1;
-    racer.vx *= 0.55;
-    racer.vz *= 0.55;
+    // Keep most incoming momentum, then bleed speed through impact drag.
+    racer.vx *= 0.82;
+    racer.vz *= 0.82;
     racer.drift = 0;
     racer.trickActive = false;
     racer.trickBuffer = 0;

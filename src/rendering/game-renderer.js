@@ -45,6 +45,7 @@ export function createGameRenderer({
   const kartRight = new THREE.Vector3();
   const kartBasis = new THREE.Matrix4();
   const shadowTilt = new THREE.Quaternion();
+  const trackForward = new THREE.Vector3();
   let driftCamera = 0;
   let cameraBank = 0;
   let hudClock = 0;
@@ -69,10 +70,18 @@ export function createGameRenderer({
       ? ((state.steering * state.speed) / MAX_SPEED) * 0.065
       : trickPose * 0.65;
     const poseBlend = dt ? 1 - Math.exp(-18 * dt) : 1;
-    kart.bodyGroup.rotation.z += (bodyLean - kart.bodyGroup.rotation.z) * poseBlend;
-    kart.bodyGroup.rotation.x += (-trickPose * 0.35 - kart.bodyGroup.rotation.x) * poseBlend;
+    const hitJolt = state.spin > 0 ? Math.min(1, state.spin) : 0;
+    const hitVibration =
+      hitJolt *
+      (0.045 * Math.sin(frameState.elapsed * 79) + 0.022 * Math.sin(frameState.elapsed * 131));
+    kart.bodyGroup.rotation.z +=
+      (bodyLean + hitVibration * 0.42 - kart.bodyGroup.rotation.z) * poseBlend;
+    kart.bodyGroup.rotation.x +=
+      (-trickPose * 0.35 + hitVibration * 0.22 - kart.bodyGroup.rotation.x) * poseBlend;
     kart.bodyGroup.position.y =
-      Math.sin(frameState.elapsed * 22) * Math.min(0.025, state.speed * 0.0003);
+      Math.sin(frameState.elapsed * 22) * Math.min(0.025, state.speed * 0.0003) +
+      Math.abs(hitVibration) * 0.3;
+    kart.bodyGroup.position.x = hitVibration;
 
     for (const wheel of kart.wheels) {
       wheel.spin.rotation.x += (state.longitudinalSpeed * dt) / wheel.radius;
@@ -218,9 +227,11 @@ export function createGameRenderer({
     // the kart points into the corner. Keep the kart-facing view in reverse.
     const velocityYaw = Math.atan2(-player.vx, -player.vz);
     const movingForward = player.speed > 8 && player.longitudinalSpeed > 0;
-    const travelBlend = player.spin > 0 ? 1 : player.driftDirection ? 0.75 : 0.35;
+    const travelBlend = player.driftDirection ? 0.75 : 0.35;
     const cameraYaw = movingForward ? yaw + wrapAngle(velocityYaw - yaw) * travelBlend : yaw;
-    const forward = new THREE.Vector3(-Math.sin(cameraYaw), 0, -Math.cos(cameraYaw));
+    const forward = player.spin > 0
+      ? trackForward.copy(frameAt(trackT(player.s)).tangent).setY(0).normalize()
+      : new THREE.Vector3(-Math.sin(cameraYaw), 0, -Math.cos(cameraYaw));
     const position = playerKart.root.position;
     const driftCameraTarget =
       frameState.running && player.driftBoost > 0 && player.boost > 0 && player.spin <= 0
@@ -229,13 +240,6 @@ export function createGameRenderer({
           : 0.75
         : 0;
     driftCamera += (driftCameraTarget - driftCamera) * (1 - Math.exp(-8 * dt));
-    if (player.spin > 0 && !movingForward) {
-      forward
-        .copy(frameAt(trackT(player.s)).tangent)
-        .setY(0)
-        .normalize();
-    }
-
     const panoramic = camera.aspect > 1.8;
     const look = position.clone().addScaledVector(forward, panoramic ? 4.5 : 6);
     look.y += 1.15;

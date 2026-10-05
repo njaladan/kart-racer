@@ -20,6 +20,8 @@ export function resetMotion(state) {
     vy: 0,
     airTime: 0,
     yawRate: 0,
+    hitDecel: 0,
+    spinDirection: 1,
     steering: 0,
     grounded: true,
     reverseHold: 0,
@@ -91,7 +93,11 @@ export function drive(state, input, surface, dt) {
         0.002 * travelSpeed * travelSpeed +
         (surface.offroad && !boosted ? (5 + travelSpeed * 0.38) * (surface.offroadDrag ?? 1) : 0));
     acceleration -= surface.slope * 9.81;
-    if (state.spin > 0) acceleration -= Math.sign(forward) * 14;
+    if (state.spin > 0) {
+      // Fade impact drag over time so the kart scrubs speed instead of stopping instantly.
+      const impactDrag = 5 + 7 * clamp((state.hitDecel || 0) / 0.85, 0, 1);
+      acceleration -= Math.sign(forward) * impactDrag;
+    }
     const next = signedSpeed + acceleration * dt;
     const nextSpeed =
       (!input.throttle || input.brake) &&
@@ -118,7 +124,10 @@ export function drive(state, input, surface, dt) {
     // Rough ground already lowers grip and adds drag; also capping yaw makes
     // it impossible to steer back onto the road after a boost expires.
     const yawLimit = 2.8;
-    const targetYaw = state.spin > 0 ? 5 : clamp(desiredYaw, -yawLimit, yawLimit);
+    const targetYaw =
+      state.spin > 0
+        ? (state.spinDirection || 1) * 15
+        : clamp(desiredYaw, -yawLimit, yawLimit);
     // Human input needs prompt release; AI retains its continuous-correction tuning.
     const yawResponse = state.isPlayer
       ? steeringTarget === 0 || targetYaw * state.yawRate < 0
