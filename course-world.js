@@ -1,8 +1,9 @@
 import * as THREE from './vendor/three/three.module.js';
 import { batchStaticMeshes } from './visuals.js';
 import { surfaceTexture } from './textures.js';
+import { createRailGeometry } from './course-rails.js';
 import { TRACK, COURSE_LENGTH, SECTIONS, frameAt, poseAt, roadHalfWidth,
-  surfaceAt, shortcutWidth, projectTrack, MILL_T, BRIDGE_RANGE, SHORTCUT } from './track.js';
+  shortcutWidth, projectTrack, MILL_T, BRIDGE_RANGE } from './track.js';
 import { cartAt } from './hazards.js';
 
 // Every road edge, rail, shortcut and moving prop uses the simulation's data.
@@ -13,6 +14,9 @@ export function addCourseWorld(scene, renderer, mats, textures) {
   const random = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
   const mat = (color, map = null) => new THREE.MeshStandardMaterial({ color, map, roughness: 0.87 });
   const wood = mat('#d6b784'), darkWood = mat('#76573b');
+  // Tight inner bends can reverse the edge direction; keep both faces visible.
+  const railMaterials = [mats.rail.clone(), darkWood.clone()], bridgeRailMaterial = wood.clone();
+  for (const material of [...railMaterials, bridgeRailMaterial]) material.side = THREE.DoubleSide;
   const stone = mat('#e8d9bf', surfaceTexture('brick', renderer));
   const roof = mat('#e67851', surfaceTexture('roof', renderer));
   const ochre = mat('#ebc875'), cream = mat('#fff1c9'), red = mat('#ed644b');
@@ -84,13 +88,14 @@ export function addCourseWorld(scene, renderer, mats, textures) {
     const edge = t => side * (roadHalfWidth(t) + 0.55 + (side > 0 ? shortcutWidth(t) : 0));
     ribbon(t => edge(t), t => edge(t) + side * 38, mats.grass, 0, true);
     // A low continuous rail marks the actual physical limit, including the grass cut.
+    mesh(createRailGeometry(side, { width: 0.15, height: 0.32, above: 0.72 }), railMaterials);
+    mesh(createRailGeometry(side, { width: 0.12, height: 0.15, above: 1.25,
+      start: BRIDGE_RANGE.start, end: BRIDGE_RANGE.end }), bridgeRailMaterial);
     for (let i = 0; i < 370; i++) {
       const t = (i + 0.5) / 370, g = groupAt(t, edge(t));
       const material = inBridge(t) ? darkWood : mats.rail;
-      box(material, g, [0, 0.72, 0], [0.15, 0.32, COURSE_LENGTH / 370 + 0.16]);
       box(material, g, [0, 0.42, 0], [0.19, 0.86, 0.19]);
-      if (inBridge(t)) box(wood, g, [0, 1.25, 0], [0.12, 0.15, COURSE_LENGTH / 370 + 0.16]);
-      batchStaticMeshes(g);
+      if (inBridge(t)) box(wood, g, [0, 1.0, 0], [0.19, 0.6, 0.19]);
     }
   }
   // Dashes and curb blocks establish each turn; timber uses visible cross planks.
@@ -232,21 +237,6 @@ export function addCourseWorld(scene, renderer, mats, textures) {
   box(darkWood, warning, [0, 2, 0], [0.17, 4, 0.17]);
   mesh(sphereGeo, warningMaterial, warning, [0, 4.2, 0], [0.45, 0.45, 0.45]);
 
-  // Readable roadside signs announce place and line choice before the turn.
-  function sign(t, offset, text, color, width = 7) {
-    const c = document.createElement('canvas'); c.width = 512; c.height = 128;
-    const ctx = c.getContext('2d'); ctx.fillStyle = color; ctx.fillRect(0, 0, 512, 128);
-    ctx.fillStyle = '#17383a'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = 'bold 33px sans-serif'; ctx.fillText(text, 256, 67, 480);
-    const texture = new THREE.CanvasTexture(c); texture.colorSpace = THREE.SRGBColorSpace;
-    const g = groupAt(t, offset);
-    for (const x of [-width * 0.4, width * 0.4]) box(wood, g, [x, 1.8, 0], [0.18, 3.6, 0.18]);
-    const m = mesh(new THREE.PlaneGeometry(width, width / 4), new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide }), g, [0, 3.7, 0]);
-    m.castShadow = false;
-  }
-  for (const s of SECTIONS) sign((s.start + 0.996) % 1, -roadHalfWidth(s.start) - 5, s.name, s.color);
-  sign(SHORTCUT.start - 0.018, 15, 'BOOST → GRASS CUT', '#ffe7ad', 7.5);
-  sign(sectorT(5, 0.1), -14, '← OUTSIDE TURBO', '#a5efd7', 7);
-  sign(sectorT(4, 0.56), -13, 'CART CROSSING · KEEP LEFT', '#ffd083', 9);
   for (let i = 0; i < 22; i++) {
     const g = new THREE.Group(); scenery.add(g);
     g.position.set(random() * 950 - 475, 80 + random() * 35, random() * 950 - 475);

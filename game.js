@@ -21,7 +21,7 @@ import {
   poseAt,
   yawFor,
   projectTrack,
-  SECTIONS, sectionAt, BOOST_PADS, ITEM_ROWS, RAMPS, WORLD_PER_UNIT, metresToProgress,
+  sectionAt, BOOST_PADS, ITEM_ROWS, RAMPS, WORLD_PER_UNIT, metresToProgress,
 } from "./track.js";
 
 (() => {
@@ -1592,11 +1592,6 @@ import {
       ui.driftFill.style.width = `${Math.round(player.drift * 100)}%`;
       ui.speed.textContent = String(Math.round(player.speed)).padStart(3, "0");
       ui.timer.textContent = formatTime(raceTime);
-      const section = sectionAt(trackT(player.s));
-      $("section-name").textContent = section.name;
-      $("section-hint").textContent = section.hint;
-      $("section-index").textContent = `${SECTIONS.indexOf(section) + 1} / 6`;
-      $("course-section").style.setProperty("--section-color", section.color);
       if (engineOsc) {
         engineOsc.frequency.setTargetAtTime(
           55 + player.speed * 1.2,
