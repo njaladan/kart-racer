@@ -80,7 +80,7 @@ export function drive(state, input, surface, dt) {
       Math.sign(forward) *
       (0.45 +
         0.002 * forward * forward +
-        (surface.offroad && !boosted ? 5 + Math.abs(forward) * 0.38 : 0));
+        (surface.offroad && !boosted ? (5 + Math.abs(forward) * 0.38) * (surface.offroadDrag ?? 1) : 0));
     acceleration -= surface.slope * 9.81;
     if (state.spin > 0) acceleration -= Math.sign(forward) * 14;
     const next = forward + acceleration * dt;

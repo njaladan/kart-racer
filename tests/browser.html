@@ -68,6 +68,10 @@
         output = document.querySelector("#state");
       const send = (type, data = {}) =>
         frame.contentWindow.postMessage({ type, ...data }, location.origin);
+      const {COURSES}=await import('../courses/registry.js');
+      const courseSelect=document.getElementById('course');
+      for(const course of COURSES) {const option=document.createElement('option');option.value=course.id;option.textContent=course.name;courseSelect.append(option);}
+      courseSelect.addEventListener('change',()=>{frame.src=`../index.html?test=1&course=${courseSelect.value}`;summary.textContent='Loading course';output.textContent='';});
       const actions = {
         start: () => send("test-start"),
         ramp: () => send("test-ramp"),

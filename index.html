@@ -9,6 +9,7 @@
     <meta name="theme-color" content="#071323" />
     <title>Turbo Trail — Kart Racing</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="data:," />
     <script type="importmap">
       { "imports": { "three": "./vendor/three/three.module.js" } }
     </script>
@@ -26,7 +27,7 @@
           <span class="brand-mark">✦</span> TURBO <b>TRAIL</b>
         </div>
         <div class="track-tag">
-          <span class="live-dot"></span> WINDMILL WILDS
+          <span class="live-dot"></span> <span id="track-name">WINDMILL WILDS</span>
         </div>
       </div>
 
@@ -36,11 +37,14 @@
             <span></span> THE STARTING GRID IS READY <span></span>
           </div>
           <h1>READY,<br /><em>SET,</em> RACE.</h1>
-          <p>
+          <p id="course-description">
             From pine hollow to the working mill.<br />Six places. One wild lap.
           </p>
-          <button id="start-button" class="primary-button">
-            START YOUR ENGINES <span>↗</span>
+          <label class="course-picker" for="course-select">CHOOSE YOUR COURSE
+            <select id="course-select" aria-label="Choose race course"></select>
+          </label>
+          <button id="start-button" class="primary-button" disabled>
+            LOADING COURSE <span>…</span>
           </button>
           <p class="controls-help">
             W / ↑ accelerate · S / ↓ brake &amp; reverse<br />A D / ← → steer ·
@@ -130,6 +134,7 @@
           <button id="again-button" class="primary-button">
             RACE AGAIN <span>↻</span>
           </button>
+          <button id="change-course-button" class="secondary-button">CHOOSE ANOTHER COURSE</button>
         </div>
       </div>
 

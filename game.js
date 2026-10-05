@@ -5,7 +5,11 @@ import {
   contactShadow,
   batchStaticMeshes,
 } from "./visuals.js";
-import { addCourseWorld } from "./course-world.js";
+import { loadCourseAssets } from "./course-assets.js";
+import { addCourseSky, stabilizeSun } from "./course-lighting.js";
+import { buildCourseWorld } from "./course-runtime.js";
+import { COURSES, courseById } from "./courses/registry.js";
+import { selectCourse, activeTrack } from "./track.js";
 import { advanceRacer, botInput } from "./simulation.js";
 import {
   createShell, advanceShell, sweptDistanceSquared, consumeItem, chooseItem,
@@ -24,7 +28,22 @@ import {
   sectionAt, BOOST_PADS, ITEM_ROWS, RAMPS, WORLD_PER_UNIT, metresToProgress,
 } from "./track.js";
 
-(() => {
+(async () => {
+  const chosenCourse = courseById(new URLSearchParams(location.search).get('course'));
+  selectCourse(chosenCourse);
+  const theme = chosenCourse.theme;
+  const selector = document.getElementById('course-select');
+  for(const course of COURSES) {
+    const option = document.createElement('option'); option.value=course.id; option.textContent=course.name;
+    selector.append(option);
+  }
+  selector.value=chosenCourse.id;
+  selector.addEventListener('change', () => {
+    const url = new URL(location.href); url.searchParams.set('course',selector.value); location.assign(url);
+  });
+  document.getElementById('track-name').textContent=chosenCourse.name.toUpperCase();
+  document.getElementById('course-description').textContent=chosenCourse.description;
+
   const canvas = document.querySelector("#game"),
     radar = document.querySelector("#radar"),
     rctx = radar.getContext("2d");
@@ -69,8 +88,8 @@ import {
   const keys = Object.create(null),
     tempObj = new THREE.Object3D();
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color("#8ed5e8");
-  scene.fog = new THREE.Fog("#c3e4e5", 165, 480);
+  scene.background = new THREE.Color(theme.sky);
+  scene.fog = new THREE.Fog(theme.fog, 165, 480);
   const camera = new THREE.PerspectiveCamera(
     63,
     innerWidth / innerHeight,
@@ -94,9 +113,9 @@ import {
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.0;
-  scene.add(new THREE.HemisphereLight("#c6edff", "#8c9b60", 1.55));
-  const sun = new THREE.DirectionalLight("#fff0d0", 2.5);
+  renderer.toneMappingExposure = theme.exposure;
+  scene.add(new THREE.HemisphereLight(theme.hemisphere, theme.ambientGround, 1.55));
+  const sun = new THREE.DirectionalLight(theme.sun, theme.sunIntensity);
   sun.position.set(-75, 130, 75);
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
@@ -113,16 +132,20 @@ import {
   const mat = (color, roughness = 0.74, extra = {}) =>
     new THREE.MeshStandardMaterial({ color, roughness, ...extra });
   const textures = Object.fromEntries(
-    ['grass', 'asphalt', 'bark', 'leaves', 'fabric', 'tire', 'paint'].map(
+    ['grass', 'snow', 'sand', 'concrete', 'water', 'asphalt', 'bark', 'leaves', 'fabric', 'tire', 'paint'].map(
       (kind) => [kind, surfaceTexture(kind, renderer)],
     ),
   );
-  const grassTexture = textures.grass, asphaltTexture = textures.asphalt;
+  const groundKind = theme.terrain || 'grass';
+  const courseAssets = chosenCourse.buildWorld ? await loadCourseAssets(renderer) : {models:{},textures:{}};
+  Object.assign(textures,courseAssets.textures);
+  const grassTexture = textures[groundKind], asphaltTexture = textures.asphalt;
+  const courseSky = addCourseSky(scene,theme);
   const surface = (map, bumpScale = 0.025) => ({ map, bumpMap: map, bumpScale });
   const mats = {
-    grass: mat("#ffffff", 0.96, surface(grassTexture, 0.06)),
-    road: mat("#ffffff", 0.96, surface(asphaltTexture, 0.035)),
-    roadside: mat("#b1afa0", 0.95, surface(asphaltTexture)),
+    grass: mat(theme.ground, 0.96, surface(grassTexture, 0.06)),
+    road: mat(theme.road, 0.96, surface(asphaltTexture, 0.035)),
+    roadside: mat(theme.shoulder, 0.95, surface(asphaltTexture)),
     white: mat("#fff4d4", 0.65),
     red: mat("#fa634f"),
     rail: mat("#e7e5d9", 0.4, { metalness: 0.22 }),
@@ -159,7 +182,7 @@ import {
   }
 
   function makeWorld() {
-    landscape = addCourseWorld(scene, renderer, mats, textures);
+    landscape = buildCourseWorld(scene, renderer, mats, textures, activeTrack, courseAssets);
     addFinishArch();
     addPads();
     addItemBoxes();
@@ -175,18 +198,21 @@ import {
     group.quaternion.setFromRotationMatrix(basis);
   }
   function addFinishArch() {
+    const edge = activeTrack.surfaceAt(0);
+    const postX = Math.max(-edge.leftEdge, edge.rightEdge) + 1.2;
+    const span = postX * 2 + 1;
     const g = new THREE.Group(),
       post = mat("#f7f0d5", 0.36),
       accent = mat("#f76150", 0.5),
       beam = mat("#fa7654", 0.4);
-    for (const x of [-9, 9]) {
-      const p = addMesh(new THREE.BoxGeometry(0.72, 5.3, 0.8), post, g);
-      p.position.set(x, 2.6, 0);
+    for (const x of [-postX, postX]) {
+      const p = addMesh(new THREE.BoxGeometry(0.72, 13.4, 0.8), post, g);
+      p.position.set(x, 6.7, 0);
       const a = addMesh(new THREE.BoxGeometry(0.9, 0.75, 1), accent, g);
-      a.position.set(x, 4.8, 0);
+      a.position.set(x, 13, 0);
     }
-    const top = addMesh(bevelBox(19, 0.85, 0.9, 0.15), beam, g);
-    top.position.set(0, 5.1, 0);
+    const top = addMesh(bevelBox(span, 0.85, 0.9, 0.15), beam, g);
+    top.position.set(0, 13.5, 0);
     const banner = document.createElement("canvas");
     banner.width = 1024;
     banner.height = 80;
@@ -197,7 +223,7 @@ import {
     bx.font = "900 59px sans-serif";
     bx.textAlign = "center";
     bx.textBaseline = "middle";
-    bx.fillText("★  WINDMILL WILDS  ★", 512, 43);
+    bx.fillText(`★  ${chosenCourse.name.toUpperCase()}  ★`, 512, 43, 1000);
     const bt = new THREE.CanvasTexture(banner);
     bt.colorSpace = THREE.SRGBColorSpace;
     for (const z of [-0.46, 0.46]) {
@@ -206,7 +232,7 @@ import {
         new THREE.MeshBasicMaterial({ map: bt }),
         g,
       );
-      sign.position.set(0, 5.1, z);
+      sign.position.set(0, 13.5, z);
       if (z > 0) sign.rotation.y = Math.PI;
       sign.castShadow = false;
     }
@@ -216,7 +242,7 @@ import {
         i % 2 ? mats.white : mats.black,
         g,
       );
-      tile.position.set(-8.25 + i * 1.5, 4.64, 0);
+      tile.position.set(-8.25 + i * 1.5, 13.04, 0);
     }
     alignGroup(g, frameAt(0));
     scene.add(g);
@@ -1037,8 +1063,18 @@ import {
   }
   $("start-button").addEventListener("click", begin);
   $("again-button").addEventListener("click", begin);
+  $("change-course-button").addEventListener("click", () => {
+    reset();started=false;
+    ui.finish.classList.add('hidden');ui.hud.classList.add('hidden');ui.title.classList.remove('hidden');
+    document.querySelector('#game-shell').classList.remove('racing','paused');
+    radar.classList.remove('active');
+    karts.forEach(k=>{k.root.visible=false;k.shadow.visible=false});
+    boxes.forEach(b=>b.group.visible=false);
+    selector.focus({preventScroll:true});
+  });
   $("resume-button").addEventListener("click", () => setPaused(false));
   window.addEventListener("keydown", (e) => {
+    if(e.target.closest("select,input,textarea,button")) return;
     const k = e.key.toLowerCase();
     if ([" ", "arrowup", "arrowdown", "arrowleft", "arrowright"].includes(k))
       e.preventDefault();
@@ -1662,14 +1698,60 @@ import {
     }
     const forest = sectionAt(trackT(player.s)).id === "forest";
     scene.fog.far += ((forest ? 260 : 600) - scene.fog.far) * (1 - Math.exp(-2 * dt));
-    sun.position.copy(player.worldPos).add(new THREE.Vector3(-65, 95, 45));
-    sun.target.position.copy(player.worldPos);
-    sun.target.updateMatrixWorld();
+    stabilizeSun(sun,player.worldPos);
     renderer.shadowMap.autoUpdate = !paused && !finished;
+    courseSky.position.copy(camera.position);
     renderer.render(scene, camera);
   }
   function clamp(v, a, b) {
     return Math.max(a, Math.min(b, v));
+  }
+  function reportTestState() {
+        parent.postMessage(
+          {
+            type: "racer-state",
+            running,
+            paused,
+            finished,
+            countdown,
+            raceTime,
+            rank: place(),
+            player: {
+              section: sectionAt(trackT(player.s)).id,
+              s: player.s,
+              x: player.x,
+              speed: player.speed,
+              item: player.item,
+              itemCount: player.itemCount,
+              grounded: player.grounded,
+              altitude:
+                player.worldPos.y -
+                projectTrack(player.worldPos, player.s).height,
+              airTime: player.airTime,
+              drift: player.drift,
+              boost: player.boost,
+              driftBoost: player.driftBoost,
+              trickActive: player.trickActive,
+              spin: player.spin,
+            },
+            course: chosenCourse.id, section: sectionAt(trackT(player.s)).id,
+            tricks: testTricks,
+            pickups: { total: boxes.length, active: boxes.filter((b) => b.active).length },
+            projectiles: projectiles.length,
+            camera: { driftEffect: driftCamera, fov: camera.fov },
+            bots: bots.map((b) => ({ s: b.s, finished: b.finished })),
+            effects: particles.length + bananas.length + projectiles.length,
+            render: {
+              geometries: renderer.info.memory.geometries,
+              textures: renderer.info.memory.textures,
+              drawCalls: renderer.info.render.calls,
+              triangles: renderer.info.render.triangles,
+              fps: testFrameStats.frames / Math.max(0.01, testFrameStats.total),
+              maxFrame: testFrameStats.max,
+            },
+          },
+          location.origin,
+        );
   }
   function frame(now) {
     const dt = Math.min(0.1, Math.max(0, (now - last) / 1000));
@@ -1701,50 +1783,7 @@ import {
       testFrameStats.total += dt;
       testFrameStats.max = Math.max(testFrameStats.max, dt);
       if (testFrameStats.frames % 6 === 0)
-        parent.postMessage(
-          {
-            type: "racer-state",
-            running,
-            paused,
-            finished,
-            countdown,
-            raceTime,
-            rank: place(),
-            player: {
-              section: sectionAt(trackT(player.s)).id,
-              s: player.s,
-              x: player.x,
-              speed: player.speed,
-              item: player.item,
-              itemCount: player.itemCount,
-              grounded: player.grounded,
-              altitude:
-                player.worldPos.y -
-                projectTrack(player.worldPos, player.s).height,
-              airTime: player.airTime,
-              drift: player.drift,
-              boost: player.boost,
-              driftBoost: player.driftBoost,
-              trickActive: player.trickActive,
-              spin: player.spin,
-            },
-            tricks: testTricks,
-            pickups: { total: boxes.length, active: boxes.filter((b) => b.active).length },
-            projectiles: projectiles.length,
-            camera: { driftEffect: driftCamera, fov: camera.fov },
-            bots: bots.map((b) => ({ s: b.s, finished: b.finished })),
-            effects: particles.length + bananas.length + projectiles.length,
-            render: {
-              geometries: renderer.info.memory.geometries,
-              textures: renderer.info.memory.textures,
-              drawCalls: renderer.info.render.calls,
-              triangles: renderer.info.render.triangles,
-              fps: testFrameStats.frames / Math.max(0.01, testFrameStats.total),
-              maxFrame: testFrameStats.max,
-            },
-          },
-          location.origin,
-        );
+        reportTestState();
     }
     requestAnimationFrame(frame);
   }
@@ -1783,10 +1822,12 @@ import {
         player.yaw = yawFor(frameAt(trackT(player.s)).tangent);
         player.speed = 0;
       }
-      if (message.type === "test-step" && running && !paused) {
+      if (message.type === "test-step" && started && !finished && !paused) {
         const seconds = Math.max(0, Math.min(5, Number(message.seconds) || 0));
         for (let i = 0; i < Math.round(seconds / FIXED_DT); i++) step(FIXED_DT);
+        reportTestState();
       }
+      if (message.type === "test-report") reportTestState();
       if (message.type === "test-auto") testAutodrive = !!message.value;
       if (message.type === "test-input") {
         clearInput();
@@ -1802,6 +1843,8 @@ import {
       if (message.type === "test-hit") hitRacer(player);
     });
   makeWorld();
+  $("start-button").disabled=false;
+  $("start-button").innerHTML='START YOUR ENGINES <span>↗</span>';
   player.yaw = yawFor(frameAt(0).tangent);
   player.worldPos.copy(poseAt(0, 0, 0.065).p);
   bots.forEach((b) => updateVehicle(b, b.kart, 0));
@@ -1817,4 +1860,10 @@ import {
   camera.lookAt(cameraLook);
   syncItem();
   requestAnimationFrame(frame);
-})();
+})().catch(error => {
+  console.error(error);
+  document.getElementById('course-description').textContent='The course could not load. Try again.';
+  const button=document.getElementById('start-button');
+  const retry=button.cloneNode(false);retry.disabled=false;retry.textContent='RETRY COURSE';
+  retry.addEventListener('click',()=>location.reload());button.replaceWith(retry);
+});

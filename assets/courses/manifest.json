@@ -1,0 +1,208 @@
+{
+  "license": "CC0-1.0",
+  "stride": 9,
+  "sources": [
+    {
+      "key": "asphalt",
+      "author": "ambientCG",
+      "license": "CC0-1.0",
+      "source": "https://ambientcg.com/view?id=Asphalt010",
+      "download": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/asphalt/albedo.jpg",
+      "sha256": "412598f9cfa046ff222a76ecd66fde576e42f5141938ffe3be2e2c0e9082e5c8",
+      "bytes": 1093417,
+      "licenseEvidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/asphalt/info.json",
+      "licenseEvidenceSha256": "66dfc65b4bf8ad1dbf8d27fcb6b68acfe53ff10c3291a63254663183b785158f"
+    },
+    {
+      "key": "concrete",
+      "author": "ambientCG",
+      "license": "CC0-1.0",
+      "source": "https://ambientcg.com/view?id=Concrete034",
+      "download": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/concrete034/color.jpg",
+      "sha256": "8ceb9186d990b31fce785e06fdc6974c160f1d27c43f6160266f164deba713aa",
+      "bytes": 269501,
+      "licenseEvidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/concrete034/info.json",
+      "licenseEvidenceSha256": "e06e2900745a3c2a042d5d0e214c4a5e57ab745ed2497619aea08f2850c67b26"
+    },
+    {
+      "key": "metal",
+      "author": "ambientCG",
+      "license": "CC0-1.0",
+      "source": "https://ambientcg.com/view?id=MetalPlates006",
+      "download": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/metalplates006/color.jpg",
+      "sha256": "08478c9e8ae9fe42c9f1378fd5259f4839cd31788a4716a523853324ef40e714",
+      "bytes": 587858,
+      "licenseEvidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/metalplates006/info.json",
+      "licenseEvidenceSha256": "7f7e45463a2e24ba34d09775cff959fb4714413e0af149c51b4a41feafdb1cdb"
+    },
+    {
+      "key": "brick",
+      "author": "ambientCG",
+      "license": "CC0-1.0",
+      "source": "https://ambientcg.com/view?id=Bricks059",
+      "download": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/bricks_red/color.jpg",
+      "sha256": "22b53ec9143b348ae26ed958cdfaa8977195c8daf534dc219f72dd10f2728e7a",
+      "bytes": 1550678,
+      "licenseEvidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/bricks_red/info.json",
+      "licenseEvidenceSha256": "909aac895e66b811ff0e285090c076e0711d65f6fbbe7d01717a8a98d0cb38ae"
+    },
+    {
+      "key": "stone",
+      "author": "ambientCG",
+      "license": "CC0-1.0",
+      "source": "https://ambientcg.com/view?id=Rock030",
+      "download": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/Rock030/color.jpg",
+      "sha256": "1dca8a336518ce0adca4b5cbe2ab30819c8769388f1c15278082a99f022c615a",
+      "bytes": 1483352,
+      "licenseEvidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/Rock030/info.json",
+      "licenseEvidenceSha256": "1edab50c505674c9ab531139c224822a0d92c53ae2795fbe23804e8effb6e99a"
+    },
+    {
+      "key": "sand",
+      "author": "ambientCG",
+      "license": "CC0-1.0",
+      "source": "https://ambientcg.com/view?id=Ground033",
+      "download": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/Ground033/color.jpg",
+      "sha256": "a4b06c25c551165a75f6f6609651428f8c8adee60692359c561785b6c0b2e40b",
+      "bytes": 1196760,
+      "licenseEvidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/Ground033/info.json",
+      "licenseEvidenceSha256": "0014e242f92ae2f12375c2ef4b76d5c936f384432023c0787c40e20857574fa1"
+    },
+    {
+      "key": "snow",
+      "author": "ambientCG",
+      "license": "CC0-1.0",
+      "source": "https://ambientcg.com/view?id=Ground054",
+      "download": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/Ground054/color.jpg",
+      "sha256": "77c0b5ac13eead1420887c608b2c28209a1ae5ba70761bf29953aa23cf3dc31b",
+      "bytes": 1551439,
+      "licenseEvidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/Ground054/info.json",
+      "licenseEvidenceSha256": "f4e503a676f522a31a8d13da28554e908730ff9181352437dc7e3717b54d9e9d"
+    },
+    {
+      "key": "wood",
+      "author": "ambientCG",
+      "license": "CC0-1.0",
+      "source": "https://ambientcg.com/view?id=Bark012",
+      "download": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/Bark012/color.jpg",
+      "sha256": "772d7a35b1d93bce6de7ad8adeabfb6cc126ba52d07b7c9103ed9a7e65dac577",
+      "bytes": 1711274,
+      "licenseEvidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/Bark012/info.json",
+      "licenseEvidenceSha256": "5a7065df4f6d26b3af8b9f1e37d7787ef016eaf2b14c84914a9e9a656bf0618b"
+    },
+    {
+      "key": "bark",
+      "author": "ambientCG",
+      "license": "CC0-1.0",
+      "source": "https://ambientcg.com/view?id=Bark012",
+      "download": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/Bark012/color.jpg",
+      "sha256": "772d7a35b1d93bce6de7ad8adeabfb6cc126ba52d07b7c9103ed9a7e65dac577",
+      "bytes": 1711274,
+      "licenseEvidence": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/shared/Bark012/info.json",
+      "licenseEvidenceSha256": "5a7065df4f6d26b3af8b9f1e37d7787ef016eaf2b14c84914a9e9a656bf0618b"
+    },
+    {
+      "key": "pine",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/tree-pinedefaulta.glb",
+      "sha256": "60d8f352fa3659ed275e06cbddfecf8f92c8effe2977c2f2d7b29b6c9b582e46",
+      "bytes": 17220
+    },
+    {
+      "key": "palm",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/tree-palmdetailedtall.glb",
+      "sha256": "2cbea0f9621cde884c63a7b4ad787bda1d051fa27ef3c66b9f2b65328dc53683",
+      "bytes": 28204
+    },
+    {
+      "key": "rock-a",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/rock-largea.glb",
+      "sha256": "6dd15390fd96501dcd1454765a17ba61dbbd8d47705dfe5149c8dd92b353ce25",
+      "bytes": 7552
+    },
+    {
+      "key": "rock-b",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/rock-largec.glb",
+      "sha256": "23aee8b727adeaf260207af3e0615dc69aa766c6d87de1d44cbc8c2711d74dd1",
+      "bytes": 7004
+    }
+  ],
+  "outputs": [
+    {
+      "path": "models.bin",
+      "sha256": "292c93ad972cd090a64d75ad78dacdf463bc3e416ee98d160e7d06b29799aa95",
+      "bytes": 77544
+    },
+    {
+      "path": "models.json",
+      "sha256": "e0c66d3e80906b409b742aa9b514f0a3a668d20c3cce5c082c735eabd996b3f7",
+      "bytes": 357
+    },
+    {
+      "path": "textures/asphalt.webp",
+      "sha256": "9ab46c8dc29431371a898af06e297d4a5c4b88965162f9017a2c0bf8730bcd0b",
+      "bytes": 1628
+    },
+    {
+      "path": "textures/bark.webp",
+      "sha256": "ef311ce9525d427df336aa59486fde2430882ed98134f517c4a97d71997b5679",
+      "bytes": 32400
+    },
+    {
+      "path": "textures/brick.webp",
+      "sha256": "9f9c4bd8a85174cb194e81f3f0a7aa79504eb0911d6c7f7454c1e7ba2ec8ee3d",
+      "bytes": 3330
+    },
+    {
+      "path": "textures/concrete.webp",
+      "sha256": "48bb46711853e46ec890327a6ab7c72b7fadf5e6f75e9219d98a16311328fc22",
+      "bytes": 2022
+    },
+    {
+      "path": "textures/metal.webp",
+      "sha256": "4c005c682f860837da821f949522c2139907f666775d13c7b4e025910670d6de",
+      "bytes": 7488
+    },
+    {
+      "path": "textures/sand.webp",
+      "sha256": "72497816bf67de6580796479bce17444427a20c044e7117d88b64371d47e0f64",
+      "bytes": 1258
+    },
+    {
+      "path": "textures/snow.webp",
+      "sha256": "16ff9364d43143e996bb2c169c767f09bb3c813e25233f58c8ee02291a10e281",
+      "bytes": 642
+    },
+    {
+      "path": "textures/stone.webp",
+      "sha256": "240acc6521d854fa3bf5d90943ade1620a15f3e43ffd694ac7be11df91da6733",
+      "bytes": 20526
+    },
+    {
+      "path": "textures/wood.webp",
+      "sha256": "e5d6356e3da21a0c85a3d5bf39e7c74c6d606a5f9a8f79fbbf9d951dcfcd6ba0",
+      "bytes": 5974
+    }
+  ],
+  "licenseEvidence": [
+    {
+      "url": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/catalog.json",
+      "sha256": "320e6e9909bfc54b8922716d85ae6e7642f2bfeb7a0b7d9f2500ed3a6ffbfee1"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/CREDITS.md",
+      "sha256": "76f40a38cb44c178a7f662363027872ef29eac7247be993f6d640f4f14a61fd1"
+    }
+  ]
+}

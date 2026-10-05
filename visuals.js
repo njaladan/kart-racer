@@ -53,6 +53,7 @@ export function batchStaticMeshes(parent, excluded = []) {
     if (meshes.length < 2) continue;
     const positions = [],
       normals = [],
+      colors = [],
       uv = [],
       indices = [];
     let offset = 0;
@@ -60,7 +61,10 @@ export function batchStaticMeshes(parent, excluded = []) {
       const g = m.geometry.clone().applyMatrix4(m.matrix);
       positions.push(...g.attributes.position.array);
       normals.push(...g.attributes.normal.array);
-      uv.push(...g.attributes.uv.array);
+      if(g.attributes.color) colors.push(...g.attributes.color.array);
+      else for(let i=0;i<g.attributes.position.count;i++) colors.push(1,1,1);
+      if(g.attributes.uv) uv.push(...g.attributes.uv.array);
+      else for(let i=0;i<g.attributes.position.count;i++) uv.push(0,0);
       if (g.index)
         for (const index of g.index.array) indices.push(index + offset);
       else
@@ -74,6 +78,7 @@ export function batchStaticMeshes(parent, excluded = []) {
     const g = new THREE.BufferGeometry();
     g.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
     g.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
+    g.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
     g.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
     g.setIndex(indices);
     const merged = new THREE.Mesh(g, material);

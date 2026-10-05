@@ -15,7 +15,7 @@ import {
   WORLD_PER_UNIT,
   TRACK,
   yawFor,
-  metresToProgress, collisionBounds, RAMPS, BOOST_PADS,
+  activeTrack, metresToProgress, collisionBounds, RAMPS, BOOST_PADS,
 } from "./track.js";
 import { progressDelta, finishRacer, lapNumber, resetRaceProgress, advanceRaceProgress, CHECKPOINT_COUNT } from "./race.js";
 import { cartAt, cartContact } from "./hazards.js";
@@ -52,7 +52,7 @@ export function botInput(state, index, elapsed, rivals = []) {
   }
   const cart = cartAt(elapsed);
   const cartGap = progressDelta(cart.s, state.s, TRACK) * WORLD_PER_UNIT;
-  if (cartGap > -6 && cartGap < 40) lane = -4.2;
+  if (cartGap > -6 && cartGap < 40) lane = activeTrack.course.hazard.safeLane;
   lane = Math.max(bounds.left + 1.1, Math.min(bounds.right - 1.1, lane));
   const target = lookahead.p.clone().addScaledVector(lookahead.right, lane);
   const desired = Math.atan2(
@@ -108,6 +108,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     input,
     {
       offroad: before.offroad,
+      offroadDrag: before.offroadDrag,
       grip: before.grip,
       bank: -before.frame.up.dot(before.horizontalRight),
       slope: before.frame.tangent.y,

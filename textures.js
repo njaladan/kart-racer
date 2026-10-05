@@ -10,6 +10,9 @@ export function surfaceTexture(kind, renderer) {
   const random = () => ((seed = (1664525 * seed + 1013904223) >>> 0) / 4294967296);
   const palettes = {
     grass: ['#78af45', '#a2c65c', '#528c35'],
+    snow: ['#eef6fa', '#ffffff', '#cddde8'],
+    sand: ['#eee1c2', '#fff5d8', '#c5b58f'],
+    concrete: ['#ccd0d4', '#eef0f1', '#a1a6af'],
     asphalt: ['#65717c', '#a1aab1', '#394754'],
     bark: ['#986945', '#c49363', '#5a3b29'],
     leaves: ['#83b965', '#bdd58c', '#528a45'],

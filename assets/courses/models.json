@@ -1,0 +1,25 @@
+{
+  "stride": 9,
+  "models": [
+    {
+      "name": "pine",
+      "offset": 0,
+      "vertices": 690
+    },
+    {
+      "name": "palm",
+      "offset": 24840,
+      "vertices": 1008
+    },
+    {
+      "name": "rock-a",
+      "offset": 61128,
+      "vertices": 240
+    },
+    {
+      "name": "rock-b",
+      "offset": 69768,
+      "vertices": 216
+    }
+  ]
+}
