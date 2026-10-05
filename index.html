@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#071323" />
+  <title>Turbo Trail — Kart Racing</title>
+  <link rel="stylesheet" href="style.css" />
+  <script type="importmap">
+    {"imports":{"three":"./vendor/three/three.module.js"}}
+  </script>
+</head>
+<body>
+  <main id="game-shell" aria-label="Turbo Trail kart racing game">
+    <canvas id="game" aria-label="Kart racing game canvas"></canvas>
+
+    <div class="topline"><div class="brand"><span class="brand-mark">✦</span> TURBO <b>TRAIL</b></div><div class="track-tag"><span class="live-dot"></span> SUNSET CIRCUIT</div></div>
+
+    <section id="title-screen" class="screen">
+      <div class="title-card">
+        <div class="eyebrow"><span></span> THE STARTING GRID IS READY <span></span></div>
+        <h1>READY,<br /><em>SET,</em> RACE.</h1>
+        <p>A little friendly competition never hurt anybody.<br />Probably.</p>
+        <button id="start-button" class="primary-button">START YOUR ENGINES <span>↗</span></button>
+        <p class="controls-help">W / ↑ accelerate · S / ↓ brake &amp; reverse<br />A D / ← → steer · Space drift · E item · Esc pause</p>
+        <div class="title-foot"><span>🏁 &nbsp;3 LAPS</span><span>⚡ &nbsp;ITEMS ON</span><span>☀️ &nbsp;GOOD VIBES</span></div>
+      </div>
+      <div class="corner-note">NO DOWNLOADS. JUST DRIVE.</div>
+    </section>
+
+    <div id="countdown" class="countdown hidden"></div>
+    <canvas id="radar" width="220" height="190" aria-label="Race minimap"></canvas>
+    <div id="touch-controls" aria-label="Touch driving controls">
+      <div class="touch-steer"><button data-key="a" aria-label="Steer left">‹</button><button data-key="d" aria-label="Steer right">›</button></div>
+      <div class="touch-drive"><button data-key="s" class="touch-brake" aria-label="Brake and reverse">BRAKE</button><button data-key=" " class="touch-drift" aria-label="Drift">DRIFT</button><button data-key="w" class="touch-gas" aria-label="Accelerate">GO <span>▲</span></button><button data-action="item" class="touch-item" aria-label="Use item">ITEM</button></div>
+    </div>
+    <div class="race-actions"><button data-action="recover" aria-label="Recover kart when stopped">RESET <kbd>R</kbd></button><button data-action="pause" aria-label="Pause race">Ⅱ</button></div>
+    <div id="race-hud" class="hud hidden">
+      <div class="hud-left"><div class="place-box"><strong id="place">1<small>ST</small></strong><span>PLACE</span></div><div class="lap-box"><span>LAP</span><strong id="lap">1 <i>/ 3</i></strong><div class="lap-meter"><b id="lap-fill"></b></div><div class="drift-meter"><b id="drift-fill"></b></div></div></div>
+      <div class="hud-center"><div id="toast" class="toast"></div><div class="item-box" id="item-box"><span class="item-icon">?</span><span class="item-label">ITEM</span><kbd>E</kbd></div></div>
+      <div class="hud-right"><div class="speed-box"><strong id="speed">000</strong><span>KM/H</span></div><div class="race-time" id="timer">00:00.00</div></div>
+    </div>
+
+    <div id="finish-screen" class="screen hidden">
+      <div class="finish-card"><div class="eyebrow"><span></span> CHECKERED FLAG <span></span></div><h2 id="finish-title">WHAT A RACE!</h2><p id="finish-copy">You made every turn count.</p><div class="finish-stats"><div><span>FINAL PLACE</span><strong id="final-place">1ST</strong></div><div><span>RACE TIME</span><strong id="final-time">00:00.00</strong></div></div><button id="again-button" class="primary-button">RACE AGAIN <span>↻</span></button></div>
+    </div>
+
+    <div id="pause-screen" class="screen hidden"><div class="pause-card"><div class="eyebrow"><span></span> PIT STOP <span></span></div><h2>TAKE A<br /><em>BREATHER.</em></h2><p>Your kart is right where you left it.</p><button id="resume-button" class="primary-button">BACK TO IT <span>↗</span></button></div></div>
+    <div class="bottomline"><span>© TURBO TRAIL RACING CLUB</span><span>BUILT FOR THE OPEN ROAD &nbsp; ✦</span></div>
+  </main>
+  <script type="module" src="game.js"></script>
+</body>
+</html>
