@@ -214,7 +214,13 @@ export function createGameRenderer({
     const yaw =
       previousYaw +
       wrapAngle(player.yaw - previousYaw) * (dt ? frameState.accumulator / FIXED_DT : 1);
-    const forward = new THREE.Vector3(-Math.sin(yaw), 0, -Math.cos(yaw));
+    // Follow travel direction through a slide so the road stays visible while
+    // the kart points into the corner. Keep the kart-facing view in reverse.
+    const velocityYaw = Math.atan2(-player.vx, -player.vz);
+    const movingForward = player.speed > 8 && player.longitudinalSpeed > 0;
+    const travelBlend = player.spin > 0 ? 1 : player.driftDirection ? 0.75 : 0.35;
+    const cameraYaw = movingForward ? yaw + wrapAngle(velocityYaw - yaw) * travelBlend : yaw;
+    const forward = new THREE.Vector3(-Math.sin(cameraYaw), 0, -Math.cos(cameraYaw));
     const position = playerKart.root.position;
     const driftCameraTarget =
       frameState.running && player.driftBoost > 0 && player.boost > 0 && player.spin <= 0
@@ -223,7 +229,7 @@ export function createGameRenderer({
           : 0.75
         : 0;
     driftCamera += (driftCameraTarget - driftCamera) * (1 - Math.exp(-8 * dt));
-    if (player.spin > 0) {
+    if (player.spin > 0 && !movingForward) {
       forward
         .copy(frameAt(trackT(player.s)).tangent)
         .setY(0)

@@ -2,6 +2,9 @@
 // are used for surface queries and race progress, never to steer the vehicle.
 export const FIXED_DT = 1 / 120;
 export const MAX_SPEED = 112; // km/h
+export const MAX_BOOST_SPEED = 144; // km/h
+export const FULL_SPEED_TURN_RADIUS = 22; // metres, also maintained during boosts
+export const DRIFT_TURN_RADIUS = 17; // metres
 export const MAX_REVERSE_SPEED = 46; // km/h
 export const JUMP_GRAVITY = 24;
 export const MAX_JUMP_HEIGHT = 1.1; // metres above the racing surface
@@ -25,6 +28,7 @@ export function resetMotion(state) {
     contactCooldown: 0,
     invulnerable: 0,
     driftHeld: false,
+    driftDirection: 0,
     driftBoost: 0,
     driftBoostTier: 0,
     trickHeld: false,
@@ -40,7 +44,7 @@ export function drive(state, input, surface, dt) {
     rz = -Math.sin(state.yaw);
   let forward = state.vx * fx + state.vz * fz;
   let lateral = state.vx * rx + state.vz * rz;
-  const steeringTarget = clamp(input.steer, -1, 1);
+  const steeringTarget = clamp(input.steer ?? 0, -1, 1);
   // Quick turn-in, quicker release/countersteer: smooth without a long input tail.
   const steeringResponse = state.isPlayer
     ? steeringTarget === 0 || steeringTarget * state.steering < 0
@@ -48,62 +52,95 @@ export function drive(state, input, surface, dt) {
       : 18
     : 10;
   state.steering += (steeringTarget - state.steering) * (1 - Math.exp(-steeringResponse * dt));
-  const sliding = input.drift && Math.abs(state.steering) > 0.15 && forward > 9 && state.grounded;
+  // Latch the slide so crossing neutral during countersteer does not abruptly
+  // switch tire grip. Release, a hit, a jump or low speed ends the drift.
+  const sliding =
+    !!input.drift &&
+    state.grounded &&
+    !(state.spin > 0) &&
+    forward > (state.driftDirection ? 7 : 9) &&
+    (!!state.driftDirection || Math.abs(state.steering) > 0.15);
+  state.driftDirection = sliding ? state.driftDirection || Math.sign(state.steering) : 0;
   const boosted = state.boost > 0 || state.star > 0;
   if (state.grounded) {
-    const limit = (boosted ? 144 : MAX_SPEED) / 3.6;
+    const limit = (boosted ? MAX_BOOST_SPEED : MAX_SPEED) / 3.6;
+    // Engine/brake forces act on travel speed. Using only its forward component
+    // lets a sideways kart accelerate past the limit and makes braking uneven.
+    const travelSpeed = Math.hypot(forward, lateral);
+    const travelDirection = Math.sign(forward) || Math.sign(state.longitudinalSpeed) || 1;
+    const signedSpeed = travelDirection * travelSpeed;
     let acceleration = 0;
-    if (input.throttle) {
+    if (input.brake) {
+      state.reverseHold = travelSpeed < 0.5 ? state.reverseHold + dt : state.reverseHold;
       acceleration =
-        forward < 0 ? 24 : (boosted ? 27 : 19) * Math.max(0, 1 - (forward / limit) ** 3);
-      state.reverseHold = 0;
-    } else if (input.brake) {
-      state.reverseHold = Math.abs(forward) < 0.5 ? state.reverseHold + dt : state.reverseHold;
-      acceleration =
-        forward > 0.5
+        signedSpeed > 0.5
           ? -28
           : state.reverseHold > 0.18
-            ? -15 * Math.max(0, 1 - (Math.abs(forward) / (MAX_REVERSE_SPEED / 3.6)) ** 3)
+            ? -15 * Math.max(0, 1 - (Math.abs(signedSpeed) / (MAX_REVERSE_SPEED / 3.6)) ** 3)
             : 0;
+    } else if (input.throttle) {
+      acceleration =
+        forward < 0 ? 24 : (boosted ? 27 : 19) * Math.max(0, 1 - (travelSpeed / limit) ** 3);
+      state.reverseHold = 0;
     } else state.reverseHold = 0;
     if (boosted && !input.brake)
-      acceleration = Math.max(acceleration, 22 * Math.max(0, 1 - forward / limit));
+      acceleration = Math.max(acceleration, 22 * Math.max(0, 1 - signedSpeed / limit));
     acceleration -=
-      Math.sign(forward) *
+      Math.sign(signedSpeed) *
       (0.45 +
-        0.002 * forward * forward +
-        (surface.offroad && !boosted
-          ? (5 + Math.abs(forward) * 0.38) * (surface.offroadDrag ?? 1)
-          : 0));
+        0.002 * travelSpeed * travelSpeed +
+        (surface.offroad && !boosted ? (5 + travelSpeed * 0.38) * (surface.offroadDrag ?? 1) : 0));
     acceleration -= surface.slope * 9.81;
     if (state.spin > 0) acceleration -= Math.sign(forward) * 14;
-    const next = forward + acceleration * dt;
-    forward =
-      !input.throttle &&
+    const next = signedSpeed + acceleration * dt;
+    const nextSpeed =
+      (!input.throttle || input.brake) &&
       (!input.brake || state.reverseHold <= 0.18) &&
-      Math.sign(next) !== Math.sign(forward)
+      Math.sign(next) !== Math.sign(signedSpeed)
         ? 0
         : next;
+    if (travelSpeed > 0.001 && Math.sign(nextSpeed) === Math.sign(signedSpeed)) {
+      forward *= Math.abs(nextSpeed) / travelSpeed;
+      lateral *= Math.abs(nextSpeed) / travelSpeed;
+    } else {
+      forward = nextSpeed;
+      lateral = 0;
+    }
 
-    // A bicycle steering model, limited by available lateral tire force.
-    // Drift lowers side grip without rotating the velocity to the heading.
-    const maxLateral = surface.offroad && !boosted ? 11 : sliding ? 25 : 23;
-    const wheelAngle = state.steering * (0.46 / (1 + Math.abs(forward) / 23));
-    const desiredYaw = (-forward / 1.6) * Math.tan(wheelAngle) * (sliding ? 1.3 : 1);
-    const yawLimit = maxLateral / Math.max(5, Math.abs(forward));
+    // Predictable curvature across the whole analog range, with a tighter
+    // drift line. Boosts retain the full-speed radius instead of widening it.
+    const speed = Math.abs(nextSpeed);
+    const radius =
+      5 +
+      ((sliding ? DRIFT_TURN_RADIUS : FULL_SPEED_TURN_RADIUS) - 5) *
+        clamp(speed / (MAX_SPEED / 3.6), 0, 1);
+    const desiredYaw = (-nextSpeed / radius) * state.steering;
+    // Rough ground already lowers grip and adds drag; also capping yaw makes
+    // it impossible to steer back onto the road after a boost expires.
+    const yawLimit = 2.8;
     const targetYaw = state.spin > 0 ? 5 : clamp(desiredYaw, -yawLimit, yawLimit);
     // Human input needs prompt release; AI retains its continuous-correction tuning.
     const yawResponse = state.isPlayer
-      ? sliding
-        ? 10
-        : steeringTarget === 0 || targetYaw * state.yawRate < 0
-          ? 26
+      ? steeringTarget === 0 || targetYaw * state.yawRate < 0
+        ? 26
+        : sliding
+          ? 12
           : 16
       : 8;
     state.yawRate += (targetYaw - state.yawRate) * (1 - Math.exp(-yawResponse * dt));
     const grip =
-      surface.offroad && !boosted ? (surface.offroadGrip ?? 5) : sliding ? 2.5 : surface.grip || 12;
+      surface.offroad && !boosted
+        ? (surface.offroadGrip ?? 5)
+        : sliding
+          ? (surface.grip || 12) * 0.5
+          : surface.grip || 12;
+    // Grip redirects momentum; it must not delete sideways energy every tick.
+    // Retain a bounded slip angle in a drift, then regain traction on release.
+    const momentum = Math.hypot(forward, lateral);
     lateral *= Math.exp(-grip * dt);
+    forward =
+      (Math.sign(forward) || travelDirection) *
+      Math.sqrt(Math.max(0, momentum * momentum - lateral * lateral));
     const parked =
       !input.throttle && !input.brake && Math.abs(forward) < 0.12 && Math.abs(lateral) < 0.12;
     if (parked) {
@@ -123,7 +160,7 @@ export function drive(state, input, surface, dt) {
   state.longitudinalSpeed = forward;
   state.lateralSpeed = lateral;
   state.speed = Math.hypot(state.vx, state.vz) * 3.6;
-  return sliding;
+  return sliding && (Math.abs(state.steering) > 0.1 || Math.abs(lateral) > 0.6);
 }
 
 export function wallContact(state, nx, nz, penetration) {
@@ -168,11 +205,18 @@ export function verticalMotion(state, height, slopeVelocity, dt) {
 
 export function chargeDrift(state, sliding, held, dt) {
   let releasedTier = 0;
+  if (!state.grounded || state.spin > 0) {
+    state.drift = 0;
+    state.driftHeld = held;
+    state.driftTier = 0;
+    return 0;
+  }
   if (sliding) state.drift = Math.min(1, state.drift + dt * 0.48);
+  else if (held) state.drift = Math.max(0, state.drift - dt * 0.8);
   if (state.driftHeld && !held) {
     releasedTier = state.drift >= 0.8 ? 2 : state.drift >= 0.42 ? 1 : 0;
     state.drift = 0;
-  } else if (!held || !state.grounded || state.spin > 0) state.drift = 0;
+  } else if (!held) state.drift = 0;
   state.driftHeld = held;
   state.driftTier = state.drift >= 0.8 ? 2 : state.drift >= 0.42 ? 1 : 0;
   return releasedTier;
