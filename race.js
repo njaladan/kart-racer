@@ -25,3 +25,22 @@ export function lapNumber(distance, length, laps) {
     Math.max(1, Math.floor(Math.max(0, distance) / length) + 1),
   );
 }
+
+// Ordered gates plus a physical-travel check prevent projection or teleports
+// from manufacturing laps. Allow local projection changes across bend normals
+// and wall correction; the wide grass cut follows these same gates.
+export const CHECKPOINT_COUNT = 12;
+export function resetRaceProgress(state, trackLength) {
+  state.nextCheckpoint = Math.floor(state.s / (trackLength / CHECKPOINT_COUNT)) + 1;
+}
+export function advanceRaceProgress(state, projected, trackLength, worldPerUnit, travelledMetres) {
+  if (state.nextCheckpoint == null) resetRaceProgress(state, trackLength);
+  const delta = progressDelta(projected, state.s, trackLength);
+  if (Math.abs(delta) * worldPerUnit > travelledMetres * 4 + 18) return false;
+  const previous = state.s;
+  state.s += delta;
+  const spacing = trackLength / CHECKPOINT_COUNT;
+  while (previous < state.nextCheckpoint * spacing && state.s >= state.nextCheckpoint * spacing)
+    state.nextCheckpoint++;
+  return true;
+}

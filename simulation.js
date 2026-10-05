@@ -15,8 +15,10 @@ import {
   WORLD_PER_UNIT,
   TRACK,
   yawFor,
+  metresToProgress, collisionBounds, RAMPS, BOOST_PADS,
 } from "./track.js";
-import { progressDelta, finishRacer, lapNumber } from "./race.js";
+import { progressDelta, finishRacer, lapNumber, resetRaceProgress, advanceRaceProgress, CHECKPOINT_COUNT } from "./race.js";
+import { cartAt, cartContact } from "./hazards.js";
 
 export function initializeRacer(state) {
   resetMotion(state);
@@ -26,10 +28,14 @@ export function initializeRacer(state) {
   state.lap = 0;
   state.finishTime = Infinity;
   state.finished = false;
+  resetRaceProgress(state, TRACK);
   return state;
 }
 export function botInput(state, index, elapsed, rivals = []) {
-  const lookahead = frameAt(trackT(state.s + 70 + state.speed * 0.25));
+  const aheadMetres = 12 + state.speed * 0.10;
+  const aheadT = trackT(state.s + metresToProgress(aheadMetres));
+  const lookahead = frameAt(aheadT);
+  const bounds = collisionBounds(aheadT);
   let lane =
     (index % 2 ? 1 : -1) * (1.2 + Math.sin(elapsed * 0.35 + index) * 0.4);
   // Leave room to pass a slower kart rather than continually pushing it.
@@ -44,6 +50,10 @@ export function botInput(state, index, elapsed, rivals = []) {
     )
       lane = rival.x > 0 ? -3.25 : 3.25;
   }
+  const cart = cartAt(elapsed);
+  const cartGap = progressDelta(cart.s, state.s, TRACK) * WORLD_PER_UNIT;
+  if (cartGap > -6 && cartGap < 40) lane = -4.2;
+  lane = Math.max(bounds.left + 1.1, Math.min(bounds.right - 1.1, lane));
   const target = lookahead.p.clone().addScaledVector(lookahead.right, lane);
   const desired = Math.atan2(
     -(target.x - state.worldPos.x),
@@ -63,7 +73,9 @@ export function botInput(state, index, elapsed, rivals = []) {
       ),
     ),
   );
-  const cruise = 94 + (state.skill || 0.8) * 12 - Math.min(28, curvature * 26);
+  const radius = aheadMetres / Math.max(0.04, curvature);
+  const safeCornerSpeed = Math.sqrt(18 * radius) * 3.6;
+  const cruise = Math.min(90 + (state.skill || 0.8) * 8, safeCornerSpeed);
   return {
     throttle: state.speed < cruise || state.boost > 0,
     brake: state.speed > cruise + 8,
@@ -95,24 +107,34 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     state,
     input,
     {
-      offroad: Math.abs(before.offset) > 8,
+      offroad: before.offroad,
+      grip: before.grip,
       bank: -before.frame.up.dot(before.horizontalRight),
       slope: before.frame.tangent.y,
     },
     dt,
   );
   const projection = projectTrack(state.worldPos, state.s);
-  state.s += progressDelta(projection.t * TRACK, state.s, TRACK);
+  advanceRaceProgress(state, projection.t * TRACK, TRACK, WORLD_PER_UNIT,
+    state.worldPos.distanceTo(state.renderFrom));
   state.x = projection.offset / 6.25;
-  const side = Math.sign(projection.offset),
-    penetration = Math.abs(projection.offset) - 8.65;
+  const bounds = collisionBounds(projection.t);
+  const side = projection.offset < bounds.left ? -1 : 1;
+  const edge = side < 0 ? bounds.left : bounds.right;
+  const penetration = side * (projection.offset - edge);
   const wallImpact = wallContact(
     state,
     projection.horizontalRight.x * side,
     projection.horizontalRight.z * side,
     penetration,
   );
-  if (penetration > 0) state.x = (side * 8.65) / 6.25;
+  if (penetration > 0) state.x = edge / 6.25;
+  const contact = cartContact(state.worldPos, raceTime);
+  const cartImpact = contact ? wallContact(state, contact.nx, contact.nz, contact.penetration) : false;
+  if (cartImpact && state.invulnerable === 0) {
+    state.vx *= 0.65; state.vz *= 0.65;
+    state.invulnerable = 0.8; state.drift = 0;
+  }
   const after = projectTrack(state.worldPos, state.s);
   const slopeVelocity = (after.height - before.height) / dt;
   const wasGrounded = state.grounded;
@@ -120,8 +142,8 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
   // Do not infer takeoff from a noisy surface derivative after a collision.
   if (state.grounded && state.speed > 50) {
     const travelled = progressDelta(after.t, before.t, 1);
-    for (const crest of [0.2, 0.51, 0.78]) {
-      const distance = progressDelta(crest, before.t, 1);
+    for (const ramp of RAMPS) {
+      const distance = progressDelta(ramp.t, before.t, 1);
       if (travelled > 0 && distance > 0 && distance <= travelled) {
         state.grounded = false;
         state.vy = JUMP_TAKEOFF_SPEED;
@@ -149,9 +171,21 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     state.driftBoost = turboTier === 2 ? 1.05 : 0.55;
     state.driftBoostTier = turboTier;
   }
+  let padBoost = false;
+  if (state.grounded && state.padCooldown === 0) {
+    for (const pad of BOOST_PADS) {
+      if (Math.abs(progressDelta(state.s, pad.t * TRACK, TRACK)) * WORLD_PER_UNIT < 3.4 &&
+          Math.abs(after.offset - pad.offset) < 2.25) {
+        state.boost = Math.max(state.boost, pad.duration);
+        state.padCooldown = 0.7;
+        padBoost = true; break;
+      }
+    }
+  }
+  state.x = after.offset / 6.25;
   state.speed = Math.hypot(state.vx, state.vz) * 3.6;
   state.lap = lapNumber(state.s, TRACK, 3) - 1;
-  const finished = finishRacer(state, TRACK * 3, raceTime);
+  const finished = state.nextCheckpoint > CHECKPOINT_COUNT * 3 && finishRacer(state, TRACK * 3, raceTime);
   if (finished) {
     const fraction = Math.max(
       0,
@@ -162,6 +196,8 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
   return {
     sliding,
     wallImpact,
+    cartImpact,
+    padBoost,
     landed,
     launched: wasGrounded && !state.grounded,
     trickStarted,

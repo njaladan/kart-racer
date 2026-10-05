@@ -80,7 +80,7 @@ export function drive(state, input, surface, dt) {
       Math.sign(forward) *
       (0.45 +
         0.002 * forward * forward +
-        (surface.offroad ? 5 + Math.abs(forward) * 0.38 : 0));
+        (surface.offroad && !boosted ? 5 + Math.abs(forward) * 0.38 : 0));
     acceleration -= surface.slope * 9.81;
     if (state.spin > 0) acceleration -= Math.sign(forward) * 14;
     const next = forward + acceleration * dt;
@@ -93,7 +93,7 @@ export function drive(state, input, surface, dt) {
 
     // A bicycle steering model, limited by available lateral tire force.
     // Drift lowers side grip without rotating the velocity to the heading.
-    const maxLateral = surface.offroad ? 11 : sliding ? 25 : 23;
+    const maxLateral = surface.offroad && !boosted ? 11 : sliding ? 25 : 23;
     const wheelAngle = state.steering * (0.46 / (1 + Math.abs(forward) / 23));
     const desiredYaw =
       (-forward / 1.6) * Math.tan(wheelAngle) * (sliding ? 1.3 : 1);
@@ -101,7 +101,7 @@ export function drive(state, input, surface, dt) {
     const targetYaw =
       state.spin > 0 ? 5 : clamp(desiredYaw, -yawLimit, yawLimit);
     state.yawRate += (targetYaw - state.yawRate) * (1 - Math.exp(-8 * dt));
-    const grip = surface.offroad ? 5 : sliding ? 2.5 : 12;
+    const grip = surface.offroad && !boosted ? 5 : sliding ? 2.5 : (surface.grip || 12);
     lateral *= Math.exp(-grip * dt);
     const parked =
       !input.throttle &&

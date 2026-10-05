@@ -867,3 +867,26 @@ h2 em {
     top: 10px;
   }
 }
+
+.course-section {
+  --section-color: #ffc677;
+  position: absolute;
+  top: 140px;
+  left: 30px;
+  display: grid;
+  gap: 5px;
+  padding: 10px 14px;
+  border-left: 3px solid var(--section-color);
+  border-radius: 0 6px 6px 0;
+  background: rgba(5, 20, 30, .72);
+  max-width: 280px;
+  pointer-events: none;
+}
+.course-section span { font: 10px "DM Mono", monospace; color: var(--section-color); }
+.course-section strong { font-size: 13px; letter-spacing: .08em; }
+.course-section small { font-size: 11px; color: #d3e4de; }
+@media (max-width: 700px) {
+  .course-section { top: 125px; left: 14px; max-width: 240px; padding: 7px 10px; }
+  .course-section strong { font-size: 11px; }
+  .course-section small { font-size: 10px; }
+}

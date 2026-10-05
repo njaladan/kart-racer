@@ -2,17 +2,17 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { initializeRacer, advanceRacer, botInput } from "../simulation.js";
 import { FIXED_DT, MAX_JUMP_TIME, MAX_JUMP_HEIGHT } from "../physics.js";
-import { TRACK, projectTrack } from "../track.js";
+import { TRACK, projectTrack, RAMPS, metresToProgress } from "../track.js";
 
 function rampRun(mode) {
-  const racer = initializeRacer({ s: TRACK * 0.16, x: 0, drift: 0, spin: 0 });
+  const racer = initializeRacer({ s: RAMPS[0].t * TRACK - metresToProgress(24), x: 0, drift: 0, spin: 0 });
   racer.vx = -Math.sin(racer.yaw) * 30;
   racer.vz = -Math.cos(racer.yaw) * 30;
   let launched = false, starts = 0, rewards = 0, airTime = 0;
   for (let tick = 1; tick < 120 * 5; tick++) {
     const input = botInput(racer, 0, tick * FIXED_DT);
     input.drift = mode === "held" ||
-      (mode === "buffered" && racer.grounded && racer.s >= TRACK * 0.195) ||
+      (mode === "buffered" && racer.grounded && racer.s >= RAMPS[0].t * TRACK - metresToProgress(3.8)) ||
       (mode === "early" && launched && racer.airTime < 0.05) ||
       (mode === "late" && launched && racer.airTime > 0.3);
     const events = advanceRacer(racer, input, FIXED_DT, tick * FIXED_DT);

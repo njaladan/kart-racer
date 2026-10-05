@@ -118,7 +118,7 @@ test("track projection is continuous across the finish seam and honors banking",
       projection = projectTrack(position, s);
     assert.ok(Math.abs(projection.offset - 3) < 0.08);
     near(frame.up.dot(frame.right), 0);
-    assert.ok(frame.up.y > 0.95);
+    assert.ok(frame.up.y > 0.90); // The ridge has a deliberate steep descent.
   }
 });
 test("rivals finish, keep their rank, and backwards crossings do not add laps", () => {
@@ -145,14 +145,11 @@ test("all five AI drivers complete three physical laps without invalid state", (
     });
     let launches = 0,
       landings = 0;
-    for (let tick = 1; tick < 120 * 160 && !s.finished; tick++) {
+    for (let tick = 1; tick < 120 * 230 && !s.finished; tick++) {
       const e = advanceRacer(
         s,
         botInput(s, index, tick * FIXED_DT),
         FIXED_DT,
-        MAX_REVERSE_SPEED,
-        MAX_JUMP_HEIGHT,
-        MAX_JUMP_TIME,
         tick * FIXED_DT,
       );
       launches += !!e.launched;
@@ -164,7 +161,7 @@ test("all five AI drivers complete three physical laps without invalid state", (
       s.finished,
       `rival ${index} stuck at ${s.s} with speed ${s.speed}`,
     );
-    assert.ok(s.finishTime < 150);
+    assert.ok(s.finishTime < 220);
     assert.ok(
       launches > 0 && landings > 0,
       `rival ${index} should jump and land`,
@@ -184,9 +181,6 @@ test("fixed simulation matches across display frame rates", () => {
           s,
           botInput(s, 0, tick * FIXED_DT),
           FIXED_DT,
-          MAX_REVERSE_SPEED,
-          MAX_JUMP_HEIGHT,
-          MAX_JUMP_TIME,
           tick * FIXED_DT,
         );
         accumulator -= FIXED_DT;
@@ -209,9 +203,6 @@ test("a parked kart does not creep sideways down track banking", () => {
       s,
       { throttle: false, brake: false, steer: 0, drift: false },
       FIXED_DT,
-      MAX_REVERSE_SPEED,
-      MAX_JUMP_HEIGHT,
-      MAX_JUMP_TIME,
       i * FIXED_DT,
     );
   assert.ok(Math.abs(s.x) < 0.001);
@@ -240,7 +231,7 @@ test("mushroom boosts across all ramps cannot launch the kart into the sky", () 
     let launches = 0,
       maxHeight = 0,
       maxAirTime = 0;
-    for (let tick = 1; tick < 120 * 130 && !s.finished; tick++) {
+    for (let tick = 1; tick < 120 * 230 && !s.finished; tick++) {
       if (boosted) s.boost = 1;
       const events = advanceRacer(
         s,

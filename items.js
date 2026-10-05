@@ -1,5 +1,6 @@
 import * as THREE from "./vendor/three/three.module.js";
-import { projectTrack, TRACK, WORLD_PER_UNIT } from "./track.js";
+import { projectTrack, TRACK, WORLD_PER_UNIT, collisionBounds } from "./track.js";
+import { cartContact } from "./hazards.js";
 import { progressDelta } from "./race.js";
 import { wrapAngle, clamp } from "./physics.js";
 
@@ -68,7 +69,7 @@ export function createShell(owner, type, target = null) {
     speed: 44,
   };
 }
-export function advanceShell(shell, dt) {
+export function advanceShell(shell, dt, raceTime = 0) {
   shell.previous.copy(shell.worldPos);
   shell.life -= dt;
   shell.grace -= dt;
@@ -87,8 +88,10 @@ export function advanceShell(shell, dt) {
   shell.worldPos.x += shell.vx * dt;
   shell.worldPos.z += shell.vz * dt;
   const surface = projectTrack(shell.worldPos, shell.s);
-  const penetration = Math.abs(surface.offset) - 9.0,
-    side = Math.sign(surface.offset);
+  const bounds = collisionBounds(surface.t, 0.55);
+  const side = surface.offset < bounds.left ? -1 : 1;
+  const edge = side < 0 ? bounds.left : bounds.right;
+  const penetration = side * (surface.offset - edge);
   if (penetration > 0) {
     const nx = surface.horizontalRight.x * side,
       nz = surface.horizontalRight.z * side,
@@ -100,6 +103,14 @@ export function advanceShell(shell, dt) {
       shell.vz -= 2 * nz * outward;
       shell.yaw = Math.atan2(-shell.vx, -shell.vz);
     }
+  }
+  const contact = cartContact(shell.worldPos, raceTime, 0.55);
+  if (contact) {
+    const outward = shell.vx * contact.nx + shell.vz * contact.nz;
+    shell.worldPos.x -= contact.nx * contact.penetration;
+    shell.worldPos.z -= contact.nz * contact.penetration;
+    if (outward > 0) { shell.vx -= 2 * contact.nx * outward; shell.vz -= 2 * contact.nz * outward; }
+    shell.yaw = Math.atan2(-shell.vx, -shell.vz);
   }
   const after = projectTrack(shell.worldPos, shell.s);
   shell.s += progressDelta(after.t * TRACK, shell.s, TRACK);

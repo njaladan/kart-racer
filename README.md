@@ -1,6 +1,6 @@
 # Turbo Trail
 
-A self-contained Three.js browser kart racer: three laps, five rivals, drifting, boost pads, physical kart contact, short ramp hops, item pickups, a minimap, and synthesized engine audio. The circuit includes banked turns, textured terrain, a lake and windmill, grandstands, signs, flowers, balloons, and detailed stylized karts with animated wheels.
+A self-contained Three.js browser kart racer: three laps, five rivals, drifting, boost pads, physical kart contact, short ramp hops, item pickups, a minimap, and synthesized engine audio. Windmill Wilds is a 1.5 km course through festival meadow, pine hollow, ridge overlook, lakeside timber, a drive-through working mill, and an orchard. Clean AI laps measure 57–58 seconds (about three minutes for three laps). Each sector changes the scenery, driving rhythm, elevation or surface within 6–12 seconds.
 
 ## Run
 
@@ -30,7 +30,7 @@ Ramp jumps intentionally favor arcade control: a bounded takeoff, stronger gravi
 
 Drift mini-turbos briefly widen the camera view and pull it back, with a stronger effect for orange turbos. Charging and release thresholds are unchanged.
 
-Nine pickup rows each offer three lanes. Item odds are balanced in a close pack; racers more than 1.5 seconds behind the leader gradually receive better odds of mushrooms, red shells, and stars, reaching the maximum recovery weighting at 6.5 seconds. These odds apply equally to players and rivals. Shells are single use; triple mushrooms queue up to 2.85 seconds of boost, and boost pads never shorten an active boost.
+Eight authored pickup rows each offer three lanes. Item odds are balanced in a close pack; racers more than 1.5 seconds behind the leader gradually receive better odds of mushrooms, red shells, and stars, reaching the maximum recovery weighting at 6.5 seconds. These odds apply equally to players and rivals. Shells are single use; triple mushrooms queue up to 2.85 seconds of boost, and boost pads never shorten an active boost.
 
 Simulation runs at 120 Hz with interpolated rendering. Track projection and minimap geometry are cached; trees, flowers, guardrails and road markings are batched; static kart and cloud parts are merged. Rendering reduces pixel density after sustained slow frames. Expired item and particle GPU resources are released, including on restart.
 
@@ -48,4 +48,12 @@ The visuals use procedural geometry and textures. They borrow the bright arcade 
 
 ## Graphics
 
-Rounded kart bodies and tires, alloy spokes, side vents, engine fins and numbered racing decals sit alongside layered tree canopies, petal flowers, corrugated guardrails and a detailed windmill. Shared 512px procedural textures add painted variation, grass blades, asphalt aggregate, bark grain, foliage, woven fabric, tire tread, masonry and roof tiles. Subtle bump mapping provides surface depth; instanced scenery and merged static kart parts keep draw calls contained.
+Rounded kart bodies and tires, alloy spokes, side vents, engine fins and numbered racing decals sit alongside layered pine canopies, orchard blossoms, a supported timber bridge and a detailed mill spanning the road. Shared 512px procedural textures add painted variation, grass blades, asphalt aggregate, bark grain, foliage, woven fabric, tire tread, masonry and roof tiles. Subtle bump mapping provides surface depth; instanced scenery and merged static kart parts keep draw calls contained.
+
+## Windmill Wilds
+
+Shared section data defines road surfaces, widths, ramp crests, pickup rows, boost panels, kart barriers and shell barriers. A delivery cart starts operating after 30 seconds, warns with a flashing beacon, and leaves an outside passing lane; AI and rendering use the same race clock and cart position.
+
+The marked orchard grass cut opens the inside boundary. Mushrooms and stars preserve grip and speed across grass; an unboosted cut pays an off-road penalty. Outside turbo panels offer an alternative. Both routes pass the same ordered lap checkpoints, and large projection jumps are rejected. The mill portal provides 10 metres of overhead clearance for the chase camera.
+
+The six sectors and course reference study are documented in `COURSE_PROPOSAL.md`. The browser test harness also accepts section seeks and bounded simulation steps through its existing test-only message API.

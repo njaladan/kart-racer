@@ -3,15 +3,15 @@ import { surfaceTexture } from "./textures.js";
 import {
   bevelBox,
   contactShadow,
-  addLandscape,
   batchStaticMeshes,
 } from "./visuals.js";
+import { addCourseWorld } from "./course-world.js";
 import { advanceRacer, botInput } from "./simulation.js";
 import {
   createShell, advanceShell, sweptDistanceSquared, consumeItem, chooseItem,
 } from "./items.js";
 import { FIXED_DT, MAX_SPEED, resetMotion } from "./physics.js";
-import { ranking, lapNumber } from "./race.js";
+import { ranking, lapNumber, resetRaceProgress } from "./race.js";
 import {
   TRACK,
   routePoint,
@@ -21,6 +21,7 @@ import {
   poseAt,
   yawFor,
   projectTrack,
+  SECTIONS, sectionAt, BOOST_PADS, ITEM_ROWS, RAMPS, WORLD_PER_UNIT, metresToProgress,
 } from "./track.js";
 
 (() => {
@@ -157,230 +158,13 @@ import {
     return m;
   }
 
-  function ribbon(
-    inner,
-    outer,
-    material,
-    segments = 500,
-    alternating = false,
-    lift = 0.025,
-  ) {
-    const pos = [],
-      uv = [],
-      idx = [];
-    for (let i = 0; i <= segments; i++) {
-      const t = i / segments,
-        f = frameAt(t);
-      for (const [j, side] of [inner, outer].entries()) {
-        const p = f.p
-          .clone()
-          .addScaledVector(f.right, side)
-          .addScaledVector(f.up, lift);
-        pos.push(p.x, p.y, p.z);
-        uv.push(j * 4, t * 180);
-      }
-    }
-    for (let i = 0; i < segments; i++) {
-      let a = i * 2,
-        b = a + 1,
-        c = a + 2,
-        d = a + 3;
-      idx.push(a, b, c, c, b, d);
-    }
-    const g = new THREE.BufferGeometry();
-    g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
-    g.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
-    if (alternating) {
-      const even = [],
-        odd = [];
-      for (let i = 0; i < segments; i++)
-        (i % 2 ? odd : even).push(...idx.slice(i * 6, i * 6 + 6));
-      g.setIndex([...even, ...odd]);
-      g.addGroup(0, even.length, 0);
-      g.addGroup(even.length, odd.length, 1);
-    } else g.setIndex(idx);
-    g.computeVertexNormals();
-    const m = new THREE.Mesh(g, material);
-    m.receiveShadow = true;
-    scene.add(m);
-    return m;
-  }
   function makeWorld() {
-    const ground = addMesh(
-      new THREE.PlaneGeometry(1500, 1500, 1, 1),
-      mats.grass,
-    );
-    ground.rotation.x = -Math.PI / 2;
-    ground.position.y = -1.7;
-    ground.receiveShadow = true;
-    ground.castShadow = false;
-    grassTexture.repeat.set(1, 1);
-    ground.geometry.attributes.uv.array.forEach((v, i, a) => {
-      a[i] = v * 100;
-    });
-    ribbon(-9.15, 9.15, mats.roadside, 500, false, -0.045);
-    ribbon(-8.1, 8.1, mats.road, 500, false, 0.045);
-    ribbon(8.1, 9.05, [mats.red, mats.white], 520, true, 0.085);
-    ribbon(-9.05, -8.1, [mats.white, mats.red], 520, true, 0.085);
-    // Intermittent lane ticks make the racing line legible at speed.
-    const dash = new THREE.InstancedMesh(
-      new THREE.BoxGeometry(0.13, 0.025, 2.4),
-      mats.white,
-      54,
-    );
-    for (let i = 0; i < 54; i++) {
-      let f = frameAt(i / 54),
-        p = f.p.clone().addScaledVector(f.up, 0.08);
-      tempObj.position.copy(p);
-      tempObj.quaternion.setFromRotationMatrix(
-        new THREE.Matrix4().makeBasis(
-          f.right,
-          f.up,
-          f.tangent.clone().negate(),
-        ),
-      );
-      tempObj.updateMatrix();
-      dash.setMatrixAt(i, tempObj.matrix);
-    }
-    dash.instanceMatrix.needsUpdate = true;
-    scene.add(dash);
-    // Low-poly pine forest in instanced batches keeps the scene light enough for a browser.
-    const count = 320,
-      trunk = new THREE.InstancedMesh(
-        new THREE.CylinderGeometry(0.16, 0.24, 1.5, 8),
-        mats.trunk,
-        count,
-      ),
-      lower = new THREE.InstancedMesh(
-        new THREE.ConeGeometry(1, 1.7, 16, 3),
-        mats.pine,
-        count,
-      ),
-      upper = new THREE.InstancedMesh(
-        new THREE.ConeGeometry(0.76, 1.55, 16, 3),
-        mats.pine2,
-        count,
-      );
-    for (let i = 0; i < count; i++) {
-      let t = Math.random(),
-        f = frameAt(t),
-        side = Math.random() < 0.5 ? -1 : 1,
-        dist = 14 + Math.random() * 48,
-        p = f.p.clone().addScaledVector(f.right, side * dist);
-      const surface = projectTrack(p, 0, true),
-        clear = surface.distance > 12,
-        base =
-          -1.68 +
-          (surface.height - 0.065 + 1.55) *
-            (1 - THREE.MathUtils.smoothstep(surface.distance, 10, 25));
-      let scale = clear ? 0.75 + Math.random() * 1.45 : 0,
-        rot = Math.random() * TAU;
-      tempObj.position.set(p.x, base + scale * 0.75, p.z);
-      tempObj.rotation.set(0, rot, 0);
-      tempObj.scale.set(scale, scale, scale);
-      tempObj.updateMatrix();
-      trunk.setMatrixAt(i, tempObj.matrix);
-      tempObj.position.set(p.x, base + scale * 1.8, p.z);
-      tempObj.scale.set(scale * 1.35, scale * 1.5, scale * 1.35);
-      tempObj.updateMatrix();
-      lower.setMatrixAt(i, tempObj.matrix);
-      tempObj.position.set(p.x, base + scale * 2.7, p.z);
-      tempObj.scale.set(scale, scale * 1.3, scale);
-      tempObj.updateMatrix();
-      upper.setMatrixAt(i, tempObj.matrix);
-    }
-    for (const m of [trunk, lower, upper]) {
-      m.instanceMatrix.needsUpdate = true;
-      m.castShadow = true;
-      scene.add(m);
-    }
-    // A few distant rounded hills and drifting clouds establish depth beyond the circuit.
-    for (let i = 0; i < 20; i++) {
-      const a = (TAU * i) / 20,
-        r = 235 + Math.random() * 45,
-        geo = new THREE.SphereGeometry(1, 24, 16),
-        hill = addMesh(geo, mat(i % 2 ? "#75a688" : "#8abb9d"));
-      hill.position.set(
-        Math.cos(a) * r,
-        -15 + Math.random() * 5,
-        Math.sin(a) * r,
-      );
-      hill.scale.set(
-        28 + Math.random() * 36,
-        17 + Math.random() * 18,
-        30 + Math.random() * 36,
-      );
-      hill.castShadow = false;
-    }
-    const cloudMat = new THREE.MeshStandardMaterial({
-      color: "#ffffff",
-      roughness: 1,
-    });
-    for (let i = 0; i < 17; i++) {
-      const g = new THREE.Group();
-      for (let j = 0; j < 4; j++) {
-        const puff = addMesh(new THREE.SphereGeometry(1, 16, 12), cloudMat, g);
-        puff.position.set(j * 2.4, Math.sin(j * 1.6) * 0.45, 0);
-        puff.scale.set(2.4, 1.25, 1.2);
-        puff.castShadow = false;
-      }
-      g.position.set(
-        -140 + Math.random() * 280,
-        34 + Math.random() * 25,
-        -130 + Math.random() * 260,
-      );
-      g.userData.drift = 0.4 + Math.random() * 0.6;
-      batchStaticMeshes(g);
-      scene.add(g);
-      clouds.push(g);
-    }
-    // Banked roadside guardrails, spaced enough to leave the landscape visible.
-    // Pressed-metal guardrails have a corrugated profile and visible support posts.
-    const railShape = new THREE.Shape();
-    const profile = [[0, -0.425], [0.02, -0.34], [0.12, -0.26], [0.12, -0.16],
-      [0.02, -0.07], [0.02, 0.07], [0.12, 0.16], [0.12, 0.26],
-      [0.02, 0.34], [0, 0.425]];
-    railShape.moveTo(...profile[0]);
-    for (const p of profile.slice(1)) railShape.lineTo(...p);
-    for (const [x, y] of [...profile].reverse()) railShape.lineTo(x - 0.04, y);
-    railShape.closePath();
-    const railGeom = new THREE.ExtrudeGeometry(railShape, { depth: 7.2, bevelEnabled: false, steps: 1 });
-    railGeom.translate(0, 0, -3.6);
-    const railCount = 290,
-      railMesh = new THREE.InstancedMesh(railGeom, mats.rail, railCount),
-      railPosts = new THREE.InstancedMesh(new THREE.BoxGeometry(0.15, 1.15, 0.18), mats.rail, railCount);
-    for (let i = 0; i < railCount; i++) {
-      const f = frameAt(i / railCount),
-        side = i % 2 ? 1 : -1,
-        p = f.p
-          .clone()
-          .addScaledVector(f.right, side * 9.6)
-          .addScaledVector(f.up, 0.6);
-      tempObj.position.copy(p);
-      tempObj.quaternion.setFromRotationMatrix(
-        new THREE.Matrix4().makeBasis(
-          f.right,
-          f.up,
-          f.tangent.clone().negate(),
-        ),
-      );
-      tempObj.scale.set(1, 1, 1);
-      tempObj.updateMatrix();
-      railMesh.setMatrixAt(i, tempObj.matrix);
-      tempObj.position.addScaledVector(f.up, -0.23);
-      tempObj.updateMatrix(); railPosts.setMatrixAt(i, tempObj.matrix);
-    }
-    railMesh.instanceMatrix.needsUpdate = true;
-    railMesh.receiveShadow = true;
-    railPosts.castShadow = true;
-    scene.add(railMesh, railPosts);
-    landscape = addLandscape(scene, renderer, mats.grass, textures);
+    landscape = addCourseWorld(scene, renderer, mats, textures);
     addFinishArch();
     addPads();
     addItemBoxes();
   }
-  const clouds = [],
-    pads = [],
+  const pads = [],
     boxes = [];
   let landscape = null;
   const shadowTexture = contactShadow();
@@ -413,7 +197,7 @@ import {
     bx.font = "900 59px sans-serif";
     bx.textAlign = "center";
     bx.textBaseline = "middle";
-    bx.fillText("★  TURBO TRAIL  ★", 512, 43);
+    bx.fillText("★  WINDMILL WILDS  ★", 512, 43);
     const bt = new THREE.CanvasTexture(banner);
     bt.colorSpace = THREE.SRGBColorSpace;
     for (const z of [-0.46, 0.46]) {
@@ -463,9 +247,9 @@ import {
       }
   }
   function addPads() {
-    for (const t of [0.115, 0.385, 0.665, 0.89]) {
-      const f = frameAt(t),
-        g = new THREE.Group(),
+    for (const pad of BOOST_PADS) {
+      const { t, offset } = pad;
+      const g = new THREE.Group(),
         base = addMesh(new THREE.BoxGeometry(4.5, 0.18, 6.8), mats.pad, g);
       base.position.y = 0.11;
       for (let i = -1; i <= 1; i++) {
@@ -476,9 +260,9 @@ import {
         );
         strip.position.set(i * 1.32, 0.23, 0);
       }
-      alignGroup(g, f);
+      alignGroup(g, poseAt(t * TRACK, offset, 0));
       scene.add(g);
-      pads.push({ g, t, phase: Math.random() * TAU });
+      pads.push({ g, ...pad, phase: Math.random() * TAU });
     }
   }
   function itemCubeMaterial() {
@@ -508,9 +292,9 @@ import {
   }
   const boxMaterial = itemCubeMaterial();
   function addItemBoxes() {
-    // Nine pickup rows offer a choice of three lanes to the whole pack.
-    for (let i = 0; i < 27; i++) {
-      let s = 90 + Math.floor(i / 3) * 260,
+    // Authored rows respect the narrow timber crossing and provide three lanes.
+    for (let i = 0; i < ITEM_ROWS.length * 3; i++) {
+      let s = ITEM_ROWS[Math.floor(i / 3)] * TRACK,
         group = new THREE.Group(),
         cube = addMesh(
           new THREE.BoxGeometry(1.65, 1.65, 1.65),
@@ -1148,6 +932,7 @@ import {
     player.finishTime = Infinity;
     player.finishDelay = 0;
     resetMotion(player);
+    resetRaceProgress(player, TRACK);
     clearInput();
     bots.forEach((b, i) => {
       b.s = -46 - Math.floor(i / 2) * 60 - (i % 2) * 5;
@@ -1155,6 +940,7 @@ import {
       b.x = [-0.4, 0.4, -0.4, 0.4, -0.4][i];
       b.speed = 0;
       resetMotion(b);
+      resetRaceProgress(b, TRACK);
       b.worldPos = poseAt(b.s, laneWidth(b.x), 0.065).p;
       b.renderFrom = b.worldPos.clone();
       b.yaw = yawFor(frameAt(trackT(b.s)).tangent);
@@ -1477,21 +1263,14 @@ import {
         0.1,
       );
     }
-    if (state.grounded && state.padCooldown === 0) {
-      for (const pad of pads) {
-        if (
-          Math.abs(nearestDelta(state.s, pad.t * TRACK)) < 13 &&
-          Math.abs(state.x) < 0.36
-        ) {
-          state.boost = Math.max(state.boost, 1.45);
-          state.padCooldown = 1.5;
-          if (state === player) {
-            notify("NEON BOOST!");
-            sfx("boost");
-          }
-          break;
-        }
-      }
+    if (events.padBoost && state === player) {
+      notify("TURBO PANEL!");
+      sfx("boost");
+    }
+    if (events.cartImpact && state === player) {
+      notify("DELIVERY CART!");
+      shake = 0.15;
+      sfx("hit");
     }
     state.speed = Math.hypot(state.vx, state.vz) * 3.6;
     if (!Number.isFinite(state.worldPos.y) || state.worldPos.y < -12) {
@@ -1536,7 +1315,7 @@ import {
       moveRacer(
         player,
         testAutodrive
-          ? { ...botInput(player, 0, elapsed, [player, ...bots]),
+          ? { ...botInput(player, 0, raceTime, [player, ...bots]),
               drift: keys[" "] || keys.shift }
           : {
               throttle: keys.arrowup || keys.w,
@@ -1557,7 +1336,7 @@ import {
     }
     bots.forEach((b, i) => {
       if (b.finished) return;
-      moveRacer(b, botInput(b, i, elapsed, [player, ...bots]), dt);
+      moveRacer(b, botInput(b, i, raceTime, [player, ...bots]), dt);
       b.cooldown -= dt;
       if (b.item && b.cooldown <= 0) {
         fireItem(b);
@@ -1622,7 +1401,7 @@ import {
             Math.abs(
               racer.worldPos.y - poseAt(box.s, laneWidth(box.x), 0.065).p.y,
             ) < 2 &&
-            Math.abs(nearestDelta(racer.s, box.s)) < 7 &&
+            Math.abs(nearestDelta(racer.s, box.s)) * WORLD_PER_UNIT < 3 &&
             Math.abs(racer.x - box.x) < 0.26
           ) {
             collect(box, racer);
@@ -1642,7 +1421,7 @@ import {
         )
           continue;
         if (
-          Math.abs(nearestDelta(racer.s, banana.s)) < 8 &&
+          Math.abs(nearestDelta(racer.s, banana.s)) * WORLD_PER_UNIT < 2 &&
           Math.abs(racer.x - banana.x) < 0.22 &&
           hitRacer(racer)
         ) {
@@ -1653,7 +1432,7 @@ import {
       }
     }
     for (const p of projectiles) {
-      advanceShell(p, dt);
+      advanceShell(p, dt, raceTime);
       for (const target of [player, ...bots]) {
         if (
           target.finished ||
@@ -1761,16 +1540,7 @@ import {
     performanceFrames = 0;
   function render(dt) {
     if (!paused) {
-      if (landscape) {
-        landscape.rotor.rotation.z += dt * 0.75;
-        landscape.balloons.forEach(
-          (b, i) => (b.rotation.z = Math.sin(elapsed * 0.4 + i) * 0.05),
-        );
-      }
-      for (const cloud of clouds) {
-        cloud.position.x += cloud.userData.drift * dt;
-        if (cloud.position.x > 250) cloud.position.x = -250;
-      }
+      if (landscape) landscape.update(raceTime);
       for (const pad of pads) {
         const pulse = 0.5 + 0.5 * Math.sin(elapsed * 5 + pad.phase);
         pad.g.children.forEach((m, i) => {
@@ -1822,6 +1592,11 @@ import {
       ui.driftFill.style.width = `${Math.round(player.drift * 100)}%`;
       ui.speed.textContent = String(Math.round(player.speed)).padStart(3, "0");
       ui.timer.textContent = formatTime(raceTime);
+      const section = sectionAt(trackT(player.s));
+      $("section-name").textContent = section.name;
+      $("section-hint").textContent = section.hint;
+      $("section-index").textContent = `${SECTIONS.indexOf(section) + 1} / 6`;
+      $("course-section").style.setProperty("--section-color", section.color);
       if (engineOsc) {
         engineOsc.frequency.setTargetAtTime(
           55 + player.speed * 1.2,
@@ -1890,6 +1665,8 @@ import {
         camera.rotation.z += (Math.random() - 0.5) * shake * 0.05;
       }
     }
+    const forest = sectionAt(trackT(player.s)).id === "forest";
+    scene.fog.far += ((forest ? 260 : 600) - scene.fog.far) * (1 - Math.exp(-2 * dt));
     sun.position.copy(player.worldPos).add(new THREE.Vector3(-65, 95, 45));
     sun.target.position.copy(player.worldPos);
     sun.target.updateMatrixWorld();
@@ -1939,6 +1716,7 @@ import {
             raceTime,
             rank: place(),
             player: {
+              section: sectionAt(trackT(player.s)).id,
               s: player.s,
               x: player.x,
               speed: player.speed,
@@ -1987,17 +1765,32 @@ import {
       const message = event.data;
       if (message.type === "test-start") begin();
       if (message.type === "test-ramp" && running) {
-        player.s = TRACK * 0.185;
+        player.s = RAMPS[0].t * TRACK - metresToProgress(14);
         player.x = 0;
         player.worldPos.copy(poseAt(player.s, 0, 0.065).p);
         player.renderFrom.copy(player.worldPos);
         resetMotion(player);
+        resetRaceProgress(player, TRACK);
         player.yaw = yawFor(frameAt(trackT(player.s)).tangent);
         player.vx = -Math.sin(player.yaw) * 35;
         player.vz = -Math.cos(player.yaw) * 35;
         player.boost = 1.5;
         player.star = 0;
         testAutodrive = true;
+      }
+      if (message.type === "test-seek" && running && Number.isFinite(message.t)) {
+        player.s = Math.max(0, Math.min(0.999, message.t)) * TRACK;
+        player.x = 0;
+        player.worldPos.copy(poseAt(player.s, 0, 0.065).p);
+        player.renderFrom.copy(player.worldPos);
+        resetMotion(player);
+        resetRaceProgress(player, TRACK);
+        player.yaw = yawFor(frameAt(trackT(player.s)).tangent);
+        player.speed = 0;
+      }
+      if (message.type === "test-step" && running && !paused) {
+        const seconds = Math.max(0, Math.min(5, Number(message.seconds) || 0));
+        for (let i = 0; i < Math.round(seconds / FIXED_DT); i++) step(FIXED_DT);
       }
       if (message.type === "test-auto") testAutodrive = !!message.value;
       if (message.type === "test-input") {
@@ -2023,7 +1816,8 @@ import {
     k.shadow.visible = false;
   });
   boxes.forEach((b) => (b.group.visible = false));
-  camera.position.set(0, 30, 35);
+  camera.position.copy(player.worldPos).addScaledVector(frameAt(0).tangent, -12);
+  camera.position.y += 7;
   cameraLook.copy(player.worldPos);
   camera.lookAt(cameraLook);
   syncItem();
