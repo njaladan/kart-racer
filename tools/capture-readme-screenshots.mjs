@@ -1,0 +1,165 @@
+#!/usr/bin/env node
+
+import { spawn } from "node:child_process";
+import { createRequire } from "node:module";
+import { existsSync } from "node:fs";
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const require = createRequire(import.meta.url);
+const repoRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
+const screenshotDir = resolve(repoRoot, "docs/screenshots");
+const courseCaptures = [
+  { id: "windmill-wilds", racer: "tux" },
+  { id: "neon-harbor", racer: "kiki" },
+  { id: "sunstone-ruins", racer: "nolok" },
+  { id: "frostpeak-festival", racer: "konqi" },
+];
+const courses = process.argv.slice(2).length
+  ? process.argv.slice(2)
+  : courseCaptures.map(({ id }) => id);
+const port = Number(process.env.SCREENSHOT_CAPTURE_PORT || 5173);
+const baseUrl = `http://127.0.0.1:${port}`;
+const captureAtSeconds = Number(process.env.SCREENSHOT_CAPTURE_AT_SECONDS || 2);
+const timeoutMs = Number(process.env.SCREENSHOT_CAPTURE_TIMEOUT_MS || 180_000);
+
+function loadPlaywright() {
+  const candidates = [
+    process.env.PLAYWRIGHT_MODULE,
+    "playwright",
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright",
+  ].filter(Boolean);
+
+  for (const candidate of candidates) {
+    try {
+      return require(candidate);
+    } catch {
+      // Try the next installed Playwright location.
+    }
+  }
+
+  throw new Error(
+    "Playwright was not found. Install it with `npm install --no-save --no-package-lock playwright` or set PLAYWRIGHT_MODULE to its installed module path.",
+  );
+}
+
+async function gameServerIsReady() {
+  try {
+    const response = await fetch(baseUrl);
+    return response.ok && (await response.text()).includes("Turbo Trail");
+  } catch {
+    return false;
+  }
+}
+
+async function startServer() {
+  if (await gameServerIsReady()) return null;
+
+  const server = spawn(
+    "python3",
+    ["-m", "http.server", String(port), "--bind", "127.0.0.1"],
+    { cwd: repoRoot, stdio: "ignore" },
+  );
+
+  for (let attempt = 0; attempt < 100; attempt++) {
+    if (await gameServerIsReady()) return server;
+    if (server.exitCode !== null) break;
+    await new Promise((resolveWait) => setTimeout(resolveWait, 100));
+  }
+
+  server.kill();
+  throw new Error(`Could not start Turbo Trail at ${baseUrl}.`);
+}
+
+async function captureCourse(browserContext, courseId) {
+  const course = courseCaptures.find(({ id }) => id === courseId);
+  if (!course) {
+    throw new Error(
+      `Unknown course "${courseId}". Choose: ${courseCaptures.map(({ id }) => id).join(", ")}.`,
+    );
+  }
+
+  const page = await browserContext.newPage();
+  const errors = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+
+  try {
+    await page.goto(`${baseUrl}/?course=${course.id}&racer=${course.racer}&test&benchmark`, {
+      waitUntil: "domcontentloaded",
+    });
+    await page.waitForFunction(
+      () => {
+        const button = document.querySelector("#start-button");
+        return button && !button.disabled;
+      },
+      undefined,
+      { timeout: 90_000 },
+    );
+
+    // The benchmark start removes the countdown delay. Let the normal render
+    // loop, camera, and keyboard input advance the race; don't send test-step.
+    await page.evaluate(() => window.postMessage({ type: "test-start" }, location.origin));
+    await page.waitForTimeout(100);
+    await page.keyboard.down("w");
+
+    try {
+      await page.waitForFunction(
+        (targetSeconds) => {
+          const text = document.querySelector("#timer")?.textContent?.trim() || "";
+          const match = text.match(/^(\d{2}):(\d{2})\.(\d{2})$/);
+          if (!match) return false;
+          const [, minutes, seconds, hundredths] = match;
+          return Number(minutes) * 60 + Number(seconds) + Number(hundredths) / 100 >= targetSeconds;
+        },
+        captureAtSeconds,
+        { timeout: timeoutMs, polling: 100 },
+      );
+    } finally {
+      await page.keyboard.up("w").catch(() => {});
+    }
+
+    const cdp = await browserContext.newCDPSession(page);
+    const screenshot = await cdp.send("Page.captureScreenshot", {
+      format: "jpeg",
+      quality: 93,
+      captureBeyondViewport: false,
+    });
+    const output = resolve(screenshotDir, `${course.id}.jpg`);
+    await writeFile(output, Buffer.from(screenshot.data, "base64"));
+    console.log(`Saved ${output}`);
+  } catch (error) {
+    const detail = errors.length ? `\nBrowser errors: ${errors.join("; ")}` : "";
+    throw new Error(`${course.id}: ${error.message}${detail}`, { cause: error });
+  } finally {
+    await page.close();
+  }
+}
+
+async function main() {
+  const { chromium } = loadPlaywright();
+  const server = await startServer();
+  const chromiumPath = process.env.CHROMIUM_PATH || "/usr/bin/chromium";
+  let browser;
+  try {
+    browser = await chromium.launch({
+      headless: true,
+      ...(existsSync(chromiumPath) ? { executablePath: chromiumPath } : {}),
+      args: ["--no-sandbox"],
+    });
+    const context = await browser.newContext({
+      viewport: { width: 1280, height: 720 },
+      deviceScaleFactor: 1,
+    });
+    for (const course of courses) await captureCourse(context, course);
+    await context.close();
+  } finally {
+    await browser?.close();
+    server?.kill();
+  }
+}
+
+main().catch((error) => {
+  console.error(error.message);
+  process.exitCode = 1;
+});
