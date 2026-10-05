@@ -1,13 +1,869 @@
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&display=swap');
-:root{--cream:#fff7e9;--ink:#071323;--lime:#d5fa51;--muted:#aab3bd;--orange:#ff7549}
-*{box-sizing:border-box}html,body{height:100%;margin:0;background:#06101e;color:var(--cream);font-family:'DM Sans',sans-serif;overflow:hidden}#game-shell{position:relative;width:100%;height:100%;min-height:480px;overflow:hidden;background:#0c1b2b}canvas{position:absolute;inset:0;width:100%;height:100%;display:block}.topline,.bottomline{position:absolute;left:5.2%;right:5.2%;z-index:2;display:flex;align-items:center;justify-content:space-between;pointer-events:none}.topline{top:28px}.brand{font-size:13px;font-weight:800;letter-spacing:.17em}.brand b{color:var(--lime)}.brand-mark{display:inline-grid;place-items:center;margin-right:7px;width:23px;height:23px;border:1px solid #ffffff50;border-radius:50%;color:var(--lime);font-size:14px}.track-tag,.bottomline{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;color:#d5dae0}.live-dot{display:inline-block;width:6px;height:6px;margin:0 8px 1px 0;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime)}.bottomline{bottom:19px;font-size:8px;color:#ffffff85}.screen{position:absolute;inset:0;z-index:3;display:grid;place-items:center;background:linear-gradient(90deg,rgba(5,13,25,.72) 0%,rgba(5,13,25,.38) 50%,rgba(5,13,25,.04) 100%);transition:opacity .35s,visibility .35s}.screen.hidden{opacity:0;visibility:hidden;pointer-events:none}.title-card{position:absolute;left:11%;top:50%;transform:translateY(-46%);width:min(470px,42vw)}.eyebrow{display:flex;align-items:center;gap:9px;font-family:'DM Mono',monospace;color:var(--lime);font-size:9px;letter-spacing:.16em}.eyebrow span{width:18px;height:1px;background:var(--lime)}h1,h2{font-family:'Barlow Condensed',sans-serif;line-height:.8;letter-spacing:-.035em;margin:23px 0 18px;font-weight:800}h1{font-size:clamp(74px,10vw,142px)}h1 em,h2 em{font-style:normal;color:var(--lime)}.title-card p,.pause-card p,.finish-card p{color:#c0c8ce;font-size:13px;line-height:1.7;margin:0 0 26px}.primary-button{appearance:none;border:0;background:var(--lime);color:#101b20;padding:16px 20px;min-width:238px;text-align:left;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:800;letter-spacing:.13em;cursor:pointer;transition:transform .18s,background .18s}.primary-button span{float:right;font-size:16px;line-height:10px}.primary-button:hover{transform:translateY(-3px);background:#e3ff85}.title-foot{display:flex;gap:17px;margin-top:30px;color:#e0e2dc;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.08em}.corner-note{position:absolute;right:5.2%;bottom:70px;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.2em;color:#fff9;writing-mode:vertical-rl}.hud{position:absolute;z-index:2;inset:0;pointer-events:none}.hud.hidden{display:none}.hud-left,.hud-right{position:absolute;top:82px;display:flex;gap:9px;align-items:stretch}.hud-left{left:5.2%}.hud-right{right:5.2%;align-items:center}.place-box,.lap-box,.speed-box{background:rgba(5,15,27,.78);border:1px solid #ffffff1c;backdrop-filter:blur(8px)}.place-box{width:65px;height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center}.place-box strong{font-family:'Barlow Condensed';font-size:37px;line-height:.9;color:var(--lime)}.place-box small{font-size:13px}.place-box>span,.lap-box>span,.speed-box>span{font-family:'DM Mono';font-size:8px;letter-spacing:.14em;color:#abb6c0;margin-top:4px}.lap-box{width:120px;padding:12px}.lap-box strong{display:block;margin:4px 0;font-family:'Barlow Condensed';font-size:25px}.lap-box i{font-size:14px;font-style:normal;color:#8998a5}.lap-meter{height:2px;background:#ffffff30;margin-top:7px}.lap-meter b{display:block;height:100%;background:var(--lime);width:0}.speed-box{width:92px;padding:8px 13px;display:flex;flex-direction:column;align-items:flex-end}.speed-box strong{font-family:'Barlow Condensed';font-size:34px;line-height:1}.race-time{font-family:'DM Mono';font-size:11px;letter-spacing:.08em;color:white;text-shadow:0 1px 8px #000}.hud-center{position:absolute;left:50%;top:75px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center}.item-box{display:flex;align-items:center;gap:8px;padding:8px 11px;background:rgba(5,15,27,.78);border:1px solid #ffffff27}.item-icon{display:grid;place-items:center;width:27px;height:27px;background:var(--lime);color:var(--ink);font-size:17px;font-weight:800}.item-label{font-family:'DM Mono';font-size:8px;letter-spacing:.15em}.item-box kbd{font:9px 'DM Mono';border:1px solid #ffffff45;padding:3px 5px;color:#d5dde2}.toast{height:28px;color:var(--lime);font-family:'DM Mono';font-size:10px;letter-spacing:.12em;text-shadow:0 1px 10px #000}.countdown{position:absolute;z-index:4;left:50%;top:43%;transform:translate(-50%,-50%);font:900 clamp(88px,16vw,180px)/.8 'Barlow Condensed';color:var(--lime);text-shadow:0 5px 30px #0008}.countdown.hidden{display:none}.finish-card,.pause-card{width:min(440px,90vw);padding:42px;background:rgba(5,14,25,.94);border:1px solid #ffffff25;box-shadow:0 25px 80px #0008}.finish-card{text-align:center}.finish-card .eyebrow,.pause-card .eyebrow{justify-content:center}.finish-card h2,.pause-card h2{font-size:64px;margin:22px 0 14px}.finish-card p,.pause-card p{margin-bottom:25px}.finish-stats{display:flex;justify-content:center;gap:52px;padding:20px 0 27px;margin-bottom:5px;border-top:1px solid #ffffff20}.finish-stats div{display:flex;flex-direction:column;gap:5px}.finish-stats span{font:8px 'DM Mono';letter-spacing:.12em;color:#aab3bd}.finish-stats strong{font:700 24px 'Barlow Condensed';color:var(--lime)}.finish-card .primary-button{width:100%}.pause-card{text-align:center}.pause-card h2{font-size:67px}.pause-card p{margin-bottom:23px}.pause-card .primary-button{text-align:center}
-@media(max-width:700px){.topline,.bottomline{left:20px;right:20px}.topline{top:18px}.title-card{left:8%;width:84%;top:52%}h1{font-size:clamp(72px,18vw,110px)}.title-card p{font-size:12px}.track-tag{font-size:8px}.corner-note{display:none}.hud-left,.hud-right{top:64px}.hud-left{left:14px}.hud-right{right:14px;flex-direction:column-reverse;align-items:flex-end;gap:5px}.place-box{width:51px;height:58px}.place-box strong{font-size:30px}.lap-box{width:94px;padding:8px}.lap-box strong{font-size:20px}.speed-box{width:auto;padding:4px 8px;flex-direction:row;gap:5px;align-items:baseline}.speed-box strong{font-size:25px}.speed-box>span{font-size:7px}.race-time{font-size:9px}.hud-center{top:148px}.bottomline{font-size:7px}.title-foot{gap:10px;font-size:7px}.primary-button{min-width:210px}.screen{background:linear-gradient(90deg,rgba(5,13,25,.75),rgba(5,13,25,.25))}}
-#touch-controls{display:none;position:absolute;z-index:2;inset:auto 18px 46px;justify-content:space-between;align-items:flex-end;pointer-events:none}#touch-controls button{pointer-events:auto;touch-action:none;user-select:none;color:#fff;background:#081726b8;border:1px solid #ffffff50;font:700 12px 'DM Mono',monospace;backdrop-filter:blur(6px)}.touch-steer,.touch-drive{display:flex;gap:8px;align-items:flex-end}.touch-steer button{width:52px;height:55px;font-size:29px}.touch-drive button{height:48px;padding:0 13px}.touch-drive .touch-gas{height:65px;min-width:69px;background:#d5fa51;color:#101b20;font-weight:800}.touch-gas span{font-size:18px}.touch-drive .touch-item{color:#d5fa51}.touch-drive .touch-drift{color:#d8e2e7}
-@media(max-width:700px){.racing #touch-controls{display:flex}}
-#radar{position:absolute;z-index:2;left:auto;top:auto;right:5.2%;bottom:48px;width:176px;height:152px;opacity:0;transform:translateY(7px);transition:opacity .3s,transform .3s;pointer-events:none}#radar.active{opacity:1;transform:translateY(0)}.drift-meter{height:2px;margin-top:4px;background:#ffffff22}.drift-meter b{display:block;height:100%;width:0;background:linear-gradient(90deg,#43dff8,#ff9b49);transition:width .08s}.item-label{white-space:nowrap}
-@media(max-width:700px){#radar{width:116px;height:100px;right:12px;bottom:126px}.hud-center{top:138px}.item-box{padding:6px 8px}.item-label{font-size:7px;letter-spacing:.07em}.hud-left,.hud-right{top:60px}}
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(./vendor/fonts/font-0.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(./vendor/fonts/font-1.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(./vendor/fonts/font-2.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(./vendor/fonts/font-3.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Barlow Condensed";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url(./vendor/fonts/font-4.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./vendor/fonts/font-5.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(./vendor/fonts/font-6.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./vendor/fonts/font-7.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(./vendor/fonts/font-8.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(./vendor/fonts/font-9.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(./vendor/fonts/font-10.ttf) format("truetype");
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(./vendor/fonts/font-11.ttf) format("truetype");
+}
+
+:root {
+  --cream: #fff7e9;
+  --ink: #071323;
+  --lime: #d5fa51;
+  --muted: #aab3bd;
+  --orange: #ff7549;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: #06101e;
+  color: var(--cream);
+  font-family: "DM Sans", sans-serif;
+  overflow: hidden;
+}
+#game-shell {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 480px;
+  overflow: hidden;
+  background: #0c1b2b;
+}
+canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.topline,
+.bottomline {
+  position: absolute;
+  left: 5.2%;
+  right: 5.2%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+}
+.topline {
+  top: 28px;
+}
+.brand {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+}
+.brand b {
+  color: var(--lime);
+}
+.brand-mark {
+  display: inline-grid;
+  place-items: center;
+  margin-right: 7px;
+  width: 23px;
+  height: 23px;
+  border: 1px solid #ffffff50;
+  border-radius: 50%;
+  color: var(--lime);
+  font-size: 14px;
+}
+.track-tag,
+.bottomline {
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  color: #d5dae0;
+}
+.live-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin: 0 8px 1px 0;
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 0 10px var(--lime);
+}
+.bottomline {
+  bottom: 19px;
+  font-size: 8px;
+  color: #ffffff85;
+}
+.screen {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(
+    90deg,
+    rgba(5, 13, 25, 0.72) 0%,
+    rgba(5, 13, 25, 0.38) 50%,
+    rgba(5, 13, 25, 0.04) 100%
+  );
+  transition:
+    opacity 0.35s,
+    visibility 0.35s;
+}
+.screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.title-card {
+  position: absolute;
+  left: 11%;
+  top: 50%;
+  transform: translateY(-46%);
+  width: min(470px, 42vw);
+}
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: "DM Mono", monospace;
+  color: var(--lime);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+}
+.eyebrow span {
+  width: 18px;
+  height: 1px;
+  background: var(--lime);
+}
+h1,
+h2 {
+  font-family: "Barlow Condensed", sans-serif;
+  line-height: 0.8;
+  letter-spacing: -0.035em;
+  margin: 23px 0 18px;
+  font-weight: 800;
+}
+h1 {
+  font-size: clamp(74px, 10vw, 142px);
+}
+h1 em,
+h2 em {
+  font-style: normal;
+  color: var(--lime);
+}
+.title-card p,
+.pause-card p,
+.finish-card p {
+  color: #c0c8ce;
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 0 0 26px;
+}
+.primary-button {
+  appearance: none;
+  border: 0;
+  background: var(--lime);
+  color: #101b20;
+  padding: 16px 20px;
+  min-width: 238px;
+  text-align: left;
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  cursor: pointer;
+  transition:
+    transform 0.18s,
+    background 0.18s;
+}
+.primary-button span {
+  float: right;
+  font-size: 16px;
+  line-height: 10px;
+}
+.primary-button:hover {
+  transform: translateY(-3px);
+  background: #e3ff85;
+}
+.title-foot {
+  display: flex;
+  gap: 17px;
+  margin-top: 30px;
+  color: #e0e2dc;
+  font-family: "DM Mono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+.corner-note {
+  position: absolute;
+  right: 5.2%;
+  bottom: 70px;
+  font-family: "DM Mono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  color: #fff9;
+  writing-mode: vertical-rl;
+}
+.hud {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+}
+.hud.hidden {
+  display: none;
+}
+.hud-left,
+.hud-right {
+  position: absolute;
+  top: 82px;
+  display: flex;
+  gap: 9px;
+  align-items: stretch;
+}
+.hud-left {
+  left: 5.2%;
+}
+.hud-right {
+  right: 5.2%;
+  align-items: center;
+}
+.place-box,
+.lap-box,
+.speed-box {
+  background: rgba(5, 15, 27, 0.78);
+  border: 1px solid #ffffff1c;
+  backdrop-filter: blur(8px);
+}
+.place-box {
+  width: 65px;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.place-box strong {
+  font-family: "Barlow Condensed";
+  font-size: 37px;
+  line-height: 0.9;
+  color: var(--lime);
+}
+.place-box small {
+  font-size: 13px;
+}
+.place-box > span,
+.lap-box > span,
+.speed-box > span {
+  font-family: "DM Mono";
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  color: #abb6c0;
+  margin-top: 4px;
+}
+.lap-box {
+  width: 120px;
+  padding: 12px;
+}
+.lap-box strong {
+  display: block;
+  margin: 4px 0;
+  font-family: "Barlow Condensed";
+  font-size: 25px;
+}
+.lap-box i {
+  font-size: 14px;
+  font-style: normal;
+  color: #8998a5;
+}
+.lap-meter {
+  height: 2px;
+  background: #ffffff30;
+  margin-top: 7px;
+}
+.lap-meter b {
+  display: block;
+  height: 100%;
+  background: var(--lime);
+  width: 0;
+}
+.speed-box {
+  width: 92px;
+  padding: 8px 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.speed-box strong {
+  font-family: "Barlow Condensed";
+  font-size: 34px;
+  line-height: 1;
+}
+.race-time {
+  font-family: "DM Mono";
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: white;
+  text-shadow: 0 1px 8px #000;
+}
+.hud-center {
+  position: absolute;
+  left: 50%;
+  top: 75px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.item-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 11px;
+  background: rgba(5, 15, 27, 0.78);
+  border: 1px solid #ffffff27;
+}
+.item-icon {
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  background: var(--lime);
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 800;
+}
+.item-label {
+  font-family: "DM Mono";
+  font-size: 8px;
+  letter-spacing: 0.15em;
+}
+.item-box kbd {
+  font: 9px "DM Mono";
+  border: 1px solid #ffffff45;
+  padding: 3px 5px;
+  color: #d5dde2;
+}
+.toast {
+  height: 28px;
+  color: var(--lime);
+  font-family: "DM Mono";
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-shadow: 0 1px 10px #000;
+}
+.countdown {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  top: 43%;
+  transform: translate(-50%, -50%);
+  font: 900 clamp(88px, 16vw, 180px)/0.8 "Barlow Condensed";
+  color: var(--lime);
+  text-shadow: 0 5px 30px #0008;
+}
+.countdown.hidden {
+  display: none;
+}
+.finish-card,
+.pause-card {
+  width: min(440px, 90vw);
+  padding: 42px;
+  background: rgba(5, 14, 25, 0.94);
+  border: 1px solid #ffffff25;
+  box-shadow: 0 25px 80px #0008;
+}
+.finish-card {
+  text-align: center;
+}
+.finish-card .eyebrow,
+.pause-card .eyebrow {
+  justify-content: center;
+}
+.finish-card h2,
+.pause-card h2 {
+  font-size: 64px;
+  margin: 22px 0 14px;
+}
+.finish-card p,
+.pause-card p {
+  margin-bottom: 25px;
+}
+.finish-stats {
+  display: flex;
+  justify-content: center;
+  gap: 52px;
+  padding: 20px 0 27px;
+  margin-bottom: 5px;
+  border-top: 1px solid #ffffff20;
+}
+.finish-stats div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.finish-stats span {
+  font: 8px "DM Mono";
+  letter-spacing: 0.12em;
+  color: #aab3bd;
+}
+.finish-stats strong {
+  font: 700 24px "Barlow Condensed";
+  color: var(--lime);
+}
+.finish-card .primary-button {
+  width: 100%;
+}
+.pause-card {
+  text-align: center;
+}
+.pause-card h2 {
+  font-size: 67px;
+}
+.pause-card p {
+  margin-bottom: 23px;
+}
+.pause-card .primary-button {
+  text-align: center;
+}
+@media (max-width: 700px) {
+  .topline,
+  .bottomline {
+    left: 20px;
+    right: 20px;
+  }
+  .topline {
+    top: 18px;
+  }
+  .title-card {
+    left: 8%;
+    width: 84%;
+    top: 52%;
+  }
+  h1 {
+    font-size: clamp(72px, 18vw, 110px);
+  }
+  .title-card p {
+    font-size: 12px;
+  }
+  .track-tag {
+    font-size: 8px;
+  }
+  .corner-note {
+    display: none;
+  }
+  .hud-left,
+  .hud-right {
+    top: 64px;
+  }
+  .hud-left {
+    left: 14px;
+  }
+  .hud-right {
+    right: 14px;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    gap: 5px;
+  }
+  .place-box {
+    width: 51px;
+    height: 58px;
+  }
+  .place-box strong {
+    font-size: 30px;
+  }
+  .lap-box {
+    width: 94px;
+    padding: 8px;
+  }
+  .lap-box strong {
+    font-size: 20px;
+  }
+  .speed-box {
+    width: auto;
+    padding: 4px 8px;
+    flex-direction: row;
+    gap: 5px;
+    align-items: baseline;
+  }
+  .speed-box strong {
+    font-size: 25px;
+  }
+  .speed-box > span {
+    font-size: 7px;
+  }
+  .race-time {
+    font-size: 9px;
+  }
+  .hud-center {
+    top: 148px;
+  }
+  .bottomline {
+    font-size: 7px;
+  }
+  .title-foot {
+    gap: 10px;
+    font-size: 7px;
+  }
+  .primary-button {
+    min-width: 210px;
+  }
+  .screen {
+    background: linear-gradient(
+      90deg,
+      rgba(5, 13, 25, 0.75),
+      rgba(5, 13, 25, 0.25)
+    );
+  }
+}
+#touch-controls {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  inset: auto 18px 46px;
+  justify-content: space-between;
+  align-items: flex-end;
+  pointer-events: none;
+}
+#touch-controls button {
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  color: #fff;
+  background: #081726b8;
+  border: 1px solid #ffffff50;
+  font:
+    700 12px "DM Mono",
+    monospace;
+  backdrop-filter: blur(6px);
+}
+.touch-steer,
+.touch-drive {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+.touch-steer button {
+  width: 52px;
+  height: 55px;
+  font-size: 29px;
+}
+.touch-drive button {
+  height: 48px;
+  padding: 0 13px;
+}
+.touch-drive .touch-gas {
+  height: 65px;
+  min-width: 69px;
+  background: #d5fa51;
+  color: #101b20;
+  font-weight: 800;
+}
+.touch-gas span {
+  font-size: 18px;
+}
+.touch-drive .touch-item {
+  color: #d5fa51;
+}
+.touch-drive .touch-drift {
+  color: #d8e2e7;
+}
+@media (max-width: 700px) {
+  .racing #touch-controls {
+    display: flex;
+  }
+}
+#radar {
+  position: absolute;
+  z-index: 2;
+  left: auto;
+  top: auto;
+  right: 5.2%;
+  bottom: 48px;
+  width: 176px;
+  height: 152px;
+  opacity: 0;
+  transform: translateY(7px);
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
+  pointer-events: none;
+}
+#radar.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+.drift-meter {
+  height: 2px;
+  margin-top: 4px;
+  background: #ffffff22;
+}
+.drift-meter b {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, #43dff8, #ff9b49);
+  transition: width 0.08s;
+}
+.item-label {
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  #radar {
+    width: 116px;
+    height: 100px;
+    right: 12px;
+    bottom: 126px;
+  }
+  .hud-center {
+    top: 138px;
+  }
+  .item-box {
+    padding: 6px 8px;
+  }
+  .item-label {
+    font-size: 7px;
+    letter-spacing: 0.07em;
+  }
+  .hud-left,
+  .hud-right {
+    top: 60px;
+  }
+}
 /* Driving controls remain reachable on small and landscape touch screens. */
-#game{touch-action:none}.controls-help{font-family:'DM Mono',monospace!important;font-size:9px!important;line-height:1.8!important;color:#e0e7e8!important;margin:17px 0 0!important}.title-foot{margin-top:20px}.race-actions{display:none;position:absolute;right:5.2%;top:27px;gap:8px;z-index:3}.racing .race-actions{display:flex}.racing .track-tag{display:none}.race-actions button{cursor:pointer;border:1px solid #ffffff40;background:#081726b8;color:#fff7e9;padding:5px 9px;font:700 10px 'DM Mono',monospace;min-height:30px}.race-actions kbd{font:inherit;color:#d5fa51;margin-left:6px}.paused #touch-controls{display:none!important}.primary-button:focus-visible,.race-actions button:focus-visible,#touch-controls button:focus-visible{outline:3px solid #fff;outline-offset:4px}.touch-brake{color:#ffb193!important}#radar{background:transparent}.screen:not(.hidden)~.race-actions{pointer-events:none}
-@media(pointer:coarse){.racing #touch-controls{display:flex}}
-@media(max-width:700px){#game-shell{min-height:0}.race-actions{right:14px;top:17px}.touch-drive{gap:5px}.touch-drive button{padding:0 9px;font-size:10px}.touch-steer{gap:5px}.touch-steer button{width:42px}.touch-drive .touch-gas{min-width:49px}.title-card{transform:translateY(-50%)}.controls-help{font-size:8px!important}}
-@media(max-height:540px){.topline{top:12px}.bottomline{bottom:10px}.title-card{top:49%;width:min(470px,64vw)}h1{font-size:clamp(62px,14vh,90px);margin:12px 0}.title-card p{margin-bottom:12px}.title-foot{margin-top:12px}.primary-button{padding:13px 16px}.controls-help{margin-top:12px!important}.hud-left,.hud-right{top:54px}.hud-center{top:48px}#touch-controls{bottom:25px}#radar{bottom:93px;width:110px;height:95px}.finish-card,.pause-card{padding:20px}.finish-card h2,.pause-card h2{font-size:48px;margin:15px 0}.finish-stats{padding:12px 0}.pause-card p{margin-bottom:15px}.race-actions{top:10px}}
+#game {
+  touch-action: none;
+}
+.controls-help {
+  font-family: "DM Mono", monospace !important;
+  font-size: 9px !important;
+  line-height: 1.8 !important;
+  color: #e0e7e8 !important;
+  margin: 17px 0 0 !important;
+}
+.title-foot {
+  margin-top: 20px;
+}
+.race-actions {
+  display: none;
+  position: absolute;
+  right: 5.2%;
+  top: 27px;
+  gap: 8px;
+  z-index: 3;
+}
+.racing .race-actions {
+  display: flex;
+}
+.racing .track-tag {
+  display: none;
+}
+.race-actions button {
+  cursor: pointer;
+  border: 1px solid #ffffff40;
+  background: #081726b8;
+  color: #fff7e9;
+  padding: 5px 9px;
+  font:
+    700 10px "DM Mono",
+    monospace;
+  min-height: 30px;
+}
+.race-actions kbd {
+  font: inherit;
+  color: #d5fa51;
+  margin-left: 6px;
+}
+.paused #touch-controls {
+  display: none !important;
+}
+.primary-button:focus-visible,
+.race-actions button:focus-visible,
+#touch-controls button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
+}
+.touch-brake {
+  color: #ffb193 !important;
+}
+#radar {
+  background: transparent;
+}
+.screen:not(.hidden) ~ .race-actions {
+  pointer-events: none;
+}
+@media (pointer: coarse) {
+  .racing #touch-controls {
+    display: flex;
+  }
+}
+@media (max-width: 700px) {
+  #game-shell {
+    min-height: 0;
+  }
+  .race-actions {
+    right: 14px;
+    top: 17px;
+  }
+  .touch-drive {
+    gap: 5px;
+  }
+  .touch-drive button {
+    padding: 0 9px;
+    font-size: 10px;
+  }
+  .touch-steer {
+    gap: 5px;
+  }
+  .touch-steer button {
+    width: 42px;
+  }
+  .touch-drive .touch-gas {
+    min-width: 49px;
+  }
+  .title-card {
+    transform: translateY(-50%);
+  }
+  .controls-help {
+    font-size: 8px !important;
+  }
+}
+@media (max-height: 540px) {
+  .topline {
+    top: 12px;
+  }
+  .bottomline {
+    bottom: 10px;
+  }
+  .title-card {
+    top: 49%;
+    width: min(470px, 64vw);
+  }
+  h1 {
+    font-size: clamp(62px, 14vh, 90px);
+    margin: 12px 0;
+  }
+  .title-card p {
+    margin-bottom: 12px;
+  }
+  .title-foot {
+    margin-top: 12px;
+  }
+  .primary-button {
+    padding: 13px 16px;
+  }
+  .controls-help {
+    margin-top: 12px !important;
+  }
+  .hud-left,
+  .hud-right {
+    top: 54px;
+  }
+  .hud-center {
+    top: 48px;
+  }
+  #touch-controls {
+    bottom: 25px;
+  }
+  #radar {
+    bottom: 93px;
+    width: 110px;
+    height: 95px;
+  }
+  .finish-card,
+  .pause-card {
+    padding: 20px;
+  }
+  .finish-card h2,
+  .pause-card h2 {
+    font-size: 48px;
+    margin: 15px 0;
+  }
+  .finish-stats {
+    padding: 12px 0;
+  }
+  .pause-card p {
+    margin-bottom: 15px;
+  }
+  .race-actions {
+    top: 10px;
+  }
+}

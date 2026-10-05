@@ -1,0 +1,90 @@
+import * as THREE from "./vendor/three/three.module.js";
+import { projectTrack, TRACK } from "./track.js";
+import { progressDelta } from "./race.js";
+import { wrapAngle, clamp } from "./physics.js";
+
+export function createShell(owner, type, target = null) {
+  const velocity = new THREE.Vector3(
+    -Math.sin(owner.yaw),
+    0,
+    -Math.cos(owner.yaw),
+  );
+  const worldPos = owner.worldPos.clone().addScaledVector(velocity, 2.2);
+  const surface = projectTrack(worldPos, owner.s);
+  worldPos.y = surface.height + 0.6;
+  return {
+    type,
+    owner,
+    target,
+    worldPos,
+    previous: worldPos.clone(),
+    yaw: owner.yaw,
+    vx: velocity.x * 44,
+    vz: velocity.z * 44,
+    s: owner.s + progressDelta(surface.t * TRACK, owner.s, TRACK),
+    x: surface.offset / 6.25,
+    life: 5.4,
+    grace: 0.35,
+    speed: 44,
+  };
+}
+export function advanceShell(shell, dt) {
+  shell.previous.copy(shell.worldPos);
+  shell.life -= dt;
+  shell.grace -= dt;
+  if (shell.type === "red" && shell.target && !shell.target.finished) {
+    const target = shell.target.worldPos;
+    const desired = Math.atan2(
+      -(target.x - shell.worldPos.x),
+      -(target.z - shell.worldPos.z),
+    );
+    shell.yaw = wrapAngle(
+      shell.yaw + clamp(wrapAngle(desired - shell.yaw), -4.8 * dt, 4.8 * dt),
+    );
+    shell.vx = -Math.sin(shell.yaw) * shell.speed;
+    shell.vz = -Math.cos(shell.yaw) * shell.speed;
+  }
+  shell.worldPos.x += shell.vx * dt;
+  shell.worldPos.z += shell.vz * dt;
+  const surface = projectTrack(shell.worldPos, shell.s);
+  const penetration = Math.abs(surface.offset) - 9.0,
+    side = Math.sign(surface.offset);
+  if (penetration > 0) {
+    const nx = surface.horizontalRight.x * side,
+      nz = surface.horizontalRight.z * side,
+      outward = shell.vx * nx + shell.vz * nz;
+    shell.worldPos.x -= nx * penetration;
+    shell.worldPos.z -= nz * penetration;
+    if (outward > 0) {
+      shell.vx -= 2 * nx * outward;
+      shell.vz -= 2 * nz * outward;
+      shell.yaw = Math.atan2(-shell.vx, -shell.vz);
+    }
+  }
+  const after = projectTrack(shell.worldPos, shell.s);
+  shell.s += progressDelta(after.t * TRACK, shell.s, TRACK);
+  shell.x = after.offset / 6.25;
+  shell.worldPos.y = after.height + 0.6;
+}
+export function sweptDistanceSquared(point, start, end) {
+  const dx = end.x - start.x,
+    dy = end.y - start.y,
+    dz = end.z - start.z,
+    length = dx * dx + dy * dy + dz * dz;
+  const t =
+    length > 0
+      ? clamp(
+          ((point.x - start.x) * dx +
+            (point.y - start.y) * dy +
+            (point.z - start.z) * dz) /
+            length,
+          0,
+          1,
+        )
+      : 0;
+  return (
+    (point.x - start.x - dx * t) ** 2 +
+    (point.y - start.y - dy * t) ** 2 +
+    (point.z - start.z - dz * t) ** 2
+  );
+}

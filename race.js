@@ -20,5 +20,8 @@ export function finishRacer(racer, distance, time) {
 }
 // Progress is signed, so backing over the line cannot manufacture laps.
 export function lapNumber(distance, length, laps) {
-  return Math.min(laps, Math.max(1, Math.floor(Math.max(0, distance) / length) + 1));
+  return Math.min(
+    laps,
+    Math.max(1, Math.floor(Math.max(0, distance) / length) + 1),
+  );
 }

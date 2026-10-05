@@ -1,8 +1,106 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Turbo Trail browser regression checks</title><style>body{margin:0;background:#122436;color:#fff;font:13px system-ui}header{padding:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}button{padding:8px;border:0;border-radius:4px;cursor:pointer}iframe{width:100%;height:calc(100vh - 185px);border:0}pre{margin:4px 10px;white-space:pre-wrap;max-height:100px;overflow:auto}#summary{color:#a8ee69}</style></head><body><header><strong>Browser regression checks</strong><button id="start">Start race</button><button id="auto">Autodrive</button><button id="gas">Hold accelerator</button><button id="drift">Hold right + drift</button><button id="release">Release controls</button><button id="pause">Pause</button><button id="resume">Resume</button><button id="mushroom">Give mushrooms</button><button id="banana">Give banana</button><button id="green">Give shell</button><button id="star">Give star</button><button id="fire">Use item</button><button id="hit">Hit kart</button><span id="summary">Waiting for game</span></header><iframe id="game-frame" src="../index.html?test=1" title="Kart racer test frame"></iframe><pre id="state"></pre><script type="module">
-const frame=document.querySelector('iframe'),summary=document.querySelector('#summary'),output=document.querySelector('#state');
-const send=(type,data={})=>frame.contentWindow.postMessage({type,...data},location.origin);
-const actions={start:()=>send('test-start'),auto:()=>{send('test-auto',{value:true});send('test-input',{keys:[]});},gas:()=>{send('test-auto',{value:false});send('test-input',{keys:['w']});},drift:()=>{send('test-auto',{value:false});send('test-input',{keys:['w','d',' ']});},release:()=>send('test-input',{keys:[]}),pause:()=>send('test-pause',{value:true}),resume:()=>send('test-pause',{value:false}),fire:()=>send('test-fire'),hit:()=>send('test-hit')};
-for(const item of ['mushroom','banana','green','star'])actions[item]=()=>send('test-item',{item});
-for(const [id,action]of Object.entries(actions))document.getElementById(id).onclick=action;
-window.addEventListener('message',event=>{if(event.origin!==location.origin||event.source!==frame.contentWindow||event.data.type!=='racer-state')return;const s=event.data;summary.textContent=`${s.finished?'FINISHED':s.paused?'PAUSED':s.running?'RACING':'READY'} · ${s.raceTime.toFixed(2)}s · ${s.player.speed.toFixed(0)} km/h · ${s.render.fps.toFixed(0)} fps`;output.textContent=JSON.stringify(s,null,1);});
-</script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Turbo Trail browser regression checks</title>
+    <style>
+      body {
+        margin: 0;
+        background: #122436;
+        color: #fff;
+        font: 13px system-ui;
+      }
+      header {
+        padding: 10px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      button {
+        padding: 8px;
+        border: 0;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      iframe {
+        width: 100%;
+        height: calc(100vh - 185px);
+        border: 0;
+      }
+      pre {
+        margin: 4px 10px;
+        white-space: pre-wrap;
+        max-height: 100px;
+        overflow: auto;
+      }
+      #summary {
+        color: #a8ee69;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <strong>Browser regression checks</strong
+      ><button id="start">Start race</button><button id="auto">Autodrive</button
+      ><button id="gas">Hold accelerator</button
+      ><button id="drift">Hold right + drift</button
+      ><button id="release">Release controls</button
+      ><button id="pause">Pause</button><button id="resume">Resume</button
+      ><button id="mushroom">Give mushrooms</button
+      ><button id="banana">Give banana</button
+      ><button id="green">Give shell</button><button id="star">Give star</button
+      ><button id="fire">Use item</button><button id="hit">Hit kart</button
+      ><span id="summary">Waiting for game</span>
+    </header>
+    <iframe
+      id="game-frame"
+      src="../index.html?test=1"
+      title="Kart racer test frame"
+    ></iframe>
+    <pre id="state"></pre>
+    <script type="module">
+      const frame = document.querySelector("iframe"),
+        summary = document.querySelector("#summary"),
+        output = document.querySelector("#state");
+      const send = (type, data = {}) =>
+        frame.contentWindow.postMessage({ type, ...data }, location.origin);
+      const actions = {
+        start: () => send("test-start"),
+        auto: () => {
+          send("test-auto", { value: true });
+          send("test-input", { keys: [] });
+        },
+        gas: () => {
+          send("test-auto", { value: false });
+          send("test-input", { keys: ["w"] });
+        },
+        drift: () => {
+          send("test-auto", { value: false });
+          send("test-input", { keys: ["w", "d", " "] });
+        },
+        release: () => send("test-input", { keys: [] }),
+        pause: () => send("test-pause", { value: true }),
+        resume: () => send("test-pause", { value: false }),
+        fire: () => send("test-fire"),
+        hit: () => send("test-hit"),
+      };
+      for (const item of ["mushroom", "banana", "green", "star"])
+        actions[item] = () => send("test-item", { item });
+      for (const [id, action] of Object.entries(actions))
+        document.getElementById(id).onclick = action;
+      window.addEventListener("message", (event) => {
+        if (
+          event.origin !== location.origin ||
+          event.source !== frame.contentWindow ||
+          event.data.type !== "racer-state"
+        )
+          return;
+        const s = event.data;
+        summary.textContent = `${s.finished ? "FINISHED" : s.paused ? "PAUSED" : s.running ? "RACING" : "READY"} · ${s.raceTime.toFixed(2)}s · ${s.player.speed.toFixed(0)} km/h · ${s.render.fps.toFixed(0)} fps`;
+        output.textContent = JSON.stringify(s, null, 1);
+      });
+    </script>
+  </body>
+</html>
