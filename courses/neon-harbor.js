@@ -31,7 +31,7 @@ export default {
   elevated:[{section:3,startFraction:.04,endFraction:.88}],
   hazard:{section:4,fraction:.59,kind:'cargo-shuttle',label:'CARGO SHUTTLE · KEEP LEFT',
     parkOffset:12,minOffset:0,halfWidth:1.35,halfLength:2.15,safeLane:-5.5,activation:30,period:12,warningSeconds:2},
-  theme:{terrain:'concrete',sky:'#142039',fog:'#26334d',ground:'#334553',road:'#435269',shoulder:'#8194a5',
+  theme:{terrain:'concrete',sky:'#142039',fog:'#26334d',ground:'#334553',road:'#b3c2d6',shoulder:'#8194a5',
     hemisphere:'#b4d8ff',ambientGround:'#596988',sun:'#b8d6ff',sunIntensity:1.7,exposure:1.25},
   buildWorld,
 };

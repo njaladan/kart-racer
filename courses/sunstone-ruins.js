@@ -32,7 +32,7 @@ export default {
   shortcut:{section:5,startFraction:.28,endFraction:.65,extraWidth:22},
   hazard:{section:4,fraction:.64,kind:'stone',label:'ANCIENT SHUTTLE',parkOffset:12,minOffset:0,
     halfWidth:1.35,halfLength:2.15,safeLane:-5.5,activation:30,period:12,warningSeconds:2},
-  theme:{terrain:'sand',sky:'#e3bd82',fog:'#e5c493',ground:'#d7b56d',road:'#b99871',shoulder:'#efe0af',
+  theme:{terrain:'sand',sky:'#e3bd82',fog:'#e5c493',ground:'#d7b56d',road:'#ead9bb',shoulder:'#efe0af',
     hemisphere:'#fff3d4',ambientGround:'#6e5c68',sun:'#fff0c6',sunIntensity:2.3,exposure:1.08},
   buildWorld,
 };
