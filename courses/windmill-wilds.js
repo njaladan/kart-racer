@@ -28,5 +28,5 @@ export default {
   itemRows: [[0,.23],[1,.12],[1,.85],[2,.32],[3,.12],[3,.90],[4,.87],[5,.72]].map(([section,fraction])=>({section,fraction})),
   shortcut: {section:5,startFraction:.10,endFraction:.36,extraWidth:22},
   hazard: {section:4,fraction:.70,kind:'cart',label:'CART CROSSING',parkOffset:10,minOffset:-3,halfWidth:1.35,halfLength:2.15,safeLane:-6,activation:30,period:12,warningSeconds:2},
-  theme: {sky:'#8ed5e8',fog:'#c3e4e5',ground:'#ffffff',road:'#ffffff',shoulder:'#b1afa0',hemisphere:'#c6edff',ambientGround:'#8c9b60',sun:'#fff0d0',sunIntensity:2.5,exposure:1},
+  theme: {sky:'#56ace2',fog:'#c2e1e6',ground:'#ffffff',road:'#ffffff',shoulder:'#b1afa0',hemisphere:'#bddcf5',ambientGround:'#7e8c6b',ambientIntensity:1.4,sun:'#fff0d5',sunIntensity:2.3,exposure:1.02},
 };

@@ -32,7 +32,7 @@ Drift mini-turbos briefly widen the camera view and pull it back, with a stronge
 
 Eight authored pickup rows each offer three lanes. Item odds are balanced in a close pack; racers more than 1.5 seconds behind the leader gradually receive better odds of mushrooms, red shells, and stars, reaching the maximum recovery weighting at 6.5 seconds. These odds apply equally to players and rivals. Shells are single use; triple mushrooms queue up to 2.85 seconds of boost, and boost pads never shorten an active boost.
 
-Simulation runs at 120 Hz with interpolated rendering. Track projection and minimap geometry are cached; trees, flowers, guardrails and road markings are batched; static kart and cloud parts are merged. Rendering reduces pixel density after sustained slow frames. Expired item and particle GPU resources are released, including on restart.
+Simulation runs at 120 Hz with interpolated rendering. Track projection and minimap geometry are cached; trees, flowers, guardrails and road markings are batched; static kart and cloud parts are merged. Rendering reduces pixel density after sustained slow frames. Item GPU resources are released when they expire; sparks share a reusable pool of 96 instances and are cleared on restart.
 
 ## Validation
 
@@ -44,11 +44,29 @@ The Node tests cover acceleration, reverse, grip, airborne momentum, bounded boo
 
 For interactive integration checks, open `/tests/browser.html` on the same local server. It exposes held inputs, autodriving, a targeted boosted-ramp scenario, item use, pause/resume, hit recovery, and visible state/render counters. These controls are enabled only for the embedded game with the explicit `?test` query; they are absent from ordinary play.
 
-The visuals use procedural geometry and textures. They borrow the bright arcade racing feel of the Wii era; they do not reproduce Nintendo characters, tracks, or assets.
+The visuals combine original procedural artwork with adapted CC0 assets. They borrow the bright arcade racing feel of the Wii era; they do not reproduce Nintendo characters, tracks, or assets.
 
 ## Graphics
 
 Rounded kart bodies and tires, alloy spokes, side vents, engine fins and numbered racing decals sit alongside layered pine canopies, orchard blossoms, a supported timber bridge and a detailed mill spanning the road. Shared 512px procedural textures add painted variation, grass blades, asphalt aggregate, bark grain, foliage, woven fabric, tire tread, masonry and roof tiles. Subtle bump mapping provides surface depth; instanced scenery and merged static kart parts keep draw calls contained.
+
+The grass and asphalt now use palette-matched 256px ambientCG textures; the pine,
+oak, and blossom scenery uses Kenney Nature Kit geometry, with spatial instance
+batches that preserve culling. Vertex colors provide fixed underside shading,
+road wear, and broad grass variation without an extra rendering pass. Warm
+sunlight, cooler ambient light, and a painted sky gradient establish depth.
+Kart paint, helmets, visors and metal use one small Poly Haven reflection map,
+prefiltered once at startup. Number decals share one atlas. The existing 2048px
+shadow map follows the kart in texel-sized steps in light space to reduce shimmer.
+Rear-wheel drift sparks are pooled in one draw call, and dual exhaust flames
+combine a pale core and orange tip in one mesh per kart.
+
+All downloaded assets are bundled locally: normal play makes no requests to
+asset providers. See [asset credits](assets/CREDITS.md) for creators, licenses,
+sources and reproduction instructions. The combined downloaded runtime assets
+are about 105 KiB. A missing optional asset falls back to procedural artwork.
+Open `/tests/browser.html?benchmark=1` to hold pixel density fixed and skip the
+countdown while comparing graphics; normal play retains adaptive resolution.
 
 ## Windmill Wilds
 

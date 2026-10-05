@@ -1,12 +1,13 @@
 import * as THREE from "three";
 import { surfaceTexture } from "./textures.js";
+import { loadGraphicsAssets, bakeVertexShade, createKartDecalAtlas,
+  ParticlePool, createStableShadowFollower, addGradientSky } from "./graphics.js";
 import {
   bevelBox,
   contactShadow,
   batchStaticMeshes,
 } from "./visuals.js";
 import { loadCourseAssets } from "./course-assets.js";
-import { addCourseSky, stabilizeSun } from "./course-lighting.js";
 import { buildCourseWorld } from "./course-runtime.js";
 import { COURSES, courseById } from "./courses/registry.js";
 import { selectCourse, activeTrack } from "./track.js";
@@ -82,9 +83,11 @@ import {
     shake = 0,
     driftCamera = 0;
   let testAutodrive = false,
+    testFreeze = false,
     testTricks = { started: 0, landed: 0 },
     testFrameStats = { frames: 0, total: 0, max: 0 };
   const testMode = new URLSearchParams(location.search).has("test");
+  const benchmarkMode = testMode && new URLSearchParams(location.search).has("benchmark");
   const keys = Object.create(null),
     tempObj = new THREE.Object3D();
   const scene = new THREE.Scene();
@@ -114,7 +117,7 @@ import {
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = theme.exposure;
-  scene.add(new THREE.HemisphereLight(theme.hemisphere, theme.ambientGround, 1.55));
+  scene.add(new THREE.HemisphereLight(theme.hemisphere, theme.ambientGround, theme.ambientIntensity ?? 1.55));
   const sun = new THREE.DirectionalLight(theme.sun, theme.sunIntensity);
   sun.position.set(-75, 130, 75);
   sun.castShadow = true;
@@ -129,18 +132,20 @@ import {
   sun.shadow.bias = -0.00025;
   scene.add(sun);
   scene.add(sun.target);
+  const followShadow = createStableShadowFollower(sun);
+  const assets = await loadGraphicsAssets(renderer);
+  addGradientSky(scene,theme);
   const mat = (color, roughness = 0.74, extra = {}) =>
-    new THREE.MeshStandardMaterial({ color, roughness, ...extra });
+    new THREE.MeshStandardMaterial({ color, roughness, vertexColors: true, ...extra });
   const textures = Object.fromEntries(
     ['grass', 'snow', 'sand', 'concrete', 'water', 'asphalt', 'bark', 'leaves', 'fabric', 'tire', 'paint'].map(
-      (kind) => [kind, surfaceTexture(kind, renderer)],
+      (kind) => [kind, assets[kind] || surfaceTexture(kind, renderer)],
     ),
   );
   const groundKind = theme.terrain || 'grass';
   const courseAssets = chosenCourse.buildWorld ? await loadCourseAssets(renderer) : {models:{},textures:{}};
   Object.assign(textures,courseAssets.textures);
   const grassTexture = textures[groundKind], asphaltTexture = textures.asphalt;
-  const courseSky = addCourseSky(scene,theme);
   const surface = (map, bumpScale = 0.025) => ({ map, bumpMap: map, bumpScale });
   const mats = {
     grass: mat(theme.ground, 0.96, surface(grassTexture, 0.06)),
@@ -173,6 +178,7 @@ import {
   };
 
   function addMesh(geometry, material, parent = scene, position = null) {
+    if (material.vertexColors) bakeVertexShade(geometry);
     const m = new THREE.Mesh(geometry, material);
     if (position) m.position.copy(position);
     m.castShadow = true;
@@ -182,7 +188,7 @@ import {
   }
 
   function makeWorld() {
-    landscape = buildCourseWorld(scene, renderer, mats, textures, activeTrack, courseAssets);
+    landscape = buildCourseWorld(scene, renderer, mats, textures, activeTrack, courseAssets, assets);
     addFinishArch();
     addPads();
     addItemBoxes();
@@ -347,23 +353,25 @@ import {
     }
   }
 
+  const decals = createKartDecalAtlas(['#38d9ca', '#fa6551', '#edc748', '#9e83ff', '#42d7b4', '#ff8bbc']);
+  const reflective = { envMap: assets.environment, envMapIntensity: 0.45 };
+  const particles = new ParticlePool(scene);
   const karts = [],
     projectiles = [],
-    bananas = [],
-    particles = [];
+    bananas = [];
   function buildKart(color, name, isPlayer = false) {
     const root = new THREE.Group();
     root.name = name;
-    const paint = mat(color, 0.34, { metalness: 0.2, map: textures.paint }),
+    const paint = mat(color, 0.34, { metalness: 0.2, map: textures.paint, ...reflective }),
       highlight = mat(
         new THREE.Color(color).lerp(new THREE.Color("#ffffff"), 0.42),
         0.32,
-        { metalness: 0.25 },
+        { metalness: 0.25, ...reflective },
       ),
       dark = mat("#18242e", 0.68, surface(textures.fabric, 0.012)),
       rubber = mat("#ffffff", 0.92, surface(textures.tire, 0.035)),
       skin = mat("#e4ad7c", 0.8),
-      helmet = mat(color, 0.25, { metalness: 0.25, map: textures.paint });
+      helmet = mat(color, 0.25, { metalness: 0.25, map: textures.paint, ...reflective });
     const body = addMesh(bevelBox(1.6, 0.48, 2.22), paint, root);
     body.position.y = 0.73;
     const nose = addMesh(bevelBox(1.08, 0.23, 0.75), highlight, root);
@@ -392,7 +400,7 @@ import {
     helmetTop.position.set(0, 1.88, -0.08);
     const visor = addMesh(
       bevelBox(0.52, 0.13, 0.12),
-      mat("#10252f", 0.2, { metalness: 0.55 }),
+      mat("#10252f", 0.2, { metalness: 0.55, ...reflective }),
       root,
     );
     visor.position.set(0, 1.81, -0.43);
@@ -442,7 +450,7 @@ import {
     dashBoard.position.set(0, 1.06, -0.46);
     const badge = addMesh(bevelBox(0.31, 0.035, 0.035), mats.gold, root);
     badge.position.set(0, 0.94, -1.02);
-    const chrome = mat("#b8c9d2", 0.3, { metalness: 0.65 });
+    const chrome = mat("#b8c9d2", 0.3, { metalness: 0.65, ...reflective });
     // Sculpted side pods, vents, suspension and a visible rear engine.
     for (const side of [-1, 1]) {
       const pod = addMesh(bevelBox(0.34, 0.34, 1.1, 0.14), paint, root);
@@ -464,22 +472,12 @@ import {
       const fin = addMesh(bevelBox(0.73, 0.035, 0.45, 0.008), dark, root);
       fin.position.set(0, 0.78 + i * 0.065, 1.01);
     }
-    const decalCanvas = document.createElement('canvas');
-    decalCanvas.width = decalCanvas.height = 128;
-    const dc = decalCanvas.getContext('2d');
-    dc.fillStyle = '#fff8dc'; dc.beginPath(); dc.arc(64, 64, 56, 0, TAU); dc.fill();
-    dc.strokeStyle = color; dc.lineWidth = 7; dc.stroke();
-    dc.fillStyle = '#243a4b'; dc.font = 'italic 900 76px sans-serif';
-    dc.textAlign = 'center'; dc.textBaseline = 'middle'; dc.fillText(String(karts.length + 1), 60, 68);
-    const decalTexture = new THREE.CanvasTexture(decalCanvas);
-    decalTexture.colorSpace = THREE.SRGBColorSpace;
-    const decalMaterial = mat('#ffffff', 0.6, { map: decalTexture, transparent: true, depthWrite: false });
-    const number = addMesh(new THREE.PlaneGeometry(0.47, 0.47), decalMaterial, root);
+    const number = addMesh(decals.geometry(karts.length, 0.47), decals.material, root);
     number.rotation.x = -Math.PI / 2;
     number.position.set(0, 0.977, -0.79);
     number.castShadow = false;
     for (const side of [-1, 1]) {
-      const patch = addMesh(new THREE.PlaneGeometry(0.31, 0.31), decalMaterial, root);
+      const patch = addMesh(decals.geometry(karts.length, 0.31), decals.material, root);
       patch.rotation.y = side * Math.PI / 2;
       patch.position.set(side * 1.003, 0.78, -0.24);
       patch.castShadow = false;
@@ -524,13 +522,23 @@ import {
         root.add(pivot);
         wheels.push({ pivot, spin, front: z < 0 });
       }
-    const exhaustMat = mat("#ff9b49", 0.28, {
-        emissive: "#ff5018",
-        emissiveIntensity: 0,
-      }),
-      flame = addMesh(new THREE.ConeGeometry(0.15, 0.8, 7), exhaustMat, root);
-    flame.position.set(0, 0.66, 1.48);
-    flame.rotation.x = -Math.PI / 2;
+    const exhaustMat = new THREE.MeshBasicMaterial({ color: '#fff0a1', vertexColors: true, toneMapped: false });
+    // Two flame lobes share one geometry and draw call, with a hot pale core.
+    const flameGeometry = new THREE.ConeGeometry(0.16, 0.85, 7).toNonIndexed();
+    const flamePositions = [], flameColors = [];
+    const source = flameGeometry.getAttribute('position');
+    for (const side of [-1, 1]) for (let i = 0; i < source.count; i++) {
+      const x = source.getX(i), y = source.getY(i), z = source.getZ(i);
+      flamePositions.push(side * 0.68 + x, -z, y);
+      const hot = THREE.MathUtils.clamp(0.5 - y / 0.85, 0, 1);
+      flameColors.push(1, 0.28 + hot * 0.65, 0.04 + hot * 0.35);
+    }
+    flameGeometry.dispose();
+    const flameGeo = new THREE.BufferGeometry();
+    flameGeo.setAttribute('position', new THREE.Float32BufferAttribute(flamePositions, 3));
+    flameGeo.setAttribute('color', new THREE.Float32BufferAttribute(flameColors, 3));
+    const flame = new THREE.Mesh(flameGeo, exhaustMat); root.add(flame);
+    flame.position.set(0, 0.65, 1.65);
     const aura = new THREE.Group();
     const ring = addMesh(
       new THREE.TorusGeometry(1.45, 0.07, 7, 36),
@@ -809,28 +817,7 @@ import {
   }
 
   function spawnParticle(pos, color, life = 0.6, size = 0.2, velocity = null) {
-    if (particles.length > 95) {
-      disposeEffect(particles[0].mesh);
-      particles.shift();
-    }
-    const mesh = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(size, 0),
-      new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.95 }),
-    );
-    mesh.position.copy(pos);
-    scene.add(mesh);
-    particles.push({
-      mesh,
-      life,
-      max: life,
-      velocity:
-        velocity ||
-        new THREE.Vector3(
-          (Math.random() - 0.5) * 2,
-          Math.random() * 2,
-          (Math.random() - 0.5) * 2,
-        ),
-    });
+    particles.spawn(pos, color, life, size, velocity);
   }
   function getItemModel(kind) {
     let g = new THREE.Group();
@@ -988,7 +975,7 @@ import {
     });
     projectiles.splice(0).forEach((p) => disposeEffect(p.mesh));
     bananas.splice(0).forEach((b) => disposeEffect(b.mesh));
-    particles.splice(0).forEach((p) => disposeEffect(p.mesh));
+    particles.clear();
     elapsed = 0;
     raceTime = 0;
     running = false;
@@ -1019,7 +1006,7 @@ import {
     ui.pause.classList.add("hidden");
     ui.hud.classList.remove("hidden");
     radar.classList.add("active");
-    countdown = 3.45;
+    countdown = benchmarkMode ? 0.01 : 3.45;
     ui.count.classList.remove("hidden");
     canvas.focus({ preventScroll: true });
     tone(420, 0.18, "square", 0.08);
@@ -1206,8 +1193,8 @@ import {
       wheel.pivot.rotation.y = wheel.front ? -state.steering * 0.32 : 0;
     }
     kart.flame.visible = state.boost > 0;
-    kart.flame.scale.setScalar(0.8 + Math.sin(elapsed * 40) * 0.18);
-    kart.exhaustMat.emissiveIntensity = state.boost > 0 ? 3 : 0;
+    kart.flame.scale.set(1, 0.85 + Math.sin(elapsed * 31) * 0.12,
+      0.9 + Math.sin(elapsed * 43) * 0.22);
     kart.aura.visible = state.star > 0;
     if (state.star > 0) {
       kart.aura.rotation.y += dt * 3;
@@ -1288,8 +1275,12 @@ import {
       sfx("boost");
     }
     if (sliding && state === player && Math.random() < dt * 35) {
+      const side = state.steering >= 0 ? 1 : -1;
+      const wheelPos = state.worldPos.clone().add(new THREE.Vector3(
+        Math.cos(state.yaw) * side * 0.85 + Math.sin(state.yaw) * 0.76,
+        0.18, -Math.sin(state.yaw) * side * 0.85 + Math.cos(state.yaw) * 0.76));
       spawnParticle(
-        state.worldPos.clone().add(new THREE.Vector3(0, 0.35, 0)),
+        wheelPos,
         state.driftTier === 2
           ? "#ff984c"
           : state.driftTier === 1
@@ -1297,6 +1288,8 @@ import {
             : "#bbc8cc",
         0.35,
         0.1,
+        new THREE.Vector3(Math.sin(state.yaw) * 2.2 + side * Math.cos(state.yaw),
+          0.5 + Math.random(), Math.cos(state.yaw) * 2.2 - side * Math.sin(state.yaw)),
       );
     }
     if (events.padBoost && state === player) {
@@ -1497,18 +1490,7 @@ import {
     toastLeft = Math.max(0, toastLeft - dt);
     if (!toastLeft) ui.toast.textContent = "";
     shake = Math.max(0, shake - dt);
-    for (const p of particles) {
-      p.life -= dt;
-      p.mesh.position.addScaledVector(p.velocity, dt);
-      p.velocity.y -= dt * 1.5;
-      p.mesh.material.opacity = Math.max(0, p.life / p.max);
-      p.mesh.scale.setScalar(0.45 + 0.9 * Math.max(0, p.life / p.max));
-    }
-    for (let i = particles.length - 1; i >= 0; i--)
-      if (particles[i].life <= 0) {
-        disposeEffect(particles[i].mesh);
-        particles.splice(i, 1);
-      }
+    particles.step(dt);
   }
   const radarPoints = Array.from({ length: 161 }, (_, i) => {
     const p = routePoint(i / 160);
@@ -1698,9 +1680,9 @@ import {
     }
     const forest = sectionAt(trackT(player.s)).id === "forest";
     scene.fog.far += ((forest ? 260 : 600) - scene.fog.far) * (1 - Math.exp(-2 * dt));
-    stabilizeSun(sun,player.worldPos);
+    followShadow(player.worldPos);
+    particles.sync();
     renderer.shadowMap.autoUpdate = !paused && !finished;
-    courseSky.position.copy(camera.position);
     renderer.render(scene, camera);
   }
   function clamp(v, a, b) {
@@ -1740,10 +1722,11 @@ import {
             projectiles: projectiles.length,
             camera: { driftEffect: driftCamera, fov: camera.fov },
             bots: bots.map((b) => ({ s: b.s, finished: b.finished })),
-            effects: particles.length + bananas.length + projectiles.length,
+            effects: particles.count + bananas.length + projectiles.length,
             render: {
               geometries: renderer.info.memory.geometries,
               textures: renderer.info.memory.textures,
+              pixelRatio: dpr, particles: particles.count,
               drawCalls: renderer.info.render.calls,
               triangles: renderer.info.render.triangles,
               fps: testFrameStats.frames / Math.max(0.01, testFrameStats.total),
@@ -1754,9 +1737,10 @@ import {
         );
   }
   function frame(now) {
-    const dt = Math.min(0.1, Math.max(0, (now - last) / 1000));
+    const frameSeconds = Math.max(0, (now - last) / 1000);
+    const dt = Math.min(0.1, frameSeconds);
     last = now;
-    if (!paused) {
+    if (!paused && (!testFreeze || !running)) {
       accumulator += dt;
       while (accumulator >= FIXED_DT) {
         step(FIXED_DT);
@@ -1769,7 +1753,7 @@ import {
       performanceFrames++;
       if (performanceTime > 3) {
         const average = performanceTime / performanceFrames;
-        if (average > 0.025 && dpr > 0.85) {
+        if (!benchmarkMode && average > 0.025 && dpr > 0.85) {
           dpr = Math.max(0.85, dpr - 0.15);
           renderer.setPixelRatio(dpr);
           renderer.setSize(w, h, false);
@@ -1780,8 +1764,8 @@ import {
     }
     if (testMode) {
       testFrameStats.frames++;
-      testFrameStats.total += dt;
-      testFrameStats.max = Math.max(testFrameStats.max, dt);
+      testFrameStats.total += frameSeconds;
+      testFrameStats.max = Math.max(testFrameStats.max, frameSeconds);
       if (testFrameStats.frames % 6 === 0)
         reportTestState();
     }
@@ -1829,6 +1813,7 @@ import {
       }
       if (message.type === "test-report") reportTestState();
       if (message.type === "test-auto") testAutodrive = !!message.value;
+      if (message.type === "test-freeze" && benchmarkMode) testFreeze = !!message.value;
       if (message.type === "test-input") {
         clearInput();
         for (const key of message.keys || []) keys[key] = true;

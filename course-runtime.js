@@ -5,9 +5,9 @@ import { addCourseWorld } from './course-world.js';
 import { createRailGeometry } from './course-rails.js';
 
 // Shared geometry uses exactly the surface/edge queries used by karts and shells.
-export function buildCourseWorld(scene,renderer,mats,textures,track,assets) {
+export function buildCourseWorld(scene,renderer,mats,textures,track,assets,commonAssets) {
   const course=track.course;
-  if(course.id==='windmill-wilds') return addCourseWorld(scene,renderer,mats,textures);
+  if(course.id==='windmill-wilds') return addCourseWorld(scene,renderer,mats,textures,commonAssets?.nature);
   const scenery=new THREE.Group();scene.add(scenery);
   const kit=createCourseKit(scenery,track,assets);
   const {mesh,box,groupAt,material}=kit;

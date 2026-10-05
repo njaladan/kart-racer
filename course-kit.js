@@ -1,19 +1,13 @@
 import * as THREE from './vendor/three/three.module.js';
 import { batchStaticMeshes } from './visuals.js';
+import { bakeVertexShade } from './graphics.js';
 
 // Scenery authors get placement and reusable primitives, never engine globals.
 export function createCourseKit(scenery, track, assets = {models:{}}) {
   const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
   const material = (color, extra = {}) => new THREE.MeshStandardMaterial({color, roughness: .85, vertexColors:true, ...extra});
   const mesh = (geometry, mat, parent = scenery, position = [0,0,0], scale = [1,1,1]) => {
-    if(!geometry.getAttribute('color') && geometry.getAttribute('normal')) {
-      const normals=geometry.getAttribute('normal'),colors=new Float32Array(normals.count*3);
-      for(let i=0;i<normals.count;i++) {
-        const shade=Math.max(.7,Math.min(1,.86+.1*normals.getY(i)+.025*normals.getX(i)-.015*normals.getZ(i)));
-        colors.set([shade,shade,shade],i*3);
-      }
-      geometry.setAttribute('color',new THREE.BufferAttribute(colors,3));
-    }
+    if(!geometry.getAttribute('color') && geometry.getAttribute('normal')) bakeVertexShade(geometry,.14);
     const m = new THREE.Mesh(geometry, mat);
     m.position.set(...position); m.scale.set(...scale);
     m.castShadow = true; m.receiveShadow = true; parent.add(m); return m;
