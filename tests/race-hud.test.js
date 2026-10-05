@@ -1,11 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {
-  formatRaceTime,
-  ordinalSuffix,
-  renderItemHud,
-  renderRaceHud,
-} from "../race-hud.js";
+import { formatRaceTime, ordinalSuffix, renderItemHud, renderRaceHud } from "../src/ui/race-hud.js";
 
 function element() {
   return { textContent: "", innerHTML: "", style: {} };

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { laneWidth, laneFromOffset } from "../track.js";
+import { laneWidth, laneFromOffset } from "../src/track/track.js";
 
 test("lane coordinates and lateral metre offsets convert consistently", () => {
   for (const lane of [-5.5, -1, 0, 0.5, 4]) {

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { COURSES, courseById, findCourseById } from "../courses/registry.js";
+import { COURSES, courseById, findCourseById } from "../src/courses/registry.js";
 import {
   selectCourse,
   activeTrack,
@@ -11,8 +11,8 @@ import {
   surfaceAt,
   collisionBounds,
   TRACK,
-} from "../track.js";
-import { cartAt, cartContact } from "../hazards.js";
+} from "../src/track/track.js";
+import { cartAt, cartContact } from "../src/simulation/hazards.js";
 
 // A single process switches through every course, exercising live engine bindings.
 test("course selection updates geometry, surfaces and hazards without stale course state", () => {
@@ -45,23 +45,14 @@ test("course selection updates geometry, surfaces and hazards without stale cour
     ) {
       const hazard = cartAt(time);
       assert.equal(hazard.halfWidth, course.hazard.halfWidth);
-      assert.equal(
-        cartContact(poseAt(hazard.s, course.hazard.safeLane, 0.065).p, time),
-        null,
-      );
+      assert.equal(cartContact(poseAt(hazard.s, course.hazard.safeLane, 0.065).p, time), null);
     }
     for (const patch of activeTrack.SURFACES) {
       const mid = (patch.start + patch.end) / 2;
       assert.equal(surfaceAt(mid).material, patch.material);
       assert.equal(surfaceAt(mid).grip, patch.grip);
-      assert.equal(
-        surfaceAt(patch.start - 0.001).material,
-        SECTIONS[patch.section].material,
-      );
-      assert.equal(
-        surfaceAt(patch.end + 0.001).material,
-        SECTIONS[patch.section].material,
-      );
+      assert.equal(surfaceAt(patch.start - 0.001).material, SECTIONS[patch.section].material);
+      assert.equal(surfaceAt(patch.end + 0.001).material, SECTIONS[patch.section].material);
     }
   }
 });

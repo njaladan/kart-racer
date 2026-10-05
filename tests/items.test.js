@@ -1,12 +1,17 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  createShell, advanceShell, sweptDistanceSquared, consumeItem,
-  itemWeights, chooseItem, MAX_QUEUED_BOOST,
-} from "../items.js";
-import { initializeRacer } from "../simulation.js";
-import { poseAt, frameAt, yawFor, projectTrack, collisionBounds } from "../track.js";
-import { FIXED_DT } from "../physics.js";
+  createShell,
+  advanceShell,
+  sweptDistanceSquared,
+  consumeItem,
+  itemWeights,
+  chooseItem,
+  MAX_QUEUED_BOOST,
+} from "../src/simulation/items.js";
+import { initializeRacer } from "../src/simulation/simulation.js";
+import { poseAt, frameAt, yawFor, projectTrack, collisionBounds } from "../src/track/track.js";
+import { FIXED_DT } from "../src/simulation/physics.js";
 
 test("green shells keep their firing heading and reflect at physical barriers", () => {
   const owner = initializeRacer({ s: 350, x: 0, drift: 0 });
@@ -20,11 +25,7 @@ test("green shells keep their firing heading and reflect at physical barriers", 
   shell.vz = f.right.z * 44;
   advanceShell(shell, 0.02);
   const surface = projectTrack(shell.worldPos, owner.s);
-  assert.ok(
-    shell.vx * surface.horizontalRight.x +
-      shell.vz * surface.horizontalRight.z <
-      0,
-  );
+  assert.ok(shell.vx * surface.horizontalRight.x + shell.vz * surface.horizontalRight.z < 0);
   assert.ok(surface.offset <= collisionBounds(surface.t, 0.55).right + 0.02);
 });
 test("red shell steering has a bounded turning rate", () => {

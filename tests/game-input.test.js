@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { bindGameInput } from "../game-input.js";
+import { bindGameInput } from "../src/input/game-input.js";
 
 class EventTargetMock {
   listeners = new Map();
@@ -46,7 +46,12 @@ test("game input owns keyboard, pointer, and reset behavior through callbacks", 
     onRecover: () => recoveries++,
   });
 
-  const keyEvent = (key) => ({ key, repeat: false, target: { closest: () => false }, preventDefault() {} });
+  const keyEvent = (key) => ({
+    key,
+    repeat: false,
+    target: { closest: () => false },
+    preventDefault() {},
+  });
   windowRef.fire("keydown", keyEvent("w"));
   windowRef.fire("keydown", keyEvent("e"));
   windowRef.fire("keydown", keyEvent("r"));

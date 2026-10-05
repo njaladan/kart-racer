@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createRacerState } from "../racer-state.js";
+import { createRacerState } from "../src/simulation/racer-state.js";
 
 test("racer state factory initializes owned fields and isolated vector state", () => {
   const first = createRacerState({

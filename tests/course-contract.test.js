@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { COURSES } from "../courses/registry.js";
-import { validateCourseDefinition } from "../course-contract.js";
-import { createTrack } from "../track-builder.js";
+import { COURSES } from "../src/courses/registry.js";
+import { validateCourseDefinition } from "../src/courses/course-contract.js";
+import { createTrack } from "../src/track/track-builder.js";
 
 test("registered course descriptors satisfy the shared runtime contract", () => {
   for (const course of COURSES) {
@@ -19,8 +19,5 @@ test("course validation reports the path of invalid authored data", () => {
     ),
   };
 
-  assert.throws(
-    () => validateCourseDefinition(course),
-    /windmill-wilds.*sections\[2\]\.halfWidth/,
-  );
+  assert.throws(() => validateCourseDefinition(course), /windmill-wilds.*sections\[2\]\.halfWidth/);
 });

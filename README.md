@@ -52,7 +52,7 @@ The visuals combine original procedural artwork with adapted CC0 assets. They bo
 
 ## Graphics
 
-The shared [art-direction brief](ART_DIRECTION.md) keeps the bright arcade style while giving the four courses different atmospheres and environmental life. A layered animated sky supplies clouds, sun or moon, stars and horizon haze. Sector transitions smoothly change fog and ambient fill; bounded snow, sand, sea spray or forest motes complement the scenery. Gentle chase-camera banking, air anticipation, turbo widening and restrained edge streaks reinforce speed without blurring the racing line.
+The shared [art-direction brief](proposals/art-direction.md) keeps the bright arcade style while giving the four courses different atmospheres and environmental life. A layered animated sky supplies clouds, sun or moon, stars and horizon haze. Sector transitions smoothly change fog and ambient fill; bounded snow, sand, sea spray or forest motes complement the scenery. Gentle chase-camera banking, air anticipation, turbo widening and restrained edge streaks reinforce speed without blurring the racing line.
 
 The upgrade bundles **ten downloaded ambientCG material sets** with 1024px photographic color maps plus separate 512px OpenGL normal and roughness maps: grass, worn asphalt, actual plank wood, cobbled paving, sand, forest floor, rock, brick, roof tiles and gravel. Materials retain the existing arcade palette with modest color adjustments. **Three textured Poly Haven props** add real benches, ornate street lamps and planters at focal places. Original Kenney trees / rocks / palms and the Poly Haven reflection environment remain part of the landscape. The additional bundle is about 11.5 MiB; no asset-provider requests occur during play.
 
@@ -77,7 +77,7 @@ Shared section data defines road surfaces, widths, ramp crests, pickup rows, boo
 
 The marked orchard grass cut opens the inside boundary. Mushrooms and stars preserve grip and speed across grass; an unboosted cut pays an off-road penalty. Outside turbo panels offer an alternative. Both routes pass the same ordered lap checkpoints, and large projection jumps are rejected. The mill portal provides 10 metres of overhead clearance for the chase camera.
 
-The six sectors and course reference study are documented in `COURSE_PROPOSAL.md`. The browser test harness also accepts section seeks and bounded simulation steps through its existing test-only message API.
+The six sectors and course reference study are documented in `proposals/windmill-wilds.md`. The browser test harness also accepts section seeks and bounded simulation steps through its existing test-only message API.
 
 ## New courses
 
@@ -89,6 +89,12 @@ The six sectors and course reference study are documented in `COURSE_PROPOSAL.md
 
 Independent reviews refined hazard clearance, supported bridges, ice recovery, shortcut placement and camera sightlines before implementation. Proposal measurement notes distinguish the original tuning goals from measured results; final shortcut gains are modest and remain candidates for human-playtest tuning.
 
-Each course owns its descriptor, scenery module, proposal and focused tests. The [parallel development contract](courses/CONTRACT.md) documents this boundary. `track-builder.js` constructs isolated route queries; `track.js` exposes the selected route to physics, AI, items and rendering. `course-runtime.js` builds shared road, terrain and barriers, while `course-kit.js` supplies scenery primitives, downloaded models and static batching. Course authors can work independently without modifying the engine. Moving meshes are explicitly excluded from batching.
+Each course owns its descriptor, scenery module, proposal and focused tests. The [parallel development contract](src/courses/CONTRACT.md) documents this boundary. `src/track/track-builder.js` constructs isolated route queries; `src/track/track.js` exposes the selected route to physics, AI, items and rendering. `src/rendering/course-runtime.js` builds shared road, terrain and barriers, while `src/rendering/course-kit.js` supplies scenery primitives, downloaded models and static batching. Course authors can work independently without modifying the engine. Moving meshes are explicitly excluded from batching.
 
 Select a course on the title screen; changing it loads a fresh world. After finishing, **CHOOSE ANOTHER COURSE** returns to the picker. The browser harness accepts `?course=neon-harbor`, `?course=sunstone-ruins` or `?course=frostpeak-festival` and retains the benchmark mode when switching.
+
+## Project organization
+
+Game source lives in `src/`, grouped into `simulation/`, `track/`, `rendering/`, `courses/`, `audio/`, `input/`, and `ui/`. `src/game.js` connects these systems. All course and art-direction proposals live in `proposals/`; assets and vendor code remain at the repository root so existing browser asset URLs continue to work.
+
+For development quality checks, run `npm install` followed by `npm run check`. Use `npm run format` to format first-party JavaScript. See [code conventions and reviewed guidance](CODE_QUALITY.md) for naming, module boundaries, existing contracts, and preserved issues. The game remains runnable with `npm start` without installing development tools.
