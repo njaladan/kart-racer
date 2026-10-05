@@ -44,6 +44,7 @@
     <header>
       <strong>Browser regression checks</strong
       ><button id="start">Start race</button><button id="auto">Autodrive</button
+      ><button id="ramp">Boosted ramp</button
       ><button id="gas">Hold accelerator</button
       ><button id="drift">Hold right + drift</button
       ><button id="release">Release controls</button
@@ -68,6 +69,7 @@
         frame.contentWindow.postMessage({ type, ...data }, location.origin);
       const actions = {
         start: () => send("test-start"),
+        ramp: () => send("test-ramp"),
         auto: () => {
           send("test-auto", { value: true });
           send("test-input", { keys: [] });
