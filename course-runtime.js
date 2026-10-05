@@ -1,87 +1,315 @@
-import * as THREE from './vendor/three/three.module.js';
-import { createCourseKit, batchScenery } from './course-kit.js';
-import { cartAt } from './hazards.js';
-import { addCourseWorld } from './course-world.js';
-import { createRailGeometry } from './course-rails.js';
+import * as THREE from "./vendor/three/three.module.js";
+import { createCourseKit, batchScenery } from "./course-kit.js";
+import { cartAt } from "./hazards.js";
+import { addCourseWorld } from "./course-world.js";
+import { createRailGeometry } from "./course-rails.js";
 
-// Shared geometry uses exactly the surface/edge queries used by karts and shells.
-export function buildCourseWorld(scene,renderer,mats,textures,track,assets,commonAssets) {
-  const course=track.course;
-  if(course.id==='windmill-wilds') return addCourseWorld(scene,renderer,mats,textures,commonAssets?.nature);
-  const scenery=new THREE.Group();scene.add(scenery);
-  const kit=createCourseKit(scenery,track,assets);
-  const {mesh,box,groupAt,material}=kit;
-  const roadMaterials = {
-    asphalt:mats.road, stone:material('#e0d0ae',{map:textures.stone}), concrete:material('#b4c4d0',{map:textures.concrete}),
-    wood:material('#a98458',{map:textures.wood}), ice:material('#9ddaf0',{roughness:.2,metalness:.2}),
-    snow:material('#e5f2f5'), sand:material('#d9b579',{map:textures.sand}), paving:material('#aaa09b'),
-  };
-  const materialNames=[...new Set([...course.sections.map(s=>s.material),...(course.surfaces||[]).map(s=>s.material)])];
-  const roads=materialNames.map(name=>roadMaterials[name] || mats.road);
-  const ground=mesh(new THREE.PlaneGeometry(1800,1800),mats.grass,scenery,[0,-1.7,0]);
-  ground.rotation.x=-Math.PI/2;ground.castShadow=false;
-  const uvGround=ground.geometry.attributes.uv;
-  for(let i=0;i<uvGround.count;i++) uvGround.setXY(i,uvGround.getX(i)*120,uvGround.getY(i)*120);
-  const isElevated=t=>track.ELEVATED.some(s=>t>=s.start&&t<s.end);
-  function ribbon(edgeA,edgeB,mat,lift=.045,terrain=false) {
-    const positions=[],uv=[],indices=[],groups=[],n=1800;
-    for(let i=0;i<=n;i++) {
-      const t=i/n,f=track.frameAt(t);
-      for(const edge of [edgeA(t),edgeB(t)]) {
-        const p=f.p.clone().addScaledVector(f.right,edge);
-        if(terrain) {
-          const distance=Math.abs(edge)-(track.roadHalfWidth(t)+(edge>0?track.shortcutWidth(t):0));
-          p.y=THREE.MathUtils.lerp(p.y-.06,-1.7,THREE.MathUtils.smoothstep(distance,0,38));
-        } else p.addScaledVector(f.up,lift);
-        positions.push(p.x,p.y,p.z);uv.push(edge/8,t*track.COURSE_LENGTH/8);
-      }
-      if(i===n || (terrain&&isElevated((i+.5)/n))) continue;
-      const a=i*2,start=indices.length;
-      if(edgeB(t)>=edgeA(t)) indices.push(a,a+1,a+2,a+1,a+3,a+2);
-      else indices.push(a,a+2,a+1,a+1,a+2,a+3);
-      if(Array.isArray(mat)) {
-        const materialIndex=materialNames.indexOf(track.surfaceAt((i+.5)/n).material);
-        const last=groups.at(-1);
-        if(last&&last.materialIndex===materialIndex&&last.start+last.count===start) last.count+=6;
-        else groups.push({start,count:6,materialIndex});
-      }
-    }
-    const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setIndex(indices);
-    groups.forEach(g=>geo.addGroup(g.start,g.count,g.materialIndex));geo.computeVertexNormals();
-    const m=mesh(geo,mat);m.castShadow=false;
+const WORLD_GROUND_Y = -1.7;
+const ROAD_SAMPLE_COUNT = 1800;
+const ROAD_DECAL_COUNT = 330;
+const RAIL_POST_COUNT = 370;
+
+// Shared geometry uses the same surface and edge queries as karts and shells.
+export function buildCourseWorld({
+  scene,
+  renderer,
+  materials,
+  textures,
+  track,
+  assets,
+  sharedAssets,
+}) {
+  const course = track.course;
+  if (course.id === "windmill-wilds") {
+    return addCourseWorld(
+      scene,
+      renderer,
+      materials,
+      textures,
+      sharedAssets?.nature,
+    );
   }
-  ribbon(t=>-track.roadHalfWidth(t)-.55,t=>track.roadHalfWidth(t)+.55,mats.roadside,-.02);
-  ribbon(t=>-track.roadHalfWidth(t),t=>track.roadHalfWidth(t),roads);
-  ribbon(t=>track.roadHalfWidth(t),t=>track.roadHalfWidth(t)+track.shortcutWidth(t),mats.grass,.035);
-  for(const side of [-1,1]) {
-    const edge=t=>side*(track.roadHalfWidth(t)+.55+(side>0?track.shortcutWidth(t):0));
-    ribbon(edge,t=>edge(t)+side*38,mats.grass,0,true);
-    const railMaterial = mats.rail.clone(); railMaterial.side=THREE.DoubleSide;
-    mesh(createRailGeometry(side,{width:.15,height:.32,above:.72}),railMaterial);
-    for(let i=0;i<370;i++) {
-      const t=(i+.5)/370,g=groupAt(t,edge(t));
-      box(mats.rail,g,[0,.42,0],[.19,.86,.19]);
-    }
-  }
-  for(let i=0;i<330;i++) {
-    const t=i/330,g=groupAt(t),half=track.roadHalfWidth(t);
-    if(i%2===0) box(mats.white,g,[0,.065,0],[.13,.025,2.4]);
-    for(const side of [-1,1]) {
-      if(side>0&&track.shortcutWidth(t)>.1) continue;
-      box(i%2?mats.red:mats.white,g,[side*(half+.25),.07,0],[.5,.04,track.COURSE_LENGTH/330+.1]);
-    }
-  }
-  const warningMaterial=material('#ffc850',{emissive:'#ff9d25',emissiveIntensity:0});
-  const warning=groupAt(track.CART_T,-track.roadHalfWidth(track.CART_T)-2);
-  box(mats.black,warning,[0,2,0],[.2,4,.2]);
-  mesh(new THREE.SphereGeometry(.45,12,8),warningMaterial,warning,[0,4.2,0]);
-  // Batch only common static road furniture. Scenery authors batch their own props,
-  // leaving declared dynamic assemblies separate and transformable.
+
+  const scenery = new THREE.Group();
+  scene.add(scenery);
+  const kit = createCourseKit(scenery, track, assets);
+  const { mesh, box, groupAt, material } = kit;
+  const roadMaterials = createRoadMaterials(materials, textures, material);
+  const sectionMaterialNames = [
+    ...new Set([
+      ...course.sections.map(({ material: name }) => name),
+      ...(course.surfaces || []).map(({ material: name }) => name),
+    ]),
+  ];
+  const sectionMaterials = sectionMaterialNames.map(
+    (name) => roadMaterials[name] || materials.road,
+  );
+
+  addGround(scenery, materials.grass, mesh);
+  const updateHazardWarning = addRoadAndShoulders({
+    scenery,
+    track,
+    materials,
+    mesh,
+    sectionMaterials,
+    sectionMaterialNames,
+    material,
+    box,
+    groupAt,
+  });
+
   batchScenery(scenery);
-  const world=course.buildWorld({THREE,scene,scenery,track,course,mats,textures,renderer,kit,hazardAt:cartAt}) || {};
-  batchScenery(scenery,world.animated || []);
-  return {update(time) {
-    warningMaterial.emissiveIntensity=cartAt(time).warning?1.5+Math.sin(time*12):0;
-    world.update?.(time);
-  }};
+  const authoredWorld =
+    course.buildWorld({
+      THREE,
+      scene,
+      scenery,
+      track,
+      course,
+      mats: materials,
+      textures,
+      renderer,
+      kit,
+      hazardAt: cartAt,
+    }) || {};
+  batchScenery(scenery, authoredWorld.animated || []);
+
+  return {
+    update(time) {
+      updateHazardWarning(time);
+      authoredWorld.update?.(time);
+    },
+  };
+}
+
+function createRoadMaterials(materials, textures, createMaterial) {
+  return {
+    asphalt: materials.road,
+    stone: createMaterial("#e0d0ae", { map: textures.stone }),
+    concrete: createMaterial("#b4c4d0", { map: textures.concrete }),
+    wood: createMaterial("#a98458", { map: textures.wood }),
+    ice: createMaterial("#9ddaf0", { roughness: 0.2, metalness: 0.2 }),
+    snow: createMaterial("#e5f2f5"),
+    sand: createMaterial("#d9b579", { map: textures.sand }),
+    paving: createMaterial("#aaa09b"),
+  };
+}
+
+function addGround(scenery, grassMaterial, addMesh) {
+  const ground = addMesh(
+    new THREE.PlaneGeometry(1800, 1800),
+    grassMaterial,
+    scenery,
+    [0, WORLD_GROUND_Y, 0],
+  );
+  ground.rotation.x = -Math.PI / 2;
+  ground.castShadow = false;
+
+  const uv = ground.geometry.attributes.uv;
+  for (let index = 0; index < uv.count; index++) {
+    uv.setXY(index, uv.getX(index) * 120, uv.getY(index) * 120);
+  }
+}
+
+function addRoadAndShoulders({
+  scenery,
+  track,
+  materials,
+  mesh,
+  sectionMaterials,
+  sectionMaterialNames,
+  material,
+  box,
+  groupAt,
+}) {
+  const elevatedAt = (t) =>
+    track.ELEVATED.some((range) => t >= range.start && t < range.end);
+  const outerEdge = (t, side) =>
+    side *
+    (track.roadHalfWidth(t) + 0.55 + (side > 0 ? track.shortcutWidth(t) : 0));
+
+  createRibbon(
+    (t) => -track.roadHalfWidth(t) - 0.55,
+    (t) => track.roadHalfWidth(t) + 0.55,
+    materials.roadside,
+    -0.02,
+  );
+  createRibbon(
+    (t) => -track.roadHalfWidth(t),
+    (t) => track.roadHalfWidth(t),
+    sectionMaterials,
+  );
+  createRibbon(
+    (t) => track.roadHalfWidth(t),
+    (t) => track.roadHalfWidth(t) + track.shortcutWidth(t),
+    materials.grass,
+    0.035,
+  );
+
+  for (const side of [-1, 1]) {
+    const edge = (t) => outerEdge(t, side);
+    createRibbon(edge, (t) => edge(t) + side * 38, materials.grass, 0, true);
+
+    const railMaterial = materials.rail.clone();
+    railMaterial.side = THREE.DoubleSide;
+    mesh(
+      createRailGeometry(side, { width: 0.15, height: 0.32, above: 0.72 }),
+      railMaterial,
+    );
+
+    for (let index = 0; index < RAIL_POST_COUNT; index++) {
+      const t = (index + 0.5) / RAIL_POST_COUNT;
+      const post = groupAt(t, edge(t));
+      box(materials.rail, post, [0, 0.42, 0], [0.19, 0.86, 0.19]);
+    }
+  }
+
+  addRoadMarkings();
+  return addHazardWarning();
+
+  function createRibbon(
+    edgeA,
+    edgeB,
+    ribbonMaterial,
+    lift = 0.045,
+    terrain = false,
+  ) {
+    const positions = [];
+    const uvs = [];
+    const indices = [];
+    const materialGroups = [];
+
+    for (let index = 0; index <= ROAD_SAMPLE_COUNT; index++) {
+      const t = index / ROAD_SAMPLE_COUNT;
+      const frame = track.frameAt(t);
+      const edges = [edgeA(t), edgeB(t)];
+
+      for (const edge of edges) {
+        const point = frame.p.clone().addScaledVector(frame.right, edge);
+        if (terrain) {
+          const roadEdge =
+            track.roadHalfWidth(t) + (edge > 0 ? track.shortcutWidth(t) : 0);
+          const distanceFromRoad = Math.abs(edge) - roadEdge;
+          point.y = THREE.MathUtils.lerp(
+            point.y - 0.06,
+            WORLD_GROUND_Y,
+            THREE.MathUtils.smoothstep(distanceFromRoad, 0, 38),
+          );
+        } else {
+          point.addScaledVector(frame.up, lift);
+        }
+        positions.push(point.x, point.y, point.z);
+        uvs.push(edge / 8, (t * track.COURSE_LENGTH) / 8);
+      }
+
+      if (
+        index === ROAD_SAMPLE_COUNT ||
+        (terrain && elevatedAt((index + 0.5) / ROAD_SAMPLE_COUNT))
+      ) {
+        continue;
+      }
+
+      const firstVertex = index * 2;
+      const groupStart = indices.length;
+      if (edgeB(t) >= edgeA(t)) {
+        indices.push(
+          firstVertex,
+          firstVertex + 1,
+          firstVertex + 2,
+          firstVertex + 1,
+          firstVertex + 3,
+          firstVertex + 2,
+        );
+      } else {
+        indices.push(
+          firstVertex,
+          firstVertex + 2,
+          firstVertex + 1,
+          firstVertex + 1,
+          firstVertex + 2,
+          firstVertex + 3,
+        );
+      }
+
+      if (Array.isArray(ribbonMaterial)) {
+        const sectionMaterial = track.surfaceAt(
+          (index + 0.5) / ROAD_SAMPLE_COUNT,
+        ).material;
+        const materialIndex = sectionMaterialNames.indexOf(sectionMaterial);
+        appendMaterialGroup(materialGroups, groupStart, materialIndex);
+      }
+    }
+
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(positions, 3),
+    );
+    geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+    geometry.setIndex(indices);
+    materialGroups.forEach(({ start, count, materialIndex }) => {
+      geometry.addGroup(start, count, materialIndex);
+    });
+    geometry.computeVertexNormals();
+
+    const ribbonMesh = mesh(geometry, ribbonMaterial);
+    ribbonMesh.castShadow = false;
+  }
+
+  function addRoadMarkings() {
+    for (let index = 0; index < ROAD_DECAL_COUNT; index++) {
+      const t = index / ROAD_DECAL_COUNT;
+      const markingGroup = groupAt(t);
+      const halfWidth = track.roadHalfWidth(t);
+      if (index % 2 === 0) {
+        box(materials.white, markingGroup, [0, 0.065, 0], [0.13, 0.025, 2.4]);
+      }
+      for (const side of [-1, 1]) {
+        if (side > 0 && track.shortcutWidth(t) > 0.1) continue;
+        const paint = index % 2 ? materials.red : materials.white;
+        box(
+          paint,
+          markingGroup,
+          [side * (halfWidth + 0.25), 0.07, 0],
+          [0.5, 0.04, track.COURSE_LENGTH / ROAD_DECAL_COUNT + 0.1],
+        );
+      }
+    }
+  }
+
+  function addHazardWarning() {
+    const warningMaterial = material("#ffc850", {
+      emissive: "#ff9d25",
+      emissiveIntensity: 0,
+    });
+    const warning = groupAt(
+      track.CART_T,
+      -track.roadHalfWidth(track.CART_T) - 2,
+    );
+    box(materials.black, warning, [0, 2, 0], [0.2, 4, 0.2]);
+    mesh(
+      new THREE.SphereGeometry(0.45, 12, 8),
+      warningMaterial,
+      warning,
+      [0, 4.2, 0],
+    );
+    return (time) => {
+      warningMaterial.emissiveIntensity = cartAt(time).warning
+        ? 1.5 + Math.sin(time * 12)
+        : 0;
+    };
+  }
+}
+
+function appendMaterialGroup(groups, start, materialIndex) {
+  const previous = groups.at(-1);
+  if (
+    previous &&
+    previous.materialIndex === materialIndex &&
+    previous.start + previous.count === start
+  ) {
+    previous.count += 6;
+  } else {
+    groups.push({ start, count: 6, materialIndex });
+  }
 }

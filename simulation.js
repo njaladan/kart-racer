@@ -15,14 +15,27 @@ import {
   WORLD_PER_UNIT,
   TRACK,
   yawFor,
-  activeTrack, metresToProgress, collisionBounds, RAMPS, BOOST_PADS,
+  activeTrack,
+  metresToProgress,
+  collisionBounds,
+  RAMPS,
+  BOOST_PADS,
+  laneWidth,
+  laneFromOffset,
 } from "./track.js";
-import { progressDelta, finishRacer, lapNumber, resetRaceProgress, advanceRaceProgress, CHECKPOINT_COUNT } from "./race.js";
+import {
+  progressDelta,
+  finishRacer,
+  lapNumber,
+  resetRaceProgress,
+  advanceRaceProgress,
+  CHECKPOINT_COUNT,
+} from "./race.js";
 import { cartAt, cartContact } from "./hazards.js";
 
 export function initializeRacer(state) {
   resetMotion(state);
-  state.worldPos = poseAt(state.s, (state.x || 0) * 6.25, 0.065).p;
+  state.worldPos = poseAt(state.s, laneWidth(state.x || 0), 0.065).p;
   state.yaw = yawFor(frameAt(trackT(state.s)).tangent);
   state.speed = 0;
   state.lap = 0;
@@ -32,7 +45,7 @@ export function initializeRacer(state) {
   return state;
 }
 export function botInput(state, index, elapsed, rivals = []) {
-  const aheadMetres = 12 + state.speed * 0.10;
+  const aheadMetres = 12 + state.speed * 0.1;
   const aheadT = trackT(state.s + metresToProgress(aheadMetres));
   const lookahead = frameAt(aheadT);
   const bounds = collisionBounds(aheadT);
@@ -45,7 +58,7 @@ export function botInput(state, index, elapsed, rivals = []) {
     if (
       gap > 0 &&
       gap < 13 &&
-      Math.abs(rival.x * 6.25 - lane) < 2.5 &&
+      Math.abs(laneWidth(rival.x) - lane) < 2.5 &&
       rival.speed < state.speed + 5
     )
       lane = rival.x > 0 ? -3.25 : 3.25;
@@ -116,9 +129,14 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     dt,
   );
   const projection = projectTrack(state.worldPos, state.s);
-  advanceRaceProgress(state, projection.t * TRACK, TRACK, WORLD_PER_UNIT,
-    state.worldPos.distanceTo(state.renderFrom));
-  state.x = projection.offset / 6.25;
+  advanceRaceProgress(
+    state,
+    projection.t * TRACK,
+    TRACK,
+    WORLD_PER_UNIT,
+    state.worldPos.distanceTo(state.renderFrom),
+  );
+  state.x = laneFromOffset(projection.offset);
   const bounds = collisionBounds(projection.t);
   const side = projection.offset < bounds.left ? -1 : 1;
   const edge = side < 0 ? bounds.left : bounds.right;
@@ -129,12 +147,16 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     projection.horizontalRight.z * side,
     penetration,
   );
-  if (penetration > 0) state.x = edge / 6.25;
+  if (penetration > 0) state.x = laneFromOffset(edge);
   const contact = cartContact(state.worldPos, raceTime);
-  const cartImpact = contact ? wallContact(state, contact.nx, contact.nz, contact.penetration) : false;
+  const cartImpact = contact
+    ? wallContact(state, contact.nx, contact.nz, contact.penetration)
+    : false;
   if (cartImpact && state.invulnerable === 0) {
-    state.vx *= 0.65; state.vz *= 0.65;
-    state.invulnerable = 0.8; state.drift = 0;
+    state.vx *= 0.65;
+    state.vz *= 0.65;
+    state.invulnerable = 0.8;
+    state.drift = 0;
   }
   const after = projectTrack(state.worldPos, state.s);
   const slopeVelocity = (after.height - before.height) / dt;
@@ -156,8 +178,11 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
   }
   // A fresh tap shortly before takeoff or early in the jump earns one trick.
   const trickStarted =
-    !state.grounded && !state.trickActive && !(state.spin > 0) &&
-    state.airTime <= 0.28 && state.trickBuffer > 0;
+    !state.grounded &&
+    !state.trickActive &&
+    !(state.spin > 0) &&
+    state.airTime <= 0.28 &&
+    state.trickBuffer > 0;
   if (trickStarted) {
     state.trickActive = true;
     state.trickBuffer = 0;
@@ -175,18 +200,25 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
   let padBoost = false;
   if (state.grounded && state.padCooldown === 0) {
     for (const pad of BOOST_PADS) {
-      if (Math.abs(progressDelta(state.s, pad.t * TRACK, TRACK)) * WORLD_PER_UNIT < 3.4 &&
-          Math.abs(after.offset - pad.offset) < 2.25) {
+      if (
+        Math.abs(progressDelta(state.s, pad.t * TRACK, TRACK)) *
+          WORLD_PER_UNIT <
+          3.4 &&
+        Math.abs(after.offset - pad.offset) < 2.25
+      ) {
         state.boost = Math.max(state.boost, pad.duration);
         state.padCooldown = 0.7;
-        padBoost = true; break;
+        padBoost = true;
+        break;
       }
     }
   }
-  state.x = after.offset / 6.25;
+  state.x = laneFromOffset(after.offset);
   state.speed = Math.hypot(state.vx, state.vz) * 3.6;
   state.lap = lapNumber(state.s, TRACK, 3) - 1;
-  const finished = state.nextCheckpoint > CHECKPOINT_COUNT * 3 && finishRacer(state, TRACK * 3, raceTime);
+  const finished =
+    state.nextCheckpoint > CHECKPOINT_COUNT * 3 &&
+    finishRacer(state, TRACK * 3, raceTime);
   if (finished) {
     const fraction = Math.max(
       0,

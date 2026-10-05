@@ -1,5 +1,11 @@
 import * as THREE from "./vendor/three/three.module.js";
-import { projectTrack, TRACK, WORLD_PER_UNIT, collisionBounds } from "./track.js";
+import {
+  projectTrack,
+  TRACK,
+  WORLD_PER_UNIT,
+  collisionBounds,
+  laneFromOffset,
+} from "./track.js";
 import { cartContact } from "./hazards.js";
 import { progressDelta } from "./race.js";
 import { wrapAngle, clamp } from "./physics.js";
@@ -15,8 +21,10 @@ export function consumeItem(who) {
   who.itemCount--;
   if (who.itemCount === 0) who.item = null;
   if (type === "mushroom")
-    who.boost = Math.max(who.boost || 0,
-      Math.min(MAX_QUEUED_BOOST, (who.boost || 0) + MUSHROOM_BOOST));
+    who.boost = Math.max(
+      who.boost || 0,
+      Math.min(MAX_QUEUED_BOOST, (who.boost || 0) + MUSHROOM_BOOST),
+    );
   return type;
 }
 
@@ -63,7 +71,7 @@ export function createShell(owner, type, target = null) {
     vx: velocity.x * 44,
     vz: velocity.z * 44,
     s: owner.s + progressDelta(surface.t * TRACK, owner.s, TRACK),
-    x: surface.offset / 6.25,
+    x: laneFromOffset(surface.offset),
     life: 5.4,
     grace: 0.35,
     speed: 44,
@@ -109,12 +117,15 @@ export function advanceShell(shell, dt, raceTime = 0) {
     const outward = shell.vx * contact.nx + shell.vz * contact.nz;
     shell.worldPos.x -= contact.nx * contact.penetration;
     shell.worldPos.z -= contact.nz * contact.penetration;
-    if (outward > 0) { shell.vx -= 2 * contact.nx * outward; shell.vz -= 2 * contact.nz * outward; }
+    if (outward > 0) {
+      shell.vx -= 2 * contact.nx * outward;
+      shell.vz -= 2 * contact.nz * outward;
+    }
     shell.yaw = Math.atan2(-shell.vx, -shell.vz);
   }
   const after = projectTrack(shell.worldPos, shell.s);
   shell.s += progressDelta(after.t * TRACK, shell.s, TRACK);
-  shell.x = after.offset / 6.25;
+  shell.x = laneFromOffset(after.offset);
   shell.worldPos.y = after.height + 0.6;
 }
 export function sweptDistanceSquared(point, start, end) {
