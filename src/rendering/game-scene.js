@@ -45,19 +45,21 @@ function createMaterials(theme, textures, environment) {
   const material = createMaterial;
   const surface = (map, bumpScale = 0.025) =>
     map?.userData?.pbr ? { map, ...map.userData.pbr } : { map, bumpMap: map, bumpScale };
+  const railColor =
+    theme.terrain === "concrete" ? "#426a80" : theme.terrain === "snow" ? "#78c5ed" : "#fff0c6";
 
   return {
     grass: material(theme.ground, 0.96, surface(textures[theme.terrain || "grass"], 0.06)),
     road: material(theme.road, theme.terrain === "concrete" ? 0.34 : 0.96, {
-      ...surface(textures.asphalt, theme.terrain === "concrete" ? 0.016 : 0.035),
+      ...surface(textures.asphalt, theme.terrain === "concrete" ? 0.004 : 0.008),
       ...(theme.terrain === "concrete"
         ? { envMap: environment, envMapIntensity: 0.13, metalness: 0.16 }
         : {}),
     }),
-    roadside: material(theme.shoulder, 0.95, surface(textures.asphalt)),
-    white: material("#fff4d4", 0.65),
-    red: material("#fa634f"),
-    rail: material("#e7e5d9", 0.4, { metalness: 0.22 }),
+    roadside: material(theme.shoulder, 0.95, surface(textures.asphalt, 0.008)),
+    white: material("#fff9e8", 0.65),
+    red: material("#ff3028"),
+    rail: material(railColor, 0.4, { metalness: 0.22 }),
     pine: material("#b4d7ad", 0.85, surface(textures.leaves, 0.04)),
     pine2: material("#d4e7b8", 0.85, surface(textures.leaves, 0.04)),
     trunk: material("#ffffff", 0.9, surface(textures.bark, 0.07)),
@@ -112,7 +114,8 @@ export async function createGameScene({ canvas, course, viewport = window }) {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  // Neutral preserves the painted palette while still compressing bright highlights.
+  renderer.toneMapping = THREE.NeutralToneMapping;
   renderer.toneMappingExposure = course.theme.exposure;
 
   scene.add(

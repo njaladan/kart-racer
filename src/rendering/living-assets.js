@@ -1,5 +1,23 @@
 import * as THREE from "../../vendor/three/three.module.js";
 
+// Keep the road's scanned grain without letting its contrast dominate the frame.
+// Prepare the shared map once rather than adding a shader variant to every road.
+function softenAsphalt(map, renderer) {
+  const canvas = document.createElement("canvas");
+  canvas.width = map.image.width;
+  canvas.height = map.image.height;
+  const context = canvas.getContext("2d");
+  context.fillStyle = "#868686";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.globalAlpha = 0.26;
+  context.drawImage(map.image, 0, 0);
+  const softened = new THREE.CanvasTexture(canvas);
+  softened.colorSpace = THREE.SRGBColorSpace;
+  softened.wrapS = softened.wrapT = THREE.RepeatWrapping;
+  softened.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+  return softened;
+}
+
 // Locally bundled 1K CC0 scans and textured Poly Haven props. All network
 // downloads happen during preparation, never while a player is racing.
 export async function loadLivingAssets(renderer) {
@@ -24,13 +42,19 @@ export async function loadLivingAssets(renderer) {
   const textures = Object.fromEntries(
     await Promise.all(
       Object.entries(index.textures).map(async ([name, paths]) => {
-        const [map, normalMap, roughnessMap] = await Promise.all([
+        const [colorMap, normalMap, roughnessMap] = await Promise.all([
           load(paths.color, true),
           load(paths.normal),
           load(paths.roughness),
         ]);
+        const map = name === "asphalt" ? softenAsphalt(colorMap, renderer) : colorMap;
         map.name = `ambientCG ${name} 1K scan`;
-        map.userData.pbr = { normalMap, normalScale: new THREE.Vector2(0.38, 0.38), roughnessMap };
+        const relief = name === "asphalt" ? 0.09 : 0.38;
+        map.userData.pbr = {
+          normalMap,
+          normalScale: new THREE.Vector2(relief, relief),
+          roughnessMap,
+        };
         return [name, map];
       }),
     ),

@@ -1,6 +1,7 @@
 import * as THREE from "../../vendor/three/three.module.js";
 import { batchStaticMeshes } from "./visuals.js";
 import { bakeVertexShade } from "./graphics.js";
+import { sceneryGroundHeight } from "./terrain-height.js";
 
 // Scenery authors get placement and reusable primitives, never engine globals.
 export function createCourseKit(scenery, track, assets = { models: {} }) {
@@ -43,14 +44,9 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
   const landGroup = (t, offset, parent = scenery) => {
     const pose = track.poseAt(t * track.TRACK, offset, 0),
       surface = track.projectTrack(pose.p, 0, true);
-    const edge = surface.offset > 0 ? surface.rightEdge : -surface.leftEdge;
     const g = new THREE.Group();
     g.position.copy(pose.p);
-    g.position.y = THREE.MathUtils.lerp(
-      surface.height - 0.12,
-      -1.7,
-      THREE.MathUtils.smoothstep(surface.distance - edge, 0, 38),
-    );
+    g.position.y = sceneryGroundHeight(surface);
     g.rotation.y = track.yawFor(pose.tangent);
     parent.add(g);
     return g;

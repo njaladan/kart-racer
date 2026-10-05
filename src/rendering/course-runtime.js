@@ -4,6 +4,7 @@ import { cartAt } from "../simulation/hazards.js";
 import { addCourseWorld } from "./course-world.js";
 import { createRailGeometry } from "./course-rails.js";
 import { addDetailedScenery } from "./detailed-scenery.js";
+import { TERRAIN_VERGE_WIDTH } from "./terrain-height.js";
 
 // Shared geometry uses exactly the surface/edge queries used by karts and shells.
 export function buildCourseWorld({
@@ -86,7 +87,11 @@ export function buildCourseWorld({
         if (terrain) {
           const bounds = track.surfaceAt(t);
           const distance = Math.abs(edge) - (edge > 0 ? bounds.rightEdge : -bounds.leftEdge);
-          p.y = THREE.MathUtils.lerp(p.y - 0.06, -1.7, THREE.MathUtils.smoothstep(distance, 0, 38));
+          p.y = THREE.MathUtils.lerp(
+            p.y - 0.06,
+            -1.7,
+            THREE.MathUtils.smoothstep(distance, 0, TERRAIN_VERGE_WIDTH),
+          );
         } else p.addScaledVector(f.up, lift);
         positions.push(p.x, p.y, p.z);
         uv.push(edge / 8, (t * track.COURSE_LENGTH) / 8);
@@ -144,7 +149,7 @@ export function buildCourseWorld({
   }
   for (const side of [-1, 1]) {
     const edge = (t) => (side < 0 ? track.surfaceAt(t).leftEdge : track.surfaceAt(t).rightEdge);
-    ribbon(edge, (t) => edge(t) + side * 38, mats.grass, 0, true);
+    ribbon(edge, (t) => edge(t) + side * TERRAIN_VERGE_WIDTH, mats.grass, 0, true);
     const railMaterial = mats.rail.clone();
     railMaterial.side = THREE.DoubleSide;
     mesh(createRailGeometry(side, { width: 0.15, height: 0.32, above: 0.72 }), railMaterial);
@@ -164,8 +169,10 @@ export function buildCourseWorld({
       box(
         i % 2 ? mats.red : mats.white,
         g,
-        [side * (half + 0.25), 0.07, 0],
-        [0.5, 0.04, track.COURSE_LENGTH / 330 + 0.1],
+        // Keep the outer curb edge inside the physical .55m shoulder. The
+        // wider painted lip overlaps the road without changing collision data.
+        [side * (half + 0.15), 0.105, 0],
+        [0.8, 0.12, track.COURSE_LENGTH / 330 + 0.1],
       );
     }
   }

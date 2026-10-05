@@ -1,9 +1,9 @@
 const ITEM_PRESENTATION = {
-  mushroom: { icon: "🍄", label: (count) => `MUSHROOM ×${count}` },
-  green: { icon: "●", label: () => "GREEN SHELL" },
-  red: { icon: "◉", label: () => "RED SHELL" },
-  banana: { icon: "⌁", label: () => "BANANA PEEL" },
-  star: { icon: "✦", label: () => "RAINBOW STAR" },
+  mushroom: { icon: "🍄", color: "#cf3945", label: (count) => `MUSHROOM ×${count}` },
+  green: { icon: "◒", color: "#219c54", label: () => "GREEN SHELL" },
+  red: { icon: "◒", color: "#df4550", label: () => "RED SHELL" },
+  banana: { icon: "🍌", color: "#dbae12", label: () => "BANANA PEEL" },
+  star: { icon: "★", color: "#eebd30", label: () => "RAINBOW STAR" },
 };
 
 export function formatRaceTime(time) {
@@ -25,8 +25,9 @@ export function formatOrdinal(value) {
 export function renderItemHud(ui, item, count) {
   const presentation = ITEM_PRESENTATION[item];
   ui.itemIcon.textContent = presentation?.icon || "?";
+  ui.itemIcon.style.color = presentation?.color || "#197ac4";
   ui.itemLabel.textContent = presentation?.label(count) || "ITEM";
-  ui.item.style.opacity = item ? "1" : ".65";
+  ui.item.style.opacity = item ? "1" : ".85";
 }
 
 export function renderRaceHud(ui, { rank, lap, totalLaps, progress, drift, speed, time }) {

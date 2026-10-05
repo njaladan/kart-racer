@@ -1,5 +1,7 @@
 // Sunstone has a quiet expedition rhythm: moving water and cloth in the oasis,
 // rock strata on the climb, monumental carved architecture, then open dunes.
+import { addGlow, createContactShadowMesh } from "../rendering/visual-effects.js";
+
 export function buildWorld(context) {
   const { THREE, scenery, track, kit, hazardAt, textures = {} } = context;
   const { material, mesh, box, groupAt, sectorT, batch, align } = kit;
@@ -102,19 +104,33 @@ export function buildWorld(context) {
     );
   }
   duneGeometry.computeVertexNormals();
+  // A gently arched strip rounds the palm silhouette at chase-camera range.
+  // Three vertices across each section give the leaf a soft central ridge.
   const frondGeometry = new THREE.BufferGeometry();
-  frondGeometry.setAttribute(
-    "position",
-    new THREE.Float32BufferAttribute(
-      [0, 0, 0, 1.4, 0.3, 0.65, 3.6, 0.05, 0.5, 5.1, -0.8, 0, 3.6, 0.05, -0.5, 1.4, 0.3, -0.65],
-      3,
-    ),
-  );
-  frondGeometry.setAttribute(
-    "uv",
-    new THREE.Float32BufferAttribute([0, 0.5, 0.27, 1, 0.7, 0.9, 1, 0.5, 0.7, 0.1, 0.27, 0], 2),
-  );
-  frondGeometry.setIndex([0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5]);
+  const frondPositions = [],
+    frondUVs = [],
+    frondIndices = [],
+    frondSections = 9;
+  for (let i = 0; i <= frondSections; i++) {
+    const u = i / frondSections,
+      width = 0.8 * Math.pow(Math.sin(Math.PI * u), 0.8),
+      height = Math.sin(Math.PI * u) * 0.5 - u * u * 0.85;
+    for (const side of [-1, 0, 1]) {
+      frondPositions.push(u * 5.2, height + (side === 0 ? width * 0.22 : 0), side * width);
+      frondUVs.push(u, (side + 1) / 2);
+    }
+    if (i < frondSections)
+      for (let side = 0; side < 2; side++) {
+        const a = i * 3 + side,
+          b = a + 1,
+          c = a + 3,
+          d = c + 1;
+        frondIndices.push(a, b, c, b, d, c);
+      }
+  }
+  frondGeometry.setAttribute("position", new THREE.Float32BufferAttribute(frondPositions, 3));
+  frondGeometry.setAttribute("uv", new THREE.Float32BufferAttribute(frondUVs, 2));
+  frondGeometry.setIndex(frondIndices);
   frondGeometry.computeVertexNormals();
   const fabricGeometry = new THREE.PlaneGeometry(8, 5, 10, 6);
   const fp = fabricGeometry.attributes.position;
@@ -139,9 +155,15 @@ export function buildWorld(context) {
     if (kit.safeGroup) return kit.safeGroup(t, offset, footprint);
     return kit.landGroup ? kit.landGroup(t, offset) : groupAt(t, offset);
   }
+  function groundShadow(parent, width, depth) {
+    const shadow = createContactShadowMesh({ width, depth, opacity: 0.24 });
+    shadow.position.y = 0.035;
+    parent.add(shadow);
+  }
   function palm(t, side, size = 1, wind = false) {
     const g = grounded(t, side * (26 + size * 2), 6 * size);
     if (!g) return;
+    groundShadow(g, 4.8 * size, 4.8 * size);
     mesh(cylinder, trunk, g, [0, 5 * size, 0], [0.55 * size, 10 * size, 0.55 * size]);
     for (let i = 0; i < 6; i++)
       mesh(
@@ -154,9 +176,13 @@ export function buildWorld(context) {
     const crown = new THREE.Group();
     g.add(crown);
     crown.position.y = 10 * size;
+    crown.rotation.y = t * 37;
+    mesh(sphere, leaf, crown, [0, 0, 0], [0.8 * size, 0.34 * size, 0.8 * size]);
     for (let i = 0; i < 9; i++) {
-      const frond = mesh(frondGeometry, leaf, crown, [0, 0, 0], [size, size, size]);
-      frond.rotation.y = (i * Math.PI * 2) / 9;
+      const reach = size * (0.88 + (i % 3) * 0.08),
+        frond = mesh(frondGeometry, leaf, crown, [0, 0, 0], [reach, size, size]);
+      frond.rotation.y = (i * Math.PI * 2) / 9 + Math.sin(i * 1.8 + t * 23) * 0.09;
+      frond.rotation.z = Math.sin(i * 2.1 + t * 11) * 0.1;
     }
     for (let i = 0; i < 3; i++)
       mesh(
@@ -175,6 +201,7 @@ export function buildWorld(context) {
   function canopy(t, offset, index) {
     const g = grounded(t, offset, 6);
     if (!g) return;
+    groundShadow(g, 11, 8);
     for (const x of [-4.5, 4.5])
       for (const z of [-3, 3]) {
         mesh(cylinder, trunk, g, [x, 2.8, z], [0.14, 5.6, 0.14]);
@@ -199,6 +226,7 @@ export function buildWorld(context) {
   function torch(t, offset, index) {
     const g = grounded(t, offset, 1.2);
     if (!g) return;
+    groundShadow(g, 3.2, 3.2);
     box(dark, g, [0, 1.25, 0], [1.6, 2.5, 1.6]);
     mesh(cylinder, bronze, g, [0, 3, 0], [0.25, 2, 0.25]);
     mesh(new THREE.CylinderGeometry(0.65, 0.3, 0.6, 8), bronze, g, [0, 4, 0]);
@@ -206,6 +234,7 @@ export function buildWorld(context) {
     flame.castShadow = false;
     flames.push({ object: flame, phase: index * 1.71 });
     animated.push(flame);
+    addGlow(g, { color: "#ffbb65", size: 2.9, opacity: 0.28, position: [0, 4.65, 0] });
   }
   // A shallow edge, a turquoise inner basin, concentric moving ripples and reeds
   // distinguish the optional sandy shore from the main opening road.
@@ -250,6 +279,26 @@ export function buildWorld(context) {
   for (let i = 0; i < 24; i++)
     palm(sectorT(0, 0.035 + i * 0.04), i % 2 ? 1 : -1, 0.8 + (i % 3) * 0.2, i % 4 === 0);
   for (const [i, f] of [0.13, 0.78].entries()) canopy(sectorT(0, f), i ? -31 : 32, i);
+  // Two staggered dune layers frame the oasis opening and put a silhouette
+  // above the flat ground. The outer layer stays lower contrast than the palms.
+  const horizonSand = material("#d5ad7a", { roughness: 0.95 });
+  for (let i = 0; i < 14; i++) {
+    const t = sectorT(0, 0.055 + (i % 7) * 0.145),
+      outer = i >= 7,
+      width = 30 + (i % 3) * 3,
+      depth = 21,
+      g = grounded(t, outer ? -101 : 65 + (i % 2) * 10, Math.hypot(width, depth));
+    if (!g) continue;
+    const d = mesh(
+      duneGeometry,
+      outer ? horizonSand : sandShade,
+      g,
+      [0, -0.3, 0],
+      [width, 23 + (i % 4) * 4, depth],
+    );
+    d.rotation.y = 0.4 + i * 0.57;
+    d.castShadow = false;
+  }
   // Paired low markers communicate the shoulder without covering its entrance.
   for (const f of [0.24, 0.37, 0.52, 0.69]) {
     const t = sectorT(0, f),
@@ -504,11 +553,13 @@ export function buildWorld(context) {
   }
   // Distant broken watchtowers repeat the temple motif across the horizon.
   for (const [section, f, offset] of [
+    [0, 0.22, -75],
+    [0, 0.83, -82],
     [1, 0.7, 72],
     [2, 0.46, -66],
     [5, 0.66, 74],
   ]) {
-    const g = grounded(sectorT(section, f), offset, 8);
+    const g = grounded(sectorT(section, f), offset, 10);
     if (!g) continue;
     for (let i = 0; i < 3; i++)
       box(i % 2 ? gold : stone, g, [0, 3 + i * 5, 0], [14 - i * 3, 6, 14 - i * 3]);

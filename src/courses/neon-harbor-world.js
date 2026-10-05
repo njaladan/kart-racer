@@ -1,5 +1,7 @@
 // Place-specific scenery only. Shared road, walls, progression and contact
 // surfaces remain in the engine; the shuttle uses the same hazard pose as AI.
+import { addGlow, createContactShadowMesh } from "../rendering/visual-effects.js";
+
 export default function buildWorld(context) {
   const { THREE, scene, scenery, track, kit, hazardAt, textures = {} } = context;
   const { material, mesh, box, groupAt, sectorT, batch, align, asset } = kit;
@@ -42,6 +44,12 @@ export default function buildWorld(context) {
     craneHooks = [];
   const industrialModels = ["building-a", "building-e", "building-m", "building-q"];
 
+  function groundShadow(parent, width, depth, y = 0.035) {
+    const shadow = createContactShadowMesh({ width, depth, opacity: 0.24 });
+    shadow.position.y = y;
+    parent.add(shadow);
+  }
+
   // Test the complete circumscribed footprint against every route segment.
   // Large buildings can otherwise overlap an adjacent street on an S-bend.
   function safeGroup(t, offset, radius) {
@@ -54,6 +62,7 @@ export default function buildWorld(context) {
   function building(t, offset, width, height, depth, index) {
     const g = safeGroup(t, offset, Math.hypot(width, depth) / 2);
     if (!g) return;
+    if (Math.abs(offset) < 50) groundShadow(g, width * 1.35, depth * 1.35);
     box(index % 3 ? masonry : paleMasonry, g, [0, height / 2, 0], [width, height, depth]);
     // Light edge strips suggest chamfered corners and dressed masonry.
     for (const x of [-width / 2 + 0.14, width / 2 - 0.14])
@@ -126,6 +135,13 @@ export default function buildWorld(context) {
     const emblem = mesh(ring, index % 2 ? pink : cyan, g, [0, height + 3.5, depth * 0.3]);
     box(steel, g, [0, height + 1.6, depth * 0.3], [0.15, 3, 0.15]);
     emblem.rotation.z = index * 0.27;
+    if (Math.abs(offset) < 50 && index % 3 === 0)
+      addGlow(g, {
+        color: index % 2 ? "#ff7dc8" : "#76f0ed",
+        size: 5.2,
+        opacity: 0.24,
+        position: [0, height + 3.5, depth * 0.3 + 0.2],
+      });
     batch(g);
   }
   // The industrial kit's factory silhouettes add authored roof shapes and
@@ -142,7 +158,10 @@ export default function buildWorld(context) {
       [0, 0, 0],
       [width, height, depth],
     );
-    if (imported) batch(g);
+    if (imported) {
+      if (Math.abs(offset) < 50) groundShadow(g, width * 1.35, depth * 1.35);
+      batch(g);
+    }
     return imported;
   }
   function lamp(t, offset, index) {
@@ -151,6 +170,14 @@ export default function buildWorld(context) {
     box(steel, g, [0, 4.5, 0], [0.22, 9, 0.22]);
     box(steel, g, [-Math.sign(offset) * 0.65, 8.8, 0], [1.4, 0.18, 0.2]);
     box(index % 2 ? cyan : window, g, [-Math.sign(offset) * 1.1, 8.65, 0], [0.7, 0.18, 0.55]);
+    if (index % 2 === 0) {
+      addGlow(g, {
+        color: "#ffe4a0",
+        size: 3.6,
+        opacity: 0.28,
+        position: [-Math.sign(offset) * 1.1, 8.58, 0],
+      });
+    }
   }
   // Promenade: waterfront lamps and a city skyline, with open sightlines.
   for (let i = 0; i < 20; i++) {
@@ -179,6 +206,7 @@ export default function buildWorld(context) {
     building(t, side * (23 + (i % 3) * 3), 10, 13 + (i % 4) * 3, 10, i + 20);
     const g = safeGroup(t, side * 14, 3.2);
     if (!g) continue;
+    groundShadow(g, 6.2, 5.6);
     box(rust, g, [0, 1, 0], [4.5, 2, 3]);
     for (const x of [-2, 2]) box(steel, g, [x, 3, 0], [0.12, 4, 0.12]);
     box(cloth, g, [0, 4.5, 0], [5.2, 0.24, 3.4]);
@@ -190,6 +218,8 @@ export default function buildWorld(context) {
     for (const x of [-1.7, 1.7]) {
       box(steel, g, [x, 4.05, 0], [0.07, 0.6, 0.07]);
       mesh(sphere, window, g, [x, 3.6, 0], [0.28, 0.4, 0.28]);
+      if (i % 3 === 0)
+        addGlow(g, { color: "#ffe4a0", size: 1.6, opacity: 0.3, position: [x, 3.6, 0] });
     }
     box(trim, g, [0, 2.08, 0], [4.7, 0.2, 3.1]);
     for (let j = 0; j < 4; j++) {
@@ -335,7 +365,7 @@ export default function buildWorld(context) {
     if (i % 2 === 0) {
       const hook = groupAt(t, -35, scenery);
       hook.position.y = -1.1;
-      const cable = box(steel, hook, [0, 19, 16], [0.15, 16, 0.15]);
+      box(steel, hook, [0, 19, 16], [0.15, 16, 0.15]);
       box(amber, hook, [0, 10.4, 16], [2.3, 0.55, 1.2]);
       box(blue, hook, [0, 8.5, 16], [4, 3, 4]);
       batch(hook);
@@ -421,6 +451,7 @@ export default function buildWorld(context) {
       const g = safeGroup(t, offset + side * 4.5, 2.4);
       if (!g) continue;
       box(concrete, g, [0, 0.06, 0], [3.7, 0.12, 3.7]);
+      groundShadow(g, 2.5, 2.5, 0.145);
       for (const x of [-1.55, 1.55]) box(trim, g, [x, 0.14, 0], [0.2, 0.2, 3.7]);
       const puddle = mesh(puddleGeometry, wet, g, [0.2, 0.135, -0.45], [1.45, 0.8, 1]);
       puddle.rotation.x = -Math.PI / 2;
@@ -496,6 +527,29 @@ export default function buildWorld(context) {
       industrialBuilding(t, offset, 16 + (i % 3) * 3, 24 + (i % 5) * 5, 12 + (i % 2) * 2, i + 60);
     else building(t, offset, 12 + (i % 3) * 5, 30 + (i % 5) * 10, 13, i + 60);
   }
+
+  // The distant bank fills the open waterfront sightline, while its simpler,
+  // cooler silhouettes keep the detailed street facades in the foreground.
+  for (const district of [0, 3])
+    for (let i = 0; i < 10; i++) {
+      const t = sectorT(district, 0.07 + i * 0.09),
+        width = 16 + (i % 3) * 4,
+        depth = 13,
+        height = 26 + ((i * 3 + district) % 7) * 5;
+      const g = safeGroup(t, -104 - (i % 2) * 19, Math.hypot(width + 2, depth + 2) / 2);
+      if (!g) continue;
+      // There is no road embankment on the far bank. Anchor its skyline to
+      // the ground plane, rather than inheriting the nearby elevated quay.
+      g.position.y = -1.7;
+      box(concrete, g, [0, 0.15, 0], [width + 2, 0.3, depth + 2]);
+      box(steel, g, [0, height / 2, 0], [width, height, depth]);
+      box(dark, g, [0, height + 1.2, 0], [width * 0.74, 2.4, depth * 0.75]);
+      for (const side of [-1, 1])
+        for (let row = 0; row < 4; row++)
+          box(cyan, g, [0, 5 + row * (height / 5), side * 6.55], [width * 0.68, 0.55, 0.1]);
+      if (i % 3 === 0) box(dark, g, [0, height + 4, 0], [0.4, 5, 0.4]);
+      batch(g);
+    }
 
   // Bounded animated city life. Instanced figures share just two draw calls.
   const people = [],

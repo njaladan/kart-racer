@@ -9,11 +9,11 @@ export function surfaceTexture(kind, renderer) {
   let seed = 1729;
   const random = () => (seed = (1664525 * seed + 1013904223) >>> 0) / 4294967296;
   const palettes = {
-    grass: ["#78af45", "#a2c65c", "#528c35"],
+    grass: ["#79bc43", "#a8d965", "#579638"],
     snow: ["#eef6fa", "#ffffff", "#cddde8"],
     sand: ["#eee1c2", "#fff5d8", "#c5b58f"],
     concrete: ["#ccd0d4", "#eef0f1", "#a1a6af"],
-    asphalt: ["#65717c", "#a1aab1", "#394754"],
+    asphalt: ["#858990", "#9699a0", "#757b83"],
     bark: ["#986945", "#c49363", "#5a3b29"],
     leaves: ["#83b965", "#bdd58c", "#528a45"],
     fabric: ["#d8e0e4", "#ffffff", "#8899a4"],
@@ -42,13 +42,13 @@ export function surfaceTexture(kind, renderer) {
         const g = ctx.createRadialGradient(x + dx, y + dy, 0, x + dx, y + dy, r);
         g.addColorStop(0, i % 2 ? light : dark);
         g.addColorStop(1, base);
-        ctx.globalAlpha = kind === "paint" ? 0.06 : 0.12;
+        ctx.globalAlpha = kind === "paint" ? 0.06 : kind === "asphalt" ? 0.08 : 0.12;
         ctx.fillStyle = g;
         ctx.fillRect(x + dx - r, y + dy - r, r * 2, r * 2);
       }
   }
   for (let i = 0; i < 13000; i++) {
-    ctx.globalAlpha = 0.08 + random() * 0.18;
+    ctx.globalAlpha = kind === "asphalt" ? 0.04 + random() * 0.06 : 0.08 + random() * 0.18;
     ctx.fillStyle = i % 2 ? light : dark;
     const x = random() * 512,
       y = random() * 512;

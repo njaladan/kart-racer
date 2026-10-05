@@ -1,5 +1,7 @@
 // A complete alpine resort. Static detail is batched by the shared runtime;
 // only fabric, lift cabins, cheering spectators, flakes and the groomer move.
+import { createContactShadowMesh, addGlow } from "../rendering/visual-effects.js";
+
 export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazardAt }) {
   const { material, mesh, box, groupAt, sectorT, asset, batch, align } = kit;
   const snow = material("#f2f8ff", { map: textures.snow, roughness: 0.96 });
@@ -26,6 +28,11 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
   scenery.add(flags);
   const cheerers = new THREE.Group();
   scenery.add(cheerers);
+  const groundShadow = (parent, width, depth = width) => {
+    const shadow = createContactShadowMesh({ width, depth, opacity: 0.24 });
+    shadow.position.y = 0.035;
+    parent.add(shadow);
+  };
 
   function pole(g, x, y, z, height = 4) {
     mesh(cylinder, dark, g, [x, y + height / 2, z], [0.08, height, 0.08]);
@@ -49,6 +56,7 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
     const g = landAt(t, edgeOffset(t, side, large ? 20 : 14));
     g.rotation.y += side > 0 ? Math.PI : 0;
     if (large) g.scale.setScalar(1.3);
+    groundShadow(g, 15, 20);
     box(rock, g, [0, 0.35, 0], [10, 0.7, 12]);
     box(timber, g, [0, 3.2, 0], [9, 5.7, 11]);
     // Actual log courses, corner joints, warm panes and snowy shutters.
@@ -91,6 +99,8 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
     pole(g, -4.8, 0.8, -8.3, 3.1);
     box(rock, g, [3, 8.15, 1.8], [1, 2.8, 1]);
     box(snow, g, [3, 9.65, 1.8], [1.35, 0.23, 1.35]);
+    // A single restrained halo per facade keeps warm windows readable in snow.
+    addGlow(g, { color: "#ffda8a", size: [6, 4], opacity: 0.12, position: [0, 3.6, -5.95] });
     return g;
   }
   for (const f of [0.08, 0.28, 0.49, 0.73]) for (const side of [-1, 1]) chalet(sectorT(0, f), side);
@@ -105,10 +115,15 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
   ];
   function pine(t, side, size, depth = 0, index = 0) {
     const g = landAt(t, edgeOffset(t, side, 8 + size * 2.5 + depth));
-    g.rotation.y += index * 0.8;
+    g.rotation.y += index * 2.399;
     const height = 10.5 * size;
-    const model = winterTrees[Math.abs(index + (side > 0 ? 1 : 0)) % winterTrees.length];
-    asset(model, g, [0, 0, 0], [height, height, height]);
+    const model =
+      depth === 0 && index % 3 !== 0
+        ? winterTrees[1]
+        : winterTrees[Math.abs(index + (side > 0 ? 1 : 0)) % winterTrees.length];
+    const width = height * (0.94 + Math.sin(index * 1.7 + side) * 0.07);
+    asset(model, g, [0, 0, 0], [width, height, width]);
+    if (depth === 0 && index % 5 === 0) groundShadow(g, width * 0.85);
   }
   // Two irregular depth layers make a canopy instead of evenly spaced cones.
   for (let i = 0; i < 30; i++)
@@ -138,35 +153,34 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
       uv = [],
       indices = [],
       n = 11,
-      rings = cap
-        ? [
-            [0.72, 0.25],
-            [0.9, 0.11],
-            [1, 0.005],
-          ]
-        : [
-            [0, 1],
-            [0.18, 0.81],
-            [0.43, 0.6],
-            [0.66, 0.36],
-            [0.83, 0.18],
-            [1, 0.005],
-          ];
-    for (let j = 0; j < rings.length; j++)
+      rings = [
+        [0, 1],
+        [0.18, 0.81],
+        [0.43, 0.6],
+        [0.66, 0.36],
+        [0.83, 0.18],
+        [1, 0.005],
+      ],
+      firstRing = cap ? 3 : 0;
+    for (let j = firstRing; j < rings.length; j++)
       for (let k = 0; k < n; k++) {
         const [y, r] = rings[j],
           a = (k / n) * Math.PI * 2;
-        const jitter = 1 + Math.sin(k * 4.7 + j * 1.4) * 0.19;
+        // Caps use the exact rock-ring jitter. A small outward shell avoids
+        // buried snow patches and z-fighting while retaining the shared ridge.
+        const jitter = (1 + Math.sin(k * 4.7 + j * 1.4) * 0.19) * (cap ? 1.025 : 1);
         vertices.push(
           Math.cos(a) * r * jitter + y * 0.12,
-          y + (j === rings.length - 1 ? Math.sin(k * 2.9) * 0.035 : Math.sin(k * 1.7 + j) * 0.055),
+          y +
+            (j === rings.length - 1 ? Math.sin(k * 2.9) * 0.035 : Math.sin(k * 1.7 + j) * 0.055) +
+            (cap ? 0.008 : 0),
           Math.sin(a) * r * jitter,
         );
         uv.push((k / n) * 4, y * 3);
         if (j < rings.length - 1) {
-          const p = j * n + k,
-            q = j * n + ((k + 1) % n);
-          indices.push(p, q, p + n, q, q + n, p + n);
+          const p = (j - firstRing) * n + k,
+            q = (j - firstRing) * n + ((k + 1) % n);
+          indices.push(p, p + n, q, q, p + n, q + n);
         }
       }
     const geo = new THREE.BufferGeometry();
@@ -177,17 +191,30 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
     return geo;
   }
   const mountainRock = mountainGeometry(),
-    mountainSnow = mountainGeometry(true);
-  for (let i = 0; i < 8; i++) {
+    mountainSnow = mountainGeometry(true),
+    mountainStone = material("#a7bdcd", { roughness: 1 });
+  function mountain(x, z, width, height, rotation) {
     const g = new THREE.Group();
+    g.name = "Layered alpine horizon";
     scenery.add(g);
-    g.position.set(330 + (i % 3) * 74, -2, -290 + i * 88);
-    g.rotation.y = i * 0.7;
+    g.position.set(x, -2, z);
+    g.rotation.y = rotation;
+    mesh(mountainRock, mountainStone, g, [0, 0, 0], [width, height, width]).castShadow = false;
+    mesh(mountainSnow, snow, g, [0, 0, 0], [width, height, width]).castShadow = false;
+  }
+  for (let i = 0; i < 8; i++) {
     const width = 48 + (i % 3) * 16,
       height = 94 + (i % 4) * 23;
-    mesh(mountainRock, rock, g, [0, 0, 0], [width, height, width]);
-    mesh(mountainSnow, snow, g, [0, 0.4, 0], [width, height, width]);
+    mountain(330 + (i % 3) * 74, -290 + i * 88, width, height, i * 0.7);
   }
+  // The first village straight looks north. Wrap the existing summit language
+  // around that view and the western finish rather than keeping it all east.
+  for (const [i, x] of [-225, -130, -35, 65, 160].entries())
+    mountain(x, -450 - (i % 2) * 24, 66 + (i % 3) * 10, 65 + (i % 3) * 17, i * 0.9);
+  for (const [i, z] of [-180, -35, 110].entries())
+    mountain(-435 - (i % 2) * 22, z, 68, 76 + i * 12, i * 1.3);
+  for (const [i, x] of [-175, -50, 75, 185].entries())
+    mountain(x, 425 + (i % 2) * 26, 70, 76 + (i % 3) * 13, i * 0.7);
   for (const s of [2, 3])
     for (let i = 0; i < 8; i++)
       for (const side of [-1, 1]) {
@@ -259,6 +286,7 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
   }
   function station(t) {
     const g = landAt(t, edgeOffset(t, -1, 43));
+    groundShadow(g, 25, 27);
     box(rock, g, [0, 1, 0], [17, 2, 15]);
     box(timber, g, [0, 5.2, 0], [16, 6.4, 14]);
     box(glass, g, [0, 5, -7.06], [13, 3, 0.1]);

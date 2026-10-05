@@ -1,5 +1,6 @@
 import * as THREE from "../../vendor/three/three.module.js";
 import { createCourseKit, batchScenery } from "./course-kit.js";
+import { createContactShadowMesh } from "./visual-effects.js";
 
 export function addDetailedScenery(scene, track, assets) {
   if (!assets?.models?.painted_wooden_bench) return;
@@ -41,6 +42,9 @@ export function addDetailedScenery(scene, track, assets) {
     const g = kit.safeGroup(t, offset, 2.8);
     if (!g) continue;
     g.rotation.y += Math.PI / 2;
+    const shadow = createContactShadowMesh({ width: 3.6, depth: 2.5, opacity: 0.24 });
+    shadow.position.y = 0.03;
+    g.add(shadow);
     kit.asset("painted_wooden_bench", g, [0, 0, 0], [1.25, 1.25, 1.25]);
     if (city && kit.hasAsset("planter_box_01"))
       kit.asset("planter_box_01", g, [0, 0, 3.2], [1.1, 1.1, 1.1]);

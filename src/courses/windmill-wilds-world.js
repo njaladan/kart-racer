@@ -1,5 +1,8 @@
 // Original countryside dressing. Static parts are batched by course-world;
 // wind, animals, visitors, boats and machinery share the race animation clock.
+import { createContactShadowMesh } from "../rendering/visual-effects.js";
+import { sceneryGroundHeight } from "../rendering/terrain-height.js";
+
 export default function buildWindmillLife(context) {
   const { THREE, scene, scenery, track, kit, textures = {} } = context;
   const { mesh, box, material, sectorT } = kit;
@@ -30,6 +33,7 @@ export default function buildWindmillLife(context) {
     blossom = material("#ffccbf");
   const steel = material("#7c918d", { metalness: 0.25, roughness: 0.55 });
   const sphere = new THREE.SphereGeometry(1, 10, 6);
+  const crown = new THREE.SphereGeometry(1, 16, 10);
   const cylinder = new THREE.CylinderGeometry(1, 1, 1, 10);
   const disc = new THREE.CylinderGeometry(1, 1, 1, 12);
   const cone = new THREE.ConeGeometry(1, 1, 8);
@@ -63,8 +67,7 @@ export default function buildWindmillLife(context) {
     const edge = near.offset > 0 ? near.rightEdge : -near.leftEdge;
     if (near.distance < edge + radius + 1) return null;
     const g = new THREE.Group();
-    const blend = THREE.MathUtils.smoothstep(near.distance - edge, 0, 38);
-    g.position.set(frame.p.x, THREE.MathUtils.lerp(near.height - 0.12, -1.7, blend), frame.p.z);
+    g.position.set(frame.p.x, sceneryGroundHeight(near), frame.p.z);
     g.rotation.y = Math.atan2(-frame.tangent.x, -frame.tangent.z);
     parent.add(g);
     return g;
@@ -77,6 +80,11 @@ export default function buildWindmillLife(context) {
   const animate = (g) => {
     if (g) animated.push(g);
     return g;
+  };
+  const groundShadow = (parent, width, depth = width) => {
+    const shadow = createContactShadowMesh({ width, depth, opacity: 0.24 });
+    shadow.position.y = 0.035;
+    parent.add(shadow);
   };
   function beam(parent, a, b, thickness = 0.15, mat = wood) {
     const start = new THREE.Vector3(...a),
@@ -140,6 +148,7 @@ export default function buildWindmillLife(context) {
     if (!g) return;
     g.name = "Striped country fair stall";
     g.scale.setScalar(size);
+    groundShadow(g, 9, 8);
     for (const x of [-3, 3]) for (const z of [-2.4, 2.4]) box(wood, g, [x, 2, z], [0.15, 4, 0.15]);
     for (let i = 0; i < 10; i++) {
       const x = -3.15 + (i + 0.5) * 0.63;
@@ -287,8 +296,26 @@ export default function buildWindmillLife(context) {
       species ?? treeModels[(treeIndex * 7 + Math.floor(fraction * 31)) % treeModels.length];
     treeIndex++;
     const height = size * (model.includes("detailed") ? 1.08 : 1);
-    asset(model, g, [0, 0, 0], [height, height, height]).rotation.y =
-      (treeIndex * 2.399) % (Math.PI * 2);
+    g.rotation.y += (treeIndex * 2.399) % (Math.PI * 2);
+    const width = height * (0.94 + Math.sin(treeIndex * 1.7) * 0.06);
+    asset(model, g, [0, 0, 0], [width, height, width]);
+    if (section !== 1 && treeIndex % 3 !== 0) {
+      // A few opaque overlapping crowns round the close orchard silhouettes.
+      // Imported trunks and branches remain visible; all crowns batch by leaf.
+      for (const [x, y, z, radius] of [
+        [-0.12, 0.73, -0.02, 0.23],
+        [0.13, 0.75, 0.04, 0.22],
+        [0.01, 0.87, -0.03, 0.18],
+      ])
+        mesh(
+          crown,
+          leaf,
+          g,
+          [x * height, y * height, z * height],
+          [radius * width, radius * height * 0.83, radius * width],
+        );
+    }
+    if (section !== 1 && treeIndex % 2 === 0) groundShadow(g, width * 0.9);
   }
   for (let i = 0; i < 36; i++) {
     const f = 0.04 + i * 0.026;
@@ -480,6 +507,7 @@ export default function buildWindmillLife(context) {
     const g = roadside(4, f, side, 9, 6);
     if (!g) continue;
     g.name = "Mill yard loading canopy";
+    groundShadow(g, 12, 9);
     for (const x of [-4, 4])
       for (const z of [-2.5, 2.5]) box(dark, g, [x, 2.4, z], [0.3, 4.8, 0.3]);
     box(wood, g, [0, 4.9, 0], [9, 0.25, 6]);

@@ -44,6 +44,7 @@ export function createGameRenderer({
   const kartForward = new THREE.Vector3();
   const kartRight = new THREE.Vector3();
   const kartBasis = new THREE.Matrix4();
+  const shadowTilt = new THREE.Quaternion();
   let driftCamera = 0;
   let cameraBank = 0;
   let hudClock = 0;
@@ -78,6 +79,14 @@ export function createGameRenderer({
       wheel.pivot.rotation.y = wheel.front ? -state.steering * 0.32 : 0;
     }
     kart.flame.visible = state.boost > 0;
+    if (kart.boostGlow) {
+      kart.boostGlow.visible = kart.flame.visible;
+      const blueTurbo = state.driftBoost > 0 && state.driftBoostTier === 1;
+      const boostColor = blueTurbo ? "#75efff" : "#ffcf68";
+      kart.flame.material.color.set(boostColor);
+      kart.boostGlow.material.color.set(boostColor);
+      kart.boostGlow.material.opacity = 0.46 + Math.sin(frameState.elapsed * 31) * 0.05;
+    }
     kart.flame.scale.set(
       1,
       0.85 + Math.sin(frameState.elapsed * 31) * 0.12,
@@ -96,9 +105,12 @@ export function createGameRenderer({
       }
     }
     kart.shadow.position.copy(poseAt(state.s, laneWidth(state.x), 0.08).p);
-    kart.shadow.quaternion.setFromUnitVectors(WORLD_FORWARD, frame.up);
+    kart.shadow.quaternion
+      .copy(kart.root.quaternion)
+      .premultiply(shadowTilt.setFromUnitVectors(kartUp, frame.up))
+      .multiply(SHADOW_PLANE_ROTATION);
     const altitude = Math.max(0, state.worldPos.y - kart.shadow.position.y);
-    kart.shadow.material.opacity = 0.27 / (1 + altitude * 0.25);
+    kart.shadow.material.opacity = 0.38 / (1 + altitude * 0.25);
     kart.shadow.scale.setScalar(1 + altitude * 0.08);
   }
 
@@ -109,7 +121,8 @@ export function createGameRenderer({
       for (const pad of pads) {
         const pulse = 0.5 + 0.5 * Math.sin(frameState.elapsed * 5 + pad.phase);
         pad.g.children.forEach((mesh, index) => {
-          if (index > 0) mesh.material.emissiveIntensity = 1.2 + pulse * 2;
+          if (index > 0 && mesh.material?.emissive)
+            mesh.material.emissiveIntensity = 1.2 + pulse * 2;
         });
       }
       for (const box of boxes) {
@@ -267,4 +280,7 @@ function trackProgress(distance) {
 }
 
 const WORLD_UP = new THREE.Vector3(0, 1, 0);
-const WORLD_FORWARD = new THREE.Vector3(0, 0, 1);
+const SHADOW_PLANE_ROTATION = new THREE.Quaternion().setFromAxisAngle(
+  new THREE.Vector3(1, 0, 0),
+  -Math.PI / 2,
+);

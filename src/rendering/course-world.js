@@ -4,6 +4,8 @@ import { surfaceTexture } from "./textures.js";
 import { createRailGeometry } from "./course-rails.js";
 import { bakeVertexShade } from "./graphics.js";
 import { createCourseKit, batchScenery } from "./course-kit.js";
+import { createContactShadowMesh } from "./visual-effects.js";
+import { sceneryGroundHeight, TERRAIN_VERGE_WIDTH } from "./terrain-height.js";
 import buildWindmillLife from "../courses/windmill-wilds-world.js";
 import {
   TRACK,
@@ -64,6 +66,8 @@ export function addCourseWorld(
   const ochre = mat("#ebc875"),
     cream = mat("#fff1c9"),
     red = mat("#ed644b");
+  const curbRed = mat("#f13738"),
+    curbWhite = mat("#fff9e6");
   const leaf = mat("#6d9d57", textures.leaves),
     pine = mat("#609782", textures.leaves);
   const flower = mat("#ffc2bd"),
@@ -120,12 +124,16 @@ export function addCourseWorld(
     for (let i = 0; i <= n; i++) {
       const t = THREE.MathUtils.lerp(startT, endT, i / n),
         frame = frameAt(t);
-      for (const [j, edge] of [edgeA(t), edgeB(t)].entries()) {
+      for (const edge of [edgeA(t), edgeB(t)]) {
         const p = frame.p.clone().addScaledVector(frame.right, edge);
         if (terrain) {
           const surface = surfaceAt(t);
           const distance = Math.abs(edge) - (edge > 0 ? surface.rightEdge : -surface.leftEdge);
-          p.y = THREE.MathUtils.lerp(p.y - 0.06, -1.7, THREE.MathUtils.smoothstep(distance, 0, 38));
+          p.y = THREE.MathUtils.lerp(
+            p.y - 0.06,
+            -1.7,
+            THREE.MathUtils.clamp(distance / TERRAIN_VERGE_WIDTH, 0, 1),
+          );
         } else p.addScaledVector(frame.up, lift);
         pos.push(p.x, p.y, p.z);
         if (grassy) uv.push(p.x / 6, p.z / 6);
@@ -202,7 +210,7 @@ export function addCourseWorld(
     const edge = (t) => (side < 0 ? surfaceAt(t).leftEdge : surfaceAt(t).rightEdge);
     ribbon(
       (t) => edge(t),
-      (t) => edge(t) + side * 38,
+      (t) => edge(t) + side * TERRAIN_VERGE_WIDTH,
       mats.grass,
       0,
       true,
@@ -239,10 +247,10 @@ export function addCourseWorld(
       for (const side of [-1, 1]) {
         if (vergeWidth(t, side) > 0.1 || (side > 0 && shortcutWidth(t) > 0.1)) continue;
         box(
-          i % 2 ? red : cream,
+          i % 2 ? curbRed : curbWhite,
           g,
-          [side * (half + 0.25), 0.07, 0],
-          [0.5, 0.04, COURSE_LENGTH / 330 + 0.1],
+          [side * (half + 0.15), 0.105, 0],
+          [0.8, 0.12, COURSE_LENGTH / 330 + 0.1],
         );
       }
     }
@@ -274,15 +282,7 @@ export function addCourseWorld(
 
   function baseAt(p) {
     const surface = projectTrack(p, 0, true);
-    const edge = surface.offset > 0 ? surface.rightEdge : -surface.leftEdge;
-    return {
-      surface,
-      y: THREE.MathUtils.lerp(
-        surface.height - 0.12,
-        -1.7,
-        THREE.MathUtils.smoothstep(surface.distance - edge, 0, 38),
-      ),
-    };
+    return { surface, y: sceneryGroundHeight(surface) };
   }
   const treeBuckets = new Map(),
     fruitBuckets = new Map();
@@ -429,21 +429,31 @@ export function addCourseWorld(
     );
     m.rotation.y = random() * 6;
   }
-  for (let i = 0; i < 20; i++) {
-    const a = (i / 20) * Math.PI * 2,
-      r = 430 + random() * 90;
+  // Broad overlapping hills stay outside the course footprint, but close
+  // enough to read through the fog from the opening meadow and valley turns.
+  for (let i = 0; i < 24; i++) {
+    const a = (i / 24) * Math.PI * 2,
+      r = 345 + random() * 25;
     const hill = mesh(
       sphereGeo,
       i % 2 ? leaf : pine,
       scenery,
-      [Math.cos(a) * r, -19, Math.sin(a) * r],
-      [50 + random() * 40, 27 + random() * 45, 50 + random() * 40],
+      [Math.cos(a) * r, -23, Math.sin(a) * r],
+      [64 + random() * 30, 48 + random() * 41, 64 + random() * 30],
     );
+    hill.name = "Layered countryside horizon";
     hill.castShadow = false;
   }
 
   function barn(t, offset, scale = 1) {
     const g = groupAt(t, offset);
+    // Buildings stand upright on the same embankment as the nearby trees.
+    g.position.y = baseAt(g.position).y;
+    const frame = poseAt(t * TRACK, offset, 0);
+    g.rotation.set(0, Math.atan2(-frame.tangent.x, -frame.tangent.z), 0);
+    const shadow = createContactShadowMesh({ width: 13, depth: 15, opacity: 0.24 });
+    shadow.position.y = 0.035;
+    g.add(shadow);
     box(red, g, [0, 3, 0], [9, 6, 11]);
     for (const x of [-3.8, 3.8]) box(cream, g, [x, 3, 5.6], [0.2, 6.1, 0.15]);
     box(darkWood, g, [0, 2.1, 5.6], [3.4, 4.2, 0.15]);

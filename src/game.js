@@ -6,7 +6,9 @@ import { createGameScene } from "./rendering/game-scene.js";
 import { createRacerState } from "./simulation/racer-state.js";
 import { bindGameInput } from "./input/game-input.js";
 import { createGameRenderer } from "./rendering/game-renderer.js";
-import { formatOrdinal, formatRaceTime, renderItemHud, renderRaceHud } from "./ui/race-hud.js";
+import { createRacerEffects } from "./rendering/racer-effects.js";
+import { addGlow } from "./rendering/visual-effects.js";
+import { formatOrdinal, formatRaceTime, renderItemHud } from "./ui/race-hud.js";
 import { bakeVertexShade, ParticlePool } from "./rendering/graphics.js";
 import { bevelBox, contactShadow, batchStaticMeshes } from "./rendering/visuals.js";
 import { buildCourseWorld } from "./rendering/course-runtime.js";
@@ -21,7 +23,7 @@ import {
   chooseItem,
 } from "./simulation/items.js";
 import { FIXED_DT, resetMotion } from "./simulation/physics.js";
-import { ranking, lapNumber, resetRaceProgress } from "./simulation/race.js";
+import { ranking, resetRaceProgress } from "./simulation/race.js";
 import {
   TRACK,
   routePoint,
@@ -246,6 +248,7 @@ import {
         const strip = addMesh(new THREE.BoxGeometry(0.18, 0.07, 5.8), mats.neon, g);
         strip.position.set(i * 1.32, 0.23, 0);
       }
+      addGlow(g, { color: "#5ef9eb", size: [4.4, 2], opacity: 0.3, position: [0, 0.32, 0] });
       alignGroup(g, poseAt(t * TRACK, offset, 0));
       scene.add(g);
       pads.push({ g, ...pad, phase: Math.random() * TAU });
@@ -289,6 +292,7 @@ import {
         new THREE.LineBasicMaterial({ color: "#eaffff" }),
       );
       group.add(wire);
+      addGlow(group, { color: "#65ffe2", size: 3.3, opacity: 0.25 });
       const b = {
         s,
         x: [-0.58, 0, 0.58][i % 3],
@@ -395,6 +399,7 @@ import {
   function spawnParticle(pos, color, life = 0.6, size = 0.2, velocity = null) {
     particles.spawn(pos, color, life, size, velocity);
   }
+  const racerEffects = createRacerEffects({ spawnParticle, terrain: chosenCourse.theme.terrain });
   function getItemModel(kind) {
     let g = new THREE.Group();
     if (kind === "banana") {
@@ -542,6 +547,7 @@ import {
     projectiles.splice(0).forEach((p) => disposeEffect(p.mesh));
     bananas.splice(0).forEach((b) => disposeEffect(b.mesh));
     particles.clear();
+    racerEffects.reset();
     elapsed = 0;
     raceTime = 0;
     running = false;
@@ -695,6 +701,7 @@ import {
   function moveRacer(state, input, dt) {
     const events = advanceRacer(state, input, dt, raceTime);
     const sliding = events.sliding;
+    racerEffects.update(state, events, dt);
     if (testMode && state === player) {
       testTricks.started += !!events.trickStarted;
       testTricks.landed += !!events.trickLanded;
@@ -729,29 +736,6 @@ import {
     if (events.turboTier && state === player) {
       notify(events.turboTier === 2 ? "ORANGE MINI-TURBO!" : "BLUE MINI-TURBO!");
       audio.play("boost");
-    }
-    if (sliding && state === player && Math.random() < dt * 35) {
-      const side = state.steering >= 0 ? 1 : -1;
-      const wheelPos = state.worldPos
-        .clone()
-        .add(
-          new THREE.Vector3(
-            Math.cos(state.yaw) * side * 0.85 + Math.sin(state.yaw) * 0.76,
-            0.18,
-            -Math.sin(state.yaw) * side * 0.85 + Math.cos(state.yaw) * 0.76,
-          ),
-        );
-      spawnParticle(
-        wheelPos,
-        state.driftTier === 2 ? "#ff984c" : state.driftTier === 1 ? "#43e6ff" : "#bbc8cc",
-        0.35,
-        0.1,
-        new THREE.Vector3(
-          Math.sin(state.yaw) * 2.2 + side * Math.cos(state.yaw),
-          0.5 + Math.random(),
-          Math.cos(state.yaw) * 2.2 - side * Math.sin(state.yaw),
-        ),
-      );
     }
     if (events.padBoost && state === player) {
       notify("TURBO PANEL!");

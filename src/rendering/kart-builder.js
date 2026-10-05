@@ -1,4 +1,5 @@
 import * as THREE from "../../vendor/three/three.module.js";
+import { addGlow } from "./visual-effects.js";
 
 /** Build locally bundled SuperTuxKart racers with independent materials and wheels. */
 export function createKartBuilder({ scene, models, textures, shadowTexture, theme = {} }) {
@@ -28,10 +29,9 @@ export function createKartBuilder({ scene, models, textures, shadowTexture, them
       });
       part.material = Array.isArray(part.material) ? independent : independent[0];
     });
-    // STK faces +Z; the race uses -Z. Scale uniformly to preserve the authored
-    // proportions, with a shared wheel footprint and room for tall characters.
+    // Converted STK assets face -Z, matching the race. Scale uniformly to
+    // preserve proportions, a shared wheel footprint and tall characters.
     bodyGroup.add(importedModel);
-    bodyGroup.rotation.y = Math.PI;
     root.add(bodyGroup);
     const wheels = [];
     const wheelBounds = new THREE.Box3();
@@ -62,17 +62,25 @@ export function createKartBuilder({ scene, models, textures, shadowTexture, them
 
     const flameGeometry = new THREE.ConeGeometry(0.17, 0.78, 8).toNonIndexed();
     const flameMaterial = new THREE.MeshBasicMaterial({
-      color: color,
+      color: "#ffe87b",
       transparent: true,
       opacity: 0.88,
       blending: THREE.AdditiveBlending,
       depthWrite: false,
+      toneMapped: false,
     });
     const flame = new THREE.Mesh(flameGeometry, flameMaterial);
-    flame.rotation.x = -Math.PI / 2;
+    flame.rotation.x = Math.PI / 2;
     flame.position.set(0, 0.66, 1.32);
     root.add(flame);
     flame.visible = false;
+    const boostGlow = addGlow(root, {
+      color: "#ffc951",
+      size: 2.15,
+      opacity: 0.52,
+      position: [0, 0.66, 1.48],
+    });
+    boostGlow.visible = false;
 
     const aura = new THREE.Group();
     const ring = new THREE.Mesh(
@@ -97,11 +105,11 @@ export function createKartBuilder({ scene, models, textures, shadowTexture, them
     aura.visible = false;
 
     const shadow = new THREE.Mesh(
-      new THREE.PlaneGeometry(3.2, 3.8),
+      new THREE.PlaneGeometry(2.65, 3.65),
       new THREE.MeshBasicMaterial({
         map: shadowTexture,
         transparent: true,
-        opacity: 0.27,
+        opacity: 0.38,
         depthWrite: false,
         polygonOffset: true,
         polygonOffsetFactor: -2,
@@ -109,7 +117,19 @@ export function createKartBuilder({ scene, models, textures, shadowTexture, them
     );
     scene.add(shadow);
     scene.add(root);
-    const kart = { root, bodyGroup, shadow, wheels, flame, aura, name, isPlayer, color, racerId };
+    const kart = {
+      root,
+      bodyGroup,
+      shadow,
+      wheels,
+      flame,
+      boostGlow,
+      aura,
+      name,
+      isPlayer,
+      color,
+      racerId,
+    };
     return kart;
   }
 
