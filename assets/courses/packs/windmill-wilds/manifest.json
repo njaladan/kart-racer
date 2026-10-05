@@ -1,0 +1,168 @@
+{
+  "pack": "Kenney Nature Kit",
+  "author": "Kenney",
+  "license": "CC0-1.0",
+  "licenseEvidence": {
+    "url": "https://kenney.nl/assets/nature-kit"
+  },
+  "catalogEvidence": {
+    "url": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/catalog.json",
+    "sha256": "320e6e9909bfc54b8922716d85ae6e7642f2bfeb7a0b7d9f2500ed3a6ffbfee1"
+  },
+  "models": [
+    {
+      "key": "kenney:nature/tree-pinedefaultb",
+      "file": "tree-pinedefaultb.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/tree-pinedefaultb.glb",
+      "license": "CC0-1.0",
+      "sha256": "a752ea5775c6fb17513f764d57ead534f44dfdd85188b842995ac9ba0e7065c1",
+      "bytes": 18180,
+      "name": "kenney:nature/tree-pinedefaultb",
+      "type": "gltf"
+    },
+    {
+      "key": "kenney:nature/tree-pinetalla-detailed",
+      "file": "tree-pinetalla-detailed.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/tree-pinetalla-detailed.glb",
+      "license": "CC0-1.0",
+      "sha256": "9ba6337460e718b8baf165b23c02f39455e3d5757b1911505410c46bc88a86b5",
+      "bytes": 10708,
+      "name": "kenney:nature/tree-pinetalla-detailed",
+      "type": "gltf"
+    },
+    {
+      "key": "kenney:nature/tree-pinetallb-detailed",
+      "file": "tree-pinetallb-detailed.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/tree-pinetallb-detailed.glb",
+      "license": "CC0-1.0",
+      "sha256": "a26b4434e1592ec1a83f364a54688bb34c48d9521bfccbe63f0cc37b381c4696",
+      "bytes": 12632,
+      "name": "kenney:nature/tree-pinetallb-detailed",
+      "type": "gltf"
+    },
+    {
+      "key": "kenney:nature/tree-oak",
+      "file": "tree-oak.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/tree-oak.glb",
+      "license": "CC0-1.0",
+      "sha256": "d7fd8773674928c50c11b66d12c636d49bdcc15a8b1c7fbb98e6f63a3439a3f3",
+      "bytes": 14644,
+      "name": "kenney:nature/tree-oak",
+      "type": "gltf"
+    },
+    {
+      "key": "kenney:nature/tree-default",
+      "file": "tree-default.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/tree-default.glb",
+      "license": "CC0-1.0",
+      "sha256": "562d29638c902de3c7bee465d3a53bb77117efbc392ae04ed894faf6b5dc691d",
+      "bytes": 9428,
+      "name": "kenney:nature/tree-default",
+      "type": "gltf"
+    },
+    {
+      "key": "kenney:nature/rock-largeb",
+      "file": "rock-largeb.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/rock-largeb.glb",
+      "license": "CC0-1.0",
+      "sha256": "caa8b025833d4dabf6d98fe2e96cf2fbd886693ac990df0db75f9d827194374b",
+      "bytes": 8560,
+      "name": "kenney:nature/rock-largeb",
+      "type": "gltf"
+    },
+    {
+      "key": "kenney:nature/rock-larged",
+      "file": "rock-larged.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/rock-larged.glb",
+      "license": "CC0-1.0",
+      "sha256": "e4fefd8d8d7deab42be61bd222bcd088330012f0025789146b81f25a46095ffd",
+      "bytes": 7992,
+      "name": "kenney:nature/rock-larged",
+      "type": "gltf"
+    },
+    {
+      "key": "kenney:nature/rock-largee",
+      "file": "rock-largee.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/rock-largee.glb",
+      "license": "CC0-1.0",
+      "sha256": "8207ce8100b7c756e55e67bee030edadeb332d7d72220027b5818f1987039def",
+      "bytes": 6464,
+      "name": "kenney:nature/rock-largee",
+      "type": "gltf"
+    },
+    {
+      "key": "kenney:nature/rock-tallb",
+      "file": "rock-tallb.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/rock-tallb.glb",
+      "license": "CC0-1.0",
+      "sha256": "b3fb7899c317a3b026fa6ced0e1eaaa596d9dd0d95efeacfb5e05d25322f19b9",
+      "bytes": 14060,
+      "name": "kenney:nature/rock-tallb",
+      "type": "gltf"
+    },
+    {
+      "key": "kenney:nature/log-large",
+      "file": "log-large.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/log-large.glb",
+      "license": "CC0-1.0",
+      "sha256": "e7a92369062d491e5a31a163d390e07db04ee573605bbfa84c00660d18896b4c",
+      "bytes": 7924,
+      "name": "kenney:nature/log-large",
+      "type": "gltf"
+    },
+    {
+      "key": "kenney:nature/stump-oldtall",
+      "file": "stump-oldtall.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/stump-oldtall.glb",
+      "license": "CC0-1.0",
+      "sha256": "8606cbd41c2a11143f083e796668cc413d58ab90cf5e53450fd93e6fcfde48e0",
+      "bytes": 9564,
+      "name": "kenney:nature/stump-oldtall",
+      "type": "gltf"
+    },
+    {
+      "key": "kenney:nature/mushroom-redgroup",
+      "file": "mushroom-redgroup.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/mushroom-redgroup.glb",
+      "license": "CC0-1.0",
+      "sha256": "29f02df0589dd2b09e8d2aff6a4662394dac5cfcf1fec701640dcbd6127e0802",
+      "bytes": 14960,
+      "name": "kenney:nature/mushroom-redgroup",
+      "type": "gltf"
+    },
+    {
+      "key": "kenney:nature/plant-bushdetailed",
+      "file": "plant-bushdetailed.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/plant-bushdetailed.glb",
+      "license": "CC0-1.0",
+      "sha256": "2e0487020d68ccf664435db9d829c78ae00e6d2785ee3ec10b9f89cc70a10406",
+      "bytes": 10172,
+      "name": "kenney:nature/plant-bushdetailed",
+      "type": "gltf"
+    },
+    {
+      "key": "kenney:nature/flower-yellowb",
+      "file": "flower-yellowb.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/flower-yellowb.glb",
+      "license": "CC0-1.0",
+      "sha256": "aaa8707779a5de59f881f80185bc507b35ec3fd5f23a39d6447ef61141dcd4f5",
+      "bytes": 11256,
+      "name": "kenney:nature/flower-yellowb",
+      "type": "gltf"
+    }
+  ]
+}

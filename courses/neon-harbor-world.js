@@ -21,6 +21,7 @@ export default function buildWorld(context) {
   const cylinder=new THREE.CylinderGeometry(1,1,1,10);
   const ring=new THREE.TorusGeometry(1.3,.14,5,14);
   const animated=[], ferries=[], craneHooks=[];
+  const industrialModels=['building-a','building-e','building-m','building-q'];
 
   // Test the complete circumscribed footprint against every route segment.
   // Large buildings can otherwise overlap an adjacent street on an S-bend.
@@ -86,6 +87,18 @@ export default function buildWorld(context) {
     emblem.rotation.z=index*.27;
     batch(g);
   }
+  // The industrial kit's factory silhouettes add authored roof shapes and
+  // window color breakup to the port skyline. Fit each source mesh to the
+  // established scenery footprint so camera clearance and road splines stay
+  // under course control.
+  function industrialBuilding(t,offset,width,height,depth,index) {
+    const g=safeGroup(t,offset,Math.hypot(width,depth)/2);
+    if(!g||!asset)return null;
+    const model=industrialModels[Math.abs(index)%industrialModels.length];
+    const imported=asset(`kenney:city-kit-industrial/${model}`,g,[0,0,0],[width,height,depth]);
+    if(imported)batch(g);
+    return imported;
+  }
   function lamp(t,offset,index) {
     const g=safeGroup(t,offset,1.3);if(!g)return;
     box(steel,g,[0,4.5,0],[.22,9,.22]);
@@ -95,7 +108,8 @@ export default function buildWorld(context) {
   // Promenade: waterfront lamps and a city skyline, with open sightlines.
   for(let i=0;i<20;i++) {
     const t=sectorT(0,(i+.5)/20);lamp(t,-13,i);
-    if(i%2===0)building(t,25+(i%3)*9,12,18+(i%5)*6,12,i);
+    if(i%4===0)industrialBuilding(t,25+(i%3)*9,14,21+(i%5)*3,10,i);
+    else if(i%2===0)building(t,25+(i%3)*9,12,18+(i%5)*6,12,i);
     const g=safeGroup(t,-19,2.5);
     if(g){
       if(i%3===0&&asset) {
@@ -158,6 +172,20 @@ export default function buildWorld(context) {
     for(const x of [-2,0,2])box(amber,g,[x,2,2.53],[.1,4,.06]);
     box(steel,g,[0,.12,0],[6.15,.24,5.15]);
     box(trim,g,[0,4.08,0],[6.15,.16,5.15]);
+  }
+  // A few compact factory blocks and tank details turn the loading hall into
+  // an active industrial district while retaining the hall's road clearance.
+  for(let i=0;i<6;i++) {
+    const t=sectorT(2,.18+i*.12),side=i%2?1:-1;
+    industrialBuilding(t,side*34,12,12,11,i+2);
+    const utility=safeGroup(t,side*47,3.2);if(!utility||!asset)continue;
+    const tank=asset('kenney:city-kit-industrial/detail-tank',utility,[0,0,0],[4.4,4.4,4.4]);
+    if(tank){tank.rotation.y=i*.73;batch(utility);}
+    if(i%2===0) {
+      const stackGroup=safeGroup(t,side*41,1.8);
+      const stack=stackGroup&&asset('kenney:city-kit-industrial/chimney-large',stackGroup,[0,0,0],[2.4,9,2.4]);
+      if(stack)batch(stackGroup);
+    }
   }
 
   // Supported deck: no embankment under the declared elevated arc. Supports
@@ -247,7 +275,8 @@ export default function buildWorld(context) {
     const t=sectorT(5,(i+.5)/20),side=i%2?1:-1;
     const extra=side>0?track.shortcutWidth(t):0;
     lamp(t,side*(13+extra),i);
-    if(i%3===0)building(t,side*(28+extra),12,24+(i%4)*6,12,i+40);
+    if(i%6===0)industrialBuilding(t,side*(28+extra),14,21+(i%4)*3,10,i+40);
+    else if(i%3===0)building(t,side*(28+extra),12,24+(i%4)*6,12,i+40);
   }
   for(const fraction of [.31,.47,.63]) {
     const t=sectorT(5,fraction),g=safeGroup(t,23+track.shortcutWidth(t),2);if(!g)continue;
@@ -317,7 +346,11 @@ export default function buildWorld(context) {
 
   // A layered panorama beyond the race: small distant high-rises form a
   // coherent port skyline rather than repeating only roadside facades.
-  for(let i=0;i<15;i++)building(sectorT(0,(i+.5)/15),75+(i%3)*17,12+(i%3)*5,30+(i%5)*10,13,i+60);
+  for(let i=0;i<15;i++) {
+    const t=sectorT(0,(i+.5)/15),offset=75+(i%3)*17;
+    if(i%4===0||i%4===2)industrialBuilding(t,offset,16+(i%3)*3,24+(i%5)*5,12+(i%2)*2,i+60);
+    else building(t,offset,12+(i%3)*5,30+(i%5)*10,13,i+60);
+  }
 
   // Bounded animated city life. Instanced figures share just two draw calls.
   const people=[],personBody=new THREE.CylinderGeometry(.22,.29,.85,6);

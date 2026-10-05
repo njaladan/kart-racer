@@ -1,0 +1,335 @@
+{
+  "license": "CC0-1.0",
+  "sourcePack": "https://kenney.nl/assets/holiday-kit",
+  "sourceMirror": "https://github.com/ETdoFresh/kenney.nl/tree/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack",
+  "licenseEvidence": "https://github.com/ETdoFresh/kenney.nl/blob/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/License.txt",
+  "models": [
+    {
+      "name": "kenney:holiday-kit/tree_pine_snow",
+      "file": "models/tree-pine-snow.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:holiday-kit/tree_pine_snow_round",
+      "file": "models/tree-pine-snow-round.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:holiday-kit/tree_pine_snowed",
+      "file": "models/tree-pine-snowed.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:holiday-kit/tree_decorated",
+      "file": "models/tree-decorated.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:holiday-kit/rock_formation_small",
+      "file": "models/rock-formation-small.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:holiday-kit/rock_formation_medium",
+      "file": "models/rock-formation-medium.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:holiday-kit/rock_formation_large",
+      "file": "models/rock-formation-large.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:holiday-kit/snowman",
+      "file": "models/snowman.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:holiday-kit/snowman_fancy",
+      "file": "models/snowman-fancy.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:holiday-kit/sled",
+      "file": "models/sled.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:holiday-kit/present",
+      "file": "models/present.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:holiday-kit/present_round",
+      "file": "models/present-round.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:holiday-kit/lights_multi",
+      "file": "models/lights-multi.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:holiday-kit/wreath",
+      "file": "models/wreath.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:holiday-kit/festivus_pole",
+      "file": "models/festivus-pole.glb",
+      "type": "gltf"
+    }
+  ],
+  "sources": [
+    {
+      "name": "kenney:holiday-kit/tree_pine_snow",
+      "author": "Kenney",
+      "pack": "Holiday Kit",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/holiday-kit",
+      "download": "https://raw.githubusercontent.com/ETdoFresh/kenney.nl/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/Models/GLTF%20format/treePineSnow.glb",
+      "sha256": "d20c30bf7cabd6fa5ac94f12170c555b179de71e7f4eeb84220315c087a9bcfd",
+      "bytes": 12192,
+      "file": "models/tree-pine-snow.glb"
+    },
+    {
+      "name": "kenney:holiday-kit/tree_pine_snow_round",
+      "author": "Kenney",
+      "pack": "Holiday Kit",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/holiday-kit",
+      "download": "https://raw.githubusercontent.com/ETdoFresh/kenney.nl/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/Models/GLTF%20format/treePineSnowRound.glb",
+      "sha256": "17d05cead4c5341c9cf128be84e720108910d64839e8dbd9f0b1f544f610179c",
+      "bytes": 27608,
+      "file": "models/tree-pine-snow-round.glb"
+    },
+    {
+      "name": "kenney:holiday-kit/tree_pine_snowed",
+      "author": "Kenney",
+      "pack": "Holiday Kit",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/holiday-kit",
+      "download": "https://raw.githubusercontent.com/ETdoFresh/kenney.nl/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/Models/GLTF%20format/treePineSnowed.glb",
+      "sha256": "53c59439036c0e0fb081a26eaf734eddbef429eb7458bd35315428ef5b1d2fbf",
+      "bytes": 9536,
+      "file": "models/tree-pine-snowed.glb"
+    },
+    {
+      "name": "kenney:holiday-kit/tree_decorated",
+      "author": "Kenney",
+      "pack": "Holiday Kit",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/holiday-kit",
+      "download": "https://raw.githubusercontent.com/ETdoFresh/kenney.nl/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/Models/GLTF%20format/treeDecorated.glb",
+      "sha256": "64de57004d5c81476e9e6df4bd4eebee5e48995efde3ba510866f53b7fbb3776",
+      "bytes": 17316,
+      "file": "models/tree-decorated.glb"
+    },
+    {
+      "name": "kenney:holiday-kit/rock_formation_small",
+      "author": "Kenney",
+      "pack": "Holiday Kit",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/holiday-kit",
+      "download": "https://raw.githubusercontent.com/ETdoFresh/kenney.nl/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/Models/GLTF%20format/rockFormationSmall.glb",
+      "sha256": "457c63ab431a9d3e923e9aac63db1aeb22eb04a22a463dc786024544c85af384",
+      "bytes": 11016,
+      "file": "models/rock-formation-small.glb"
+    },
+    {
+      "name": "kenney:holiday-kit/rock_formation_medium",
+      "author": "Kenney",
+      "pack": "Holiday Kit",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/holiday-kit",
+      "download": "https://raw.githubusercontent.com/ETdoFresh/kenney.nl/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/Models/GLTF%20format/rockFormationMedium.glb",
+      "sha256": "449ba8e7d56bb97b66c2c45e82d667c4ddeb473440b4731a339a6c15d24f1ef9",
+      "bytes": 12400,
+      "file": "models/rock-formation-medium.glb"
+    },
+    {
+      "name": "kenney:holiday-kit/rock_formation_large",
+      "author": "Kenney",
+      "pack": "Holiday Kit",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/holiday-kit",
+      "download": "https://raw.githubusercontent.com/ETdoFresh/kenney.nl/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/Models/GLTF%20format/rockFormationLarge.glb",
+      "sha256": "2e5e580417eb7fd348afe159ebdf03dd7f2674029edf38acb37e712cd0209b28",
+      "bytes": 10876,
+      "file": "models/rock-formation-large.glb"
+    },
+    {
+      "name": "kenney:holiday-kit/snowman",
+      "author": "Kenney",
+      "pack": "Holiday Kit",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/holiday-kit",
+      "download": "https://raw.githubusercontent.com/ETdoFresh/kenney.nl/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/Models/GLTF%20format/snowman.glb",
+      "sha256": "bf6a5a59f9c24643445ac7b381fdac25dfcb2d7a8192d27c86c998d935406193",
+      "bytes": 15000,
+      "file": "models/snowman.glb"
+    },
+    {
+      "name": "kenney:holiday-kit/snowman_fancy",
+      "author": "Kenney",
+      "pack": "Holiday Kit",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/holiday-kit",
+      "download": "https://raw.githubusercontent.com/ETdoFresh/kenney.nl/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/Models/GLTF%20format/snowmanFancy.glb",
+      "sha256": "794086e2fd40e5d08ff68d9788fa8a9295926b3eacfe2f0ba177894d03a185ee",
+      "bytes": 18572,
+      "file": "models/snowman-fancy.glb"
+    },
+    {
+      "name": "kenney:holiday-kit/sled",
+      "author": "Kenney",
+      "pack": "Holiday Kit",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/holiday-kit",
+      "download": "https://raw.githubusercontent.com/ETdoFresh/kenney.nl/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/Models/GLTF%20format/sled.glb",
+      "sha256": "04652fc639f003368bbdc7c08f3ddaf7f9e8656b7f3eda7dd1bee612e9aabf83",
+      "bytes": 26152,
+      "file": "models/sled.glb"
+    },
+    {
+      "name": "kenney:holiday-kit/present",
+      "author": "Kenney",
+      "pack": "Holiday Kit",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/holiday-kit",
+      "download": "https://raw.githubusercontent.com/ETdoFresh/kenney.nl/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/Models/GLTF%20format/present.glb",
+      "sha256": "dad0f8f19689ee8457c13f773cdcb2f4562d36fb8473243338fc987089d12025",
+      "bytes": 39760,
+      "file": "models/present.glb"
+    },
+    {
+      "name": "kenney:holiday-kit/present_round",
+      "author": "Kenney",
+      "pack": "Holiday Kit",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/holiday-kit",
+      "download": "https://raw.githubusercontent.com/ETdoFresh/kenney.nl/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/Models/GLTF%20format/presentRound.glb",
+      "sha256": "9ca8307462eb1c4a2b59d0cb3fc60f17f00367bed0a49cd41c76e776ecebaebb",
+      "bytes": 54248,
+      "file": "models/present-round.glb"
+    },
+    {
+      "name": "kenney:holiday-kit/lights_multi",
+      "author": "Kenney",
+      "pack": "Holiday Kit",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/holiday-kit",
+      "download": "https://raw.githubusercontent.com/ETdoFresh/kenney.nl/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/Models/GLTF%20format/lightsMulti.glb",
+      "sha256": "334dc865c8e022478a19ba01fb1d117d6214d8c72ceb481a99c4f402f2d5e6e5",
+      "bytes": 67220,
+      "file": "models/lights-multi.glb"
+    },
+    {
+      "name": "kenney:holiday-kit/wreath",
+      "author": "Kenney",
+      "pack": "Holiday Kit",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/holiday-kit",
+      "download": "https://raw.githubusercontent.com/ETdoFresh/kenney.nl/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/Models/GLTF%20format/wreath.glb",
+      "sha256": "4c19190cfbec56f0156b792b6b047f411ac465b66574b72100100c5c835cca69",
+      "bytes": 49580,
+      "file": "models/wreath.glb"
+    },
+    {
+      "name": "kenney:holiday-kit/festivus_pole",
+      "author": "Kenney",
+      "pack": "Holiday Kit",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/holiday-kit",
+      "download": "https://raw.githubusercontent.com/ETdoFresh/kenney.nl/45df48c4d45f8716216b1a9e22df0b69cd9f5932/kenney_holidaypack/Models/GLTF%20format/festivusPole.glb",
+      "sha256": "12f4424e8d3ff6aebb06af1f5e17ddcb4137bb36353ba44431bf4ac061d73857",
+      "bytes": 10440,
+      "file": "models/festivus-pole.glb"
+    }
+  ],
+  "licenseEvidenceSha256": "5236f24ced7986af690c92367a523bcd6b98d25f9fd81a58ec295cc2c0690d56",
+  "licenseEvidenceFile": "LICENSE.txt",
+  "outputs": [
+    {
+      "path": "models/festivus-pole.glb",
+      "sha256": "12f4424e8d3ff6aebb06af1f5e17ddcb4137bb36353ba44431bf4ac061d73857",
+      "bytes": 10440
+    },
+    {
+      "path": "models/lights-multi.glb",
+      "sha256": "334dc865c8e022478a19ba01fb1d117d6214d8c72ceb481a99c4f402f2d5e6e5",
+      "bytes": 67220
+    },
+    {
+      "path": "models/present-round.glb",
+      "sha256": "9ca8307462eb1c4a2b59d0cb3fc60f17f00367bed0a49cd41c76e776ecebaebb",
+      "bytes": 54248
+    },
+    {
+      "path": "models/present.glb",
+      "sha256": "dad0f8f19689ee8457c13f773cdcb2f4562d36fb8473243338fc987089d12025",
+      "bytes": 39760
+    },
+    {
+      "path": "models/rock-formation-large.glb",
+      "sha256": "2e5e580417eb7fd348afe159ebdf03dd7f2674029edf38acb37e712cd0209b28",
+      "bytes": 10876
+    },
+    {
+      "path": "models/rock-formation-medium.glb",
+      "sha256": "449ba8e7d56bb97b66c2c45e82d667c4ddeb473440b4731a339a6c15d24f1ef9",
+      "bytes": 12400
+    },
+    {
+      "path": "models/rock-formation-small.glb",
+      "sha256": "457c63ab431a9d3e923e9aac63db1aeb22eb04a22a463dc786024544c85af384",
+      "bytes": 11016
+    },
+    {
+      "path": "models/sled.glb",
+      "sha256": "04652fc639f003368bbdc7c08f3ddaf7f9e8656b7f3eda7dd1bee612e9aabf83",
+      "bytes": 26152
+    },
+    {
+      "path": "models/snowman-fancy.glb",
+      "sha256": "794086e2fd40e5d08ff68d9788fa8a9295926b3eacfe2f0ba177894d03a185ee",
+      "bytes": 18572
+    },
+    {
+      "path": "models/snowman.glb",
+      "sha256": "bf6a5a59f9c24643445ac7b381fdac25dfcb2d7a8192d27c86c998d935406193",
+      "bytes": 15000
+    },
+    {
+      "path": "models/tree-decorated.glb",
+      "sha256": "64de57004d5c81476e9e6df4bd4eebee5e48995efde3ba510866f53b7fbb3776",
+      "bytes": 17316
+    },
+    {
+      "path": "models/tree-pine-snow-round.glb",
+      "sha256": "17d05cead4c5341c9cf128be84e720108910d64839e8dbd9f0b1f544f610179c",
+      "bytes": 27608
+    },
+    {
+      "path": "models/tree-pine-snow.glb",
+      "sha256": "d20c30bf7cabd6fa5ac94f12170c555b179de71e7f4eeb84220315c087a9bcfd",
+      "bytes": 12192
+    },
+    {
+      "path": "models/tree-pine-snowed.glb",
+      "sha256": "53c59439036c0e0fb081a26eaf734eddbef429eb7458bd35315428ef5b1d2fbf",
+      "bytes": 9536
+    },
+    {
+      "path": "models/wreath.glb",
+      "sha256": "4c19190cfbec56f0156b792b6b047f411ac465b66574b72100100c5c835cca69",
+      "bytes": 49580
+    },
+    {
+      "path": "LICENSE.txt",
+      "sha256": "5236f24ced7986af690c92367a523bcd6b98d25f9fd81a58ec295cc2c0690d56",
+      "bytes": 587
+    }
+  ],
+  "licenseSourceSha256": "8df3d0326b71972ba3c3bd5c429cf85679a5a5c3e186a4828be6f8b5245b40bc"
+}

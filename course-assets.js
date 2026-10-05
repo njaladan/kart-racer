@@ -1,7 +1,10 @@
 import * as THREE from './vendor/three/three.module.js';
+import { GLTFLoader } from './vendor/three/addons/loaders/GLTFLoader.js';
 
-// One compact local download set, decoded once before the selected world builds.
-export async function loadCourseAssets(renderer) {
+// The old compact mesh bundle remains available while the shared and selected
+// course packs move to local, textured glTF models. Nothing is fetched remotely
+// by the running game.
+export async function loadCourseAssets(renderer, courseId = 'windmill-wilds') {
   const loader=new THREE.TextureLoader();
   const names=['asphalt','concrete','metal','brick','stone','sand','snow','wood','bark'];
   const maps=await Promise.all(names.map(async name=>{
@@ -13,7 +16,50 @@ export async function loadCourseAssets(renderer) {
   const [indexResponse,dataResponse]=await Promise.all([fetch('./assets/courses/models.json'),fetch('./assets/courses/models.bin')]);
   if(!indexResponse.ok||!dataResponse.ok) throw new Error('Course scenery assets could not be loaded');
   const index=await indexResponse.json(),data=await dataResponse.arrayBuffer();
-  return {textures:Object.fromEntries(maps),models:decodeCourseModels(index,data)};
+  const models=decodeCourseModels(index,data);
+  const gltfLoader=new GLTFLoader();
+  await loadModelPack(gltfLoader,'./assets/courses/packs/shared/manifest.json',models,renderer);
+  if(courseId) await loadModelPack(gltfLoader,`./assets/courses/packs/${courseId}/manifest.json`,models,renderer,true);
+  return {textures:Object.fromEntries(maps),models};
+}
+
+async function loadModelPack(loader,manifestUrl,models,renderer,optional=false) {
+  const response=await fetch(manifestUrl);
+  if(optional && response.status===404) return;
+  if(!response.ok) throw new Error(`Course asset manifest could not be loaded: ${manifestUrl}`);
+  const manifest=await response.json();
+  await Promise.all((manifest.models||[]).map(async entry=>{
+    if(entry.type!=='gltf') throw new Error(`Unsupported model type in ${manifestUrl}: ${entry.type}`);
+    const fileUrl=new URL(entry.file,new URL('.',new URL(manifestUrl,location.href))).href;
+    const loaded=await loader.loadAsync(fileUrl);
+    const object=normalizeCourseModel(loaded.scene);
+    const maxAnisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
+    object.traverse(child=>{
+      if(!child.isMesh) return;
+      child.castShadow=true;child.receiveShadow=true;
+      const materials=Array.isArray(child.material)?child.material:[child.material];
+      for(const material of materials) for(const key of ['map','normalMap','roughnessMap','metalnessMap','aoMap','emissiveMap']) {
+        const map=material?.[key];if(map) map.anisotropy=maxAnisotropy;
+      }
+    });
+    object.name=entry.name;
+    models[entry.name]=object;
+  }));
+}
+
+// Imported kits use different authoring scales and pivots. A one metre tall,
+// ground-centred source makes `kit.asset(..., scale)` predictable in metres.
+export function normalizeCourseModel(scene) {
+  scene.updateMatrixWorld(true);
+  const bounds=new THREE.Box3().setFromObject(scene);
+  const size=bounds.getSize(new THREE.Vector3());
+  const height=Math.max(.001,size.y);
+  scene.scale.multiplyScalar(1/height);
+  scene.position.set(-((bounds.min.x+bounds.max.x)*.5)/height,-bounds.min.y/height,-((bounds.min.z+bounds.max.z)*.5)/height);
+  scene.updateMatrixWorld(true);
+  const model = new THREE.Group();
+  model.add(scene);
+  return model;
 }
 
 export function decodeCourseModels(index,data) {

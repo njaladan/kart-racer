@@ -11,21 +11,22 @@ export default function buildWindmillLife(context) {
   const cream = material('#fff0cd'), coral = material('#ec785b'), butter = material('#edc765');
   const mint = material('#82bb9a'), navy = material('#537f9c'), skin = material('#eac297');
   const leaf = material('#669766', { map: textures.leaves ?? null });
-  const moss = material('#8fa369'), grass = material('#7eae59'), deep = material('#386859');
+  const grass = material('#7eae59'), deep = material('#386859');
   const stone = material('#b6b4a0', { map: textures.rock ?? null });
-  const paleStone = material('#d5ccad', { map: textures.rock ?? null });
   const fruit = material('#e98353'), blossom = material('#ffccbf');
   const steel = material('#7c918d', { metalness: .25, roughness: .55 });
   const sphere = new THREE.SphereGeometry(1, 10, 6);
   const cylinder = new THREE.CylinderGeometry(1, 1, 1, 10);
   const disc = new THREE.CylinderGeometry(1, 1, 1, 12);
-  const rockGeo = new THREE.IcosahedronGeometry(1, 0);
   const cone = new THREE.ConeGeometry(1, 1, 8);
   const torus = new THREE.TorusGeometry(1, .1, 5, 14);
   const leafGeometry = new THREE.BufferGeometry();
   leafGeometry.setAttribute('position', new THREE.Float32BufferAttribute([0,0,0, .24,.02,-.35, 0,.04,-1, -.24,.02,-.35], 3));
   leafGeometry.setIndex([0,1,2,0,2,3]); leafGeometry.computeVertexNormals();
   const fernMat = deep.clone(); fernMat.side = THREE.DoubleSide;
+  const asset = (slug, parent, position, scale) => kit.asset(`kenney:nature/${slug}`, parent, position, scale);
+  const treeModels = ['tree-pinedefaultb', 'tree-pinetalla-detailed', 'tree-pinetallb-detailed', 'tree-oak', 'tree-default'];
+  const rockModels = ['rock-largeb', 'rock-larged', 'rock-largee', 'rock-tallb'];
 
   function ground(t, offset, radius = 1, parent = scenery) {
     const frame = track.poseAt(t * track.TRACK, offset, 0);
@@ -157,30 +158,66 @@ export default function buildWindmillLife(context) {
   // Forest floor has authored understory islands and fallen timber.
   for(let i=0;i<60;i++) {
     const g=roadside(1,.03+random()*.94,i%2?1:-1,2.5+random()*11,1.6);if(!g)continue;
-    mesh(rockGeo,moss,g,[0,.17,0],[1.4,.3,1]);
+    asset(rockModels[i % rockModels.length], g, [0, .12, 0], [1.3 + (i % 4) * .18, 1.2, 1.1 + (i % 3) * .17]);
+    if (i % 3 === 0) asset(rockModels[(i + 2) % rockModels.length], g, [1.05, .08, -.3], [.62, .68, .7]);
     for(let j=0;j<7;j++) {
       const frond=mesh(leafGeometry,fernMat,g,[0,.28,0],[1.2,1.2,1.8]);
       frond.rotation.y=j*Math.PI*2/7;frond.rotation.x=-.6-random()*.35;
     }
-    for(let j=0;j<3;j++) {
+    for(let j=0;j<2;j++) {
       const x=1+random(),z=random()-.5;
-      mesh(cylinder,cream,g,[x,.25,z],[.07,.5,.07]);
-      mesh(sphere,j%2?coral:butter,g,[x,.48,z],[.28,.15,.28]);
+      const mushroom=asset('mushroom-redgroup',g,[x,.05,z],[.48,.5,.48]);
+      mushroom.rotation.y=random()*Math.PI*2;
     }
+    if(i%4===0)asset('plant-bushdetailed',g,[-1.1,.05,.4],[1.35,1.35,1.35]);
+  }
+  // A layered pine canopy frames the turns; oak and broadleaf trees open the
+  // meadow and orchard instead of leaving the skyline empty.
+  let treeIndex = 0;
+  function tree(section, fraction, side, clearance, size, species) {
+    const g = roadside(section, fraction, side, clearance, size * .38);
+    if (!g) return;
+    const model = species ?? treeModels[(treeIndex * 7 + Math.floor(fraction * 31)) % treeModels.length];
+    treeIndex++;
+    const height = size * (model.includes('detailed') ? 1.08 : 1);
+    asset(model, g, [0, 0, 0], [height, height, height]).rotation.y = treeIndex * 2.399 % (Math.PI * 2);
+  }
+  for (let i = 0; i < 36; i++) {
+    const f = .04 + i * .026;
+    for (const side of [-1, 1]) {
+      tree(1, f, side, 7 + (i % 4) * 2.7, 13 + (i % 5) * 1.9,
+        i % 4 === 0 ? 'tree-pinedefaultb' : i % 4 === 1 ? 'tree-pinetalla-detailed' : 'tree-pinetallb-detailed');
+      if (i % 3 === 0) tree(1, f + .013, side, 20 + (i % 3) * 3, 10 + (i % 4) * 1.7, 'tree-pinedefaultb');
+    }
+  }
+  for (let i = 0; i < 20; i++) {
+    const f = .05 + i * .045, side = i % 2 ? 1 : -1;
+    tree(5, f, side, 8 + (i % 3) * 3, 9 + (i % 4) * 1.25, i % 3 ? 'tree-oak' : 'tree-default');
+  }
+  for (let i = 0; i < 10; i++) {
+    const f = .08 + i * .09, side = i % 2 ? -1 : 1;
+    tree(0, f, side, 15 + (i % 3) * 4, 10 + (i % 3) * 1.5, i % 2 ? 'tree-oak' : 'tree-default');
+  }
+  for (let i = 0; i < 16; i++) {
+    const f = .08 + i * .052, side = i % 2 ? 1 : -1;
+    const g = roadside(5, f, side, 3.4 + (i % 3), .9);
+    if (g) asset('flower-yellowb', g, [0, .02, 0], [.8 + (i % 3) * .15, .8, .8]);
   }
   for(const [f,side]of [[.16,1],[.39,-1],[.71,1],[.88,-1]]) {
     const g=roadside(1,f,side,8,4);if(!g)continue;g.name='Mossy fallen log';g.rotation.y+=.6;
-    mesh(cylinder,dark,g,[0,.6,0],[.6,7,.6]).rotation.z=Math.PI/2;
-    for(const sign of [-1,1])mesh(disc,wood,g,[sign*3.52,.6,0],[.5,.035,.5]).rotation.z=Math.PI/2;
-    for(let i=0;i<6;i++)mesh(sphere,moss,g,[-2+i*.8,.99,0],[.65,.19,.55]);
-    beam(g,[.5,.7,0],[1.2,1.9,.6],.17,dark);
+    const log = asset('log-large', g, [0, .25, 0], [1, 1, 7]);
+    log.rotation.y = Math.PI / 2;
+    asset('stump-oldtall', g, [3.5, 0, .4], [1.35, 1.35, 1.35]);
   }
-  // Ridge strata deliberately expose horizontal shelves and the valley view.
+  // Imported stone silhouettes form varied ridge outcrops while preserving
+  // the open valley view between geological clusters.
   for(let i=0;i<9;i++) {
     const g=roadside(2,.08+i*.087,-1,17,8);if(!g)continue;g.name='Layered limestone outcrop';
-    for(let layer=0;layer<4;layer++) {
-      const m=mesh(rockGeo,layer%2?stone:paleStone,g,[Math.sin(i+layer)*1.2,layer*2.1+1.1,0],[7-layer*.75,1.5,5-layer*.45]);
-      m.rotation.y=.1*Math.sin(i+layer);
+    for (let j = 0; j < 4; j++) {
+      const slug = rockModels[(i + j) % rockModels.length];
+      const scale = j === 0 ? [5.2, 5.4, 4.8] : [2.7 + (j % 2) * .5, 2.6 + (j % 3) * .3, 2.8];
+      const m = asset(slug, g, [Math.sin(i * 1.7 + j) * (j ? 3.3 : .4), j ? .4 : 0, j ? (j % 2 ? 2.4 : -2.2) : 0], scale);
+      m.rotation.y = .37 * Math.sin(i + j * 1.9);
     }
     for(let j=0;j<4;j++)mesh(cone,grass,g,[random()*8-4,.35,5+random()],[.25,.8,.25]);
   }

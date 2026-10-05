@@ -1,0 +1,60 @@
+{
+  "license": "CC0-1.0",
+  "models": [
+    {
+      "name": "kenney-kart-oobi",
+      "file": "models/kart-oobi.glb",
+      "type": "gltf",
+      "source": "https://kenney.nl/assets/car-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/1f7dee9076ee848773f08fd632ab4e4e73357777/packs/car-kit/kart-oobi.glb",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "sha256": "be713611f3422ccd980dcd82bf7ebd20e93ebab6645a845aa1e03285cbd8fb0c",
+      "bytes": 263780
+    },
+    {
+      "name": "kenney-kart-oodi",
+      "file": "models/kart-oodi.glb",
+      "type": "gltf",
+      "source": "https://kenney.nl/assets/car-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/1f7dee9076ee848773f08fd632ab4e4e73357777/packs/car-kit/kart-oodi.glb",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "sha256": "f348257937f56a72c3df8c3378f9c48e1bca6c3c4169a4334519f3e3eb050a5d",
+      "bytes": 243248
+    },
+    {
+      "name": "kenney-kart-ooli",
+      "file": "models/kart-ooli.glb",
+      "type": "gltf",
+      "source": "https://kenney.nl/assets/car-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/1f7dee9076ee848773f08fd632ab4e4e73357777/packs/car-kit/kart-ooli.glb",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "sha256": "2b285a600126682e992ef31797cb46339b6a964800442d48e8279e0e19105b76",
+      "bytes": 245644
+    },
+    {
+      "name": "kenney-kart-oopi",
+      "file": "models/kart-oopi.glb",
+      "type": "gltf",
+      "source": "https://kenney.nl/assets/car-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/1f7dee9076ee848773f08fd632ab4e4e73357777/packs/car-kit/kart-oopi.glb",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "sha256": "c6ada5b224bb65037576ea4c611f6291e257ec78c7421ab996a10463e17ba354",
+      "bytes": 248468
+    },
+    {
+      "name": "kenney-kart-oozi",
+      "file": "models/kart-oozi.glb",
+      "type": "gltf",
+      "source": "https://kenney.nl/assets/car-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/1f7dee9076ee848773f08fd632ab4e4e73357777/packs/car-kit/kart-oozi.glb",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "sha256": "04fd19514d3d607feef917482ad2f20314971dd36c41eb6721aa7a0faf016541",
+      "bytes": 253040
+    }
+  ]
+}

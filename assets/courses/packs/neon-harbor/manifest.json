@@ -1,0 +1,121 @@
+{
+  "models": [
+    {
+      "name": "kenney:city-kit-industrial/building-a",
+      "file": "models/building-a.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:city-kit-industrial/building-e",
+      "file": "models/building-e.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:city-kit-industrial/building-i",
+      "file": "models/building-i.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:city-kit-industrial/building-m",
+      "file": "models/building-m.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:city-kit-industrial/building-q",
+      "file": "models/building-q.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:city-kit-industrial/chimney-large",
+      "file": "models/chimney-large.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "kenney:city-kit-industrial/detail-tank",
+      "file": "models/detail-tank.glb",
+      "type": "gltf"
+    }
+  ],
+  "sources": [
+    {
+      "file": "models/building-a.glb",
+      "author": "Kenney",
+      "pack": "City Kit Industrial",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/city-kit-industrial",
+      "download": "https://raw.githubusercontent.com/IronRon/Power-Up-the-City/0dc510bea12cdfb473f29f0c6f211bd2318aff6a/assets/kenney_city-kit-industrial_1.0/Models/GLB%20format/building-a.glb",
+      "sha256": "62b0b9ffbcea8dd914a899cacd10b54629bf7013db7bd221f2708c7ba8b054ea",
+      "bytes": 176884
+    },
+    {
+      "file": "models/building-e.glb",
+      "author": "Kenney",
+      "pack": "City Kit Industrial",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/city-kit-industrial",
+      "download": "https://raw.githubusercontent.com/IronRon/Power-Up-the-City/0dc510bea12cdfb473f29f0c6f211bd2318aff6a/assets/kenney_city-kit-industrial_1.0/Models/GLB%20format/building-e.glb",
+      "sha256": "866d2e4f1ca4bb39b878ce8225ace663ce08e67db60adcf0891fa77ee8a60cd7",
+      "bytes": 128964
+    },
+    {
+      "file": "models/building-i.glb",
+      "author": "Kenney",
+      "pack": "City Kit Industrial",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/city-kit-industrial",
+      "download": "https://raw.githubusercontent.com/IronRon/Power-Up-the-City/0dc510bea12cdfb473f29f0c6f211bd2318aff6a/assets/kenney_city-kit-industrial_1.0/Models/GLB%20format/building-i.glb",
+      "sha256": "c36fa11de6077c89c5c78e37677320ae40a5c8ef157ba1848ef53d9c486fd4ed",
+      "bytes": 73416
+    },
+    {
+      "file": "models/building-m.glb",
+      "author": "Kenney",
+      "pack": "City Kit Industrial",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/city-kit-industrial",
+      "download": "https://raw.githubusercontent.com/IronRon/Power-Up-the-City/0dc510bea12cdfb473f29f0c6f211bd2318aff6a/assets/kenney_city-kit-industrial_1.0/Models/GLB%20format/building-m.glb",
+      "sha256": "698e133cf312f009f4c1bc7901b7be9133e72cb0a5f5dfbc483e410eb0ea2881",
+      "bytes": 138560
+    },
+    {
+      "file": "models/building-q.glb",
+      "author": "Kenney",
+      "pack": "City Kit Industrial",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/city-kit-industrial",
+      "download": "https://raw.githubusercontent.com/IronRon/Power-Up-the-City/0dc510bea12cdfb473f29f0c6f211bd2318aff6a/assets/kenney_city-kit-industrial_1.0/Models/GLB%20format/building-q.glb",
+      "sha256": "43ad3628a58af108fb93e41477480a26a4ef1e96142732a19b31db9bdfe02fd5",
+      "bytes": 180820
+    },
+    {
+      "file": "models/chimney-large.glb",
+      "author": "Kenney",
+      "pack": "City Kit Industrial",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/city-kit-industrial",
+      "download": "https://raw.githubusercontent.com/IronRon/Power-Up-the-City/0dc510bea12cdfb473f29f0c6f211bd2318aff6a/assets/kenney_city-kit-industrial_1.0/Models/GLB%20format/chimney-large.glb",
+      "sha256": "c9929b82a913d0372ee8849440ee9ecd79a9609aac46fb091074fdeafb731126",
+      "bytes": 21408
+    },
+    {
+      "file": "models/detail-tank.glb",
+      "author": "Kenney",
+      "pack": "City Kit Industrial",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/city-kit-industrial",
+      "download": "https://raw.githubusercontent.com/IronRon/Power-Up-the-City/0dc510bea12cdfb473f29f0c6f211bd2318aff6a/assets/kenney_city-kit-industrial_1.0/Models/GLB%20format/detail-tank.glb",
+      "sha256": "b1edc2953c590c16f1d8280dfeb9073af6c710ac3d587f3dba144f69363d799b",
+      "bytes": 23456
+    },
+    {
+      "file": "models/Textures/colormap.png",
+      "author": "Kenney",
+      "pack": "City Kit Industrial",
+      "license": "CC0-1.0",
+      "source": "https://kenney.nl/assets/city-kit-industrial",
+      "download": "https://raw.githubusercontent.com/IronRon/Power-Up-the-City/0dc510bea12cdfb473f29f0c6f211bd2318aff6a/assets/kenney_city-kit-industrial_1.0/Models/GLB%20format/Textures/colormap.png",
+      "sha256": "4a912ef8e95fbec4ac0cacc295b9221a4b66c482d4f90bec4e2277689c21a623",
+      "bytes": 11107
+    }
+  ]
+}

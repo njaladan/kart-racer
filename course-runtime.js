@@ -23,6 +23,7 @@ export function buildCourseWorld({
       mats,
       textures,
       commonAssets?.nature,
+      assets,
     );
     addDetailedScenery(scene, track, assets);
     return world;

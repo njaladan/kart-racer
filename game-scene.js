@@ -168,7 +168,7 @@ export async function createGameScene({ canvas, course, viewport = window }) {
       sharedAssets[kind] || surfaceTexture(kind, renderer),
     ]),
   );
-  const courseAssets = await loadCourseAssets(renderer);
+  const courseAssets = await loadCourseAssets(renderer, course.id);
   Object.assign(textures, courseAssets.textures);
   const livingAssets = await loadLivingAssets(renderer);
   Object.assign(textures, livingAssets.textures);

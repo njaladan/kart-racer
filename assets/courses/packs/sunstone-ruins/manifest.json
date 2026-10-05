@@ -1,0 +1,56 @@
+{
+  "pack": "Kenney Nature Kit",
+  "author": "Kenney",
+  "license": "CC0-1.0",
+  "licenseEvidence": [
+    {
+      "url": "https://kenney.nl/assets/nature-kit",
+      "catalog": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/catalog.json",
+      "catalogSha256": "320e6e9909bfc54b8922716d85ae6e7642f2bfeb7a0b7d9f2500ed3a6ffbfee1",
+      "credits": "https://raw.githubusercontent.com/rawprogress/fable-cities/main/public/assets/CREDITS.md",
+      "creditsSha256": "76f40a38cb44c178a7f662363027872ef29eac7247be993f6d640f4f14a61fd1"
+    }
+  ],
+  "models": [
+    {
+      "name": "kenney:nature/rock-largeb",
+      "file": "models/rock-largeb.glb",
+      "type": "gltf",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/rock-largeb.glb",
+      "license": "CC0-1.0",
+      "sha256": "caa8b025833d4dabf6d98fe2e96cf2fbd886693ac990df0db75f9d827194374b",
+      "bytes": 8560
+    },
+    {
+      "name": "kenney:nature/rock-larged",
+      "file": "models/rock-larged.glb",
+      "type": "gltf",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/rock-larged.glb",
+      "license": "CC0-1.0",
+      "sha256": "e4fefd8d8d7deab42be61bd222bcd088330012f0025789146b81f25a46095ffd",
+      "bytes": 7992
+    },
+    {
+      "name": "kenney:nature/rock-largee",
+      "file": "models/rock-largee.glb",
+      "type": "gltf",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/rock-largee.glb",
+      "license": "CC0-1.0",
+      "sha256": "8207ce8100b7c756e55e67bee030edadeb332d7d72220027b5818f1987039def",
+      "bytes": 6464
+    },
+    {
+      "name": "kenney:nature/rock-tallb",
+      "file": "models/rock-tallb.glb",
+      "type": "gltf",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/rock-tallb.glb",
+      "license": "CC0-1.0",
+      "sha256": "b3fb7899c317a3b026fa6ced0e1eaaa596d9dd0d95efeacfb5e05d25322f19b9",
+      "bytes": 14060
+    }
+  ]
+}

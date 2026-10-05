@@ -10,6 +10,7 @@ redistributed, including in commercial games. Credit is included as a courtesy.
 | `grass.webp` | Lennart Demes / [ambientCG Grass004](https://ambientcg.com/view?id=Grass004) | Resized to 256 × 256, sunny green palette, WebP |
 | `sky-reflections.webp` | Greg Zaal (original), Jarod Guest (sky edits) / [Poly Haven Kloofendal 48d Partly Cloudy (Pure Sky)](https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky) | Tonemapped HDR to a 256 × 128 WebP reflection map |
 | `nature.bin`, `nature.json` | [Kenney Nature Kit](https://kenney.nl/assets/nature-kit): `tree_default`, `tree_oak`, `tree_pineSmallB` | Geometry normalized to 4.5 m, materials combined into linear vertex colors, baked underside shading; oak also supplies a pink blossom variant |
+| `assets/courses/packs/shared/models/*.glb` | [Kenney Car Kit](https://kenney.nl/assets/car-kit): `kart-oobi`, `kart-oodi`, `kart-ooli`, `kart-oopi`, `kart-oozi` | Local glTF models retain Kenney's embedded color atlas; runtime normalizes to 1 m, then scales and rotates the models for the game's kart coordinate system |
 
 Sources were retrieved through public GitHub distributions:
 
@@ -17,9 +18,10 @@ Sources were retrieved through public GitHub distributions:
 - Models: [Hidencod/tge-assets](https://github.com/Hidencod/tge-assets), distributed under CC0 with Kenney attribution.
 
 The sources and their exact SHA-256 hashes, alongside hashes of runtime files,
-are recorded in `manifest.json`. `tools/prepare-assets.py` reproduces the
-derivatives with Python 3, Pillow and numpy. Source downloads stay in its
-temporary source directory and are not shipped to the browser.
+are recorded in `manifest.json` and `assets/courses/packs/shared/manifest.json`.
+`tools/prepare-assets.py` and `tools/prepare-shared-assets.py` reproduce the
+local asset sets. Source downloads stay out of the browser's runtime network
+path; the compact glTF files required by the game are bundled locally.
 
 The kart number atlas, sky gradient, signs, flames, and remaining procedural
 graphics are original Turbo Trail artwork. Three.js and fonts retain their

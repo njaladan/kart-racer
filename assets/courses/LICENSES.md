@@ -65,3 +65,20 @@ The sources use material colors with no texture maps or rigging to discard.
 
 The preparation script is project code; it does not change the license of source
 assets or impose restrictions on these CC0 derivatives.
+
+## Shared racers
+
+Author: **Kenney**, Car Kit: https://kenney.nl/assets/car-kit
+
+The checked-in GLB files `assets/courses/packs/shared/models/kart-oobi.glb`,
+`kart-oodi.glb`, `kart-ooli.glb`, `kart-oopi.glb`, and `kart-oozi.glb` are CC0
+1.0. They preserve the pack's embedded color atlas and separate wheel meshes;
+the local `manifest.json` records each pinned download URL, byte size, and
+SHA-256 hash. Recreate the files with:
+
+```sh
+python tools/prepare-shared-assets.py
+```
+
+Three.js r180's GLTFLoader and BufferGeometryUtils are vendored under
+`vendor/three/addons/` under the existing Three.js MIT license.

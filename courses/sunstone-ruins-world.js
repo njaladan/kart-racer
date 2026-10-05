@@ -24,17 +24,44 @@ export function buildWorld(context) {
   const rock=new THREE.IcosahedronGeometry(1,0);
   const sphere=new THREE.SphereGeometry(1,12,8);
   const ring=new THREE.RingGeometry(.93,1,40);ring.rotateX(-Math.PI/2);
-  const importedRockMaterials=new Map();
+  const rockMaterials=new Map();
   function importedRock(name,parent,position,size) {
-    const model=kit.asset(name,parent,position);
-    model.geometry.computeBoundingBox();
-    const dimensions=model.geometry.boundingBox.getSize(new THREE.Vector3());
-    model.scale.set(size[0]/dimensions.x,size[1]/dimensions.y,size[2]/dimensions.z);
-    if(!importedRockMaterials.has(name)) {
-      const mat=model.material.clone();mat.color.set(name==='rock-a'?'#d9b78b':'#be9d7c');
-      mat.roughness=.94;importedRockMaterials.set(name,mat);
+    // Kenney's faceted rock forms are split across several meshes in glTF.
+    // Scale the whole authored silhouette, and tint cloned materials so each
+    // canyon cluster keeps the warm sandstone palette without flattening its
+    // facet shading or mutating the shared asset cache.
+    const model=kit.asset(`kenney:nature/${name}`,parent,position,size);
+    const tint=name==='rock-tallb'?'#c7a37a':name==='rock-largee'?'#d9b78b':'#be9d7c';
+    model.traverse(child=>{
+      if(!child.isMesh)return;
+      const originals=Array.isArray(child.material)?child.material:[child.material];
+      const clones=originals.map(source=>{
+        if(!rockMaterials.has(source))rockMaterials.set(source,new Map());
+        const variants=rockMaterials.get(source);
+        if(!variants.has(tint)) {
+          const mat=source.clone();mat.color.set(tint);mat.roughness=.94;
+          variants.set(tint,mat);
+        }
+        return variants.get(tint);
+      });
+      child.material=Array.isArray(child.material)?clones:clones[0];
+    });
+    return model;
+  }
+  function beddedLayerGeometry(width,height,phase,front=7.9) {
+    const geometry=new THREE.BufferGeometry(),positions=[],indices=[],segments=8;
+    for(let i=0;i<=segments;i++) {
+      const x=-width/2+width*i/segments;
+      const wobble=Math.sin(i*1.71+phase)*.22+Math.sin(i*.73+phase*2)*.12;
+      const z=front+wobble;
+      positions.push(x,height+wobble*.35,z,x,height+1.15+wobble,z-.13);
+      if(i<segments) {
+        const a=i*2,b=a+1,c=a+2,d=a+3;
+        indices.push(a,c,b,b,c,d,a,b,c,b,d,c);
+      }
     }
-    model.material=importedRockMaterials.get(name);return model;
+    geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
+    geometry.setIndex(indices);geometry.computeVertexNormals();return geometry;
   }
   // Give dunes actual wind-sculpted ridges, rather than a repeated oval mound.
   const duneGeometry=new THREE.PlaneGeometry(2,2,18,14);duneGeometry.rotateX(-Math.PI/2);
@@ -135,15 +162,19 @@ export function buildWorld(context) {
   // fragments; low shelves leave the S-bend's exit visible from kart height.
   for(let i=0;i<28;i++) {
     const t=sectorT(1,(i+.5)/28),side=i%2?1:-1,g=grounded(t,side*30,12);if(!g)continue;
-    const wall=importedRock(i%3?'rock-a':'rock-b',g,[0,-4,0],[14,22+(i%3)*3,16]);wall.rotation.y=i*.9;
+    const wall=importedRock(i%3?'rock-largeb':'rock-tallb',g,[0,-4,0],[14,22+(i%3)*3,16]);wall.rotation.y=i*.9;
     for(let band=0;band<4;band++) {
       const ledge=box(band%2?chalk:dark,g,[0,1.5+band*4,0],[11,.4+(band%2)*.2,9]);ledge.rotation.y=i*.9;
+      if(band<3) {
+        const seam=mesh(beddedLayerGeometry(11,band*5-1.5,i*1.7+band),band%2?dark:stone,g);
+        seam.rotation.y=i*.9;
+      }
     }
     for(let j=0;j<3;j++)mesh(rock,j%2?stone:chalk,g,[-5+j*5,-.2,7],[2+j*.7,1.5,2]);
   }
   for(let i=0;i<15;i++) {
     const g=grounded(sectorT(2,(i+.5)/15),-29,10);if(!g)continue;
-    importedRock(i%2?'rock-a':'rock-b',g,[0,-4,0],[14,14,10]);
+    importedRock(i%2?'rock-largee':'rock-largeb',g,[0,-4,0],[14,14,10]);
     box(chalk,g,[0,1.5,0],[12,.5,8]);
     for(let j=0;j<3;j++)mesh(cone,leaf,g,[-4+j*4,.7,3],[.7,1.7,.7]);
   }
@@ -157,6 +188,22 @@ export function buildWorld(context) {
       for(let x=-18+i*3;x<=18-i*3;x+=6) {
         box(dark,temple,[x,3.3+i*6,front-.06],[.25,2.8,.12]);
         const carving=box(gold,temple,[x,4+i*6,front-.18],[1.3,1.3,.2]);carving.rotation.z=Math.PI/4;
+      }
+      // Recessed pilasters break the flat block face into architectural bays.
+      // The center stays clear for the road, stairs and sun-seal sightline.
+      const bayWidth=(54-i*9)/4;
+      for(const x of [-1.45,-.55,.55,1.45].map(f=>f*bayWidth)) {
+        const y=3+i*6,frontZ=front-.38;
+        box(dark,temple,[x,y+.2,frontZ-.03],[1.9,5.7,.22]);
+        mesh(new THREE.CylinderGeometry(.76,.92,5,10),gold,temple,[x,y+.15,frontZ-.22]);
+        for(const h of [y-2.55,y+2.55]) {
+          box(chalk,temple,[x,h,frontZ-.25],[2.2,.38,.78]);
+          box(stone,temple,[x,h+.28,frontZ-.25],[1.65,.18,.58]);
+        }
+        for(let flute=0;flute<5;flute++) {
+          const mark=box(chalk,temple,[x-.48+flute*.24,y+.1,frontZ-.76],[.07,3.9,.05]);
+          mark.rotation.z=(flute-2)*.025;
+        }
       }
       // Roof cornice and corner blocks make the mass read as built masonry.
       for(const x of [-1,1])box(chalk,temple,[x*(25-i*4.5),4+i*6,0],[1,3,40-i*7]);
@@ -252,7 +299,7 @@ export function buildWorld(context) {
     const edge=track.surfaceAt(t).rightEdge;
     const g=grounded(t,side>0?edge+23:-37,19);if(!g)continue;
     const d=mesh(duneGeometry,i%3?sand:sandShade,g,[0,-.4,0],[17+(i%3)*2,12+(i%4),14]);d.rotation.y=i*.44;
-    if(i%5===0)importedRock('rock-b',g,[10,-1,0],[5,4,5]);
+    if(i%5===0)importedRock('rock-larged',g,[10,-1,0],[5,4,5]);
   }
   for(const f of [.28,.65]) {
     const t=sectorT(5,f),g=grounded(t,track.surfaceAt(t).rightEdge+3,1.5);if(!g)continue;

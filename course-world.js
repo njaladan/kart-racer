@@ -10,7 +10,7 @@ import { TRACK, COURSE_LENGTH, SECTIONS, frameAt, poseAt, roadHalfWidth,
 import { cartAt } from './hazards.js';
 
 // Every road edge, rail, shortcut and moving prop uses the simulation's data.
-export function addCourseWorld(scene, renderer, mats, textures, nature = null) {
+export function addCourseWorld(scene, renderer, mats, textures, nature = null, assets = {models:{}}) {
   const scenery = new THREE.Group();
   scene.add(scenery);
   let seed = 8127;
@@ -305,7 +305,7 @@ export function addCourseWorld(scene, renderer, mats, textures, nature = null) {
     batchStaticMeshes(g);
   }
   const life=buildWindmillLife({THREE,scene,scenery,track:activeTrack,
-    kit:createCourseKit(scenery,activeTrack),textures});
+    kit:createCourseKit(scenery,activeTrack,assets),textures});
   batchScenery(scenery,[mill,...life.animated]);
   return {
     update(time) {

@@ -9,7 +9,6 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
   const yellow=material('#ffe19e',{emissive:'#ffb85e',emissiveIntensity:.26});
   const glass=material('#9cdef1',{metalness:.38,roughness:.2});
   const rock=material('#9bb1c5',{map:textures.stone}), amber=material('#ffaf45',{emissive:'#df7900',emissiveIntensity:.3});
-  const pineDark=material('#385d69'), pineLight=material('#557d80');
   const cone=new THREE.ConeGeometry(1,1,9), sphere=new THREE.SphereGeometry(1,10,7);
   const cylinder=new THREE.CylinderGeometry(1,1,1,10), clothGeo=new THREE.PlaneGeometry(1,1,8,3);
   const edgeOffset=(t,side,margin)=>side*(side>0?track.surfaceAt(t).rightEdge:-track.surfaceAt(t).leftEdge)+side*margin;
@@ -35,6 +34,8 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
       for(const x of [-4.56,4.56])box(bark,g,[x,y,0],[.13,.1,11.5]);
     }
     for(const x of [-4.3,4.3])for(const z of [-5.5,5.5])box(cream,g,[x,3.2,z],[.28,5.7,.25]);
+    // A real wreath gives the village a small, readable festival accent.
+    asset('kenney:holiday-kit/wreath',g,[0,4.2,-5.91],[1.35,1.35,.3]);
     for(const x of [-2.65,2.65]) {
       const r=box(roof,g,[x,6.35,0],[6.1,.35,12.7]);r.rotation.z=x>0?-.48:.48;
       const cap=box(snow,g,[x,6.63,0],[6.4,.25,12.8]);cap.rotation.z=r.rotation.z;
@@ -62,21 +63,17 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
   for(const f of [.64,.88])chalet(sectorT(5,f),-1);
   chalet(sectorT(2,.84),-1,true);
 
+  const winterTrees=[
+    'kenney:holiday-kit/tree_pine_snow',
+    'kenney:holiday-kit/tree_pine_snow_round',
+    'kenney:holiday-kit/tree_pine_snowed',
+    'kenney:holiday-kit/tree_decorated',
+  ];
   function pine(t,side,size,depth=0,index=0) {
     const g=landAt(t,edgeOffset(t,side,8+size*2.5+depth));g.rotation.y+=index*.8;
     const height=10.5*size;
-    asset('pine',g,[0,0,0],[height,height,height]);
-    mesh(cylinder,bark,g,[0,.12*height,0],[.028*height,.24*height,.028*height]);
-    for(let tier=0;tier<4;tier++) {
-      const y=(.35+tier*.19)*height,r=(.2-tier*.045)*height;
-      mesh(cone,tier%2?pineLight:pineDark,g,[0,y-.03*height,0],[r,.30*height,r]);
-      mesh(cone,snow,g,[0,y+.055*height,0],[r*.88,.20*height,r*.88]);
-      for(let branch=0;branch<4;branch++) {
-        const angle=branch*Math.PI/2+tier*.7;
-        const b=box(bark,g,[Math.cos(angle)*r*.5,y-.14*height,Math.sin(angle)*r*.5],[r*1.1,.1,.1]);b.rotation.y=-angle;b.rotation.z=.17;
-      }
-    }
-    mesh(sphere,snow,g,[0,.1,0],[size*2.3,.32,size*1.9]);
+    const model=winterTrees[Math.abs(index+(side>0?1:0))%winterTrees.length];
+    asset(model,g,[0,0,0],[height,height,height]);
   }
   // Two irregular depth layers make a canopy instead of evenly spaced cones.
   for(let i=0;i<30;i++)for(const side of [-1,1]) {
@@ -114,10 +111,26 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
   }
   for(const s of [2,3])for(let i=0;i<8;i++)for(const side of [-1,1]) {
     const t=sectorT(s,(i+.5)/8),g=landAt(t,edgeOffset(t,side,9));
-    asset(i%2?'rock-a':'rock-b',g,[0,-.5,0],[2.7,3.2,2.2]);
-    mesh(sphere,snow,g,[0,2.1,0],[4.5,.65,3.1]);
-    if(i%2===0)mesh(sphere,snow,g,[side*2,.5,3],[4.2,1.1,3.2]);
+    const model=i%3===0?'large':i%3===1?'medium':'small';
+    asset(`kenney:holiday-kit/rock_formation_${model}`,g,[0,-.5,0],[2.7,3.2,2.2]);
   }
+
+  // Little resort props use the same winter-festival kit as the trees and
+  // rocks. All are outside the physical course edge and clear of the camera.
+  for(const [fraction,side,kind] of [[.19,-1,'fancy'],[.47,1,'plain'],[.76,-1,'plain']]) {
+    const g=landAt(sectorT(0,fraction),edgeOffset(sectorT(0,fraction),side,15));
+    asset(`kenney:holiday-kit/snowman${kind==='fancy'?'_fancy':''}`,g,[0,0,0],[2.25,2.25,2.25]);
+  }
+  for(const [fraction,side] of [[.29,1],[.70,-1]]) {
+    const g=landAt(sectorT(0,fraction),edgeOffset(sectorT(0,fraction),side,18));
+    asset('kenney:holiday-kit/sled',g,[0,0,0],[2.2,2.2,2.2]);
+    asset('kenney:holiday-kit/present',g,[2.25,.05,.35],[.8,.8,.8]);
+    asset('kenney:holiday-kit/present_round',g,[-2.2,.05,-.25],[.8,.8,.8]);
+  }
+  const festivalPole=landAt(sectorT(0,.52),edgeOffset(sectorT(0,.52),-1,24));
+  asset('kenney:holiday-kit/festivus_pole',festivalPole,[0,0,0],[3.2,3.2,3.2]);
+  const villageLights=landAt(sectorT(0,.51),edgeOffset(sectorT(0,.51),1,22));
+  asset('kenney:holiday-kit/lights_multi',villageLights,[0,5,0],[5.8,1.8,1.8]);
 
   // Lift follows the forest/climb beside the road; every cable crossing stays
   // 19 m above the authored surface and every support stands outside its edge.

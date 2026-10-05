@@ -315,7 +315,7 @@ import {
   const karts = [];
   const buildKartMesh = createKartBuilder({
     scene,
-    mats,
+    models: courseAssets.models,
     textures: { ...textures, environment: assets.environment },
     shadowTexture,
     paintColors: [
