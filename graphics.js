@@ -44,10 +44,15 @@ export async function loadGraphicsAssets(renderer) {
   if (sky) {
     sky.mapping = THREE.EquirectangularReflectionMapping;
     const generator = new THREE.PMREMGenerator(renderer);
-    // Filter once at startup. Only the small kart surfaces use this map.
-    environment = generator.fromEquirectangular(sky);
-    generator.dispose();
-    sky.dispose();
+    try {
+      // Filter once at startup. Only the small kart surfaces use this map.
+      environment = generator.fromEquirectangular(sky);
+    } catch (error) {
+      console.warn('Using direct lighting without optional kart reflections', error);
+    } finally {
+      generator.dispose();
+      sky.dispose();
+    }
   }
   return { grass, asphalt, nature, environment: environment?.texture ?? null };
 }
