@@ -17,10 +17,6 @@ export function bindGameInput({
   const heldPointers = new Map();
   const touchButtons = [...documentRef.querySelectorAll("#touch-controls [data-key]")];
   let steeringPointer = null;
-  let tiltEnabled = false;
-  let tiltCenter = null;
-  let tiltSteer = 0;
-  const tiltButton = documentRef.querySelector('[data-action="tilt"]');
 
   pointer.autoThrottle =
     !!windowRef.matchMedia?.("(pointer: coarse)").matches ||
@@ -46,7 +42,6 @@ export function bindGameInput({
     steeringPointer = null;
     pointer.down = false;
     pointer.steer = 0;
-    tiltSteer = 0;
   }
 
   windowRef.addEventListener("keydown", (event) => {
@@ -111,61 +106,9 @@ export function bindGameInput({
     if (isRunning()) onUseItem();
   });
 
-  function setTiltEnabled(enabled) {
-    tiltEnabled = enabled;
-    tiltCenter = null;
-    tiltSteer = 0;
-    pointer.steer = 0;
-    tiltButton.classList.toggle("is-held", enabled);
-    tiltButton.setAttribute("aria-pressed", String(enabled));
-    tiltButton.textContent = enabled ? "TILT ON" : "TILT";
-    tiltButton.setAttribute("aria-label", enabled ? "Disable tilt steering" : "Enable tilt steering");
-  }
-
-  tiltButton.addEventListener("click", async () => {
-    if (tiltEnabled) {
-      setTiltEnabled(false);
-      return;
-    }
-    const Orientation = windowRef.DeviceOrientationEvent;
-    if (!Orientation) {
-      tiltButton.textContent = "NO SENSOR";
-      return;
-    }
-    try {
-      if (typeof Orientation.requestPermission === "function") {
-        const permission = await Orientation.requestPermission();
-        if (permission !== "granted") {
-          tiltButton.textContent = "ALLOW TILT";
-          return;
-        }
-      }
-      setTiltEnabled(true);
-    } catch {
-      tiltButton.textContent = "ALLOW TILT";
-    }
-  });
-
-  windowRef.addEventListener("deviceorientation", (event) => {
-    const orientationAngle =
-      (((windowRef.screen?.orientation?.angle ?? windowRef.orientation ?? 0) % 360) + 360) % 360;
-    const screenAngle = orientationAngle % 180;
-    const sensorAngle = screenAngle === 90 ? event.beta : event.gamma;
-    if (!tiltEnabled || !Number.isFinite(sensorAngle)) return;
-    if (tiltCenter === null) tiltCenter = sensorAngle;
-    const direction = orientationAngle === 90 ? -1 : 1;
-    const angle = (sensorAngle - tiltCenter) * direction;
-    const deadZone = 3;
-    const activeAngle =
-      Math.abs(angle) <= deadZone ? 0 : Math.sign(angle) * (Math.abs(angle) - deadZone);
-    tiltSteer = clamp(activeAngle / 22, -1, 1);
-    if (isRunning() && !pointer.down) pointer.steer = tiltSteer;
-  });
-
   canvas.addEventListener("pointerdown", (event) => {
     event.preventDefault?.();
     if (!isRunning() || steeringPointer !== null) return;
-    if (pointer.autoThrottle && tiltEnabled) return;
     steeringPointer = event.pointerId;
     pointer.down = true;
     pointer.x = event.clientX;
@@ -181,7 +124,7 @@ export function bindGameInput({
       if (event.pointerId !== steeringPointer) return;
       steeringPointer = null;
       pointer.down = false;
-      pointer.steer = tiltEnabled ? tiltSteer : 0;
+      pointer.steer = 0;
     });
   }
 
