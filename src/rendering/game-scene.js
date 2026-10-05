@@ -7,6 +7,11 @@ import { addAmbientWeather } from "./ambient-weather.js";
 import { addRaceFinish } from "./display-finish.js";
 import { loadCourseAssets } from "./course-assets.js";
 import { loadLivingAssets } from "./living-assets.js";
+import { createCourseEnvironments } from "./reflection-environments.js";
+import { createCourseLighting } from "./course-lighting.js";
+import { createPostProcessing } from "./postprocessing.js";
+import { createGraphicsQuality } from "./graphics-quality.js";
+import { installSurfaceDetail } from "./surface-detail.js";
 
 const SHARED_TEXTURES = [
   "grass",
@@ -97,6 +102,7 @@ export async function createGameScene({ canvas, course, viewport = window }) {
     0.1,
     750,
   );
+  camera.layers.enable(1);
   const renderer = new THREE.WebGLRenderer({
     canvas,
     antialias: true,
@@ -148,6 +154,10 @@ export async function createGameScene({ canvas, course, viewport = window }) {
 
   const followShadow = createStableShadowFollower(sun);
   const sharedAssets = await loadGraphicsAssets(renderer);
+  const environmentMaps = createCourseEnvironments(renderer, course.theme);
+  sharedAssets.environment = environmentMaps.exterior;
+  scene.environment = environmentMaps.exterior;
+  scene.environmentIntensity = 0.5;
   const sky = addGradientSky(scene, course.theme);
   const weather = addAmbientWeather(scene, course.theme);
   const displayFinish = addRaceFinish(scene);
@@ -164,6 +174,26 @@ export async function createGameScene({ canvas, course, viewport = window }) {
   textures.canvas ||= textures.fabric;
   textures.metal ||= textures.paint;
 
+  const materials = createMaterials(course.theme, textures, sharedAssets.environment);
+  installSurfaceDetail(materials.grass, { kind: "terrain", strength: 0.18 });
+  installSurfaceDetail(materials.road, { kind: "road", strength: 0.08 });
+  installSurfaceDetail(materials.roadside, { kind: "road", strength: 0.14 });
+  const lighting = createCourseLighting(scene, {
+    theme: course.theme,
+    ambientLight,
+    sun,
+    environmentMaps,
+  });
+  const postprocessing = createPostProcessing(renderer, course.theme);
+  const graphicsQuality = createGraphicsQuality({
+    renderer,
+    sun,
+    weather,
+    postprocessing,
+    lighting,
+  });
+  renderer.info.autoReset = false;
+
   return {
     scene,
     camera,
@@ -171,13 +201,18 @@ export async function createGameScene({ canvas, course, viewport = window }) {
     pixelRatio,
     followShadow,
     ambientLight,
+    sun,
+    lighting,
+    postprocessing,
+    graphicsQuality,
+    environmentMaps,
     sky,
     weather,
     displayFinish,
     sharedAssets,
     courseAssets,
     textures,
-    materials: createMaterials(course.theme, textures, sharedAssets.environment),
+    materials,
     createMaterial,
   };
 }

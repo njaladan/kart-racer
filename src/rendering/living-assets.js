@@ -93,6 +93,8 @@ export function decodeLivingModels(index, data, maps = {}) {
           normalScale: new THREE.Vector2(0.55, 0.55),
           roughnessMap: maps[m.armMap] || null,
           metalnessMap: maps[m.armMap] || null,
+          aoMap: maps[m.armMap] || null,
+          aoMapIntensity: 0.85,
         }),
     );
     for (const part of definition.primitives) {

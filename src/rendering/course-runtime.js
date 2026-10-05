@@ -5,6 +5,7 @@ import { buildWindmillWorld } from "../courses/windmill-wilds/world.js";
 import { createRailGeometry } from "./course-rails.js";
 import { addDetailedScenery } from "./detailed-scenery.js";
 import { TERRAIN_VERGE_WIDTH } from "./terrain-height.js";
+import { createSceneryDetailController } from "./scenery-lod.js";
 
 // Shared geometry uses exactly the surface/edge queries used by karts and shells.
 export function buildCourseWorld({
@@ -28,7 +29,7 @@ export function buildCourseWorld({
       assets,
     });
     addDetailedScenery(scene, track, assets);
-    return world;
+    return { ...world, ...createSceneryDetailController(scene) };
   }
   const scenery = new THREE.Group();
   scene.add(scenery);
@@ -77,6 +78,8 @@ export function buildCourseWorld({
   const ground = mesh(new THREE.PlaneGeometry(1800, 1800), mats.grass, scenery, [0, -1.7, 0]);
   ground.rotation.x = -Math.PI / 2;
   ground.castShadow = false;
+  ground.name = "Course ground";
+  ground.userData.bakeReceiver = true;
   const uvGround = ground.geometry.attributes.uv;
   for (let i = 0; i < uvGround.count; i++)
     uvGround.setXY(i, uvGround.getX(i) * 120, uvGround.getY(i) * 120);
@@ -98,7 +101,7 @@ export function buildCourseWorld({
           p.y = THREE.MathUtils.lerp(
             p.y - 0.06,
             -1.7,
-            THREE.MathUtils.smoothstep(distance, 0, TERRAIN_VERGE_WIDTH),
+            THREE.MathUtils.clamp(distance / TERRAIN_VERGE_WIDTH, 0, 1),
           );
         } else p.addScaledVector(f.up, lift);
         positions.push(p.x, p.y, p.z);
@@ -126,6 +129,8 @@ export function buildCourseWorld({
     geo.computeVertexNormals();
     const m = mesh(geo, mat);
     m.castShadow = false;
+    m.name = terrain ? "Course terrain verge" : "Course road surface";
+    m.userData.bakeReceiver = true;
   }
   ribbon(
     (t) => -track.roadHalfWidth(t) - 0.55,
@@ -210,6 +215,8 @@ export function buildCourseWorld({
   batchScenery(scenery, world.animated || []);
   addDetailedScenery(scene, track, assets);
   return {
+    ...createSceneryDetailController(scene),
+    animated: world.animated || [],
     update(time) {
       warningMaterial.emissiveIntensity = cartAt(time).warning ? 1.5 + Math.sin(time * 12) : 0;
       world.update?.(time);

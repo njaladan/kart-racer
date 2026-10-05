@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "course": "sunstone-ruins",
+  "lighting": "indirect.png",
+  "height": "height.png",
+  "bounds": [
+    -311.83000000000004,
+    -272.27,
+    608.8800000000001,
+    527.87
+  ],
+  "heightRange": [
+    -12,
+    75
+  ],
+  "bounceScale": 0.65,
+  "resolution": 512,
+  "samples": 8,
+  "radius": 22.0,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded.",
+  "sourceSceneSha256": "c4c5cff7d45b573cf5710db490eafa91cda77995383db25064ff5f681aa6cd3e",
+  "triangles": 375384,
+  "lights": 6,
+  "outputs": [
+    {
+      "file": "indirect.png",
+      "bytes": 206059,
+      "sha256": "b488b4825a76202e042c69b3d9e98c2ec0735d18b0d378a995fe497004e619fa"
+    },
+    {
+      "file": "height.png",
+      "bytes": 314966,
+      "sha256": "2ee94cc3bdf44ee03b967137f6b22708ad1c87c4273645d737714788190389fc"
+    }
+  ]
+}

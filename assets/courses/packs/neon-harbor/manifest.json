@@ -34,6 +34,76 @@
       "name": "kenney:city-kit-industrial/detail-tank",
       "file": "models/detail-tank.glb",
       "type": "gltf"
+    },
+    {
+      "name": "harbor:housing-a",
+      "file": "models/housing-a.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "harbor:housing-b",
+      "file": "models/housing-b.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "harbor:market-house",
+      "file": "models/market-house.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "harbor:market-house-c",
+      "file": "models/market-house-c.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "harbor:bench",
+      "file": "models/bench.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "harbor:lamp",
+      "file": "models/lamp.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "harbor:aircon",
+      "file": "models/aircon.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "harbor:kiosk",
+      "file": "models/kiosk.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "harbor:pallet",
+      "file": "models/pallet.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "harbor:palm",
+      "file": "models/palm.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "harbor:tetrapod",
+      "file": "models/tetrapod.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "harbor:cargo-ferry",
+      "file": "models/cargo-ferry.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "harbor:gantry-crane",
+      "file": "models/gantry-crane.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "harbor:container",
+      "file": "models/container.glb",
+      "type": "gltf"
     }
   ],
   "sources": [
@@ -116,6 +186,146 @@
       "download": "https://raw.githubusercontent.com/IronRon/Power-Up-the-City/0dc510bea12cdfb473f29f0c6f211bd2318aff6a/assets/kenney_city-kit-industrial_1.0/Models/GLB%20format/Textures/colormap.png",
       "sha256": "4a912ef8e95fbec4ac0cacc295b9221a4b66c482d4f90bec4e2277689c21a623",
       "bytes": 11107
+    },
+    {
+      "file": "models/housing-a.glb",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on; STK contributors",
+      "license": "CC-BY-SA-4.0",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/tag/1.4",
+      "sourceFile": "library/stklib_modernHousing_a/stklib_modernHousing_a_main.spm",
+      "modifications": "Shared textures replaced by original trim textures; browser-budget simplification; true ray-occlusion vertex bake; GLB conversion.",
+      "bytes": 40496,
+      "sha256": "7bba5424e53482a668f1b5f4c190a188ed97ecdb65c6b381f0cb2e2970dbc1b2"
+    },
+    {
+      "file": "models/housing-b.glb",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on; STK contributors",
+      "license": "CC-BY-SA-4.0",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/tag/1.4",
+      "sourceFile": "library/stklib_modernHousing_b/stklib_modernHousing_b.spm",
+      "modifications": "Shared textures replaced by original trim textures; browser-budget simplification; true ray-occlusion vertex bake; GLB conversion.",
+      "bytes": 30540,
+      "sha256": "9199eea332cbb38b64af864f93b074a53c40d78a4320bf317deca133fb741a5c"
+    },
+    {
+      "file": "models/market-house.glb",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on; STK contributors",
+      "license": "CC-BY-SA-4.0",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/tag/1.4",
+      "sourceFile": "library/stklib_silvianHouse_a/stklib_silvianHouse_a_medium.spm",
+      "modifications": "Shared textures replaced by original trim textures; browser-budget simplification; true ray-occlusion vertex bake; GLB conversion.",
+      "bytes": 136812,
+      "sha256": "7aa74e4e89b7fbbb2f6dd878eb90f7f4722bab7aeffd5d0a0846a0f62963a5cf"
+    },
+    {
+      "file": "models/market-house-c.glb",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on; STK contributors",
+      "license": "CC-BY-SA-4.0",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/tag/1.4",
+      "sourceFile": "library/stklib_silvianHouse_c/stklib_silvianHouse_c_main.spm",
+      "modifications": "Shared textures replaced by original trim textures; browser-budget simplification; true ray-occlusion vertex bake; GLB conversion.",
+      "bytes": 255844,
+      "sha256": "6ce39f0afd1155afa3fb9c6f0091ea704fa793f8006849b388040ecf7192e111"
+    },
+    {
+      "file": "models/bench.glb",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on; STK contributors",
+      "license": "CC-BY-SA-4.0",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/tag/1.4",
+      "sourceFile": "library/stklib_bench_a/stklib_bench_a_main.spm",
+      "modifications": "Shared textures replaced by original trim textures; browser-budget simplification; true ray-occlusion vertex bake; GLB conversion.",
+      "bytes": 53028,
+      "sha256": "190863e607e34d7a5055b27411973393f1e42259d1c3403740641d740381b771"
+    },
+    {
+      "file": "models/lamp.glb",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on; STK contributors",
+      "license": "CC-BY-SA-4.0",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/tag/1.4",
+      "sourceFile": "library/hd_modernStreetLamp_a/hd_modernStreetLamp_a_main.spm",
+      "modifications": "Shared textures replaced by original trim textures; browser-budget simplification; true ray-occlusion vertex bake; GLB conversion.",
+      "bytes": 377552,
+      "sha256": "2aa554aa08ca54974f1508f7be6e9659d860c149721f5fb6a07fafee824a455c"
+    },
+    {
+      "file": "models/aircon.glb",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on; STK contributors",
+      "license": "CC-BY-SA-4.0",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/tag/1.4",
+      "sourceFile": "library/stklib_airConditioner_a/stklib_airConditioner_a_main.spm",
+      "modifications": "Shared textures replaced by original trim textures; browser-budget simplification; true ray-occlusion vertex bake; GLB conversion.",
+      "bytes": 61892,
+      "sha256": "5688569a09181ef3ce2c63a958a34928bc3a88fc897732decc6424978787f5bb"
+    },
+    {
+      "file": "models/kiosk.glb",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on; STK contributors",
+      "license": "CC-BY-SA-4.0",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/tag/1.4",
+      "sourceFile": "library/stklib_silvianKiosk_a/stklib_silvianKiosk_a_main.spm",
+      "modifications": "Shared textures replaced by original trim textures; browser-budget simplification; true ray-occlusion vertex bake; GLB conversion.",
+      "bytes": 36888,
+      "sha256": "9aab86eee69bdde0202fd61d2bde9d72bfedbccf37a4ac730be19c15002cdc95"
+    },
+    {
+      "file": "models/pallet.glb",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on; STK contributors",
+      "license": "CC-BY-SA-4.0",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/tag/1.4",
+      "sourceFile": "library/stklib_pallet_a/stklib_pallet_a.spm",
+      "modifications": "Shared textures replaced by original trim textures; browser-budget simplification; true ray-occlusion vertex bake; GLB conversion.",
+      "bytes": 40380,
+      "sha256": "e9301fc0bb3f580c226ea4bd9696ab3ce233c682fad2140cd2d7cf3c3f2c0683"
+    },
+    {
+      "file": "models/palm.glb",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on; STK contributors",
+      "license": "CC-BY-SA-3.0",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/tag/1.4",
+      "sourceFile": "library/hd_palmTree_a/hd_palmTree_a_main.spm",
+      "modifications": "Shared textures replaced by original trim textures; browser-budget simplification; true ray-occlusion vertex bake; GLB conversion.",
+      "bytes": 1990628,
+      "sha256": "b595e0291725c3f97a50df43db1ffd3049f6f90acb5b3a32cdc56fa713277b8f"
+    },
+    {
+      "file": "models/tetrapod.glb",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on; STK contributors",
+      "license": "CC-BY-SA-4.0",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/tag/1.4",
+      "sourceFile": "library/stklib_tetrapodUnderwater_a/stklib_tetrapodUnderwater_a_main.spm",
+      "modifications": "Shared textures replaced by original trim textures; browser-budget simplification; true ray-occlusion vertex bake; GLB conversion.",
+      "bytes": 7716,
+      "sha256": "0223bfbaf8d0fb8309abcdfdaa6244c05ae2d65f4daeef69e98091da809f2290"
+    },
+    {
+      "file": "models/cargo-ferry.glb",
+      "author": "Turbo Trail contributors",
+      "license": "CC0-1.0",
+      "source": "tools/prepare-harbor-fidelity.py",
+      "sourceFile": "offline authored mesh",
+      "modifications": "Shared textures replaced by original trim textures; browser-budget simplification; true ray-occlusion vertex bake; GLB conversion.",
+      "bytes": 143988,
+      "sha256": "cdc1360c6189f28cd2e60a79fe190c96a8c00615f92ba68eeedefdee42ea1ecb"
+    },
+    {
+      "file": "models/gantry-crane.glb",
+      "author": "Turbo Trail contributors",
+      "license": "CC0-1.0",
+      "source": "tools/prepare-harbor-fidelity.py",
+      "sourceFile": "offline authored mesh",
+      "modifications": "Shared textures replaced by original trim textures; browser-budget simplification; true ray-occlusion vertex bake; GLB conversion.",
+      "bytes": 183272,
+      "sha256": "3e70712f9ee33d5df8fb98c55c36b06fa1eba775c3b900138cd49944558d2e59"
+    },
+    {
+      "file": "models/container.glb",
+      "author": "Turbo Trail contributors",
+      "license": "CC0-1.0",
+      "source": "tools/prepare-harbor-fidelity.py",
+      "sourceFile": "offline authored mesh",
+      "modifications": "Shared textures replaced by original trim textures; browser-budget simplification; true ray-occlusion vertex bake; GLB conversion.",
+      "bytes": 96172,
+      "sha256": "2c22abf1e11ab40449a2f8cc488127b2741d9188d21b37dd30b40d324cef54f4"
     }
   ]
 }

@@ -61,7 +61,25 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
     const model = assets.models[name];
     if (!model) throw new Error(`Unknown course scenery asset: ${name}`);
     if (model.isObject3D) {
-      const instance = model.clone(true);
+      const inferred = name.endsWith("-near") ? name.slice(0, -5) : name;
+      const lodNames = model.userData.lods || {
+        mid: `${inferred}-mid`,
+        far: `${inferred}-far`,
+      };
+      const variants = [model, assets.models[lodNames.mid], assets.models[lodNames.far]].filter(
+        Boolean,
+      );
+      let instance;
+      if (variants.length > 1) {
+        instance = new THREE.LOD();
+        instance.name = `${name} distance detail`;
+        instance.autoUpdate = false;
+        instance.userData.sceneryLod = true;
+        instance.userData.lodDistances = model.userData.lodDistances || [0, 85, 180];
+        variants.forEach((variant, i) =>
+          instance.addLevel(variant.clone(true), instance.userData.lodDistances[i], 0.12),
+        );
+      } else instance = model.clone(true);
       instance.position.set(...position);
       instance.scale.set(...scale);
       parent.add(instance);
@@ -86,9 +104,13 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
 
 export function batchScenery(scenery, animated = []) {
   scenery.updateMatrixWorld(true);
+  const protectedGroups = [...animated];
+  scenery.traverse((object) => {
+    if (object.isLOD) protectedGroups.push(object);
+  });
   const meshes = [];
   scenery.traverse((m) => {
-    if (m.isMesh && !animated.some((g) => g === m || g.getObjectById(m.id))) meshes.push(m);
+    if (m.isMesh && !protectedGroups.some((g) => g === m || g.getObjectById(m.id))) meshes.push(m);
   });
   const combined = new THREE.Group();
   scenery.add(combined);
@@ -100,7 +122,7 @@ export function batchScenery(scenery, animated = []) {
   // Remove empty source containers left after flattening static scenery.
   const prune = (group) => {
     for (const child of [...group.children]) {
-      if (child.isGroup && !animated.includes(child)) {
+      if (child.isGroup && !protectedGroups.includes(child)) {
         prune(child);
         if (child.children.length === 0) group.remove(child);
       }

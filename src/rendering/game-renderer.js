@@ -10,6 +10,7 @@ import {
   sectionAt,
   trackT,
 } from "../track/track.js";
+import { advanceSurfaceDetails } from "./surface-detail.js";
 import { renderRaceHud } from "../ui/race-hud.js";
 
 /** Own interpolated kart presentation, HUD refresh, camera motion, and drawing. */
@@ -22,6 +23,9 @@ export function createGameRenderer({
   sky,
   weather,
   displayFinish,
+  lighting,
+  postprocessing,
+  graphicsQuality,
   theme = {},
   player,
   bots,
@@ -78,10 +82,37 @@ export function createGameRenderer({
       (bodyLean + hitVibration * 0.42 - kart.bodyGroup.rotation.z) * poseBlend;
     kart.bodyGroup.rotation.x +=
       (-trickPose * 0.35 + hitVibration * 0.22 - kart.bodyGroup.rotation.x) * poseBlend;
-    kart.bodyGroup.position.y =
-      Math.sin(frameState.elapsed * 22) * Math.min(0.025, state.speed * 0.0003) +
-      Math.abs(hitVibration) * 0.3;
     kart.bodyGroup.position.x = hitVibration;
+    const suspension = kart.suspension;
+    if (suspension) {
+      if (!suspension.previousGrounded && state.grounded) suspension.velocity = -0.7;
+      suspension.previousGrounded = state.grounded;
+      const surface = sectionAt(trackT(state.s)).material;
+      const rough = ["gravel", "sand", "snow", "stone", "needles"].includes(surface);
+      const target = state.grounded
+        ? Math.sin(frameState.elapsed * (rough ? 19 : 24)) *
+          Math.min(rough ? 0.045 : 0.015, state.speed * 0.0006)
+        : 0.035;
+      suspension.velocity +=
+        ((target - suspension.compression) * 110 - suspension.velocity * 13) * Math.min(dt, 0.033);
+      suspension.compression = THREE.MathUtils.clamp(
+        suspension.compression + suspension.velocity * dt,
+        -0.11,
+        0.06,
+      );
+      kart.bodyGroup.position.y = suspension.compression + Math.abs(hitVibration) * 0.3;
+      for (const driver of kart.driverParts || []) {
+        driver.object.rotation.z = driver.rotation.z - bodyLean * 0.7;
+        driver.object.rotation.x =
+          driver.rotation.x +
+          Math.sin(frameState.elapsed * 8) * Math.min(0.025, state.speed * 0.0003);
+        driver.object.position.y = driver.position.y - suspension.compression * 0.24;
+      }
+    } else {
+      kart.bodyGroup.position.y =
+        Math.sin(frameState.elapsed * 22) * Math.min(0.025, state.speed * 0.0003) +
+        Math.abs(hitVibration) * 0.3;
+    }
 
     for (const wheel of kart.wheels) {
       wheel.spin.rotation.x += (state.longitudinalSpeed * dt) / wheel.radius;
@@ -125,6 +156,7 @@ export function createGameRenderer({
 
   function render(dt) {
     const frameState = getFrameState();
+    renderer.info?.reset();
     if (!frameState.paused) {
       getLandscape()?.update(frameState.raceTime);
       for (const pad of pads) {
@@ -204,6 +236,9 @@ export function createGameRenderer({
       ambientLight.intensity +=
         ((theme.ambientIntensity ?? 1.55) * (enclosed ? 0.85 : 1) - ambientLight.intensity) *
         atmosphereBlend;
+    lighting?.update(dt, player.worldPos, section, [player, ...bots]);
+    advanceSurfaceDetails(scene, frameState.raceTime);
+    getLandscape()?.updateCamera?.(camera.position, graphicsQuality?.getTier() ?? 3);
     sky?.update(frameState.raceTime);
     weather?.update(frameState.raceTime, camera.position, forest);
     displayFinish?.update(
@@ -215,7 +250,8 @@ export function createGameRenderer({
     followShadow(player.worldPos);
     particles.sync();
     renderer.shadowMap.autoUpdate = !frameState.paused && !frameState.finished;
-    renderer.render(scene, camera);
+    if (postprocessing) postprocessing.render(scene, camera);
+    else renderer.render(scene, camera);
   }
 
   function updateCamera(dt, frameState) {
@@ -229,9 +265,13 @@ export function createGameRenderer({
     const movingForward = player.speed > 8 && player.longitudinalSpeed > 0;
     const travelBlend = player.driftDirection ? 0.75 : 0.35;
     const cameraYaw = movingForward ? yaw + wrapAngle(velocityYaw - yaw) * travelBlend : yaw;
-    const forward = player.spin > 0
-      ? trackForward.copy(frameAt(trackT(player.s)).tangent).setY(0).normalize()
-      : new THREE.Vector3(-Math.sin(cameraYaw), 0, -Math.cos(cameraYaw));
+    const forward =
+      player.spin > 0
+        ? trackForward
+            .copy(frameAt(trackT(player.s)).tangent)
+            .setY(0)
+            .normalize()
+        : new THREE.Vector3(-Math.sin(cameraYaw), 0, -Math.cos(cameraYaw));
     const position = playerKart.root.position;
     const driftCameraTarget =
       frameState.running && player.driftBoost > 0 && player.boost > 0 && player.spin <= 0

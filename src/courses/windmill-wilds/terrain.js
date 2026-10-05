@@ -1,4 +1,5 @@
 import * as THREE from "../../../vendor/three/three.module.js";
+import { createWaterMaterial, installSurfaceDetail } from "../../rendering/surface-detail.js";
 import { createRailGeometry } from "../../rendering/course-rails.js";
 import { TERRAIN_VERGE_WIDTH } from "../../rendering/terrain-height.js";
 import {
@@ -16,7 +17,7 @@ import {
 } from "../../track/track.js";
 
 /** Road ribbons, collision-aligned rails, bridge support, and the lake surface. */
-export function buildWindmillTerrain({ scenery, textures, mats, palette, primitives }) {
+export function buildWindmillTerrain({ scene, scenery, textures, mats, palette, primitives }) {
   const { wood, darkWood, stone, cream, curbRed, curbWhite, railMaterials, bridgeRailMaterial } =
     palette;
   const { mesh, box, groupAt, sectorT, mat } = primitives;
@@ -24,6 +25,9 @@ export function buildWindmillTerrain({ scenery, textures, mats, palette, primiti
   const ground = mesh(new THREE.PlaneGeometry(1800, 1800), mats.grass, scenery, [0, -1.7, 0]);
   ground.rotation.x = -Math.PI / 2;
   ground.castShadow = false;
+  ground.userData.bakeReceiver = true;
+  installSurfaceDetail(mats.grass, { kind: "terrain", scale: 0.045, strength: 0.16 });
+  installSurfaceDetail(mats.road, { kind: "road", scale: 0.05, strength: 0.09 });
   const groundUV = ground.geometry.attributes.uv;
   // World-aligned grass tiles meet the banks without an obvious texture seam.
   const groundPos = ground.geometry.getAttribute("position");
@@ -89,6 +93,7 @@ export function buildWindmillTerrain({ scenery, textures, mats, palette, primiti
     geo.computeVertexNormals();
     const m = mesh(geo, materials);
     m.castShadow = false;
+    m.userData.bakeReceiver = true;
     return m;
   }
   ribbon(
@@ -183,12 +188,15 @@ export function buildWindmillTerrain({ scenery, textures, mats, palette, primiti
   }
   const lakeFrame = poseAt(sectorT(3, 0.38) * TRACK, 39, 0);
   const lake = mesh(
-    new THREE.CircleGeometry(1, 64),
-    new THREE.MeshStandardMaterial({
-      color: "#4aa9bf",
-      roughness: 0.28,
-      metalness: 0.25,
-      map: textures.water,
+    createLakeGeometry(),
+    createWaterMaterial({
+      scene,
+      color: "#409db1",
+      roughness: 0.2,
+      normalMap: textures.water?.userData?.pbr?.normalMap || null,
+      shoreRadius: 1,
+      flow: 0.045,
+      foam: true,
     }),
     scenery,
     [lakeFrame.p.x, -1.55, lakeFrame.p.z],
@@ -198,4 +206,28 @@ export function buildWindmillTerrain({ scenery, textures, mats, palette, primiti
   lake.castShadow = false;
 
   return { lake };
+}
+
+// An irregular authored shoreline replaces the perfect circular disc. UVs are
+// reusable; two normal flows, Fresnel and foam come from the shared water shader.
+function createLakeGeometry() {
+  const n = 96,
+    position = [0, 0, 0],
+    uv = [0.5, 0.5],
+    indices = [];
+  for (let i = 0; i <= n; i++) {
+    const a = (i * Math.PI * 2) / n;
+    const r = 1 + 0.035 * Math.sin(a * 5) + 0.025 * Math.cos(a * 9);
+    const x = Math.cos(a) * r,
+      y = Math.sin(a) * r;
+    position.push(x, y, 0);
+    uv.push(x * 0.5 + 0.5, y * 0.5 + 0.5);
+    if (i < n) indices.push(0, i + 1, i + 2);
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(position, 3));
+  geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+  geometry.setIndex(indices);
+  geometry.computeVertexNormals();
+  return geometry;
 }

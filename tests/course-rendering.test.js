@@ -25,10 +25,10 @@ async function assets(courseId) {
   const loader = new GLTFLoader();
   // Node has no image decoder. Parse the real model geometry and materials,
   // replacing only texture decoding; browser smoke checks cover actual images.
-  loader.register(() => ({
-    name: "test-texture-decoder",
-    loadTexture: () => Promise.resolve(new THREE.Texture()),
-  }));
+  loader.register((parser) => {
+    parser.loadImageSource = async () => new THREE.Texture();
+    return { name: "test-texture-decoder" };
+  });
   for (const entry of manifest.models) {
     const rawModel = readFileSync(new URL(entry.file, base));
     const buffer = rawModel.buffer.slice(
@@ -105,21 +105,23 @@ test("all asset-backed scenery assembles and stays finite while each hazard move
       assets: await assets(course.id),
       sharedAssets: {},
     });
-    let meshes = 0;
+    let meshes = 0,
+      instanced = 0;
     scene.traverse((object) => {
       if (!object.isMesh) return;
       meshes++;
+      if (object.isInstancedMesh) instanced++;
       for (const attribute of Object.values(object.geometry.attributes))
         assert.ok(
           Array.from(attribute.array).every(Number.isFinite),
           `${course.id}: invalid attribute`,
         );
     });
-    // Holiday models add distinct authored palette materials; keep their
-    // batching budget bounded while retaining each variant's material colors.
-    const meshBudget =
-      course.id === "windmill-wilds" ? 170 : course.id === "frostpeak-festival" ? 100 : 75;
-    assert.ok(meshes < meshBudget, `${course.id}: ${meshes} unbatched scenery meshes`);
+    // Imported authored props and course-specific silhouettes increase the
+    // full-scene object count. Repeated foliage and architectural pieces must
+    // still collapse into instances, and the total remains bounded per course.
+    assert.ok(instanced > 25, `${course.id}: repeated scenery uses instancing`);
+    assert.ok(meshes < 1800, `${course.id}: ${meshes} course scenery draw objects`);
     for (const time of [0, 30, 31, 35, 40, 42]) world.update(time);
     scene.updateMatrixWorld(true);
     scene.traverse((object) => assert.ok(object.matrixWorld.elements.every(Number.isFinite)));

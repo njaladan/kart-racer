@@ -125,9 +125,7 @@ export function drive(state, input, surface, dt) {
     // it impossible to steer back onto the road after a boost expires.
     const yawLimit = 2.8;
     const targetYaw =
-      state.spin > 0
-        ? (state.spinDirection || 1) * 15
-        : clamp(desiredYaw, -yawLimit, yawLimit);
+      state.spin > 0 ? (state.spinDirection || 1) * 15 : clamp(desiredYaw, -yawLimit, yawLimit);
     // Human input needs prompt release; AI retains its continuous-correction tuning.
     const yawResponse = state.isPlayer
       ? steeringTarget === 0 || targetYaw * state.yawRate < 0

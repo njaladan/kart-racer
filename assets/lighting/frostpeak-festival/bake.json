@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "course": "frostpeak-festival",
+  "lighting": "indirect.png",
+  "height": "height.png",
+  "bounds": [
+    -330.62,
+    -285.62,
+    613.74,
+    574.31
+  ],
+  "heightRange": [
+    -12,
+    75
+  ],
+  "bounceScale": 0.65,
+  "resolution": 512,
+  "samples": 8,
+  "radius": 22.0,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded.",
+  "sourceSceneSha256": "b8a2e4141267908306bf243e7dd5436845e0f27289f4315c026fead2e389412e",
+  "triangles": 1493642,
+  "lights": 23,
+  "outputs": [
+    {
+      "file": "indirect.png",
+      "bytes": 175698,
+      "sha256": "1f8512537eab3ba949f468ed0f4594054e42d1532700edaf6a55b9457c7955e3"
+    },
+    {
+      "file": "height.png",
+      "bytes": 202585,
+      "sha256": "c2abdb863369d340a41f546a64f385ff682c3e04a4b360a6ee45d1cba3ccf360"
+    }
+  ]
+}

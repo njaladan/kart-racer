@@ -72,3 +72,81 @@ test("shadow following snaps in light space while preserving sun direction", () 
   }
   assert.ok(sun.position.clone().sub(sun.target.position).normalize().distanceTo(direction) < 1e-9);
 });
+
+test("surface, wind and atmospheric modifiers compose without losing earlier bake hooks", async () => {
+  const { installSurfaceDetail, installHeightHaze, installFoliageWind } =
+    await import("../src/rendering/surface-detail.js");
+  const scene = new THREE.Scene();
+  const material = new THREE.MeshStandardMaterial();
+  material.onBeforeCompile = (shader) => {
+    shader.uniforms.bakedMarker = { value: 1 };
+  };
+  installSurfaceDetail(material, { kind: "terrain" });
+  installHeightHaze(material, { terrain: "snow" });
+  installFoliageWind(scene, material);
+  const shader = {
+    vertexShader: THREE.ShaderLib.standard.vertexShader,
+    fragmentShader: THREE.ShaderLib.standard.fragmentShader,
+    uniforms: {},
+  };
+  material.onBeforeCompile(shader);
+  assert.equal(shader.uniforms.bakedMarker.value, 1);
+  assert.ok(shader.uniforms.detailStrength.value > 0);
+  assert.ok(shader.uniforms.hazeStrength.value > 0);
+  assert.equal((shader.vertexShader.match(/vec4 vSurfaceWorldPosition/g) || []).length, 1);
+  assert.equal((shader.vertexShader.match(/vec4 vHazeWorldPosition/g) || []).length, 1);
+  assert.ok(
+    shader.fragmentShader.indexOf("outgoingLight=mix") <
+      shader.fragmentShader.indexOf("#include <tonemapping_fragment>"),
+  );
+  const key = material.customProgramCacheKey();
+  installSurfaceDetail(material, { kind: "terrain" });
+  assert.equal(material.customProgramCacheKey(), key, "shared materials are not patched twice");
+});
+
+test("water keeps dielectric response and pause-safe animation independent of surface UV tiling", async () => {
+  const { createWaterMaterial, advanceSurfaceDetails } =
+    await import("../src/rendering/surface-detail.js");
+  const scene = new THREE.Scene();
+  const material = createWaterMaterial({ scene, shoreRadius: 24 });
+  assert.equal(material.metalness, 0);
+  assert.equal(material.transparent, false);
+  assert.equal(material.depthWrite, true);
+  const shader = {
+    vertexShader: THREE.ShaderLib.standard.vertexShader,
+    fragmentShader: THREE.ShaderLib.standard.fragmentShader,
+    uniforms: {},
+  };
+  material.onBeforeCompile(shader);
+  advanceSurfaceDetails(scene, 13);
+  assert.equal(shader.uniforms.waterTime.value, 13);
+  advanceSurfaceDetails(scene, 13);
+  assert.equal(shader.uniforms.waterTime.value, 13);
+  assert.equal(shader.uniforms.waterRadius.value, 24);
+  assert.ok(shader.fragmentShader.includes("texture2D(normalMap,vNormalMapUv*1.83"));
+  assert.ok(shader.fragmentShader.includes("waterFresnel"));
+});
+
+test("course reflection probes retain HDR highlights, course palette and enclosed attenuation", async () => {
+  const { createReflectionPixels } = await import("../src/rendering/reflection-environments.js");
+  const day = createReflectionPixels({ terrain: "grass", sky: "#68bcea", ground: "#6a924b" });
+  const night = createReflectionPixels({
+    terrain: "concrete",
+    sky: "#08122e",
+    fog: "#243656",
+    ground: "#19202f",
+  });
+  const inside = createReflectionPixels(
+    { terrain: "grass", sky: "#68bcea", ground: "#6a924b" },
+    true,
+  );
+  assert.ok(day.every(Number.isFinite));
+  assert.equal(day.length, 256 * 128 * 4);
+  assert.ok(
+    day.reduce((max, value) => Math.max(max, value), 0) > 1,
+    "bright sky sources must survive HDR prefiltering",
+  );
+  assert.notDeepEqual(day, night);
+  const radiance = (data) => data.reduce((sum, value, i) => sum + (i % 4 === 3 ? 0 : value), 0);
+  assert.ok(radiance(inside) < radiance(day));
+});

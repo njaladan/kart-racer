@@ -163,6 +163,279 @@
       "bytes": 11256,
       "name": "kenney:nature/flower-yellowb",
       "type": "gltf"
+    },
+    {
+      "name": "windmill:fir",
+      "type": "gltf",
+      "file": "fir.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_pinetree_b/stklib_pinetree_b_high.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_pinetree_b.txt and upstream.txt",
+      "sha256": "cedaab813c8132f7a2a3b0db344c0cc6d792f96a9c21a84b76efc3faeb04556a",
+      "bytes": 879804,
+      "triangles": 418,
+      "lods": {
+        "mid": "windmill:fir-far",
+        "far": "windmill:fir-far"
+      },
+      "lodDistances": [
+        0,
+        95,
+        210
+      ]
+    },
+    {
+      "name": "windmill:fir-far",
+      "type": "gltf",
+      "file": "fir-far.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_pinetree_b/stklib_pinetree_b_low.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_pinetree_b.txt and upstream.txt",
+      "sha256": "10b7013ad007c25c0943849b36ca14076fd06e7f171518acd09b0d46afefa99e",
+      "bytes": 130020,
+      "triangles": 8
+    },
+    {
+      "name": "windmill:oak",
+      "type": "gltf",
+      "file": "oak.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_autumnTree_b/stklib_autumnTree_b_high.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_autumnTree_b.txt and upstream.txt",
+      "sha256": "721cce6fdc4be94578a27743566dc82e9d82cfa8fccbd21ed12853ee75374e5d",
+      "bytes": 636492,
+      "triangles": 560,
+      "lods": {
+        "mid": "windmill:oak-far",
+        "far": "windmill:oak-far"
+      },
+      "lodDistances": [
+        0,
+        95,
+        210
+      ]
+    },
+    {
+      "name": "windmill:oak-far",
+      "type": "gltf",
+      "file": "oak-far.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_autumnTree_b/stklib_autumnTree_b_low.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_autumnTree_b.txt and upstream.txt",
+      "sha256": "9344be79f644433bb4e78ff707341074820dfc47332e9940491f296bd7ad29d5",
+      "bytes": 193668,
+      "triangles": 8
+    },
+    {
+      "name": "windmill:orchard",
+      "type": "gltf",
+      "file": "orchard.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_autumnTree_d/stklib_autumnTree_d_high.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_autumnTree_d.txt and upstream.txt",
+      "sha256": "7c3cbde4b95e526a354e1bc292dd132877a12a41cf36422979cbad406ec24d69",
+      "bytes": 608068,
+      "triangles": 520,
+      "lods": {
+        "mid": "windmill:orchard-far",
+        "far": "windmill:orchard-far"
+      },
+      "lodDistances": [
+        0,
+        95,
+        210
+      ]
+    },
+    {
+      "name": "windmill:orchard-far",
+      "type": "gltf",
+      "file": "orchard-far.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_autumnTree_d/stklib_autumnTree_d_low.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_autumnTree_d.txt and upstream.txt",
+      "sha256": "6d9db21d8594a055046b7658eaf7c331b39fc3fb8235a881eabb8878c9433011",
+      "bytes": 221576,
+      "triangles": 8
+    },
+    {
+      "name": "windmill:willow",
+      "type": "gltf",
+      "file": "willow.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_autumnTree_g/stklib_autumnTree_g_medium.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_autumnTree_g.txt and upstream.txt",
+      "sha256": "7608c53ad45273a40a44f2a24c602c7d68a75b4c9020c797ab2a89bdbb894022",
+      "bytes": 680556,
+      "triangles": 1038
+    },
+    {
+      "name": "windmill:farmhouse",
+      "type": "gltf",
+      "file": "farmhouse.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_old_house_a/stklib_old_house_a_main.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_old_house_a.txt and upstream.txt",
+      "sha256": "0f6b56a9692d10ecea9483ede713b15fcb2769b3bbbd18e3cc30438d98597031",
+      "bytes": 2510472,
+      "triangles": 762
+    },
+    {
+      "name": "windmill:cottage",
+      "type": "gltf",
+      "file": "cottage.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_silvianHouse_a/stklib_silvianHouse_a_medium.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_silvianHouse_a.txt and upstream.txt",
+      "sha256": "1f082e4c11a31a5ce6eb698de8054f1a95fe11c54fc0dba4a1fb7bcec6abe205",
+      "bytes": 3405788,
+      "triangles": 792
+    },
+    {
+      "name": "windmill:lodge",
+      "type": "gltf",
+      "file": "lodge.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_woodLodge_a/stklib_woodLodge_a_main.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_woodLodge_a.txt and upstream.txt",
+      "sha256": "0a4a8d87beb21d584aa2fb5c52f7b10c1284a64eac65b3262106544fcf1b7a95",
+      "bytes": 2010640,
+      "triangles": 1432
+    },
+    {
+      "name": "windmill:flower-bush",
+      "type": "gltf",
+      "file": "flower-bush.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_redFlowerBush_a/stklib_redFlowerBush_a_main.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_redFlowerBush_a.txt and upstream.txt",
+      "sha256": "0f1c41de79f3b7e8e552b77eddd3b781606a77e891f6c233b31bcdfc28ca85ba",
+      "bytes": 196108,
+      "triangles": 220
+    },
+    {
+      "name": "windmill:stone-wall",
+      "type": "gltf",
+      "file": "stone-wall.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_lowRockBarrier_a/stklib_lowRockBarrier_a_main.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_lowRockBarrier_a.txt and upstream.txt",
+      "sha256": "1baf5709020faa1f9845702e21f8bf3d91f4f259b9411113bba5508eb3287895",
+      "bytes": 1774452,
+      "triangles": 286
+    },
+    {
+      "name": "windmill:fern",
+      "type": "gltf",
+      "file": "fern.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_fern_a/stklib_fern_a_a.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_fern_a.txt and upstream.txt",
+      "sha256": "551567b27a0fe2d5ffdb8ef9ec6899340dd4fc4c947361c26bfa1c1231e972d6",
+      "bytes": 116988,
+      "triangles": 216
+    },
+    {
+      "name": "windmill:hay-bale",
+      "type": "gltf",
+      "file": "hay-bale.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_hayBall_a/stklib_hayBall_a_main.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_hayBall_a.txt and upstream.txt",
+      "sha256": "b832835d5dc7b449bfbaa893cc9f198297719e519587dec7fc4d91328540da17",
+      "bytes": 226696,
+      "triangles": 736
+    },
+    {
+      "name": "windmill:windpump",
+      "type": "gltf",
+      "file": "windpump.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_windpump_a/stklib_windpump_a_main.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_windpump_a.txt and upstream.txt",
+      "sha256": "641b251e3e928ab2f67a5b1d7e3c57304d133582cc9f175cc1df749e4eeff3de",
+      "bytes": 1452740,
+      "triangles": 242
+    },
+    {
+      "name": "windmill:windpump-rotor",
+      "type": "gltf",
+      "file": "windpump-rotor.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_windpump_a/stklib_windpump_a_mill.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_windpump_a.txt and upstream.txt",
+      "sha256": "a207bed1b48f60c1c21422e540dba974fada5064e671135d4dbd95570f6cc010",
+      "bytes": 402292,
+      "triangles": 140
+    },
+    {
+      "name": "windmill:cattail",
+      "type": "gltf",
+      "file": "cattail.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_cattail_a/stklib_cattail_a_main.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_cattail_a.txt and upstream.txt",
+      "sha256": "1258c0135aa7762d2676f157a01f8a525ec78adc49468accc1ddf6e74a66b60e",
+      "bytes": 53272,
+      "triangles": 72
+    },
+    {
+      "name": "windmill:boat",
+      "type": "gltf",
+      "file": "boat.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_ReedBoat_a/stklib_ReedBoat_a.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_ReedBoat_a.txt and upstream.txt",
+      "sha256": "f93b5933c21ab0dc9a6c3d1513cb9cdd56bed5a32512a18e4ca91f099f488aac",
+      "bytes": 649792,
+      "triangles": 1336
+    },
+    {
+      "name": "windmill:lily",
+      "type": "gltf",
+      "file": "lily.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_waterLily_a/stklib_waterLily_a_main_high.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_waterLily_a.txt and upstream.txt",
+      "sha256": "48046ab7f351b7a4df9eea9d1ee0f02f49ce84c0fe932d9f6147c136281b13ff",
+      "bytes": 382076,
+      "triangles": 658
+    },
+    {
+      "name": "windmill:grass-tuft",
+      "type": "gltf",
+      "file": "grass-tuft.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_animGrass_a/stklib_animGrass_a_main.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_animGrass_a.txt and upstream.txt",
+      "sha256": "3163c6ab12e9cc4f7d8086f83e981b52739bf3fe2ebf3303a8dab3c2711b005a",
+      "bytes": 172896,
+      "triangles": 32
+    },
+    {
+      "name": "windmill:pallet",
+      "type": "gltf",
+      "file": "pallet.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_pallet_a/stklib_pallet_a.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_pallet_a.txt and upstream.txt",
+      "sha256": "15e6ea99d04b2ddef201acd2d37e14e5e2c2b67ef2eed9db4009476536ae5af6",
+      "bytes": 428864,
+      "triangles": 220
+    },
+    {
+      "name": "windmill:bench",
+      "type": "gltf",
+      "file": "bench.glb",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+      "sourceFile": "library/stklib_bench_a/stklib_bench_a_main.spm",
+      "license": "CC-BY-SA-4.0; see licenses/stklib_bench_a.txt and upstream.txt",
+      "sha256": "adad3b5c54324ea228728fa6788f115f2c97c14addb7cf3cb980da0a7cd6b403",
+      "bytes": 892584,
+      "triangles": 368
     }
-  ]
+  ],
+  "fidelitySource": {
+    "url": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip",
+    "sha256": "ad61912093e7d4b399c8e4841156f45550a8b60dc59a290ad84058a9bae0622d"
+  }
 }

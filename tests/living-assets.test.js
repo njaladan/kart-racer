@@ -55,7 +55,7 @@ test("textured imported props preserve UVs, finite rooted geometry and batch int
     scene.traverse((m) => {
       if (m.isMesh) meshes++;
     });
-    assert.ok(meshes >= 1 && meshes <= 6, `${course.id}: imported props remain batched`);
+    assert.ok(meshes >= 1 && meshes <= 32, `${course.id}: imported props remain region-batched`);
     scene.updateMatrixWorld(true);
     scene.traverse((m) => assert.ok(m.matrixWorld.elements.every(Number.isFinite)));
   }

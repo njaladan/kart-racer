@@ -13,76 +13,19 @@ export function buildTemple({
 }) {
   const { batch, box, groupAt, mesh, sectorT } = kit;
   const { bronze, chalk, cool, dark, gold, rune, stone } = palette;
-  const { cone, cylinder, rock, sphere } = geometry;
+  const { cone, sphere } = geometry;
   // A stepped temple remains in front of the ridge's south-west heading.
-  const temple = grounded(sectorT(3, 0.2), 52, 30);
+  const temple = grounded(sectorT(3, 0.2), 57, 35);
   if (temple) {
-    for (let i = 0; i < 4; i++) {
-      box(i % 2 ? gold : stone, temple, [0, 3 + i * 6, 0], [54 - i * 9, 6, 42 - i * 7]);
-      box(chalk, temple, [0, 5.65 + i * 6, 0], [54 - i * 9, 0.5, 42 - i * 7]);
-      const front = -(42 - i * 7) / 2;
-      for (let x = -18 + i * 3; x <= 18 - i * 3; x += 6) {
-        box(dark, temple, [x, 3.3 + i * 6, front - 0.06], [0.25, 2.8, 0.12]);
-        const carving = box(gold, temple, [x, 4 + i * 6, front - 0.18], [1.3, 1.3, 0.2]);
-        carving.rotation.z = Math.PI / 4;
-      }
-      // Recessed pilasters break the flat block face into architectural bays.
-      // The center stays clear for the road, stairs and sun-seal sightline.
-      const bayWidth = (54 - i * 9) / 4;
-      for (const x of [-1.45, -0.55, 0.55, 1.45].map((f) => f * bayWidth)) {
-        const y = 3 + i * 6,
-          frontZ = front - 0.38;
-        box(dark, temple, [x, y + 0.2, frontZ - 0.03], [1.9, 5.7, 0.22]);
-        mesh(new THREE.CylinderGeometry(0.76, 0.92, 5, 10), gold, temple, [
-          x,
-          y + 0.15,
-          frontZ - 0.22,
-        ]);
-        for (const h of [y - 2.55, y + 2.55]) {
-          box(chalk, temple, [x, h, frontZ - 0.25], [2.2, 0.38, 0.78]);
-          box(stone, temple, [x, h + 0.28, frontZ - 0.25], [1.65, 0.18, 0.58]);
-        }
-        for (let flute = 0; flute < 5; flute++) {
-          const mark = box(
-            chalk,
-            temple,
-            [x - 0.48 + flute * 0.24, y + 0.1, frontZ - 0.76],
-            [0.07, 3.9, 0.05],
-          );
-          mark.rotation.z = (flute - 2) * 0.025;
-        }
-      }
-      // Roof cornice and corner blocks make the mass read as built masonry.
-      for (const x of [-1, 1])
-        box(chalk, temple, [x * (25 - i * 4.5), 4 + i * 6, 0], [1, 3, 40 - i * 7]);
+    // Authored architecture provides recessed doorways, roof eaves, texture
+    // trims and real geometry AO; reuse it at monumental scale as the reveal.
+    const shrine = kit.asset("ruins:shrine", temple, [0, 0, 0], [24, 24, 24]);
+    shrine.rotation.y = Math.PI;
+    for (const x of [-21, 21]) {
+      kit.asset("ruins:dragon", temple, [x, 0, -23], [7, 7, 7]);
     }
-    box(cool, temple, [0, 19, -17], [12, 12, 1]);
-    for (const x of [-6.7, 6.7]) box(chalk, temple, [x, 19, -17.2], [0.8, 12.8, 1]);
-    box(gold, temple, [0, 25.2, -17.2], [14.2, 1, 1]);
-    const sunSeal = mesh(
-      new THREE.CylinderGeometry(2.1, 2.1, 0.25, 16),
-      gold,
-      temple,
-      [0, 22, -17.65],
-    );
-    sunSeal.rotation.x = Math.PI / 2;
-    for (let i = 0; i < 12; i++) {
-      const a = (i * Math.PI) / 6,
-        ray = box(
-          chalk,
-          temple,
-          [Math.sin(a) * 3.1, 22 + Math.cos(a) * 3.1, -17.67],
-          [0.5, 1.1, 0.2],
-        );
-      ray.rotation.z = -a;
-    }
-    for (let i = 0; i < 7; i++)
-      box(chalk, temple, [0, 12 + i * 0.62, -22.2 + i * 0.7], [12 - i * 0.6, 0.4, 1.35]);
-    for (const x of [-20, 20]) {
-      box(dark, temple, [x, 15, 0], [5, 30, 5]);
-      mesh(cone, gold, temple, [x, 31, 0], [4, 3, 4]);
-      for (const y of [5, 15, 25]) box(chalk, temple, [x, y, -2.6], [5.2, 0.55, 0.2]);
-    }
+    const annex = kit.asset("ruins:ruined-house", temple, [-23, 0, 12], [15, 15, 15]);
+    annex.rotation.y = -0.22;
   }
   // Gateway lintel clears the chase camera by 13 m; every support remains
   // outside the physical road. The processional shoulder opens further on.
@@ -114,44 +57,27 @@ export function buildTemple({
       for (const y of [2, 14]) box(chalk, g, [0, y, 0], [3.3, 0.5, 3.3]);
       for (const y of [6, 8, 10]) box(gold, g, [0, y, -1.56], [0.65, 1.1, 0.12]);
     }
-  // Broad paving lane leads past low ceremonial markers and shaded arcades.
-  // The arcade roof stays outside the lane; it is scenery, not a false tunnel.
-  for (let i = 0; i < 8; i++) {
-    const t = sectorT(3, 0.42 + i * 0.056),
-      g = grounded(t, 25, 5);
-    if (!g) continue;
-    for (const z of [-3, 3]) {
-      box(dark, g, [0, 0.5, z], [3.2, 1, 3.2]);
-      mesh(cylinder, stone, g, [0, 5, z], [1, 9, 1]);
-      box(gold, g, [0, 9.8, z], [2.8, 0.7, 2.8]);
-      for (const y of [2, 8]) mesh(cylinder, chalk, g, [0, y, z], [1.1, 0.25, 1.1]);
-    }
-    box(stone, g, [0, 10.5, 0], [3.4, 0.7, 9]);
-    box(chalk, g, [0, 11, 0], [3.7, 0.3, 9.2]);
-    const outer = grounded(t, track.surfaceAt(t).rightEdge + 1.6, 0.6);
-    if (outer) {
-      box(chalk, outer, [0, 0.45, 0], [0.75, 0.9, 0.75]);
-      mesh(rock, rune, outer, [0, 1, 0], [0.25, 0.3, 0.25]);
+  // Carved roadside shrines and ruined rooms compose the procession and
+  // courtyard without placing their broad footprints on the paved apron.
+  for (let sector = 3; sector <= 4; sector++) {
+    for (let i = 0; i < 7; i++) {
+      const t = sectorT(sector, 0.08 + i * 0.13);
+      const side = i % 2 ? 1 : -1;
+      const edge = track.surfaceAt(t);
+      const offset = side > 0 ? edge.rightEdge + 22 : edge.leftEdge - 22;
+      const g = grounded(t, offset, 14);
+      if (!g) continue;
+      const ruin = kit.asset(
+        i % 3 ? "ruins:ruined-house" : "ruins:shrine",
+        g,
+        [0, 0, 0],
+        [i % 3 ? 11 : 8, i % 3 ? 11 : 8, i % 3 ? 11 : 8],
+      );
+      ruin.rotation.y = side > 0 ? -Math.PI / 2 : Math.PI / 2;
+      kit.asset("ruins:dragon", g, [side * -7, 0, -5], [3.5, 3.5, 3.5]);
     }
   }
   for (const [i, f] of [0.33, 0.64].entries()) canopy(sectorT(3, f), -24, i + 2);
-  // Courtyard pillars have flute carving, capitals, decorative bases and
-  // broken companions. Intentional gaps reveal machinery and the passing lane.
-  for (let i = 0; i < 18; i++) {
-    const t = sectorT(4, (i + 0.5) / 18),
-      g = grounded(t, (i % 2 ? 1 : -1) * 24, 3.5);
-    if (!g) continue;
-    box(stone, g, [0, 0.6, 0], [5, 1.2, 5]);
-    mesh(cylinder, i % 3 ? stone : cool, g, [0, 7, 0], [1.5, 13, 1.5]);
-    box(gold, g, [0, 14, 0], [4, 1, 4]);
-    for (const y of [1.4, 3, 11.7, 13.2]) mesh(cylinder, chalk, g, [0, y, 0], [1.65, 0.3, 1.65]);
-    for (let j = 0; j < 6; j++) {
-      const a = (j * Math.PI) / 3,
-        c = box(dark, g, [Math.cos(a) * 1.44, 7, Math.sin(a) * 1.44], [0.11, 7, 0.18]);
-      c.rotation.y = -a;
-    }
-    if (i % 4 === 0) mesh(rock, stone, g, [3, 0.2, 2], [1.2, 0.7, 1.5]);
-  }
   for (let i = 0; i < 6; i++)
     torch(
       sectorT(i < 2 ? 3 : 4, i < 2 ? 0.2 + i * 0.45 : 0.12 + (i - 2) * 0.23),

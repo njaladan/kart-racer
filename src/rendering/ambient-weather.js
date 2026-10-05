@@ -61,6 +61,9 @@ export function addAmbientWeather(scene, theme = {}) {
   scene.add(points);
   return {
     object: points,
+    setQuality(tier) {
+      geometry.setDrawRange(0, Math.ceil(count * [0.45, 0.65, 0.85, 1][tier]));
+    },
     update(time, position, forest = false) {
       points.visible = snow || dust || city || forest;
       if (!points.visible) return;

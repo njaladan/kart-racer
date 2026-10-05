@@ -46,25 +46,10 @@ export async function loadGraphicsAssets(renderer) {
       return null;
     }
   };
-  const [grass, asphalt, sky, nature] = await Promise.all([
+  const [grass, asphalt, nature] = await Promise.all([
     texture("grass"),
     texture("asphalt"),
-    texture("sky-reflections"),
     models(),
   ]);
-  let environment = null;
-  if (sky) {
-    sky.mapping = THREE.EquirectangularReflectionMapping;
-    const generator = new THREE.PMREMGenerator(renderer);
-    try {
-      // Filter once at startup. Only the small kart surfaces use this map.
-      environment = generator.fromEquirectangular(sky);
-    } catch (error) {
-      console.warn("Using direct lighting without optional kart reflections", error);
-    } finally {
-      generator.dispose();
-      sky.dispose();
-    }
-  }
-  return { grass, asphalt, nature, environment: environment?.texture ?? null };
+  return { grass, asphalt, nature, environment: null };
 }

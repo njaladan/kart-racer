@@ -4,6 +4,7 @@ export class ParticlePool {
   constructor(scene, capacity = 96) {
     this.capacity = capacity;
     this.count = 0;
+    this.renderLimit = capacity;
     this.particles = Array.from({ length: capacity }, () => ({
       position: new THREE.Vector3(),
       velocity: new THREE.Vector3(),
@@ -14,7 +15,7 @@ export class ParticlePool {
     }));
     this.object = new THREE.Object3D();
     this.mesh = new THREE.InstancedMesh(
-      new THREE.IcosahedronGeometry(1, 0),
+      new THREE.PlaneGeometry(2, 2),
       new THREE.MeshBasicMaterial({ vertexColors: false, transparent: true, depthWrite: false }),
       capacity,
     );
@@ -27,22 +28,30 @@ export class ParticlePool {
     this.mesh.material.onBeforeCompile = (shader) => {
       shader.vertexShader = shader.vertexShader.replace(
         "#include <common>",
-        "#include <common>\nattribute float particleOpacity; varying float vParticleOpacity;",
+        "#include <common>\nattribute float particleOpacity; varying float vParticleOpacity; varying vec2 vParticleUv;",
       );
       shader.vertexShader = shader.vertexShader.replace(
         "#include <begin_vertex>",
-        "#include <begin_vertex>\nvParticleOpacity = particleOpacity;",
+        "#include <begin_vertex>\nvParticleOpacity = particleOpacity; vParticleUv = uv;",
+      );
+      shader.vertexShader = shader.vertexShader.replace(
+        "#include <project_vertex>",
+        `vec4 mvPosition = modelViewMatrix * instanceMatrix * vec4(0.,0.,0.,1.);
+        mvPosition.xy += position.xy * vec2(length(instanceMatrix[0].xyz),length(instanceMatrix[1].xyz));
+        gl_Position = projectionMatrix * mvPosition;`,
       );
       shader.fragmentShader = shader.fragmentShader.replace(
         "#include <common>",
-        "#include <common>\nvarying float vParticleOpacity;",
+        "#include <common>\nvarying float vParticleOpacity; varying vec2 vParticleUv;",
       );
       shader.fragmentShader = shader.fragmentShader.replace(
         "#include <color_fragment>",
-        "#include <color_fragment>\ndiffuseColor.a *= vParticleOpacity;",
+        `#include <color_fragment>
+float particleSoft = 1.-smoothstep(.05,.5,length(vParticleUv-.5));
+diffuseColor.a *= vParticleOpacity * particleSoft; if(diffuseColor.a<.01)discard;`,
       );
     };
-    this.mesh.material.customProgramCacheKey = () => "pooled-particle-opacity-v1";
+    this.mesh.material.customProgramCacheKey = () => "pooled-billboard-particle-v2";
     this.opacity = new THREE.InstancedBufferAttribute(new Float32Array(capacity), 1);
     this.opacity.setUsage(THREE.DynamicDrawUsage);
     this.mesh.geometry.setAttribute("particleOpacity", this.opacity);
@@ -81,8 +90,8 @@ export class ParticlePool {
     }
   }
   sync() {
-    this.mesh.count = this.count;
-    this.mesh.visible = this.count > 0;
+    this.mesh.count = Math.min(this.count, this.renderLimit);
+    this.mesh.visible = this.mesh.count > 0;
     for (let i = 0; i < this.count; i++) {
       const p = this.particles[i],
         fade = Math.max(0, p.life / p.max);
@@ -98,6 +107,9 @@ export class ParticlePool {
       this.mesh.instanceColor.needsUpdate = true;
       this.opacity.needsUpdate = true;
     }
+  }
+  setQuality(tier) {
+    this.renderLimit = Math.ceil(this.capacity * [0.45, 0.65, 0.85, 1][tier]);
   }
   clear() {
     this.count = this.mesh.count = 0;

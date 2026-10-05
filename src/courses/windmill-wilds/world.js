@@ -15,7 +15,6 @@ export function buildWindmillWorld({
   materials: mats,
   textures,
   track,
-  nature = null,
   assets = { models: {} },
 }) {
   const scenery = new THREE.Group();
@@ -106,19 +105,20 @@ export function buildWindmillWorld({
     bridgeRailMaterial,
   };
   const primitives = { mesh, box, mat, align, groupAt, sectorT, sphereGeo, coneGeo, cylinderGeo };
-  const options = { scene, scenery, mats, textures, palette, primitives };
+  const kit = createCourseKit(scenery, track, assets);
+  const options = { scene, scenery, mats, textures, palette, primitives, kit, track };
   const { lake } = buildWindmillTerrain(options);
-  buildWindmillVegetation({ ...options, nature, random });
+  buildWindmillVegetation({ ...options, random });
   const landmarks = buildWindmillLandmarks(options);
   const life = buildWindmillLife({
     THREE,
     scene,
     scenery,
     track,
-    kit: createCourseKit(scenery, track, assets),
+    kit,
     textures,
   });
-  batchScenery(scenery, [landmarks.mill, ...life.animated]);
+  batchScenery(scenery, [...landmarks.animated, ...life.animated]);
   return {
     update(time) {
       landmarks.update(time);

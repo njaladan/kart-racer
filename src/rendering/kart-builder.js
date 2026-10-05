@@ -14,8 +14,11 @@ export function createKartBuilder({ scene, models, textures, shadowTexture, them
     const importedModel = source.clone(true);
     const bodyGroup = new THREE.Group();
     bodyGroup.name = `${name} imported racer`;
+    const litMaterials = [];
+    const driverParts = [];
     importedModel.traverse((part) => {
       if (!part.isMesh) return;
+      part.layers.enable(1);
       part.castShadow = true;
       part.receiveShadow = true;
       const materials = Array.isArray(part.material) ? part.material : [part.material];
@@ -25,12 +28,31 @@ export function createKartBuilder({ scene, models, textures, shadowTexture, them
           material.envMap = textures.environment;
           material.envMapIntensity = theme.terrain === "concrete" ? 0.18 : 0.28;
         }
+        material.userData.baseKartColor = material.color.clone();
+        litMaterials.push(material);
         return material;
       });
       part.material = Array.isArray(part.material) ? independent : independent[0];
     });
     // Converted STK assets face -Z, matching the race. Scale uniformly to
     // preserve proportions, a shared wheel footprint and tall characters.
+    const driverPattern = {
+      tux: /tux_body/i,
+      kiki: /Kiki_body|kiki_hair|Cloth_Kiki|Eyes2/i,
+      konqi: /^Konqi_dif|konqi-eye|konqi_scarf/i,
+      nolok: /nolok_character|AAARH/i,
+      pidgin: /^pidgin\.png/i,
+      wilber: /character|driver/i,
+    }[racerId];
+    importedModel.traverse((part) => {
+      if (part.isMesh && driverPattern?.test(part.name)) {
+        driverParts.push({
+          object: part,
+          rotation: part.rotation.clone(),
+          position: part.position.clone(),
+        });
+      }
+    });
     bodyGroup.add(importedModel);
     root.add(bodyGroup);
     const wheels = [];
@@ -120,6 +142,9 @@ export function createKartBuilder({ scene, models, textures, shadowTexture, them
     const kart = {
       root,
       bodyGroup,
+      litMaterials,
+      driverParts,
+      suspension: { compression: 0, velocity: 0, previousGrounded: true },
       shadow,
       wheels,
       flame,

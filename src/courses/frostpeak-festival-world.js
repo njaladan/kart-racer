@@ -1,31 +1,36 @@
 import { buildSkiLift } from "./frostpeak-festival/build-ski-lift.js";
+import { buildSnowTerrain } from "./frostpeak-festival/build-snow-terrain.js";
 import { buildMountainHorizon } from "./frostpeak-festival/build-mountain-horizon.js";
 // A complete alpine resort. Static detail is batched by the shared runtime;
 // only fabric, lift cabins, cheering spectators, flakes and the groomer move.
+import { registerLightPool } from "../rendering/course-lighting.js";
+import { installSurfaceDetail } from "../rendering/surface-detail.js";
 import { createContactShadowMesh, addGlow } from "../rendering/visual-effects.js";
 
 export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazardAt }) {
   const { material, mesh, box, groupAt, sectorT, asset, batch, align } = kit;
   const snow = material("#f2f8ff", { map: textures.snow, roughness: 0.96 });
-  const timber = material("#c6a17f", { map: textures.wood }),
-    roof = material("#bc6676", { map: textures.wood });
+  const timber = material("#c6a17f", { map: textures.wood });
   const bark = material("#97765c", { map: textures.bark }),
     cream = material("#efdfc8");
   const dark = material("#344958"),
     cyan = material("#53cbd7"),
     red = material("#e97087");
   const yellow = material("#ffe19e", { emissive: "#ffb85e", emissiveIntensity: 0.26 });
-  const glass = material("#9cdef1", { metalness: 0.38, roughness: 0.2 });
+  const glass = material("#bedceb", { metalness: 0.02, roughness: 0.18 });
   const rock = material("#9bb1c5", { map: textures.stone }),
     amber = material("#ffaf45", { emissive: "#df7900", emissiveIntensity: 0.3 });
-  const cone = new THREE.ConeGeometry(1, 1, 9),
-    sphere = new THREE.SphereGeometry(1, 10, 7);
+  const sphere = new THREE.SphereGeometry(1, 10, 7);
   const cylinder = new THREE.CylinderGeometry(1, 1, 1, 10),
     clothGeo = new THREE.PlaneGeometry(1, 1, 8, 3);
   const edgeOffset = (t, side, margin) =>
     side * (side > 0 ? track.surfaceAt(t).rightEdge : -track.surfaceAt(t).leftEdge) + side * margin;
   const landAt = (t, offset, parent = scenery) =>
     kit.landGroup ? kit.landGroup(t, offset, parent) : groupAt(t, offset, parent);
+  const lampPoolMaterial = createContactShadowMesh({ opacity: 0.16 }).material.clone();
+  lampPoolMaterial.color.set("#ffc274");
+  lampPoolMaterial.blending = THREE.AdditiveBlending;
+  lampPoolMaterial.toneMapped = false;
   const flags = new THREE.Group();
   scenery.add(flags);
   const cheerers = new THREE.Group();
@@ -37,8 +42,25 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
   };
 
   function pole(g, x, y, z, height = 4) {
-    mesh(cylinder, dark, g, [x, y + height / 2, z], [0.08, height, 0.08]);
-    mesh(sphere, yellow, g, [x, y + height + 0.16, z], [0.3, 0.36, 0.3]);
+    asset("frostpeak:wood-lamp", g, [x, y, z], [height, height, height]);
+    addGlow(g, {
+      color: "#ffd390",
+      size: [1.5, 1.5],
+      opacity: 0.17,
+      position: [x + 0.5, y + height - 0.4, z],
+    });
+    const pool = createContactShadowMesh({ width: 8, depth: 7, opacity: 0.16 });
+    pool.material = lampPoolMaterial;
+    pool.position.set(x + 0.7, y + 0.055, z);
+    pool.name = "Warm lamp illumination baked on snow";
+    g.add(pool);
+    g.updateWorldMatrix(true, false);
+    registerLightPool(scene, {
+      position: g.localToWorld(new THREE.Vector3(x + 0.7, y + height - 0.4, z)),
+      color: "#ffbf76",
+      intensity: 7,
+      radius: 16,
+    });
   }
   function rail(g, x, y, z, width, axis = "x") {
     box(bark, g, [x, y, z], axis === "x" ? [width, 0.15, 0.15] : [0.15, 0.15, width]);
@@ -55,93 +77,66 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
       );
   }
   function chalet(t, side, large = false) {
-    const g = landAt(t, edgeOffset(t, side, large ? 20 : 14));
-    g.rotation.y += side > 0 ? Math.PI : 0;
-    if (large) g.scale.setScalar(1.3);
-    groundShadow(g, 15, 20);
-    box(rock, g, [0, 0.35, 0], [10, 0.7, 12]);
-    box(timber, g, [0, 3.2, 0], [9, 5.7, 11]);
-    // Actual log courses, corner joints, warm panes and snowy shutters.
-    for (let y = 0.9; y < 5.8; y += 0.65) {
-      box(bark, g, [0, y, -5.57], [9.5, 0.11, 0.12]);
-      for (const x of [-4.56, 4.56]) box(bark, g, [x, y, 0], [0.13, 0.1, 11.5]);
-    }
-    for (const x of [-4.3, 4.3])
-      for (const z of [-5.5, 5.5]) box(cream, g, [x, 3.2, z], [0.28, 5.7, 0.25]);
-    // A real wreath gives the village a small, readable festival accent.
-    asset("kenney:holiday-kit/wreath", g, [0, 4.2, -5.91], [1.35, 1.35, 0.3]);
-    for (const x of [-2.65, 2.65]) {
-      const r = box(roof, g, [x, 6.35, 0], [6.1, 0.35, 12.7]);
-      r.rotation.z = x > 0 ? -0.48 : 0.48;
-      const cap = box(snow, g, [x, 6.63, 0], [6.4, 0.25, 12.8]);
-      cap.rotation.z = r.rotation.z;
-      for (let z = -5.5; z <= 5.5; z += 1.15)
-        mesh(cone, snow, g, [x + (x > 0 ? 2.5 : -2.5), 5.32, z], [0.11, 0.65, 0.1]);
-    }
-    box(bark, g, [0, 7.87, 0], [0.3, 0.26, 13]);
-    for (const x of [-2.65, 2.65])
-      for (const y of [2.15, 4.6]) {
-        box(bark, g, [x, y, -5.69], [1.9, 1.85, 0.16]);
-        box(yellow, g, [x, y, -5.79], [1.6, 1.55, 0.08]);
-        box(bark, g, [x, y, -5.87], [0.1, 1.65, 0.04]);
-        box(bark, g, [x, y, -5.87], [1.6, 0.1, 0.04]);
-        box(snow, g, [x, y - 0.89, -5.82], [2.2, 0.17, 0.42]);
-        for (const dx of [-1.17, 1.17]) box(red, g, [x + dx, y, -5.68], [0.33, 1.8, 0.16]);
-      }
-    box(red, g, [0, 1.65, -5.69], [1.65, 3.2, 0.12]);
-    mesh(sphere, yellow, g, [0.5, 1.65, -5.8], [0.07, 0.07, 0.07]);
-    // Raised welcome deck and upper balcony create layered resort facades.
-    box(timber, g, [0, 0.73, -7.1], [10.8, 0.35, 3]);
-    for (const x of [-4.7, 4.7]) rail(g, x, 1.75, -7.1, 2.8, "z");
-    box(timber, g, [0, 3.45, -6.55], [9.8, 0.2, 2.2]);
-    rail(g, 0, 4.55, -7.6, 9.8);
-    for (const x of [-4.4, 4.4]) box(bark, g, [x, 2.2, -7.3], [0.18, 3.6, 0.18]);
-    for (let step = 0; step < 3; step++)
-      box(rock, g, [0, 0.2 + step * 0.16, -9 + step * 0.35], [2.5, 0.25, 0.7]);
-    pole(g, -4.8, 0.8, -8.3, 3.1);
-    box(rock, g, [3, 8.15, 1.8], [1, 2.8, 1]);
-    box(snow, g, [3, 9.65, 1.8], [1.35, 0.23, 1.35]);
-    // A single restrained halo per facade keeps warm windows readable in snow.
-    addGlow(g, { color: "#ffda8a", size: [6, 4], opacity: 0.12, position: [0, 3.6, -5.95] });
+    const height = large ? 12.8 : 8.9;
+    const margin = large ? 24 : 17;
+    const g = kit.safeGroup(t, edgeOffset(t, side, margin), height * 0.65);
+    if (!g) return null;
+    g.name = "Textured snow-roofed alpine lodge";
+    g.rotation.y += side > 0 ? Math.PI * 0.5 : -Math.PI * 0.5;
+    groundShadow(g, height * 1.55, height * 1.65);
+    asset("frostpeak:chalet", g, [0, 0, 0], [height, height, height]);
+    // The imported model already has sculpted snow, stone foundations, eaves,
+    // balcony timber and recessed openings. A pool is painted onto the snow
+    // rather than adding another real-time shadow light to every lodge.
+    addGlow(g, { color: "#ffd28a", size: [7, 4], opacity: 0.1, position: [0, 3.1, -3.8] });
+    pole(g, -height * 0.61, 0, -height * 0.47, 3.5);
+    const sled = asset(
+      "kenney:holiday-kit/sled",
+      g,
+      [height * 0.56, 0.08, -height * 0.4],
+      [1.9, 1.9, 1.9],
+    );
+    sled.rotation.y = 0.3;
     return g;
   }
   for (const f of [0.08, 0.28, 0.49, 0.73]) for (const side of [-1, 1]) chalet(sectorT(0, f), side);
   for (const f of [0.64, 0.88]) chalet(sectorT(5, f), -1);
   chalet(sectorT(2, 0.84), -1, true);
 
-  const winterTrees = [
-    "kenney:holiday-kit/tree_pine_snow",
-    "kenney:holiday-kit/tree_pine_snow_round",
-    "kenney:holiday-kit/tree_pine_snowed",
-    "kenney:holiday-kit/tree_decorated",
-  ];
   function pine(t, side, size, depth = 0, index = 0) {
-    const g = landAt(t, edgeOffset(t, side, 8 + size * 2.5 + depth));
+    const height = 11.5 * size;
+    const offset = edgeOffset(t, side, 9 + height * 0.36 + depth);
+    const g = kit.safeGroup(t, offset, height * 0.42);
+    if (!g) return;
+    g.name = "Snow-painted textured conifer cluster";
     g.rotation.y += index * 2.399;
-    const height = 10.5 * size;
-    const model =
-      depth === 0 && index % 3 !== 0
-        ? winterTrees[1]
-        : winterTrees[Math.abs(index + (side > 0 ? 1 : 0)) % winterTrees.length];
-    const width = height * (0.94 + Math.sin(index * 1.7 + side) * 0.07);
-    asset(model, g, [0, 0, 0], [width, height, width]);
-    if (depth === 0 && index % 5 === 0) groundShadow(g, width * 0.85);
-  }
-  // Two irregular depth layers make a canopy instead of evenly spaced cones.
-  for (let i = 0; i < 30; i++)
-    for (const side of [-1, 1]) {
-      pine(sectorT(1, (i + 0.45) / 30), side, 0.82 + (i % 5) * 0.13, 0, i);
-      if (i % 2 === 0) pine(sectorT(1, (i + 0.9) / 30), side, 1.2 + (i % 3) * 0.15, 13, i + 1);
+    // Downloaded textured branches carry the silhouette. Near/mid/far models
+    // are switched and region-batched by the shared runtime.
+    const width = height * (0.84 + Math.sin(index * 1.7 + side) * 0.09);
+    asset("frostpeak:pine-near", g, [0, 0, 0], [width, height, width]);
+    if (depth === 0 && index % 4 === 0) {
+      asset("frostpeak:snow-bush", g, [side * 2.8, -0.15, -2], [2.7, 2.3, 2.7]);
+      groundShadow(g, width * 0.8);
     }
-  for (let i = 0; i < 15; i++)
-    for (const side of [-1, 1])
-      pine(sectorT(i % 2 ? 0 : 3, (i + 0.5) / 15), side, 0.9 + (i % 3) * 0.12, 7, i);
+  }
+  for (let s = 0; s < 6; s++) {
+    const count = s === 1 ? 34 : s === 2 ? 22 : 14;
+    for (let i = 0; i < count; i++)
+      for (const side of [-1, 1]) {
+        const f = (i + 0.25 + (Math.sin(i * 6.1) + 1) * 0.25) / count;
+        // Resort views deliberately leave sightline windows between clusters.
+        if ((s === 0 || s === 5) && i % 3 === 0) continue;
+        pine(sectorT(s, f), side, 0.8 + (i % 5) * 0.12, s === 0 ? 12 : 0, i + s * 31);
+        if (i % 2 === 0)
+          pine(sectorT(s, Math.min(0.985, f + 0.008)), side, 1.18 + (i % 3) * 0.12, 17, i + 5);
+      }
+  }
 
   function flag(t, side, index) {
     const offset = edgeOffset(t, side, 3.2),
       g = landAt(t, offset);
     mesh(cylinder, dark, g, [0, 3.6, 0], [0.09, 7.2, 0.09]);
-    mesh(sphere, snow, g, [0, 0.1, 0], [1.3, 0.34, 1.1]);
+    asset("frostpeak:snow-bush", g, [side * 0.5, -0.25, 0], [0.9, 0.62, 0.9]);
     const moving = landAt(t, offset, flags);
     mesh(clothGeo, index % 2 ? cyan : red, moving, [side * 1.3, 6.3, 0], [2.6, 1.3, 1]);
   }
@@ -151,7 +146,8 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
 
   const palette = { cream, cyan, dark, glass, red, rock, snow, timber };
   const geometry = { cylinder };
-  buildMountainHorizon({ THREE, edgeOffset, landAt, scenery, kit, palette });
+  buildMountainHorizon({ THREE, edgeOffset, landAt, scenery, kit, palette, textures });
+  buildSnowTerrain({ THREE, scene, scenery, track, kit, textures, edgeOffset, landAt });
   // Little resort props use the same winter-festival kit as the trees and
   // rocks. All are outside the physical course edge and clear of the camera.
   for (const [fraction, side, kind] of [
@@ -210,7 +206,14 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
   // with rubber approach matting represented by the firm main-route surface.
   const pond = landAt(sectorT(4, 0.31), edgeOffset(sectorT(4, 0.31), -1, 27));
   mesh(cylinder, dark, pond, [0, 0.1, 0], [19, 0.3, 14]);
-  mesh(cylinder, glass, pond, [0, 0.3, 0], [18.6, 0.16, 13.6]);
+  const pondIce = material("#b2dcea", {
+    map: textures.snow,
+    roughness: 0.19,
+    metalness: 0.01,
+    envMapIntensity: 0.7,
+  });
+  installSurfaceDetail(pondIce, { kind: "ice", scale: 0.18, strength: 0.2 });
+  mesh(cylinder, pondIce, pond, [0, 0.3, 0], [18.6, 0.16, 13.6]);
   for (let i = 0; i < 20; i++) {
     const a = (i / 20) * Math.PI * 2,
       x = Math.cos(a) * 19,
@@ -219,6 +222,15 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
     const b = box(i % 2 ? red : cyan, pond, [x, 1.5, z], [3.3, 0.5, 0.13]);
     b.rotation.y = -a + Math.PI / 2;
   }
+  for (const [x, z] of [
+    [-18, 0],
+    [18, 0],
+    [0, -14],
+    [0, 14],
+  ])
+    pole(pond, x, 0.35, z, 4.5);
+  chalet(sectorT(4, 0.56), -1);
+  chalet(sectorT(3, 0.8), 1);
   for (const f of [0.18, 0.39]) {
     const t = sectorT(4, f),
       g = landAt(t, edgeOffset(t, -1, 9));
@@ -263,11 +275,11 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
       for (const side of [-1, 1]) {
         const t = sectorT(s, (i + 0.6) / 8),
           g = landAt(t, edgeOffset(t, side, 4.5));
-        mesh(sphere, snow, g, [0, 0.12, 0], [2.5, 0.5, 1.65]);
+        if (i % 2 === 0) asset("frostpeak:snow-bush", g, [0, -0.24, 0], [1.8, 1.1, 1.8]);
         if (s === 1 && i % 2 === 0) {
           const log = mesh(cylinder, bark, g, [side * 2, 0.3, 0], [0.33, 4.5, 0.33]);
           log.rotation.z = Math.PI / 2;
-          mesh(sphere, snow, g, [side * 2, 0.65, 0], [2.25, 0.22, 0.5]);
+          asset("frostpeak:snow-bush", g, [side * 2, 0.18, 0.7], [1.4, 0.85, 1.4]);
         }
         if (s === 5 && side > 0 && track.shortcutWidth(t) > 2) {
           box(cyan, g, [0, 1, 0], [0.16, 2, 0.16]);
@@ -315,6 +327,8 @@ export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazard
       .filter((o) => o.isMesh)
       .map((o) => ({ mesh: o, base: o.geometry.attributes.position.array.slice() }));
   }
+  for (const object of [groomer, beacon, flags, cheerers, ...gondolas])
+    object.userData.skipBake = true;
   const flagMotion = prepareMotion(flags),
     crowdMotion = prepareMotion(cheerers);
   const flakesGeo = new THREE.BufferGeometry(),

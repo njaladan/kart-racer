@@ -18,6 +18,8 @@ import { createRaceItems } from "./simulation/race-items.js";
 import { botInput } from "./simulation/simulation.js";
 import { bindGameInput } from "./input/game-input.js";
 import { createFrameLoop } from "./runtime/frame-loop.js";
+import { loadCourseBake, installCourseBake } from "./rendering/baked-lighting.js";
+import { installHeightHaze, installFoliageWind } from "./rendering/surface-detail.js";
 import { createBrowserDiagnostics } from "./testing/browser-diagnostics.js";
 
 async function startGame() {
@@ -36,6 +38,8 @@ async function startGame() {
     sharedAssets,
   });
   const { pads, boxes } = createRaceProps({ ...sceneState, course });
+  const courseBake = await loadCourseBake(course.id);
+  installCourseBake(scene, courseBake);
   const racers = createRaceGrid(roster);
   const [player, ...bots] = racers;
   const buildKart = createKartBuilder({
@@ -153,11 +157,25 @@ async function startGame() {
       accumulator: loop.getAccumulator(),
     }),
   });
+  scene.traverse((object) => {
+    if (!object.isMesh) return;
+    for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
+      installHeightHaze(material, course.theme);
+      const label = `${material.name} ${material.map?.name || ""}`;
+      if (
+        material.userData.foliageWind ||
+        /leaf|leaves|needle|flower|fern|reed|cloth|fabric|branch|foliage/i.test(label)
+      )
+        installFoliageWind(scene, material);
+    }
+  });
+  sceneState.graphicsQuality.attachWorld(landscape, particles);
   const loop = createFrameLoop({
     renderer,
     camera,
     initialPixelRatio: sceneState.pixelRatio,
     benchmarkMode,
+    onQualityChange: ({ tier }) => sceneState.graphicsQuality.apply(tier),
     isPaused: () => session.getState().paused,
     shouldStep: () => !diagnostics.freeze || !session.getState().running,
     step: session.step,

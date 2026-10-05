@@ -53,8 +53,22 @@ export default function buildWindmillLife(context) {
   leafGeometry.computeVertexNormals();
   const fernMat = deep.clone();
   fernMat.side = THREE.DoubleSide;
+  const mappedAssets = {
+    "tree-pinedefaultb": "fir",
+    "tree-pinetalla-detailed": "fir",
+    "tree-pinetallb-detailed": "fir",
+    "tree-oak": "oak",
+    "tree-default": "orchard",
+    "plant-bushdetailed": "flower-bush",
+    "flower-yellowb": "flower-bush",
+  };
   const asset = (slug, parent, position, scale) =>
-    kit.asset(`kenney:nature/${slug}`, parent, position, scale);
+    kit.asset(
+      mappedAssets[slug] ? `windmill:${mappedAssets[slug]}` : `kenney:nature/${slug}`,
+      parent,
+      position,
+      scale,
+    );
   const treeModels = [
     "tree-pinedefaultb",
     "tree-pinetalla-detailed",
@@ -157,22 +171,13 @@ export default function buildWindmillLife(context) {
     flag(g, 0, 4.2, 0, butter, 2.1);
     mesh(disc, cream, g, [0, 0.09, 0], [1.2, 0.15, 1.2]);
   }
-  for (let i = 0; i < 95; i++) {
-    const section = i < 60 ? 0 : 5,
-      side = i % 2 ? 1 : -1,
-      f = 0.08 + random() * 0.86;
-    const g = roadside(section, f, side, 2.5 + random() * 7, 0.7);
+  // Flower islands use downloaded, UV-painted blossom/leaf cards.
+  for (let i = 0; i < 32; i++) {
+    const section = i < 20 ? 0 : 5;
+    const g = roadside(section, 0.06 + random() * 0.9, i % 2 ? 1 : -1, 4 + random() * 6, 1);
     if (!g) continue;
-    for (let j = 0; j < 8; j++) {
-      const x = random() * 2 - 1,
-        z = random() * 2 - 1,
-        h = 0.22 + random() * 0.35;
-      box(grass, g, [x, h / 2, z], [0.04, h, 0.04]);
-      if (j % 2 === 0) {
-        mesh(sphere, j % 3 ? blossom : butter, g, [x, h, z], [0.18, 0.07, 0.18]);
-        mesh(sphere, cream, g, [x, h + 0.035, z], [0.055, 0.055, 0.055]);
-      }
-    }
+    const flowers = kit.asset("windmill:flower-bush", g, [0, 0.025, 0], [0.85, 0.85, 0.85]);
+    flowers.rotation.y = random() * Math.PI * 2;
   }
   const pasture = roadside(0, 0.55, -1, 30, 10);
   if (pasture) {
@@ -219,11 +224,7 @@ export default function buildWindmillLife(context) {
     scene.add(g);
     animate(g);
     g.name = "Bobbing rowboat";
-    mesh(sphere, index % 2 ? navy : coral, g, [0, 0, 0], [1.4, 0.55, 3.5]);
-    mesh(sphere, dark, g, [0, 0.19, 0], [1.18, 0.17, 3.0]);
-    for (const z of [-1.8, 0, 1.8]) box(wood, g, [0, 0.3, z], [2.5, 0.13, 0.35]);
-    for (const side of [-1, 1])
-      beam(g, [side * 0.7, 0.35, 0.5], [side * 3, 0.18, -1.1], 0.06, wood);
+    kit.asset("windmill:boat", g, [0, 0, 0], [1.7, 1.7, 1.7]);
     boats.push({ g, baseY: g.position.y, phase: index * 2, baseR: g.rotation.y });
   }
   for (const [f, side] of [
@@ -246,13 +247,7 @@ export default function buildWindmillLife(context) {
   for (let i = 0; i < 48; i++) {
     const g = roadside(3, 0.03 + random() * 0.93, i % 3 ? 1 : -1, 6 + random() * 12, 0.8);
     if (!g) continue;
-    for (let j = 0; j < 6; j++) {
-      const x = random() * 1.8 - 0.9,
-        z = random() * 1.8 - 0.9,
-        h = 0.8 + random() * 1.4;
-      beam(g, [x, 0, z], [x + 0.15, h, z], 0.025, leaf);
-      mesh(cylinder, dark, g, [x + 0.13, h - 0.1, z], [0.1, 0.35, 0.1]);
-    }
+    kit.asset("windmill:cattail", g, [0, 0, 0], [1.8, 1.8, 1.8]);
   }
   // Farm machinery reads as a mechanism: spokes, paddles, gear and transmission.
   const wheelBase = roadside(4, 0.46, 1, 10, 5);

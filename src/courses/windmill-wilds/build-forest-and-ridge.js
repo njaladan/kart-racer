@@ -15,8 +15,8 @@ export function buildForestAndRidge({
   geometry,
 }) {
   const { box, mesh } = kit;
-  const { cream, dark, fernMat, grass, leaf, steel, wood } = palette;
-  const { cone, crown, cylinder, leafGeometry } = geometry;
+  const { cream, dark, fernMat, grass, steel, wood } = palette;
+  const { cone, cylinder, leafGeometry } = geometry;
   // Forest floor has authored understory islands and fallen timber.
   for (let i = 0; i < 60; i++) {
     const g = roadside(1, 0.03 + random() * 0.94, i % 2 ? 1 : -1, 2.5 + random() * 11, 1.6);
@@ -55,26 +55,10 @@ export function buildForestAndRidge({
     g.rotation.y += (treeIndex * 2.399) % (Math.PI * 2);
     const width = height * (0.94 + Math.sin(treeIndex * 1.7) * 0.06);
     asset(model, g, [0, 0, 0], [width, height, width]);
-    if (section !== 1 && treeIndex % 3 !== 0) {
-      // A few opaque overlapping crowns round the close orchard silhouettes.
-      // Imported trunks and branches remain visible; all crowns batch by leaf.
-      for (const [x, y, z, radius] of [
-        [-0.12, 0.73, -0.02, 0.23],
-        [0.13, 0.75, 0.04, 0.22],
-        [0.01, 0.87, -0.03, 0.18],
-      ])
-        mesh(
-          crown,
-          leaf,
-          g,
-          [x * height, y * height, z * height],
-          [radius * width, radius * height * 0.83, radius * width],
-        );
-    }
     if (section !== 1 && treeIndex % 2 === 0) groundShadow(g, width * 0.9);
   }
-  for (let i = 0; i < 36; i++) {
-    const f = 0.04 + i * 0.026;
+  for (let i = 0; i < 18; i++) {
+    const f = 0.04 + i * 0.052;
     for (const side of [-1, 1]) {
       tree(
         1,

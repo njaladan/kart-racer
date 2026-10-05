@@ -50,6 +50,9 @@ async function loadModelPack(loader, manifestUrl, models, renderer, optional = f
       const fileUrl = new URL(entry.file, new URL(".", new URL(manifestUrl, location.href))).href;
       const loaded = await loader.loadAsync(fileUrl);
       const object = normalizeCourseModel(loaded.scene);
+      object.userData.assetName = entry.name;
+      object.userData.lods = entry.lods || null;
+      object.userData.lodDistances = entry.lodDistances || [0, 85, 180];
       const maxAnisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
       object.traverse((child) => {
         if (!child.isMesh) return;

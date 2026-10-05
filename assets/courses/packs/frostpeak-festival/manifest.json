@@ -78,6 +78,90 @@
       "name": "kenney:holiday-kit/festivus_pole",
       "file": "models/festivus-pole.glb",
       "type": "gltf"
+    },
+    {
+      "name": "frostpeak:chalet",
+      "file": "models/chalet.glb",
+      "type": "gltf",
+      "bytes": 297212,
+      "sha256": "4489de8e8f888f05c08c4414ec72dced7188e7e979905cdb8dd198ab13613d6f",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip#library/stklib_woodLodge_a/stklib_woodLodge_a_main.spm",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on",
+      "license": "CC-BY-SA-4.0",
+      "attribution": "Jean-Manuel Cl\u00e9men\u00e7on / SuperTuxKart",
+      "modifications": "Converted SPM to textured glTF, embedded resized textures, offline vertex AO for solid models; winter diffuse painting for conifers."
+    },
+    {
+      "name": "frostpeak:pine-near",
+      "file": "models/pine-near.glb",
+      "type": "gltf",
+      "bytes": 324452,
+      "sha256": "6b822de501291859c81e205b216e02a8764392a602de121e65375ae61875977b",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip#library/stklib_pinetree_a/stklib_pinetree_a_lod_high.spm",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on",
+      "license": "CC-BY-SA-4.0",
+      "attribution": "Jean-Manuel Cl\u00e9men\u00e7on / SuperTuxKart",
+      "modifications": "Converted SPM to textured glTF, embedded resized textures, offline vertex AO for solid models; winter diffuse painting for conifers."
+    },
+    {
+      "name": "frostpeak:pine-mid",
+      "file": "models/pine-mid.glb",
+      "type": "gltf",
+      "bytes": 191872,
+      "sha256": "43a5f1b75bc2fc5ee17d587e40f88f0aea339446441090163ad1325f2ed0cee3",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip#library/stklib_pinetree_b/stklib_pinetree_b_high.spm",
+      "author": "Sven Andreas Belting; Christian Duion Femmer",
+      "license": "CC-BY-SA-3.0 AND CC-BY-3.0",
+      "attribution": "Sven Andreas Belting; Christian Duion Femmer / SuperTuxKart",
+      "modifications": "Converted SPM to textured glTF, embedded resized textures, offline vertex AO for solid models; winter diffuse painting for conifers."
+    },
+    {
+      "name": "frostpeak:pine-far",
+      "file": "models/pine-far.glb",
+      "type": "gltf",
+      "bytes": 150340,
+      "sha256": "2767ab0abc590004de0dbc5b56fca2dfefca96a917a330b46c205699f42341d0",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip#library/stklib_pinetree_a/stklib_conifer_a_lodlow.spm",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on",
+      "license": "CC-BY-SA-4.0",
+      "attribution": "Jean-Manuel Cl\u00e9men\u00e7on / SuperTuxKart",
+      "modifications": "Converted SPM to textured glTF, embedded resized textures, offline vertex AO for solid models; winter diffuse painting for conifers."
+    },
+    {
+      "name": "frostpeak:snow-bush",
+      "file": "models/snow-bush.glb",
+      "type": "gltf",
+      "bytes": 108060,
+      "sha256": "f0ccf733c4365074076cb0ff0130f41bb542d5290334316444ed2268f41ef587",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip#library/stklib_snowSmallBush_a/stklib_snowSmallBush_a_main.spm",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on",
+      "license": "CC-BY-SA-4.0",
+      "attribution": "Jean-Manuel Cl\u00e9men\u00e7on / SuperTuxKart",
+      "modifications": "Converted SPM to textured glTF, embedded resized textures, offline vertex AO for solid models; winter diffuse painting for conifers."
+    },
+    {
+      "name": "frostpeak:snow-rock",
+      "file": "models/snow-rock.glb",
+      "type": "gltf",
+      "bytes": 223808,
+      "sha256": "91ed5f738c593ce3113de855b0e5cd2b34a7a16dd7839cf1889eb84d687d2f6d",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip#library/stklib_snowRocks_a/stklib_snowRocks_a_main.spm",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on",
+      "license": "CC-BY-SA-4.0",
+      "attribution": "Jean-Manuel Cl\u00e9men\u00e7on / SuperTuxKart",
+      "modifications": "Converted SPM to textured glTF, embedded resized textures, offline vertex AO for solid models; winter diffuse painting for conifers."
+    },
+    {
+      "name": "frostpeak:wood-lamp",
+      "file": "models/wood-lamp.glb",
+      "type": "gltf",
+      "bytes": 64644,
+      "sha256": "a301666c7e9e6b62ea595109fc9ddacb7d9ae04a5e33a4a8224967e719798993",
+      "source": "https://github.com/supertuxkart/stk-assets-mobile/releases/download/1.4/stk-assets-full.zip#library/stklib_woodPostLamp_a/stklib_woodPostLamp_a_main.spm",
+      "author": "Jean-Manuel Cl\u00e9men\u00e7on",
+      "license": "CC-BY-SA-4.0",
+      "attribution": "Jean-Manuel Cl\u00e9men\u00e7on / SuperTuxKart",
+      "modifications": "Converted SPM to textured glTF, embedded resized textures, offline vertex AO for solid models; winter diffuse painting for conifers."
     }
   ],
   "sources": [

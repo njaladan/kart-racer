@@ -102,3 +102,34 @@ test("adaptive resolution survives resize and benchmarks retain the requested ra
   for (let i = 0; i < 70; i++) benchmark.frame(0.05);
   assert.equal(benchmark.loop.getPixelRatio(), 2);
 });
+
+test("adaptive quality lowers costly effects and recovers after sustained healthy rendering", () => {
+  const changes = [];
+  const app = fixture({ onQualityChange: (change) => changes.push(change) });
+  for (let i = 0; i < 65; i++) app.frame(1 / 30);
+  assert.equal(app.loop.getQualityTier(), 3, "short dips must not lower artwork quality");
+  for (let i = 0; i < 40; i++) app.frame(1 / 30);
+  assert.equal(app.loop.getQualityTier(), 2);
+  assert.equal(changes.at(-1).targetFps, 60);
+  const reduced = app.loop.getPixelRatio();
+  for (let i = 0; i < 610; i++) app.frame(1 / 60);
+  assert.ok(app.loop.getPixelRatio() > reduced, "resolution recovers after healthy windows");
+  for (let i = 0; i < 1250; i++) app.frame(1 / 60);
+  assert.equal(app.loop.getPixelRatio(), 2);
+  assert.equal(app.loop.getQualityTier(), 3);
+});
+
+test("background-tab stalls do not pollute quality timing or pause recovery", () => {
+  const changes = [];
+  const app = fixture({ onQualityChange: (change) => changes.push(change) });
+  for (let i = 0; i < 12; i++) app.frame(5);
+  assert.equal(app.loop.getQualityTier(), 3);
+  assert.equal(changes.length, 0);
+  app.pause(true);
+  for (let i = 0; i < 100; i++) app.frame(0.05);
+  assert.equal(changes.length, 0);
+  app.pause(false);
+  app.loop.resetTiming();
+  for (let i = 0; i < 185; i++) app.frame(1 / 60);
+  assert.equal(app.loop.getQualityTier(), 3);
+});

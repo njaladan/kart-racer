@@ -1,4 +1,5 @@
 import * as THREE from "../../vendor/three/three.module.js";
+import { sectionAt, trackT } from "../track/track.js";
 
 const SPARK_COLORS = ["#d6edf1", "#8af6ff", "#ffc05e"];
 
@@ -21,7 +22,7 @@ export function createRacerEffects({ spawnParticle, terrain = "grass" }) {
   function update(state, events, dt) {
     let clock = clocks.get(state);
     if (!clock) {
-      clock = { drift: 0, boost: 0 };
+      clock = { drift: 0, boost: 0, surface: 0 };
       clocks.set(state, clock);
     }
     if (events.landed) {
@@ -38,6 +39,38 @@ export function createRacerEffects({ spawnParticle, terrain = "grass" }) {
           velocity,
         );
       }
+    }
+
+    const surface = sectionAt(trackT(state.s)).material;
+    const loose =
+      ["snow", "sand", "gravel", "needles", "grass"].includes(surface) || Math.abs(state.x) > 1;
+    const wet = terrain === "concrete" || surface === "ice";
+    clock.surface =
+      state.grounded && state.speed > 12 && (loose || wet)
+        ? clock.surface + dt * (state.isPlayer ? 14 : 3)
+        : 0;
+    while (clock.surface >= 1) {
+      clock.surface--;
+      const color =
+        surface === "snow" || terrain === "snow"
+          ? "#e8f6ff"
+          : wet
+            ? "#96cdd9"
+            : terrain === "sand"
+              ? "#d8b985"
+              : "#aaa785";
+      for (const side of [-1, 1])
+        spawnParticle(
+          positionBehind(state, side * 0.7, 0.74, 0.12),
+          color,
+          wet ? 0.25 : 0.48,
+          wet ? 0.08 : 0.17,
+          new THREE.Vector3(
+            Math.sin(state.yaw) * 2 + side * Math.cos(state.yaw) * 0.8,
+            wet ? 0.65 : 0.35,
+            Math.cos(state.yaw) * 2 - side * Math.sin(state.yaw) * 0.8,
+          ),
+        );
     }
 
     const drifting = events.sliding && state.grounded;

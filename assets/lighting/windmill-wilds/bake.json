@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "course": "windmill-wilds",
+  "lighting": "indirect.png",
+  "height": "height.png",
+  "bounds": [
+    -289.19,
+    -245.6,
+    556.72,
+    481.93
+  ],
+  "heightRange": [
+    -12,
+    75
+  ],
+  "bounceScale": 0.65,
+  "resolution": 512,
+  "samples": 8,
+  "radius": 22.0,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded.",
+  "sourceSceneSha256": "304359c0a606ad8b0f388954fbadff1db5ecdd63f47c8685a50cb68662cbb57f",
+  "triangles": 505632,
+  "lights": 0,
+  "outputs": [
+    {
+      "file": "indirect.png",
+      "bytes": 185271,
+      "sha256": "98cf7fd3f290271080a35816fc5d4680d4bbd91590aa8dbfe57905ec8e597932"
+    },
+    {
+      "file": "height.png",
+      "bytes": 200225,
+      "sha256": "63e2c179435dba14a5fadb3523d0a91d02c4dcff3cb7093f64089acb586139de"
+    }
+  ]
+}

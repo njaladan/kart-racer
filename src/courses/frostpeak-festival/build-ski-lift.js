@@ -12,7 +12,7 @@ export function buildSkiLift({
   palette,
   geometry,
 }) {
-  const { batch, box, mesh, sectorT } = kit;
+  const { asset, batch, box, mesh, sectorT } = kit;
   const { cream, cyan, dark, glass, red, rock, snow, timber } = palette;
   const { cylinder } = geometry;
   // Lift follows the forest/climb beside the road; every cable crossing stays
@@ -49,12 +49,13 @@ export function buildSkiLift({
   function station(t) {
     const g = landAt(t, edgeOffset(t, -1, 43));
     groundShadow(g, 25, 27);
-    box(rock, g, [0, 1, 0], [17, 2, 15]);
-    box(timber, g, [0, 5.2, 0], [16, 6.4, 14]);
-    box(glass, g, [0, 5, -7.06], [13, 3, 0.1]);
-    box(red, g, [0, 8.6, 0], [19, 0.45, 18]);
-    box(snow, g, [0, 8.94, 0], [19.4, 0.25, 18.4]);
-    for (const x of [-7, 0, 7]) box(dark, g, [x, 4.8, -7.15], [0.3, 5.8, 0.3]);
+    asset("frostpeak:chalet", g, [0, 0, 0], [13.5, 11.5, 13.5]);
+    // Boarding canopy and framed glazing remain functional lift architecture,
+    // while the imported lodge supplies timber joints, eaves and snowy roof.
+    box(glass, g, [0, 3.2, -7.06], [8.4, 2.6, 0.1]);
+    box(red, g, [0, 5.15, -9.5], [11, 0.3, 6]);
+    box(snow, g, [0, 5.42, -9.5], [11.2, 0.24, 6.2]);
+    for (const x of [-4.8, 4.8]) box(dark, g, [x, 3.05, -11.8], [0.3, 4.7, 0.3]);
     box(timber, g, [0, 1.2, -10], [18, 0.3, 6]);
     rail(g, 0, 2.4, -12.8, 18);
     for (let i = 0; i < 5; i++) {

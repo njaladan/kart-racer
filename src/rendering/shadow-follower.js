@@ -6,9 +6,10 @@ export function createStableShadowFollower(sun) {
   const x = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), z).normalize();
   const y = new THREE.Vector3().crossVectors(z, x);
   const center = new THREE.Vector3();
-  const texelX = (sun.shadow.camera.right - sun.shadow.camera.left) / sun.shadow.mapSize.x;
-  const texelY = (sun.shadow.camera.top - sun.shadow.camera.bottom) / sun.shadow.mapSize.y;
+
   return (position) => {
+    const texelX = (sun.shadow.camera.right - sun.shadow.camera.left) / sun.shadow.mapSize.x;
+    const texelY = (sun.shadow.camera.top - sun.shadow.camera.bottom) / sun.shadow.mapSize.y;
     // Quantize in light space, not world X/Z, to keep projected shadow texels
     // anchored as the kart moves. The light direction stays exactly constant.
     center

@@ -1,3 +1,7 @@
+import { registerLightPool } from "../rendering/course-lighting.js";
+import { createWaterMaterial, installSurfaceDetail } from "../rendering/surface-detail.js";
+import { addRuinsDressing } from "./sunstone-ruins/add-ruins-dressing.js";
+import { placeRock } from "./sunstone-ruins/ruins-assets.js";
 import { buildTemple } from "./sunstone-ruins/build-temple.js";
 import { createDesertGeometry } from "./sunstone-ruins/create-desert-geometry.js";
 // Sunstone has a quiet expedition rhythm: moving water and cloth in the oasis,
@@ -6,7 +10,8 @@ import { addGlow, createContactShadowMesh } from "../rendering/visual-effects.js
 
 export function buildWorld(context) {
   const { THREE, scenery, track, kit, hazardAt, textures = {} } = context;
-  const { material, mesh, box, groupAt, sectorT, batch, align } = kit;
+  const scene = context.scene || scenery;
+  const { material, mesh, box, groupAt, sectorT, align } = kit;
   const animated = [],
     windPalms = [],
     cloth = [],
@@ -23,7 +28,13 @@ export function buildWorld(context) {
     trunk = material("#a18660", { map: textures.bark });
   const sand = material("#e3c584", { map: textures.sand }),
     sandShade = material("#d4b47c", { map: textures.sand });
-  const water = material("#5fb5ad", { map: textures.water, roughness: 0.2, metalness: 0.22 });
+  const water = createWaterMaterial({
+    scene,
+    color: "#4aada8",
+    roughness: 0.2,
+    shoreRadius: 26,
+    foam: true,
+  });
   const poolDeep = material("#348f94", { roughness: 0.35 });
   const rippleMat = material("#b0e7d3", {
     transparent: true,
@@ -36,49 +47,32 @@ export function buildWorld(context) {
   const teal = material("#4b9091", { map: textures.fabric, side: THREE.DoubleSide });
   const flameMat = material("#ffbd61", { emissive: "#ff923c", emissiveIntensity: 1.5 });
   const bronze = material("#9e7648", { map: textures.metal, roughness: 0.62, metalness: 0.32 });
-  const ceramic = material("#c27658", { map: textures.stone });
   const cylinder = new THREE.CylinderGeometry(1, 1, 1, 10);
   const cone = new THREE.ConeGeometry(1, 1, 8);
   const rock = new THREE.IcosahedronGeometry(1, 0);
   const sphere = new THREE.SphereGeometry(1, 12, 8);
   const ring = new THREE.RingGeometry(0.93, 1, 40);
   ring.rotateX(-Math.PI / 2);
-  const rockMaterials = new Map();
+  for (const m of [sand, sandShade, stone, dark, gold, chalk])
+    installSurfaceDetail(m, { kind: "terrain", scale: 0.065, strength: 0.15 });
   function importedRock(name, parent, position, size) {
-    // Kenney's faceted rock forms are split across several meshes in glTF.
-    // Scale the whole authored silhouette, and tint cloned materials so each
-    // canyon cluster keeps the warm sandstone palette without flattening its
-    // facet shading or mutating the shared asset cache.
-    const model = kit.asset(`kenney:nature/${name}`, parent, position, size);
-    const tint = name === "rock-tallb" ? "#c7a37a" : name === "rock-largee" ? "#d9b78b" : "#be9d7c";
-    model.traverse((child) => {
-      if (!child.isMesh) return;
-      const originals = Array.isArray(child.material) ? child.material : [child.material];
-      const clones = originals.map((source) => {
-        if (!rockMaterials.has(source)) rockMaterials.set(source, new Map());
-        const variants = rockMaterials.get(source);
-        if (!variants.has(tint)) {
-          const mat = source.clone();
-          mat.color.set(tint);
-          mat.roughness = 0.94;
-          variants.set(tint, mat);
-        }
-        return variants.get(tint);
-      });
-      child.material = Array.isArray(child.material) ? clones : clones[0];
-    });
+    // These downloaded rock silhouettes are eroded, UV-unwrapped and textured
+    // offline; the runtime only instances their rounded, stratified GLBs.
+    const model = placeRock(
+      kit,
+      name === "rock-tallb" ? "ruins:cliff" : "ruins:boulder",
+      parent,
+      position,
+      size,
+    );
     return model;
   }
   const palette = { bronze, chalk, cool, dark, gold, rune, stone };
   const geometry = { cone, cylinder, rock, sphere };
-  const {
-    beddedLayerGeometry,
-    duneGeometry,
-    frondGeometry,
-    fabricGeometry,
-    wingGeometry,
-    birdMat,
-  } = createDesertGeometry({ THREE, kit });
+  const { duneGeometry, fabricGeometry, wingGeometry, birdMat } = createDesertGeometry({
+    THREE,
+    kit,
+  });
   function grounded(t, offset, footprint = 0) {
     // safeGroup also tests against other nearby sectors, protecting tight bends.
     if (kit.safeGroup) return kit.safeGroup(t, offset, footprint);
@@ -92,41 +86,15 @@ export function buildWorld(context) {
   function palm(t, side, size = 1, wind = false) {
     const g = grounded(t, side * (26 + size * 2), 6 * size);
     if (!g) return;
-    groundShadow(g, 4.8 * size, 4.8 * size);
-    mesh(cylinder, trunk, g, [0, 5 * size, 0], [0.55 * size, 10 * size, 0.55 * size]);
-    for (let i = 0; i < 6; i++)
-      mesh(
-        cylinder,
-        dark,
-        g,
-        [0, (1 + i * 1.3) * size, 0],
-        [0.59 * size, 0.12 * size, 0.59 * size],
-      );
-    const crown = new THREE.Group();
-    g.add(crown);
-    crown.position.y = 10 * size;
-    crown.rotation.y = t * 37;
-    mesh(sphere, leaf, crown, [0, 0, 0], [0.8 * size, 0.34 * size, 0.8 * size]);
-    for (let i = 0; i < 9; i++) {
-      const reach = size * (0.88 + (i % 3) * 0.08),
-        frond = mesh(frondGeometry, leaf, crown, [0, 0, 0], [reach, size, size]);
-      frond.rotation.y = (i * Math.PI * 2) / 9 + Math.sin(i * 1.8 + t * 23) * 0.09;
-      frond.rotation.z = Math.sin(i * 2.1 + t * 11) * 0.1;
-    }
-    for (let i = 0; i < 3; i++)
-      mesh(
-        sphere,
-        dark,
-        g,
-        [(i - 1) * 0.35 * size, 9.6 * size, 0.25 * size],
-        [0.33 * size, 0.43 * size, 0.33 * size],
-      );
-    batch(crown);
+    groundShadow(g, 6.8 * size, 6.8 * size);
+    const tree = kit.asset("ruins:palm", g, [0, 0, 0], [12 * size, 12 * size, 12 * size]);
+    tree.rotation.y = t * 37;
     if (wind) {
-      windPalms.push({ object: crown, phase: t * 25 });
-      animated.push(crown);
-    } else batch(g);
+      windPalms.push({ object: tree, phase: t * 25 });
+      animated.push(tree);
+    }
   }
+
   function canopy(t, offset, index) {
     const g = grounded(t, offset, 6);
     if (!g) return;
@@ -141,24 +109,31 @@ export function buildWorld(context) {
     cloth.push({ object: roof, phase: index * 1.3, baseY: 5.3 });
     animated.push(roof);
     box(dark, g, [0, 0.45, 0], [5.8, 0.9, 2.8]);
-    for (let i = 0; i < 5; i++) {
-      const pot = mesh(
-        new THREE.SphereGeometry(1, 8, 6),
-        i % 2 ? ceramic : gold,
-        g,
-        [-2 + i, 1.4, 0],
-        [0.45, 0.62, 0.45],
-      );
-      mesh(cylinder, dark, g, [pot.position.x, 1.99, 0], [0.2, 0.07, 0.2]);
+    for (let i = 0; i < 4; i++) {
+      const pot = kit.asset("ruins:vase", g, [-2.4 + i * 1.5, 0.9, 0], [0.8, 0.8, 0.8]);
+      pot.rotation.y = i * 1.31;
     }
   }
+
   function torch(t, offset, index) {
     const g = grounded(t, offset, 1.2);
     if (!g) return;
     groundShadow(g, 3.2, 3.2);
-    box(dark, g, [0, 1.25, 0], [1.6, 2.5, 1.6]);
-    mesh(cylinder, bronze, g, [0, 3, 0], [0.25, 2, 0.25]);
-    mesh(new THREE.CylinderGeometry(0.65, 0.3, 0.6, 8), bronze, g, [0, 4, 0]);
+    kit.asset("ruins:torch", g, [0, 0, 0], [4.3, 4.3, 4.3]);
+    g.updateWorldMatrix(true, false);
+    const lightPosition = g.localToWorld(new THREE.Vector3(0, 4.5, 0));
+    registerLightPool(scene, {
+      position: lightPosition,
+      color: "#ffaa55",
+      intensity: 28,
+      radius: 13,
+    });
+    const pool = createContactShadowMesh({ width: 12, depth: 12, opacity: 0.24 });
+    pool.material = pool.material.clone();
+    pool.material.color.set("#d4944b");
+    pool.material.blending = THREE.AdditiveBlending;
+    pool.position.y = 0.05;
+    g.add(pool);
     const flame = mesh(rock, flameMat, g, [0, 4.65, 0], [0.42, 0.85, 0.42]);
     flame.castShadow = false;
     flames.push({ object: flame, phase: index * 1.71 });
@@ -185,7 +160,7 @@ export function buildWorld(context) {
       const a = (i * Math.PI) / 18,
         x = Math.cos(a) * 27,
         z = Math.sin(a) * 19;
-      mesh(rock, i % 3 ? chalk : dark, pond, [x, -0.15, z], [1.5, 0.7, 1.1]);
+      if (i % 3 === 0) placeRock(kit, "ruins:boulder", pond, [x, -0.1, z], [1.5, 0.8, 1.2]);
       for (let j = 0; j < 3; j++) {
         const stalk = mesh(
           cylinder,
@@ -225,6 +200,7 @@ export function buildWorld(context) {
       [0, -0.3, 0],
       [width, 23 + (i % 4) * 4, depth],
     );
+    d.userData.bakeReceiver = true;
     d.rotation.y = 0.4 + i * 0.57;
     d.castShadow = false;
   }
@@ -250,33 +226,15 @@ export function buildWorld(context) {
       [14, 22 + (i % 3) * 3, 16],
     );
     wall.rotation.y = i * 0.9;
-    for (let band = 0; band < 4; band++) {
-      const ledge = box(
-        band % 2 ? chalk : dark,
-        g,
-        [0, 1.5 + band * 4, 0],
-        [11, 0.4 + (band % 2) * 0.2, 9],
-      );
-      ledge.rotation.y = i * 0.9;
-      if (band < 3) {
-        const seam = mesh(
-          beddedLayerGeometry(11, band * 5 - 1.5, i * 1.7 + band),
-          band % 2 ? dark : stone,
-          g,
-        );
-        seam.rotation.y = i * 0.9;
-      }
-    }
     for (let j = 0; j < 3; j++)
-      mesh(rock, j % 2 ? stone : chalk, g, [-5 + j * 5, -0.2, 7], [2 + j * 0.7, 1.5, 2]);
+      placeRock(kit, "ruins:boulder", g, [-5 + j * 5, -0.2, 7], [2 + j * 0.7, 1.5, 2]);
   }
   for (let i = 0; i < 15; i++) {
     const g = grounded(sectorT(2, (i + 0.5) / 15), -29, 10);
     if (!g) continue;
-    importedRock(i % 2 ? "rock-largee" : "rock-largeb", g, [0, -4, 0], [14, 14, 10]);
-    box(chalk, g, [0, 1.5, 0], [12, 0.5, 8]);
-    for (let j = 0; j < 3; j++) mesh(cone, leaf, g, [-4 + j * 4, 0.7, 3], [0.7, 1.7, 0.7]);
+    importedRock(i % 2 ? "rock-largee" : "rock-largeb", g, [0, -2, 0], [14, 14, 10]);
   }
+
   const { hazard, gearGroup, beacon } = buildTemple({
     THREE,
     animated,
@@ -303,6 +261,7 @@ export function buildWorld(context) {
       [0, -0.4, 0],
       [17 + (i % 3) * 2, 12 + (i % 4), 14],
     );
+    d.userData.bakeReceiver = true;
     d.rotation.y = i * 0.44;
     if (i % 5 === 0) importedRock("rock-larged", g, [10, -1, 0], [5, 4, 5]);
   }
@@ -321,13 +280,13 @@ export function buildWorld(context) {
     [2, 0.46, -66],
     [5, 0.66, 74],
   ]) {
-    const g = grounded(sectorT(section, f), offset, 10);
+    const g = grounded(sectorT(section, f), offset, 16);
     if (!g) continue;
-    for (let i = 0; i < 3; i++)
-      box(i % 2 ? gold : stone, g, [0, 3 + i * 5, 0], [14 - i * 3, 6, 14 - i * 3]);
-    for (const x of [-4, 4]) box(dark, g, [x, 17, 0], [2, 6, 2]);
-    box(chalk, g, [0, 13, 0], [10, 0.8, 10]);
+    const tower = kit.asset("ruins:ruined-house", g, [0, 0, 0], [18, 18, 18]);
+    tower.rotation.y = section * 0.73;
   }
+  addRuinsDressing({ ...context, grounded, groundShadow, duneGeometry, sand, sandShade, animated });
+
   // Sand motes stay beside the canyon and dune sector, below eye-level opacity.
   const dustPositions = [];
   for (let i = 0; i < 64; i++) {
