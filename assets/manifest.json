@@ -1,0 +1,51 @@
+{
+  "license": "CC0-1.0",
+  "sources": {
+    "asphalt.jpg": {
+      "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/asphalt/albedo.jpg",
+      "sha256": "412598f9cfa046ff222a76ecd66fde576e42f5141938ffe3be2e2c0e9082e5c8"
+    },
+    "grass.jpg": {
+      "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/Grass004/color.jpg",
+      "sha256": "9e1c60da44b34a9738b1256ba827541f097dc583521b1d281e61b5f4b4217bc5"
+    },
+    "sky.hdr": {
+      "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/hdri/kloofendal_48d_partly_cloudy_puresky_1k.hdr",
+      "sha256": "fd94c84997b8a3c353b62c2125a9b44e19509956986a126e472684432a02d798"
+    },
+    "tree-default.glb": {
+      "url": "https://raw.githubusercontent.com/Hidencod/tge-assets/1f7dee9076ee848773f08fd632ab4e4e73357777/packs/nature-kit/tree-default.glb",
+      "sha256": "562d29638c902de3c7bee465d3a53bb77117efbc392ae04ed894faf6b5dc691d"
+    },
+    "tree-oak.glb": {
+      "url": "https://raw.githubusercontent.com/Hidencod/tge-assets/1f7dee9076ee848773f08fd632ab4e4e73357777/packs/nature-kit/tree-oak.glb",
+      "sha256": "d7fd8773674928c50c11b66d12c636d49bdcc15a8b1c7fbb98e6f63a3439a3f3"
+    },
+    "tree-pine.glb": {
+      "url": "https://raw.githubusercontent.com/Hidencod/tge-assets/1f7dee9076ee848773f08fd632ab4e4e73357777/packs/nature-kit/tree-pinesmallb.glb",
+      "sha256": "59392aa6604adb9dccd4fb76df5ed12ae8ac7d7391eb7e04bc84fffe9f9b36c8"
+    }
+  },
+  "outputs": {
+    "asphalt.webp": {
+      "bytes": 13098,
+      "sha256": "486a911ef626d3fc9d725bacac76651470255af34cf37e280dfa52875d4f4214"
+    },
+    "grass.webp": {
+      "bytes": 26034,
+      "sha256": "0c24754ead312c599a1604456b6478be4eaa054fa4c610364c513fd07520dc04"
+    },
+    "nature.bin": {
+      "bytes": 63936,
+      "sha256": "e7d1fa6e8aabff16fd41e11e8472b9eb223ff5d049da580439ce6068c546459c"
+    },
+    "nature.json": {
+      "bytes": 229,
+      "sha256": "767b72d859981570020e1a05430121cff42154c3d613e110a4198dfee7a06886"
+    },
+    "sky-reflections.webp": {
+      "bytes": 3526,
+      "sha256": "1c24d69e96b23f359c26f0e97de5a9e4617c9d0741df60ed5d910cd3243bfa76"
+    }
+  }
+}

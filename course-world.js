@@ -2,17 +2,18 @@ import * as THREE from './vendor/three/three.module.js';
 import { batchStaticMeshes } from './visuals.js';
 import { surfaceTexture } from './textures.js';
 import { createRailGeometry } from './course-rails.js';
+import { bakeVertexShade } from './graphics.js';
 import { TRACK, COURSE_LENGTH, SECTIONS, frameAt, poseAt, roadHalfWidth,
-  shortcutWidth, projectTrack, MILL_T, BRIDGE_RANGE } from './track.js';
+  surfaceAt, shortcutWidth, projectTrack, MILL_T, BRIDGE_RANGE } from './track.js';
 import { cartAt } from './hazards.js';
 
 // Every road edge, rail, shortcut and moving prop uses the simulation's data.
-export function addCourseWorld(scene, renderer, mats, textures) {
+export function addCourseWorld(scene, renderer, mats, textures, nature = null) {
   const scenery = new THREE.Group();
   scene.add(scenery);
   let seed = 8127;
   const random = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
-  const mat = (color, map = null) => new THREE.MeshStandardMaterial({ color, map, roughness: 0.87 });
+  const mat = (color, map = null) => new THREE.MeshStandardMaterial({ color, map, roughness: 0.87, vertexColors: true });
   const wood = mat('#d6b784'), darkWood = mat('#76573b');
   // Tight inner bends can reverse the edge direction; keep both faces visible.
   const railMaterials = [mats.rail.clone(), darkWood.clone()], bridgeRailMaterial = wood.clone();
@@ -28,6 +29,7 @@ export function addCourseWorld(scene, renderer, mats, textures) {
   const coneGeo = new THREE.ConeGeometry(1, 1, 12);
   const cylinderGeo = new THREE.CylinderGeometry(1, 1, 1, 10);
   const mesh = (geo, material, parent = scenery, p = [0, 0, 0], scale = [1, 1, 1]) => {
+    if (Array.isArray(material) || material.vertexColors) bakeVertexShade(geo);
     const m = new THREE.Mesh(geo, material);
     m.position.set(...p); m.scale.set(...scale);
     m.castShadow = true; m.receiveShadow = true; parent.add(m); return m;
@@ -46,10 +48,13 @@ export function addCourseWorld(scene, renderer, mats, textures) {
   const ground = mesh(new THREE.PlaneGeometry(1800, 1800), mats.grass, scenery, [0, -1.7, 0]);
   ground.rotation.x = -Math.PI / 2; ground.castShadow = false;
   const groundUV = ground.geometry.attributes.uv;
-  for (let i = 0; i < groundUV.count; i++) groundUV.setXY(i, groundUV.getX(i) * 120, groundUV.getY(i) * 120);
+  // World-aligned grass tiles meet the banks without an obvious texture seam.
+  const groundPos = ground.geometry.getAttribute('position');
+  for (let i = 0; i < groundUV.count; i++) groundUV.setXY(i, groundPos.getX(i) / 6, -groundPos.getY(i) / 6);
 
   function ribbon(edgeA, edgeB, materials, lift = 0.045, terrain = false) {
-    const pos = [], uv = [], indices = [], groups = [], n = 1800;
+    const pos = [], uv = [], colors = [], indices = [], groups = [], n = 1800;
+    const grassy = materials === mats.grass;
     for (let i = 0; i <= n; i++) {
       const t = i / n, frame = frameAt(t);
       for (const [j, edge] of [edgeA(t), edgeB(t)].entries()) {
@@ -58,7 +63,14 @@ export function addCourseWorld(scene, renderer, mats, textures) {
           const distance = Math.abs(edge) - (roadHalfWidth(t) + (edge > 0 ? shortcutWidth(t) : 0));
           p.y = THREE.MathUtils.lerp(p.y - 0.06, -1.7, THREE.MathUtils.smoothstep(distance, 0, 38));
         } else p.addScaledVector(frame.up, lift);
-        pos.push(p.x, p.y, p.z); uv.push(edge / 8, t * COURSE_LENGTH / 8);
+        pos.push(p.x, p.y, p.z);
+        if (grassy) uv.push(p.x / 6, p.z / 6);
+        else uv.push(edge / 8, t * COURSE_LENGTH / 8);
+        // Painted edge wear and broad turf variation live in existing vertices.
+        const variation = 0.5 + 0.5 * Math.sin(p.x * 0.047 + Math.sin(p.z * 0.035) * 2);
+        const shade = grassy ? 0.87 + variation * 0.13
+          : Array.isArray(materials) ? 0.9 + variation * 0.06 : 0.95;
+        colors.push(shade, shade, shade);
       }
       if (i < n) {
         if (terrain && inBridge((i + 0.5) / n)) continue;
@@ -76,6 +88,7 @@ export function addCourseWorld(scene, renderer, mats, textures) {
     }
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    geo.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
     geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); geo.setIndex(indices);
     for (const g of groups) geo.addGroup(g.start, g.count, g.materialIndex);
     geo.computeVertexNormals();
@@ -131,9 +144,37 @@ export function addCourseWorld(scene, renderer, mats, textures) {
     return { surface, y: THREE.MathUtils.lerp(surface.height - 0.12, -1.7,
       THREE.MathUtils.smoothstep(surface.distance - edge - 0.55, 0, 38)) };
   }
+  const treeBuckets = new Map(), fruitBuckets = new Map();
+  const treeMaterial = new THREE.MeshStandardMaterial({ color: '#ffffff', vertexColors: true, roughness: 0.92 });
+  const treeDummy = new THREE.Object3D();
+  const treeTint = new THREE.Color();
+  function instance(bucketMap, key, geometry, material, matrix, color) {
+    if (!bucketMap.has(key)) bucketMap.set(key, { geometry, material, placements: [] });
+    bucketMap.get(key).placements.push({ matrix: matrix.clone(), color: color.clone() });
+  }
   function tree(t, offset, kind, size) {
     const p = poseAt(t * TRACK, offset, 0).p, base = baseAt(p);
     if (base.surface.distance < base.surface.halfWidth + 3 + (base.surface.offset > 0 ? shortcutWidth(base.surface.t) : 0)) return;
+    if (nature) {
+      const type = kind === 'pine' ? 2 : kind === 'blossom' ? 3 : (Math.floor(t * 193) % 2);
+      // A sector-sized batch balances culling with a low draw-call count.
+      const tile = surfaceAt(t).section.id;
+      const phase = t * 277 + offset;
+      treeDummy.position.set(p.x, base.y, p.z);
+      treeDummy.rotation.set(0, phase, 0);
+      treeDummy.scale.set(size * (kind === 'pine' ? 2.8 : 1.8), size * (kind === 'pine' ? 1.6 : 1.45), size * (kind === 'pine' ? 2.8 : 1.8) * (0.94 + Math.sin(phase) * 0.08));
+      treeDummy.updateMatrix();
+      treeTint.setRGB(0.92 + Math.sin(phase) * 0.06, 0.94 + Math.cos(phase) * 0.05, 0.9);
+      instance(treeBuckets, `${tile}:${type}`, nature[type], treeMaterial, treeDummy.matrix, treeTint);
+      if (kind === 'orchard') for (let i = 0; i < 5; i++) {
+        treeDummy.position.set(p.x + Math.cos(i * 1.7) * size * 1.4,
+          base.y + size * (4.4 + (i % 2) * 0.5), p.z + Math.sin(i * 1.7) * size * 1.4);
+        treeDummy.scale.setScalar(0.22); treeDummy.updateMatrix();
+        treeTint.setRGB(1, 1, 1);
+        instance(fruitBuckets, tile, fruitGeo, fruit, treeDummy.matrix, treeTint);
+      }
+      return;
+    }
     const g = new THREE.Group(); g.position.set(p.x, base.y, p.z); scenery.add(g);
     mesh(cylinderGeo, bark, g, [0, size * 2.5, 0], [size * 0.25, size * 5, size * 0.25]);
     if (kind === 'pine') {
@@ -146,6 +187,7 @@ export function addCourseWorld(scene, renderer, mats, textures) {
         [Math.cos(i * 1.7) * size * 1.6, size * (4.1 + (i % 2) * 0.5), Math.sin(i * 1.7) * size * 1.7], [0.22, 0.22, 0.22]);
     }
   }
+  const fruitGeo = bakeVertexShade(new THREE.OctahedronGeometry(1));
   for (let i = 0; i < 160; i++) {
     const t = sectorT(1, random()), side = i % 2 ? 1 : -1;
     tree(t, side * (14 + random() * 32), 'pine', 1.8 + random() * 0.9);
@@ -158,6 +200,18 @@ export function addCourseWorld(scene, renderer, mats, textures) {
     tree(t, side * (15 + (side > 0 ? shortcutWidth(t) : 0) + random() * 27), i % 3 ? 'orchard' : 'blossom', 1 + random() * 0.4);
   }
   for (let i = 0; i < 40; i++) tree(sectorT(0, random()), (i % 2 ? 1 : -1) * (20 + random() * 42), 'orchard', 1.3 + random());
+  // Spatial batches retain culling: an orchard across the circuit does not
+  // enter the nearby shadow map or main pass. Count and placement stay bounded.
+  for (const buckets of [treeBuckets, fruitBuckets]) for (const bucket of buckets.values()) {
+    const m = new THREE.InstancedMesh(bucket.geometry, bucket.material, bucket.placements.length);
+    m.name = buckets === treeBuckets ? 'Kenney nature instances' : 'Orchard fruit instances';
+    bucket.placements.forEach((p, i) => { m.setMatrixAt(i, p.matrix); m.setColorAt(i, p.color); });
+    m.instanceMatrix.needsUpdate = true;
+    m.castShadow = buckets === treeBuckets;
+    m.receiveShadow = true;
+    m.computeBoundingSphere();
+    scene.add(m);
+  }
   // Ridge rock faces lean away from the road; the outside is an open valley view.
   for (let i = 0; i < 45; i++) {
     const t = sectorT(2, random()), p = poseAt(t * TRACK, -17 - random() * 15, 0).p, base = baseAt(p);
