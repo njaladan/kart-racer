@@ -908,3 +908,7 @@ h2 em {
 @media(max-height:540px) { .course-picker { margin:8px 0; font-size:9px; } .course-picker select { padding:8px 12px; } .title-card h1 { font-size:clamp(38px,10vh,54px); margin:10px 0; } .title-card p { margin-bottom:8px; font-size:11px; } .title-foot { margin-top:8px; } }
 
 .primary-button:disabled { opacity:.65; cursor:wait; transform:none; }
+
+.race-pickers { display:grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap:12px; }
+.race-pickers .course-picker select { font-size:13px; padding-left:10px; padding-right:4px; }
+@media(max-width:600px) { .race-pickers { gap:8px; } .race-pickers .course-picker { letter-spacing:.06em; font-size:9px; } .race-pickers .course-picker select { font-size:12px; } }

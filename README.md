@@ -4,6 +4,11 @@ A browser kart racer built with Three.js. Race five rivals over three laps, drif
 
 Four courses include moving hazards, boost pads, and shortcuts: **Windmill Wilds**, **Neon Harbor**, **Sunstone Ruins**, and **Frostpeak Festival**. Supports keyboard and touch controls.
 
+Choose from six distinct **SuperTuxKart** racers: Tux (penguin), Nolok (reptile),
+Pidgin (bird), Kiki (robot), Konqi (dragon), and Wilber (mascot). Each has its
+own vehicle. Choose your racer on the starting screen; the other five form
+the opponent grid. [Racer artwork credits and licenses](assets/courses/packs/shared/LICENSES.md).
+
 ## Screenshots
 
 | Windmill Wilds | Neon Harbor |

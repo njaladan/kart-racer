@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { createAudioController } from "./audio/audio.js";
+import { RACERS, raceRoster } from "./rendering/racer-roster.js";
 import { createKartBuilder } from "./rendering/kart-builder.js";
 import { createGameScene } from "./rendering/game-scene.js";
 import { createRacerState } from "./simulation/racer-state.js";
@@ -39,6 +40,20 @@ import {
 } from "./track/track.js";
 
 (async () => {
+  const roster = raceRoster(new URLSearchParams(location.search).get("racer"));
+  const racerSelector = document.getElementById("racer-select");
+  for (const racer of RACERS) {
+    const option = document.createElement("option");
+    option.value = racer.id;
+    option.textContent = `${racer.name} · ${racer.kind}`;
+    racerSelector.append(option);
+  }
+  racerSelector.value = roster[0].id;
+  racerSelector.addEventListener("change", () => {
+    const url = new URL(location.href);
+    url.searchParams.set("racer", racerSelector.value);
+    location.assign(url);
+  });
   const requestedCourse = new URLSearchParams(location.search).get("course");
   const chosenCourse = findCourseById(requestedCourse) ?? DEFAULT_COURSE;
   selectCourse(chosenCourse);
@@ -295,65 +310,41 @@ import {
     models: courseAssets.models,
     textures: { ...textures, environment: assets.environment },
     shadowTexture,
-    paintColors: ["#38d9ca", "#fa6551", "#edc748", "#9e83ff", "#42d7b4", "#ff8bbc"],
     theme: chosenCourse.theme,
   });
   const projectiles = [],
     bananas = [];
-  function buildKart(color, name, isPlayer = false) {
-    const kart = buildKartMesh(color, name, isPlayer);
+  function buildKart(color, name, isPlayer = false, racerId) {
+    const kart = buildKartMesh(color, name, isPlayer, racerId);
     karts.push(kart);
     return kart;
   }
 
   const player = createRacerState({
     name: "YOU",
-    color: "#38d9ca",
+    color: roster[0].color,
+    racerId: roster[0].id,
     isPlayer: true,
   });
-  const bots = [
-    {
-      name: "MISO",
-      color: "#fa6551",
-      s: -18,
-      x: -0.35,
-      speed: 163,
-      skill: 0.91,
-    },
-    { name: "PIP", color: "#edc748", s: -30, x: 0.32, speed: 158, skill: 0.86 },
-    {
-      name: "BOLT",
-      color: "#9e83ff",
-      s: -43,
-      x: -0.12,
-      speed: 153,
-      skill: 0.81,
-    },
-    {
-      name: "NOVA",
-      color: "#42d7b4",
-      s: -55,
-      x: 0.43,
-      speed: 148,
-      skill: 0.77,
-    },
-    {
-      name: "BEANS",
-      color: "#ff8bbc",
-      s: -70,
-      x: -0.42,
-      speed: 144,
-      skill: 0.72,
-    },
-  ].map(createRacerState);
+  const bots = roster.slice(1).map((racer, index) =>
+    createRacerState({
+      name: racer.name.toUpperCase(),
+      color: racer.color,
+      racerId: racer.id,
+      s: [-18, -30, -43, -55, -70][index],
+      x: [-0.35, 0.32, -0.12, 0.43, -0.42][index],
+      speed: [163, 158, 153, 148, 144][index],
+      skill: [0.91, 0.86, 0.81, 0.77, 0.72][index],
+    }),
+  );
   bots.forEach((b) => {
     b.worldPos = poseAt(b.s, laneWidth(b.x), 0.065).p;
     b.renderFrom = b.worldPos.clone();
     b.yaw = yawFor(frameAt(trackT(b.s)).tangent);
   });
-  const playerKart = buildKart("#38d9ca", "YOU", true);
+  const playerKart = buildKart(player.color, "YOU", true, player.racerId);
   bots.forEach((b) => {
-    b.kart = buildKart(b.color, b.name);
+    b.kart = buildKart(b.color, b.name, false, b.racerId);
     b.item = null;
     b.itemCount = 0;
     b.cooldown = 5 + Math.random() * 5;
@@ -1053,6 +1044,7 @@ import {
         raceTime,
         rank: place(),
         player: {
+          racer: player.racerId,
           section: sectionAt(trackT(player.s)).id,
           s: player.s,
           x: player.x,
@@ -1077,7 +1069,7 @@ import {
         },
         projectiles: projectiles.length,
         camera: { driftEffect: gameRenderer.getDriftCamera(), fov: camera.fov },
-        bots: bots.map((b) => ({ s: b.s, finished: b.finished })),
+        bots: bots.map((b) => ({ racer: b.racerId, s: b.s, finished: b.finished })),
         effects: particles.count + bananas.length + projectiles.length,
         render: {
           geometries: renderer.info.memory.geometries,

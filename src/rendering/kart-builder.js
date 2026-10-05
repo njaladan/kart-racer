@@ -1,75 +1,63 @@
 import * as THREE from "../../vendor/three/three.module.js";
-import { createKartDecalAtlas } from "./graphics.js";
 
-/** Build locally bundled Kenney racers with independent materials and wheel state. */
-export function createKartBuilder({
-  scene,
-  models,
-  textures,
-  shadowTexture,
-  paintColors,
-  theme = {},
-}) {
+/** Build locally bundled SuperTuxKart racers with independent materials and wheels. */
+export function createKartBuilder({ scene, models, textures, shadowTexture, theme = {} }) {
   const TAU = Math.PI * 2;
-  const decals = createKartDecalAtlas(paintColors);
-  let kartIndex = 0;
 
-  function buildKart(color, name, isPlayer = false) {
+  function buildKart(color, name, isPlayer = false, racerId = "tux") {
     const root = new THREE.Group();
     root.name = name;
-    const kartNames = ["oobi", "oodi", "ooli", "oopi", "oozi"];
-    const modelName = `kenney-kart-${kartNames[kartIndex % kartNames.length]}`;
+    const modelName = `stk-kart-${racerId}`;
     const source = models[modelName];
     if (!source?.isObject3D) throw new Error(`Missing shared racer model: ${modelName}`);
     const importedModel = source.clone(true);
     const bodyGroup = new THREE.Group();
     bodyGroup.name = `${name} imported racer`;
-    // Preserve the painted Kenney atlas while making each competitor easy to
-    // identify at race distance with restrained color on the shell material.
-    const raceTint = new THREE.Color(color);
     importedModel.traverse((part) => {
       if (!part.isMesh) return;
       part.castShadow = true;
       part.receiveShadow = true;
-      const chassis = part.name.startsWith("kart-");
       const materials = Array.isArray(part.material) ? part.material : [part.material];
-      const tinted = materials.map((sourceMaterial) => {
+      const independent = materials.map((sourceMaterial) => {
         const material = sourceMaterial.clone();
-        material.roughness = Math.min(material.roughness ?? 0.72, chassis ? 0.42 : 0.82);
-        if (chassis) material.color.copy(raceTint).lerp(new THREE.Color("#ffffff"), 0.42);
         if (!material.envMap) {
           material.envMap = textures.environment;
           material.envMapIntensity = theme.terrain === "concrete" ? 0.18 : 0.28;
         }
         return material;
       });
-      part.material = Array.isArray(part.material) ? tinted : tinted[0];
+      part.material = Array.isArray(part.material) ? independent : independent[0];
     });
-    // Kenney's source faces +Z while the race uses -Z as forward. The loader
-    // normalized these assets to one metre tall and centered them on the floor.
+    // STK faces +Z; the race uses -Z. Scale uniformly to preserve the authored
+    // proportions, with a shared wheel footprint and room for tall characters.
     bodyGroup.add(importedModel);
     bodyGroup.rotation.y = Math.PI;
-    bodyGroup.scale.set(3.45, 2.05, 2.28);
     root.add(bodyGroup);
-
     const wheels = [];
+    const wheelBounds = new THREE.Box3();
+    const wheelPivots = [];
     importedModel.traverse((part) => {
-      if (!part.name.startsWith("wheel-")) return;
-      wheels.push({ pivot: part, spin: part, front: part.name.includes("front") });
+      if (part.name.startsWith("wheel-")) wheelPivots.push(part);
     });
+    for (const part of wheelPivots) {
+      wheelBounds.union(new THREE.Box3().setFromObject(part));
+      // Steering and rolling require separate transforms. Rolling the axle
+      // pivot itself would erase steering or move an off-center wheel.
+      const spin = new THREE.Group();
+      spin.name = `${part.name}-spin`;
+      for (const child of [...part.children]) spin.add(child);
+      part.add(spin);
+      wheels.push({ pivot: part, spin, front: part.name.includes("front") });
+    }
     if (wheels.length !== 4) throw new Error(`${modelName} should contain four animated wheels`);
-
-    const number = new THREE.Mesh(decals.geometry(kartIndex, 0.14), decals.material);
-    number.rotation.x = -Math.PI / 2;
-    number.position.set(0, 0.53, 0.27);
-    number.castShadow = false;
-    bodyGroup.add(number);
-    for (const side of [-1, 1]) {
-      const patch = new THREE.Mesh(decals.geometry(kartIndex, 0.14), decals.material);
-      patch.rotation.set(0, (side * Math.PI) / 2, 0);
-      patch.position.set(side * 0.33, 0.38, 0);
-      patch.castShadow = false;
-      bodyGroup.add(patch);
+    const size = new THREE.Box3().setFromObject(importedModel).getSize(new THREE.Vector3());
+    const footprint = wheelBounds.getSize(new THREE.Vector3());
+    const scale = Math.min(2.4 / footprint.x, 2.6 / size.y, 3.4 / size.z);
+    bodyGroup.scale.setScalar(scale);
+    root.updateMatrixWorld(true);
+    for (const wheel of wheels) {
+      const bounds = new THREE.Box3().setFromObject(wheel.spin).getSize(new THREE.Vector3());
+      wheel.radius = Math.max(0.1, bounds.y / 2);
     }
 
     const flameGeometry = new THREE.ConeGeometry(0.17, 0.78, 8).toNonIndexed();
@@ -121,8 +109,7 @@ export function createKartBuilder({
     );
     scene.add(shadow);
     scene.add(root);
-    const kart = { root, bodyGroup, shadow, wheels, flame, aura, name, isPlayer, color };
-    kartIndex += 1;
+    const kart = { root, bodyGroup, shadow, wheels, flame, aura, name, isPlayer, color, racerId };
     return kart;
   }
 

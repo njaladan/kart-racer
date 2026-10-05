@@ -68,17 +68,9 @@ assets or impose restrictions on these CC0 derivatives.
 
 ## Shared racers
 
-Author: **Kenney**, Car Kit: https://kenney.nl/assets/car-kit
-
-The checked-in GLB files `assets/courses/packs/shared/models/kart-oobi.glb`,
-`kart-oodi.glb`, `kart-ooli.glb`, `kart-oopi.glb`, and `kart-oozi.glb` are CC0
-1.0. They preserve the pack's embedded color atlas and separate wheel meshes;
-the local `manifest.json` records each pinned download URL, byte size, and
-SHA-256 hash. Recreate the files with:
-
-```sh
-python tools/prepare-shared-assets.py
-```
+The shared pack now bundles six distinct SuperTuxKart 1.4 racers and their
+vehicles under CC BY-SA 3.0 / 4.0. See [racer credits and conversion details](packs/shared/LICENSES.md)
+for authors, per-file upstream notices, modifications and reproduction instructions.
 
 Three.js r180's GLTFLoader and BufferGeometryUtils are vendored under
 `vendor/three/addons/` under the existing Three.js MIT license.

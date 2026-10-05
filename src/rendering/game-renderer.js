@@ -74,7 +74,7 @@ export function createGameRenderer({
       Math.sin(frameState.elapsed * 22) * Math.min(0.025, state.speed * 0.0003);
 
     for (const wheel of kart.wheels) {
-      wheel.spin.rotation.x -= (state.longitudinalSpeed * dt) / 0.42;
+      wheel.spin.rotation.x += (state.longitudinalSpeed * dt) / wheel.radius;
       wheel.pivot.rotation.y = wheel.front ? -state.steering * 0.32 : 0;
     }
     kart.flame.visible = state.boost > 0;
