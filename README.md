@@ -13,9 +13,9 @@ the opponent grid. [Racer artwork credits and licenses](assets/courses/packs/sha
 
 | Windmill Wilds | Neon Harbor |
 | --- | --- |
-| ![In-game view of Windmill Wilds](docs/screenshots/windmill-wilds.jpg) | ![In-game view of Neon Harbor](docs/screenshots/neon-harbor.jpg) |
+| ![Tux racing in Windmill Wilds](docs/screenshots/windmill-wilds.jpg) | ![Kiki racing in Neon Harbor](docs/screenshots/neon-harbor.jpg) |
 | **Sunstone Ruins** | **Frostpeak Festival** |
-| ![In-game view of Sunstone Ruins](docs/screenshots/sunstone-ruins.jpg) | ![In-game view of Frostpeak Festival](docs/screenshots/frostpeak-festival.jpg) |
+| ![Nolok racing in Sunstone Ruins](docs/screenshots/sunstone-ruins.jpg) | ![Konqi racing in Frostpeak Festival](docs/screenshots/frostpeak-festival.jpg) |
 
 ## Run locally
 
