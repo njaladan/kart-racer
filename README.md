@@ -1,6 +1,6 @@
 # Turbo Trail
 
-A self-contained Three.js browser kart racer: three laps, five rivals, drifting, boost pads, physical kart contact, short ramp hops, item pickups, a minimap, and synthesized engine audio. Windmill Wilds is a 1.5 km course through festival meadow, pine hollow, ridge overlook, lakeside timber, a drive-through working mill, and an orchard. Clean AI laps measure 57–58 seconds (about three minutes for three laps). Each sector changes the scenery, driving rhythm, elevation or surface within 6–12 seconds.
+A self-contained Three.js browser kart racer: three laps, five rivals, drifting, boost pads, physical kart contact, short ramp hops, item pickups, a minimap, and synthesized engine audio. Choose among four courses: Windmill Wilds, Neon Harbor, Sunstone Ruins, and Frostpeak Festival. Each is about 1.5 km long with six distinct sectors, a moving hazard, and a boost-dependent shortcut. Clean AI laps measure roughly 56–60 seconds (about three minutes for three laps). Each sector changes the scenery, driving rhythm, elevation or surface within 6–12 seconds.
 
 ## Run
 
@@ -40,7 +40,7 @@ Simulation runs at 120 Hz with interpolated rendering. Track projection and mini
 npm test
 ```
 
-The Node tests cover acceleration, reverse, grip, airborne momentum, bounded boosted jumps, collision-related takeoff prevention, wall impulses, single-use drift turbos, continuous track progress, finish ranking, AI race completion, frame-rate independence, shell bounces, homing steering, and swept projectile collision.
+The Node tests cover every course’s length, section pacing, five-driver race completion, shared collision boundaries, real single-mushroom shortcuts, asset integrity and scenery assembly, alongside acceleration, reverse, grip, airborne momentum, bounded boosted jumps, collision-related takeoff prevention, wall impulses, single-use drift turbos, continuous track progress, finish ranking, AI race completion, frame-rate independence, shell bounces, homing steering, and swept projectile collision.
 
 For interactive integration checks, open `/tests/browser.html` on the same local server. It exposes held inputs, autodriving, a targeted boosted-ramp scenario, item use, pause/resume, hit recovery, and visible state/render counters. These controls are enabled only for the embedded game with the explicit `?test` query; they are absent from ordinary play.
 
@@ -64,7 +64,7 @@ combine a pale core and orange tip in one mesh per kart.
 All downloaded assets are bundled locally: normal play makes no requests to
 asset providers. See [asset credits](assets/CREDITS.md) for creators, licenses,
 sources and reproduction instructions. The combined downloaded runtime assets
-are about 105 KiB. A missing optional asset falls back to procedural artwork.
+are about 105 KiB for the shared graphics. The new courses add about 162 KiB of local assets: nine 512px textures and four normalized Kenney Nature Kit models. Their palette-matched concrete, masonry, sand, snow, timber and metal support detailed harbor buildings, carved temples and snowy chalets. See [course asset licenses and sources](assets/courses/LICENSES.md) and the [reproducible preparation script](tools/prepare-course-assets.py). A missing optional shared asset falls back to procedural artwork; a required course load failure offers a retry.
 Open `/tests/browser.html?benchmark=1` to hold pixel density fixed and skip the
 countdown while comparing graphics; normal play retains adaptive resolution.
 
@@ -75,3 +75,17 @@ Shared section data defines road surfaces, widths, ramp crests, pickup rows, boo
 The marked orchard grass cut opens the inside boundary. Mushrooms and stars preserve grip and speed across grass; an unboosted cut pays an off-road penalty. Outside turbo panels offer an alternative. Both routes pass the same ordered lap checkpoints, and large projection jumps are rejected. The mill portal provides 10 metres of overhead clearance for the chase camera.
 
 The six sectors and course reference study are documented in `COURSE_PROPOSAL.md`. The browser test harness also accepts section seeks and bounded simulation steps through its existing test-only message API.
+
+## New courses
+
+| Course | Personality | Measured length | Clean AI laps | Proposal |
+| --- | --- | --- | --- | --- |
+| Neon Harbor | Midnight waterfront, market, warehouse and cargo terminal | 1,500 m | 56–57 s | [Detailed proposal](proposals/neon-harbor.md) |
+| Sunstone Ruins | Warm canyon, oasis, carved temple and stone aqueduct | 1,499 m | 56–57 s | [Detailed proposal](proposals/sunstone-ruins.md) |
+| Frostpeak Festival | Snowy village, fir forest, ridge and festival square | 1,541 m | 58–60 s | [Detailed proposal](proposals/frostpeak-festival.md) |
+
+Independent reviews refined hazard clearance, supported bridges, ice recovery, shortcut placement and camera sightlines before implementation. Proposal measurement notes distinguish the original tuning goals from measured results; final shortcut gains are modest and remain candidates for human-playtest tuning.
+
+Each course owns its descriptor, scenery module, proposal and focused tests. The [parallel development contract](courses/CONTRACT.md) documents this boundary. `track-builder.js` constructs isolated route queries; `track.js` exposes the selected route to physics, AI, items and rendering. `course-runtime.js` builds shared road, terrain and barriers, while `course-kit.js` supplies scenery primitives, downloaded models and static batching. Course authors can work independently without modifying the engine. Moving meshes are explicitly excluded from batching.
+
+Select a course on the title screen; changing it loads a fresh world. After finishing, **CHOOSE ANOTHER COURSE** returns to the picker. The browser harness accepts `?course=neon-harbor`, `?course=sunstone-ruins` or `?course=frostpeak-festival` and retains the benchmark mode when switching.

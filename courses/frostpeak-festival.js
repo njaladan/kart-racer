@@ -33,7 +33,7 @@ export default {
   shortcut:{section:5,startFraction:.07,endFraction:.32,extraWidth:20,drag:1.25},
   hazard:{section:4,fraction:.78,kind:'groomer',label:'GROOMER CROSSING',parkOffset:12,minOffset:0,
     halfWidth:1.35,halfLength:2.15,safeLane:-5.5,activation:30,period:12,warningSeconds:2},
-  theme:{sky:'#b8def2',fog:'#d8e9f2',ground:'#e9f2f7',road:'#546775',shoulder:'#d6e6ed',
+  theme:{terrain:'snow',sky:'#b8def2',fog:'#d8e9f2',ground:'#e9f2f7',road:'#546775',shoulder:'#d6e6ed',
     hemisphere:'#dcf6ff',ambientGround:'#829baa',sun:'#fff1cc',sunIntensity:2.2,exposure:1.05},
   buildWorld,
 };

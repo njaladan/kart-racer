@@ -49,3 +49,13 @@ test('all asset-backed scenery assembles and stays finite while each hazard move
     scene.traverse(object=>assert.ok(object.matrixWorld.elements.every(Number.isFinite)));
   }
 });
+
+// Pin the actual runtime bundle to the source/license manifest.
+test('bundled course assets match their recorded sizes and SHA-256 digests',()=>{
+  const manifest=JSON.parse(readFileSync(new URL('../assets/courses/manifest.json',import.meta.url)));
+  for(const output of manifest.outputs) {
+    const data=readFileSync(new URL(`../assets/courses/${output.path}`,import.meta.url));
+    assert.equal(data.length,output.bytes,output.path);
+    assert.equal(createHash('sha256').update(data).digest('hex'),output.sha256,output.path);
+  }
+});

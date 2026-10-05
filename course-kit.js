@@ -21,15 +21,12 @@ export function createCourseKit(scenery, track, assets = {models:{}}) {
     const g = new THREE.Group(); align(g,track.poseAt(t*track.TRACK,offset,0)); parent.add(g); return g;
   };
   const sectorT = (index,fraction) => track.sectorT(index,fraction);
-  // Course text signs were removed in the current game direction. Scenery can
-  // use structural beacons, colored markers and open sightlines for guidance.
-  const sign = () => new THREE.Group();
   const asset = (name,parent = scenery,position = [0,0,0],scale = [1,1,1]) => {
     const model=assets.models[name];
     if(!model) throw new Error(`Unknown course scenery asset: ${name}`);
     return mesh(model.geometry,model.material,parent,position,scale);
   };
-  return {material,mesh,box,align,groupAt,sectorT,sign,asset,batch:batchStaticMeshes};
+  return {material,mesh,box,align,groupAt,sectorT,asset,batch:batchStaticMeshes};
 }
 
 export function batchScenery(scenery, animated = []) {

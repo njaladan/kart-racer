@@ -1,24 +1,36 @@
 // Theme-only props. Ground, snow apron, road surfaces, rails and pickups are
 // built by the shared engine from the same metadata used by vehicle physics.
-export function buildWorld({ THREE, scene, scenery, track, kit, hazardAt }) {
-  const {material,mesh,box,groupAt,sectorT,sign,batch,align}=kit;
-  const snow=material('#f4fbff',{roughness:.95});
-  const timber=material('#80574b'), roof=material('#ae5364'), pine=material('#315f68');
+export function buildWorld({ THREE, scene, scenery, track, textures, kit, hazardAt }) {
+  const {material,mesh,box,groupAt,sectorT,asset,batch,align}=kit;
+  const snow=material('#f4fbff',{map:textures.snow,roughness:.95});
+  const timber=material('#d1ae89',{map:textures.wood}), roof=material('#bc6a7d',{map:textures.wood});
+  const bark=material('#b8997d',{map:textures.bark}), cream=material('#eadbc7');
   const dark=material('#354952'), cyan=material('#54d9df'), red=material('#f2788b');
   const yellow=material('#ffe092'), glass=material('#9ddbe7',{metalness:.15,roughness:.25});
-  const rock=material('#a2b5c2'), amber=material('#ffaf45',{emissive:'#df7900',emissiveIntensity:.3});
+  const rock=material('#b4c6d3',{map:textures.stone}), amber=material('#ffaf45',{emissive:'#df7900',emissiveIntensity:.3});
   const cone=new THREE.ConeGeometry(1,1,8), sphere=new THREE.SphereGeometry(1,8,6);
   const cylinder=new THREE.CylinderGeometry(1,1,1,8);
   const edgeOffset=(t,side,margin)=>side*(side>0?track.surfaceAt(t).rightEdge:-track.surfaceAt(t).leftEdge)+side*margin;
 
   function chalet(t,side) {
     const g=groupAt(t,edgeOffset(t,side,13),scenery);
-    box(timber,g,[0,2.7,0],[9,5.4,11]);
+    box(rock,g,[0,.3,0],[9.4,.6,11.4]);
+    box(timber,g,[0,2.9,0],[9,5.2,11]);
+    for(const x of [-4.25,4.25])for(const z of [-5.5,5.5])box(bark,g,[x,2.9,z],[.28,5.2,.18]);
+    box(cream,g,[0,5.35,-5.54],[8.8,.35,.12]);
+    box(bark,g,[0,2,-5.6],[8.8,.3,.18]);
     for(const x of [-2.65,2.65]) {
       const r=box(roof,g,[x,6,0],[6.1,.35,12]);r.rotation.z=x>0?-.48:.48;
       const cap=box(snow,g,[x,6.22,0],[6.2,.18,12.1]);cap.rotation.z=r.rotation.z;
     }
-    for(const x of [-2.7,2.7]) box(yellow,g,[x,3,-5.53],[1.7,1.6,.06]);
+    for(const x of [-2.7,2.7]) {
+      box(bark,g,[x,3.4,-5.62],[2.05,2.1,.16]);
+      box(yellow,g,[x,3.4,-5.73],[1.7,1.75,.06]);
+      box(bark,g,[x,3.4,-5.78],[.1,1.8,.04]);
+      box(bark,g,[x,3.4,-5.78],[1.7,.1,.04]);
+      box(snow,g,[x,2.43,-5.75],[2.3,.18,.35]);
+      for(const dx of [-1.28,1.28])box(red,g,[x+dx,3.4,-5.66],[.38,1.9,.13]);
+    }
     box(red,g,[0,1.7,-5.55],[1.7,3.4,.07]);
     box(rock,g,[3,7.5,1.8],[.9,2.5,.9]);
   }
@@ -27,12 +39,13 @@ export function buildWorld({ THREE, scene, scenery, track, kit, hazardAt }) {
 
   function snowyPine(t,side,size=1) {
     const g=groupAt(t,edgeOffset(t,side,7+size*2),scenery);
-    mesh(cylinder,timber,g,[0,2.7*size,0],[.5*size,5.4*size,.5*size]);
-    for(let i=0;i<3;i++) {
-      const y=(3.8+i*1.7)*size,r=(3.2-i*.55)*size;
-      mesh(cone,pine,g,[0,y,0],[r,4.1*size,r]);
-      mesh(cone,snow,g,[0,y+.7*size,0],[r*.85,2.8*size,r*.85]);
-    }
+    const height=11*size;
+    // Kenney's tapered four-tier silhouette remains visible between the
+    // smaller snow caps; source model colors retain their baked shading.
+    asset('pine',g,[0,0,0],[height,height,height]);
+    mesh(cylinder,bark,g,[0,.08*height,0],[.022*height,.16*height,.022*height]);
+    for(const [y,r,h] of [[.45,.13,.19],[.625,.095,.14],[.80,.055,.13],[.937,.024,.13]])
+      mesh(cone,snow,g,[0,y*height,0],[r*height,h*height,r*height]);
   }
   for(let i=0;i<38;i++)for(const side of [-1,1])snowyPine(sectorT(1,(i+.5)/38),side,.85+(i%4)*.13);
   for(let i=0;i<18;i++)for(const side of [-1,1])snowyPine(sectorT(i%2?0:3,(i+.5)/18),side,.85);
@@ -54,23 +67,19 @@ export function buildWorld({ THREE, scene, scenery, track, kit, hazardAt }) {
   }
   for(const f of [.18,.44,.71])for(const side of [-1,1]) {
     const g=groupAt(sectorT(2,f),edgeOffset(sectorT(2,f),side,9),scenery);
-    mesh(sphere,rock,g,[0,1.2,0],[3.2,2.8,2.7]);
-    mesh(sphere,snow,g,[0,2.4,0],[3.3,.65,2.8]);
+    asset(f<.5?'rock-a':'rock-b',g,[0,0,0],[1.65,2.2,1.35]);
+    mesh(sphere,snow,g,[0,1.9,0],[2.6,.45,2.1]);
   }
-  sign(sectorT(2,.84),-18,'SUMMIT · 54 m','#70adc9',8);
 
-  function banner(t,text,color) {
+  function banner(t,color) {
     const g=groupAt(t,0,scenery);
     for(const x of [-19,19])box(timber,g,[x,6.7,0],[.4,13.4,.4]);
     box(dark,g,[0,13.3,0],[38,.4,.4]);
     // Lowest fabric is 11.65 metres above the surface.
     box(color,g,[0,12.4,0],[36,1.5,.12]);
-    sign(t,-15,text,'#467f9d',7);
   }
-  banner(sectorT(3,.13),'FROSTPEAK FESTIVAL',red);
-  banner(sectorT(3,.58),'DOWNHILL DASH',cyan);
-  sign(sectorT(4,.06),-18,'BLUE ICE · EASY STEER','#52bfdd',8);
-  sign(sectorT(4,.53),-18,'GRIP RETURNS · KEEP LEFT','#527d95',9);
+  banner(sectorT(3,.13),red);
+  banner(sectorT(3,.58),cyan);
 
   // Resort rink fencing sits beyond the collision boundary; decorative
   // hockey goals and seating never occupy the driveable ice.
@@ -92,8 +101,6 @@ export function buildWorld({ THREE, scene, scenery, track, kit, hazardAt }) {
       }
     }
   }
-  sign(sectorT(5,.045),-18,'POWDER CUT → BOOST','#d96c84',9);
-  sign(sectorT(5,.57),-18,'GRANDSTAND SPRINT','#d96c84',9);
 
   const groomer=new THREE.Group();scene.add(groomer);
   box(red,groomer,[0,.9,0],[2.3,1.05,3.4]);
@@ -106,7 +113,6 @@ export function buildWorld({ THREE, scene, scenery, track, kit, hazardAt }) {
   const warning=groupAt(sectorT(4,.78),16,scenery);
   box(dark,warning,[0,1.65,0],[.2,3.3,.2]);
   const beacon=mesh(sphere,amber,warning,[0,3.7,0],[.55,.55,.55]);
-  sign(sectorT(4,.67),-18,'GROOMER · LEFT LANE CLEAR','#e8994c',10);
   batch(scenery);
   return {animated:[groomer,beacon],update(time){
     const state=hazardAt(time);align(groomer,state);

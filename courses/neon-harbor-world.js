@@ -2,7 +2,7 @@
 // surfaces remain in the engine; the shuttle uses the same hazard pose as AI.
 export default function buildWorld(context) {
   const {THREE, scene, scenery, track, kit, hazardAt, textures={}} = context;
-  const {material,mesh,box,groupAt,sectorT,sign,batch,align,asset} = kit;
+  const {material,mesh,box,groupAt,sectorT,batch,align,asset} = kit;
   const steel=material('#344d68',{map:textures.metal??null,metalness:.42,roughness:.56});
   const concrete=material('#a2becb',{map:textures.concrete??null,roughness:.86});
   const amber=material('#f5ba66',{map:textures.metal??null,metalness:.2,roughness:.66});
@@ -84,7 +84,6 @@ export default function buildWorld(context) {
       } else {box(concrete,g,[0,.4,0],[4,.8,1.2]);box(steel,g,[0,1.3,.4],[4,.18,.15]);}
     }
   }
-  sign(sectorT(0,.43),-18,'NEON HARBOR · NIGHT RACE','#7af1e6',10);
 
   // Market compresses into two color districts with freestanding stalls.
   // Awnings remain outside the road; street banners clear the camera by 13 m.
@@ -112,7 +111,6 @@ export default function buildWorld(context) {
     box(pink,g,[0,13.4,0],[24,.28,.3]);
     for(let i=0;i<7;i++)box(i%2?cyan:pink,g,[-9+i*3,13,0],[1.1,.6,.08]);
   }
-  sign(sectorT(1,.16),-16,'NIGHT MARKET','#ff94cd',7);
 
   // A short loading hall, rather than a full-sector tunnel. Wide sidewalls
   // leave the curved route and trailing camera room; overhead begins at 13 m.
@@ -133,7 +131,6 @@ export default function buildWorld(context) {
     box(steel,g,[0,.12,0],[6.15,.24,5.15]);
     box(trim,g,[0,4.08,0],[6.15,.16,5.15]);
   }
-  sign(sectorT(2,.63),-17,'QUAY ↑ SKYLINE VIEW','#8ad9ff',8);
 
   // Supported deck: no embankment under the declared elevated arc. Supports
   // are below the shared continuous road, never decorative road obstacles.
@@ -203,7 +200,6 @@ export default function buildWorld(context) {
     }
     batch(g);
   }
-  sign(sectorT(4,.39),-16,'CARGO CROSSING · KEEP LEFT','#ffd36c',10);
 
   // Boulevard has a visible rough service apron inside its right-hand bend.
   // Skyline façades and palms of light line the finish without filling the cut.
@@ -213,13 +209,11 @@ export default function buildWorld(context) {
     lamp(t,side*(13+extra),i);
     if(i%3===0)building(t,side*(28+extra),12,24+(i%4)*6,12,i+40);
   }
-  sign(sectorT(5,.32),23,'BOOST → SERVICE APRON','#ffe7ad',8);
   for(const fraction of [.31,.47,.63]) {
     const t=sectorT(5,fraction),g=safeGroup(t,23+track.shortcutWidth(t),2);if(!g)continue;
     for(const z of [-.65,.65]) {const arm=box(cyan,g,[0,2,z],[2,.28,.28]);arm.rotation.y=z>0?-.6:.6;}
     box(steel,g,[0,1,0],[.18,2,.18]);
   }
-  sign(sectorT(5,.18),-17,'← OUTSIDE TURBO','#7af1e6',7);
 
   // The visual shuttle body matches the engine contact box (2.7 × 4.3 m).
   const shuttle=new THREE.Group();scene.add(shuttle);
