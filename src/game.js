@@ -1,3 +1,4 @@
+import * as THREE from "../vendor/three/three.module.js";
 import { createAudioController } from "./audio/audio.js";
 import { createGamePage } from "./ui/game-page.js";
 import { createRaceView } from "./ui/race-view.js";
@@ -73,6 +74,18 @@ async function startGame() {
     onCollect: feedback.collected,
     onUse: feedback.itemUsed,
     onImpact: feedback.impact,
+    onShellTrail: (shell) => {
+      const velocity = new THREE.Vector3(-shell.vx * 0.025, 0.28, -shell.vz * 0.025);
+      velocity.x += (Math.random() - 0.5) * 0.45;
+      velocity.z += (Math.random() - 0.5) * 0.45;
+      particles.spawn(
+        shell.worldPos.clone().add(new THREE.Vector3(0, 0.12, 0)),
+        "#aeb7b1",
+        0.42,
+        0.18 + Math.random() * 0.07,
+        velocity,
+      );
+    },
   });
   const keys = Object.create(null);
   const pointer = { down: false, x: 0, steer: 0 };

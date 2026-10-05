@@ -1,6 +1,6 @@
 import * as THREE from "../../vendor/three/three.module.js";
 import { lapNumber } from "../simulation/race.js";
-import { FIXED_DT, MAX_SPEED, wrapAngle } from "../simulation/physics.js";
+import { FIXED_DT, MAX_SPEED, clamp, wrapAngle } from "../simulation/physics.js";
 import {
   TRACK,
   frameAt,
@@ -68,6 +68,15 @@ export function createGameRenderer({
     kartRight.crossVectors(kartUp, kartForward).normalize();
     kartBasis.makeBasis(kartRight, kartUp, kartForward);
     kart.root.quaternion.setFromRotationMatrix(kartBasis);
+    kart.root.position.y += state.hitLift || 0;
+    if (state.spin > 0 && state.hitFlipDuration > 0) {
+      const progress = clamp(state.hitFlipElapsed / state.hitFlipDuration, 0, 1);
+      const flip = clamp(progress / 0.72, 0, 1);
+      const easedFlip = 1 - (1 - flip) ** 3;
+      const angle = easedFlip * Math.PI * 2 * (state.hitFlipDirection || 1);
+      if (state.hitFlipAxis === "z") kart.root.rotateZ(angle);
+      else kart.root.rotateX(angle);
+    }
 
     const trickPose = state.trickActive ? Math.sin(Math.min(1, state.airTime / 0.42) * Math.PI) : 0;
     const bodyLean = state.grounded
@@ -186,8 +195,7 @@ export function createGameRenderer({
       }
       for (const projectile of projectiles) {
         projectile.mesh.position.copy(projectile.worldPos);
-        projectile.mesh.rotation.y += dt * 7;
-        projectile.mesh.rotation.x += dt * 4;
+        projectile.mesh.rotation.set(0, projectile.yaw, 0);
       }
       updateVehicle(player, playerKart, dt);
       bots.forEach((bot) => updateVehicle(bot, bot.kart, dt));
@@ -272,7 +280,8 @@ export function createGameRenderer({
             .setY(0)
             .normalize()
         : new THREE.Vector3(-Math.sin(cameraYaw), 0, -Math.cos(cameraYaw));
-    const position = playerKart.root.position;
+    const position = playerKart.root.position.clone();
+    position.y -= player.hitLift || 0;
     const driftCameraTarget =
       frameState.running && player.driftBoost > 0 && player.boost > 0 && player.spin <= 0
         ? player.driftBoostTier === 2

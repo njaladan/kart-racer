@@ -20,8 +20,13 @@ export function resetMotion(state) {
     vy: 0,
     airTime: 0,
     yawRate: 0,
-    hitDecel: 0,
-    spinDirection: 1,
+    hitFlipDuration: 0,
+    hitFlipElapsed: 0,
+    hitFlipDirection: 1,
+    hitSlideVx: 0,
+    hitSlideVz: 0,
+    hitStartYaw: 0,
+    hitLift: 0,
     steering: 0,
     grounded: true,
     reverseHold: 0,
@@ -40,6 +45,24 @@ export function resetMotion(state) {
 }
 
 export function drive(state, input, surface, dt) {
+  if (state.spin > 0) {
+    // Coast along the incoming line while the visual flip plays, then settle
+    // at a complete stop. Keep the chassis heading locked through the hit.
+    const fraction = clamp(state.spin / (state.hitFlipDuration || 1), 0, 1);
+    state.yaw = state.hitStartYaw;
+    state.yawRate = 0;
+    state.steering *= Math.exp(-18 * dt);
+    state.vx = state.hitSlideVx * fraction;
+    state.vz = state.hitSlideVz * fraction;
+    state.worldPos.x += state.vx * dt;
+    state.worldPos.z += state.vz * dt;
+    const fx = -Math.sin(state.yaw), fz = -Math.cos(state.yaw);
+    const rx = Math.cos(state.yaw), rz = -Math.sin(state.yaw);
+    state.longitudinalSpeed = state.vx * fx + state.vz * fz;
+    state.lateralSpeed = state.vx * rx + state.vz * rz;
+    state.speed = Math.hypot(state.vx, state.vz) * 3.6;
+    return false;
+  }
   const fx = -Math.sin(state.yaw),
     fz = -Math.cos(state.yaw);
   const rx = Math.cos(state.yaw),
@@ -93,11 +116,6 @@ export function drive(state, input, surface, dt) {
         0.002 * travelSpeed * travelSpeed +
         (surface.offroad && !boosted ? (5 + travelSpeed * 0.38) * (surface.offroadDrag ?? 1) : 0));
     acceleration -= surface.slope * 9.81;
-    if (state.spin > 0) {
-      // Fade impact drag over time so the kart scrubs speed instead of stopping instantly.
-      const impactDrag = 5 + 7 * clamp((state.hitDecel || 0) / 0.85, 0, 1);
-      acceleration -= Math.sign(forward) * impactDrag;
-    }
     const next = signedSpeed + acceleration * dt;
     const nextSpeed =
       (!input.throttle || input.brake) &&
@@ -124,8 +142,7 @@ export function drive(state, input, surface, dt) {
     // Rough ground already lowers grip and adds drag; also capping yaw makes
     // it impossible to steer back onto the road after a boost expires.
     const yawLimit = 2.8;
-    const targetYaw =
-      state.spin > 0 ? (state.spinDirection || 1) * 15 : clamp(desiredYaw, -yawLimit, yawLimit);
+    const targetYaw = clamp(desiredYaw, -yawLimit, yawLimit);
     // Human input needs prompt release; AI retains its continuous-correction tuning.
     const yawResponse = state.isPlayer
       ? steeringTarget === 0 || targetYaw * state.yawRate < 0

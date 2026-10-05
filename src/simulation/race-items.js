@@ -18,6 +18,7 @@ export function createRaceItems({
   onCollect = () => {},
   onUse = () => {},
   onImpact = () => {},
+  onShellTrail = () => {},
 }) {
   const projectiles = [],
     bananas = [];
@@ -115,11 +116,16 @@ export function createRaceItems({
     }
     for (const p of projectiles) {
       advanceShell(p, dt, raceTime);
+      p.trailTime = (p.trailTime || 0) + dt;
+      if (p.trailTime >= 0.045) {
+        p.trailTime %= 0.045;
+        onShellTrail(p);
+      }
       for (const target of racers) {
         if (target.finished || p.life <= 0 || (target === p.owner && p.grace > 0)) continue;
         const center = target.worldPos.clone();
         center.y += 0.6;
-        if (sweptDistanceSquared(center, p.previous, p.worldPos) < 1.5 ** 2 && onHit(target, 1.4)) {
+        if (sweptDistanceSquared(center, p.previous, p.worldPos) < 1.5 ** 2 && onHit(target, 1.05, p)) {
           p.life = 0;
           onImpact(target, "SHELL HIT!");
           break;

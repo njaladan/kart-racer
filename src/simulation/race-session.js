@@ -56,16 +56,24 @@ export function createRaceSession({
     state.paused = value;
     onPause(value);
   }
-  function hitRacer(racer, seconds = 1.1) {
+  function hitRacer(racer, seconds = 1.05, projectile = null) {
     if (racer.invulnerable > 0 || racer.star > 0 || racer.finished) return false;
     racer.spin = seconds;
-    racer.spinDirection = Math.sign(racer.steering || racer.yawRate || 1);
-    racer.yawRate = racer.spinDirection * 15;
-    racer.hitDecel = 0.85;
+    racer.hitFlipDuration = seconds;
+    racer.hitFlipElapsed = 0;
+    racer.hitStartYaw = racer.yaw;
+    const incomingX = projectile?.vx ?? -Math.sin(racer.yaw);
+    const incomingZ = projectile?.vz ?? -Math.cos(racer.yaw);
+    const side = incomingX * Math.cos(racer.yaw) - incomingZ * Math.sin(racer.yaw);
+    racer.hitFlipAxis = Math.abs(side) > 0.38 ? "z" : "x";
+    racer.hitFlipDirection = side < 0 ? -1 : 1;
     racer.invulnerable = seconds + 1;
-    // Keep most incoming momentum, then bleed speed through impact drag.
-    racer.vx *= 0.82;
-    racer.vz *= 0.82;
+    // Keep most incoming momentum during the flip and taper it to zero.
+    racer.hitSlideVx = racer.vx * 0.9;
+    racer.hitSlideVz = racer.vz * 0.9;
+    racer.vx = racer.hitSlideVx;
+    racer.vz = racer.hitSlideVz;
+    racer.yawRate = 0;
     racer.drift = 0;
     racer.trickActive = false;
     racer.trickBuffer = 0;

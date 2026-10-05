@@ -5,6 +5,8 @@ import {
   WORLD_PER_UNIT,
   collisionBounds,
   laneFromOffset,
+  laneWidth,
+  poseAt,
 } from "../track/track.js";
 import { cartContact } from "./hazards.js";
 import { progressDelta } from "./race.js";
@@ -73,9 +75,22 @@ export function advanceShell(shell, dt, raceTime = 0) {
   shell.life -= dt;
   shell.grace -= dt;
   if (shell.type === "red" && shell.target && !shell.target.finished) {
-    const target = shell.target.worldPos;
-    const desired = Math.atan2(-(target.x - shell.worldPos.x), -(target.z - shell.worldPos.z));
-    shell.yaw = wrapAngle(shell.yaw + clamp(wrapAngle(desired - shell.yaw), -4.8 * dt, 4.8 * dt));
+    // Steer toward a point ahead on the shared racing line. Direct line of
+    // sight can aim through the inside of a bend and leave a shell fighting
+    // the road barrier, so reserve direct homing for the final few metres.
+    const targetGap = Math.max(0, progressDelta(shell.target.s, shell.s, TRACK) * WORLD_PER_UNIT);
+    const lookAhead = clamp(targetGap * 0.55, 4, 12);
+    const waypoint = poseAt(
+      shell.s + lookAhead / WORLD_PER_UNIT,
+      laneWidth(shell.target.x),
+      0.6,
+    ).p;
+    const directBlend = clamp((7 - targetGap) / 5, 0, 1);
+    waypoint.lerp(shell.target.worldPos, directBlend);
+    const desired = Math.atan2(-(waypoint.x - shell.worldPos.x), -(waypoint.z - shell.worldPos.z));
+    shell.yaw = wrapAngle(
+      shell.yaw + clamp(wrapAngle(desired - shell.yaw), -6.5 * dt, 6.5 * dt),
+    );
     shell.vx = -Math.sin(shell.yaw) * shell.speed;
     shell.vz = -Math.cos(shell.yaw) * shell.speed;
   }

@@ -88,6 +88,7 @@ export function botInput(state, index, elapsed, rivals = []) {
 }
 export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
   if (state.finished) return {};
+  const hitWasActive = state.spin > 0;
   state.prevS = state.s;
   state.renderYawFrom = state.yaw;
   if (!state.renderFrom) state.renderFrom = state.worldPos.clone();
@@ -97,13 +98,23 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     "boost",
     "star",
     "spin",
-    "hitDecel",
     "invulnerable",
     "contactCooldown",
     "padCooldown",
     "driftBoost",
   ])
     state[key] = Math.max(0, (state[key] || 0) - dt);
+  if (hitWasActive) {
+    state.hitFlipElapsed = Math.min(state.hitFlipDuration, state.hitFlipElapsed + dt);
+    const progress = state.hitFlipDuration
+      ? state.hitFlipElapsed / state.hitFlipDuration
+      : 1;
+    const flight = Math.min(1, progress / 0.82);
+    const landing = Math.max(0, (progress - 0.82) / 0.18);
+    state.hitLift =
+      Math.sin(flight * Math.PI) * 1.35 +
+      Math.abs(Math.sin(landing * Math.PI * 2)) * Math.exp(-landing * 4) * 0.28;
+  }
   const trickPressed = !!input.drift && !state.trickHeld;
   state.trickHeld = !!input.drift;
   state.trickBuffer = trickPressed ? 0.22 : Math.max(0, state.trickBuffer - dt);
@@ -121,6 +132,12 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     },
     dt,
   );
+  if (hitWasActive && state.spin === 0) {
+    state.vx = state.vz = state.speed = state.longitudinalSpeed = state.lateralSpeed = 0;
+    state.yaw = state.hitStartYaw;
+    state.yawRate = 0;
+    state.hitLift = 0;
+  }
   const projection = projectTrack(state.worldPos, state.s);
   advanceRaceProgress(
     state,
