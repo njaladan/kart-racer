@@ -1269,7 +1269,8 @@ import {
   });
   window.addEventListener("blur", () => {
     clearInput();
-    if (started && !finished) setPaused(true);
+    if (started && !finished && !(testMode && parent !== window))
+      setPaused(true);
   });
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
@@ -1832,18 +1833,24 @@ import {
           .copy(frameAt(trackT(player.s)).tangent)
           .setY(0)
           .normalize();
-      const look = player.worldPos.clone().addScaledVector(forward, 7);
+      const panoramic = camera.aspect > 1.8;
+      const look = player.worldPos
+        .clone()
+        .addScaledVector(forward, panoramic ? 4.5 : 6);
       look.y += 1.15;
       const desired = player.worldPos
         .clone()
-        .addScaledVector(forward, -8.7 - player.speed * 0.017);
+        .addScaledVector(
+          forward,
+          -(panoramic ? 10.5 : 8.7) - player.speed * 0.017,
+        );
       desired.y += 4.7;
       camera.position.lerp(desired, 1 - Math.exp(-6 * dt));
       cameraLook.lerp(look, 1 - Math.exp(-9 * dt));
       const cameraTrack = projectTrack(camera.position, player.s);
       camera.position.y = Math.max(camera.position.y, cameraTrack.height + 2.1);
       camera.fov +=
-        (63 +
+        ((panoramic ? 68 : 63) +
           Math.min(7, player.speed * 0.045) +
           (player.boost > 0 ? 3 : 0) -
           camera.fov) *
@@ -1909,6 +1916,10 @@ import {
               item: player.item,
               itemCount: player.itemCount,
               grounded: player.grounded,
+              altitude:
+                player.worldPos.y -
+                projectTrack(player.worldPos, player.s).height,
+              airTime: player.airTime,
               drift: player.drift,
               boost: player.boost,
               spin: player.spin,
@@ -1940,6 +1951,19 @@ import {
         return;
       const message = event.data;
       if (message.type === "test-start") begin();
+      if (message.type === "test-ramp" && running) {
+        player.s = TRACK * 0.185;
+        player.x = 0;
+        player.worldPos.copy(poseAt(player.s, 0, 0.065).p);
+        player.renderFrom.copy(player.worldPos);
+        resetMotion(player);
+        player.yaw = yawFor(frameAt(trackT(player.s)).tangent);
+        player.vx = -Math.sin(player.yaw) * 35;
+        player.vz = -Math.cos(player.yaw) * 35;
+        player.boost = 1.5;
+        player.star = 0;
+        testAutodrive = true;
+      }
       if (message.type === "test-auto") testAutodrive = !!message.value;
       if (message.type === "test-input") {
         clearInput();

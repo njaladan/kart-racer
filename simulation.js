@@ -116,7 +116,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
   if (state.grounded && state.speed > 50) {
     const travelled = progressDelta(after.t, before.t, 1);
     for (const crest of [0.2, 0.51, 0.78]) {
-      const distance = progressDelta(crest - 0.004, before.t, 1);
+      const distance = progressDelta(crest, before.t, 1);
       if (travelled > 0 && distance > 0 && distance <= travelled) {
         state.grounded = false;
         state.vy = 3;
