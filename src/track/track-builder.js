@@ -2,6 +2,9 @@ import * as THREE from "../../vendor/three/three.module.js";
 import { progressDelta } from "../simulation/race.js";
 import { validateCourseDefinition } from "../courses/course-contract.js";
 export const TRACK = 2400;
+// Bound curvature, not lap-driving skill: even the inside lane must leave
+// margin over the kart's boosted 22 m turn radius. Larger radii are gentler.
+export const MIN_ROAD_CURVE_RADIUS = 40;
 export const wrap01 = (t) => ((t % 1) + 1) % 1;
 export const trackT = (s) => wrap01(s / TRACK);
 export const laneWidth = (lane) => lane * 6.25;
@@ -179,6 +182,23 @@ export function createTrack(course) {
   }
   const SAMPLE_COUNT = 3072;
   const samples = Array.from({ length: SAMPLE_COUNT + 1 }, (_, i) => routePoint(i / SAMPLE_COUNT));
+  let minimumCurveRadius = Infinity;
+  for (let i = 0; i < SAMPLE_COUNT; i++) {
+    const a = samples[(i + SAMPLE_COUNT - 1) % SAMPLE_COUNT];
+    const b = samples[i];
+    const c = samples[i + 1];
+    const ab = Math.hypot(b.x - a.x, b.z - a.z);
+    const bc = Math.hypot(c.x - b.x, c.z - b.z);
+    const ac = Math.hypot(c.x - a.x, c.z - a.z);
+    const cross = Math.abs((b.x - a.x) * (c.z - a.z) - (b.z - a.z) * (c.x - a.x));
+    if (cross > 1e-9)
+      minimumCurveRadius = Math.min(minimumCurveRadius, (ab * bc * ac) / (2 * cross));
+  }
+  if (minimumCurveRadius < MIN_ROAD_CURVE_RADIUS) {
+    throw new RangeError(
+      `Course "${course.id}" has a ${minimumCurveRadius.toFixed(1)} m bend; road curves require at least ${MIN_ROAD_CURVE_RADIUS} m radius`,
+    );
+  }
   const COURSE_LENGTH = samples.slice(1).reduce((sum, p, i) => sum + p.distanceTo(samples[i]), 0);
   // Cache the complete frame; physics no longer evaluates spline tangents per kart per tick.
   const frames = samples.slice(0, SAMPLE_COUNT).map((p, i) => {
@@ -289,6 +309,7 @@ export function createTrack(course) {
     routePoint,
     SAMPLE_COUNT,
     COURSE_LENGTH,
+    minimumCurveRadius,
     frameAt,
     poseAt,
     projectTrack,

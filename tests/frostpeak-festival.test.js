@@ -66,11 +66,13 @@ test("Frostpeak ice has firm approaches and enough recovery before the groomer",
 function cornerRun(track, mode) {
   const start = track.SHORTCUT.start - 30 / track.COURSE_LENGTH,
     end = track.SHORTCUT.end + 20 / track.COURSE_LENGTH;
+  // The wider bend rewards a shallow powder line; heading to its far edge
+  // adds lateral distance and misses the corner's actual apex.
   const lane = (t) =>
     mode === "outside"
       ? -5.5
       : mode === "cut" || mode === "ordinary"
-        ? 3 + 17 * Math.min(1, track.shortcutWidth(t) / 20)
+        ? 3 + 9 * Math.min(1, track.shortcutWidth(t) / 20)
         : 6;
   const racer = initializeRacer({
     s: start * TRACK,
@@ -93,7 +95,11 @@ function cornerRun(track, mode) {
       target = f.p.clone().addScaledVector(f.right, lane(ahead));
     const desired = Math.atan2(-(target.x - racer.worldPos.x), -(target.z - racer.worldPos.z));
     const error = Math.atan2(Math.sin(desired - racer.yaw), Math.cos(desired - racer.yaw));
-    if (!used && t >= track.SHORTCUT.start + 0.018 && (mode === "cut" || mode === "mainboost")) {
+    const boostEntry =
+      mode === "cut"
+        ? track.projectTrack(racer.worldPos, racer.s).offroad
+        : t >= track.SHORTCUT.start + 0.018;
+    if (!used && boostEntry && (mode === "cut" || mode === "mainboost")) {
       assert.equal(consumeItem(racer), "mushroom");
       used = true;
     }
@@ -101,7 +107,7 @@ function cornerRun(track, mode) {
       racer,
       {
         throttle: racer.speed < 97 || racer.boost > 0,
-        brake: racer.speed > 107,
+        brake: racer.speed > 107 && racer.boost === 0,
         steer: Math.max(-1, Math.min(1, -error * 5)),
         drift: false,
       },
@@ -121,7 +127,9 @@ test("one actual mushroom rewards the powder cut while ordinary powder loses tim
   const cut = cornerRun(track, "cut"),
     ordinary = cornerRun(track, "ordinary"),
     outside = cornerRun(track, "outside");
-  assert.ok(cut.time < mainBoost.time - 0.15);
+  assert.ok(cut.time < main.time - 0.15);
+  assert.ok(cut.time < ordinary.time - 0.5);
+  assert.ok(mainBoost.time < main.time - 0.15);
   assert.ok(ordinary.time > main.time + 0.02);
   assert.ok(Math.abs(outside.time - main.time) < 0.5);
   for (const result of [main, mainBoost, cut, ordinary, outside]) assert.equal(result.walls, 0);

@@ -10,6 +10,10 @@ import {
   MAX_REVERSE_SPEED,
   MAX_JUMP_HEIGHT,
   MAX_JUMP_TIME,
+  MAX_SPEED,
+  MAX_BOOST_SPEED,
+  FULL_SPEED_TURN_RADIUS,
+  DRIFT_TURN_RADIUS,
 } from "../src/simulation/physics.js";
 import { progressDelta, ranking, finishRacer, lapNumber } from "../src/simulation/race.js";
 import { initializeRacer, advanceRacer, botInput } from "../src/simulation/simulation.js";
@@ -76,6 +80,86 @@ test("turn-in, release and countersteer respond promptly without snapping", () =
   for (let i = 0; i < 18; i++) drive(s, { ...input, steer: -1 }, flat, FIXED_DT);
   assert.ok(s.steering < -0.9 && s.yawRate > 0.6, "countersteer should not feel delayed");
 });
+
+test("cornering preserves cruising speed and boosts preserve the turning radius", () => {
+  for (const drift of [false, true]) {
+    for (const boost of [0, 1]) {
+      const straight = body(),
+        turning = body();
+      for (const state of [straight, turning]) {
+        state.isPlayer = true;
+        state.boost = boost;
+        state.vz = -(boost ? MAX_BOOST_SPEED : MAX_SPEED) / 3.6;
+      }
+      for (let i = 0; i < 600; i++) {
+        drive(straight, input, flat, FIXED_DT);
+        drive(turning, { ...input, steer: 1, drift }, flat, FIXED_DT);
+      }
+      near(turning.speed, straight.speed, 0.05);
+      const radius = turning.speed / 3.6 / Math.abs(turning.yawRate);
+      assert.ok(radius <= (drift ? DRIFT_TURN_RADIUS : FULL_SPEED_TURN_RADIUS) + 0.1);
+      assert.ok(Math.abs(Math.atan2(turning.lateralSpeed, turning.longitudinalSpeed)) < 0.4);
+    }
+  }
+});
+
+test("analog steering retains useful range rather than saturating at a small input", () => {
+  const rates = [0.25, 0.5, 1].map((steer) => {
+    const state = body();
+    state.vz = -30;
+    for (let i = 0; i < 240; i++) drive(state, { ...input, steer }, flat, FIXED_DT);
+    return Math.abs(state.yawRate);
+  });
+  near(rates[1] / rates[0], 2, 0.01);
+  near(rates[2] / rates[1], 2, 0.01);
+});
+
+test("drift grip survives neutral countersteer and release promptly restores control", () => {
+  const state = body();
+  state.isPlayer = true;
+  state.vz = -30;
+  for (let i = 0; i < 120; i++) drive(state, { ...input, steer: 1, drift: true }, flat, FIXED_DT);
+  const direction = state.driftDirection;
+  for (let i = 0; i < 18; i++) drive(state, { ...input, drift: true }, flat, FIXED_DT);
+  assert.equal(state.driftDirection, direction, "neutral steering must retain drift grip");
+  assert.ok(Math.abs(state.yawRate) < 0.25);
+  for (let i = 0; i < 18; i++) drive(state, { ...input, steer: -1, drift: true }, flat, FIXED_DT);
+  assert.ok(state.yawRate > 0.8, "drift countersteer must respond within 150ms");
+  for (let i = 0; i < 60; i++) drive(state, input, flat, FIXED_DT);
+  assert.equal(state.driftDirection, 0);
+  assert.ok(Math.abs(state.lateralSpeed) < 0.2);
+});
+
+test("braking takes priority over held throttle and boost", () => {
+  const state = body();
+  state.vz = -30;
+  state.boost = 1;
+  for (let i = 0; i < 60; i++) drive(state, { ...input, brake: true }, flat, FIXED_DT);
+  assert.ok(state.longitudinalSpeed < 17 && state.longitudinalSpeed > 0);
+  for (let i = 0; i < 240; i++) drive(state, { ...input, brake: true }, flat, FIXED_DT);
+  assert.ok(state.longitudinalSpeed < -2, "a deliberate brake hold should still engage reverse");
+});
+
+test("rough ground retains steering authority when a boost expires", () => {
+  const state = body();
+  state.vz = -35;
+  state.boost = 1;
+  const rough = { ...flat, offroad: true, offroadGrip: 5 };
+  for (let i = 0; i < 120; i++) drive(state, { ...input, steer: 1 }, rough, FIXED_DT);
+  const boostedYaw = Math.abs(state.yawRate);
+  state.boost = 0;
+  for (let i = 0; i < 30; i++) drive(state, { ...input, steer: 1 }, rough, FIXED_DT);
+  assert.ok(Math.abs(state.yawRate) > boostedYaw * 0.7);
+  assert.ok(state.speed < 120, "rough ground must still slow the kart");
+});
+
+test("neutral input and purely sideways motion remain finite", () => {
+  const state = body();
+  state.vx = 10;
+  drive(state, {}, flat, FIXED_DT);
+  assert.ok(Number.isFinite(state.yaw + state.worldPos.x + state.worldPos.z));
+  assert.ok(state.speed > 35, "grip must redirect sideways momentum without deleting it");
+});
 test("airborne input cannot redirect momentum, and gravity produces a landing", () => {
   const s = body();
   s.grounded = false;
@@ -113,6 +197,23 @@ test("mini turbo fires exactly once on drift release", () => {
   near(chargeDrift(s, false, false, FIXED_DT), 2);
   for (let i = 0; i < 100; i++) near(chargeDrift(s, false, false, FIXED_DT), 0);
   near(s.drift, 0);
+});
+
+test("airborne and hit releases cancel drift rewards and idle charge decays", () => {
+  for (const change of [{ grounded: false }, { spin: 1 }]) {
+    const state = body();
+    state.drift = 1;
+    state.driftHeld = true;
+    Object.assign(state, change);
+    near(chargeDrift(state, false, false, FIXED_DT), 0);
+    near(state.drift, 0);
+    near(state.driftTier, 0);
+  }
+  const state = body();
+  state.drift = 1;
+  state.driftHeld = true;
+  for (let i = 0; i < 240; i++) chargeDrift(state, false, true, FIXED_DT);
+  near(chargeDrift(state, false, false, FIXED_DT), 0);
 });
 test("track projection is continuous across the finish seam and honors banking", () => {
   near(progressDelta(3, 2397, TRACK), 6);

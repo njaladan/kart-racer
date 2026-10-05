@@ -78,7 +78,7 @@ export function botInput(state, index, elapsed, rivals = []) {
   );
   const radius = aheadMetres / Math.max(0.04, curvature);
   const safeCornerSpeed = Math.sqrt(18 * radius) * 3.6;
-  const cruise = Math.min(90 + (state.skill || 0.8) * 8, safeCornerSpeed);
+  const cruise = Math.min(89.5 + (state.skill || 0.8) * 8, safeCornerSpeed);
   return {
     throttle: state.speed < cruise || state.boost > 0,
     brake: state.speed > cruise + 8,
