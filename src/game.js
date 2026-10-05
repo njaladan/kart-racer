@@ -80,7 +80,7 @@ async function startGame() {
       diagnostics.autodrive
         ? { ...botInput(player, 0, raceTime, racers), drift: keys[" "] || keys.shift }
         : {
-            throttle: keys.arrowup || keys.w,
+            throttle: pointer.autoThrottle || keys.arrowup || keys.w,
             brake: keys.arrowdown || keys.s,
             steer:
               (keys.arrowright || keys.d ? 1 : 0) - (keys.arrowleft || keys.a ? 1 : 0) ||

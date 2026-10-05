@@ -156,6 +156,13 @@
   height: 84px;
   font-size: 42px;
 }
+#touch-controls .touch-tilt {
+  width: 58px;
+  height: 52px;
+  padding: 0 4px;
+  color: #d5fa51;
+  font-size: 9px;
+}
 .touch-drive {
   display: grid;
   grid-template-columns: repeat(2, clamp(58px, 17vw, 76px));
@@ -255,6 +262,26 @@
   .racing #touch-controls {
     display: flex;
   }
+  #touch-controls .touch-gas {
+    display: none;
+  }
+  .touch-drive {
+    grid-template-columns: repeat(2, clamp(58px, 17vw, 76px));
+  }
+  #touch-controls .touch-drift {
+    grid-column: 1;
+    grid-row: 1;
+    height: 84px;
+  }
+  #touch-controls .touch-brake {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  #touch-controls .touch-item {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    height: 84px;
+  }
 }
 .mobile-help {
   display: none;
@@ -283,6 +310,15 @@
   }
   #touch-controls .touch-drive button {
     font-size: 10px;
+  }
+  #touch-controls .touch-steer {
+    gap: 5px;
+  }
+  #touch-controls .touch-steer button {
+    width: clamp(52px, 15vw, 68px);
+  }
+  #touch-controls .touch-steer .touch-tilt {
+    width: 52px;
   }
   .title-card {
     transform: translateY(-50%);
