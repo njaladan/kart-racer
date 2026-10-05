@@ -52,3 +52,91 @@
     font-size: 18px;
   }
 }
+
+/* Landscape phones have room for a short HUD, but not portrait-sized buttons. */
+@media (max-height: 620px) and (pointer: coarse) {
+  #touch-controls {
+    bottom: max(10px, calc(env(safe-area-inset-bottom) + 8px));
+  }
+  #touch-controls .touch-steer {
+    gap: 5px;
+  }
+  #touch-controls .touch-steer button {
+    width: clamp(48px, 8vh, 58px);
+    height: clamp(56px, 12vh, 68px);
+    font-size: 34px;
+  }
+  #touch-controls .touch-steer .touch-tilt {
+    width: clamp(44px, 7vh, 50px);
+    height: clamp(40px, 8vh, 46px);
+    font-size: 8px;
+  }
+  .touch-drive {
+    grid-template-columns: repeat(2, clamp(50px, 10vh, 60px));
+    gap: 5px;
+  }
+  #touch-controls .touch-drift,
+  #touch-controls .touch-item {
+    height: clamp(56px, 12vh, 68px);
+  }
+  #touch-controls .touch-brake {
+    min-height: 48px;
+  }
+  .place-box {
+    bottom: max(124px, calc(env(safe-area-inset-bottom) + 112px));
+    min-width: 60px;
+  }
+  .place-box strong {
+    font-size: clamp(46px, 10vh, 58px);
+    -webkit-text-stroke-width: 3px;
+  }
+  .place-box small {
+    font-size: 18px;
+    margin-top: 5px;
+  }
+  .place-box > span {
+    margin-top: 2px;
+    font-size: 9px;
+  }
+  .hud-right {
+    bottom: max(128px, calc(env(safe-area-inset-bottom) + 116px));
+    left: max(88px, calc(env(safe-area-inset-left) + 82px));
+  }
+  .speed-box strong {
+    font-size: clamp(25px, 6vh, 32px);
+  }
+  .race-time {
+    font-size: 8px;
+  }
+  .item-box {
+    top: max(54px, calc(env(safe-area-inset-top) + 42px));
+    grid-template-columns: 48px auto;
+    grid-template-rows: 48px auto;
+    column-gap: 6px;
+    row-gap: 4px;
+  }
+  .item-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    font-size: 30px;
+  }
+  .item-label {
+    font-size: 9px;
+  }
+  .lap-box {
+    top: max(62px, calc(env(safe-area-inset-top) + 50px));
+    width: 88px;
+  }
+  .lap-box strong {
+    font-size: 36px;
+  }
+  .lap-box i {
+    font-size: 23px;
+  }
+  #radar.active {
+    width: 76px;
+    height: 64px;
+    bottom: max(138px, calc(env(safe-area-inset-bottom) + 126px));
+  }
+}
