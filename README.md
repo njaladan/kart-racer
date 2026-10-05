@@ -11,6 +11,8 @@ the opponent grid. [Racer artwork credits and licenses](assets/courses/packs/sha
 
 ## Screenshots
 
+To regenerate these images, see the [screenshot capture guide](docs/screenshot-capture.md).
+
 | Windmill Wilds | Neon Harbor |
 | --- | --- |
 | ![Tux racing in Windmill Wilds](docs/screenshots/windmill-wilds.jpg) | ![Kiki racing in Neon Harbor](docs/screenshots/neon-harbor.jpg) |
