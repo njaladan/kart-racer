@@ -109,6 +109,10 @@ body {
   min-height: 0;
   overflow: hidden;
   background: #0c1b2b;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  overscroll-behavior: none;
 }
 canvas {
   position: absolute;
@@ -598,7 +602,7 @@ h2 em {
   display: none;
   position: absolute;
   z-index: 2;
-  inset: auto 18px 46px;
+  inset: auto max(12px, env(safe-area-inset-right)) max(24px, calc(env(safe-area-inset-bottom) + 12px)) max(12px, env(safe-area-inset-left));
   justify-content: space-between;
   align-items: flex-end;
   pointer-events: none;
@@ -607,6 +611,11 @@ h2 em {
   pointer-events: auto;
   touch-action: none;
   user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  appearance: none;
+  border-radius: 18px;
   color: #fff;
   background: #081726b8;
   border: 1px solid #ffffff50;
@@ -614,6 +623,18 @@ h2 em {
     700 12px "DM Mono",
     monospace;
   backdrop-filter: blur(6px);
+  transition: background-color 80ms, box-shadow 80ms;
+}
+#touch-controls button.is-held,
+#touch-controls button:active {
+  background: #345367e8;
+  border-color: #d5fa51;
+  box-shadow: inset 0 0 0 2px #d5fa5180, 0 0 18px #d5fa5126;
+}
+#touch-controls .touch-gas.is-held,
+#touch-controls .touch-gas:active {
+  background: #edffac;
+  box-shadow: inset 0 0 0 3px #95b42b, 0 0 22px #d5fa5140;
 }
 .touch-steer,
 .touch-drive {
@@ -621,18 +642,22 @@ h2 em {
   gap: 8px;
   align-items: flex-end;
 }
-.touch-steer button {
-  width: 52px;
-  height: 55px;
-  font-size: 29px;
+#touch-controls .touch-steer button {
+  width: clamp(58px, 17vw, 76px);
+  height: 84px;
+  font-size: 42px;
+}
+.touch-drive {
+  display: grid;
+  grid-template-columns: repeat(2, clamp(58px, 17vw, 76px));
 }
 .touch-drive button {
-  height: 48px;
-  padding: 0 13px;
+  width: 100%;
+  min-height: 60px;
+  padding: 0 4px;
 }
-.touch-drive .touch-gas {
-  height: 65px;
-  min-width: 69px;
+#touch-controls .touch-gas {
+  height: 84px;
   background: #d5fa51;
   color: #101b20;
   font-weight: 800;
@@ -640,10 +665,11 @@ h2 em {
 .touch-gas span {
   font-size: 18px;
 }
-.touch-drive .touch-item {
+#touch-controls .touch-item {
   color: #d5fa51;
+  height: 84px;
 }
-.touch-drive .touch-drift {
+#touch-controls .touch-drift {
   color: #d8e2e7;
 }
 @media (max-width: 700px) {
@@ -745,7 +771,11 @@ h2 em {
   font:
     700 10px "DM Mono",
     monospace;
-  min-height: 30px;
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 .race-actions kbd {
   font: inherit;
@@ -775,29 +805,33 @@ h2 em {
     display: flex;
   }
 }
+.mobile-help {
+  display: none;
+}
+@media (pointer: coarse), (max-width: 700px) {
+  .mobile-help {
+    display: block;
+  }
+  .desktop-help {
+    display: none;
+  }
+  .race-actions {
+    top: max(12px, env(safe-area-inset-top));
+    right: max(12px, env(safe-area-inset-right));
+  }
+  #radar.active {
+    bottom: max(184px, calc(env(safe-area-inset-bottom) + 172px));
+    right: max(12px, env(safe-area-inset-right));
+    width: 100px;
+    height: 86px;
+  }
+}
 @media (max-width: 700px) {
   #game-shell {
     min-height: 0;
   }
-  .race-actions {
-    right: 14px;
-    top: 17px;
-  }
-  .touch-drive {
-    gap: 5px;
-  }
-  .touch-drive button {
-    padding: 0 9px;
+  #touch-controls .touch-drive button {
     font-size: 10px;
-  }
-  .touch-steer {
-    gap: 5px;
-  }
-  .touch-steer button {
-    width: 42px;
-  }
-  .touch-drive .touch-gas {
-    min-width: 49px;
   }
   .title-card {
     transform: translateY(-50%);
@@ -839,9 +873,6 @@ h2 em {
   }
   .hud-center {
     top: 48px;
-  }
-  #touch-controls {
-    bottom: 25px;
   }
   #radar {
     bottom: 93px;

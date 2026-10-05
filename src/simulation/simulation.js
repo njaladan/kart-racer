@@ -37,6 +37,7 @@ export function initializeRacer(state) {
   resetMotion(state);
   state.worldPos = poseAt(state.s, laneWidth(state.x || 0), 0.065).p;
   state.yaw = yawFor(frameAt(trackT(state.s)).tangent);
+  state.renderYawFrom = state.yaw;
   state.speed = 0;
   state.lap = 0;
   state.finishTime = Infinity;
@@ -88,6 +89,7 @@ export function botInput(state, index, elapsed, rivals = []) {
 export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
   if (state.finished) return {};
   state.prevS = state.s;
+  state.renderYawFrom = state.yaw;
   if (!state.renderFrom) state.renderFrom = state.worldPos.clone();
   else state.renderFrom.copy(state.worldPos);
   const previousLap = state.lap;

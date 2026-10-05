@@ -501,6 +501,7 @@ import {
     player.x = 0;
     player.speed = 0;
     player.yaw = yawFor(frameAt(0).tangent);
+    player.renderYawFrom = player.yaw;
     player.worldPos.copy(poseAt(0, 0, 0.065).p);
     player.lap = 0;
     player.boost = 0;
@@ -530,6 +531,7 @@ import {
       b.worldPos = poseAt(b.s, laneWidth(b.x), 0.065).p;
       b.renderFrom = b.worldPos.clone();
       b.yaw = yawFor(frameAt(trackT(b.s)).tangent);
+      b.renderYawFrom = b.yaw;
       b.lap = 0;
       b.padCooldown = 0;
       b.finishTime = Infinity;
@@ -655,6 +657,7 @@ import {
     player.worldPos.copy(f.p);
     player.renderFrom?.copy(f.p);
     player.yaw = yawFor(f.tangent);
+    player.renderYawFrom = player.yaw;
     player.x = 0;
     resetMotion(player);
     player.spin = 0;
@@ -666,9 +669,8 @@ import {
   window.addEventListener("resize", () => {
     w = innerWidth;
     h = innerHeight;
-    // Existing resize reference retained for this behavior-preserving reorganization.
-    // eslint-disable-next-line no-undef
-    pixelRatio = Math.min(devicePixelRatio || 1, maxDpr);
+    clearInput();
+    pixelRatio = Math.min(pixelRatio, devicePixelRatio || 1);
     renderer.setPixelRatio(pixelRatio);
     renderer.setSize(w, h, false);
     camera.aspect = w / h;

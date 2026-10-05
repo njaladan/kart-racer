@@ -4,7 +4,7 @@ import { resetMotion } from "./physics.js";
 /**
  * Build the shared mutable record used by simulation, race, items, and view code.
  * Physics owns velocity/contact/drift fields; race owns progress/finish fields;
- * items owns inventory/effects; the browser view owns renderFrom and kart.
+ * items owns inventory/effects; the browser view owns renderFrom, renderYawFrom, and kart.
  */
 export function createRacerState(configuration = {}) {
   const state = {
@@ -17,6 +17,7 @@ export function createRacerState(configuration = {}) {
     yaw: 0,
     worldPos: new THREE.Vector3(),
     renderFrom: new THREE.Vector3(),
+    renderYawFrom: 0,
     lap: 0,
     nextCheckpoint: 1,
     finishTime: Infinity,

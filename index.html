@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
     <meta name="theme-color" content="#071323" />
     <title>Turbo Trail — Kart Racing</title>
@@ -46,9 +46,14 @@
           <button id="start-button" class="primary-button" disabled>
             LOADING COURSE <span>…</span>
           </button>
-          <p class="controls-help">
+          <p class="controls-help desktop-help">
             W / ↑ accelerate · S / ↓ brake &amp; reverse<br />A D / ← → steer ·
             Space drift / tap at ramps to trick · E item · Esc pause
+          </p>
+          <p class="controls-help mobile-help">
+            Hold GO to accelerate · Left thumb steers<br />
+            Hold DRIFT through turns · Tap ITEM to use<br />
+            You can also drag the track to steer smoothly
           </p>
           <div class="title-foot">
             <span>🏁 &nbsp;3 LAPS</span><span>⚡ &nbsp;ITEMS ON</span
@@ -67,8 +72,8 @@
       ></canvas>
       <div id="touch-controls" aria-label="Touch driving controls">
         <div class="touch-steer">
-          <button data-key="a" aria-label="Steer left">‹</button
-          ><button data-key="d" aria-label="Steer right">›</button>
+          <button data-key="a" aria-label="Steer left" aria-pressed="false">‹</button
+          ><button data-key="d" aria-label="Steer right" aria-pressed="false">›</button>
         </div>
         <div class="touch-drive">
           <button

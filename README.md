@@ -20,11 +20,13 @@ Open http://127.0.0.1:5173. Alternatively, use any static HTTP server. No npm in
 - **Use item:** E / Enter
 - **Pause:** Escape or the pause button. Losing focus also pauses the game.
 - **Recover:** R or RESET when travelling below 12 km/h
-- **Touch:** Steering, brake/reverse, drift, accelerator, and item buttons. Drag on the canvas to steer.
+- **Touch:** Hold GO to accelerate and use the steering, brake/reverse, drift, and item buttons. Drag on the canvas for proportional steering. Large thumb targets show held inputs, support simultaneous fingers, and stay clear of iPhone safe areas. Driving controls suppress text selection, long-press menus, and browser zoom gestures.
 
 ## Handling and performance
 
 Horizontal movement uses world-space velocity, smooth steering, lateral tire grip, rolling resistance, slope forces, braking, and reverse. The track supplies the road surface and physical barriers; it does not steer the kart. Ordinary top speed is roughly 107 km/h on level road, and reverse reaches roughly 45 km/h. From rest, level-road acceleration reaches about 63 km/h forwards and 36 km/h in reverse after one second.
+
+Player steering turns in promptly and recenters or countersteers faster, while preserving gradual transitions. Kart position and heading share fixed-step interpolation, and the follow camera tracks that rendered pose. AI response tuning and surface grip remain unchanged.
 
 Ramp jumps intentionally favor arcade control: a bounded takeoff, stronger gravity, at most 1.1 metres above the road, and at most 0.85 seconds of airtime. Boosts increase horizontal speed without increasing takeoff velocity. Surface changes and kart collisions cannot trigger a jump.
 

@@ -40,7 +40,14 @@ export function drive(state, input, surface, dt) {
     rz = -Math.sin(state.yaw);
   let forward = state.vx * fx + state.vz * fz;
   let lateral = state.vx * rx + state.vz * rz;
-  state.steering += (clamp(input.steer, -1, 1) - state.steering) * (1 - Math.exp(-10 * dt));
+  const steeringTarget = clamp(input.steer, -1, 1);
+  // Quick turn-in, quicker release/countersteer: smooth without a long input tail.
+  const steeringResponse = state.isPlayer
+    ? steeringTarget === 0 || steeringTarget * state.steering < 0
+      ? 26
+      : 18
+    : 10;
+  state.steering += (steeringTarget - state.steering) * (1 - Math.exp(-steeringResponse * dt));
   const sliding = input.drift && Math.abs(state.steering) > 0.15 && forward > 9 && state.grounded;
   const boosted = state.boost > 0 || state.star > 0;
   if (state.grounded) {
@@ -85,7 +92,15 @@ export function drive(state, input, surface, dt) {
     const desiredYaw = (-forward / 1.6) * Math.tan(wheelAngle) * (sliding ? 1.3 : 1);
     const yawLimit = maxLateral / Math.max(5, Math.abs(forward));
     const targetYaw = state.spin > 0 ? 5 : clamp(desiredYaw, -yawLimit, yawLimit);
-    state.yawRate += (targetYaw - state.yawRate) * (1 - Math.exp(-8 * dt));
+    // Human input needs prompt release; AI retains its continuous-correction tuning.
+    const yawResponse = state.isPlayer
+      ? sliding
+        ? 10
+        : steeringTarget === 0 || targetYaw * state.yawRate < 0
+          ? 26
+          : 16
+      : 8;
+    state.yawRate += (targetYaw - state.yawRate) * (1 - Math.exp(-yawResponse * dt));
     const grip =
       surface.offroad && !boosted ? (surface.offroadGrip ?? 5) : sliding ? 2.5 : surface.grip || 12;
     lateral *= Math.exp(-grip * dt);

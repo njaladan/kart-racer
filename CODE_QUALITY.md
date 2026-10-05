@@ -60,9 +60,9 @@ Prettier provides consistent formatting across first-party source, Node tests, a
 
 Run `npm install` once for development tools, then `npm run check` for lint, formatting, and regression tests. `npm run format` applies formatting. Running the game still requires no install or build.
 
-### Preserved issue
+### Resize behavior
 
-The pulled version references undeclared `maxDpr` in the resize handler in `src/game.js`. It is retained with one localized lint exception to honor the no-logic-change scope; a resize can still fail there. Fixing that existing behavior belongs in a separate change.
+The organization pass preserved an undeclared `maxDpr` reference in the resize handler in `src/game.js`. The mobile-control update fixes this by retaining the current, performance-adjusted pixel ratio when resizing and clearing held inputs when the viewport changes.
 
 ### Sources reviewed
 

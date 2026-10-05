@@ -60,6 +60,22 @@ test("braking stops before engaging deliberate reverse", () => {
   assert.ok(s.longitudinalSpeed < -2);
   assert.ok(s.speed > 40 && s.speed < MAX_REVERSE_SPEED);
 });
+test("turn-in, release and countersteer respond promptly without snapping", () => {
+  const s = body();
+  s.isPlayer = true;
+  s.vz = -20;
+  drive(s, { ...input, steer: 1 }, flat, FIXED_DT);
+  assert.ok(s.steering > 0 && s.steering < 0.2, "first steering step remains gradual");
+  for (let i = 1; i < 18; i++) drive(s, { ...input, steer: 1 }, flat, FIXED_DT);
+  assert.ok(s.steering > 0.9 && s.yawRate < -0.6, "turning should be established within 150ms");
+  for (let i = 0; i < 18; i++) drive(s, input, flat, FIXED_DT);
+  assert.ok(
+    s.steering < 0.025 && Math.abs(s.yawRate) < 0.22,
+    "release should stop the steering tail",
+  );
+  for (let i = 0; i < 18; i++) drive(s, { ...input, steer: -1 }, flat, FIXED_DT);
+  assert.ok(s.steering < -0.9 && s.yawRate > 0.6, "countersteer should not feel delayed");
+});
 test("airborne input cannot redirect momentum, and gravity produces a landing", () => {
   const s = body();
   s.grounded = false;

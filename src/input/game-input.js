@@ -13,8 +13,29 @@ export function bindGameInput({
   canRecover,
   onRecover,
 }) {
+  const keyboardKeys = new Set();
+  const heldPointers = new Map();
+  const touchButtons = [...documentRef.querySelectorAll("#touch-controls [data-key]")];
+  let steeringPointer = null;
+
+  function syncKey(key) {
+    keys[key] =
+      keyboardKeys.has(key) ||
+      [...heldPointers.values()].some((button) => button.dataset.key === key);
+  }
+
+  function showHeld(button) {
+    const held = [...heldPointers.values()].includes(button);
+    button.classList.toggle("is-held", held);
+    button.setAttribute("aria-pressed", String(held));
+  }
+
   function clear() {
+    keyboardKeys.clear();
+    heldPointers.clear();
+    touchButtons.forEach(showHeld);
     for (const key of Object.keys(keys)) delete keys[key];
+    steeringPointer = null;
     pointer.down = false;
     pointer.steer = 0;
   }
@@ -30,12 +51,15 @@ export function bindGameInput({
       return;
     }
     if (!isRunning()) return;
-    keys[key] = true;
+    keyboardKeys.add(key);
+    syncKey(key);
     if ((key === "e" || key === "enter") && !event.repeat) onUseItem();
     if (key === "r" && !event.repeat && canRecover()) onRecover();
   });
   windowRef.addEventListener("keyup", (event) => {
-    keys[event.key.toLowerCase()] = false;
+    const key = event.key.toLowerCase();
+    keyboardKeys.delete(key);
+    syncKey(key);
   });
   windowRef.addEventListener("blur", () => {
     clear();
@@ -47,17 +71,22 @@ export function bindGameInput({
     if (canPause()) onPause();
   });
 
-  documentRef.querySelectorAll("#touch-controls [data-key]").forEach((button) => {
+  touchButtons.forEach((button) => {
     const key = button.dataset.key;
     button.addEventListener("pointerdown", (event) => {
       event.preventDefault();
       if (!isRunning()) return;
       button.setPointerCapture(event.pointerId);
-      keys[key] = true;
+      heldPointers.set(event.pointerId, button);
+      syncKey(key);
+      showHeld(button);
     });
     for (const eventName of ["pointerup", "pointercancel", "lostpointercapture"]) {
-      button.addEventListener(eventName, () => {
-        keys[key] = false;
+      button.addEventListener(eventName, (event) => {
+        if (heldPointers.get(event.pointerId) !== button) return;
+        heldPointers.delete(event.pointerId);
+        syncKey(key);
+        showHeld(button);
       });
     }
   });
@@ -74,19 +103,37 @@ export function bindGameInput({
   });
 
   canvas.addEventListener("pointerdown", (event) => {
-    if (!isRunning()) return;
+    event.preventDefault?.();
+    if (!isRunning() || steeringPointer !== null) return;
+    steeringPointer = event.pointerId;
     pointer.down = true;
     pointer.x = event.clientX;
+    pointer.steer = 0;
     canvas.setPointerCapture(event.pointerId);
   });
   canvas.addEventListener("pointermove", (event) => {
-    if (pointer.down) pointer.steer = clamp((event.clientX - pointer.x) / 85, -1, 1);
+    if (pointer.down && event.pointerId === steeringPointer)
+      pointer.steer = clamp((event.clientX - pointer.x) / 85, -1, 1);
   });
   for (const eventName of ["pointerup", "pointercancel", "lostpointercapture"]) {
-    canvas.addEventListener(eventName, () => {
+    canvas.addEventListener(eventName, (event) => {
+      if (event.pointerId !== steeringPointer) return;
+      steeringPointer = null;
       pointer.down = false;
       pointer.steer = 0;
     });
+  }
+
+  // Safari can still start selection/callouts during a sustained multi-touch hold.
+  // Cancel native gestures only on the driving surface and driving buttons.
+  const drivingTargets = [canvas, ...documentRef.querySelectorAll("#touch-controls button")];
+  for (const target of drivingTargets) {
+    for (const eventName of ["touchstart", "touchmove"]) {
+      target.addEventListener(eventName, (event) => event.preventDefault(), { passive: false });
+    }
+    for (const eventName of ["contextmenu", "selectstart", "dblclick"]) {
+      target.addEventListener(eventName, (event) => event.preventDefault());
+    }
   }
 
   return { clear };

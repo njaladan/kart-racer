@@ -1,6 +1,6 @@
 import * as THREE from "../../vendor/three/three.module.js";
 import { lapNumber } from "../simulation/race.js";
-import { FIXED_DT, MAX_SPEED } from "../simulation/physics.js";
+import { FIXED_DT, MAX_SPEED, wrapAngle } from "../simulation/physics.js";
 import {
   TRACK,
   frameAt,
@@ -52,18 +52,16 @@ export function createGameRenderer({
   function updateVehicle(state, kart, dt) {
     const frameState = getFrameState();
     const frame = frameAt(trackT(state.s));
-    kart.root.position
-      .copy(state.renderFrom || state.worldPos)
-      .lerp(state.worldPos, dt ? frameState.accumulator / FIXED_DT : 1);
+    const blend = dt ? frameState.accumulator / FIXED_DT : 1;
+    const previousYaw = state.renderYawFrom ?? state.yaw;
+    const yaw = previousYaw + wrapAngle(state.yaw - previousYaw) * blend;
+    kart.root.position.copy(state.renderFrom || state.worldPos).lerp(state.worldPos, blend);
     kartUp.copy(state.grounded ? frame.up : WORLD_UP);
-    kartForward.set(Math.sin(state.yaw), 0, Math.cos(state.yaw));
+    kartForward.set(Math.sin(yaw), 0, Math.cos(yaw));
     kartForward.addScaledVector(kartUp, -kartForward.dot(kartUp)).normalize();
     kartRight.crossVectors(kartUp, kartForward).normalize();
     kartBasis.makeBasis(kartRight, kartUp, kartForward);
-    kart.root.quaternion.slerp(
-      new THREE.Quaternion().setFromRotationMatrix(kartBasis),
-      dt ? 1 - Math.exp(-14 * dt) : 1,
-    );
+    kart.root.quaternion.setFromRotationMatrix(kartBasis);
 
     const trickPose = state.trickActive ? Math.sin(Math.min(1, state.airTime / 0.42) * Math.PI) : 0;
     const bodyLean = state.grounded
@@ -198,7 +196,12 @@ export function createGameRenderer({
   }
 
   function updateCamera(dt, frameState) {
-    const forward = new THREE.Vector3(-Math.sin(player.yaw), 0, -Math.cos(player.yaw));
+    const previousYaw = player.renderYawFrom ?? player.yaw;
+    const yaw =
+      previousYaw +
+      wrapAngle(player.yaw - previousYaw) * (dt ? frameState.accumulator / FIXED_DT : 1);
+    const forward = new THREE.Vector3(-Math.sin(yaw), 0, -Math.cos(yaw));
+    const position = playerKart.root.position;
     const driftCameraTarget =
       frameState.running && player.driftBoost > 0 && player.boost > 0 && player.spin <= 0
         ? player.driftBoostTier === 2
@@ -214,17 +217,17 @@ export function createGameRenderer({
     }
 
     const panoramic = camera.aspect > 1.8;
-    const look = player.worldPos.clone().addScaledVector(forward, panoramic ? 4.5 : 6);
+    const look = position.clone().addScaledVector(forward, panoramic ? 4.5 : 6);
     look.y += 1.15;
-    const desired = player.worldPos
+    const desired = position
       .clone()
       .addScaledVector(
         forward,
         -(panoramic ? 10.5 : 8.7) - player.speed * 0.017 - driftCamera * 0.65,
       );
     desired.y += 4.7;
-    camera.position.lerp(desired, 1 - Math.exp(-6 * dt));
-    cameraLook.lerp(look, 1 - Math.exp(-9 * dt));
+    camera.position.lerp(desired, 1 - Math.exp(-9 * dt));
+    cameraLook.lerp(look, 1 - Math.exp(-12 * dt));
     const cameraTrack = projectTrack(camera.position, player.s);
     camera.position.y = Math.max(camera.position.y, cameraTrack.height + 2.1);
     camera.fov +=
