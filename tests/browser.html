@@ -45,6 +45,7 @@
       <strong>Browser regression checks</strong
       ><button id="start">Start race</button><button id="auto">Autodrive</button
       ><button id="ramp">Boosted ramp</button
+      ><button id="trick">Tap trick</button
       ><button id="gas">Hold accelerator</button
       ><button id="drift">Hold right + drift</button
       ><button id="release">Release controls</button
@@ -70,6 +71,10 @@
       const actions = {
         start: () => send("test-start"),
         ramp: () => send("test-ramp"),
+        trick: () => {
+          send("test-input", { keys: ["w", " "] });
+          setTimeout(() => send("test-input", { keys: ["w"] }), 100);
+        },
         auto: () => {
           send("test-auto", { value: true });
           send("test-input", { keys: [] });

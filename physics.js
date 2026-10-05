@@ -5,7 +5,8 @@ export const MAX_SPEED = 112; // km/h
 export const MAX_REVERSE_SPEED = 46; // km/h
 export const JUMP_GRAVITY = 24;
 export const MAX_JUMP_HEIGHT = 1.1; // metres above the racing surface
-export const MAX_JUMP_TIME = 0.7;
+export const MAX_JUMP_TIME = 0.85;
+export const JUMP_TAKEOFF_SPEED = 6;
 export const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 export const wrapAngle = (a) => Math.atan2(Math.sin(a), Math.cos(a));
 
@@ -24,6 +25,11 @@ export function resetMotion(state) {
     contactCooldown: 0,
     invulnerable: 0,
     driftHeld: false,
+    driftBoost: 0,
+    driftBoostTier: 0,
+    trickHeld: false,
+    trickBuffer: 0,
+    trickActive: false,
   });
 }
 
@@ -144,7 +150,7 @@ export function verticalMotion(state, height, slopeVelocity, dt) {
     state.airTime = 0;
   } else {
     state.airTime = (state.airTime || 0) + dt;
-    state.vy = clamp(state.vy - JUMP_GRAVITY * dt, -32, 3);
+    state.vy = clamp(state.vy - JUMP_GRAVITY * dt, -32, JUMP_TAKEOFF_SPEED);
     state.worldPos.y += state.vy * dt;
     if (state.worldPos.y > height + MAX_JUMP_HEIGHT) {
       state.worldPos.y = height + MAX_JUMP_HEIGHT;

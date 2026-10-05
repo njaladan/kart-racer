@@ -1,6 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createShell, advanceShell, sweptDistanceSquared } from "../items.js";
+import {
+  createShell, advanceShell, sweptDistanceSquared, consumeItem,
+  itemWeights, chooseItem, MAX_QUEUED_BOOST,
+} from "../items.js";
 import { initializeRacer } from "../simulation.js";
 import { poseAt, frameAt, yawFor, projectTrack } from "../track.js";
 import { FIXED_DT } from "../physics.js";
@@ -38,4 +41,56 @@ test("swept collision finds a target crossed between frames without hitting dist
   assert.equal(sweptDistanceSquared({ x: 5, y: 0.6, z: 0 }, start, end), 0);
   assert.ok(sweptDistanceSquared({ x: 5, y: 4, z: 0 }, start, end) > 9);
   assert.ok(sweptDistanceSquared({ x: 5, y: 0.6, z: 3 }, start, end) >= 9);
+});
+
+test("shells are consumed once and the inventory can accept the next pickup", () => {
+  for (const type of ["green", "red"]) {
+    const racer = { item: type, itemCount: 1, spin: 0 };
+    assert.equal(consumeItem(racer), type);
+    assert.equal(racer.item, null);
+    assert.equal(racer.itemCount, 0);
+    assert.equal(consumeItem(racer), null);
+    assert.equal(racer.itemCount, 0);
+    racer.item = "mushroom";
+    racer.itemCount = 3;
+    assert.equal(consumeItem(racer), "mushroom");
+  }
+});
+
+test("rapid mushroom uses deliver all three boosts and blocked uses preserve charges", () => {
+  const racer = { item: "mushroom", itemCount: 3, boost: 0, spin: 1 };
+  assert.equal(consumeItem(racer), null);
+  assert.equal(racer.itemCount, 3);
+  racer.spin = 0;
+  for (let i = 0; i < 3; i++) consumeItem(racer);
+  assert.equal(racer.boost, MAX_QUEUED_BOOST);
+  assert.equal(racer.item, null);
+  assert.equal(consumeItem(racer), null);
+  racer.item = "mushroom";
+  racer.itemCount = 3;
+  consumeItem(racer);
+  assert.equal(racer.boost, MAX_QUEUED_BOOST);
+  racer.boost = 3.3;
+  consumeItem(racer);
+  assert.equal(racer.boost, 3.3, "an existing longer boost must not be shortened");
+});
+
+test("comeback odds follow distance behind, apply to every racer, and stay bounded", () => {
+  const leader = { s: 2000, speed: 100 };
+  const close = { s: 1950, speed: 100 };
+  const far = { s: 1000, speed: 100 };
+  const pack = [leader, close, far];
+  assert.deepEqual(itemWeights(leader, pack), itemWeights(close, pack));
+  const weights = itemWeights(far, pack);
+  assert.ok(weights.mushroom > itemWeights(leader, pack).mushroom);
+  assert.ok(weights.star > itemWeights(leader, pack).star);
+  assert.ok(weights.banana < itemWeights(leader, pack).banana);
+  assert.deepEqual(weights, itemWeights({ ...far, isPlayer: true }, pack));
+  assert.deepEqual(weights, itemWeights({ s: -10000, speed: 0 }, pack));
+  const counts = {};
+  for (let i = 0; i < 100; i++) {
+    const type = chooseItem(far, pack, (i + 0.5) / 100);
+    counts[type] = (counts[type] || 0) + 1;
+  }
+  assert.deepEqual(counts, weights);
 });

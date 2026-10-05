@@ -1,7 +1,47 @@
 import * as THREE from "./vendor/three/three.module.js";
-import { projectTrack, TRACK } from "./track.js";
+import { projectTrack, TRACK, WORLD_PER_UNIT } from "./track.js";
 import { progressDelta } from "./race.js";
 import { wrapAngle, clamp } from "./physics.js";
+
+export const MUSHROOM_BOOST = 0.95;
+export const MAX_QUEUED_BOOST = MUSHROOM_BOOST * 3;
+
+// Use the same inventory rules for the player and every rival.
+export function consumeItem(who) {
+  if (!who.item || who.itemCount <= 0 || who.finished || who.spin > 0)
+    return null;
+  const type = who.item;
+  who.itemCount--;
+  if (who.itemCount === 0) who.item = null;
+  if (type === "mushroom")
+    who.boost = Math.max(who.boost || 0,
+      Math.min(MAX_QUEUED_BOOST, (who.boost || 0) + MUSHROOM_BOOST));
+  return type;
+}
+
+export function itemWeights(who, racers) {
+  const leader = Math.max(who.s, ...racers.map((racer) => racer.s));
+  const gapSeconds =
+    ((leader - who.s) * WORLD_PER_UNIT) / (Math.max(60, who.speed || 0) / 3.6);
+  const recovery = clamp((gapSeconds - 1.5) / 5, 0, 1);
+  const trailing = { mushroom: 38, green: 10, red: 24, banana: 6, star: 22 };
+  return Object.fromEntries(
+    Object.entries(trailing).map(([type, weight]) => [
+      type,
+      20 + (weight - 20) * recovery,
+    ]),
+  );
+}
+
+export function chooseItem(who, racers, random = Math.random()) {
+  const weights = Object.entries(itemWeights(who, racers));
+  let roll = clamp(random, 0, 1) * weights.reduce((sum, [, w]) => sum + w, 0);
+  for (const [type, weight] of weights) {
+    roll -= weight;
+    if (roll < 0) return type;
+  }
+  return weights.at(-1)[0];
+}
 
 export function createShell(owner, type, target = null) {
   const velocity = new THREE.Vector3(

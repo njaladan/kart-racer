@@ -5,6 +5,7 @@ import {
   chargeDrift,
   resetMotion,
   FIXED_DT,
+  JUMP_TAKEOFF_SPEED,
 } from "./physics.js";
 import {
   frameAt,
@@ -83,8 +84,12 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     "invulnerable",
     "contactCooldown",
     "padCooldown",
+    "driftBoost",
   ])
     state[key] = Math.max(0, (state[key] || 0) - dt);
+  const trickPressed = !!input.drift && !state.trickHeld;
+  state.trickHeld = !!input.drift;
+  state.trickBuffer = trickPressed ? 0.22 : Math.max(0, state.trickBuffer - dt);
   const before = projectTrack(state.worldPos, state.s);
   const sliding = drive(
     state,
@@ -119,16 +124,31 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
       const distance = progressDelta(crest, before.t, 1);
       if (travelled > 0 && distance > 0 && distance <= travelled) {
         state.grounded = false;
-        state.vy = 3;
+        state.vy = JUMP_TAKEOFF_SPEED;
         state.airTime = 0;
+        state.trickActive = false;
         break;
       }
     }
   }
+  // A fresh tap shortly before takeoff or early in the jump earns one trick.
+  const trickStarted =
+    !state.grounded && !state.trickActive && !(state.spin > 0) &&
+    state.airTime <= 0.28 && state.trickBuffer > 0;
+  if (trickStarted) {
+    state.trickActive = true;
+    state.trickBuffer = 0;
+  }
   const landed = verticalMotion(state, after.height, slopeVelocity, dt);
+  const trickLanded = landed && state.trickActive && !(state.spin > 0);
+  if (trickLanded) state.boost = Math.max(state.boost, 0.7);
+  if (landed || state.spin > 0) state.trickActive = false;
   const turboTier = chargeDrift(state, sliding, input.drift, dt);
-  if (turboTier)
+  if (turboTier) {
     state.boost = Math.max(state.boost, turboTier === 2 ? 1.05 : 0.55);
+    state.driftBoost = turboTier === 2 ? 1.05 : 0.55;
+    state.driftBoostTier = turboTier;
+  }
   state.speed = Math.hypot(state.vx, state.vz) * 3.6;
   state.lap = lapNumber(state.s, TRACK, 3) - 1;
   const finished = finishRacer(state, TRACK * 3, raceTime);
@@ -144,6 +164,8 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     wallImpact,
     landed,
     launched: wasGrounded && !state.grounded,
+    trickStarted,
+    trickLanded,
     turboTier,
     newLap: state.lap > previousLap,
     finished,

@@ -16,6 +16,7 @@ Open http://127.0.0.1:5173. Alternatively, use any static HTTP server. No npm in
 - **Brake, then reverse:** S / Down arrow. Hold to reverse after stopping.
 - **Steer:** A / D or Left / Right arrows
 - **Drift:** Hold Space or Shift while turning, then release for a mini-turbo
+- **Trick:** Tap Space, Shift, or the touch DRIFT button just before ramp takeoff or during the first 0.28 seconds in the air. A successful trick earns a 0.7-second landing boost. Holding drift through a ramp does not automatically perform a trick.
 - **Use item:** E / Enter
 - **Pause:** Escape or the pause button. Losing focus also pauses the game.
 - **Recover:** R or RESET when travelling below 12 km/h
@@ -25,7 +26,11 @@ Open http://127.0.0.1:5173. Alternatively, use any static HTTP server. No npm in
 
 Horizontal movement uses world-space velocity, smooth steering, lateral tire grip, rolling resistance, slope forces, braking, and reverse. The track supplies the road surface and physical barriers; it does not steer the kart. Ordinary top speed is roughly 107 km/h on level road, and reverse reaches roughly 45 km/h. From rest, level-road acceleration reaches about 63 km/h forwards and 36 km/h in reverse after one second.
 
-Ramp jumps intentionally favor arcade control: a bounded takeoff, stronger gravity, at most 1.1 metres above the road, and at most 0.7 seconds of airtime. Boosts increase horizontal speed without increasing takeoff velocity. Surface changes and kart collisions cannot trigger a jump.
+Ramp jumps intentionally favor arcade control: a bounded takeoff, stronger gravity, at most 1.1 metres above the road, and at most 0.85 seconds of airtime. Boosts increase horizontal speed without increasing takeoff velocity. Surface changes and kart collisions cannot trigger a jump.
+
+Drift mini-turbos briefly widen the camera view and pull it back, with a stronger effect for orange turbos. Charging and release thresholds are unchanged.
+
+Nine pickup rows each offer three lanes. Item odds are balanced in a close pack; racers more than 1.5 seconds behind the leader gradually receive better odds of mushrooms, red shells, and stars, reaching the maximum recovery weighting at 6.5 seconds. These odds apply equally to players and rivals. Shells are single use; triple mushrooms queue up to 2.85 seconds of boost, and boost pads never shorten an active boost.
 
 Simulation runs at 120 Hz with interpolated rendering. Track projection and minimap geometry are cached; trees, flowers, guardrails and road markings are batched; static kart and cloud parts are merged. Rendering reduces pixel density after sustained slow frames. Expired item and particle GPU resources are released, including on restart.
 

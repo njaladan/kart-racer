@@ -7,7 +7,9 @@ import {
   batchStaticMeshes,
 } from "./visuals.js";
 import { advanceRacer, botInput } from "./simulation.js";
-import { createShell, advanceShell, sweptDistanceSquared } from "./items.js";
+import {
+  createShell, advanceShell, sweptDistanceSquared, consumeItem, chooseItem,
+} from "./items.js";
 import { FIXED_DT, MAX_SPEED, resetMotion } from "./physics.js";
 import { ranking, lapNumber } from "./race.js";
 import {
@@ -57,8 +59,10 @@ import {
     finished = false,
     countdown = 0,
     toastLeft = 0,
-    shake = 0;
+    shake = 0,
+    driftCamera = 0;
   let testAutodrive = false,
+    testTricks = { started: 0, landed: 0 },
     testFrameStats = { frames: 0, total: 0, max: 0 };
   const testMode = new URLSearchParams(location.search).has("test");
   const keys = Object.create(null),
@@ -504,8 +508,9 @@ import {
   }
   const boxMaterial = itemCubeMaterial();
   function addItemBoxes() {
-    for (let i = 0; i < 18; i++) {
-      let s = 90 + i * 130,
+    // Nine pickup rows offer a choice of three lanes to the whole pack.
+    for (let i = 0; i < 27; i++) {
+      let s = 90 + Math.floor(i / 3) * 260,
         group = new THREE.Group(),
         cube = addMesh(
           new THREE.BoxGeometry(1.65, 1.65, 1.65),
@@ -984,8 +989,7 @@ import {
     box.active = false;
     box.group.visible = false;
     box.respawn = 10 + Math.random() * 4;
-    const pool = ["mushroom", "green", "red", "banana", "star"];
-    setItem(who, pool[Math.floor(Math.random() * pool.length)]);
+    setItem(who, chooseItem(who, [player, ...bots]));
     if (who === player) {
       notify(
         `${{ mushroom: "TRIPLE MUSHROOMS", green: "GREEN SHELL", red: "HOMING RED SHELL", banana: "BANANA PEELS", star: "RAINBOW STAR" }[who.item]}!`,
@@ -1061,15 +1065,12 @@ import {
     return g;
   }
   function fireItem(who) {
-    if (!who.item || who.finished || who.spin > 0) return;
-    const type = who.item,
-      isPlayer = who === player,
+    const type = consumeItem(who);
+    if (!type) return;
+    const isPlayer = who === player,
       from = who.s,
       lane = who.x;
-    who.itemCount--;
     if (type === "mushroom") {
-      who.boost = Math.max(who.boost, 0.95);
-      if (!who.itemCount) who.item = null;
       if (isPlayer) {
         notify(
           who.itemCount ? `TURBO! ${who.itemCount} LEFT` : "MUSHROOM BOOST!",
@@ -1183,6 +1184,8 @@ import {
     finished = false;
     toastLeft = 0;
     shake = 0;
+    driftCamera = 0;
+    testTricks = { started: 0, landed: 0 };
     ui.toast.textContent = "";
     syncItem();
     updateVehicle(player, playerKart, 0, true);
@@ -1364,9 +1367,16 @@ import {
       new THREE.Quaternion().setFromRotationMatrix(kartBasis),
       dt ? 1 - Math.exp(-14 * dt) : 1,
     );
-    kart.bodyGroup.rotation.z = state.grounded
-      ? ((state.steering * state.speed) / MAX_SPEED) * 0.065
+    const trickPose = state.trickActive
+      ? Math.sin(Math.min(1, state.airTime / 0.42) * Math.PI)
       : 0;
+    const bodyLean = state.grounded
+      ? ((state.steering * state.speed) / MAX_SPEED) * 0.065
+      : trickPose * 0.65;
+    const poseBlend = dt ? 1 - Math.exp(-18 * dt) : 1;
+    kart.bodyGroup.rotation.z += (bodyLean - kart.bodyGroup.rotation.z) * poseBlend;
+    kart.bodyGroup.rotation.x +=
+      (-trickPose * 0.35 - kart.bodyGroup.rotation.x) * poseBlend;
     kart.bodyGroup.position.y =
       Math.sin(elapsed * 22) * Math.min(0.025, state.speed * 0.0003);
     for (const wheel of kart.wheels) {
@@ -1422,6 +1432,10 @@ import {
   function moveRacer(state, input, dt) {
     const events = advanceRacer(state, input, dt, raceTime);
     const sliding = events.sliding;
+    if (testMode && state === player) {
+      testTricks.started += !!events.trickStarted;
+      testTricks.landed += !!events.trickLanded;
+    }
     if (events.wallImpact && state.contactCooldown === 0) {
       state.contactCooldown = 0.45;
       if (state === player) {
@@ -1430,12 +1444,20 @@ import {
       }
     }
     if (events.launched && state === player) {
-      notify("AIR TIME!");
+      notify("TAP DRIFT TO TRICK!");
       sfx("jump");
+    }
+    if (events.trickStarted && state === player) {
+      notify("TRICK!");
+      sfx("pickup");
+      for (let n = 0; n < 12; n++)
+        spawnParticle(state.worldPos.clone().add(new THREE.Vector3(0, 0.7, 0)),
+          "#ffe680", 0.5, 0.15);
     }
     if (events.landed && state === player) {
       shake = 0.09;
-      notify("SMOOTH LANDING");
+      notify(events.trickLanded ? "TRICK LANDING BOOST!" : "SMOOTH LANDING");
+      if (events.trickLanded) sfx("boost");
     }
     if (events.turboTier && state === player) {
       notify(
@@ -1461,7 +1483,7 @@ import {
           Math.abs(nearestDelta(state.s, pad.t * TRACK)) < 13 &&
           Math.abs(state.x) < 0.36
         ) {
-          state.boost = 1.45;
+          state.boost = Math.max(state.boost, 1.45);
           state.padCooldown = 1.5;
           if (state === player) {
             notify("NEON BOOST!");
@@ -1514,7 +1536,8 @@ import {
       moveRacer(
         player,
         testAutodrive
-          ? botInput(player, 0, elapsed, [player, ...bots])
+          ? { ...botInput(player, 0, elapsed, [player, ...bots]),
+              drift: keys[" "] || keys.shift }
           : {
               throttle: keys.arrowup || keys.w,
               brake: keys.arrowdown || keys.s,
@@ -1828,6 +1851,12 @@ import {
         0,
         -Math.cos(player.yaw),
       );
+      const driftCameraTarget =
+        running && player.driftBoost > 0 && player.boost > 0 && player.spin <= 0
+          ? (player.driftBoostTier === 2 ? 1 : 0.75)
+          : 0;
+      driftCamera +=
+        (driftCameraTarget - driftCamera) * (1 - Math.exp(-8 * dt));
       if (player.spin > 0)
         forward
           .copy(frameAt(trackT(player.s)).tangent)
@@ -1842,7 +1871,7 @@ import {
         .clone()
         .addScaledVector(
           forward,
-          -(panoramic ? 10.5 : 8.7) - player.speed * 0.017,
+          -(panoramic ? 10.5 : 8.7) - player.speed * 0.017 - driftCamera * 0.65,
         );
       desired.y += 4.7;
       camera.position.lerp(desired, 1 - Math.exp(-6 * dt));
@@ -1852,7 +1881,7 @@ import {
       camera.fov +=
         ((panoramic ? 68 : 63) +
           Math.min(7, player.speed * 0.045) +
-          (player.boost > 0 ? 3 : 0) -
+          (player.boost > 0 ? 3 : 0) + driftCamera * 3.5 -
           camera.fov) *
         (1 - Math.exp(-3 * dt));
       camera.updateProjectionMatrix();
@@ -1899,7 +1928,7 @@ import {
       testFrameStats.frames++;
       testFrameStats.total += dt;
       testFrameStats.max = Math.max(testFrameStats.max, dt);
-      if (testFrameStats.frames % 30 === 0)
+      if (testFrameStats.frames % 6 === 0)
         parent.postMessage(
           {
             type: "racer-state",
@@ -1922,8 +1951,14 @@ import {
               airTime: player.airTime,
               drift: player.drift,
               boost: player.boost,
+              driftBoost: player.driftBoost,
+              trickActive: player.trickActive,
               spin: player.spin,
             },
+            tricks: testTricks,
+            pickups: { total: boxes.length, active: boxes.filter((b) => b.active).length },
+            projectiles: projectiles.length,
+            camera: { driftEffect: driftCamera, fov: camera.fov },
             bots: bots.map((b) => ({ s: b.s, finished: b.finished })),
             effects: particles.length + bananas.length + projectiles.length,
             render: {
