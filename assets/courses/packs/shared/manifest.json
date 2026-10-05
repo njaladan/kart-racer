@@ -15,8 +15,8 @@
       "license": "CC-BY-SA-3.0",
       "attribution": "licenses/tux.txt",
       "modifications": "SPM saved driving pose converted to static glTF; assembled wheels/accessories; baked chassis paint masks; textures resized to 512px. Original animation, glow meshes and secondary decal layers omitted; common metal/lamp shader textures replaced with solid materials.",
-      "sha256": "0d914e76119e80eb1f3f1acfeaadf3fa60779896778efaa69187171b122bf5ed",
-      "bytes": 731636
+      "sha256": "23f981484277df98a0f09da08a8ca19d8deb328d05134e64d2c5c3f97f1caa14",
+      "bytes": 731644
     },
     {
       "name": "stk-kart-nolok",
@@ -33,8 +33,8 @@
       "license": "CC-BY-SA-4.0",
       "attribution": "licenses/nolok.txt",
       "modifications": "SPM saved driving pose converted to static glTF; assembled wheels/accessories; baked chassis paint masks; textures resized to 512px. Original animation, glow meshes and secondary decal layers omitted; common metal/lamp shader textures replaced with solid materials.",
-      "sha256": "ded3d0994e39dc2567e0068d70765807b26636476314fe95e585a05c1afa9038",
-      "bytes": 1127980
+      "sha256": "804e3affdd790672c60b12b2d137d112ed87459f3cb7c06b9164a9b9b5abb0e5",
+      "bytes": 1127984
     },
     {
       "name": "stk-kart-pidgin",
@@ -51,7 +51,7 @@
       "license": "CC-BY-SA-3.0",
       "attribution": "licenses/pidgin.txt",
       "modifications": "SPM saved driving pose converted to static glTF; assembled wheels/accessories; baked chassis paint masks; textures resized to 512px. Original animation, glow meshes and secondary decal layers omitted; common metal/lamp shader textures replaced with solid materials.",
-      "sha256": "737db3cfafc0d46f411ec4c2a5cadc5d5232cf4b5d2adff52941c34c95d5534b",
+      "sha256": "72075b7cfd5ee0a563eebba2ec0f5681db935a0e6199af1ff6a8c4bf0fd71f8f",
       "bytes": 839204
     },
     {
@@ -69,8 +69,8 @@
       "license": "CC-BY-SA-3.0",
       "attribution": "licenses/kiki.txt",
       "modifications": "SPM saved driving pose converted to static glTF; assembled wheels/accessories; baked chassis paint masks; textures resized to 512px. Original animation, glow meshes and secondary decal layers omitted; common metal/lamp shader textures replaced with solid materials.",
-      "sha256": "51e33d1e589bfdf48268ea7cbfb74c4c72e63ee742d88137028b4e75faad1eed",
-      "bytes": 1334320
+      "sha256": "d906cb7657941759e3c5d7de07f575e6854df2370f65e9e517d07b054d95079a",
+      "bytes": 1334332
     },
     {
       "name": "stk-kart-konqi",
@@ -87,8 +87,8 @@
       "license": "CC-BY-SA-3.0",
       "attribution": "licenses/konqi.txt",
       "modifications": "SPM saved driving pose converted to static glTF; assembled wheels/accessories; baked chassis paint masks; textures resized to 512px. Original animation, glow meshes and secondary decal layers omitted; common metal/lamp shader textures replaced with solid materials.",
-      "sha256": "9f540a5539721ac76f9fd765a11be980c1f56dff48e4597f67669857dc46e1a5",
-      "bytes": 1239052
+      "sha256": "63ac1f942b383827b09c9187eb26a82e6953e4708139360d0b05cbc4ca72977f",
+      "bytes": 1239064
     },
     {
       "name": "stk-kart-wilber",
@@ -105,8 +105,8 @@
       "license": "CC-BY-SA-3.0",
       "attribution": "licenses/wilber.txt",
       "modifications": "SPM saved driving pose converted to static glTF; assembled wheels/accessories; baked chassis paint masks; textures resized to 512px. Original animation, glow meshes and secondary decal layers omitted; common metal/lamp shader textures replaced with solid materials.",
-      "sha256": "c50e58898d44b4352bbb322c1343d3e2043e5dee7690ce7d56b7ff9d4abf8654",
-      "bytes": 599812
+      "sha256": "772eceb7e15e26d9b0aa3b7e39774bdb79fc38af619757aaf6e94c276ef532b1",
+      "bytes": 599820
     }
   ]
 }

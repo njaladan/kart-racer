@@ -30,7 +30,12 @@ def create_material(image, decal, name, decal_name):
         texture = material.node_tree.nodes.new('ShaderNodeTexImage')
         texture.image = image
         material.node_tree.links.new(texture.outputs['Color'], shader.inputs['Base Color'])
-        if image.channels == 4:
+        # STK textures often have an unused opaque alpha channel. Preserve
+        # transparency only when at least one texel actually needs it.
+        has_transparency = image.channels == 4 and any(
+            alpha < 0.99999 for alpha in image.pixels[3::image.channels]
+        )
+        if has_transparency:
             material.node_tree.links.new(texture.outputs['Alpha'], shader.inputs['Alpha'])
             material.surface_render_method = 'DITHERED'
     return material
