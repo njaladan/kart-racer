@@ -4,10 +4,10 @@
   "lighting": "indirect.png",
   "height": "height.png",
   "bounds": [
-    -345,
-    -375,
-    715,
-    685
+    -395,
+    -275,
+    790,
+    645
   ],
   "heightRange": [
     -12,
@@ -18,30 +18,30 @@
   "samples": 12,
   "radius": 22.0,
   "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
-  "sourceSceneSha256": "f63fc87799204cf9ffe62f2c185e95af033d3f32806f4ae427ff08b908e1fb1f",
-  "triangles": 267020,
-  "lights": 94,
+  "sourceSceneSha256": "1dd31ab901d3facd57239b94b5cc5a3162d3d41735c3d906a6c3cb048fbe82f3",
+  "triangles": 191578,
+  "lights": 100,
   "outputs": [
     {
       "file": "indirect.png",
       "width": 512,
       "height": 512,
-      "bytes": 203181,
-      "sha256": "f9b8c468ec5196495738ac91278ec741df827ae5ea8b9e88d05ed5ea5748a0a8"
+      "bytes": 179922,
+      "sha256": "a3aeb8b6676499bb6289b1165ee103d960bddebb4a79531ff401ab6a81e26f85"
     },
     {
       "file": "height.png",
       "width": 512,
       "height": 512,
-      "bytes": 48774,
-      "sha256": "30653ea5a45111a3779d3cf9a038e34d39d186be0949ee96b39e2463784d8906"
+      "bytes": 82232,
+      "sha256": "f6506abb59f33b4b9ec2dba7c92abfa1b97fe18ccc64f147d5ed5187103cdda2"
     },
     {
       "file": "spill.png",
       "width": 640,
       "height": 320,
-      "bytes": 4863,
-      "sha256": "c0a6753ff858a25cf26dc19ae67cd467b1353943e2391b66e853461f0866d1c8"
+      "bytes": 4623,
+      "sha256": "400c0810dd0a80d6ec1b00534309684e09cf40627cdaabc0a338bc18c72adb7a"
     }
   ],
   "lightVolume": {

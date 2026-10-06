@@ -1,6 +1,6 @@
 import { worldKit } from "./world-kit.js";
+import { createClockworkClearance } from "./clockwork-clearance.js";
 import { architecturalDetail } from "./architectural-detail.js";
-import { liftPhase, traversalPose } from "../../simulation/course-mechanics.js";
 import { registerLightPool } from "../../rendering/course-lighting.js";
 import { addGlow, createContactShadowMesh } from "../../rendering/visual-effects.js";
 
@@ -8,6 +8,21 @@ import { addGlow, createContactShadowMesh } from "../../rendering/visual-effects
 export function buildClockwork(context) {
   const w = worldKit(context),
     { THREE, scene, scenery, track, mat, mesh, box, at, motion, cylinder, torus, sphere } = w;
+  const allows = createClockworkClearance(track);
+  // Move complete assemblies outwards until their full volume clears every
+  // floor, rather than trusting the center's distance to one nearby ribbon.
+  function clearAt(section, fraction, offset, center, size) {
+    for (let step = 0; step < 8; step++) {
+      const g = at(section, fraction, offset + Math.sign(offset) * step * 8);
+      if (allows(g, center, size)) return g;
+      g.removeFromParent();
+    }
+    return null;
+  }
+  function supportBox(material, parent, position, size) {
+    if (allows(parent, position, size)) return box(material, parent, position, size);
+    return null;
+  }
   const bronze = architecturalDetail(
       mat("#c69657", "metal", { metalness: 0.64, roughness: 0.4 }),
       "metal",
@@ -141,7 +156,9 @@ export function buildClockwork(context) {
   // Visible giant meshed gears have fixed pivots, varied tooth counts and speed.
   for (let section = 1; section <= 3; section++)
     for (let i = 0; i < 4; i++) {
-      const g = at(section, 0.12 + i * 0.23, 32);
+      const g = clearAt(section, 0.12 + i * 0.23, 32, [0, 12, 0], [32, 40, 8]);
+      if (!g) continue;
+      g.name = "Gallery gear train";
       gear(g, [0, 12, 0], 9 + (i % 2) * 2, i % 2 ? -0.13 : 0.11);
       gear(g, [9.5, 20, 1.5], 5, i % 2 ? 0.24 : -0.22, 20);
       for (const side of [-1, 1]) box(iron, g, [side * 13, 12, 0], [2, 27, 5]);
@@ -152,7 +169,6 @@ export function buildClockwork(context) {
   // Stacked racing galleries have connected subdecks and diagonals, never
   // ground hills stretched up into the elevated road.
   for (let section = 1; section <= 6; section++) {
-    if (section === 5) continue;
     const count = Math.ceil(
       ((track.SECTIONS[section].end - track.SECTIONS[section].start) * track.COURSE_LENGTH) / 8,
     );
@@ -175,96 +191,43 @@ export function buildClockwork(context) {
       }
       if (i % 4 === 0 && section >= 4) {
         const height = Math.max(4, f.p.y + 25);
-        box(masonry, g, [0, -height / 2 - 2, 0], [7, height, 7]);
+        supportBox(masonry, g, [0, -height / 2 - 2, 0], [7, height, 7]);
         for (const side of [-1, 1]) pipe(g, [side * 8, -2, 0], [0, -12, 0], 0.8, bronze);
       }
     }
   }
   // The clock face is a full building facade seen across the upper balcony.
-  const clock = at(3, 0.46, -45);
-  box(masonry, clock, [0, 17, -5], [56, 61, 15]);
-  for (const x of [-28, 28]) {
-    box(pale, clock, [x, 18, -3], [8, 68, 20]);
-    mesh(cone, copper, clock, [x, 56, -3], [7, 14, 7]);
-    lamp(clock, [x, 7, 8], 23);
-  }
-  mesh(new THREE.CircleGeometry(23, 64), pale, clock, [0, 26, 3]);
-  mesh(torus, bronze, clock, [0, 26, 4], [24, 24, 24]);
-  for (let i = 0; i < 60; i++) {
-    const a = (i * Math.PI) / 30,
-      tick = box(
-        i % 5 === 0 ? dark : bronze,
-        clock,
-        [Math.sin(a) * 20.5, 26 + Math.cos(a) * 20.5, 4.1],
-        [i % 5 === 0 ? 0.9 : 0.3, i % 5 === 0 ? 3 : 1.3, 0.25],
-      );
-    tick.rotation.z = -a;
-  }
-  const hands = new THREE.Group();
-  clock.add(hands);
-  hands.position.set(0, 26, 4.4);
-  box(dark, hands, [0, 7.5, 0], [0.65, 15, 0.5]);
-  box(bronze, hands, [4.5, 0, 0.3], [9, 1, 0.5]);
-  mesh(sphere, bronze, hands, [0, 0, 0.6], [1, 1, 0.5]);
-  motion(hands, (time) => {
-    hands.rotation.z = -time * 0.05;
-  });
-  // Genuine vertical lift: stationary shaft/counterweight, level moving deck,
-  // two physically connected staging docks, ropes and guide wheels.
-  const lift = track.course.traversals[0],
-    base = traversalPose(track, lift, 0),
-    top = traversalPose(track, lift, 1),
-    height = top.p.y - base.p.y;
-  const shaft = new THREE.Group();
-  scenery.add(shaft);
-  shaft.position.copy(base.p);
-  shaft.rotation.y = track.yawFor(base.tangent);
-  for (const x of [-14, 14])
-    for (const z of [-10, 10]) {
-      box(iron, shaft, [x, height / 2 + 1, z], [1.5, height + 8, 1.5]);
-      pipe(shaft, [x, 0, z], [x, height + 5, z], 0.18, bronze);
+  const clock = clearAt(3, 0.46, -60, [0, 26, -3], [68, 78, 26]);
+  if (clock) {
+    clock.name = "Clock face facade";
+    box(masonry, clock, [0, 17, -5], [56, 61, 15]);
+    for (const x of [-28, 28]) {
+      box(pale, clock, [x, 18, -3], [8, 68, 20]);
+      mesh(cone, copper, clock, [x, 56, -3], [7, 14, 7]);
+      lamp(clock, [x, 7, 8], 23);
     }
-  for (let y = 0; y <= height + 6; y += 9) {
-    box(bronze, shaft, [0, y, 11], [30, 0.9, 1]);
-    for (const x of [-14, 14]) pipe(shaft, [x, y, -10], [x, y + 8, 10], 0.45, iron);
-  }
-  box(masonry, shaft, [0, -13, 0], [32, 25, 24]);
-  box(bronze, shaft, [0, height + 8, 0], [34, 3, 27]);
-  gear(shaft, [0, height + 13, 11], 7, 0.24, 24);
-  for (const [q, label] of [
-    [0, "Boarding dock"],
-    [1, "Crown dock"],
-  ]) {
-    const g = new THREE.Group();
-    scenery.add(g);
-    g.position.copy(traversalPose(track, lift, q).p);
-    g.rotation.y = shaft.rotation.y;
-    g.name = label;
-    box(iron, g, [0, -0.6, q ? -5 : 5], [24, 1.2, 12]);
-    for (const x of [-12, 12]) {
-      box(bronze, g, [x, 1.5, 0], [0.5, 3, 18]);
-      lamp(g, [x, 4, 3]);
+    mesh(new THREE.CircleGeometry(23, 64), pale, clock, [0, 26, 3]);
+    mesh(torus, bronze, clock, [0, 26, 4], [24, 24, 24]);
+    for (let i = 0; i < 60; i++) {
+      const a = (i * Math.PI) / 30,
+        tick = box(
+          i % 5 === 0 ? dark : bronze,
+          clock,
+          [Math.sin(a) * 20.5, 26 + Math.cos(a) * 20.5, 4.1],
+          [i % 5 === 0 ? 0.9 : 0.3, i % 5 === 0 ? 3 : 1.3, 0.25],
+        );
+      tick.rotation.z = -a;
     }
+    const hands = new THREE.Group();
+    clock.add(hands);
+    hands.position.set(0, 26, 4.4);
+    box(dark, hands, [0, 7.5, 0], [0.65, 15, 0.5]);
+    box(bronze, hands, [4.5, 0, 0.3], [9, 1, 0.5]);
+    mesh(sphere, bronze, hands, [0, 0, 0.6], [1, 1, 0.5]);
+    motion(hands, (time) => {
+      hands.rotation.z = -time * 0.05;
+    });
   }
-  const platform = new THREE.Group();
-  scenery.add(platform);
-  platform.name = "Rideable sky lift";
-  box(iron, platform, [0, -0.5, 0], [23, 1, 18]);
-  for (const side of [-1, 1]) {
-    box(bronze, platform, [side * 11, 1.4, 0], [0.5, 2.8, 18]);
-    for (const z of [-8, 8]) box(copper, platform, [side * 11, 5, z], [0.4, 10, 0.4]);
-  }
-  box(bronze, platform, [0, 10, 0], [23, 0.7, 18]);
-  for (let i = 0; i < 4; i++) box(glow, platform, [-7.5 + i * 5, 9.5, 0], [2, 0.12, 2]);
-  motion(platform, (time) => {
-    const pose = traversalPose(track, lift, liftPhase(lift, time));
-    platform.position.copy(pose.p);
-    platform.rotation.y = shaft.rotation.y;
-  });
-  const weight = box(bronze, shaft, [0, height / 2, 12], [8, 12, 3]);
-  motion(weight, (time) => {
-    weight.position.y = height * (1 - liftPhase(lift, time));
-  });
   // Foundry neighborhoods: nested roofs, arched shops, pipes, courtyards,
   // repair awnings and chimneys create near, middle and distant silhouettes.
   function building(g, i, size = 1) {
@@ -295,18 +258,24 @@ export function buildClockwork(context) {
   }
   for (const section of [0, 4, 7])
     for (let i = 0; i < 14; i++) {
-      const g = w.safe(section, (i + 0.5) / 14, (i % 2 ? 1 : -1) * (30 + (i % 3) * 17), 12);
-      if (g) building(g, i, 1 + (i % 3) * 0.15);
+      const g = w.safe(section, (i + 0.5) / 14, (i % 2 ? 1 : -1) * (30 + (i % 3) * 17), 24);
+      if (!g) continue;
+      const size = 1 + (i % 3) * 0.15;
+      if (allows(g, [0, 15 * size, -2 * size], [28 * size, 35 * size, 32 * size]))
+        building(g, i, size);
+      else g.removeFromParent();
     }
   for (let section = 1; section <= 3; section++)
     for (let i = 0; i < 4; i++) {
-      const g = at(section, 0.15 + i * 0.23, -28);
+      const g = clearAt(section, 0.15 + i * 0.23, -36, [0, 12, -2], [30, 32, 30]);
+      if (!g) continue;
+      g.name = "Spiral workshop balcony";
       box(iron, g, [0, -1.2, 0], [27, 2.4, 26]);
       building(g, i, 0.75);
       for (const x of [-11, 11]) {
         box(bronze, g, [x, 1.2, 0], [0.3, 2.4, 26]);
         const height = Math.max(10, g.position.y + 26);
-        box(masonry, g, [x, -height / 2 - 2, 0], [3, height, 3]);
+        supportBox(masonry, g, [x, -height / 2 - 2, 0], [3, height, 3]);
       }
     }
   for (let i = 0; i < 28; i++) {
@@ -315,12 +284,16 @@ export function buildClockwork(context) {
     scenery.add(g);
     g.position.set(Math.sin(a) * 330, -26, Math.cos(a) * 330);
     g.rotation.y = a + Math.PI;
-    building(g, i, 1.5 + (i % 4) * 0.3);
+    const size = 1.5 + (i % 4) * 0.3;
+    if (allows(g, [0, 15 * size, -2 * size], [28 * size, 35 * size, 32 * size]))
+      building(g, i, size);
+    else g.removeFromParent();
   }
   // Busy rooftop workers, piston engines and tethered mail balloons.
   for (let section = 1; section <= 6; section++) {
-    if (section === 5) continue;
-    const g = at(section, 0.55, -17);
+    const g = clearAt(section, 0.55, -20, [0, 2, 0], [10, 6, 16]);
+    if (!g) continue;
+    g.name = "Rooftop turbine crew";
     box(pale, g, [0, -0.7, 0], [10, 1.4, 15]);
     const robot = new THREE.Group();
     g.add(robot);
@@ -350,8 +323,9 @@ export function buildClockwork(context) {
     }
   }
   for (let i = 0; i < 5; i++) {
-    const g = at(i === 0 ? 0 : 6, 0.15 + i * 0.16, i % 2 ? 65 : -65),
-      base = g.position.clone();
+    const g = clearAt(i === 0 ? 0 : 6, 0.15 + i * 0.16, i % 2 ? 65 : -65, [0, 40, 0], [20, 30, 20]);
+    if (!g) continue;
+    const base = g.position.clone();
     g.position.y += 30;
     mesh(sphere, cloth, g, [0, 10, 0], [9, 12, 9]);
     for (const side of [-1, 1]) pipe(g, [side * 5, 2, 0], [side * 6, 10, 0], 0.08, bronze);
