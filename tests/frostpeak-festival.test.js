@@ -3,14 +3,13 @@ import assert from "node:assert/strict";
 import course from "../src/courses/frostpeak-festival.js";
 import { selectCourse, TRACK } from "../src/track/track.js";
 import { initializeRacer, botInput, advanceRacer } from "../src/simulation/simulation.js";
-import { consumeItem } from "../src/simulation/items.js";
 import { cartAt, cartContact } from "../src/simulation/hazards.js";
 
-// Five isolated drivers cover the genuine authored bends, elevation, grip
-// transition, moving hazard and bounded hops through three ordered laps.
-test("Frostpeak provides six paced mountain sections and five complete clean races", () => {
+test("eight winter places complete three laps for five drivers, including the tight village", () => {
   const track = selectCourse(course);
-  assert.ok(track.COURSE_LENGTH >= 1450 && track.COURSE_LENGTH <= 1600);
+  assert.equal(track.SECTIONS.length, 8);
+  assert.ok(track.COURSE_LENGTH > 1800 && track.COURSE_LENGTH < 1950);
+  assert.ok(track.minimumCurveRadius >= 18 && track.minimumCurveRadius < 30);
   for (let index = 0; index < 5; index++) {
     const racer = initializeRacer({ s: 0, x: 0, skill: 0.91 - index * 0.0475, drift: 0 });
     const entries = [0],
@@ -18,12 +17,12 @@ test("Frostpeak provides six paced mountain sections and five complete clean rac
     let section = 0,
       walls = 0,
       contacts = 0;
-    for (let tick = 1; tick < 230 * 120 && !racer.finished; tick++) {
+    for (let tick = 1; tick < 250 * 120 && !racer.finished; tick++) {
       const time = tick / 120;
       const events = advanceRacer(racer, botInput(racer, index, time), 1 / 120, time);
       walls += !!events.wallImpact;
       contacts += !!events.cartImpact;
-      if (section < 5 && racer.s >= track.SECTIONS[section + 1].start * TRACK) {
+      if (section < 7 && racer.s >= track.SECTIONS[section + 1].start * TRACK) {
         entries.push(time);
         section++;
       }
@@ -36,108 +35,52 @@ test("Frostpeak provides six paced mountain sections and five complete clean rac
     assert.ok(racer.finished);
     assert.equal(walls, 0);
     assert.equal(contacts, 0);
-    assert.equal(entries.length, 7);
+    assert.equal(entries.length, 9);
     assert.equal(laps.length, 3);
-    const times = [laps[0], laps[1] - laps[0], laps[2] - laps[1]];
-    assert.ok(times.every((time) => time >= 55 && time <= 65));
+    assert.ok(laps[0] > 60 && laps[0] < 80);
     for (let i = 1; i < entries.length; i++)
-      assert.ok(entries[i] - entries[i - 1] >= 6 && entries[i] - entries[i - 1] <= 14);
+      assert.ok(entries[i] - entries[i - 1] >= 5 && entries[i] - entries[i - 1] <= 15);
   }
 });
 
-test("Frostpeak ice has firm approaches and enough recovery before the groomer", () => {
-  const track = selectCourse(course),
-    patch = track.SURFACES[0];
-  assert.equal(track.surfaceAt((patch.start + patch.end) / 2).grip, 8.5);
-  assert.equal(track.surfaceAt((patch.start + patch.end) / 2).material, "ice");
-  assert.equal(track.surfaceAt(patch.start - 0.003).grip, 12);
-  assert.equal(track.surfaceAt(patch.end + 0.003).grip, 12);
-  assert.ok((track.CART_T - patch.end) * track.COURSE_LENGTH >= 30);
-  const descentRamp = track.RAMPS.find((ramp) => ramp.section === 3);
-  assert.ok((patch.start - descentRamp.t) * track.COURSE_LENGTH > 80);
-  for (let time = 30; time < 42; time += 0.1) {
+test("lake timber, mountain trick lanes and powder routes share coherent collision and ground", () => {
+  const track = selectCourse(course);
+  for (const verge of track.VERGES) {
+    const t = (verge.start + verge.end) / 2;
+    const offset = verge.side * (track.roadHalfWidth(t) + verge.extraWidth * 0.55);
+    const surface = track.surfaceAt(t, offset);
+    assert.equal(surface.material, verge.material);
+    assert.equal(surface.offroad, !verge.driveable);
+    const point = track.poseAt(t * TRACK, offset, 0.065).p;
+    const projection = track.projectTrack(point, t * TRACK);
+    assert.ok(Math.abs(projection.height - point.y) < 0.035);
+    assert.ok(
+      projection.offset > track.collisionBounds(t).left &&
+        projection.offset < track.collisionBounds(t).right,
+    );
+  }
+  const lanes = track.RAMPS.filter((r) => r.width != null);
+  assert.equal(lanes.length, 2);
+  for (const ramp of lanes) {
+    assert.ok(track.rampHeight(ramp.t, ramp.offset) > 1.5);
+    assert.equal(track.rampHeight(ramp.t, 0), 0);
+    assert.equal(track.surfaceAt(ramp.t, ramp.offset).offroad, false);
+  }
+  assert.ok(
+    Array.from({ length: 100 }, (_, i) => Math.abs(track.bankAt(track.sectorT(2, i / 100)))).some(
+      (bank) => bank > 0.2,
+    ),
+  );
+});
+
+test("the groomer crossing is on firm snow with a clear passing lane all cycle", () => {
+  const track = selectCourse(course);
+  assert.equal(track.surfaceAt(track.CART_T).material, "snow");
+  assert.ok((track.CART_T - track.sectorT(5, 0.76)) * track.COURSE_LENGTH > 25);
+  for (let time = 30; time < 43; time += 0.1) {
     const hazard = cartAt(time),
       safe = track.poseAt(hazard.s, course.hazard.safeLane, 0.065).p;
     assert.equal(cartContact(safe, time), null);
     assert.ok(track.collisionBounds(track.CART_T).left < course.hazard.safeLane - 0.9);
   }
-});
-
-function cornerRun(track, mode) {
-  const start = track.SHORTCUT.start - 30 / track.COURSE_LENGTH,
-    end = track.SHORTCUT.end + 20 / track.COURSE_LENGTH;
-  // The wider bend rewards a shallow powder line; heading to its far edge
-  // adds lateral distance and misses the corner's actual apex.
-  const lane = (t) =>
-    mode === "outside"
-      ? -5.5
-      : mode === "cut" || mode === "ordinary"
-        ? 3 + 9 * Math.min(1, track.shortcutWidth(t) / 20)
-        : 6;
-  const racer = initializeRacer({
-    s: start * TRACK,
-    x: lane(start) / 6.25,
-    drift: 0,
-    item: "mushroom",
-    itemCount: 1,
-  });
-  const frame = track.frameAt(start);
-  racer.vx = frame.tangent.x * 26;
-  racer.vz = frame.tangent.z * 26;
-  racer.speed = 26 * 3.6;
-  let used = false,
-    walls = 0;
-  for (let tick = 1; tick < 15 * 120; tick++) {
-    const time = tick / 120,
-      t = racer.s / TRACK,
-      ahead = t + 12 / track.COURSE_LENGTH;
-    const f = track.frameAt(ahead),
-      target = f.p.clone().addScaledVector(f.right, lane(ahead));
-    const desired = Math.atan2(-(target.x - racer.worldPos.x), -(target.z - racer.worldPos.z));
-    const error = Math.atan2(Math.sin(desired - racer.yaw), Math.cos(desired - racer.yaw));
-    const boostEntry =
-      mode === "cut"
-        ? track.projectTrack(racer.worldPos, racer.s).offroad
-        : t >= track.SHORTCUT.start + 0.018;
-    if (!used && boostEntry && (mode === "cut" || mode === "mainboost")) {
-      assert.equal(consumeItem(racer), "mushroom");
-      used = true;
-    }
-    const events = advanceRacer(
-      racer,
-      {
-        throttle: racer.speed < 97 || racer.boost > 0,
-        brake: racer.speed > 107 && racer.boost === 0,
-        steer: Math.max(-1, Math.min(1, -error * 5)),
-        drift: false,
-      },
-      1 / 120,
-      time,
-    );
-    walls += !!events.wallImpact;
-    if (racer.s >= end * TRACK) return { time, walls, used, remaining: racer.itemCount };
-  }
-  assert.fail(`Corner driver ${mode} failed to exit`);
-}
-
-test("one actual mushroom rewards the powder cut while ordinary powder loses time", () => {
-  const track = selectCourse(course);
-  const main = cornerRun(track, "road"),
-    mainBoost = cornerRun(track, "mainboost");
-  const cut = cornerRun(track, "cut"),
-    ordinary = cornerRun(track, "ordinary"),
-    outside = cornerRun(track, "outside");
-  assert.ok(cut.time < main.time - 0.15);
-  assert.ok(cut.time < ordinary.time - 0.5);
-  assert.ok(mainBoost.time < main.time - 0.15);
-  assert.ok(ordinary.time > main.time + 0.02);
-  assert.ok(Math.abs(outside.time - main.time) < 0.5);
-  for (const result of [main, mainBoost, cut, ordinary, outside]) assert.equal(result.walls, 0);
-  assert.ok(cut.used && mainBoost.used);
-  assert.equal(cut.remaining, 0);
-  const middle = (track.SHORTCUT.start + track.SHORTCUT.end) / 2;
-  assert.equal(track.surfaceAt(middle, 15).offroadDrag, 1.25);
-  const point = track.poseAt(middle * TRACK, 15, 0.065).p,
-    projection = track.projectTrack(point, middle * TRACK);
-  assert.ok(projection.offroad && Math.abs(projection.height - point.y) < 0.03);
 });

@@ -18,7 +18,7 @@ export function buildSkiLift({
   // Lift follows the forest/climb beside the road; every cable crossing stays
   // 19 m above the authored surface and every support stands outside its edge.
   const liftStart = sectorT(0, 0.82),
-    liftEnd = sectorT(2, 0.84),
+    liftEnd = sectorT(3, 0.18),
     liftPoints = [];
   for (let i = 0; i <= 48; i++) {
     const t = liftStart + ((liftEnd - liftStart) * i) / 48;

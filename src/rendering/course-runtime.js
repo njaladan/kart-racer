@@ -251,7 +251,7 @@ export function buildCourseWorld({
   for (const side of [-1, 1]) {
     const edge = (t) => (side < 0 ? track.surfaceAt(t).leftEdge : track.surfaceAt(t).rightEdge);
     ribbon(edge, (t) => edge(t) + side * TERRAIN_VERGE_WIDTH, mats.grass, 0, true);
-    if (course.edgeStyle === "port-lumen") continue;
+    if (["port-lumen", "frostpeak"].includes(course.edgeStyle)) continue;
     const railMaterial = mats.rail.clone();
     railMaterial.side = THREE.DoubleSide;
     mesh(createRailGeometry(side, { width: 0.15, height: 0.32, above: 0.72 }), railMaterial);
@@ -261,7 +261,7 @@ export function buildCourseWorld({
       box(mats.rail, g, [0, 0.42, 0], [0.19, 0.86, 0.19]);
     }
   }
-  for (let i = 0; course.edgeStyle !== "port-lumen" && i < 330; i++) {
+  for (let i = 0; !["port-lumen", "frostpeak"].includes(course.edgeStyle) && i < 330; i++) {
     const t = i / 330,
       g = groupAt(t),
       half = track.roadHalfWidth(t);
