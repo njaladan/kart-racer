@@ -22,12 +22,13 @@ export function buildWaterfront({
   void geometry;
   // Supported deck: no embankment under the declared elevated arc. Supports
   // are below the shared continuous road, never decorative road obstacles.
-  for (let i = 0; i < 20; i++) {
-    const t = sectorT(3, 0.04 + (0.84 * i) / 19),
+  for (let i = 0; i < 4; i++) {
+    const t = sectorT(3, [0.04, 0.2, 0.76, 0.95][i]),
       g = groupAt(t, 0, scenery);
+    g.rotation.set(0, track.yawFor(track.frameAt(t).tangent), 0);
     const height = Math.max(3, track.frameAt(t).p.y + 1.7);
-    box(concrete, g, [0, -0.5, 0], [17.5, 0.9, 1.4]);
-    for (const x of [-6, 6]) box(steel, g, [x, -height / 2 - 0.3, 0], [1, height, 1]);
+    box(concrete, g, [0, -0.5, 0], [29, 0.9, 3]);
+    for (const x of [-15, 15]) box(steel, g, [x, -height / 2 - 0.3, 0], [1, height, 1]);
     box(steel, g, [0, -2, 0], [13, 0.6, 0.7]);
     for (const side of [-1, 1]) {
       const brace = box(amber, g, [side * 4, -4, 0], [0.35, 5, 0.35]);
@@ -37,17 +38,17 @@ export function buildWaterfront({
   }
   // Water sits below the panorama, on the outside/south of the quay. Ships
   // and cranes sit beyond route footprints rather than becoming obstacles.
-  const harborPose = track.poseAt(sectorT(3, 0.48) * track.TRACK, -90, 0);
+  const harborPose = track.poseAt(sectorT(3, 0.48) * track.TRACK, 90, 0);
   const waterMaterial = createWaterMaterial({
     scene,
-    color: "#174f65",
+    color: "#123248",
     normalMap: textures.water?.userData?.pbr?.normalMap,
     environment: scene.environment,
     roughness: 0.16,
     foam: true,
     flow: 0.025,
   });
-  const water = mesh(new THREE.PlaneGeometry(370, 125), waterMaterial, scenery, [
+  const water = mesh(new THREE.PlaneGeometry(1200, 1100), waterMaterial, scenery, [
     harborPose.p.x,
     -1.48,
     harborPose.p.z,
@@ -60,7 +61,7 @@ export function buildWaterfront({
   animated.push(water);
   for (let i = 0; i < 3; i++) {
     const t = sectorT(3, 0.21 + i * 0.26),
-      g = safeGroup(t, -58 - i * 13, 20);
+      g = safeGroup(t, 67 + i * 23, 20);
     if (!g) continue;
     g.position.y = -1.1;
     fitAsset("harbor:cargo-ferry", g, [0, 0, 0], [12, 12, 34]);
@@ -70,14 +71,14 @@ export function buildWaterfront({
   }
   for (let i = 0; i < 4; i++) {
     const t = sectorT(3, 0.13 + i * 0.22),
-      g = safeGroup(t, -35, 10);
+      g = safeGroup(t, 45, 10);
     if (!g) continue;
     g.position.y = -1.1;
     fitAsset("harbor:gantry-crane", g, [0, 0, 0], [10, 28, 30]);
     batch(g);
     // Hook assembly moves entirely over the water; it never sweeps the road.
     if (i % 2 === 0) {
-      const hook = groupAt(t, -35, scenery);
+      const hook = groupAt(t, 45, scenery);
       hook.position.y = -1.1;
       box(steel, hook, [0, 19, 16], [0.15, 16, 0.15]);
       box(amber, hook, [0, 10.4, 16], [2.3, 0.55, 1.2]);
@@ -90,7 +91,7 @@ export function buildWaterfront({
   // Authored concrete tetrapods break the shoreline and catch reflected light.
   for (let i = 0; i < 24; i++) {
     const t = sectorT(3, 0.04 + (0.88 * i) / 24),
-      g = safeGroup(t, -39 - (i % 3) * 4, 4);
+      g = safeGroup(t, 44 + (i % 3) * 4, 4);
     if (!g) continue;
     g.position.y = -1.1;
     const block = fitAsset("harbor:tetrapod", g, [0, 0, 0], [4.5, 3.4, 4.5]);

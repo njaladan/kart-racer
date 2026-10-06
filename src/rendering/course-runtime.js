@@ -164,25 +164,7 @@ export function buildCourseWorld({
     );
   }
   for (const belt of track.CONVEYORS) {
-    const canvas = document.createElement("canvas");
-    canvas.width = 128;
-    canvas.height = 256;
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#263846";
-    ctx.fillRect(0, 0, 128, 256);
-    for (let y = 0; y < 256; y += 32) {
-      ctx.fillStyle = y % 64 ? "#56d6d0" : "#e5b768";
-      ctx.beginPath();
-      ctx.moveTo(22, y + 5);
-      ctx.lineTo(70, y + 5);
-      ctx.lineTo(96, y + 16);
-      ctx.lineTo(70, y + 27);
-      ctx.lineTo(22, y + 27);
-      ctx.lineTo(48, y + 16);
-      ctx.closePath();
-      ctx.fill();
-    }
-    const texture = new THREE.CanvasTexture(canvas);
+    const texture = textures.harborConveyor?.clone() || new THREE.Texture();
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
     const beltMaterial = material("#ffffff", {
@@ -267,6 +249,7 @@ export function buildCourseWorld({
   for (const side of [-1, 1]) {
     const edge = (t) => (side < 0 ? track.surfaceAt(t).leftEdge : track.surfaceAt(t).rightEdge);
     ribbon(edge, (t) => edge(t) + side * TERRAIN_VERGE_WIDTH, mats.grass, 0, true);
+    if (course.edgeStyle === "port-lumen") continue;
     const railMaterial = mats.rail.clone();
     railMaterial.side = THREE.DoubleSide;
     mesh(createRailGeometry(side, { width: 0.15, height: 0.32, above: 0.72 }), railMaterial);
@@ -276,7 +259,7 @@ export function buildCourseWorld({
       box(mats.rail, g, [0, 0.42, 0], [0.19, 0.86, 0.19]);
     }
   }
-  for (let i = 0; i < 330; i++) {
+  for (let i = 0; course.edgeStyle !== "port-lumen" && i < 330; i++) {
     const t = i / 330,
       g = groupAt(t),
       half = track.roadHalfWidth(t);

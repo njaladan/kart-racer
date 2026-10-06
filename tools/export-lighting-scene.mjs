@@ -27,6 +27,7 @@ const arrayBuffer = (data) => data.buffer.slice(data.byteOffset, data.byteOffset
 async function loadAssets(id) {
   const base = resolve(root, "assets/courses");
   const assets = {
+    textures: {},
     models: decodeCourseModels(
       JSON.parse(await readFile(`${base}/models.json`)),
       arrayBuffer(await readFile(`${base}/models.bin`)),
@@ -35,6 +36,27 @@ async function loadAssets(id) {
   for (const pack of ["shared", id]) {
     const folder = `${base}/packs/${pack}`;
     const manifest = JSON.parse(await readFile(`${folder}/manifest.json`));
+    for (const entry of manifest.textures || []) {
+      const { data, info } = await sharp(await readFile(resolve(folder, entry.file)))
+        .resize(16, 16)
+        .removeAlpha()
+        .raw()
+        .toBuffer({ resolveWithObject: true });
+      const average = new THREE.Color(0, 0, 0);
+      for (let i = 0; i < data.length; i += info.channels)
+        average.add(
+          new THREE.Color().setRGB(
+            data[i] / 255,
+            data[i + 1] / 255,
+            data[i + 2] / 255,
+            THREE.SRGBColorSpace,
+          ),
+        );
+      average.multiplyScalar(info.channels / data.length);
+      const texture = new THREE.Texture();
+      texture.userData.averageLinear = average.toArray();
+      assets.textures[entry.name] = texture;
+    }
     for (const entry of manifest.models) {
       if (entry.name.startsWith("stk-kart-")) continue;
       const loader = new GLTFLoader();
@@ -129,6 +151,7 @@ for (const course of COURSES.filter((course) => !wanted.length || wanted.include
       "paving",
     ].map((name) => [name, new THREE.Texture()]),
   );
+  Object.assign(textures, assets.textures);
   const mats = Object.fromEntries(
     ["grass", "road", "roadside", "rail", "white", "red", "black", "pine2", "trunk"].map((name) => [
       name,

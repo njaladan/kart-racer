@@ -27,15 +27,16 @@ export async function loadCourseAssets(renderer, courseId = "windmill-wilds") {
   const models = decodeCourseModels(index, data);
   const gltfLoader = new GLTFLoader();
   await loadModelPack(gltfLoader, "./assets/courses/packs/shared/manifest.json", models, renderer);
-  if (courseId)
-    await loadModelPack(
-      gltfLoader,
-      `./assets/courses/packs/${courseId}/manifest.json`,
-      models,
-      renderer,
-      true,
-    );
-  return { textures: Object.fromEntries(maps), models };
+  const courseTextures = courseId
+    ? await loadModelPack(
+        gltfLoader,
+        `./assets/courses/packs/${courseId}/manifest.json`,
+        models,
+        renderer,
+        true,
+      )
+    : {};
+  return { textures: { ...Object.fromEntries(maps), ...courseTextures }, models };
 }
 
 async function loadModelPack(loader, manifestUrl, models, renderer, optional = false) {
@@ -75,6 +76,18 @@ async function loadModelPack(loader, manifestUrl, models, renderer, optional = f
       object.name = entry.name;
       models[entry.name] = object;
     }),
+  );
+  const textureLoader = new THREE.TextureLoader();
+  return Object.fromEntries(
+    await Promise.all(
+      (manifest.textures || []).map(async (entry) => {
+        const fileUrl = new URL(entry.file, new URL(".", new URL(manifestUrl, location.href))).href;
+        const texture = await textureLoader.loadAsync(fileUrl);
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+        return [entry.name, texture];
+      }),
+    ),
   );
 }
 

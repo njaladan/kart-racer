@@ -29,9 +29,15 @@ export function createCourseLighting(scene, { theme, ambientLight, sun, environm
       quality = tier;
     },
     update(dt, position, section, racers) {
-      const enclosed = ["forest", "pines", "warehouse", "temple", "canyon", "ice-cave"].includes(
-        section.id,
-      );
+      const enclosed = [
+        "forest",
+        "pines",
+        "warehouse",
+        "temple",
+        "canyon",
+        "ice-cave",
+        "ferry",
+      ].includes(section.id);
       enclosure += ((enclosed ? 1 : 0) - enclosure) * (dt ? 1 - Math.exp(-2.2 * dt) : 1);
       const baseAmbient = theme.ambientIntensity ?? 1.55;
       ambientLight.intensity = baseAmbient * (1 - enclosure * 0.22);
@@ -51,6 +57,7 @@ export function createCourseLighting(scene, { theme, ambientLight, sun, environm
           "temple",
           "canyon",
           "ice-cave",
+          "ferry",
         ].includes(racerSection.id);
         const shade = state.renderShade ?? 1;
         state.renderShade =

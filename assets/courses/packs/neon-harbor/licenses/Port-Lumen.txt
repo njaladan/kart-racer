@@ -1,0 +1,7 @@
+Port Lumen additions: original facade / emission / cargo / sign atlases by Turbo Trail contributors, CC0-1.0. Reproduce with tools/prepare-port-lumen.py.
+
+Vehicles and skyscraper silhouettes: Kenney, CC0-1.0.
+https://kenney.nl/assets/car-kit
+https://kenney.nl/assets/city-kit-commercial
+Mirror: https://github.com/Hidencod/tge-assets
+Exact download URLs and SHA-256 hashes in manifest.json.

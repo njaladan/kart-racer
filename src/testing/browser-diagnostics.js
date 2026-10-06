@@ -127,6 +127,19 @@ export function createBrowserDiagnostics({
         player.yaw = yawFor(frameAt(trackT(player.s)).tangent);
         player.renderYawFrom = player.yaw;
         player.speed = 0;
+        // Seeks jump between districts. Snap the camera so course previews
+        // do not capture an interpolated fly-through inside nearby buildings.
+        if (camera.position && gameRenderer.cameraLook) {
+          const forward = frameAt(trackT(player.s)).tangent.setY(0).normalize();
+          const panoramic = camera.aspect > 1.8;
+          camera.position.copy(player.worldPos).addScaledVector(forward, panoramic ? -10.5 : -8.7);
+          camera.position.y += 4.7;
+          gameRenderer.cameraLook
+            .copy(player.worldPos)
+            .addScaledVector(forward, panoramic ? 4.5 : 6);
+          gameRenderer.cameraLook.y += 1.15;
+          camera.lookAt(gameRenderer.cameraLook);
+        }
       }
       if (message.type === "test-step" && started && !finished && !paused) {
         const seconds = Math.max(0, Math.min(5, Number(message.seconds) || 0));

@@ -104,6 +104,41 @@
       "name": "harbor:container",
       "file": "models/container.glb",
       "type": "gltf"
+    },
+    {
+      "name": "lumen:sedan",
+      "file": "models/lumen-sedan.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "lumen:taxi",
+      "file": "models/lumen-taxi.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "lumen:van",
+      "file": "models/lumen-van.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "lumen:truck",
+      "file": "models/lumen-truck.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "lumen:delivery",
+      "file": "models/lumen-delivery.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "lumen:building-skyscraper-a",
+      "file": "models/lumen-building-skyscraper-a.glb",
+      "type": "gltf"
+    },
+    {
+      "name": "lumen:building-skyscraper-d",
+      "file": "models/lumen-building-skyscraper-d.glb",
+      "type": "gltf"
     }
   ],
   "sources": [
@@ -326,6 +361,214 @@
       "modifications": "Shared textures replaced by original trim textures; browser-budget simplification; true ray-occlusion vertex bake; GLB conversion.",
       "bytes": 96172,
       "sha256": "2c22abf1e11ab40449a2f8cc488127b2741d9188d21b37dd30b40d324cef54f4"
+    },
+    {
+      "file": "textures/facade-0.webp",
+      "author": "Turbo Trail contributors",
+      "license": "CC0-1.0",
+      "source": "tools/prepare-port-lumen.py",
+      "bytes": 47554,
+      "sha256": "b233d7c9a4648d782e82c7f2711583cbc28c1b712e2cae8e63be49c849e9c1f2",
+      "modifications": "Original offline texture authoring."
+    },
+    {
+      "file": "textures/facade-0-emission.webp",
+      "author": "Turbo Trail contributors",
+      "license": "CC0-1.0",
+      "source": "tools/prepare-port-lumen.py",
+      "bytes": 19168,
+      "sha256": "99ce9b8ec78f9e7bb4e96dbda5e13cfaebba068f6db6cac9ddd73f416ffaba45",
+      "modifications": "Original offline texture authoring."
+    },
+    {
+      "file": "textures/facade-1.webp",
+      "author": "Turbo Trail contributors",
+      "license": "CC0-1.0",
+      "source": "tools/prepare-port-lumen.py",
+      "bytes": 47120,
+      "sha256": "de6335f67bb80d300c91b26a1202a7854560c03d7d84014816d883071a145467",
+      "modifications": "Original offline texture authoring."
+    },
+    {
+      "file": "textures/facade-1-emission.webp",
+      "author": "Turbo Trail contributors",
+      "license": "CC0-1.0",
+      "source": "tools/prepare-port-lumen.py",
+      "bytes": 19182,
+      "sha256": "7b2b0942aca8c6502851b654812bdc559be841efb7016c7f38b90808950def5f",
+      "modifications": "Original offline texture authoring."
+    },
+    {
+      "file": "textures/facade-2.webp",
+      "author": "Turbo Trail contributors",
+      "license": "CC0-1.0",
+      "source": "tools/prepare-port-lumen.py",
+      "bytes": 44816,
+      "sha256": "c6f4b160959bee5154f7a1cead9a2398ff3e44b5889de4513a4cf3fb31bcc3b1",
+      "modifications": "Original offline texture authoring."
+    },
+    {
+      "file": "textures/facade-2-emission.webp",
+      "author": "Turbo Trail contributors",
+      "license": "CC0-1.0",
+      "source": "tools/prepare-port-lumen.py",
+      "bytes": 15990,
+      "sha256": "66ccab301a5e117e5f2858999d3e3a803c9c72169e5a95a348dcf1638a4f4613",
+      "modifications": "Original offline texture authoring."
+    },
+    {
+      "file": "textures/cargo-corrugated.webp",
+      "author": "Turbo Trail contributors",
+      "license": "CC0-1.0",
+      "source": "tools/prepare-port-lumen.py",
+      "bytes": 75498,
+      "sha256": "342d225d6b07f70d78c72b63097563503116648f1f5cdcc171b1b8d84b8bca9c",
+      "modifications": "Original offline texture authoring."
+    },
+    {
+      "file": "textures/sign-atlas.webp",
+      "author": "Turbo Trail contributors",
+      "license": "CC0-1.0",
+      "source": "tools/prepare-port-lumen.py",
+      "bytes": 126528,
+      "sha256": "8a2db6ba39ed6c623e1e3a5b7f7179fd00af2b2920a436882697a9a347bb993b",
+      "modifications": "Original offline texture authoring."
+    },
+    {
+      "file": "textures/welcome.webp",
+      "author": "Turbo Trail contributors",
+      "license": "CC0-1.0",
+      "source": "tools/prepare-port-lumen.py",
+      "bytes": 12466,
+      "sha256": "8c9294f5a27757f05656a30e801a2bd48522e24a7111969634333799aec67bff",
+      "modifications": "Original offline texture authoring."
+    },
+    {
+      "file": "textures/conveyor.webp",
+      "author": "Turbo Trail contributors",
+      "license": "CC0-1.0",
+      "source": "tools/prepare-port-lumen.py",
+      "bytes": 10544,
+      "sha256": "5df37f80d93a9ced698934b86039d8f5359bc43bba3d60cad268ce3aac60ee04",
+      "modifications": "Original offline texture authoring."
+    },
+    {
+      "file": "textures/shopfront-atlas.webp",
+      "author": "Turbo Trail contributors",
+      "license": "CC0-1.0",
+      "source": "tools/prepare-port-lumen.py",
+      "bytes": 34722,
+      "sha256": "70d1d90eb3720ce62ae8633acf53e5a921db77b2797d1ae62e551feb11e63c5c",
+      "modifications": "Original offline texture authoring."
+    },
+    {
+      "file": "models/lumen-sedan.glb",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "source": "https://raw.githubusercontent.com/Hidencod/tge-assets/1f7dee9076ee848773f08fd632ab4e4e73357777/packs/car-kit/sedan.glb",
+      "sha256": "36faef2dc604e12bac43dc15f39fe5d56d1c23bfe7a22ab03f43856de4a2db34",
+      "bytes": 184504,
+      "modifications": "None; runtime fits to vehicle bounds."
+    },
+    {
+      "file": "models/lumen-taxi.glb",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "source": "https://raw.githubusercontent.com/Hidencod/tge-assets/1f7dee9076ee848773f08fd632ab4e4e73357777/packs/car-kit/taxi.glb",
+      "sha256": "c0ead3df92617dbca425e522003e80777cffc5f8987f664abab1363ff786704c",
+      "bytes": 187896,
+      "modifications": "None; runtime fits to vehicle bounds."
+    },
+    {
+      "file": "models/lumen-van.glb",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "source": "https://raw.githubusercontent.com/Hidencod/tge-assets/1f7dee9076ee848773f08fd632ab4e4e73357777/packs/car-kit/van.glb",
+      "sha256": "58ee6d0b068ed0f8f1b5d12b0377300ae81ded67c3053f5cd844f7885d96728d",
+      "bytes": 187952,
+      "modifications": "None; runtime fits to vehicle bounds."
+    },
+    {
+      "file": "models/lumen-truck.glb",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "source": "https://raw.githubusercontent.com/Hidencod/tge-assets/1f7dee9076ee848773f08fd632ab4e4e73357777/packs/car-kit/truck.glb",
+      "sha256": "80454be69df2a50f32c225b5d6a29c62d9ce23bc446f26970a5e9a9e9ba99293",
+      "bytes": 188652,
+      "modifications": "None; runtime fits to vehicle bounds."
+    },
+    {
+      "file": "models/lumen-delivery.glb",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "source": "https://raw.githubusercontent.com/Hidencod/tge-assets/1f7dee9076ee848773f08fd632ab4e4e73357777/packs/car-kit/delivery.glb",
+      "sha256": "bb7dce820c585a71c038dfa3c122788ce03ce0b5b224534bbd3de1776165b254",
+      "bytes": 252504,
+      "modifications": "None; runtime fits to vehicle bounds."
+    },
+    {
+      "file": "models/lumen-building-skyscraper-a.glb",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "source": "https://raw.githubusercontent.com/Hidencod/tge-assets/1f7dee9076ee848773f08fd632ab4e4e73357777/packs/city-kit-commercial/building-skyscraper-a.glb",
+      "sha256": "affb365f6e19725e4e53d71191c1ef306df7d65035f8d770ab166aa8bb5c5923",
+      "bytes": 122376,
+      "modifications": "None; runtime fits to vehicle bounds."
+    },
+    {
+      "file": "models/lumen-building-skyscraper-d.glb",
+      "author": "Kenney",
+      "license": "CC0-1.0",
+      "source": "https://raw.githubusercontent.com/Hidencod/tge-assets/1f7dee9076ee848773f08fd632ab4e4e73357777/packs/city-kit-commercial/building-skyscraper-d.glb",
+      "sha256": "158729f4bf10d5076532eb00c279bcbf72769dc4a86a77a1b07d3a181b562b2a",
+      "bytes": 178188,
+      "modifications": "None; runtime fits to vehicle bounds."
+    }
+  ],
+  "textures": [
+    {
+      "name": "harborFacade0",
+      "file": "textures/facade-0.webp"
+    },
+    {
+      "name": "harborFacadeEmission0",
+      "file": "textures/facade-0-emission.webp"
+    },
+    {
+      "name": "harborFacade1",
+      "file": "textures/facade-1.webp"
+    },
+    {
+      "name": "harborFacadeEmission1",
+      "file": "textures/facade-1-emission.webp"
+    },
+    {
+      "name": "harborFacade2",
+      "file": "textures/facade-2.webp"
+    },
+    {
+      "name": "harborFacadeEmission2",
+      "file": "textures/facade-2-emission.webp"
+    },
+    {
+      "name": "harborCargo",
+      "file": "textures/cargo-corrugated.webp"
+    },
+    {
+      "name": "harborSigns",
+      "file": "textures/sign-atlas.webp"
+    },
+    {
+      "name": "harborWelcome",
+      "file": "textures/welcome.webp"
+    },
+    {
+      "name": "harborConveyor",
+      "file": "textures/conveyor.webp"
+    },
+    {
+      "name": "harborShops",
+      "file": "textures/shopfront-atlas.webp"
     }
   ]
 }

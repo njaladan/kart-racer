@@ -7,3 +7,12 @@ Pinned download: https://github.com/supertuxkart/stk-assets-mobile/releases/down
 Shared source textures without per-file notices have been replaced with original authored trim textures. Other adaptations: true vertex occlusion bake, offline polygon simplification and GLB export. Source conversion script: tools/prepare-harbor-fidelity.py. The adapted STK models remain under their listed share-alike licenses.
 
 Cargo ferry and lattice gantry: original authored meshes and trim textures by Turbo Trail contributors, CC0 1.0. These are produced offline by the same script.
+
+## Port Lumen expansion
+
+Seven vehicle/skyscraper models by **Kenney**, CC0-1.0, from the Car Kit and
+City Kit Commercial. The exact mirror revision and file SHA-256 digests are
+recorded in `manifest.json`. Full source links are in `licenses/Port-Lumen.txt`.
+
+Eleven original facade, window-emission, cargo, sign, welcome, conveyor and shop-window textures
+by Turbo Trail contributors, CC0-1.0. Rebuild with `tools/prepare-port-lumen.py`.
