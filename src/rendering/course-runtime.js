@@ -75,7 +75,38 @@ export function buildCourseWorld({
       bumpScale: 0.035,
     }),
   };
+  if (course.edgeStyle === "adventure") {
+    const road = course.theme.road;
+    roadMaterials.stone = material(road, { bumpMap: textures.stone, bumpScale: 0.025 });
+    roadMaterials.paper = material(road, { roughness: 0.8 });
+    roadMaterials.glass = material(road, { roughness: 0.3, metalness: 0.2 });
+    roadMaterials.metal = material(road, {
+      bumpMap: textures.metal,
+      bumpScale: 0.02,
+      metalness: 0.42,
+      roughness: 0.5,
+    });
+    roadMaterials.wood = material(road, { bumpMap: textures.wood, bumpScale: 0.03 });
+    roadMaterials.paving = material(road, { bumpMap: textures.paving, bumpScale: 0.025 });
+  }
   if (course.theme.wetPavement) installWetPavement(roadMaterials.stone);
+  if (course.edgeStyle === "adventure") {
+    const rail = material(course.theme.shoulder, { metalness: 0.25 });
+    for (const side of [-1, 1]) {
+      for (const section of track.SECTIONS) {
+        const range = (course.traversals || []).find((r) => track.SECTIONS[r.section] === section);
+        if (range) continue;
+        const geometry = createRailGeometry(side, {
+          width: 0.25,
+          height: 0.4,
+          above: 0.5,
+          start: section.start,
+          end: section.end,
+        });
+        mesh(geometry, rail);
+      }
+    }
+  }
   if (course.edgeStyle === "sunstone") {
     roadMaterials.stone = material("#d7bc93", { bumpMap: textures.stone, bumpScale: 0.035 });
     roadMaterials.paving = material("#dccaab", { bumpMap: textures.paving, bumpScale: 0.02 });
@@ -130,7 +161,12 @@ export function buildCourseWorld({
         uv.push(edge / 8, (t * track.COURSE_LENGTH) / 8);
       }
       const midpoint = THREE.MathUtils.lerp(startT, endT, (i + 0.5) / n);
-      if (i === n || (terrain && isElevated(midpoint))) continue;
+      const transit = (course.traversals || []).some(
+        (r) =>
+          midpoint >= track.sectorT(r.section, r.startFraction) &&
+          midpoint < track.sectorT(r.section, r.endFraction),
+      );
+      if (i === n || transit || (terrain && isElevated(midpoint))) continue;
       const a = i * 2,
         start = indices.length;
       if (edgeB(t) >= edgeA(t)) indices.push(a, a + 1, a + 2, a + 1, a + 3, a + 2);
@@ -172,6 +208,7 @@ export function buildCourseWorld({
     0.035,
   );
   for (const v of track.VERGES) {
+    if (v.gate === "unfold") continue;
     ribbon(
       (t) => v.side * track.roadHalfWidth(t),
       (t) => v.side * (track.roadHalfWidth(t) + track.vergeWidth(t, v.side)),
@@ -268,7 +305,7 @@ export function buildCourseWorld({
   for (const side of [-1, 1]) {
     const edge = (t) => (side < 0 ? track.surfaceAt(t).leftEdge : track.surfaceAt(t).rightEdge);
     ribbon(edge, (t) => edge(t) + side * TERRAIN_VERGE_WIDTH, mats.grass, 0, true);
-    if (["port-lumen", "sunstone", "frostpeak"].includes(course.edgeStyle)) continue;
+    if (["port-lumen", "sunstone", "frostpeak", "adventure"].includes(course.edgeStyle)) continue;
     const railMaterial = mats.rail.clone();
     railMaterial.side = THREE.DoubleSide;
     mesh(createRailGeometry(side, { width: 0.15, height: 0.32, above: 0.72 }), railMaterial);
@@ -280,7 +317,7 @@ export function buildCourseWorld({
   }
   for (
     let i = 0;
-    !["port-lumen", "sunstone", "frostpeak"].includes(course.edgeStyle) && i < 330;
+    !["port-lumen", "sunstone", "frostpeak", "adventure"].includes(course.edgeStyle) && i < 330;
     i++
   ) {
     const t = i / 330,
@@ -297,6 +334,23 @@ export function buildCourseWorld({
         [side * (half + 0.15), 0.105, 0],
         [0.8, 0.12, track.COURSE_LENGTH / 330 + 0.1],
       );
+    }
+  }
+  if (course.edgeStyle === "adventure") {
+    const rail = material(course.theme.shoulder, { metalness: 0.25 });
+    for (const side of [-1, 1]) {
+      for (const section of track.SECTIONS) {
+        const range = (course.traversals || []).find((r) => track.SECTIONS[r.section] === section);
+        if (range) continue;
+        const geometry = createRailGeometry(side, {
+          width: 0.25,
+          height: 0.4,
+          above: 0.5,
+          start: section.start,
+          end: section.end,
+        });
+        mesh(geometry, rail);
+      }
     }
   }
   if (course.edgeStyle === "sunstone") {

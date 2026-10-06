@@ -5,11 +5,19 @@ export function resolveRacerContacts(racers, { hitRacer, onContact }) {
     for (let j = i + 1; j < racers.length; j++) {
       const a = racers[i],
         b = racers[j];
-      if (a.finished || b.finished || Math.abs(a.worldPos.y - b.worldPos.y) > 1.5) continue;
+      if (
+        a.traversalIndex >= 0 ||
+        b.traversalIndex >= 0 ||
+        a.finished ||
+        b.finished ||
+        Math.abs(a.worldPos.y - b.worldPos.y) > 1.5
+      )
+        continue;
       let dx = a.worldPos.x - b.worldPos.x,
         dz = a.worldPos.z - b.worldPos.z;
       const distance = Math.hypot(dx, dz);
-      if (distance >= 1.95) continue;
+      const separation = 0.975 * ((a.scale || 1) + (b.scale || 1));
+      if (distance >= separation) continue;
       if (distance < 0.001) {
         dx = 1;
         dz = 0;
@@ -17,7 +25,7 @@ export function resolveRacerContacts(racers, { hitRacer, onContact }) {
         dx /= distance;
         dz /= distance;
       }
-      const push = (1.95 - distance) * 0.5;
+      const push = (separation - distance) * 0.5;
       a.worldPos.x += dx * push;
       a.worldPos.z += dz * push;
       b.worldPos.x -= dx * push;

@@ -1,3 +1,4 @@
+import { unfoldPhase, scaleAt } from "../simulation/course-mechanics.js";
 import * as THREE from "../../vendor/three/three.module.js";
 import { progressDelta } from "../simulation/race.js";
 import { validateCourseDefinition } from "../courses/course-contract.js";
@@ -12,6 +13,7 @@ export const laneFromOffset = (offset) => offset / 6.25;
 export const yawFor = (tangent) => Math.atan2(-tangent.x, -tangent.z);
 export function createTrack(course) {
   validateCourseDefinition(course);
+  let mechanismTime = 0;
   const controls = course.controls;
   const curve = new THREE.CatmullRomCurve3(
     controls.map((p) => new THREE.Vector3(...p)),
@@ -93,7 +95,11 @@ export function createTrack(course) {
   function vergePatchWidth(verge, t) {
     const taper = Math.min(12 / lengths.at(-1), (verge.end - verge.start) / 3);
     return (
-      verge.extraWidth *
+      (verge.maxScale &&
+      scaleAt({ course, sectorT, COURSE_LENGTH: lengths.at(-1) }, t) > verge.maxScale
+        ? 0
+        : verge.extraWidth) *
+      (verge.gate === "unfold" ? (unfoldPhase(course, mechanismTime) >= 0.99 ? 1 : 0) : 1) *
       smooth(verge.start, verge.start + taper, t) *
       (1 - smooth(verge.end - taper, verge.end, t))
     );
@@ -236,7 +242,7 @@ export function createTrack(course) {
       minimumCurveRadius = Math.min(minimumCurveRadius, (ab * bc * ac) / (2 * cross));
   }
   const radiusFloor = course.minimumRadius ?? MIN_ROAD_CURVE_RADIUS;
-  if (minimumCurveRadius < radiusFloor) {
+  if (course.topology !== "adventure" && minimumCurveRadius < radiusFloor) {
     throw new RangeError(
       `Course "${course.id}" has a ${minimumCurveRadius.toFixed(1)} m bend; road curves require at least ${radiusFloor} m radius`,
     );
@@ -333,6 +339,9 @@ export function createTrack(course) {
   }
 
   return {
+    setTime: (time) => {
+      mechanismTime = time;
+    },
     SURFACES,
     ELEVATED,
     VERGES,

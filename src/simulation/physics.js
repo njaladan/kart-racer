@@ -50,6 +50,12 @@ export function resetMotion(state) {
     trickVariant: 0,
     trickCount: 0,
     trickAge: 0,
+    traversalIndex: -1,
+    traversalProgress: 0,
+    traversalDeparture: 0,
+    traversalOffset: 0,
+    scale: 1,
+    underwater: false,
   });
 }
 
@@ -240,13 +246,20 @@ export function verticalMotion(state, height, slopeVelocity, dt) {
     state.airTime = 0;
   } else {
     state.airTime = (state.airTime || 0) + dt;
-    state.vy = clamp(state.vy - JUMP_GRAVITY * dt, -32, JUMP_TAKEOFF_SPEED);
+    state.vy = clamp(
+      state.vy - JUMP_GRAVITY * (state.underwater ? 0.4 : 1) * dt,
+      -32,
+      JUMP_TAKEOFF_SPEED,
+    );
     state.worldPos.y += state.vy * dt;
-    if (state.worldPos.y > height + MAX_JUMP_HEIGHT) {
-      state.worldPos.y = height + MAX_JUMP_HEIGHT;
+    if (state.worldPos.y > height + MAX_JUMP_HEIGHT * (state.underwater ? 2.3 : 1)) {
+      state.worldPos.y = height + MAX_JUMP_HEIGHT * (state.underwater ? 2.3 : 1);
       state.vy = Math.min(state.vy, 0);
     }
-    if (state.worldPos.y <= height || state.airTime >= MAX_JUMP_TIME) {
+    if (
+      state.worldPos.y <= height ||
+      state.airTime >= MAX_JUMP_TIME * (state.underwater ? 1.6 : 1)
+    ) {
       landed = true;
       state.grounded = true;
       state.worldPos.y = height;

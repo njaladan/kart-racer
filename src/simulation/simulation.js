@@ -1,4 +1,10 @@
-import { solarBoostAt } from "./course-mechanics.js";
+import {
+  solarBoostAt,
+  scaleAt,
+  mechanismContact,
+  advanceTraversal,
+  currentAt,
+} from "./course-mechanics.js";
 import {
   drive,
   verticalMotion,
@@ -67,6 +73,15 @@ export function botInput(state, index, elapsed, rivals = []) {
   const cart = cartAt(elapsed);
   const cartGap = progressDelta(cart.s, state.s, TRACK) * WORLD_PER_UNIT;
   if (cartGap > -6 && cartGap < 40) lane = activeTrack.course.hazard.safeLane;
+  for (const pendulum of activeTrack.course.pendulums || []) {
+    const gap =
+      progressDelta(
+        activeTrack.sectorT(pendulum.section, pendulum.fraction) * TRACK,
+        state.s,
+        TRACK,
+      ) * WORLD_PER_UNIT;
+    if (gap > -6 && gap < 45) lane = -7.4;
+  }
   const traffic = activeTrack.course.traffic;
   if (
     traffic &&
@@ -100,6 +115,16 @@ export function botInput(state, index, elapsed, rivals = []) {
 }
 export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLaps = 3) {
   if (state.finished) return {};
+  activeTrack.setTime(raceTime);
+  state.scale = scaleAt(activeTrack, trackT(state.s));
+  const underwater = activeTrack.course.underwater;
+  state.underwater =
+    !!underwater &&
+    trackT(state.s) >= activeTrack.sectorT(underwater.section, underwater.startFraction) &&
+    trackT(state.s) <=
+      activeTrack.sectorT(underwater.endSection ?? underwater.section, underwater.endFraction);
+  const transit = advanceTraversal(state, activeTrack, dt, raceTime, advanceRaceProgress);
+  if (transit) return transit;
   const hitWasActive = state.spin > 0;
   state.prevS = state.s;
   state.renderYawFrom = state.yaw;
@@ -142,6 +167,11 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     },
     dt,
   );
+  const current = currentAt(activeTrack, before.t, raceTime);
+  if (state.grounded && current) {
+    state.vx += before.horizontalRight.x * current * dt;
+    state.vz += before.horizontalRight.z * current * dt;
+  }
   let conveyorMotion = false;
   if (state.grounded && !state.finished) {
     for (const belt of activeTrack.CONVEYORS) {
@@ -187,7 +217,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     state.worldPos.distanceTo(state.renderFrom),
   );
   state.x = laneFromOffset(projection.offset);
-  const bounds = collisionBounds(projection.t);
+  const bounds = collisionBounds(projection.t, 0.9 * state.scale);
   const side = projection.offset < bounds.left ? -1 : 1;
   const edge = side < 0 ? bounds.left : bounds.right;
   const penetration = side * (projection.offset - edge);
@@ -199,7 +229,10 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   );
   if (penetration > 0) state.x = laneFromOffset(edge);
   const trafficHit = trafficContact(state.worldPos, raceTime);
-  const contact = trafficHit || cartContact(state.worldPos, raceTime);
+  const contact =
+    mechanismContact(activeTrack, state.worldPos, raceTime, 0.9 * state.scale) ||
+    trafficHit ||
+    cartContact(state.worldPos, raceTime, 0.9 * state.scale);
   const cartImpact = contact
     ? wallContact(state, contact.nx, contact.nz, contact.penetration)
     : false;

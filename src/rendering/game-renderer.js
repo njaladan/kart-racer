@@ -66,7 +66,11 @@ export function createGameRenderer({
       previousYaw + wrapAngle(state.yaw - previousYaw) * blend + (state.visualYawOffset || 0);
     kart.root.position.copy(state.renderFrom || state.worldPos).lerp(state.worldPos, blend);
     if (state.visualOffset) kart.root.position.add(state.visualOffset);
-    kartUp.copy(state.grounded ? frame.up : WORLD_UP);
+    kartUp.copy(state.grounded && !(state.traversalIndex >= 0) ? frame.up : WORLD_UP);
+    const scaleBlend = dt ? 1 - Math.exp(-10 * dt) : 1;
+    kart.renderScale =
+      (kart.renderScale ?? 1) + ((state.scale || 1) - (kart.renderScale ?? 1)) * scaleBlend;
+    kart.root.scale.setScalar(kart.renderScale);
     kartForward.set(Math.sin(yaw), 0, Math.cos(yaw));
     kartForward.addScaledVector(kartUp, -kartForward.dot(kartUp)).normalize();
     kartRight.crossVectors(kartUp, kartForward).normalize();
@@ -185,6 +189,7 @@ export function createGameRenderer({
   function render(dt) {
     const frameState = getFrameState();
     renderer.info?.reset();
+    activeTrack.setTime(frameState.raceTime);
     if (!frameState.paused) {
       getLandscape()?.update(frameState.raceTime, {
         playerLap: player.lap,
@@ -260,16 +265,13 @@ export function createGameRenderer({
     const forest = ["forest", "pines"].includes(section.id);
     const enclosed = forest || ["warehouse", "temple", "canyon"].includes(section.id);
     const atmosphereBlend = 1 - Math.exp(-1.5 * dt);
-    const fogFar = forest
-      ? 330
-      : theme.terrain === "concrete"
-        ? 520
-        : theme.terrain === "sand"
-          ? 670
-          : 720;
+    const fogFar = player.underwater
+      ? 200
+      : (theme.fogFar ??
+        (forest ? 330 : theme.terrain === "concrete" ? 520 : theme.terrain === "sand" ? 670 : 720));
     scene.fog.far += (fogFar - scene.fog.far) * atmosphereBlend;
     scene.fog.near += ((enclosed ? 95 : 180) - scene.fog.near) * atmosphereBlend;
-    const fogColor = new THREE.Color(theme.fog || "#ffffff");
+    const fogColor = new THREE.Color(player.underwater ? "#489da8" : theme.fog || "#ffffff");
     if (forest)
       fogColor.lerp(new THREE.Color(theme.terrain === "snow" ? "#b0cbdc" : "#91b5ac"), 0.3);
     if (section.id === "temple") fogColor.lerp(new THREE.Color("#b5a7a0"), 0.22);
@@ -328,15 +330,16 @@ export function createGameRenderer({
         : 0;
     driftCamera += (driftCameraTarget - driftCamera) * (1 - Math.exp(-8 * dt));
     const panoramic = camera.aspect > 1.8;
+    const viewScale = Math.max(0.55, playerKart.renderScale || 1);
     const look = position.clone().addScaledVector(forward, panoramic ? 4.5 : 6);
     look.y += 1.15;
     const desired = position
       .clone()
       .addScaledVector(
         forward,
-        -(panoramic ? 10.5 : 8.7) - player.speed * 0.017 - driftCamera * 0.65,
+        -(panoramic ? 10.5 : 8.7) * viewScale - player.speed * 0.017 - driftCamera * 0.65,
       );
-    desired.y += 4.7;
+    desired.y += 4.7 * viewScale;
     camera.position.lerp(desired, 1 - Math.exp(-9 * dt));
     cameraLook.lerp(look, 1 - Math.exp(-12 * dt));
     const cameraTrack = projectTrack(camera.position, player.s);

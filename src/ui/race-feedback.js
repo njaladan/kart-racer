@@ -22,6 +22,10 @@ export function createRaceFeedback({ player, audio, particles, toast, terrain })
   }
   function racerEvent(racer, events, dt) {
     racerEffects.update(racer, events, dt);
+    if (events.traversalStarted && racer === player) {
+      notify(events.traversalKind === "lift" ? "ALL ABOARD THE SKY LIFT" : "CANNON FLIGHT!");
+      audio.play(events.traversalKind === "lift" ? "mechanism" : "hit");
+    }
     if (events.wallContact) {
       if (racer === player) {
         shake = 0.1;

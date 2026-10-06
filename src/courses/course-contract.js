@@ -67,8 +67,12 @@ export function validateCourseDefinition(course) {
     }
   });
 
-  if (!Array.isArray(course.sections) || course.sections.length < 6 || course.sections.length > 8) {
-    fail(course, "sections", "six to eight section descriptors");
+  if (
+    !Array.isArray(course.sections) ||
+    course.sections.length < (course.topology === "adventure" ? 3 : 6) ||
+    course.sections.length > (course.topology === "adventure" ? 32 : 8)
+  ) {
+    fail(course, "sections", "ordered section descriptors covering the route");
   }
   if (course.minimumRadius != null)
     finite(course, course.minimumRadius, "minimumRadius", { min: 18, max: 40 });
