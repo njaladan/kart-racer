@@ -1,3 +1,4 @@
+import { createBoostMotion } from "./boost-motion.js";
 import * as THREE from "../../vendor/three/three.module.js";
 import { lapNumber } from "../simulation/race.js";
 import { FIXED_DT, MAX_SPEED, clamp, wrapAngle } from "../simulation/physics.js";
@@ -55,6 +56,9 @@ export function createGameRenderer({
   let motionEnabled = true;
   let driftCamera = 0;
   let cameraBank = 0;
+  const boostMotion = createBoostMotion();
+  let boostStrength = 0;
+  let boostKick = 0;
   let hudClock = 0;
   let radarClock = 0;
 
@@ -163,7 +167,7 @@ export function createGameRenderer({
       wheel.pivot.rotation.y = wheel.front ? -state.steering * 0.32 : 0;
     }
     if (kart.driftReadiness) updateDriftReadiness(kart.driftReadiness, state, frameState.elapsed);
-    kart.flame.visible = state.boost > 0;
+    kart.flame.visible = state.boost > 0 || state.star > 0;
     if (kart.boostGlow) {
       kart.boostGlow.visible = kart.flame.visible;
       const blueTurbo = state.driftBoost > 0 && state.driftBoostTier === 1;
@@ -306,9 +310,10 @@ export function createGameRenderer({
     displayFinish?.update(
       frameState.raceTime,
       motionEnabled && frameState.running && !frameState.finished ? player.speed : 0,
-      motionEnabled && player.boost > 0 && frameState.running && !frameState.finished,
+      boostStrength,
       camera.aspect,
     );
+    postprocessing?.setBoostMotion(boostStrength, boostKick);
     followShadow(player.worldPos);
     if (scene.userData.wetRoadReflections && graphicsQuality?.getTier() === 3) {
       const t = trackT(player.s);
@@ -332,6 +337,13 @@ export function createGameRenderer({
   }
 
   function updateCamera(dt, frameState) {
+    const boost = boostMotion.update(
+      player,
+      motionEnabled && frameState.running && !frameState.finished,
+      dt,
+    );
+    boostStrength = boost.strength;
+    boostKick = boost.kick;
     const previousYaw = player.renderYawFrom ?? player.yaw;
     const yaw =
       previousYaw +
@@ -370,20 +382,25 @@ export function createGameRenderer({
       .clone()
       .addScaledVector(
         forward,
-        -(panoramic ? 10.5 : 8.7) * viewScale - player.speed * 0.017 - driftCamera * 0.65,
+        -(panoramic ? 10.5 : 8.7) * viewScale -
+          player.speed * 0.017 -
+          boostStrength * 2.8 -
+          boostKick * 1.2 -
+          driftCamera * 0.4,
       );
-    desired.y += 4.7 * viewScale;
-    camera.position.lerp(desired, 1 - Math.exp(-9 * dt));
-    cameraLook.lerp(look, 1 - Math.exp(-12 * dt));
+    desired.y += 4.7 * viewScale - boostStrength * 0.35;
+    camera.position.lerp(desired, 1 - Math.exp(-(9 - boostStrength * 4) * dt));
+    cameraLook.lerp(look, 1 - Math.exp(-(12 - boostStrength * 3) * dt));
     const cameraTrack = projectTrack(camera.position, player.s);
     camera.position.y = Math.max(camera.position.y, cameraTrack.height + 2.1);
     camera.fov +=
       ((panoramic ? 68 : 63) +
         Math.min(7, player.speed * 0.045) +
-        (player.boost > 0 ? 3 : 0) +
+        boostStrength * 13 +
+        boostKick * 4 +
         driftCamera * 3.5 -
         camera.fov) *
-      (1 - Math.exp(-3 * dt));
+      (1 - Math.exp(-(boostStrength > 0.1 ? 12 : 5) * dt));
     camera.updateProjectionMatrix();
     camera.lookAt(cameraLook);
     const bankTarget =
@@ -392,6 +409,12 @@ export function createGameRenderer({
         : 0;
     cameraBank += (bankTarget - cameraBank) * (1 - Math.exp(-5 * dt));
     camera.rotation.z += cameraBank;
+    // Bounded vibration: the chase rig strains under acceleration, while the
+    // road and kart stay readable. Race time keeps pause/resume deterministic.
+    const vibration = boostStrength * 0.0025 + boostKick * 0.005;
+    camera.rotation.x += Math.sin(frameState.raceTime * 67) * vibration;
+    camera.rotation.y += Math.sin(frameState.raceTime * 53) * vibration * 0.7;
+    camera.rotation.z += Math.sin(frameState.raceTime * 43) * vibration;
     if (motionEnabled && frameState.shake) {
       camera.rotation.z += (Math.random() - 0.5) * frameState.shake * 0.05;
     }
@@ -408,6 +431,10 @@ export function createGameRenderer({
     reset: () => {
       driftCamera = 0;
       cameraBank = 0;
+      boostMotion.reset();
+      boostStrength = boostKick = 0;
+      camera.fov = camera.aspect > 1.8 ? 68 : 63;
+      camera.updateProjectionMatrix();
     },
   };
 }

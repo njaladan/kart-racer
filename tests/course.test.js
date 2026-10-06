@@ -19,9 +19,9 @@ import { advanceRaceProgress } from "../src/simulation/race.js";
 import { createShell, advanceShell } from "../src/simulation/items.js";
 import { FIXED_DT, drive } from "../src/simulation/physics.js";
 
-test("the eight-place valley stays near one minute with no boundary impacts", () => {
+test("the faster AI clears the eight-place valley with no boundary impacts", () => {
   assert.ok(COURSE_LENGTH > 1530 && COURSE_LENGTH < 1580);
-  const racer = initializeRacer({ s: 0, x: 0, skill: 0.9, drift: 0 });
+  const racer = initializeRacer({ s: 0, x: 0, skill: 0.9, drift: 0, isPlayer: false, isBot: true });
   const entries = [0];
   let section = 0,
     wallHits = 0;
@@ -41,9 +41,9 @@ test("the eight-place valley stays near one minute with no boundary impacts", ()
   }
   assert.equal(entries.length, SECTIONS.length + 1);
   assert.equal(wallHits, 0);
-  assert.ok(entries.at(-1) >= 55 && entries.at(-1) <= 65);
+  assert.ok(entries.at(-1) >= 44 && entries.at(-1) <= 53);
   for (let i = 1; i < entries.length; i++)
-    assert.ok(entries[i] - entries[i - 1] >= 4.5 && entries[i] - entries[i - 1] <= 13);
+    assert.ok(entries[i] - entries[i - 1] >= 3.5 && entries[i] - entries[i - 1] <= 13);
 });
 
 test("the grass shortcut has usable width, coherent ground and the same ordered lap gates", () => {

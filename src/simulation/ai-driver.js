@@ -1,0 +1,147 @@
+import {
+  frameAt,
+  trackT,
+  collisionBounds,
+  laneWidth,
+  metresToProgress,
+  WORLD_PER_UNIT,
+  TRACK,
+  activeTrack,
+  BOOST_PADS,
+  RAMPS,
+} from "../track/track.js";
+import { progressDelta } from "./race.js";
+import { cartAt, trafficAt } from "./hazards.js";
+
+export function botInput(state, index, elapsed, rivals = [], items = {}) {
+  const carrySpeed = activeTrack.movingSurfaceAt(trackT(state.s))?.speed || 0;
+  const aheadMetres = 12 + (state.speed + carrySpeed * 3.6) * 0.09;
+  const aheadT = trackT(state.s + metresToProgress(aheadMetres));
+  const lookahead = frameAt(aheadT);
+  const bounds = collisionBounds(aheadT);
+  const current = frameAt(trackT(state.s));
+  const skill = state.skill ?? 0.95;
+  let lane = (index % 2 ? 1 : -1) * 0.8;
+  // Seek the closest useful pickup or boost, without making a last-second dive.
+  let bestGap = 48;
+  for (const pad of BOOST_PADS) {
+    const gap = progressDelta(pad.t * TRACK, state.s, TRACK) * WORLD_PER_UNIT;
+    if (
+      gap > 0 &&
+      gap < bestGap &&
+      Math.abs(pad.offset) < 5 &&
+      Math.abs(pad.offset - laneWidth(state.x)) < gap * 0.3 + 1
+    ) {
+      bestGap = gap;
+      lane = pad.offset;
+    }
+  }
+  if (!state.item)
+    for (const box of items.boxes || []) {
+      if (!box.active) continue;
+      const gap = progressDelta(box.s, state.s, TRACK) * WORLD_PER_UNIT;
+      const offset = laneWidth(box.x);
+      if (
+        gap > 0 &&
+        gap < bestGap &&
+        Math.abs(offset) < 5 &&
+        Math.abs(offset - laneWidth(state.x)) < gap * 0.3 + 1
+      ) {
+        bestGap = gap;
+        lane = offset;
+      }
+    }
+  // Leave room to pass a slower kart rather than continually pushing it.
+  for (const rival of rivals) {
+    if (rival === state || rival.finished) continue;
+    const gap = progressDelta(rival.s, state.s, TRACK) * WORLD_PER_UNIT;
+    if (
+      gap > 0 &&
+      gap < 22 &&
+      Math.abs(laneWidth(rival.x) - lane) < 2.5 &&
+      rival.speed < state.speed + 9
+    )
+      lane = rival.x > 0 ? -3.25 : 3.25;
+  }
+  for (const danger of [...(items.bananas || []), ...(items.projectiles || [])]) {
+    if (danger.owner === state && danger.grace > 0) continue;
+    const gap = progressDelta(danger.s, state.s, TRACK) * WORLD_PER_UNIT;
+    if (gap > -2 && gap < 24 && Math.abs(laneWidth(danger.x) - lane) < 2.8)
+      lane = danger.x > 0 ? -3.4 : 3.4;
+  }
+  const cart = cartAt(elapsed);
+  const cartGap = progressDelta(cart.s, state.s, TRACK) * WORLD_PER_UNIT;
+  if (activeTrack.course.hazard.enabled !== false && cartGap > -6 && cartGap < 40)
+    lane = activeTrack.course.hazard.safeLane;
+  for (const pendulum of activeTrack.course.pendulums || []) {
+    const gap =
+      progressDelta(
+        activeTrack.sectorT(pendulum.section, pendulum.fraction) * TRACK,
+        state.s,
+        TRACK,
+      ) * WORLD_PER_UNIT;
+    if (gap > -12 && gap < 60) lane = -7.9;
+  }
+  const traffic = activeTrack.course.traffic;
+  if (
+    traffic &&
+    trackT(state.s) >= activeTrack.sectorT(traffic.section, traffic.startFraction) - 0.03
+  ) {
+    for (const vehicle of trafficAt(elapsed)) {
+      const gap = progressDelta(vehicle.s, state.s, TRACK) * WORLD_PER_UNIT;
+      if (vehicle.active && gap > -5 && gap < 42 && Math.abs(lane - vehicle.lane) < 3)
+        lane = traffic.clearLane;
+    }
+  }
+  lane = Math.max(bounds.left + 1.1, Math.min(bounds.right - 1.1, lane));
+  const target = lookahead.p.clone().addScaledVector(lookahead.right, lane);
+  const desired = Math.atan2(-(target.x - state.worldPos.x), -(target.z - state.worldPos.z));
+  const headingError = Math.atan2(Math.sin(desired - state.yaw), Math.cos(desired - state.yaw));
+  // Preview several points rather than averaging a whole S-bend into a
+  // straight. Brake early enough to reach the next corner's grip budget.
+  let cruise = state.boost > 0 || state.star > 0 ? 143 : 117 + skill * 7;
+  for (const distance of [0, 12, 28, 48]) {
+    const preview = frameAt(trackT(state.s + metresToProgress(distance)));
+    const radius = 1 / Math.max(0.003, Math.abs(preview.curvature));
+    const cornerSpeed = Math.max(9, Math.sqrt((22 + skill * 2) * radius) - carrySpeed);
+    cruise = Math.min(cruise, Math.sqrt(cornerSpeed ** 2 + 2 * 22 * distance) * 3.6);
+  }
+  const headingCorrection = Math.max(-1, Math.min(1, -headingError * 3.1));
+  // Tap a trick just before a ramp; do not hold the drift button through flight.
+  const rampAhead = RAMPS.some((ramp) => {
+    const gap = progressDelta(ramp.t * TRACK, state.s, TRACK) * WORLD_PER_UNIT;
+    return (
+      gap > 0 &&
+      gap < Math.max(1.5, (state.speed / 3.6) * 0.12) &&
+      (ramp.width == null || Math.abs(laneWidth(state.x) - (ramp.offset || 0)) < ramp.width / 2)
+    );
+  });
+  return {
+    throttle: state.speed < cruise + 1,
+    brake: state.speed > cruise + 5,
+    steer: headingCorrection,
+    drift: state.grounded && rampAhead && !state.trickHeld && Math.abs(current.curvature) < 0.018,
+  };
+}
+
+/** Save speed items for a controllable exit and aim weapons at nearby rivals. */
+export function shouldUseBotItem(state, rivals) {
+  if (!state.item || state.finished || state.spin > 0 || !state.grounded) return false;
+  if (state.item === "star") return state.star <= 0;
+  if (state.item === "mushroom") {
+    const preview = frameAt(trackT(state.s + metresToProgress(24)));
+    return state.boost <= 0 && Math.abs(preview.curvature) < 0.025 && Math.abs(state.x) < 0.7;
+  }
+  return rivals.some((rival) => {
+    if (rival === state || rival.finished || rival.star > 0 || rival.invulnerable > 0) return false;
+    const gap = (rival.s - state.s) * WORLD_PER_UNIT;
+    if (state.item === "banana") return gap < 0 && gap > -35 && Math.abs(rival.x - state.x) < 0.5;
+    if (state.item === "red") return gap > 0 && gap < 180;
+    return (
+      gap > 0 &&
+      gap < 65 &&
+      Math.abs(rival.x - state.x) < 0.3 &&
+      Math.abs(frameAt(trackT(state.s)).curvature) < 0.012
+    );
+  });
+}

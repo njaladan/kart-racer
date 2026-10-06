@@ -46,6 +46,7 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
     uniforms: {
       source: { value: target.texture },
       bloom: { value: bloomA.texture },
+      boostBlur: { value: 0 },
       bloomStrength: { value: night ? 0.18 : 0.08 },
       gradeTint: {
         value: new THREE.Vector3(
@@ -61,8 +62,19 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
       },
     },
     vertexShader,
-    fragmentShader: `uniform sampler2D source,bloom;uniform float bloomStrength;uniform vec3 gradeTint;varying vec2 vUv;
-      void main(){vec3 c=texture2D(source,vUv).rgb+texture2D(bloom,vUv).rgb*bloomStrength;
+    fragmentShader: `uniform sampler2D source,bloom;uniform float bloomStrength,boostBlur;uniform vec3 gradeTint;varying vec2 vUv;
+      void main(){
+        vec3 c=texture2D(source,vUv).rgb;
+        // Four extra taps in the existing grade pass; no history or new targets.
+        // The center stays sharp and Performance bypasses this pass entirely.
+        if(boostBlur>.001){
+          vec2 radial=vUv-vec2(.5,.54);
+          float edge=smoothstep(.18,.6,length(radial));
+          vec2 stepUv=radial*boostBlur*edge*.012;
+          c=c*.4;
+          for(int i=1;i<=4;i++) c+=texture2D(source,clamp(vUv-stepUv*float(i),vec2(0.),vec2(1.))).rgb*.15;
+        }
+        c+=texture2D(bloom,vUv).rgb*bloomStrength;
         c*=gradeTint;gl_FragColor=vec4(c,1.);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
@@ -79,6 +91,9 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
     renderer.render(fullscreen, camera);
   }
   return {
+    setBoostMotion(strength, kick) {
+      grade.uniforms.boostBlur.value = strength + kick * 0.35;
+    },
     setOptions(preferences) {
       bloomEnabled = preferences.bloom;
     },

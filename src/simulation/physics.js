@@ -2,6 +2,7 @@
 // are used for surface queries and race progress, never to steer the vehicle.
 export const FIXED_DT = 1 / 120;
 export const MAX_SPEED = 112; // km/h
+export const AI_MAX_SPEED = 126; // tougher rivals still obey traction and braking
 export const MAX_BOOST_SPEED = 144; // km/h
 export const FULL_SPEED_TURN_RADIUS = 22; // metres, also maintained during boosts
 const AI_DRIFT_TURN_RADIUS = 17; // metres
@@ -117,7 +118,7 @@ export function drive(state, input, surface, dt) {
     ? steeringTarget === 0 || steeringTarget * state.steering < 0
       ? 26
       : 18
-    : 10;
+    : 18;
   state.steering += (steeringTarget - state.steering) * (1 - Math.exp(-steeringResponse * dt));
   // Entry is a deliberate press while steering at racing speed. Holding the
   // button through a failed entry, landing or collision cannot restart a slide.
@@ -146,7 +147,8 @@ export function drive(state, input, surface, dt) {
   const previousTravelYaw = Math.atan2(-state.vx, -state.vz);
   const boosted = state.boost > 0 || state.star > 0;
   if (state.grounded) {
-    const limit = (boosted ? MAX_BOOST_SPEED : MAX_SPEED) / 3.6;
+    const isBot = state.isBot === true;
+    const limit = (boosted ? MAX_BOOST_SPEED : isBot ? AI_MAX_SPEED : MAX_SPEED) / 3.6;
     // Engine/brake forces act on travel speed. Using only its forward component
     // lets a sideways kart accelerate past the limit and makes braking uneven.
     const travelSpeed = Math.hypot(forward, lateral);
@@ -163,7 +165,9 @@ export function drive(state, input, surface, dt) {
             : 0;
     } else if (input.throttle) {
       acceleration =
-        forward < 0 ? 24 : (boosted ? 27 : 19) * Math.max(0, 1 - (travelSpeed / limit) ** 3);
+        forward < 0
+          ? 24
+          : (boosted ? 27 : isBot ? 23 : 19) * Math.max(0, 1 - (travelSpeed / limit) ** 3);
       state.reverseHold = 0;
     } else state.reverseHold = 0;
     if (boosted && !input.brake)
@@ -223,7 +227,7 @@ export function drive(state, input, surface, dt) {
         targetYaw += (-state.driftDirection * speed * curvature - targetYaw) * entry;
       }
     } else {
-      // Keep the existing AI curve so its learned lines and race pacing hold.
+      // Responsive AI steering preserves its physical turn-radius limits.
       const radius =
         AI_LOW_SPEED_TURN_RADIUS +
         ((sliding ? AI_DRIFT_TURN_RADIUS : FULL_SPEED_TURN_RADIUS) - AI_LOW_SPEED_TURN_RADIUS) *
@@ -238,7 +242,7 @@ export function drive(state, input, surface, dt) {
         : steeringTarget === 0 || targetYaw * state.yawRate < 0
           ? 26
           : 12
-      : 8;
+      : 14;
     state.yawRate += (targetYaw - state.yawRate) * (1 - Math.exp(-yawResponse * dt));
     const grip =
       surface.offroad && !boosted

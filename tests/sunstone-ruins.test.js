@@ -28,7 +28,7 @@ test("Sunstone expedition connects eight places and a buried temple with continu
 
 test("all five drivers finish the rebuilt adventure without wall hits", () => {
   for (let i = 0; i < 5; i++) {
-    const r = initializeRacer({ s: 0, x: 0, skill: 0.9 - i * 0.045 });
+    const r = initializeRacer({ s: 0, x: 0, skill: 0.9 - i * 0.045, isPlayer: false, isBot: true });
     let hits = 0;
     for (let k = 1; k < 120 * 240 && !r.finished; k++) {
       const e = advanceRacer(r, botInput(r, i, k / 120), 1 / 120, k / 120);
@@ -36,7 +36,7 @@ test("all five drivers finish the rebuilt adventure without wall hits", () => {
     }
     assert.ok(r.finished);
     assert.equal(hits, 0);
-    assert.ok(r.finishTime > 190 && r.finishTime < 215);
+    assert.ok(r.finishTime > 154 && r.finishTime < 183);
   }
 });
 

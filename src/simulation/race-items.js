@@ -152,5 +152,5 @@ export function createRaceItems({
       list.length = 0;
     }
   }
-  return { projectiles, bananas, setItem, fire: fireItem, step, reset };
+  return { boxes, projectiles, bananas, setItem, fire: fireItem, step, reset };
 }

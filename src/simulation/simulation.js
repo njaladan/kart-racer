@@ -1,3 +1,4 @@
+export { botInput } from "./ai-driver.js";
 import {
   solarBoostAt,
   scaleAt,
@@ -25,7 +26,6 @@ import {
   TRACK,
   yawFor,
   activeTrack,
-  metresToProgress,
   collisionBounds,
   RAMPS,
   BOOST_PADS,
@@ -40,7 +40,7 @@ import {
   advanceRaceProgress,
   CHECKPOINT_COUNT,
 } from "./race.js";
-import { cartAt, cartContact, trafficAt, trafficContact } from "./hazards.js";
+import { cartContact, trafficContact } from "./hazards.js";
 
 export function initializeRacer(state) {
   resetMotion(state);
@@ -89,69 +89,6 @@ export function recoverRacer(state) {
   state.invulnerable = 1.5;
   state.visualOffset?.set(0, 0, 0);
   state.visualYawOffset = 0;
-}
-export function botInput(state, index, elapsed, rivals = []) {
-  const carrySpeed = activeTrack.movingSurfaceAt(trackT(state.s))?.speed || 0;
-  const aheadMetres = 12 + (state.speed + carrySpeed * 3.6) * 0.1;
-  const aheadT = trackT(state.s + metresToProgress(aheadMetres));
-  const lookahead = frameAt(aheadT);
-  const bounds = collisionBounds(aheadT);
-  let lane = (index % 2 ? 1 : -1) * (1.2 + Math.sin(elapsed * 0.35 + index) * 0.4);
-  // Leave room to pass a slower kart rather than continually pushing it.
-  for (const rival of rivals) {
-    if (rival === state || rival.finished) continue;
-    const gap = progressDelta(rival.s, state.s, TRACK) * WORLD_PER_UNIT;
-    if (
-      gap > 0 &&
-      gap < 13 &&
-      Math.abs(laneWidth(rival.x) - lane) < 2.5 &&
-      rival.speed < state.speed + 5
-    )
-      lane = rival.x > 0 ? -3.25 : 3.25;
-  }
-  const cart = cartAt(elapsed);
-  const cartGap = progressDelta(cart.s, state.s, TRACK) * WORLD_PER_UNIT;
-  if (activeTrack.course.hazard.enabled !== false && cartGap > -6 && cartGap < 40)
-    lane = activeTrack.course.hazard.safeLane;
-  for (const pendulum of activeTrack.course.pendulums || []) {
-    const gap =
-      progressDelta(
-        activeTrack.sectorT(pendulum.section, pendulum.fraction) * TRACK,
-        state.s,
-        TRACK,
-      ) * WORLD_PER_UNIT;
-    if (gap > -6 && gap < 45) lane = -7.4;
-  }
-  const traffic = activeTrack.course.traffic;
-  if (
-    traffic &&
-    trackT(state.s) >= activeTrack.sectorT(traffic.section, traffic.startFraction) - 0.03
-  ) {
-    for (const vehicle of trafficAt(elapsed)) {
-      const gap = progressDelta(vehicle.s, state.s, TRACK) * WORLD_PER_UNIT;
-      if (vehicle.active && gap > -5 && gap < 42 && Math.abs(lane - vehicle.lane) < 3)
-        lane = traffic.clearLane;
-    }
-  }
-  lane = Math.max(bounds.left + 1.1, Math.min(bounds.right - 1.1, lane));
-  const target = lookahead.p.clone().addScaledVector(lookahead.right, lane);
-  const desired = Math.atan2(-(target.x - state.worldPos.x), -(target.z - state.worldPos.z));
-  const headingError = Math.atan2(Math.sin(desired - state.yaw), Math.cos(desired - state.yaw));
-  const curvature = Math.abs(
-    Math.atan2(
-      Math.sin(yawFor(lookahead.tangent) - yawFor(frameAt(trackT(state.s)).tangent)),
-      Math.cos(yawFor(lookahead.tangent) - yawFor(frameAt(trackT(state.s)).tangent)),
-    ),
-  );
-  const radius = aheadMetres / Math.max(0.04, curvature);
-  const safeCornerSpeed = Math.max(24, (Math.sqrt(18 * radius) - carrySpeed) * 3.6);
-  const cruise = Math.min(89.5 + (state.skill || 0.8) * 8, safeCornerSpeed);
-  return {
-    throttle: state.speed < cruise || state.boost > 0,
-    brake: state.speed > cruise + 8,
-    steer: Math.max(-1, Math.min(1, -headingError * 2.8)),
-    drift: false,
-  };
 }
 export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLaps = 3) {
   if (state.finished) return {};

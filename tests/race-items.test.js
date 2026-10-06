@@ -30,6 +30,9 @@ test("pickups go to one racer, respect held inventory, and respawn on the race c
     items,
     racers: [player],
   } = setup([box]);
+  // Place the pickup at the player's grid slot, independent of grid order.
+  box.s = player.s;
+  box.x = player.x;
   items.step(0.01, 0);
   assert.ok(player.item);
   assert.equal(box.active, false);

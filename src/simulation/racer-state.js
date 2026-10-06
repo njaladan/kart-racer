@@ -11,6 +11,7 @@ export function createRacerState(configuration = {}) {
     name: "RACER",
     color: "#ffffff",
     isPlayer: false,
+    isBot: false,
     s: 0,
     x: 0,
     speed: 0,

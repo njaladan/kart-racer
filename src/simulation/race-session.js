@@ -1,3 +1,4 @@
+import { shouldUseBotItem } from "./ai-driver.js";
 import { advanceRacer, botInput, recoverRacer } from "./simulation.js";
 import { cancelDrift } from "./physics.js";
 import { ranking } from "./race.js";
@@ -24,6 +25,10 @@ export function createRaceSession({
   onStep = () => {},
 }) {
   const [player, ...bots] = racers;
+  // Human-controlled multiplayer karts must never inherit the rival engine.
+  racers.forEach((racer, index) => {
+    racer.isBot = index > 0 && !getRacerInput;
+  });
   const state = {
     elapsed: 0,
     raceTime: 0,
@@ -124,14 +129,14 @@ export function createRaceSession({
       if (bot.finished) return;
       moveRacer(
         bot,
-        getRacerInput ? getRacerInput(bot) : botInput(bot, index, state.raceTime, racers),
+        getRacerInput ? getRacerInput(bot) : botInput(bot, index, state.raceTime, racers, items),
         dt,
       );
       if (getRacerInput) return;
       bot.cooldown -= dt;
-      if (bot.item && bot.cooldown <= 0) {
+      if (bot.cooldown <= 0 && shouldUseBotItem(bot, racers)) {
         items.fire(bot);
-        bot.cooldown = 5 + Math.random() * 6;
+        bot.cooldown = bot.item === "mushroom" ? 1.1 : 0.65;
       }
     });
     resolveRacerContacts(racers, {

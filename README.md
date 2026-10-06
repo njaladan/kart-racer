@@ -1,6 +1,6 @@
 # Turbo Trail
 
-A browser kart racer built with Three.js. Race five rivals over three laps, drift into mini-turbos, launch off ramps, and use items to take the lead.
+A browser kart racer built with Three.js. Start at the back and race five fast rivals over three laps, drift into mini-turbos, launch off ramps, and use items to take the lead. Rivals plan corners, pass slower karts, seek boosts and pickups, perform ramp tricks, and time their weapons.
 
 Twelve playable courses include moving hazards, boost pads, and shortcuts: **Windmill Wilds**, **Neon Harbor**, **Sunstone Ruins**, **Frostpeak Festival**, **Clockwork Citadel**, **Paper Revel**, **Tempest Causeway**, **Pocket Pantry**, **Railstorm Express**, **Metronome Hall**, **Pelagic Glasshouse**, and **Emberwing Observatory**. Supports keyboard, touch and gamepad controls.
 
@@ -68,6 +68,8 @@ For friends on your network, share this machine's reachable address and port 517
 Touch controls appear on supported devices; drag on the game canvas to steer.
 
 Enter a drift with a fresh drift press while turning at speed. Steer into the bend to tighten the line and charge faster; countersteer to widen it. One blue diamond beside each rear wheel means a mini-turbo is ready; two orange diamonds mean the longer turbo is ready. Release to regain grip and boost out of the corner. Charge requires sustained turning with the course bend; straight-road weaving earns nothing. taps, braking, wall scrapes, jumps and rough ground interrupt it. Let the tires recover and any mini-turbo finish before pressing again. Existing boosts and stars do not build drift charge.
+
+Boosts punch the chase camera backward, widen the view, and throw radial action lines around the scene. Balanced and higher add edge-only radial blur in the existing finishing pass; Performance keeps the action lines and camera effects. Turn off **Camera motion and speed streaks** in settings to disable boost camera motion, action lines and blur.
 
 ## Tests
 

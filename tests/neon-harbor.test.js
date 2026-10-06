@@ -43,7 +43,7 @@ test("the downtown service cut and boulevard boosts use their authored lanes", (
 
 test("an AI racer completes the three lap course without wall or traffic impacts", () => {
   selectCourse(course);
-  const racer = initializeRacer({ s: 0, x: 0, skill: 0.9, drift: 0 });
+  const racer = initializeRacer({ s: 0, x: 0, skill: 0.9, drift: 0, isPlayer: false, isBot: true });
   const lapTimes = [];
   let lastLap = 0;
   let impacts = 0;
@@ -60,7 +60,7 @@ test("an AI racer completes the three lap course without wall or traffic impacts
   assert.ok(racer.finished && racer.finishTime < 220);
   assert.equal(impacts, 0);
   assert.equal(lapTimes.length, 3);
-  for (const lapTime of lapTimes) assert.ok(lapTime >= 65 && lapTime <= 78);
+  for (const lapTime of lapTimes) assert.ok(lapTime >= 53 && lapTime <= 64);
 });
 
 test("cargo shuttle warnings and contact leave the left lane open", () => {

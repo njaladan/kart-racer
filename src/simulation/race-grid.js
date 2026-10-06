@@ -3,6 +3,12 @@ import { resetMotion } from "./physics.js";
 import { resetRaceProgress } from "./race.js";
 import { TRACK, frameAt, trackT, laneWidth, poseAt, yawFor } from "../track/track.js";
 
+// Roster order keeps the local player first; grid order puts them last.
+function gridPosition(index, count) {
+  const slot = index === 0 ? count - 1 : index - 1;
+  return { s: -slot * 18, x: slot % 2 === 0 ? -0.34 : 0.34 };
+}
+
 function placeRacer(racer) {
   racer.worldPos.copy(poseAt(racer.s, laneWidth(racer.x), 0.065).p);
   racer.renderFrom.copy(racer.worldPos);
@@ -17,9 +23,9 @@ export function createRaceGrid(roster) {
       color: entry.color,
       racerId: entry.id,
       isPlayer: index === 0,
-      s: index === 0 ? 0 : [-18, -30, -43, -55, -70][index - 1],
-      x: index === 0 ? 0 : [-0.35, 0.32, -0.12, 0.43, -0.42][index - 1],
-      skill: index === 0 ? 0.8 : [0.91, 0.86, 0.81, 0.77, 0.72][index - 1],
+      isBot: index > 0 && !entry.playerId,
+      ...gridPosition(index, roster.length),
+      skill: index === 0 ? 0.8 : [1, 0.98, 0.96, 0.94, 0.92][index - 1],
     }),
   );
   racers.forEach(placeRacer);
@@ -30,8 +36,7 @@ export function resetRaceGrid(racers) {
   racers.forEach((racer, index) => {
     const botIndex = index - 1;
     Object.assign(racer, {
-      s: index === 0 ? 0 : -46 - Math.floor(botIndex / 2) * 60 - (botIndex % 2) * 5,
-      x: index === 0 ? 0 : botIndex % 2 === 0 ? -0.4 : 0.4,
+      ...gridPosition(index, racers.length),
       speed: 0,
       lap: 0,
       boost: 0,
@@ -47,7 +52,7 @@ export function resetRaceGrid(racers) {
       finishTime: Infinity,
       finishDelay: 0,
       recoveryCount: 0,
-      cooldown: index === 0 ? 0 : 4 + botIndex * 1.5,
+      cooldown: index === 0 ? 0 : 0.6 + botIndex * 0.15,
     });
     racer.prevS = racer.s;
     resetMotion(racer);

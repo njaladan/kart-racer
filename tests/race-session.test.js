@@ -165,3 +165,27 @@ test("hits cancel trick rewards while protected racers retain motion", () => {
   assert.equal(player.invulnerable, 1.5);
   assert.deepEqual(player.renderFrom, player.worldPos);
 });
+
+test("the player starts last on creation, begin and every restart for each roster size", () => {
+  selectCourse(DEFAULT_COURSE);
+  for (let count = 2; count <= RACERS.length; count++) {
+    const racers = createRaceGrid(RACERS.slice(0, count));
+    const session = createRaceSession({
+      racers,
+      items: { reset() {} },
+      getPlayerInput: () => ({}),
+    });
+    assert.equal(session.place(), count);
+    const positions = racers.map((racer) => racer.s);
+    for (let restart = 0; restart < 3; restart++) {
+      racers[0].s = 10000;
+      session.begin();
+      assert.equal(session.place(), count);
+      assert.deepEqual(
+        racers.map((racer) => racer.s),
+        positions,
+      );
+      assert.ok(racers.every((racer) => racer.s <= 0));
+    }
+  }
+});
