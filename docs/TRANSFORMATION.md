@@ -68,7 +68,29 @@ Foley polish (`33bdfd2`): different original engine registers for the six driver
 ## Latest visual milestones
 
 - `fd52e91`: Neon wet pavement, authored road reflection atlases and bounded Ultra live reflections; Sunstone carved masonry, temple dressing and regenerated lighting. Both README images refreshed.
-- Sunstone flow/focus (this milestone): four shared shader sandfalls replace waving flat curtains; three depth-tested cones join banked solar-engine cores to the actual moving boost pads, with soft receiving footprints. All animation follows the race clock and reuses fixed resources. No new lights or static-bake changes. Six Sunstone checks pass, including five AI races with zero wall hits and beam/pad endpoints after batching; all twelve scenes assemble with finite geometry. Screenshot-free Chromium GPU readback verifies three compiled shaders, visible motion, identical frozen frames and exact rewind. Changed-file lint and formatting pass.
+- `8940ae7`: Sunstone flow/focus: four shared shader sandfalls replace waving flat curtains; three depth-tested cones join banked solar-engine cores to the actual moving boost pads, with soft receiving footprints. All animation follows the race clock and reuses fixed resources. No new lights or static-bake changes. Six Sunstone checks pass, including five AI races with zero wall hits and beam/pad endpoints after batching; all twelve scenes assemble with finite geometry. Screenshot-free Chromium GPU readback verifies three compiled shaders, visible motion, identical frozen frames and exact rewind. Changed-file lint and formatting pass.
+
+## All twelve environmental pass
+
+This milestone follows the user's clarification that the emphasis is environment,
+particularly all kinds of particles. Every course gains its own local weather,
+emissions and surface motion: 81 fields, twelve analytic shapes, five motion
+families, race-clock/reduced-motion behavior, density scaling and spatial culling.
+Steam follows the actual kettle/kiosk; soap particles stay over the sink; train
+exhaust follows the moving locomotive; sea and caldera emissions start at their
+actual water/magma levels. New source anchors survive static batching. Six worlds
+also gain original animated roadside stories, with whole-route motion-envelope
+clearance. No course music or new downloaded assets. See `docs/environment-effects.md`
+for the course-by-course changes and reproducible screenshot-free browser check.
+
+Sixteen focused Node checks pass, including all twelve scenes, resources, source
+attachment/culling, motion clearance and lighting/asset hashes. All twelve palette
+and surface shader checks pass in Chromium with exact frozen/rewound GPU readback
+and zero shader/page errors. All twelve lighting bakes are regenerated at their
+existing resolutions/samples; each source hash matches the final exported scene.
+Brief textured in-game checks in Neon, Sunstone, Pantry and Railstorm render with
+zero page/shader errors. Lint and formatting pass. Existing README driving images remain; no new captures
+were made in this pass. Pulled main before work; commit and push this milestone.
 
 ## Exact next steps
 1. Human driving-camera full laps and multiplayer visual assessment remain partial; the user will do deeper playtesting. Use those observations to target the next course refinement.

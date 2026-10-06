@@ -132,6 +132,7 @@ export function buildRailstorm(context) {
   }
   // The locomotive leads a separate visible parallel track during the chase.
   const locomotive = new THREE.Group();
+  locomotive.userData.environmentSource = "express-boiler";
   scenery.add(locomotive);
   box(iron, locomotive, [0, 3.5, 0], [13, 7, 31]);
   mesh(cylinder, red, locomotive, [0, 8, -4], [5, 19, 5]).rotation.x = Math.PI / 2;
@@ -149,16 +150,6 @@ export function buildRailstorm(context) {
     const t = track.sectorT(1, ((time * 9) % 180) / 180);
     w.align(locomotive, track.poseAt(t * track.TRACK, 32, -2));
   });
-  const steam = mat("#dae1df", "stone", { transparent: true, opacity: 0.15, depthWrite: false });
-  for (let i = 0; i < 8; i++) {
-    const puff = mesh(sphere, steam, locomotive, [0, 22, -8], [2, 2, 2]);
-    puff.castShadow = false;
-    motion(puff, (time) => {
-      const q = (time * 0.22 + i / 8) % 1;
-      puff.position.set(Math.sin(time + i) * 3, 22 + q * 28, -8 + q * 16);
-      puff.scale.setScalar(1 + q * 5);
-    });
-  }
   w.sweep(1, 0, 1, 20, 44, stone, -6);
   for (const offset of [27.5, 36.5]) w.sweep(1, 0, 1, offset - 0.2, offset + 0.2, iron, -2.7);
   // A silver-green river winds beneath the freight viaduct, bounded by gorge walls.

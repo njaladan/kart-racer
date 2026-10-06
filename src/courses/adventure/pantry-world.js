@@ -250,11 +250,11 @@ export function buildPantry(context) {
     }
   }
   const kettle = at(0, 0.48, 31);
+  kettle.userData.environmentSource = "breakfast-kettle";
   mesh(sphere, teal, kettle, [0, 10, 0], [12, 10, 12]);
   mesh(cylinder, cream, kettle, [0, 20, 0], [5, 2, 5]);
   mesh(torus, dark, kettle, [0, 21, 0], [10, 10, 10]);
   tube(kettle, [8, 9, 0], [18, 19, 0], 2.5, silver);
-  steam(kettle, [18, 20, 0], 1.5, 8);
   // Sloping approach is surrounded by pantry steps; it is not a floating ramp.
   for (let i = 0; i < 10; i++) {
     const g = at(1, (i + 0.5) / 10, i % 2 ? 29 : -29);
@@ -394,6 +394,7 @@ export function buildPantry(context) {
   }
   // The dish rack and sink are monumental but keep the racing surface visible.
   const sink = at(4, 0.45, 48);
+  sink.userData.environmentSource = "soap-basin";
   box(silver, sink, [0, -1.5, 0], [65, 3, 85]);
   for (const side of [-1, 1]) box(porcelain, sink, [side * 32, 4, 0], [3, 10, 88]);
   for (const z of [-42, 42]) box(porcelain, sink, [0, 4, z], [65, 10, 3]);

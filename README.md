@@ -6,6 +6,8 @@ Twelve playable courses include moving hazards, boost pads, and shortcuts: **Win
 
 Course edges now come from meadows, dunes, snow, kitchen shelves, reef beds and exposed decks. Most boundaries are open: explore rough shoulders, or fall from a ledge and recover automatically onto the course. [Pathway designs for all twelve courses](docs/pathway-design.md).
 
+Every course has its own environmental layers: petals and fireflies, rain and sea spray, sand gusts, powder snow, steam and sparks, confetti, flour, bubbles, plankton and volcanic embers. Animated surface lighting and working roadside details give each world motion. [Environment effects across all twelve courses](docs/environment-effects.md).
+
 Choose from six distinct **SuperTuxKart** racers: Tux (penguin), Nolok (reptile),
 Pidgin (bird), Kiki (robot), Konqi (dragon), and Wilber (mascot). Each has its
 own vehicle. Choose your racer on the starting screen; the other five form

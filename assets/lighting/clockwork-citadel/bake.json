@@ -18,16 +18,16 @@
   "samples": 12,
   "radius": 22.0,
   "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
-  "sourceSceneSha256": "1dd31ab901d3facd57239b94b5cc5a3162d3d41735c3d906a6c3cb048fbe82f3",
-  "triangles": 191578,
+  "sourceSceneSha256": "fd50eaf28622f716195b9e24859a9e2d58534e3cfbbd89e46cc14bb7bac5a292",
+  "triangles": 205530,
   "lights": 100,
   "outputs": [
     {
       "file": "indirect.png",
       "width": 512,
       "height": 512,
-      "bytes": 179922,
-      "sha256": "a3aeb8b6676499bb6289b1165ee103d960bddebb4a79531ff401ab6a81e26f85"
+      "bytes": 181296,
+      "sha256": "3d728b2ffad7068098c0be1c2c466d7e93f321eb9174a53973ea1eb449134040"
     },
     {
       "file": "height.png",

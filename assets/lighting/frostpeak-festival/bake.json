@@ -18,23 +18,23 @@
   "samples": 12,
   "radius": 22.0,
   "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded.",
-  "sourceSceneSha256": "b89bb0c10d5a06bc39f4012d9ab7589f8211bfbc4f815b2673dd5e1802b8cdce",
-  "triangles": 1639559,
+  "sourceSceneSha256": "5a3bbcb48a8ff5f8cb0790bc0b677d377b6f56675aef3f8ed93dc1edc3169ffe",
+  "triangles": 1635484,
   "lights": 115,
   "outputs": [
     {
       "file": "indirect.png",
       "width": 768,
       "height": 768,
-      "bytes": 529932,
-      "sha256": "029be2cfc909e729b98b28d11aab59207249ecc3a723c8604e612e9804217dc0"
+      "bytes": 512058,
+      "sha256": "f9083b6b5e51a992ec38d003df4a4b84e39c03d09aff4a2ebfa3325402965260"
     },
     {
       "file": "height.png",
       "width": 768,
       "height": 768,
-      "bytes": 487320,
-      "sha256": "12e0c3a4c5968016942636cab67131991b9f97907679335a68272a900b5b74fd"
+      "bytes": 492544,
+      "sha256": "7f5024a7f515a4bb4b78bba0894e9a39e0ab26c83e821bfcc4ed0774ae85bfdd"
     }
   ]
 }

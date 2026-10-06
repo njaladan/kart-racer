@@ -122,7 +122,7 @@ export function batchScenery(scenery, animated = []) {
   // Remove empty source containers left after flattening static scenery.
   const prune = (group) => {
     for (const child of [...group.children]) {
-      if (child.isGroup && !protectedGroups.includes(child)) {
+      if (child.isGroup && !protectedGroups.includes(child) && !child.userData.environmentSource) {
         prune(child);
         if (child.children.length === 0) group.remove(child);
       }

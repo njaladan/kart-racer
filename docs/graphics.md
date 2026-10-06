@@ -73,6 +73,22 @@ with no shader or page errors; GPU pixel readback confirms motion, identical
 paused frames and an exact return to the starting frame. This checks rendering
 correctness rather than player-device performance or full-lap composition.
 
+## Environmental layers across all twelve courses
+
+The [environment pass](environment-effects.md) adds 81 local particle fields with
+twelve analytic shapes and five motion families, plus course-specific surface
+movement. Rain changes wet-surface normals; ice, brass and dew have sparse glints;
+canopy shade, paper fibers, sand, caustics and lava spill move gently with race
+time. Existing texture, normal, bake and reflection hooks remain composed.
+Particle density follows graphics quality and adaptive quality. Single-pass
+quads, lifetime/near-camera fades, regional bounds and fog keep their cost bounded.
+
+Supporting roadside stories add machinery and festival motion to selected
+settings. Their full motion envelopes clear every road level. All twelve bakes
+were regenerated at their existing resolutions/samples and checked against the
+final scene-export hashes. The new effects use original procedural geometry and
+shader shapes; no downloaded particle sheets or scenery assets were added.
+
 ## Ownership and interfaces
 
 - `game-scene.js` owns renderer settings, lights and shared material construction.

@@ -12,6 +12,7 @@ import { templePaving } from "../courses/sunstone-ruins/sunstone-materials.js";
 import { kitchenRoadDetail } from "../courses/adventure/pantry-materials.js";
 import { glasshouseRoad } from "../courses/adventure/pelagic-materials.js";
 import { metalDeckDetail } from "../courses/adventure/architectural-detail.js";
+import { buildCourseEnvironment, composeCourseEnvironment } from "../courses/course-environment.js";
 
 // Shared geometry uses exactly the surface/edge queries used by karts and shells.
 export function buildCourseWorld({
@@ -35,7 +36,8 @@ export function buildCourseWorld({
       assets,
     });
     addDetailedScenery(scene, track, assets);
-    return { ...world, ...createSceneryDetailController(scene) };
+    const environment = buildCourseEnvironment({ scene, track, textures, surfaces: [mats.road] });
+    return composeCourseEnvironment(world, environment, createSceneryDetailController(scene));
   }
   const scenery = new THREE.Group();
   scene.add(scenery);
@@ -418,18 +420,23 @@ export function buildCourseWorld({
     }) || {};
   batchScenery(scenery, world.animated || []);
   addDetailedScenery(scene, track, assets);
+  const environment = buildCourseEnvironment({
+    scene,
+    track,
+    textures,
+    surfaces: Object.values(roadMaterials),
+  });
   const detail = createSceneryDetailController(scene);
-  return {
-    ...detail,
-    setQuality(tier) {
-      detail.setQuality(tier);
-      world.setQuality?.(tier);
+  return composeCourseEnvironment(
+    {
+      ...world,
+      update(time, courseState) {
+        for (const belt of conveyorTextures) belt.texture.offset.y = -(time * belt.speed) / 8;
+        warningMaterial.emissiveIntensity = cartAt(time).warning ? 1.5 + Math.sin(time * 12) : 0;
+        world.update?.(time, courseState);
+      },
     },
-    animated: world.animated || [],
-    update(time, courseState) {
-      for (const belt of conveyorTextures) belt.texture.offset.y = -(time * belt.speed) / 8;
-      warningMaterial.emissiveIntensity = cartAt(time).warning ? 1.5 + Math.sin(time * 12) : 0;
-      world.update?.(time, courseState);
-    },
-  };
+    environment,
+    detail,
+  );
 }

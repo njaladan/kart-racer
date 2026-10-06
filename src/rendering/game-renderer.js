@@ -208,6 +208,7 @@ export function createGameRenderer({
         playerLap: player.lap,
         playerT: trackT(player.s),
         running: frameState.running && !frameState.finished,
+        motionEnabled,
       });
       for (const pad of pads) {
         const pulse = 0.5 + 0.5 * Math.sin(frameState.elapsed * 5 + pad.phase);
