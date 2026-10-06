@@ -70,7 +70,7 @@ Foley polish (`33bdfd2`): different original engine registers for the six driver
 - `fd52e91`: Neon wet pavement, authored road reflection atlases and bounded Ultra live reflections; Sunstone carved masonry, temple dressing and regenerated lighting. Both README images refreshed.
 - `8940ae7`: Sunstone flow/focus: four shared shader sandfalls replace waving flat curtains; three depth-tested cones join banked solar-engine cores to the actual moving boost pads, with soft receiving footprints. All animation follows the race clock and reuses fixed resources. No new lights or static-bake changes. Six Sunstone checks pass, including five AI races with zero wall hits and beam/pad endpoints after batching; all twelve scenes assemble with finite geometry. Screenshot-free Chromium GPU readback verifies three compiled shaders, visible motion, identical frozen frames and exact rewind. Changed-file lint and formatting pass.
 
-## All twelve environmental pass
+## All twelve environmental pass (`e0c3b1c`)
 
 This milestone follows the user's clarification that the emphasis is environment,
 particularly all kinds of particles. Every course gains its own local weather,
@@ -89,12 +89,30 @@ and surface shader checks pass in Chromium with exact frozen/rewound GPU readbac
 and zero shader/page errors. All twelve lighting bakes are regenerated at their
 existing resolutions/samples; each source hash matches the final exported scene.
 Brief textured in-game checks in Neon, Sunstone, Pantry and Railstorm render with
-zero page/shader errors. Lint and formatting pass. Existing README driving images remain; no new captures
-were made in this pass. Pulled main before work; commit and push this milestone.
+zero page/shader errors. Lint and formatting pass. Existing README driving images
+remained during this pass. Pulled main before work and pushed the milestone.
+
+## Twelve-course README gallery refresh
+
+At the user's request, a Luna subagent captured and inspected a new actual
+driving-camera image for every course at 1280×720. Mid-route locations replace
+the remaining starting-line views. Clockwork now shows gallery gears and layered
+towers; Railstorm shows the freight boarding approach; Pelagic shows the reef,
+fish and giant jellyfish without the previous foreground obstruction; Emberwing
+shows the actual cannon flight over the caldera. All twelve capture seeks were
+validated, with no browser errors reported. The README descriptions and capture
+script record the selected views; the default viewport and per-course timeout
+now match the successful capture workflow. Main inspected the saved images and
+verified the gallery, without taking screenshots.
+
+Verification: all twelve README image paths are unique and match registered
+courses; every JPEG differs from its prior version, decodes successfully and
+has the expected dimensions. Capture-script lint and formatting pass, as does
+the whitespace check. Gameplay code is unchanged; no broad suite rerun.
 
 ## Exact next steps
 1. Human driving-camera full laps and multiplayer visual assessment remain partial; the user will do deeper playtesting. Use those observations to target the next course refinement.
-2. Improve partially occluded Pelagic/Railstorm gallery composition through Luna only when worth one bounded attempt. Clockwork's spiral image was refreshed in `fe15b16`. Main does not capture screenshots.
+2. All twelve README images are refreshed. Future requested gallery captures remain delegated to Luna; main does not capture screenshots.
 3. Avoid repeating broad suites without a new concern. The Clockwork milestone passed 167/167; this visual-only milestone uses the focused checks above. Device profiling remains necessary before expanding Ultra reflection cost.
 
 - `da57f65`: Screenshot milestone: bundle Luna's actual Railstorm capture and corrected Pantry capture referenced by README. Synchronous test transport confirms kart and camera positions; no page errors.

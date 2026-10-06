@@ -31,10 +31,23 @@ browser with `npx playwright install chromium`.
 
 `SCREENSHOT_CAPTURE_AT_SECONDS` sets the race timer threshold for captures that
 drive from the start (default `2`). `SCREENSHOT_CAPTURE_TIMEOUT_MS` sets the
-per-course limit (default `60000`), and `SCREENSHOT_CAPTURE_PORT` changes the
+per-course limit (default `120000`), and `SCREENSHOT_CAPTURE_PORT` changes the
 server port (default `5173`). The script selects a racer and capture position
 for each registered course; course-specific positions are configured in the
 script.
+
+`SCREENSHOT_CAPTURE_WIDTH` and `SCREENSHOT_CAPTURE_HEIGHT` set the viewport
+(defaults `1280` and `720`). The latest twelve-course gallery uses `1280` by
+`720`. For example:
+
+```sh
+SCREENSHOT_CAPTURE_WIDTH=1280 SCREENSHOT_CAPTURE_HEIGHT=720 \
+  node tools/capture-readme-screenshots.mjs
+```
+
+Rendering with software Chromium can take longer at this size. Increase
+`SCREENSHOT_CAPTURE_TIMEOUT_MS` when needed; it bounds loading, simulation
+setup and rendering together for each course.
 
 ## Capture behavior
 

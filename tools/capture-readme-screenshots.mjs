@@ -12,24 +12,24 @@ const require = createRequire(import.meta.url);
 const repoRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const screenshotDir = resolve(repoRoot, "docs/screenshots");
 const courseCaptures = [
-  { id: "windmill-wilds", racer: "tux" },
+  { id: "windmill-wilds", racer: "tux", t: 0.61, seconds: 24 },
   { id: "neon-harbor", racer: "kiki", t: 0.15, seconds: 12 },
   { id: "sunstone-ruins", racer: "nolok", t: 0.655, seconds: 12 },
-  { id: "frostpeak-festival", racer: "konqi" },
-  { id: "clockwork-citadel", racer: "kiki", t: 0.265, seconds: 18 },
-  { id: "paper-revel", racer: "pidgin", t: 0.4, seconds: 31 },
+  { id: "frostpeak-festival", racer: "konqi", t: 0.58, seconds: 22 },
+  { id: "clockwork-citadel", racer: "kiki", t: 0.376, seconds: 24 },
+  { id: "paper-revel", racer: "pidgin", t: 0.27, seconds: 31 },
   { id: "tempest-causeway", racer: "konqi", t: 0.24, seconds: 18 },
   { id: "pocket-pantry", racer: "wilber", t: 0.35, seconds: 18 },
-  { id: "railstorm-express", racer: "nolok", t: 0.4974, seconds: 18 },
+  { id: "railstorm-express", racer: "nolok", t: 0.285, seconds: 18 },
   { id: "metronome-hall", racer: "kiki", t: 0.39, seconds: 14 },
-  { id: "pelagic-glasshouse", racer: "konqi", t: 0.42, seconds: 25 },
-  { id: "emberwing-observatory", racer: "pidgin", t: 0.3785, seconds: 18 },
+  { id: "pelagic-glasshouse", racer: "konqi", t: 0.36, seconds: 25 },
+  { id: "emberwing-observatory", racer: "pidgin", t: 0.397, seconds: 18 },
 ];
 const courses = process.argv.slice(2).length ? process.argv.slice(2) : COURSES.map(({ id }) => id);
 const port = Number(process.env.SCREENSHOT_CAPTURE_PORT || 5173);
 const baseUrl = `http://127.0.0.1:${port}`;
 const captureAtSeconds = Number(process.env.SCREENSHOT_CAPTURE_AT_SECONDS || 2);
-const timeoutMs = Number(process.env.SCREENSHOT_CAPTURE_TIMEOUT_MS || 60_000);
+const timeoutMs = Number(process.env.SCREENSHOT_CAPTURE_TIMEOUT_MS || 120_000);
 
 function loadPlaywright() {
   const candidates = [
@@ -204,8 +204,8 @@ async function main() {
     });
     const context = await browser.newContext({
       viewport: {
-        width: Number(process.env.SCREENSHOT_CAPTURE_WIDTH || 960),
-        height: Number(process.env.SCREENSHOT_CAPTURE_HEIGHT || 540),
+        width: Number(process.env.SCREENSHOT_CAPTURE_WIDTH || 1280),
+        height: Number(process.env.SCREENSHOT_CAPTURE_HEIGHT || 720),
       },
       deviceScaleFactor: 1,
     });

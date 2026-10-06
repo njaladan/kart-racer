@@ -19,17 +19,17 @@ To regenerate these images, see the [screenshot capture guide](docs/screenshot-c
 
 | Windmill Wilds | Neon Harbor |
 | --- | --- |
-| ![Tux racing in Windmill Wilds](docs/screenshots/windmill-wilds.jpg) | ![Rain-slick streets in Port Lumen](docs/screenshots/neon-harbor.jpg) |
+| ![Tux races through a blossom-drifting orchard toward turquoise boost pads in Windmill Wilds](docs/screenshots/windmill-wilds.jpg) | ![Kiki enters Port Lumen's rain-slick neon market streets](docs/screenshots/neon-harbor.jpg) |
 | **Sunstone Ruins** | **Frostpeak Festival** |
-| ![Racing through the buried Sunstone temple](docs/screenshots/sunstone-ruins.jpg) | ![Racing down an open Frostpeak snow ledge](docs/screenshots/frostpeak-festival.jpg) |
+| ![Nolok drives past torch-lit sandstone carvings inside the buried Sunstone temple](docs/screenshots/sunstone-ruins.jpg) | ![Konqi approaches Frostpeak's snowy lakeside village and ski course](docs/screenshots/frostpeak-festival.jpg) |
 | **Clockwork Citadel** | **Paper Revel** |
-| ![Racing up the exposed Clockwork spiral](docs/screenshots/clockwork-citadel.jpg) | ![Racing across the exposed Paper Revel folds](docs/screenshots/paper-revel.jpg) |
+| ![Kiki races along the elevated Clockwork balcony beneath towers and turning gears](docs/screenshots/clockwork-citadel.jpg) | ![Pidgin heads beneath festival lanterns between brightly folded origami hills](docs/screenshots/paper-revel.jpg) |
 | **Tempest Causeway** | **Pocket Pantry** |
-| ![Racing across an exposed Tempest bridge](docs/screenshots/tempest-causeway.jpg) | ![Racing along the open pantry shelf](docs/screenshots/pocket-pantry.jpg) |
+| ![Konqi follows a rain-streaked suspension bridge above the exposed Tempest sea](docs/screenshots/tempest-causeway.jpg) | ![Wilber's tiny kart follows a wooden track between oversized pantry foods](docs/screenshots/pocket-pantry.jpg) |
 | **Railstorm Express** | **Metronome Hall** |
-| ![Racing onto the moving freight decks](docs/screenshots/railstorm-express.jpg) | ![Racing across the open music-box deck](docs/screenshots/metronome-hall.jpg) |
+| ![Nolok approaches orange moving freight cars on the Railstorm cliffside railway](docs/screenshots/railstorm-express.jpg) | ![Kiki races through a warm wooden hall beneath suspended brass mechanisms](docs/screenshots/metronome-hall.jpg) |
 | **Pelagic Glasshouse** | **Emberwing Observatory** |
-| ![Racing through the open coral terraces](docs/screenshots/pelagic-glasshouse.jpg) | ![Racing down the exposed Emberwing descent](docs/screenshots/emberwing-observatory.jpg) |
+| ![Konqi drives beneath the Pelagic glasshouse dome among fish, bubbles and reef plants](docs/screenshots/pelagic-glasshouse.jpg) | ![Pidgin flies above Emberwing's glowing caldera after a cannon launch](docs/screenshots/emberwing-observatory.jpg) |
 
 ## Run locally
 
