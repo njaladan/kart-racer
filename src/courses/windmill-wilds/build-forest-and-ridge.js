@@ -108,7 +108,9 @@ export function buildForestAndRidge({
   }
   // Imported stone silhouettes form varied ridge outcrops while preserving
   // the open valley view between geological clusters.
-  for (let i = 0; i < 9; i++) {
+  // Keep the final downhill into the bridge open. The last two large rock
+  // clusters crowded that drop and read as oversized objects in the racing lane.
+  for (let i = 0; i < 7; i++) {
     const g = roadside(2, 0.08 + i * 0.087, -1, 17, 8);
     if (!g) continue;
     g.name = "Layered limestone outcrop";
