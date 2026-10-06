@@ -208,9 +208,17 @@ export function buildWindmillTerrain({ scene, scenery, textures, mats, palette, 
     // Keep the crossbeam well below the timber deck, including at the raised
     // bridge hop where a near-flush beam can poke through the road.
     box(darkWood, g, [0, -1.2, 0], [12.8, 0.45, 1.5]);
-    for (const x of [-5, 5]) box(darkWood, g, [x, -4.8, 0], [0.7, 9, 0.7]);
-    const brace = box(wood, g, [0, -3.8, 0], [11, 0.5, 0.6]);
-    brace.rotation.z = 0.32;
+    // Piles stay world-vertical and reach the valley floor; road-normal posts
+    // followed the steep bridge grade and floated above or pierced the deck.
+    const frame = frameAt(t);
+    for (const x of [-5, 5]) {
+      const top = frame.p
+        .clone()
+        .addScaledVector(frame.right, x)
+        .addScaledVector(frame.up, -0.25);
+      const height = Math.max(0.8, top.y + 1.65);
+      box(darkWood, scenery, [top.x, top.y - height / 2, top.z], [0.7, height, 0.7]);
+    }
   }
   const lakeFrame = poseAt(sectorT(3, 0.38) * TRACK, 39, 0);
   const lake = mesh(
