@@ -162,6 +162,18 @@
       "license": "CC-BY-SA-4.0",
       "attribution": "Jean-Manuel Cl\u00e9men\u00e7on / SuperTuxKart",
       "modifications": "Converted SPM to textured glTF, embedded resized textures, offline vertex AO for solid models; winter diffuse painting for conifers."
+    },
+    {
+      "name": "frostpeak:fox",
+      "file": "models/fox.glb",
+      "type": "gltf",
+      "bytes": 162852,
+      "sha256": "d97044e701822bac5a62696459b27d7b375aada5de8574ed4362edbba94771f7",
+      "source": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/Fox/glTF-Binary/Fox.glb",
+      "license": "CC0-1.0 AND CC-BY-4.0",
+      "author": "PixelMannen (model); tomkranis (rig/animation); AsoboStudio and scurest (glTF conversion)",
+      "modifications": "Unmodified GLB; normalized and animated at runtime.",
+      "licenseEvidence": "licenses/fox.md"
     }
   ],
   "sources": [
@@ -415,5 +427,57 @@
       "bytes": 587
     }
   ],
-  "licenseSourceSha256": "8df3d0326b71972ba3c3bd5c429cf85679a5a5c3e186a4828be6f8b5245b40bc"
+  "licenseSourceSha256": "8df3d0326b71972ba3c3bd5c429cf85679a5a5c3e186a4828be6f8b5245b40bc",
+  "textures": [
+    {
+      "name": "frostIce",
+      "file": "textures/blue-ice.webp",
+      "bytes": 28050,
+      "sha256": "7727d397bc238511b311f6aa9c63cf4ac46e6533534ceaa9d7b71906eac062fd",
+      "source": "Original authored texture; tools/prepare-frostpeak-festival-textures.py",
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "frostIceNormal",
+      "file": "textures/blue-ice-normal.webp",
+      "bytes": 10328,
+      "sha256": "db16f9b49fb4ebb8fcef4b49e08674e60e0b7f9ad7b0222c1f44d69ad6d12291",
+      "source": "Original authored texture; tools/prepare-frostpeak-festival-textures.py",
+      "license": "CC0-1.0",
+      "colorSpace": "linear"
+    },
+    {
+      "name": "frostIceRoughness",
+      "file": "textures/blue-ice-roughness.webp",
+      "bytes": 3566,
+      "sha256": "413759972ed726a0dc00efa5f206ff32892850155877f52e65c0955db2fdfcd7",
+      "source": "Original authored texture; tools/prepare-frostpeak-festival-textures.py",
+      "license": "CC0-1.0",
+      "colorSpace": "linear"
+    },
+    {
+      "name": "frostSnow",
+      "file": "textures/groomed-snow.webp",
+      "bytes": 2468,
+      "sha256": "0efaaa6dfd4050cfd3d65c9c970f5c3433d7ddb5ae7352be7e2cd67da8b2960b",
+      "source": "Original authored texture; tools/prepare-frostpeak-festival-textures.py",
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "frostKnit",
+      "file": "textures/festival-knit.webp",
+      "bytes": 64844,
+      "sha256": "682c8ec8c04bff4cc1885603286243bce976c59251a606c0d85fa636f1351a59",
+      "source": "Original authored texture; tools/prepare-frostpeak-festival-textures.py",
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "frostSigns",
+      "file": "textures/shop-signs.webp",
+      "bytes": 16532,
+      "sha256": "cb78d4cf899418d18af0c8aa06e11fc3a458c1cbbf02fda37ee94c167f9c5067",
+      "source": "Original authored texture; tools/prepare-frostpeak-festival-textures.py",
+      "license": "CC0-1.0"
+    }
+  ]
 }

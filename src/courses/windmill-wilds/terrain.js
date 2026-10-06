@@ -205,14 +205,15 @@ export function buildWindmillTerrain({ scene, scenery, textures, mats, palette, 
   for (let i = 0; i < 16; i++) {
     const t = THREE.MathUtils.lerp(BRIDGE_RANGE.start, BRIDGE_RANGE.end, i / 15);
     const g = groupAt(t);
-    // Keep the crossbeam well below the timber deck, including at the raised
-    // bridge hop where a near-flush beam can poke through the road.
-    box(darkWood, g, [0, -1.2, 0], [12.8, 0.45, 1.5]);
-    // Piles stay world-vertical and reach the valley floor; road-normal posts
-    // followed the steep bridge grade and floated above or pierced the deck.
+    const half = roadHalfWidth(t),
+      supportOffset = half + 0.85;
+    // The cap beam stays below the raised road hop; its piles are outside the road
+    // edges instead of protruding through the timber driving surface.
+    box(darkWood, g, [0, -1.2, 0], [2 * (supportOffset + 0.35), 0.45, 1.5]);
+    // Piles stay world-vertical and reach the valley floor, even on the grade.
     const frame = frameAt(t);
-    for (const x of [-5, 5]) {
-      const top = frame.p.clone().addScaledVector(frame.right, x).addScaledVector(frame.up, -0.25);
+    for (const x of [-supportOffset, supportOffset]) {
+      const top = frame.p.clone().addScaledVector(frame.right, x).addScaledVector(frame.up, -0.125);
       const height = Math.max(0.8, top.y + 1.65);
       box(darkWood, scenery, [top.x, top.y - height / 2, top.z], [0.7, height, 0.7]);
     }

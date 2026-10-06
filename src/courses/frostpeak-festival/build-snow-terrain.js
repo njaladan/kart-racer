@@ -8,7 +8,7 @@ export function buildSnowTerrain({ THREE, scenery, track, kit, textures, edgeOff
   installSurfaceDetail(snow, { kind: "terrain", scale: 0.04, strength: 0.095 });
   const rows = 44,
     columns = 10;
-  for (let section = 0; section < 6; section++) {
+  for (let section = 0; section < track.SECTIONS.length; section++) {
     for (const side of [-1, 1]) {
       const positions = [],
         colors = [],
@@ -28,7 +28,7 @@ export function buildSnowTerrain({ THREE, scenery, track, kit, textures, edgeOff
           const envelope = Math.pow(Math.sin(u * Math.PI), 1.8);
           const windRidge =
             0.55 + 0.35 * Math.sin(phase + side * 1.2) + 0.15 * Math.cos(phase * 2.6 + u * 8);
-          const mound = envelope * (section === 2 || section === 3 ? 6 : 2.7) * windRidge;
+          const mound = envelope * (section === 2 || section === 4 ? 6 : 2.7) * windRidge;
           p.y = sceneryGroundHeight(projection) + 0.045 + mound;
           positions.push(p.x, p.y, p.z);
           // Creases carry cool indirect shading; scan UVs stay world-aligned.

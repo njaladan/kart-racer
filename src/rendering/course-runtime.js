@@ -49,9 +49,16 @@ export function buildCourseWorld({
       bumpMap: textures.wood,
       bumpScale: 0.04,
     }),
-    ice: material("#9ddaf0", { roughness: 0.2, metalness: 0.2 }),
+    ice: material("#b9e5ff", {
+      map: textures.frostIce,
+      normalMap: textures.frostIceNormal,
+      normalScale: new THREE.Vector2(0.4, 0.4),
+      roughnessMap: textures.frostIceRoughness,
+      roughness: 0.65,
+      metalness: 0.12,
+    }),
     grass: mats.grass,
-    snow: material("#e5f2f5", { map: textures.snow }),
+    snow: material("#f3f6ff", { map: textures.frostSnow || textures.snow }),
     sand: material("#ead3a0", { map: textures.sand }),
     gravel: material("#c7c7ba", {
       map: textures.gravel || textures.stone,
@@ -261,7 +268,7 @@ export function buildCourseWorld({
   for (const side of [-1, 1]) {
     const edge = (t) => (side < 0 ? track.surfaceAt(t).leftEdge : track.surfaceAt(t).rightEdge);
     ribbon(edge, (t) => edge(t) + side * TERRAIN_VERGE_WIDTH, mats.grass, 0, true);
-    if (["port-lumen", "sunstone"].includes(course.edgeStyle)) continue;
+    if (["port-lumen", "sunstone", "frostpeak"].includes(course.edgeStyle)) continue;
     const railMaterial = mats.rail.clone();
     railMaterial.side = THREE.DoubleSide;
     mesh(createRailGeometry(side, { width: 0.15, height: 0.32, above: 0.72 }), railMaterial);
@@ -271,7 +278,11 @@ export function buildCourseWorld({
       box(mats.rail, g, [0, 0.42, 0], [0.19, 0.86, 0.19]);
     }
   }
-  for (let i = 0; !["port-lumen", "sunstone"].includes(course.edgeStyle) && i < 330; i++) {
+  for (
+    let i = 0;
+    !["port-lumen", "sunstone", "frostpeak"].includes(course.edgeStyle) && i < 330;
+    i++
+  ) {
     const t = i / 330,
       g = groupAt(t),
       half = track.roadHalfWidth(t);
@@ -319,6 +330,7 @@ export function buildCourseWorld({
       textures,
       renderer,
       kit,
+      assets,
       hazardAt: cartAt,
       trafficAt,
     }) || {};

@@ -1,82 +1,170 @@
-# Course proposal: Frostpeak Festival
+# Frostpeak Festival — the night the mountain lights up
 
-## Identity
+The village has carried its lantern festival up the mountain. You race out of
+its warm market, through quiet woods and a blue glacier, onto a carnival above
+the clouds, and back down to the lake and the crowded chalet backstreets. The
+summit celebration is visible from the start; the starting square is visible
+from the summit. This is one connected place with a reason for everything in it.
 
-Playful, exuberant, sporty. A bright mountain resort mixes spectator energy with rhythmic steering, downhill speed and a short forgiving slippery bend.
+## Racing rhythm
 
-## Lap plan
+Eight sections over approximately 1,880 metres. Start with a welcoming market,
+compress into woodland, climb a tilted ice ravine, release into an enormous
+summit vista, descend on snow waves, choose a lake line, work through technical
+village turns, then celebrate the return. Each section changes the surface,
+framing, height, color or decision the player makes. The village has actual
+bends around 24 metres in radius, rather than cosmetic props beside an oval.
+The summit reaches about 85 metres above the valley.
 
-Nominal sixty-second lap; distance budgets total 1,500 m. Section boundaries must be derived from authored route geometry, not these time windows.
+A lap takes roughly 69–70 seconds for the current unboosted AI. These are
+simulation measurements, not a claim of human playtesting. Drift skill, items
+and the alternate lanes give the player room to improve their route each lap.
 
-| Time | Place | Initial distance | Driving and visual beats |
-| --- | --- | --- | --- |
-| 0–10 s | Village square | 260 m | Wide festive start, chalet-lined opening drift and item lane choice before the forest. |
-| 10–20 s | Snowy pine slalom | 235 m | Linked bends framed by snow-covered pines and flags; small roller, then a clear recovery opening. |
-| 20–30 s | Summit climb | 245 m | Two separated climbing bends, distant mountain silhouettes, and a broad crest. Exposed views contrast the forest enclosure. |
-| 30–40 s | Panoramic descent | 285 m | Banked downhill sweep under resort banners, a bounded small hop, and a gentler landing/runout. No major launch or unguarded cliff. |
-| 40–50 s | Ice-rink bend | 210 m | A short pale-blue ice patch in a wide, gentle bend reduces lateral grip moderately. Firm entry/exit paving and room to recover prevent prolonged sliding. Resort yard contains the announced groomer crossing after the ice. |
-| 50–60 s | Grandstand finish | 275 m | A boost-assisted inside-right powder cut leads toward outside boost panels, cheering stands and a payoff straight. |
+## Eight places, four meaningful elements each
 
-## Signature sequence
+### 1. Lantern Lane
 
-The summit reveal followed by a sweeping, banner-lined descent with the village and grandstands visible below.
+**Look:** warm amber windows, pink and teal market awnings, thick snowy roofs,
+wooden signs, patterned textiles, trails of footprints and golden lanterns.
+**Play:** an opening bend sweeps between close market frontages, with a soft
+snow apron on the outside and a turbo on the way into the trees.
+**Feel:** the anticipation of a busy winter evening; warmth within arm's reach.
 
-## One interactive hazard
+- Market stalls: hot drinks, knitted mittens and lantern-making supplies make
+  the celebration legible through objects, rather than explanatory text.
+- Garland gates: lantern strings frame the route at varying heights, always
+  above the kart and chase camera.
+- A giant decorated tree: a landmark for the finish and a beacon seen from the
+  mountain; wrapped gifts and snowmen create detail around its base.
+- Working chimneys and shoppers: movement belongs to the village, even when
+  no kart is passing.
 
-A compact snow groomer crosses only the center/right of the resort yard, after the ice exit. It follows the common introductory delay, warning and predictable movement cycle, with an amber beacon and marked crossing. Its blade stays inside its tested collision footprint; the left passing lane remains clear.
+### 2. Snowbell Woods
 
-## Shortcut and competing lines
+**Look:** layered blue-green conifers, warm light reflected in snow, delicate
+frost bushes and a few clear windows through the trees.
+**Play:** an S-shaped forest route, a mushroom-friendly powder apron and a
+small trick crest. Closely framed sections open briefly onto the glacier.
+**Feel:** quieter and more intimate; you have slipped out of the festival.
 
-A snow-powder apron inside the final right bend has marked entry and visible exit. Powder uses ordinary off-road drag, overridden by boost; it is separate from ice. A clean boosted cut targets about a one-second saving while the main road offers items. Outside panels compete with an inside-road drift.
+- A fallen pine forms an overhead natural gateway, with roots and snow on its
+  trunk. The driveable opening and camera clearance remain generous.
+- Snowbell strings hung between trees signal the approaching celebration.
+- A fox with its own walking and surveying rhythm inhabits a clearing.
+- A sledding hill has moving visitors, footprints and a warming hut.
 
-## Materials, scenery and camera
+### 3. Glacier Organ
 
-Use bright snow terrain, dark groomed road, blue ice, red/cyan flags, chalet timber and snowy pine groups. Ice is a localized section material with moderate grip reduction (initial grip 8–9 versus 12 normally), no new airborne or vehicle mode. Downhill grade and the limited ice surface provide personality without changing global physics.
+**Look:** great uneven ice pipes, cyan cracks, lavender creases, trapped bubbles
+and white snow shelves. The glacier feels carved, not assembled from identical
+blue boxes.
+**Play:** a climbing S with up to 0.38 radians of banking, a short blue-ice patch,
+firm snow before and after it, and a boost close to the exit.
+**Feel:** briefly small inside something ancient and beautiful.
 
-## Shared design and implementation contract
+- Giant faceted ice columns crowd the sides and frame the sky.
+- An overhead ice arch compresses the view before the summit reveal.
+- Hanging icicles and layered frost give a sense of the glacier's thickness.
+- Small sparkling ice motes move slowly through the shaded blue corridor.
 
-Target a 1,450–1,600 m continuous course and representative clean 55–65 second laps, with three laps near three minutes. Measure first and flying laps separately; adjust meaningful route length and corner shapes rather than global speed or compulsory waiting. All figures here are tuning targets until measured.
+### 4. Cloudcap Carnival
 
-Six physical sections introduce a major change roughly every ten seconds, with two or three smaller beats (turn reversal, sightline, item choice, crest, width change) inside each. No unchanged stretch should approach twenty seconds. Place recovery room after demanding sections. Keep one coherent landscape, one interactive hazard, one boost-dependent shortcut, and one competing normal racing line. Obstacles always leave a clear passing lane.
+**Look:** an elevated timber festival deck, pavilion roofs, colorful fabric,
+gondola station and the entire village visible below.
+**Play:** a curved wooden overlook, room to drift, a boost into a small crest,
+and a clear setup for the descent.
+**Feel:** the reward for the climb; the mountain is hosting a party.
 
-Use the current world-space driving, bounded ramp hops, drift boosts, item system and ordered checkpoints. No gaps, cannons, falling roads, true branching progress, or new vehicle mode. The shortcut is a continuous ground patch inside an expanded physical boundary, uses the same ground query and ordered progression, and has a clearly visible entry and exit. Boost overrides its off-road drag. AI initially stays on the main route.
+- A summit pavilion has a turning celestial ornament and luminous textiles.
+- Round-trip gondolas carry people between village and mountain.
+- A kinetic snowflake sculpture creates a recognizable mountaintop silhouette.
+- An overlook with spectators points your eye down toward the lake and village.
 
-Each course owns a descriptor and scenery module under `src/courses/<id>.js` and `src/courses/<id>-world.js`. Shared track construction translates authored control-point boundaries into actual arc-distance section ranges and caches route frames. Rendering, kart physics, shells, AI, pads and ramps consume that same metadata. A registry selects the course before constructing the game; changing course starts a fresh page/race so old world state cannot leak. Root-owned engine, registry and UI files are not edited by course agents.
+### 5. Dragonback Drop
 
-Descriptor fields: `id`, `name`, `description`, `targetLength`, `controls` (world xyz), `sections` (six objects with `controlIndex`, `id`, `name`, `hint`, `halfWidth`, `material`, `color`, optional `grip`), `ramps` ({section,fraction,halfLength,height}), `pads` ({section,fraction,offset,duration}), `itemRows` ({section,fraction}), `shortcut` ({section,startFraction,endFraction,extraWidth}), `hazard` ({section,fraction,kind,label,parkOffset,minOffset,halfWidth,halfLength,safeLane,activation,period,warningSeconds}), `theme` ({sky,fog,ground,road,shoulder,hemisphere,ambientGround,sun,sunIntensity,exposure}), `buildWorld` (scenery function). Section widths are half-widths in metres; offsets are signed lateral world metres. Shortcut extends the positive/right boundary; design an inside-right curve there. Hazard occupies the right/central road and reserves the negative/left passing lane. The common hazard runtime handles the shared warning/movement/collision clock; themed meshes are owned by scenery.
+**Look:** rolling snow, ridge-side pines, a distant frozen waterfall and little
+skiers using their own hill beside the course.
+**Play:** a steep descent; the left extension is a firm, driveable trick line
+with two localized ramps and boosts. The central route remains smooth.
+**Feel:** exhilarating scale and speed after the close glacier and summit.
 
-Scenery signature: `buildWorld(context)`, where context provides `THREE`, `scene`, `scenery`, `track`, `course`, `mats`, `textures`, `renderer`, `kit`, `hazardAt`. Shared ground, road, rails, markings, signs, ramps, pads and pickups are engine-owned. Scenery builds place-specific props and returns `{update(time)}`. `kit` provides `material(color,extra)`, `mesh(geometry,material,parent,position,scale)`, `box(material,parent,position,scale)`, `groupAt(t,offset,parent)`, `sectorT(index,fraction)`, `sign(t,offset,text,color,width)`, `batch(parent)`, `align(group,frame)`. Props must sit beyond the physical boundary or above a portal with at least 11 m camera clearance. Only the declared moving hazard occupies driveable road; decorative props have no separate collisions.
+- A snow-dragon sculpture links the rolling hill shapes into one festival idea.
+- Two optional trick ramps make the extended left lane a real choice.
+- Skiers and sledders use the slopes independently of the race.
+- A frozen waterfall and alpine rock faces provide a destination in the distance.
 
-Validate six continuous sections, route length, route separation, widths, pad alignment, shortcut ground/progress, hazard warning and permanently clear lane, kart/shell edge agreement, finite projection, bounded hops, all five AI drivers finishing three laps, measured sector splits, desktop/mobile camera clearance, course switching and browser console. Keep geometry/material reuse and batch static meshes; avoid per-frame scenery allocation and large numbers of real-time lights. Document actual measurements and any remaining human-playtest tuning rather than claiming unmeasured performance.
+### 6. Mirror Lake
 
-## Implementation order and review record
+**Look:** patterned blue ice, snow islands, timber docks, skating visitors,
+shoreline lanterns and the mountaintop celebration reflected in the palette.
+**Play:** a broad ice bend has three lines: centre ice, an outside-left timber
+extension with grip and turbos, and a right-side powder apron that can be cut
+with an item. Firm snow at the lake exit precedes the warned groomer crossing.
+**Feel:** the expansive calm of a frozen lake, with a decision at every entry.
 
-1. Review this proposal for pacing, geometry, safety-lane clarity, engine compatibility and parallel ownership. Resolve findings here before implementation.
-2. Author and measure route/sections with the shared builder, then place themed scenery and hazard.
-3. Tune AI and representative lap/sector times, inspect browser and camera, and integrate through the registry.
-4. Record review resolutions and measured implementation results below.
+- Frost patterns, cracks and trapped bubbles make the ice rich at kart height.
+- A timber shore route trades a wider line for grip and visible boost panels.
+- Skaters circulate on a separate ornamental pond, beyond the racing boundary.
+- A service hut, parked sleds and the groomer tell how the resort stays running.
 
-## Independent review and resolutions
+### 7. Chalet Labyrinth
 
-Reviewed independently by a dedicated course reviewer. The following constraints are adopted before implementation:
+**Look:** close buildings, stone lower walls, amber doors, overhead balconies,
+knitted laundry, snowy eaves and chimneys.
+**Play:** a genuine sequence of tight turns climbs onto a wooden roof-level
+passage, then descends into the village. The route is directed by buildings
+and pools of light, with no centreline or striped racing curb.
+**Feel:** delightfully lost between places where people live.
 
-- Set explicit half-widths (initial sectors 9, 7.8, 8.5, 8, 9, 9 m; tuning may widen curves). Use a 1.35 m hazard half-width, minimum offset 0 m, parked offset 12 m, and safe lane −5.5 m. With a 0.9 m kart radius there is at least 3.25 m lateral clearance at the closest hazard position. AI must read the descriptor safe lane. Entire meshes, including blades, must fit their contact footprint.
-- Author the expanded shortcut on a sustained right-hand bend. Taper within its range, flatten banking, and rejoin before the next tight turn. Measure main-road, outside-pad, boosted-cut and ordinary-cut traversal rather than inferring a saving from width. Reject nearby route segments that make projection ambiguous.
-- Check complete scenery footprints against road and expanded shortcut boundaries. Camera clearance includes approach and trailing path, not just the portal center. Gateway/warehouse/banners have at least 11 m overhead clearance; sidewalls cannot clip the curved road or camera.
-- Measure first and flying sector splits; tune any sector above 14 seconds, retain multiple internal beats, and verify distant landmarks are actually in the crest's sightline.
+- Full lodge frontages form streets with different widths and heights.
+- A supported timber passage runs at balcony level, with rooms below it.
+- Hanging cloth and wooden bridges form layered overhead composition.
+- Village details — firewood, sleds, window boxes, footprints — reward repeat laps.
 
-Ice resolution: optional `surfaces: [{section,startFraction,endFraction,material,grip}]` is shared by rendering and physics. Start with section 4 fractions 0.12–0.45 at grip 8.5; firm paving before and after, groomer at fraction 0.78, at least 30 m after ice. Keep the descent hop well before ice entry.
+### 8. Starfall Parade
 
-## Implemented course and measured results
+**Look:** warm lanterns rising toward the cooler mountain sky, spectators,
+colorful pennants, a parade sleigh and timed bursts above the starting square.
+**Play:** a final powder option and trick crest return you to the broad market
+start. The finish landmark is recognizable before the line appears.
+**Feel:** returning home to the festival, with the energy of a finale.
 
-The implemented clockwise mountain route measures **1,541.2 m**, with a 54.2 m summit and no intersecting road. Actual centreline section budgets are approximately **298 m village, 219 m pines, 284 m summit, 238 m descent, 197 m rink, and 305 m grandstands**. A 512-point geometry survey found about 70.6 m minimum separation between route samples separated by at least seven percent of a lap. The steepest sampled tangent has vertical component 0.279; the climb/descent and low hops remain supported road using the existing bounded airborne model.
+- A decorated parade sleigh establishes what the village is celebrating.
+- Sky lanterns rise on their own staggered cycles.
+- Fireworks evolve above the skyline, away from the driving sightline.
+- Cheering visitors and pennants carry movement through the finish.
 
-At the fixed 120 Hz physics step, five isolated AI drivers with skills 0.91–0.72 completed all three ordered laps in **174.94–177.75 seconds**, with **zero wall or groomer impacts**. Standing laps measured **58.87–59.78 s** and flying laps **58.02–59.02 s**. The skill-0.91 driver's laps were **59.18, 58.41, and 58.38 s**. Its first-lap section entry times were **0, 12.03, 21.03, 32.08, 40.58, 47.89, and finish 59.18 s**; individual sectors lasted **7.32–12.03 s**. These are isolated driving measurements with authored panels active and no combat, rather than human race times.
+## Composition and performance
 
-The localized blue ice patch is **64.9 m** long at grip 8.5, with firm road before and after. The groomer crossing lies **64.9 m beyond the ice exit**, leaving recovery room. It activates after 30 seconds with a two-second warning, parks at offset +12 m, and never crosses left of offset 0 m. Its complete blade/body mesh fits the 2.7 × 4.3 m collision footprint. Tests sample the full twelve-second cycle and prove the −5.5 m lane remains clear.
+Density means purposeful layers: a snow edge close to the kart, an inhabited
+place beside it, a visible next destination, and a mountain silhouette behind
+that. It does not mean filling the driveable space with visual noise. The next
+turn, ice change and route entrance need a readable shape and color even at speed.
 
-Review of the original broad powder cut found that one real 0.95-second mushroom could expire before the exit. The apron is now restricted to a **76.3 m inside-right bend**, and powder applies a local **1.25× ordinary off-road drag**; boosts override that drag. A controlled entry-to-exit comparison, including 30 m approach and 20 m runout, measured **4.59 s on the inside road, 4.41 s using one mushroom on that road, 4.15 s using one mushroom on the powder cut, 4.67 s taking the powder without a mushroom, and 4.76 s on the outside panel line**. All five traversals had zero wall contacts. Each boosted run uses exactly one actual `consumeItem` call; no continuing boost is supplied. The cut currently saves **0.26 s against the same mushroom on the road** and **0.44 s against the ordinary inside line**, a smaller measured reward than the original one-second target. This modest reward is retained because the single-mushroom route works and ordinary powder loses time; human drift/boost tuning remains a playtest item.
+The shared generic rail, red-white curb and centreline are disabled for this
+course. Rounded snowbanks follow the actual collision edge. Timber rails appear
+where they belong on elevated wooden decks. Marker poles and lamps communicate
+open-snow boundaries. These edges have the same geometry limits as the racer.
 
-Graphics use the same shared CC0 asset direction as the other course graphics: compressed 512-pixel ambientCG snow, wood, bark and stone maps; actual Kenney pine and rock models with source vertex colors; gentle baked vertex shading on authored chalet, grandstand and groomer meshes. Timber chalets have framing, shutters, window crossbars, snowy sills and roof caps. Snow-covered Kenney pines frame the slalom; low summit rocks and distant mountain silhouettes preserve the reveal; high colored banners, rink goals and spectator stands establish the resort sequence without roadside text. Full pine/rock/chalet footprints stay beyond the road and shortcut rails. Banner fabric stays at least 11.65 m above the road. Static scenery is globally batched while the groomer and flashing beacon remain separately animated.
+Use the locally bundled, textured SuperTuxKart chalets, pines, rocks and lamps,
+and Kenney holiday props, with source attribution retained. New imported animals
+retain their original licenses. Author the unusual structures from small shared
+geometry; bake winter material detail into compressed textures. Batch static
+props regionally and instance repeated parts. Conifers already have three LODs.
 
-`tests/frostpeak-festival.test.js` verifies all five three-lap completions, lap and section pacing, localized ice/recovery, hazard passing-lane clearance, actual single-mushroom shortcut economics, and coherent shortcut ground projection. The focused tests pass. Browser camera and integrated race checks are part of the shared integration pass; these measurements do not claim human playtesting.
+Warm lamps use the shared limited light pool and an offline indirect-light bake.
+Do not give every lantern a real-time shadow light. Faceted ice uses opaque
+textured materials instead of expensive refraction. Snow and fireworks use
+bounded point buffers. Independent clocks give visitors, gondolas and festival
+objects changing phases from lap to lap, without random road-blocking events.
+
+## Implementation status
+
+The eight-section route, terrain, snow and timber edges, driveable alternate
+lanes, banked climbs, localized trick ramps, gondola route and warned groomer are
+implemented. The festival stalls, alpine lodge facades, elevated timber passage,
+glacier arches, summit pavilion and turning wheel, snow dragon, waterfall, skating
+pond, climbing and descent routes, fox, visitors, skaters, gondolas, lanterns,
+fireworks, drifting aurora and independent snowfall are also in the course.
+Detailed ice, snow, knit and sign textures are bundled locally. Static geometry is
+region-batched; moving life uses bounded shared meshes and point buffers.

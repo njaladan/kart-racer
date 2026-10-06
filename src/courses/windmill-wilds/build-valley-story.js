@@ -175,41 +175,6 @@ export function buildValleyStory({ scene, scenery, track, kit, textures }) {
     kites.push({ g: kite, phase: i * 1.7 });
   }
 
-  // A small cascade feeds the lake beside the crossing, never over the road.
-  const waterfall = place(3, 0.28, 1, 44, 13);
-  let waterMap = null;
-  if (waterfall) {
-    waterfall.name = "Reedwater cascade and limestone spring";
-    const height = 23;
-    // Keep the waterfall's framing rocks at natural boulder scale. The source
-    // kit models are already substantial; 25–28x made one read as a cliff.
-    imported("kenney:nature/rock-largee", waterfall, [-5, -0.5, 2], 6);
-    imported("kenney:nature/rock-larged", waterfall, [5, -0.5, 3], 5.5);
-    waterMap = textures.water?.clone() || null;
-    if (waterMap) {
-      waterMap.repeat.set(1, 5);
-      waterMap.needsUpdate = true;
-    }
-    const water = new THREE.MeshStandardMaterial({
-      color: "#b4e9e3",
-      map: waterMap,
-      roughness: 0.32,
-      transparent: true,
-      opacity: 0.82,
-      side: THREE.DoubleSide,
-    });
-    const sheet = mesh(new THREE.PlaneGeometry(5.5, height, 4, 8), water, waterfall, [
-      0,
-      height / 2,
-      -0.4,
-    ]);
-    sheet.castShadow = false;
-    sheet.userData.skipBake = true;
-    for (let j = 0; j < 7; j++)
-      mesh(sphere, cream, waterfall, [(j - 3) * 0.9, 0.4, -0.5], [0.9, 0.12, 0.6]).castShadow =
-        false;
-  }
-
   // An outer plank line is a fully driveable extension with its own scenery.
   // Low posts delineate it; reeds separate it visually from the inner deck.
   for (let i = 0; i < 12; i++) {
@@ -351,7 +316,6 @@ export function buildValleyStory({ scene, scenery, track, kit, textures }) {
         g.rotation.y = -time * 0.09 - phase;
       }
       for (const rotor of sails) rotor.rotation.z = time * 0.8;
-      if (waterMap) waterMap.offset.y = -time * 0.3;
     },
   };
 }

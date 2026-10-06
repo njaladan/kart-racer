@@ -103,6 +103,7 @@ async function loadAssets(id) {
         "",
       );
       const model = normalizeCourseModel(gltf.scene);
+      model.userData.animationClips = gltf.animations;
       model.userData.lods = entry.lods || null;
       model.userData.lodDistances = entry.lodDistances || [0, 85, 180];
       model.traverse((object) => {
@@ -254,7 +255,7 @@ for (const course of COURSES.filter((course) => !wanted.length || wanted.include
       streams[0].byteLength + streams[1].byteLength + streams[2].byteLength,
     ],
     bounds: [minX, minZ, maxX - minX, maxZ - minZ],
-    heightRange: [-12, 75],
+    heightRange: [-12, Math.max(75, ...controls.map((p) => p[1] + 20))],
     lightVolume: course.theme.lightVolume,
     lights: (scene.userData.localLightPools || []).map((pool) => ({
       position: pool.position.toArray(),

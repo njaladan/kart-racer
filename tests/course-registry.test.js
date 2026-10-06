@@ -24,9 +24,11 @@ test("course selection updates geometry, surfaces and hazards without stale cour
   for (const course of [...COURSES, COURSES[0]]) {
     selectCourse(course);
     assert.equal(activeTrack.course, course);
-    const isNeonHarbor = ["neon-harbor", "sunstone-ruins"].includes(course.id);
+    const isLongCourse = ["neon-harbor", "sunstone-ruins", "frostpeak-festival"].includes(
+      course.id,
+    );
     assert.ok(
-      isNeonHarbor
+      isLongCourse
         ? COURSE_LENGTH >= 1800 && COURSE_LENGTH <= 2000
         : COURSE_LENGTH >= 1450 && COURSE_LENGTH <= 1600,
     );
