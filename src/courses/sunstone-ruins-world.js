@@ -1,17 +1,17 @@
 import { buildExpeditionLife } from "./sunstone-ruins/build-expedition-life.js";
 import { buildSolarArchitecture } from "./sunstone-ruins/build-solar-architecture.js";
 import { createWaterMaterial, installSurfaceDetail } from "../rendering/surface-detail.js";
-import { solarLaneAt } from "../simulation/course-mechanics.js";
 import { addGlow } from "../rendering/visual-effects.js";
 import { carvedSandstone } from "./sunstone-ruins/sunstone-materials.js";
 import { buildTempleAtmosphere } from "./sunstone-ruins/build-temple-atmosphere.js";
+import { createSandfall } from "./sunstone-ruins/sandfall.js";
+import { createSolarFocus } from "./sunstone-ruins/solar-focus.js";
 
 /** The road travels through the monument; architecture follows its actual frames. */
 export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazardAt }) {
   const { material, mesh, box, groupAt, sectorT, align } = kit;
   const animated = [],
-    motions = [],
-    solar = [];
+    motions = [];
   const stone = material("#dfb87f", { bumpMap: textures.stone, bumpScale: 0.05 });
   const pale = material("#ffe0a0", { bumpMap: textures.stone, bumpScale: 0.05 });
   const shade = material("#957958", { bumpMap: textures.stone, bumpScale: 0.05 });
@@ -117,24 +117,16 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
     geo.computeVertexNormals();
     mesh(geo, material("#ffffff", { side: THREE.DoubleSide }), scenery);
   }
+  const sandfall = createSandfall(THREE);
+  motions.push(sandfall.update);
   for (const f of [0.28, 0.7]) {
     const g = groupAt(sectorT(1, f));
     box(stone, g, [0, 32, 0], [48, 8, 12]);
     for (const side of [-1, 1]) {
-      const curtain = mesh(
-        new THREE.PlaneGeometry(7, 29, 1, 6),
-        material("#ecc680", {
-          transparent: true,
-          opacity: 0.38,
-          side: THREE.DoubleSide,
-          depthWrite: false,
-        }),
-        g,
-        [side * 18, 14, 0],
-      );
-      pulse(curtain, (time) => {
-        curtain.position.x = side * 18 + Math.sin(time * 1.4 + f) * 0.4;
-      });
+      const curtain = mesh(sandfall.geometry, sandfall.material, g, [side * 18, 14, 0]);
+      curtain.name = "Flowing canyon sandfall";
+      curtain.castShadow = curtain.receiveShadow = false;
+      animated.push(curtain);
     }
   }
   // High mesa: huge eroded pillars below the road, a sun crown on the skyline.
@@ -195,7 +187,18 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
       stripe.rotation.y = Math.PI / 8;
     }
     animated.push(pad);
-    solar.push({ pad, t, index: i });
+    const focus = createSolarFocus({
+      THREE,
+      track,
+      kit,
+      t,
+      index: i,
+      pad,
+      sourceGroup: g,
+      scenery,
+    });
+    animated.push(focus.beam);
+    motions.push(focus.update);
     addGlow(g, { color: "#ffcf83", size: 8, opacity: 0.18, position: [0, 18, 0] });
   }
   portal(sectorT(4, 0.96), 19, 24);
@@ -279,9 +282,6 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
     update(time) {
       motions.forEach((fn) => fn(time));
       align(sentinel, hazardAt(time));
-      solar.forEach(({ pad, t, index }) => {
-        align(pad, track.poseAt(t * track.TRACK, solarLaneAt(track.course, time, index), 0.03));
-      });
       dust.position.y = -((time * 0.5) % 3);
       dust.position.x = Math.sin(time * 0.4) * 0.4;
     },

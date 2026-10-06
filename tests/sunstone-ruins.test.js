@@ -5,6 +5,10 @@ import { selectCourse, TRACK } from "../src/track/track.js";
 import { initializeRacer, advanceRacer, botInput } from "../src/simulation/simulation.js";
 import { cartAt, cartContact } from "../src/simulation/hazards.js";
 import { solarLaneAt, solarBoostAt } from "../src/simulation/course-mechanics.js";
+import * as THREE from "../vendor/three/three.module.js";
+import { createCourseKit, batchScenery } from "../src/rendering/course-kit.js";
+import { createSolarFocus } from "../src/courses/sunstone-ruins/solar-focus.js";
+import { createSandfall } from "../src/courses/sunstone-ruins/sandfall.js";
 const track = selectCourse(course);
 
 test("Sunstone expedition connects eight places and a buried temple with continuous surfaces", () => {
@@ -67,4 +71,62 @@ test("sand cut and temple apron share ground, boundaries and ordered route ident
       assert.ok(offset > s.leftEdge && offset < s.rightEdge);
     }
   }
+});
+
+test("batched solar beams meet the engine core and moving boost footprint at every phase", () => {
+  const scenery = new THREE.Group(),
+    kit = createCourseKit(scenery, track),
+    effects = course.solarEngine.fractions.map((f, index) => {
+      const t = track.sectorT(course.solarEngine.section, f),
+        pad = kit.groupAt(t),
+        sourceGroup = kit.groupAt(t),
+        focus = createSolarFocus({ THREE, track, kit, t, index, pad, sourceGroup, scenery });
+      kit.mesh(
+        new THREE.SphereGeometry(0.1),
+        new THREE.MeshBasicMaterial(),
+        sourceGroup,
+        [0, 19, 0],
+      );
+      return { ...focus, t, index, pad, sourceGroup };
+    });
+  batchScenery(
+    scenery,
+    effects.flatMap(({ beam, pad, sourceGroup }) => [beam, pad, sourceGroup]),
+  );
+  const objects = [];
+  scenery.traverse((object) => objects.push(object));
+  assert.equal(objects.filter((object) => object.isMesh).length, 9);
+  for (const time of [0, 0.25, 2, 4, 6, 8, 19, 19, 0]) {
+    effects.forEach((effect) => effect.update(time));
+    scenery.updateMatrixWorld(true);
+    for (const { beam, footprint, t, index, pad, sourceGroup } of effects) {
+      const offset = solarLaneAt(course, time, index),
+        source = sourceGroup.localToWorld(new THREE.Vector3(0, 19, 0)),
+        target = pad.localToWorld(new THREE.Vector3(0, 0.27, 0));
+      assert.ok(beam.localToWorld(new THREE.Vector3(0, 0.5, 0)).distanceTo(source) < 1e-8);
+      assert.ok(beam.localToWorld(new THREE.Vector3(0, -0.5, 0)).distanceTo(target) < 1e-8);
+      assert.ok(footprint.getWorldPosition(new THREE.Vector3()).distanceTo(target) < 1e-8);
+      assert.equal(solarBoostAt(track, t, offset, time), course.solarEngine.duration);
+      assert.equal(beam.material.depthWrite, false);
+      assert.equal(beam.castShadow, false);
+    }
+  }
+  const after = [];
+  scenery.traverse((object) => after.push(object));
+  assert.deepEqual(after, objects, "Animation reuses all geometry and scene objects");
+});
+
+test("sandfall shader bounds contain flutter and shared time freezes and rewinds", () => {
+  const effect = createSandfall(THREE);
+  for (const time of [0, 12.5, 12.5, 0]) {
+    effect.update(time);
+    assert.equal(effect.material.uniforms.sandTime.value, time);
+  }
+  assert.equal(effect.material.depthWrite, false);
+  for (const attribute of Object.values(effect.geometry.attributes))
+    assert.ok([...attribute.array].every(Number.isFinite));
+  const bounds = effect.geometry.boundingBox;
+  assert.ok(bounds.max.x >= 3.5 * 1.1 + 0.16);
+  assert.ok(bounds.max.z >= 0.18 && bounds.min.z <= -0.18);
+  assert.ok(effect.geometry.boundingSphere.containsPoint(bounds.max));
 });

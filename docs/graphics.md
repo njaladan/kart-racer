@@ -53,6 +53,26 @@ At Sunstone progress 0.655 with the same settings, draws changed from 955 to
 1,018 (+6.6%) and triangles from 423,267 to 432,123 (+2.1%); texture count
 remained 75. The clearer dune placement offsets part of the added dressing cost.
 
+## Sunstone sandfalls and solar focus
+
+The four canyon sandfalls share one geometry and material. Shader strands flow
+downward at different speeds, with small flutter and a widening base; their
+frustum bounds include that displacement. Animation uses the race clock, so
+pausing and restarting reproduce the same frame.
+
+Each solar engine has one open, depth-tested beam and a soft footprint on its
+moving pad. The beam joins the actual banked lens core to the pad transform;
+`solarLaneAt` remains the shared source for boost-lane motion. Three cones and
+three footprints add six bounded draw objects without new lights, textures or
+render targets. Animated effects do not cast shadows or enter the static bake.
+
+Six Sunstone checks pass, including five complete AI races and beam endpoints
+after scenery batching. All twelve course scenes assemble with finite geometry.
+A screenshot-free Chromium shader check renders the sandfall, beam and footprint
+with no shader or page errors; GPU pixel readback confirms motion, identical
+paused frames and an exact return to the starting frame. This checks rendering
+correctness rather than player-device performance or full-lap composition.
+
 ## Ownership and interfaces
 
 - `game-scene.js` owns renderer settings, lights and shared material construction.
