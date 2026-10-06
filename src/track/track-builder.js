@@ -290,7 +290,10 @@ export function createTrack(course) {
       );
       const ex = position.x - a.x - dx * u,
         ez = position.z - a.z - dz * u,
-        d = ex * ex + ez * ez;
+        // A horizontal crossing is not a route join. Height disambiguates
+        // floors while the bounded local search retains ordered route identity.
+        ey = position.y - THREE.MathUtils.lerp(a.y, b.y, u),
+        d = ex * ex + ez * ez + ey * ey * (global ? 1 : 0.25);
       if (d < best) {
         best = d;
         bestT = (i + u) / SAMPLE_COUNT;
@@ -319,6 +322,7 @@ export function createTrack(course) {
       offset,
       height,
       horizontalRight,
+      routeId: `${course.id}:${SECTIONS.indexOf(sectionAt(t))}`,
       distance: Math.sqrt(best),
       ...surfaceAt(t, offset),
     };
