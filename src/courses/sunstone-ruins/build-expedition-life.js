@@ -90,7 +90,7 @@ export function buildExpeditionLife({
     for (let i = 0; i < 6; i++) {
       const t = sectorT(section, (i + 0.5) / 6),
         side = i % 2 ? 1 : -1,
-        g = safe(t, side * (135 + (i % 3) * 38), 58);
+        g = safe(t, side * (135 + (i % 3) * 38), 60 + (i % 3) * 14);
       if (!g) continue;
       const hill = mesh(
         dune,

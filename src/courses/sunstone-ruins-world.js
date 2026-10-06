@@ -3,6 +3,8 @@ import { buildSolarArchitecture } from "./sunstone-ruins/build-solar-architectur
 import { createWaterMaterial, installSurfaceDetail } from "../rendering/surface-detail.js";
 import { solarLaneAt } from "../simulation/course-mechanics.js";
 import { addGlow } from "../rendering/visual-effects.js";
+import { carvedSandstone } from "./sunstone-ruins/sunstone-materials.js";
+import { buildTempleAtmosphere } from "./sunstone-ruins/build-temple-atmosphere.js";
 
 /** The road travels through the monument; architecture follows its actual frames. */
 export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazardAt }) {
@@ -12,15 +14,17 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
     solar = [];
   const stone = material("#dfb87f", { bumpMap: textures.stone, bumpScale: 0.05 });
   const pale = material("#ffe0a0", { bumpMap: textures.stone, bumpScale: 0.05 });
-  const shade = material("#806477", { bumpMap: textures.stone, bumpScale: 0.05 });
-  const dark = material("#514250", { bumpMap: textures.stone, bumpScale: 0.05 });
+  const shade = material("#957958", { bumpMap: textures.stone, bumpScale: 0.05 });
+  const dark = material("#594737", { bumpMap: textures.stone, bumpScale: 0.05 });
   const sand = material("#d9ac68", { bumpMap: textures.sand, bumpScale: 0.035 });
+  const paleSand = material("#e8c78b", { bumpMap: textures.sand, bumpScale: 0.035 });
   const gold = material("#dfa744", { metalness: 0.55, roughness: 0.36 });
   const teal = material("#4e9a94", { map: textures.fabric, side: THREE.DoubleSide });
   const glow = material("#ffe4a1", { emissive: "#ffc75a", emissiveIntensity: 1.4 });
   const coolGlow = material("#8ef2db", { emissive: "#39c9be", emissiveIntensity: 0.7 });
-  for (const m of [stone, pale, shade, dark, sand])
+  for (const m of [stone, pale, shade, dark, sand, paleSand])
     installSurfaceDetail(m, { kind: "terrain", strength: 0.18 });
+  for (const m of [stone, pale, shade, dark]) carvedSandstone(m, { carved: true });
   const cyl = new THREE.CylinderGeometry(1, 1, 1, 12);
   const sphere = new THREE.SphereGeometry(1, 12, 8);
   const dune = new THREE.SphereGeometry(1, 20, 10, 0, Math.PI * 2, 0, Math.PI / 2);
@@ -212,16 +216,11 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
   for (let i = 0; i < 38; i++) {
     const t = sectorT(6, (i + 0.5) / 38),
       side = i % 2 ? 1 : -1;
+    const radius = 27 + (i % 3) * 9;
     const edge = side > 0 ? track.surfaceAt(t).rightEdge : track.surfaceAt(t).leftEdge;
-    const g = safe(t, edge + side * (25 + (i % 4) * 14), 22);
+    const g = safe(t, edge + side * (radius + 8 + (i % 4) * 14), radius);
     if (!g) continue;
-    const d = mesh(
-      dune,
-      i % 2 ? sand : pale,
-      g,
-      [0, -1, 0],
-      [27 + (i % 3) * 9, 12 + (i % 5) * 4, 24],
-    );
+    const d = mesh(dune, i % 2 ? sand : paleSand, g, [0, -1, 0], [radius, 12 + (i % 5) * 4, 24]);
     d.rotation.y = i * 0.73;
     if (i % 7 === 0) kit.asset("ruins:ruined-house", g, [0, 0, 0], [10, 10, 10]);
   }
@@ -241,6 +240,15 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
     kit,
     track,
     palette: { stone, pale, gold, dark, glow },
+    animated,
+    motions,
+  });
+  buildTempleAtmosphere({
+    THREE,
+    scene,
+    track,
+    kit,
+    palette: { stone, pale, dark, gold, glow },
     animated,
     motions,
   });

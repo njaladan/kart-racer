@@ -309,6 +309,21 @@ export function createGameRenderer({
       camera.aspect,
     );
     followShadow(player.worldPos);
+    if (scene.userData.wetRoadReflections && graphicsQuality?.getTier() === 3) {
+      const t = trackT(player.s);
+      const frame = frameAt(t);
+      const ahead = frameAt(t + 20 / activeTrack.COURSE_LENGTH);
+      const behind = frameAt(t - 20 / activeTrack.COURSE_LENGTH);
+      scene.userData.wetReflectionSurface = {
+        height: frame.p.y + 0.045,
+        frozen: frameState.paused || frameState.finished,
+        eligible:
+          ["promenade", "downtown", "market", "cargo", "boulevard"].includes(section.id) &&
+          Math.abs(frame.up.x) + Math.abs(frame.up.z) < 0.035 &&
+          Math.abs(ahead.p.y - frame.p.y) < 0.25 &&
+          Math.abs(behind.p.y - frame.p.y) < 0.25,
+      };
+    }
     particles.sync();
     renderer.shadowMap.autoUpdate = !frameState.paused && !frameState.finished;
     if (postprocessing) postprocessing.render(scene, camera);

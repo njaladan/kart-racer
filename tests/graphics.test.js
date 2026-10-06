@@ -155,3 +155,67 @@ test("course reflection probes retain HDR highlights, course palette and enclose
   const radiance = (data) => data.reduce((sum, value, i) => sum + (i % 4 === 3 ? 0 : value), 0);
   assert.ok(radiance(inside) < radiance(day));
 });
+
+test("Ultra wet reflections cap resolution, skip slopes and restore render state even on failure", async () => {
+  const { createWetRoadReflections } = await import("../src/rendering/wet-road-reflections.js");
+  const effect = createWetRoadReflections();
+  const scene = new THREE.Scene();
+  scene.userData.wetReflectionSurface = { eligible: true, height: 4 };
+  const camera = new THREE.PerspectiveCamera(63, 9 / 16, 0.1, 750);
+  camera.position.set(0, 9, 15);
+  camera.lookAt(0, 4, 0);
+  camera.updateMatrixWorld();
+  const originalTarget = {};
+  const originalClipping = [];
+  let activeTarget = originalTarget;
+  let captures = 0;
+  let shouldFail = false;
+  const renderer = {
+    clippingPlanes: originalClipping,
+    shadowMap: { autoUpdate: true },
+    xr: { enabled: true },
+    getDrawingBufferSize: (size) => size.set(1080, 1920),
+    getRenderTarget: () => activeTarget,
+    setRenderTarget: (value) => {
+      activeTarget = value;
+    },
+    clear() {},
+    render: (_scene, mirror) => {
+      captures++;
+      assert.ok(activeTarget.width <= 640 && activeTarget.height <= 640);
+      assert.equal(mirror.position.y, 2 * scene.userData.wetReflectionSurface.height - 9);
+      assert.equal(renderer.shadowMap.autoUpdate, false);
+      assert.equal(renderer.xr.enabled, false);
+      assert.ok(renderer.clippingPlanes[0].distanceToPoint(new THREE.Vector3(0, 3, 0)) < 0);
+      if (shouldFail) throw new Error("capture failed");
+    },
+  };
+  for (const tier of [0, 1, 2]) {
+    effect.setQuality(tier);
+    effect.render(renderer, scene, camera);
+  }
+  assert.equal(captures, 0);
+  effect.setQuality(3);
+  effect.render(renderer, scene, camera);
+  effect.render(renderer, scene, camera);
+  assert.equal(captures, 1, "second frame reuses the saved image and projection");
+  scene.userData.wetReflectionSurface.frozen = true;
+  effect.render(renderer, scene, camera);
+  effect.render(renderer, scene, camera);
+  assert.equal(captures, 1, "paused frames reuse the reflection without additional captures");
+  assert.equal(activeTarget, originalTarget);
+  assert.equal(renderer.clippingPlanes, originalClipping);
+  assert.equal(renderer.shadowMap.autoUpdate, true);
+  assert.equal(renderer.xr.enabled, true);
+  scene.userData.wetReflectionSurface.eligible = false;
+  effect.render(renderer, scene, camera);
+  assert.equal(captures, 1);
+  scene.userData.wetReflectionSurface = { eligible: true, height: 5 };
+  shouldFail = true;
+  assert.throws(() => effect.render(renderer, scene, camera), /capture failed/);
+  assert.equal(activeTarget, originalTarget);
+  assert.equal(renderer.clippingPlanes, originalClipping);
+  assert.equal(renderer.shadowMap.autoUpdate, true);
+  assert.equal(renderer.xr.enabled, true);
+  effect.dispose();
+});

@@ -1,5 +1,7 @@
+import { createRoadReflections } from "./road-reflections.js";
+
 /** Dense architecture and natural boundaries. Every placement uses road frames. */
-export function buildLumenDistricts({ THREE, scenery, track, kit, props, materials }) {
+export function buildLumenDistricts({ THREE, scenery, track, kit, props, materials, textures }) {
   const { box, mesh, groupAt, sectorT, batch } = kit;
   const {
     facades,
@@ -16,6 +18,7 @@ export function buildLumenDistricts({ THREE, scenery, track, kit, props, materia
     window,
   } = materials;
   const { fitAsset, lightAt, groundShadow } = props;
+  const reflections = createRoadReflections({ THREE, scenery, track, textures });
   const cylinder = new THREE.CylinderGeometry(1, 1, 1, 8);
   const sphere = new THREE.SphereGeometry(1, 12, 6);
   const upright = (t, offset = 0) => {
@@ -82,6 +85,8 @@ export function buildLumenDistricts({ THREE, scenery, track, kit, props, materia
       3.3,
       (-side * Math.PI) / 2,
     );
+    reflections.stamp(t, side, advertising[index % advertising.length]);
+    if (district !== 2) reflections.stamp(t, side, index % 3, depth, true);
     if (index % 3 === 0) {
       const blade = new THREE.Group();
       g.add(blade);

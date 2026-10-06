@@ -3,6 +3,56 @@
 The graphics pass is presentation-only: track surfaces, collision boundaries,
 physics and race progression still use the existing course contract.
 
+## Neon Harbor and Sunstone fidelity
+
+Neon asphalt has antialiased fissures, darker wet areas and smoother puddle
+normals. Sign and window reflections reuse the building atlases on road ribbons
+that follow the actual bends and banks. Their masks share the pavement's puddle
+pattern, soften at grazing angles and break up the reflected image. These are
+authored approximations, so they remain available without rendering a second
+scene. Regional batches and the existing textures limit their draw and memory cost.
+
+Ultra additionally captures nearby buildings and racers with a mirrored camera.
+The capture is half resolution, capped at 640 pixels on both axes, and updates
+on alternating frames. It reuses the main shadow map. Flat city sections qualify;
+slopes, banks, bridge and ferry sections use the atlas reflections. Height and
+distance fades prevent a flat mirror from extending across changing road levels.
+The image and projection matrix are cached together. Lowering quality disables
+the capture and releases its large GPU buffers. This adds a scene pass on capture
+frames, so leave it in Ultra until measurements on player hardware justify a
+broader default. Paused frames reuse the capture. Adaptive quality can drop it
+automatically.
+
+Sunstone paving and walls use staggered joints, chipped edges, varied block
+color and derivative normal relief. Recessed floor joints collect sparse moss.
+Sand dunes use their own material so masonry seams do not appear on sand.
+Their placement checks use the full dune radius to keep the temple corridor clear.
+Temple rubble, vines, torch fixtures and skylight cards add nearby scale cues.
+Static torch spill and the warmer wall palette are included in the regenerated
+768px lighting bake; only the existing bounded racer lights update at runtime.
+
+| Setting | Shared artwork | Optional work |
+| --- | --- | --- |
+| Performance | Pavement, atlas reflections, carved stone, temple dressing, baked light | Sparse street vapor; no shadows or bloom |
+| Balanced | Same | More vapor, 1024px shadows; no bloom |
+| High | Same | More vapor, 1024px shadows and quarter-resolution bloom |
+| Ultra | Same | Full vapor, 2048px shadows, bloom and bounded live road reflections |
+
+Browser validation covers all four tiers, the flat downtown reflection and the
+buried temple. Software Chromium checks shader compilation and scene behavior;
+its frame rate does not measure player GPU performance. Further progress toward
+the visual references needs more detailed authored meshes and richer material
+scans; this pass focuses on surface lighting and reuses the bundled assets.
+
+At 960×540, High, frozen at Neon progress 0.15, browser counters changed from
+709 to 750 draws (+5.8%) and 203,491 to 223,469 triangles (+9.8%), including
+the shadow and postprocessing passes. Loaded textures changed from 66 to 67
+(the small vapor mask). These counts compare the same camera and race time;
+they do not predict the shader or transparency cost on a particular GPU.
+At Sunstone progress 0.655 with the same settings, draws changed from 955 to
+1,018 (+6.6%) and triangles from 423,267 to 432,123 (+2.1%); texture count
+remained 75. The clearer dune placement offsets part of the added dressing cost.
+
 ## Ownership and interfaces
 
 - `game-scene.js` owns renderer settings, lights and shared material construction.

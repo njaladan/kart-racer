@@ -8,6 +8,7 @@ import { buildPortLighting } from "./neon-harbor/build-port-lighting.js";
 import { buildLumenMotion } from "./neon-harbor/build-lumen-motion.js";
 import { buildPortLandmarks } from "./neon-harbor/build-port-landmarks.js";
 import { installSurfaceDetail } from "../rendering/surface-detail.js";
+import { createStreetMist } from "./neon-harbor/street-mist.js";
 
 // Authored imported architecture supplies silhouettes, recesses and baked AO.
 // The shared engine retains every physical road, verge and camera boundary.
@@ -67,7 +68,7 @@ export default function buildWorld(context) {
     geometry,
   });
   const lumenMaterials = createLumenMaterials({ THREE, kit, textures, palette });
-  buildLumenDistricts({ THREE, scenery, track, kit, props, materials: lumenMaterials });
+  buildLumenDistricts({ THREE, scenery, track, kit, props, materials: lumenMaterials, textures });
   buildLumenQuays({ THREE, scenery, track, kit, props, materials: lumenMaterials });
   const motion = buildLumenMotion({
     THREE,
@@ -106,12 +107,15 @@ export default function buildWorld(context) {
     palette,
     geometry,
   });
+  const mist = createStreetMist({ THREE, scenery, track, animated });
   return {
     animated,
+    setQuality: mist.setQuality,
     update(time, state) {
       harborLife.update(time, state);
       portLandmarks.update(time, state);
       motion.update(time);
+      mist.update(time);
     },
   };
 }

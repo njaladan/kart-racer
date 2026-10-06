@@ -73,9 +73,9 @@ export function installSurfaceDetail(
   });
 }
 
-/** Most pavement stays matte; broad irregular puddles catch the night sky. */
+/** One opaque draw: dry grit, dark fissures and smooth irregular rain puddles. */
 export function installWetPavement(material) {
-  return patchMaterial(material, "wet-pavement-v1", (shader) => {
+  return patchMaterial(material, "wet-pavement-v2", (shader) => {
     addWorldPosition(shader, "vPavementWorld");
     shader.fragmentShader = `
       float pavementHash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
@@ -84,12 +84,28 @@ export function installWetPavement(material) {
           mix(pavementHash(i+vec2(0.,1.)),pavementHash(i+vec2(1.)),f.x),f.y);}
       ${shader.fragmentShader}`;
     shader.fragmentShader = shader.fragmentShader.replace(
-      "#include <roughnessmap_fragment>",
-      `#include <roughnessmap_fragment>
+      "#include <color_fragment>",
+      `#include <color_fragment>
       float puddleNoise=pavementNoise(vPavementWorld.xz*vec2(.17,.31))*.8+
         pavementNoise(vPavementWorld.xz*.73)*.2;
-      float puddle=smoothstep(.58,.76,puddleNoise);
-      roughnessFactor=mix(.66,.32,puddle);`,
+      float pavementWetness=smoothstep(.40,.65,puddleNoise);
+      vec2 fissureP=vPavementWorld.xz*.24;
+      fissureP+=vec2(pavementNoise(vPavementWorld.xz*.9),pavementNoise(vPavementWorld.zx*.83))*.36;
+      vec2 fissureEdge=abs(fract(fissureP)-.5);
+      float fissureAA=max(fwidth(fissureP.x),fwidth(fissureP.y));
+      float fissure=1.-smoothstep(.004,.013+fissureAA,min(fissureEdge.x,fissureEdge.y));
+      fissure*=smoothstep(.28,.65,pavementNoise(vPavementWorld.xz*.43));
+      diffuseColor.rgb*=mix(1.,.72,pavementWetness)*mix(1.,.38,fissure);`,
+    );
+    shader.fragmentShader = shader.fragmentShader.replace(
+      "#include <roughnessmap_fragment>",
+      `#include <roughnessmap_fragment>
+      roughnessFactor=mix(.68,.13,pavementWetness);`,
+    );
+    shader.fragmentShader = shader.fragmentShader.replace(
+      "#include <normal_fragment_maps>",
+      `#include <normal_fragment_maps>
+      normal=normalize(mix(normal,nonPerturbedNormal,pavementWetness*.82));`,
     );
   });
 }

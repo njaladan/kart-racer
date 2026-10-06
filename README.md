@@ -17,9 +17,9 @@ To regenerate these images, see the [screenshot capture guide](docs/screenshot-c
 
 | Windmill Wilds | Neon Harbor |
 | --- | --- |
-| ![Tux racing in Windmill Wilds](docs/screenshots/windmill-wilds.jpg) | ![Racing along the Neon Harbor quay](docs/screenshots/neon-harbor.jpg) |
+| ![Tux racing in Windmill Wilds](docs/screenshots/windmill-wilds.jpg) | ![Rain-slick streets in Port Lumen](docs/screenshots/neon-harbor.jpg) |
 | **Sunstone Ruins** | **Frostpeak Festival** |
-| ![Racing through the open dune sea](docs/screenshots/sunstone-ruins.jpg) | ![Racing down an open Frostpeak snow ledge](docs/screenshots/frostpeak-festival.jpg) |
+| ![Racing through the buried Sunstone temple](docs/screenshots/sunstone-ruins.jpg) | ![Racing down an open Frostpeak snow ledge](docs/screenshots/frostpeak-festival.jpg) |
 | **Clockwork Citadel** | **Paper Revel** |
 | ![Racing up the exposed Clockwork spiral](docs/screenshots/clockwork-citadel.jpg) | ![Racing across the exposed Paper Revel folds](docs/screenshots/paper-revel.jpg) |
 | **Tempest Causeway** | **Pocket Pantry** |

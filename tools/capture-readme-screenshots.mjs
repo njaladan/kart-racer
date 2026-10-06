@@ -13,8 +13,8 @@ const repoRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const screenshotDir = resolve(repoRoot, "docs/screenshots");
 const courseCaptures = [
   { id: "windmill-wilds", racer: "tux" },
-  { id: "neon-harbor", racer: "kiki" },
-  { id: "sunstone-ruins", racer: "nolok", t: 0.6, seconds: 12 },
+  { id: "neon-harbor", racer: "kiki", t: 0.15, seconds: 12 },
+  { id: "sunstone-ruins", racer: "nolok", t: 0.655, seconds: 12 },
   { id: "frostpeak-festival", racer: "konqi" },
   { id: "clockwork-citadel", racer: "kiki", t: 0.265, seconds: 18 },
   { id: "paper-revel", racer: "pidgin", t: 0.4, seconds: 31 },

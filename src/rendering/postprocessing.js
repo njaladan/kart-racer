@@ -3,7 +3,7 @@ import * as THREE from "../../vendor/three/three.module.js";
 const vertexShader = `varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}`;
 
 /** HDR scene + quarter-size separable bloom. Low tier renders directly. */
-export function createPostProcessing(renderer, theme = {}) {
+export function createPostProcessing(renderer, theme = {}, wetReflections = null) {
   const target = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 2 });
   const bloomA = new THREE.WebGLRenderTarget(1, 1, {
     type: THREE.HalfFloatType,
@@ -84,6 +84,7 @@ export function createPostProcessing(renderer, theme = {}) {
     },
     setQuality(tier) {
       quality = tier;
+      wetReflections?.setQuality(tier);
     },
     render(scene, sceneCamera) {
       if (quality === 0) {
@@ -101,6 +102,7 @@ export function createPostProcessing(renderer, theme = {}) {
       }
       const toneMapping = renderer.toneMapping;
       renderer.toneMapping = THREE.NoToneMapping;
+      wetReflections?.render(renderer, scene, sceneCamera);
       renderer.setRenderTarget(target);
       renderer.render(scene, sceneCamera);
       if (quality >= 2 && bloomEnabled) {
@@ -117,6 +119,7 @@ export function createPostProcessing(renderer, theme = {}) {
       draw(grade, null);
     },
     dispose() {
+      wetReflections?.dispose();
       target.dispose();
       bloomA.dispose();
       bloomB.dispose();

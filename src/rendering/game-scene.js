@@ -12,6 +12,7 @@ import { createCourseLighting } from "./course-lighting.js";
 import { createPostProcessing } from "./postprocessing.js";
 import { createGraphicsQuality } from "./graphics-quality.js";
 import { installSurfaceDetail, installWetPavement } from "./surface-detail.js";
+import { createWetRoadReflections } from "./wet-road-reflections.js";
 
 const SHARED_TEXTURES = [
   "grass",
@@ -186,6 +187,11 @@ export async function createGameScene({ canvas, course, viewport = window }) {
   installSurfaceDetail(materials.grass, { kind: "terrain", strength: 0.18 });
   installSurfaceDetail(materials.road, { kind: "road", strength: 0.08 });
   if (course.theme.wetPavement) installWetPavement(materials.road);
+  const wetReflections = course.theme.wetPavement ? createWetRoadReflections() : null;
+  if (wetReflections) {
+    wetReflections.install(materials.road);
+    scene.userData.wetRoadReflections = wetReflections;
+  }
   installSurfaceDetail(materials.roadside, { kind: "road", strength: 0.14 });
   const lighting = createCourseLighting(scene, {
     theme: course.theme,
@@ -193,7 +199,7 @@ export async function createGameScene({ canvas, course, viewport = window }) {
     sun,
     environmentMaps,
   });
-  const postprocessing = createPostProcessing(renderer, course.theme);
+  const postprocessing = createPostProcessing(renderer, course.theme, wetReflections);
   const graphicsQuality = createGraphicsQuality({
     renderer,
     sun,

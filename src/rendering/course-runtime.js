@@ -100,7 +100,12 @@ export function buildCourseWorld({
       kitchenRoadDetail(roadMaterials.paving, true);
     } else templePaving(roadMaterials.paving);
   }
-  if (course.theme.wetPavement) installWetPavement(roadMaterials.stone);
+  if (course.theme.wetPavement) {
+    for (const name of ["stone", "concrete"]) {
+      installWetPavement(roadMaterials[name]);
+      scene.userData.wetRoadReflections?.install(roadMaterials[name]);
+    }
+  }
   if (!course.pathwayEdges && course.edgeStyle === "adventure") {
     const rail = material(course.theme.shoulder, { metalness: 0.25 });
     for (const side of [-1, 1]) {
@@ -413,8 +418,13 @@ export function buildCourseWorld({
     }) || {};
   batchScenery(scenery, world.animated || []);
   addDetailedScenery(scene, track, assets);
+  const detail = createSceneryDetailController(scene);
   return {
-    ...createSceneryDetailController(scene),
+    ...detail,
+    setQuality(tier) {
+      detail.setQuality(tier);
+      world.setQuality?.(tier);
+    },
     animated: world.animated || [],
     update(time, courseState) {
       for (const belt of conveyorTextures) belt.texture.offset.y = -(time * belt.speed) / 8;
