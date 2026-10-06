@@ -24,8 +24,11 @@ test("course selection updates geometry, surfaces and hazards without stale cour
   for (const course of [...COURSES, COURSES[0]]) {
     selectCourse(course);
     assert.equal(activeTrack.course, course);
-    assert.ok(COURSE_LENGTH >= 1450 && COURSE_LENGTH <= 1600);
-    assert.equal(SECTIONS.length, 6);
+    const isNeonHarbor = course.id === "neon-harbor";
+    assert.ok(
+      isNeonHarbor ? COURSE_LENGTH >= 1800 && COURSE_LENGTH <= 2000 : COURSE_LENGTH >= 1450 && COURSE_LENGTH <= 1600,
+    );
+    assert.equal(SECTIONS.length, isNeonHarbor ? 8 : 6);
     for (let i = 0; i < 120; i++) {
       const t = i / 120,
         p = poseAt(t * TRACK, 2, 0.065).p,

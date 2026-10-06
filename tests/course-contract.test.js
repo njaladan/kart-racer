@@ -8,7 +8,7 @@ test("registered course descriptors satisfy the shared runtime contract", () => 
   for (const course of COURSES) {
     assert.equal(validateCourseDefinition(course), course);
     const track = createTrack(course);
-    assert.equal(track.SECTIONS.length, 6);
+    assert.equal(track.SECTIONS.length, course.id === "neon-harbor" ? 8 : 6);
     assert.ok(track.minimumCurveRadius >= MIN_ROAD_CURVE_RADIUS);
   }
 });

@@ -165,9 +165,14 @@ export function buildPortLandmarks({
     depthWrite: false,
     side: THREE.DoubleSide,
   });
-  const beam = mesh(new THREE.PlaneGeometry(38, 4), beamMaterial, lighthouseBeam, [19, 22, 0]);
-  beam.rotation.y = Math.PI / 2;
-  beam.castShadow = false;
+  const lighthouseBeamMesh = mesh(
+    new THREE.PlaneGeometry(38, 4),
+    beamMaterial,
+    lighthouseBeam,
+    [19, 22, 0],
+  );
+  lighthouseBeamMesh.rotation.y = Math.PI / 2;
+  lighthouseBeamMesh.castShadow = false;
   lighthouse.add(lighthouseBeam);
   animated.push(lighthouseBeam);
 
