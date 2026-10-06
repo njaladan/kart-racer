@@ -44,6 +44,7 @@ import { cartAt, cartContact, trafficAt, trafficContact } from "./hazards.js";
 
 export function initializeRacer(state) {
   resetMotion(state);
+  state.lastSafeS = state.s;
   state.scale = scaleAt(activeTrack, trackT(state.s));
   state.underwater = underwaterAt(activeTrack, trackT(state.s));
   state.worldPos = poseAt(state.s, laneWidth(state.x || 0), 0.065).p;
@@ -55,6 +56,39 @@ export function initializeRacer(state) {
   state.finished = false;
   resetRaceProgress(state, TRACK);
   return state;
+}
+
+/** Recovery runs in authority and prediction, with the same interpolation reset. */
+export function recoverRacer(state) {
+  state.recoveryCount = (state.recoveryCount || 0) + 1;
+  if (state.traversalIndex >= 0) {
+    const traversal = activeTrack.course.traversals?.[state.traversalIndex];
+    if (traversal)
+      state.s =
+        Math.floor(state.s / TRACK) * TRACK +
+        activeTrack.sectorT(traversal.section, traversal.startFraction) * TRACK -
+        2;
+  } else if ((state.falling || state.offPathTime > 0) && Number.isFinite(state.lastSafeS)) {
+    state.s = state.lastSafeS;
+  }
+  const pose = poseAt(state.s, 0, 0.065);
+  resetMotion(state);
+  state.worldPos.copy(pose.p);
+  if (!state.renderFrom) state.renderFrom = pose.p.clone();
+  else state.renderFrom.copy(pose.p);
+  state.yaw = yawFor(pose.tangent);
+  state.renderYawFrom = state.yaw;
+  state.prevS = state.s;
+  state.lastSafeS = state.s;
+  state.x = 0;
+  state.speed = 0;
+  state.spin = 0;
+  state.boost = 0;
+  state.scale = scaleAt(activeTrack, trackT(state.s));
+  state.underwater = underwaterAt(activeTrack, trackT(state.s));
+  state.invulnerable = 1.5;
+  state.visualOffset?.set(0, 0, 0);
+  state.visualYawOffset = 0;
 }
 export function botInput(state, index, elapsed, rivals = []) {
   const carrySpeed = activeTrack.movingSurfaceAt(trackT(state.s))?.speed || 0;
@@ -124,7 +158,11 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   activeTrack.setTime(raceTime);
   state.scale = scaleAt(activeTrack, trackT(state.s));
   state.underwater = underwaterAt(activeTrack, trackT(state.s));
-  const transit = advanceTraversal(state, activeTrack, dt, raceTime, advanceRaceProgress);
+  const entry = projectTrack(state.worldPos, state.s);
+  const transit =
+    !state.falling &&
+    !entry.offroad &&
+    advanceTraversal(state, activeTrack, dt, raceTime, advanceRaceProgress);
   if (transit) {
     cancelDrift(state);
     state.driftButtonDown = !!input.drift;
@@ -229,18 +267,31 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     state.hitLift = 0;
   }
   const projection = projectTrack(state.worldPos, state.s);
-  advanceRaceProgress(
-    state,
-    projection.t * TRACK,
-    TRACK,
-    WORLD_PER_UNIT,
-    state.worldPos.distanceTo(state.renderFrom),
-  );
+  const floor = activeTrack.floorAt(projection);
+  if (!floor.supported) {
+    state.falling = true;
+    state.trickActive = false;
+    state.trickBuffer = 0;
+  } else if (state.falling) {
+    // Once below a platform, driving underneath it cannot snap you onto it.
+    if (state.worldPos.y < floor.height - 0.4) floor.supported = false;
+    else state.falling = false;
+  }
+  state.offPathTime = floor.outside || state.falling ? (state.offPathTime || 0) + dt : 0;
+  if (!state.falling && !floor.outside)
+    advanceRaceProgress(
+      state,
+      projection.t * TRACK,
+      TRACK,
+      WORLD_PER_UNIT,
+      state.worldPos.distanceTo(state.renderFrom),
+    );
   state.x = laneFromOffset(projection.offset);
   const bounds = collisionBounds(projection.t, 0.9 * state.scale);
   const side = projection.offset < bounds.left ? -1 : 1;
   const edge = side < 0 ? bounds.left : bounds.right;
-  const penetration = side * (projection.offset - edge);
+  const solid = side < 0 ? bounds.leftSolid : bounds.rightSolid;
+  const penetration = solid && !state.falling ? side * (projection.offset - edge) : 0;
   const wallImpact = wallContact(
     state,
     projection.horizontalRight.x * side,
@@ -250,6 +301,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   if (penetration > 0) state.x = laneFromOffset(edge);
   const trafficHit = trafficContact(state.worldPos, raceTime);
   const contact =
+    activeTrack.pathwayContact(state.worldPos, 0.9 * state.scale) ||
     mechanismContact(activeTrack, state.worldPos, raceTime, 0.9 * state.scale) ||
     trafficHit ||
     cartContact(state.worldPos, raceTime, 0.9 * state.scale);
@@ -267,7 +319,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   const wasGrounded = state.grounded;
   // Arcade ramp hops: boost changes horizontal speed, never jump height.
   // Do not infer takeoff from a noisy surface derivative after a collision.
-  if (state.grounded && state.speed > 50) {
+  if (floor.supported && state.grounded && state.speed > 50) {
     const travelled = progressDelta(after.t, before.t, 1);
     for (const ramp of RAMPS) {
       const distance = progressDelta(ramp.t, before.t, 1);
@@ -285,6 +337,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   }
   // A fresh tap shortly before takeoff or early in the jump earns one trick.
   const trickStarted =
+    !state.falling &&
     !state.grounded &&
     !state.trickActive &&
     !(state.spin > 0) &&
@@ -298,7 +351,14 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     state.trickAge = 0;
   }
   if (state.trickActive) state.trickAge = (state.trickAge || 0) + dt;
-  const landed = verticalMotion(state, after.height, slopeVelocity, dt);
+  const support = activeTrack.floorAt(after);
+  const landed = verticalMotion(
+    state,
+    support.height,
+    slopeVelocity,
+    dt,
+    floor.supported && support.supported,
+  );
   const trickLanded = landed && state.trickActive && !(state.spin > 0);
   if (trickLanded) state.boost = Math.max(state.boost, 0.7);
   if (landed || state.spin > 0) state.trickActive = false;
@@ -335,6 +395,15 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   }
   state.x = laneFromOffset(after.offset);
   state.speed = Math.hypot(state.vx, state.vz) * 3.6;
+  if (state.grounded && !after.offroad && !state.falling) state.lastSafeS = state.s;
+  if (
+    !Number.isFinite(state.worldPos.y) ||
+    (state.falling && (state.airTime > 1.15 || state.worldPos.y < after.height - 14)) ||
+    state.offPathTime > 1.4
+  ) {
+    recoverRacer(state);
+    return { recovered: true };
+  }
   state.lap = lapNumber(state.s, TRACK, totalLaps) - 1;
   const finished =
     state.nextCheckpoint > CHECKPOINT_COUNT * totalLaps &&

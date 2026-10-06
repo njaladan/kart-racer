@@ -22,6 +22,7 @@ export function createRacerState(configuration = {}) {
     nextCheckpoint: 1,
     finishTime: Infinity,
     finishDelay: 0,
+    recoveryCount: 0,
     boost: 0,
     star: 0,
     spin: 0,

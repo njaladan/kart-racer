@@ -39,6 +39,9 @@ export function resetMotion(state) {
     hitLift: 0,
     steering: 0,
     grounded: true,
+    falling: false,
+    offPathTime: 0,
+    lastSafeS: null,
     reverseHold: 0,
     lateralSpeed: 0,
     longitudinalSpeed: 0,
@@ -288,8 +291,13 @@ export function wallContact(state, nx, nz, penetration) {
   return outward > 2;
 }
 
-export function verticalMotion(state, height, slopeVelocity, dt) {
+export function verticalMotion(state, height, slopeVelocity, dt, supported = true) {
   let landed = false;
+  if (!supported && state.grounded) {
+    state.grounded = false;
+    state.vy = Math.min(0, state.vy);
+    state.airTime = 0;
+  }
   if (state.grounded) {
     // Surface corrections, banks and kart contact cannot launch the kart.
     // A deliberate ramp takeoff is the only way to leave the ground.
@@ -304,13 +312,13 @@ export function verticalMotion(state, height, slopeVelocity, dt) {
       JUMP_TAKEOFF_SPEED,
     );
     state.worldPos.y += state.vy * dt;
-    if (state.worldPos.y > height + MAX_JUMP_HEIGHT * (state.underwater ? 2.3 : 1)) {
+    if (supported && state.worldPos.y > height + MAX_JUMP_HEIGHT * (state.underwater ? 2.3 : 1)) {
       state.worldPos.y = height + MAX_JUMP_HEIGHT * (state.underwater ? 2.3 : 1);
       state.vy = Math.min(state.vy, 0);
     }
     if (
-      state.worldPos.y <= height ||
-      state.airTime >= MAX_JUMP_TIME * (state.underwater ? 1.6 : 1)
+      supported &&
+      (state.worldPos.y <= height || state.airTime >= MAX_JUMP_TIME * (state.underwater ? 1.6 : 1))
     ) {
       landed = true;
       state.grounded = true;

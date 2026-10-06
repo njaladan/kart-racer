@@ -1,7 +1,9 @@
+import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { adventure } from "./adventure-definition.js";
 import { buildRailstorm } from "./adventure/railstorm-world.js";
 export default adventure({
   id: "railstorm-express",
+  pathwayEdges: PATHWAY_EDGES["railstorm-express"],
   name: "Railstorm Express",
   description:
     "Chase the express along the cliffs, board its moving freight decks, race through cargo, and burst back onto the mountain road.",

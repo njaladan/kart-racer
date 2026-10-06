@@ -7,6 +7,7 @@ import buildWindmillLife from "../windmill-wilds-world.js";
 import { buildWindmillTerrain } from "./terrain.js";
 import { buildWindmillVegetation } from "./vegetation.js";
 import { buildWindmillLandmarks } from "./landmarks.js";
+import { buildPathwayEdges } from "../../rendering/pathway-edges.js";
 import { buildValleyStory } from "./build-valley-story.js";
 
 /** Compose countryside terrain, vegetation, landmarks, and animated life. */
@@ -35,10 +36,6 @@ export function buildWindmillWorld({
     });
   const wood = mat("#d6b784", textures.wood),
     darkWood = mat("#76573b", textures.wood);
-  // Tight inner bends can reverse the edge direction; keep both faces visible.
-  const railMaterials = [mats.rail.clone(), darkWood.clone()],
-    bridgeRailMaterial = wood.clone();
-  for (const material of [...railMaterials, bridgeRailMaterial]) material.side = THREE.DoubleSide;
   const stone = mat(
     "#e8d9bf",
     textures.brick || (renderer ? surfaceTexture("brick", renderer) : null),
@@ -102,13 +99,12 @@ export function buildWindmillWorld({
     fruit,
     rock,
     bark,
-    railMaterials,
-    bridgeRailMaterial,
   };
   const primitives = { mesh, box, mat, align, groupAt, sectorT, sphereGeo, coneGeo, cylinderGeo };
   const kit = createCourseKit(scenery, track, assets);
   const options = { scene, scenery, mats, textures, palette, primitives, kit, track };
   const { lake } = buildWindmillTerrain(options);
+  buildPathwayEdges({ track, kit, textures });
   buildWindmillVegetation({ ...options, random });
   const landmarks = buildWindmillLandmarks(options);
   const life = buildWindmillLife({

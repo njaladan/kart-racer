@@ -4,6 +4,7 @@ import { cartAt, trafficAt } from "../simulation/hazards.js";
 import { buildWindmillWorld } from "../courses/windmill-wilds/world.js";
 import { installWetPavement } from "./surface-detail.js";
 import { createRailGeometry } from "./course-rails.js";
+import { buildPathwayEdges } from "./pathway-edges.js";
 import { addDetailedScenery } from "./detailed-scenery.js";
 import { TERRAIN_VERGE_WIDTH } from "./terrain-height.js";
 import { createSceneryDetailController } from "./scenery-lod.js";
@@ -100,7 +101,7 @@ export function buildCourseWorld({
     } else templePaving(roadMaterials.paving);
   }
   if (course.theme.wetPavement) installWetPavement(roadMaterials.stone);
-  if (course.edgeStyle === "adventure") {
+  if (!course.pathwayEdges && course.edgeStyle === "adventure") {
     const rail = material(course.theme.shoulder, { metalness: 0.25 });
     for (const side of [-1, 1]) {
       for (const section of track.SECTIONS) {
@@ -228,7 +229,7 @@ export function buildCourseWorld({
   ribbon(
     (t) => -track.roadHalfWidth(t) - 0.55,
     (t) => track.roadHalfWidth(t) + 0.55,
-    mats.roadside,
+    course.pathwayEdges ? roads : mats.roadside,
     -0.02,
   );
   ribbon(
@@ -339,6 +340,7 @@ export function buildCourseWorld({
   }
   for (const side of [-1, 1]) {
     const edge = (t) => (side < 0 ? track.surfaceAt(t).leftEdge : track.surfaceAt(t).rightEdge);
+    if (course.pathwayEdges) continue;
     ribbon(edge, (t) => edge(t) + side * TERRAIN_VERGE_WIDTH, mats.grass, 0, true);
     if (["port-lumen", "sunstone", "frostpeak", "adventure"].includes(course.edgeStyle)) continue;
     const railMaterial = mats.rail.clone();
@@ -352,7 +354,9 @@ export function buildCourseWorld({
   }
   for (
     let i = 0;
-    !["port-lumen", "sunstone", "frostpeak", "adventure"].includes(course.edgeStyle) && i < 330;
+    !course.pathwayEdges &&
+    !["port-lumen", "sunstone", "frostpeak", "adventure"].includes(course.edgeStyle) &&
+    i < 330;
     i++
   ) {
     const t = i / 330,
@@ -371,7 +375,7 @@ export function buildCourseWorld({
       );
     }
   }
-  if (course.edgeStyle === "sunstone") {
+  if (!course.pathwayEdges && course.edgeStyle === "sunstone") {
     const edgeMaterial = material("#c49663", { bumpMap: textures.stone, bumpScale: 0.02 });
     for (const side of [-1, 1]) {
       const rail = mesh(
@@ -381,6 +385,7 @@ export function buildCourseWorld({
       rail.name = "Continuous sandstone parapet";
     }
   }
+  buildPathwayEdges({ track, kit, textures });
   const warningMaterial = material("#ffc850", {
     emissive: "#ff9d25",
     emissiveIntensity: 0,

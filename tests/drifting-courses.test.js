@@ -73,10 +73,10 @@ for (const [id, section, fraction, expectedTier] of [
 
 test("releasing on a wall scrape cancels a ready turbo on the same simulation tick", () => {
   const track = selectCourse(courseById("windmill-wilds"));
-  const t = track.sectorT(6, 0.5);
+  const t = track.sectorT(3, 0.3);
   const state = initializeRacer({
     s: t * TRACK,
-    x: (track.roadHalfWidth(t) - 0.1) / 6.25,
+    x: (-track.roadHalfWidth(t) + 0.1) / 6.25,
     isPlayer: true,
   });
   Object.assign(state, {

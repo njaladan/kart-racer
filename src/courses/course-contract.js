@@ -1,3 +1,5 @@
+import { PATHWAY_KINDS } from "./pathway-edges.js";
+
 const REQUIRED_THEME_COLORS = [
   "sky",
   "fog",
@@ -113,6 +115,19 @@ export function validateCourseDefinition(course) {
   });
   if (course.sections[0].controlIndex !== 0)
     fail(course, "sections[0].controlIndex", "0 so sections cover the full loop");
+
+  if (course.pathwayEdges != null) {
+    if (
+      !Array.isArray(course.pathwayEdges) ||
+      course.pathwayEdges.length !== course.sections.length
+    )
+      fail(course, "pathwayEdges", "one left/right environmental edge pair per section");
+    course.pathwayEdges.forEach((edges, index) => {
+      for (const side of ["left", "right"])
+        if (!Object.hasOwn(PATHWAY_KINDS, edges?.[side]))
+          fail(course, `pathwayEdges[${index}].${side}`, "a known pathway kind");
+    });
+  }
 
   for (const [index, ramp] of (course.ramps || []).entries()) {
     sectionFraction(course, ramp, `ramps[${index}]`);

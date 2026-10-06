@@ -1,7 +1,5 @@
 import * as THREE from "../../../vendor/three/three.module.js";
 import { createWaterMaterial, installSurfaceDetail } from "../../rendering/surface-detail.js";
-import { createRailGeometry } from "../../rendering/course-rails.js";
-import { TERRAIN_VERGE_WIDTH } from "../../rendering/terrain-height.js";
 import {
   TRACK,
   COURSE_LENGTH,
@@ -18,7 +16,7 @@ import {
 
 /** Road ribbons, collision-aligned rails, bridge support, and the lake surface. */
 export function buildWindmillTerrain({ scene, scenery, textures, mats, palette, primitives }) {
-  const { wood, darkWood, stone, bridgeRailMaterial } = palette;
+  const { wood, darkWood, stone } = palette;
   const { mesh, box, groupAt, sectorT, mat } = primitives;
   const inBridge = (t) => t >= BRIDGE_RANGE.start && t <= BRIDGE_RANGE.end;
   const ground = mesh(new THREE.PlaneGeometry(1800, 1800), mats.grass, scenery, [0, -1.7, 0]);
@@ -49,11 +47,7 @@ export function buildWindmillTerrain({ scene, scenery, textures, mats, palette, 
         if (terrain) {
           const surface = surfaceAt(t);
           const distance = Math.abs(edge) - (edge > 0 ? surface.rightEdge : -surface.leftEdge);
-          p.y = THREE.MathUtils.lerp(
-            p.y - 0.06,
-            -1.7,
-            THREE.MathUtils.clamp(distance / TERRAIN_VERGE_WIDTH, 0, 1),
-          );
+          p.y = THREE.MathUtils.lerp(p.y - 0.06, -1.7, THREE.MathUtils.clamp(distance / 38, 0, 1));
         } else p.addScaledVector(frame.up, lift);
         pos.push(p.x, p.y, p.z);
         if (grassy) uv.push(p.x / 6, p.z / 6);
@@ -101,7 +95,7 @@ export function buildWindmillTerrain({ scene, scenery, textures, mats, palette, 
   ribbon(
     (t) => -roadHalfWidth(t) - 0.55,
     (t) => roadHalfWidth(t) + 0.55,
-    mats.roadside,
+    mats.grass,
     -0.02,
   );
   ribbon(
@@ -137,47 +131,6 @@ export function buildWindmillTerrain({ scene, scenery, textures, mats, palette, 
       v.start,
       v.end,
     );
-  for (const side of [-1, 1]) {
-    const edge = (t) => (side < 0 ? surfaceAt(t).leftEdge : surfaceAt(t).rightEdge);
-    ribbon(
-      (t) => edge(t),
-      (t) => edge(t) + side * TERRAIN_VERGE_WIDTH,
-      mats.grass,
-      0,
-      true,
-    );
-    // The same physical limit is expressed by each place's natural boundary.
-    // Rounded turf lips, exposed roots and old stonework replace the metal cage.
-    for (const [index, section] of SECTIONS.entries()) {
-      const boundary =
-        index === 3
-          ? { material: darkWood, width: 0.18, height: 0.28, above: 0.72 }
-          : index === 6
-            ? { material: stone, width: 0.65, height: 1.45, above: 0.62 }
-            : index === 1
-              ? { material: mats.trunk, width: 0.65, height: 0.35, above: 0.08 }
-              : { material: mats.grass, width: 1.2, height: 0.4, above: 0.05 };
-      mesh(
-        createRailGeometry(side, { ...boundary, start: section.start, end: section.end }),
-        boundary.material,
-      );
-    }
-    mesh(
-      createRailGeometry(side, {
-        width: 0.12,
-        height: 0.15,
-        above: 1.25,
-        start: BRIDGE_RANGE.start,
-        end: BRIDGE_RANGE.end,
-      }),
-      bridgeRailMaterial,
-    );
-    for (let i = 0; i < 40; i++) {
-      const t = THREE.MathUtils.lerp(BRIDGE_RANGE.start, BRIDGE_RANGE.end, i / 39),
-        g = groupAt(t, edge(t));
-      box(darkWood, g, [0, 0.72, 0], [0.19, 1.5, 0.19]);
-    }
-  }
   // Tire-worn earth has two subtle wheel ruts. Timber has actual cross planks.
   const rut = mat("#b29e7a", textures.gravel);
   for (const section of SECTIONS) {

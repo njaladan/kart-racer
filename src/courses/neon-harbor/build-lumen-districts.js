@@ -32,41 +32,7 @@ export function buildLumenDistricts({ THREE, scenery, track, kit, props, materia
     return side > 0 ? surface.rightEdge : -surface.leftEdge;
   };
 
-  // Replace racetrack stripes with raised city pavements, seawalls and bridge parapets.
-  for (let district = 0; district < 8; district++) {
-    const count = Math.ceil(lengthOf(district) / 4);
-    for (let i = 0; i < count; i++) {
-      const t = sectorT(district, (i + 0.5) / count);
-      const span = lengthOf(district) / count + 0.22;
-      for (const side of [-1, 1]) {
-        const edge = edgeAt(t, side);
-        const g = groupAt(t, side * edge, scenery);
-        if (district === 3) {
-          box(concrete, g, [side * 0.4, 0.45, 0], [0.8, 0.9, span]);
-          box(cyan, g, [0, 0.92, 0], [0.1, 0.08, span]);
-          if (i % 5 === 0) box(amber, g, [-side * 0.14, 1.03, 0], [0.09, 0.14, 0.3]);
-        } else if ([0, 6, 7].includes(district) && side > 0) {
-          box(concrete, g, [0.4, -1.5, 0], [0.8, 3.8, span]);
-          box(steel, g, [0.2, 0.47, 0], [0.65, 0.22, span]);
-          if (i % 5 === 0) {
-            mesh(cylinder, steel, g, [0.4, 0.9, 0], [0.35, 0.65, 0.35]);
-            box(amber, g, [0.4, 1.23, 0], [0.64, 0.09, 0.64]);
-          }
-        } else if ([0, 1, 2, 7].includes(district)) {
-          box(concrete, g, [side * 1.8, 0.11, 0], [3.6, 0.22, span]);
-          box(steel, g, [side * 0.12, 0.2, 0], [0.24, 0.14, span]);
-          if (i % 7 === 0) {
-            box(dark, g, [-side * 0.3, 0.035, 0], [0.5, 0.025, 1.6]);
-            for (let j = 0; j < 6; j++)
-              box(steel, g, [-side * 0.3, 0.055, -0.65 + j * 0.25], [0.47, 0.025, 0.04]);
-          }
-        } else {
-          box(amber, g, [0, 0.08, 0], [0.24, 0.08, span]);
-          if (i % 4 === 0) box(cyan, g, [0, 0.15, 0], [0.3, 0.06, 0.65]);
-        }
-      }
-    }
-  }
+  // Quay drops and explorable pavements are built by the shared pathway system.
 
   function block(district, fraction, side, index, far = false) {
     const t = sectorT(district, fraction);

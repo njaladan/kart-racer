@@ -7,7 +7,7 @@ import { initializeRacer, advanceRacer } from "../src/simulation/simulation.js";
 import { createShell, advanceShell } from "../src/simulation/items.js";
 import { advanceRaceProgress } from "../src/simulation/race.js";
 
-test("all extra route choices have continuous ground, material costs and shared barriers", () => {
+test("all extra route choices have continuous ground, material costs and authored open or solid edges", () => {
   for (const course of COURSES) {
     const track = selectCourse(course);
     if (course.topology !== "adventure") assert.ok(track.VERGES.length >= 2, course.id);
@@ -62,10 +62,11 @@ test("all extra route choices have continuous ground, material costs and shared 
       shell.vx = f.right.x * v.side * 30;
       shell.vz = f.right.z * v.side * 30;
       advanceShell(shell, 1 / 120, activeTime);
-      assert.ok(
-        shell.vx * f.right.x * v.side + shell.vz * f.right.z * v.side < 0,
-        "shell reflects at widened rail",
-      );
+      const solid =
+        v.side < 0 ? track.collisionBounds(mid).leftSolid : track.collisionBounds(mid).rightSolid;
+      const outward = shell.vx * f.right.x * v.side + shell.vz * f.right.z * v.side;
+      if (solid) assert.ok(outward < 0, "shell reflects at the widened structural boundary");
+      else assert.ok(outward > 0, "open route choices have no invisible reflecting rail");
       const rail = createRailGeometry(v.side, {
         width: 0.15,
         height: 0.32,

@@ -97,15 +97,16 @@ export function buildPaper(context) {
   // Continuous folded banks and low zigzag mountains fill all distances.
   for (let section = 0; section < 8; section++) {
     for (const side of [-1, 1]) {
-      w.sweep(
-        section,
-        0,
-        1,
-        (t) => side * (track.roadHalfWidth(t) + 1),
-        (t) => side * (track.roadHalfWidth(t) + 16),
-        papers[(section + (side > 0 ? 1 : 2)) % 5],
-        -0.15,
-      );
+      if (track.edgeAt(track.sectorT(section, 0.5), side).mode === "soft")
+        w.sweep(
+          section,
+          0,
+          1,
+          (t) => track.edgeAt(t, side).offset,
+          (t) => track.platformEdgeAt(t, side),
+          papers[(section + (side > 0 ? 1 : 2)) % 5],
+          -0.15,
+        );
       for (let i = 0; i < 8; i++) {
         const t = track.sectorT(section, (i + 0.5) / 8),
           edge = side > 0 ? track.surfaceAt(t).rightEdge : -track.surfaceAt(t).leftEdge;

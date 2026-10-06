@@ -7,6 +7,7 @@ import {
   laneFromOffset,
   laneWidth,
   poseAt,
+  activeTrack,
 } from "../track/track.js";
 import { cartContact, trafficContact } from "./hazards.js";
 import { progressDelta } from "./race.js";
@@ -91,11 +92,16 @@ export function advanceShell(shell, dt, raceTime = 0) {
   shell.worldPos.x += shell.vx * dt;
   shell.worldPos.z += shell.vz * dt;
   const surface = projectTrack(shell.worldPos, shell.s);
+  const support = activeTrack.floorAt(surface);
+  if (!support.supported || support.outside) {
+    shell.life = 0;
+    return;
+  }
   const bounds = collisionBounds(surface.t, 0.55);
   const side = surface.offset < bounds.left ? -1 : 1;
   const edge = side < 0 ? bounds.left : bounds.right;
   const penetration = side * (surface.offset - edge);
-  if (penetration > 0) {
+  if (penetration > 0 && (side < 0 ? bounds.leftSolid : bounds.rightSolid)) {
     const nx = surface.horizontalRight.x * side,
       nz = surface.horizontalRight.z * side,
       outward = shell.vx * nx + shell.vz * nz;
@@ -108,7 +114,9 @@ export function advanceShell(shell, dt, raceTime = 0) {
     }
   }
   const contact =
-    trafficContact(shell.worldPos, raceTime, 0.55) || cartContact(shell.worldPos, raceTime, 0.55);
+    activeTrack.pathwayContact(shell.worldPos, 0.55) ||
+    trafficContact(shell.worldPos, raceTime, 0.55) ||
+    cartContact(shell.worldPos, raceTime, 0.55);
   if (contact) {
     const outward = shell.vx * contact.nx + shell.vz * contact.nz;
     shell.worldPos.x -= contact.nx * contact.penetration;
@@ -122,7 +130,7 @@ export function advanceShell(shell, dt, raceTime = 0) {
   const after = projectTrack(shell.worldPos, shell.s);
   shell.s += progressDelta(after.t * TRACK, shell.s, TRACK);
   shell.x = laneFromOffset(after.offset);
-  shell.worldPos.y = after.height + 0.6;
+  shell.worldPos.y = activeTrack.floorAt(after).height + 0.6;
 }
 export function sweptDistanceSquared(point, start, end) {
   const dx = end.x - start.x,

@@ -7,6 +7,7 @@ import { createRaceSession } from "../src/simulation/race-session.js";
 import { RACERS } from "../src/rendering/racer-roster.js";
 import { DEFAULT_COURSE } from "../src/courses/registry.js";
 import { selectCourse } from "../src/track/track.js";
+import { botInput } from "../src/simulation/simulation.js";
 import { FIXED_DT } from "../src/simulation/physics.js";
 
 function harness(callbacks = {}) {
@@ -56,7 +57,7 @@ function harness(callbacks = {}) {
     boxes: [],
     createEffect: (type) => ({ type }),
     removeEffect: (mesh) => effectsRemoved.push(mesh),
-    getPlayerInput: () => ({ throttle: true }),
+    getPlayerInput: () => botInput(local[0], 0, clock / 1000),
     ...defaults,
     ...callbacks,
     now: () => clock,
@@ -114,7 +115,7 @@ test("prediction responds before round trip and reconciliation stays continuous 
     racers: h.authoritative,
     items: { reset() {}, step() {} },
     getPlayerInput: () => held,
-    getRacerInput: () => ({ throttle: true }),
+    getRacerInput: (racer) => botInput(racer, 1, session.getState().raceTime),
     stopOnPlayerFinish: false,
     totalLaps: 1,
   });
@@ -226,4 +227,19 @@ test("items have persistent effect meshes; server events and finishes fire once;
   h.network.items.fire();
   assert.equal(h.outgoing.at(-1).message.seq, 11);
   assert.ok(h.outgoing.some((record) => record.message.type === "loaded"));
+});
+
+test("an authoritative recovery clears visual correction instead of sliding across the drop", () => {
+  let recoveries = 0;
+  const h = harness({ onRecover: () => recoveries++ });
+  h.receive(h.snapshot(0));
+  h.local[0].worldPos.y -= 3;
+  h.local[0].visualOffset.set(1, 0, 0);
+  h.authoritative[0].recoveryCount = 1;
+  h.receive(h.snapshot(1));
+  assert.equal(h.local[0].recoveryCount, 1);
+  assert.equal(h.local[0].visualOffset.length(), 0);
+  assert.equal(h.local[0].visualYawOffset, 0);
+  assert.equal(recoveries, 1);
+  assert.ok(h.local[0].renderFrom.distanceTo(h.local[0].worldPos) < 1e-9);
 });

@@ -10,6 +10,7 @@ export function buildSnowTerrain({ THREE, scenery, track, kit, textures, edgeOff
     columns = 10;
   for (let section = 0; section < track.SECTIONS.length; section++) {
     for (const side of [-1, 1]) {
+      if (track.edgeAt(kit.sectorT(section, 0.5), side).mode === "drop") continue;
       const positions = [],
         colors = [],
         uv = [],
@@ -20,7 +21,7 @@ export function buildSnowTerrain({ THREE, scenery, track, kit, textures, edgeOff
         const phase = (t * track.COURSE_LENGTH) / 18;
         for (let column = 0; column <= columns; column++) {
           const u = column / columns;
-          const margin = 2.8 + u * 26;
+          const margin = track.edgeAt(t, side).shoulder + 2.8 + u * 26;
           const p = track.poseAt(t * track.TRACK, edgeOffset(t, side, margin), 0).p;
           const projection = track.projectTrack(p, 0, true);
           const edge = projection.offset > 0 ? projection.rightEdge : -projection.leftEdge;

@@ -1,3 +1,4 @@
+import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { adventure } from "./adventure-definition.js";
 import { buildPaper } from "./adventure/paper-world.js";
 const points = Array.from({ length: 32 }, (_, i) => {
@@ -6,6 +7,7 @@ const points = Array.from({ length: 32 }, (_, i) => {
 });
 export default adventure({
   id: "paper-revel",
+  pathwayEdges: PATHWAY_EDGES["paper-revel"],
   name: "Paper Revel",
   description:
     "An origami festival of folded valleys and layered crossings. Watch a giant fan unfold a new racing line beneath the lanterns.",

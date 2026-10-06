@@ -1,7 +1,9 @@
+import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { adventure } from "./adventure-definition.js";
 import { buildEmberwing } from "./adventure/emberwing-world.js";
 export default adventure({
   id: "emberwing-observatory",
+  pathwayEdges: PATHWAY_EDGES["emberwing-observatory"],
   name: "Emberwing Observatory",
   description:
     "Climb a volcanic star observatory, fire across the caldera in a sky cannon, and land among the rotating telescope terraces.",

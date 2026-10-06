@@ -1,3 +1,4 @@
+import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { adventure } from "./adventure-definition.js";
 import { buildClockwork } from "./adventure/clockwork-world.js";
 const points = [
@@ -26,6 +27,7 @@ points.push(
 );
 export default adventure({
   id: "clockwork-citadel",
+  pathwayEdges: PATHWAY_EDGES["clockwork-citadel"],
   name: "Clockwork Citadel",
   description:
     "Spiral into a living clock tower, board its sky lift, and dive from the crown through enormous turning gears.",

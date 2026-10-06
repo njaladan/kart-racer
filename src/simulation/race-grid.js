@@ -46,10 +46,14 @@ export function resetRaceGrid(racers) {
       finished: false,
       finishTime: Infinity,
       finishDelay: 0,
+      recoveryCount: 0,
       cooldown: index === 0 ? 0 : 4 + botIndex * 1.5,
     });
     racer.prevS = racer.s;
     resetMotion(racer);
+    racer.lastSafeS = racer.s;
+    racer.visualOffset?.set(0, 0, 0);
+    racer.visualYawOffset = 0;
     resetRaceProgress(racer, TRACK);
     placeRacer(racer);
   });

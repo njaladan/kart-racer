@@ -27,7 +27,15 @@ export function buildPelagic(context) {
   sea.material.side = THREE.DoubleSide;
   // The underwater road has broad reef terraces instead of a featureless seabed.
   for (let section = 1; section <= 4; section++) {
-    w.sweep(section, 0, 1, -30, 30, sand, -0.22);
+    w.sweep(
+      section,
+      0,
+      1,
+      (t) => track.platformEdgeAt(t, -1),
+      (t) => track.platformEdgeAt(t, 1),
+      sand,
+      -0.22,
+    );
     for (const side of [-1, 1])
       for (let i = 0; i < 11; i++) {
         const t = track.sectorT(section, (i + 0.5) / 11),
@@ -227,7 +235,15 @@ export function buildPelagic(context) {
   }
   // Dry garden bookends: terraced islands, palms, tiled fountains and attendants.
   for (const section of [0, 5]) {
-    w.sweep(section, 0, 1, -36, 36, sand, -0.15);
+    w.sweep(
+      section,
+      0,
+      1,
+      (t) => track.platformEdgeAt(t, -1),
+      (t) => track.platformEdgeAt(t, 1),
+      sand,
+      -0.15,
+    );
     for (let i = 0; i < 10; i++) {
       const g = at(section, 0.05 + i * 0.095, (i % 2 ? 1 : -1) * 25);
       mesh(cylinder, ivory, g, [0, 0.4, 0], [8, 0.8, 8]);

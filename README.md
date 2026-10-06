@@ -4,6 +4,8 @@ A browser kart racer built with Three.js. Race five rivals over three laps, drif
 
 Twelve playable courses include moving hazards, boost pads, and shortcuts: **Windmill Wilds**, **Neon Harbor**, **Sunstone Ruins**, **Frostpeak Festival**, **Clockwork Citadel**, **Paper Revel**, **Tempest Causeway**, **Pocket Pantry**, **Railstorm Express**, **Metronome Hall**, **Pelagic Glasshouse**, and **Emberwing Observatory**. Supports keyboard, touch and gamepad controls.
 
+Course edges now come from meadows, dunes, snow, kitchen shelves, reef beds and exposed decks. Most boundaries are open: explore rough shoulders, or fall from a ledge and recover automatically onto the course. [Pathway designs for all twelve courses](docs/pathway-design.md).
+
 Choose from six distinct **SuperTuxKart** racers: Tux (penguin), Nolok (reptile),
 Pidgin (bird), Kiki (robot), Konqi (dragon), and Wilber (mascot). Each has its
 own vehicle. Choose your racer on the starting screen; the other five form
@@ -15,17 +17,17 @@ To regenerate these images, see the [screenshot capture guide](docs/screenshot-c
 
 | Windmill Wilds | Neon Harbor |
 | --- | --- |
-| ![Tux racing in Windmill Wilds](docs/screenshots/windmill-wilds.jpg) | ![Kiki racing in Neon Harbor](docs/screenshots/neon-harbor.jpg) |
+| ![Tux racing in Windmill Wilds](docs/screenshots/windmill-wilds.jpg) | ![Racing along the Neon Harbor quay](docs/screenshots/neon-harbor.jpg) |
 | **Sunstone Ruins** | **Frostpeak Festival** |
-| ![Nolok racing through a Sunstone temple](docs/screenshots/sunstone-engine-polish.jpg) | ![Konqi racing in Frostpeak Festival](docs/screenshots/frostpeak-festival.jpg) |
+| ![Racing through the open dune sea](docs/screenshots/sunstone-ruins.jpg) | ![Racing down an open Frostpeak snow ledge](docs/screenshots/frostpeak-festival.jpg) |
 | **Clockwork Citadel** | **Paper Revel** |
-| ![Kiki racing through Clockwork Citadel](docs/screenshots/clockwork-citadel.jpg) | ![Pidgin racing through Paper Revel](docs/screenshots/paper-crossing.jpg) |
+| ![Racing up the exposed Clockwork spiral](docs/screenshots/clockwork-citadel.jpg) | ![Racing across the exposed Paper Revel folds](docs/screenshots/paper-revel.jpg) |
 | **Tempest Causeway** | **Pocket Pantry** |
-| ![Konqi racing across Tempest Causeway](docs/screenshots/tempest-causeway.jpg) | ![Wilber racing through Pocket Pantry](docs/screenshots/pocket-pantry.jpg) |
+| ![Racing across an exposed Tempest bridge](docs/screenshots/tempest-causeway.jpg) | ![Racing along the open pantry shelf](docs/screenshots/pocket-pantry.jpg) |
 | **Railstorm Express** | **Metronome Hall** |
-| ![Nolok racing through a Railstorm Express carriage](docs/screenshots/railstorm-express.jpg) | ![Pidgin racing through the Metronome Hall](docs/screenshots/metronome-hall.jpg) |
+| ![Racing onto the moving freight decks](docs/screenshots/railstorm-express.jpg) | ![Racing across the open music-box deck](docs/screenshots/metronome-hall.jpg) |
 | **Pelagic Glasshouse** | **Emberwing Observatory** |
-| ![Konqi racing through the flooded Pelagic Glasshouse](docs/screenshots/pelagic-glasshouse.jpg) | ![Pidgin at the Emberwing Observatory cannon launch](docs/screenshots/emberwing-observatory.jpg) |
+| ![Racing through the open coral terraces](docs/screenshots/pelagic-glasshouse.jpg) | ![Racing down the exposed Emberwing descent](docs/screenshots/emberwing-observatory.jpg) |
 
 ## Run locally
 

@@ -1,3 +1,4 @@
+import { PATHWAY_EDGES } from "./pathway-edges.js";
 // Eight connected places: a broad valley loop folds into a compact willow maze.
 // The willow maze has two rounded lobes with a short recovery line between
 // them: enter wide, tighten to the apex, then release before changing direction.
@@ -101,6 +102,7 @@ const definitions = [
 
 export default {
   id: "windmill-wilds",
+  pathwayEdges: PATHWAY_EDGES["windmill-wilds"],
   name: "Windmill Wilds",
   description:
     "Eight places in a living valley. Root tunnels, tilted hills, reedwater timber and a willow maze.",

@@ -5,7 +5,7 @@ import { kitchenRoadDetail } from "./pantry-materials.js";
 /** Cherrywood, blue velvet and polished brass inside a giant working music box. */
 export function buildMetronome(context) {
   const w = worldKit(context),
-    { THREE, scene, scenery, mat, mesh, box, at, motion, cylinder, sphere, torus, tube } = w;
+    { THREE, scene, scenery, track, mat, mesh, box, at, motion, cylinder, sphere, torus, tube } = w;
   const wood = mat("#8d573e", "wood"),
     dark = mat("#563c46", "wood"),
     gold = mat("#dab477", "metal", { metalness: 0.6, roughness: 0.32 }),
@@ -39,10 +39,34 @@ export function buildMetronome(context) {
   });
   // Continuous instrument case with gilded rims and pierced support cabinets.
   for (let section = 0; section < 6; section++) {
-    w.sweep(section, 0, 1, -23, 23, wood, -0.14);
-    w.sweep(section, 0, 1, -24, 24, dark, -2);
+    w.sweep(
+      section,
+      0,
+      1,
+      (t) => track.platformEdgeAt(t, -1),
+      (t) => track.platformEdgeAt(t, 1),
+      wood,
+      -0.14,
+    );
+    w.sweep(
+      section,
+      0,
+      1,
+      (t) => track.platformEdgeAt(t, -1),
+      (t) => track.platformEdgeAt(t, 1),
+      dark,
+      -2,
+    );
     for (const side of [-1, 1]) {
-      w.sweep(section, 0, 1, side * 21, side * 23, gold, 0);
+      w.sweep(
+        section,
+        0,
+        1,
+        (t) => track.platformEdgeAt(t, side),
+        (t) => track.platformEdgeAt(t, side) - side * 0.25,
+        gold,
+        0,
+      );
       for (let i = 0; i < 7; i++) {
         const g = at(section, (i + 0.5) / 7, side * 21),
           height = g.position.y + 22;

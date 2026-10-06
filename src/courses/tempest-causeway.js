@@ -1,7 +1,9 @@
+import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { adventure } from "./adventure-definition.js";
 import { buildTempest } from "./adventure/tempest-world.js";
 export default adventure({
   id: "tempest-causeway",
+  pathwayEdges: PATHWAY_EDGES["tempest-causeway"],
   name: "Tempest Causeway",
   description:
     "Race between lighthouse shelters over a wild Atlantic of heaving waves, wind-swept spans, and storm-lit suspension bridges.",

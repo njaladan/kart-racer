@@ -1,3 +1,4 @@
+import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { buildWorld } from "./frostpeak-festival-world.js";
 
 // The lantern festival climbs out of its village, disappears into glacier pipes,
@@ -116,6 +117,7 @@ const places = [
 
 export default {
   id: "frostpeak-festival",
+  pathwayEdges: PATHWAY_EDGES["frostpeak-festival"],
   name: "Frostpeak Festival",
   description:
     "Eight winter wonders: lantern alleys, singing glaciers, a cloudtop carnival and a rooftop labyrinth.",

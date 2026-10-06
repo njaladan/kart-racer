@@ -1,7 +1,9 @@
+import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { adventure } from "./adventure-definition.js";
 import { buildPelagic } from "./adventure/pelagic-world.js";
 export default adventure({
   id: "pelagic-glasshouse",
+  pathwayEdges: PATHWAY_EDGES["pelagic-glasshouse"],
   name: "Pelagic Glasshouse",
   description:
     "Descend through a flooded botanical dome, ride gentle reef currents beneath enormous jellyfish, and climb into a luminous coastal conservatory.",

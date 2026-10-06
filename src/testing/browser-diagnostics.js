@@ -121,10 +121,14 @@ export function createBrowserDiagnostics({
       }
       if (message.type === "test-seek" && running && Number.isFinite(message.t)) {
         player.s = Math.max(0, Math.min(0.999, message.t)) * TRACK;
-        player.x = 0;
-        player.worldPos.copy(poseAt(player.s, 0, 0.065).p);
+        const offset = Number.isFinite(message.offset)
+          ? Math.max(-80, Math.min(80, message.offset))
+          : 0;
+        player.x = offset / 6.25;
+        player.worldPos.copy(poseAt(player.s, offset, 0.065).p);
         player.renderFrom.copy(player.worldPos);
         resetMotion(player);
+        player.lastSafeS = player.s;
         resetRaceProgress(player, TRACK);
         player.yaw = yawFor(frameAt(trackT(player.s)).tangent);
         player.renderYawFrom = player.yaw;
@@ -196,6 +200,9 @@ export function createBrowserDiagnostics({
       state: () => ({
         ...session.getState(),
         s: player?.s,
+        falling: player?.falling,
+        grounded: player?.grounded,
+        recoveryCount: player?.recoveryCount,
         position: player?.worldPos?.toArray(),
         camera: camera?.position?.toArray(),
         kart: player?.kart?.root?.position?.toArray(),

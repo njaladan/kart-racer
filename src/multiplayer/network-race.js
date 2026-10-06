@@ -26,6 +26,7 @@ export function createNetworkRace({
   onHit,
   hideLobby,
   onRoom = () => {},
+  onRecover = () => {},
   now = () => performance.now(),
   documentRef = document,
 }) {
@@ -63,6 +64,7 @@ export function createNetworkRace({
   function reconcile(data) {
     const oldPosition = player.worldPos.clone(),
       oldYaw = player.yaw;
+    const oldRecovery = player.recoveryCount || 0;
     pending.splice(
       0,
       pending.findIndex((command) => command.seq > data.ack) < 0
@@ -79,7 +81,8 @@ export function createNetworkRace({
     }
     const correction = oldPosition.sub(player.worldPos);
     if (!player.visualOffset) player.visualOffset = new Vector3();
-    if (started && correction.length() < 8) {
+    const recovered = (player.recoveryCount || 0) !== oldRecovery;
+    if (started && !recovered && correction.length() < 8) {
       player.visualOffset.add(correction);
       player.visualYawOffset = wrapAngle((player.visualYawOffset || 0) + oldYaw - player.yaw);
     } else {
@@ -88,6 +91,7 @@ export function createNetworkRace({
     }
     player.renderFrom.copy(player.worldPos);
     player.renderYawFrom = player.yaw;
+    if (started && recovered) onRecover();
     onInventory(player);
   }
   function syncEffects(list, records, type) {
@@ -234,6 +238,7 @@ export function createNetworkRace({
       pending.push({ seq: ++seq, input });
       if (pending.length > 180) pending.shift();
       const events = advanceRacer(player, input, dt, state.raceTime, match.laps);
+      if (events.recovered) onRecover();
       // Crossing the line remains provisional until the authoritative snapshot.
       if (events.finished) {
         player.finished = false;

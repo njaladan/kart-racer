@@ -1,7 +1,9 @@
+import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { adventure } from "./adventure-definition.js";
 import { buildPantry } from "./adventure/pantry-world.js";
 export default adventure({
   id: "pocket-pantry",
+  pathwayEdges: PATHWAY_EDGES["pocket-pantry"],
   name: "Pocket Pantry",
   description:
     "A breakfast-time expedition: shrink into a sunberry jar, race towering pantry shelves and a secret biscuit tunnel, then grow back beside the steaming sink.",

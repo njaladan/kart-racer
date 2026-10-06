@@ -1,10 +1,8 @@
-import { scaleAt, underwaterAt } from "./course-mechanics.js";
-import { advanceRacer, botInput } from "./simulation.js";
-import { resetMotion, cancelDrift } from "./physics.js";
+import { advanceRacer, botInput, recoverRacer } from "./simulation.js";
+import { cancelDrift } from "./physics.js";
 import { ranking } from "./race.js";
 import { resetRaceGrid } from "./race-grid.js";
 import { resolveRacerContacts } from "./racer-contact.js";
-import { poseAt, yawFor, projectTrack, activeTrack } from "../track/track.js";
 
 /** Race lifecycle and fixed-step orchestration. No DOM, renderer, or audio ownership. */
 export function createRaceSession({
@@ -85,27 +83,7 @@ export function createRaceSession({
     return true;
   }
   function recoverPlayer(player = racers[0]) {
-    if (player.traversalIndex >= 0) {
-      const traversal = activeTrack.course.traversals?.[player.traversalIndex];
-      if (traversal)
-        player.s =
-          Math.floor(player.s / activeTrack.TRACK) * activeTrack.TRACK +
-          activeTrack.sectorT(traversal.section, traversal.startFraction) * activeTrack.TRACK -
-          2;
-    }
-    const pose = poseAt(player.s, 0, 0.065);
-    player.worldPos.copy(pose.p);
-    player.renderFrom.copy(pose.p);
-    player.yaw = yawFor(pose.tangent);
-    player.renderYawFrom = player.yaw;
-    player.x = 0;
-    resetMotion(player);
-    player.scale = scaleAt(activeTrack, activeTrack.trackT(player.s));
-    player.underwater = underwaterAt(activeTrack, activeTrack.trackT(player.s));
-    player.speed = 0;
-    player.spin = 0;
-    player.drift = 0;
-    player.invulnerable = 1.5;
+    recoverRacer(player);
     onRecover();
   }
   function moveRacer(racer, input, dt) {
@@ -115,16 +93,7 @@ export function createRaceSession({
       events.wallContact = true;
     }
     racer.speed = Math.hypot(racer.vx, racer.vz) * 3.6;
-    if (
-      !Number.isFinite(racer.worldPos.y) ||
-      racer.worldPos.y < projectTrack(racer.worldPos, racer.s).height - 18
-    ) {
-      if (racer === player) recoverPlayer();
-      else {
-        racer.worldPos.copy(poseAt(racer.s, 0, 0.065).p);
-        resetMotion(racer);
-      }
-    }
+    if (events.recovered && racer === player) onRecover();
     if (events.finished && racer === player) racer.finishDelay = 0.35;
     onRacerEvent(racer, events, dt);
   }

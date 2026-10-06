@@ -6,7 +6,12 @@ export function sceneryGroundHeight(surface) {
   const { frame } = surface;
   const lane = surface.offset / Math.hypot(frame.right.x, frame.right.z);
   const edge = lane > 0 ? surface.rightEdge : surface.leftEdge;
-  const blend = Math.max(0, Math.min(1, (Math.abs(lane) - Math.abs(edge)) / TERRAIN_VERGE_WIDTH));
+  if (surface.pathway?.mode === "drop") return surface.groundHeight ?? -1.7;
+  const shoulder = surface.pathway?.shoulder ?? 0;
+  const blend = Math.max(
+    0,
+    Math.min(1, (Math.abs(lane) - Math.abs(edge) - shoulder) / TERRAIN_VERGE_WIDTH),
+  );
   const edgeHeight = frame.p.y + frame.right.y * edge - 0.06;
   return edgeHeight + ((surface.groundHeight ?? -1.7) - edgeHeight) * blend;
 }

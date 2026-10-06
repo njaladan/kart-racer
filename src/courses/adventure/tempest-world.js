@@ -65,17 +65,27 @@ export function buildTempest(context) {
   }
   for (const section of [1, 3, 5]) {
     // Connected underside and girders follow every elevation/bank of the deck.
-    w.sweep(section, 0, 1, -12, 12, iron, -1.4);
+    w.sweep(
+      section,
+      0,
+      1,
+      (t) => track.platformEdgeAt(t, -1),
+      (t) => track.platformEdgeAt(t, 1),
+      iron,
+      -1.4,
+    );
     const count = Math.ceil(
       ((track.SECTIONS[section].end - track.SECTIONS[section].start) * track.COURSE_LENGTH) / 10,
     );
     for (let i = 0; i < count; i++) {
       const g = at(section, (i + 0.5) / count);
-      box(concrete, g, [0, -1.1, 0], [24, 1.5, 11]);
+      box(
+        concrete,
+        g,
+        [0, -1.1, 0],
+        [track.roadHalfWidth(track.sectorT(section, (i + 0.5) / count)) * 2 + 1.1, 1.5, 11],
+      );
       for (const side of [-1, 1]) {
-        box(iron, g, [side * 12, 0.8, 0], [0.5, 1.6, 11]);
-        box(copper, g, [side * 12, 2.5, 0], [0.25, 0.25, 11]);
-        box(iron, g, [side * 12, 1.7, 0], [0.25, 3.4, 0.25]);
         tube(g, [side * 12, -2, -5], [side * 12, -8, 5], 0.3, iron);
         if (i % 4 === 0) lamp(g, side * 12, 4, 0);
       }

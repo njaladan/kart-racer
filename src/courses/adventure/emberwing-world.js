@@ -45,7 +45,16 @@ export function buildEmberwing(context) {
     if (section === 2) {
       w.sweep(2, 0, 0.16, -22, 22, basalt, -0.22);
       w.sweep(2, 0.88, 1, -22, 22, basalt, -0.22);
-    } else w.sweep(section, 0, 1, -26, 26, basalt, -0.22);
+    } else
+      w.sweep(
+        section,
+        0,
+        1,
+        (t) => track.platformEdgeAt(t, -1),
+        (t) => track.platformEdgeAt(t, 1),
+        basalt,
+        -0.22,
+      );
     if (section === 2) continue;
     for (const side of [-1, 1])
       for (let i = 0; i < 9; i++) {

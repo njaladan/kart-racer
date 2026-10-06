@@ -1,3 +1,4 @@
+import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { buildWorld } from "./sunstone-ruins-world.js";
 
 // A clockwise expedition: the final sustained right bend puts the sand on
@@ -6,6 +7,7 @@ import { buildWorld } from "./sunstone-ruins-world.js";
 // of little direction changes: hold the slide, open it out, boost toward home.
 export default {
   id: "sunstone-ruins",
+  pathwayEdges: PATHWAY_EDGES["sunstone-ruins"],
   topology: "adventure",
   name: "Sunstone Ruins",
   description:

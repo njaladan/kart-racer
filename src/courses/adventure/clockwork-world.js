@@ -159,15 +159,19 @@ export function buildClockwork(context) {
     for (let i = 0; i < count; i++) {
       const g = at(section, (i + 0.5) / count),
         f = track.frameAt(track.sectorT(section, (i + 0.5) / count));
-      box(iron, g, [0, -1.1, 0], [22, 1.6, 9.3]);
+      const t = track.sectorT(section, (i + 0.5) / count);
+      const left = track.platformEdgeAt(t, -1),
+        right = track.platformEdgeAt(t, 1);
+      box(iron, g, [(left + right) / 2, -1.1, 0], [right - left, 1.6, 9.3]);
       for (const side of [-1, 1]) {
-        box(bronze, g, [side * 10.9, 0.7, 0], [0.45, 1.3, 9.3]);
         if (i % 2 === 0) {
-          box(iron, g, [side * 10.9, 1.5, 0], [0.32, 3, 0.32]);
-          box(copper, g, [side * 10.9, 2.8, 0], [0.4, 0.3, 9.3]);
           pipe(g, [side * 10, -1, 0], [side * 20, -9, 0], 0.45, iron);
         }
-        if (i % 7 === 0) lamp(g, [side * 11.5, 3.4, 0]);
+        if (i % 7 === 0) {
+          const x = (side < 0 ? left : right) + side * 0.2;
+          pipe(g, [x, -1, 0], [x, 2.2, 0], 0.1, iron);
+          lamp(g, [x, 2.4, 0]);
+        }
       }
       if (i % 4 === 0 && section >= 4) {
         const height = Math.max(4, f.p.y + 25);

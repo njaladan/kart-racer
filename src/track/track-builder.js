@@ -3,6 +3,8 @@ import { unfoldPhase, scaleAt } from "../simulation/course-mechanics.js";
 import * as THREE from "../../vendor/three/three.module.js";
 import { progressDelta } from "../simulation/race.js";
 import { validateCourseDefinition } from "../courses/course-contract.js";
+import { PATHWAY_KINDS } from "../courses/pathway-edges.js";
+import { createPathwayQueries } from "./pathway.js";
 export const TRACK = 2400;
 // Default floor for broad roads; individual courses can author tighter
 // technical bends for drifting. Larger radii are gentler.
@@ -174,6 +176,7 @@ export function createTrack(course) {
       section = sectionAt(t);
     const patch = SURFACES.find((s) => t >= s.start && t < s.end);
     const verge = vergeAt(t, offset);
+    const edges = course.pathwayEdges?.[SECTIONS.indexOf(section)];
     return {
       section,
       movingSurface: movingSurfaceAt(t),
@@ -193,14 +196,18 @@ export function createTrack(course) {
       grip: verge?.grip ?? patch?.grip ?? section.grip ?? 12,
       offroadGrip: verge?.grip ?? 5,
       verge,
+      pathway: edges ? PATHWAY_KINDS[edges[offset < 0 ? "left" : "right"]] : null,
     };
   }
   // Vehicle centers respect body size; shells use the same actual road edges.
   function collisionBounds(t, radius = 0.9) {
     const surface = surfaceAt(t);
+    const edges = course.pathwayEdges?.[SECTIONS.indexOf(sectionAt(t))];
     return {
       left: surface.leftEdge + radius,
       right: surface.rightEdge - radius,
+      leftSolid: !edges || PATHWAY_KINDS[edges.left].mode === "wall",
+      rightSolid: !edges || PATHWAY_KINDS[edges.right].mode === "wall",
     };
   }
   function bankAt(t) {
@@ -392,6 +399,8 @@ export function createTrack(course) {
       frame,
       offset,
       height,
+      worldX: position.x,
+      worldZ: position.z,
       horizontalRight,
       routeId: `${course.id}:${SECTIONS.indexOf(sectionAt(t))}`,
       distance: Math.sqrt(best),
@@ -399,7 +408,7 @@ export function createTrack(course) {
     };
   }
 
-  return {
+  const track = {
     setTime: (time) => {
       mechanismTime = time;
     },
@@ -443,4 +452,6 @@ export function createTrack(course) {
     projectTrack,
     sectorT,
   };
+  Object.assign(track, createPathwayQueries(track));
+  return track;
 }

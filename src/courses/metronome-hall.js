@@ -1,7 +1,9 @@
+import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { adventure } from "./adventure-definition.js";
 import { buildMetronome } from "./adventure/metronome-world.js";
 export default adventure({
   id: "metronome-hall",
+  pathwayEdges: PATHWAY_EDGES["metronome-hall"],
   name: "Metronome Hall",
   description:
     "Drive the rhythm of a gigantic music box: pendulums, tappets and hammer gates answer a shared mechanical beat.",

@@ -34,8 +34,6 @@ export function buildRailstorm(context) {
     scenery.add(g);
     box(car.index % 2 ? red : iron, g, [0, -1.6, 0], [22, 3.2, car.length + 0.15]);
     for (const side of [-1, 1]) {
-      box(iron, g, [side * 10.7, 0.75, 0], [0.45, 1.5, car.length]);
-      box(cream, g, [side * 7.7, 0.48, 0], [0.25, 0.45, car.length]);
       for (const z of [-car.length * 0.3, car.length * 0.3]) {
         mesh(cylinder, dark, g, [side * 10, -3.1, z], [1.5, 1.2, 1.5]).rotation.z = Math.PI / 2;
         box(iron, g, [side * 8, -2.8, z], [5, 1, 4]);
@@ -79,7 +77,7 @@ export function buildRailstorm(context) {
       for (let i = 0; i <= 12; i++) {
         const t = pose.start + ((pose.end - pose.start) * i) / 12;
         for (let side = 0; side < 2; side++) {
-          const p = track.poseAt(t * track.TRACK, side ? 11 : -11, 0.025).p,
+          const p = track.poseAt(t * track.TRACK, track.platformEdgeAt(t, side ? 1 : -1), 0.025).p,
             q = (i * 2 + side) * 3;
           positions[q] = p.x;
           positions[q + 1] = p.y;

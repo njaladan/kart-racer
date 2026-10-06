@@ -194,10 +194,34 @@ export function buildPantry(context) {
   // Counter shoulders, shelf undersides and fascia use the exact road curve.
   for (let section = 0; section < 7; section++) {
     const surface = section === 3 ? silver : section === 4 ? porcelain : wood;
-    w.sweep(section, 0, 1, -46, 46, surface, -0.2);
-    w.sweep(section, 0, 1, -47, 47, dark, -1.2);
+    w.sweep(
+      section,
+      0,
+      1,
+      (t) => track.platformEdgeAt(t, -1),
+      (t) => track.platformEdgeAt(t, 1),
+      surface,
+      -0.2,
+    );
+    w.sweep(
+      section,
+      0,
+      1,
+      (t) => track.platformEdgeAt(t, -1),
+      (t) => track.platformEdgeAt(t, 1),
+      dark,
+      -1.2,
+    );
     for (const side of [-1, 1]) {
-      w.sweep(section, 0, 1, side * 45, side * 47, section === 4 ? teal : crust, -0.08);
+      w.sweep(
+        section,
+        0,
+        1,
+        (t) => track.platformEdgeAt(t, side),
+        (t) => track.platformEdgeAt(t, side) - side * 0.3,
+        section === 4 ? teal : crust,
+        -0.08,
+      );
       for (let i = 0; i < 6; i++) {
         const g = at(section, (i + 0.5) / 6, side * 42);
         const height = g.position.y + 22;
