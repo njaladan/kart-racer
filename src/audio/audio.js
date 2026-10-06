@@ -260,7 +260,13 @@ export function createAudioController(audioWindow = window) {
         noise(
           source.kind === "water" ? 0.4 : 0.2,
           volume,
-          source.kind === "engine" ? 140 : source.kind === "sandfall" ? 1800 : 900,
+          source.kind === "engine"
+            ? 140
+            : source.kind === "sandfall"
+              ? 1800
+              : source.kind === "paper"
+                ? 4200
+                : 900,
           stereo,
           true,
         );

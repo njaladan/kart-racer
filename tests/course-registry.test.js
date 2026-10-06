@@ -16,7 +16,7 @@ import { cartAt, cartContact } from "../src/simulation/hazards.js";
 
 // A single process switches through every course, exercising live engine bindings.
 test("course selection updates geometry, surfaces and hazards without stale course state", () => {
-  assert.equal(COURSES.length, 5);
+  assert.equal(COURSES.length, 6);
   assert.equal(new Set(COURSES.map((c) => c.id)).size, COURSES.length);
   assert.equal(courseById("missing").id, "windmill-wilds");
   assert.equal(findCourseById("missing"), null);

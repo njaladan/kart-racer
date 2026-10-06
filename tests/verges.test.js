@@ -12,6 +12,8 @@ test("all extra route choices have continuous ground, material costs and shared 
     const track = selectCourse(course);
     if (course.topology !== "adventure") assert.ok(track.VERGES.length >= 2, course.id);
     for (const v of track.VERGES) {
+      const activeTime = (course.unfold?.openAfter ?? -2) + 3;
+      track.setTime(activeTime);
       assert.ok(track.vergeWidth(v.start, v.side) < 1e-8);
       assert.ok(track.vergeWidth(v.end, v.side) < 1e-8);
       const mid = (v.start + v.end) / 2;
@@ -27,7 +29,7 @@ test("all extra route choices have continuous ground, material costs and shared 
         assert.equal(local.offroad, !v.driveable);
         assert.equal(local.material, v.material);
         assert.equal(local.grip, v.grip);
-        assert.equal(local.offroadDrag, v.drag);
+        assert.equal(local.offroadDrag, v.drag ?? 1);
         assert.equal(local.offroadGrip, v.grip);
         assert.ok(
           Math.abs(local.t - global.t) < 0.00001,
@@ -40,7 +42,7 @@ test("all extra route choices have continuous ground, material costs and shared 
         assert.ok(Math.abs(kart.left - 0.9 - local.leftEdge) < 1e-8);
         assert.ok(Math.abs(shell.right + 0.55 - local.rightEdge) < 1e-8);
         const racer = initializeRacer({ s: t * TRACK, x: offset / 6.25, drift: 0 });
-        advanceRacer(racer, {}, 1 / 120, 1);
+        advanceRacer(racer, {}, 1 / 120, activeTime);
         assert.ok(
           Math.abs(racer.x * 6.25 - offset) < 0.04,
           "stationary kart must not be clamped to the old rail",
@@ -59,7 +61,7 @@ test("all extra route choices have continuous ground, material costs and shared 
       shell.worldPos.copy(track.poseAt(mid * TRACK, edge - v.side * (radius + 0.02), 0.3).p);
       shell.vx = f.right.x * v.side * 30;
       shell.vz = f.right.z * v.side * 30;
-      advanceShell(shell, 1 / 120, 1);
+      advanceShell(shell, 1 / 120, activeTime);
       assert.ok(
         shell.vx * f.right.x * v.side + shell.vz * f.right.z * v.side < 0,
         "shell reflects at widened rail",
