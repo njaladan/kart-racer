@@ -73,7 +73,11 @@ export function createSelectionStage({ canvas, models, environment, menu }) {
         camera.aspect = width / height;
         camera.updateProjectionMatrix();
       }
-      time += Math.min(dt, 0.05);
+      if (
+        menu.preferences.motion &&
+        !globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+      )
+        time += Math.min(dt, 0.05);
       if (selected) {
         selected.root.rotation.y = Math.sin(time * 0.34) * 0.25 - 0.35;
         selected.bodyGroup.position.y = Math.sin(time * 2) * 0.016;

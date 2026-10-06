@@ -14,17 +14,27 @@ export function createSelectionMenu({ documentRef, locationRef, course, racer, m
   const get = (id) => documentRef.getElementById(id);
   const selected = { course: course.id, racer: racer.id };
   let onRacer = () => {},
-    onPreferences = () => {};
+    onPreferences = () => {},
+    onFeedback = () => {};
   const prefs = loadPreferences();
   const courseGrid = get("course-grid"),
     racerGrid = get("racer-grid");
+  function preview(image, entry) {
+    // Reuse the local driving gallery; illustrated art remains an offline fallback.
+    image.onerror = () => {
+      image.onerror = null;
+      image.src = `./assets/previews/${entry.id}.svg`;
+    };
+    const gallery = { "sunstone-ruins": "sunstone-engine-polish", "paper-revel": "paper-crossing" };
+    image.src = `./docs/screenshots/${gallery[entry.id] || entry.id}.jpg`;
+  }
   function chooseCourse(entry) {
     selected.course = entry.id;
     get("selected-course-name").textContent = entry.name;
     get("course-description").textContent = entry.description;
     const image = get("course-preview");
-    image.src = `./assets/previews/${entry.id}.svg`;
-    image.alt = `${entry.name} illustrated preview`;
+    preview(image, entry);
+    image.alt = `${entry.name} driving preview`;
     get("course-number").textContent =
       `${String(COURSES.indexOf(entry) + 1).padStart(2, "0")} / ${String(COURSES.length).padStart(2, "0")}`;
     for (const b of courseGrid.children)
@@ -45,7 +55,7 @@ export function createSelectionMenu({ documentRef, locationRef, course, racer, m
     b.className = "course-tile";
     b.dataset.id = entry.id;
     const image = documentRef.createElement("img");
-    image.src = `./assets/previews/${entry.id}.svg`;
+    preview(image, entry);
     image.alt = "";
     image.loading = "lazy";
     const title = documentRef.createElement("span");
@@ -53,7 +63,10 @@ export function createSelectionMenu({ documentRef, locationRef, course, racer, m
     const number = documentRef.createElement("small");
     number.textContent = String(index + 1).padStart(2, "0");
     b.append(image, number, title);
-    b.onclick = () => chooseCourse(entry);
+    b.onclick = () => {
+      chooseCourse(entry);
+      onFeedback();
+    };
     courseGrid.append(b);
   }
   for (const entry of RACERS) {
@@ -69,11 +82,15 @@ export function createSelectionMenu({ documentRef, locationRef, course, racer, m
     const kind = documentRef.createElement("small");
     kind.textContent = entry.kind;
     b.append(mark, name, kind);
-    b.onclick = () => chooseRacer(entry);
+    b.onclick = () => {
+      chooseRacer(entry);
+      onFeedback();
+    };
     racerGrid.append(b);
   }
   for (const tab of documentRef.querySelectorAll("[data-menu-tab]"))
     tab.onclick = () => {
+      onFeedback();
       for (const b of documentRef.querySelectorAll("[data-menu-tab]"))
         b.setAttribute("aria-selected", String(b === tab));
       for (const panel of documentRef.querySelectorAll(".menu-panel"))
@@ -87,6 +104,7 @@ export function createSelectionMenu({ documentRef, locationRef, course, racer, m
     control.oninput = () => {
       prefs[key] = control.type === "checkbox" ? control.checked : Number(control.value);
       savePreferences(prefs);
+      onFeedback();
       onPreferences({ ...prefs });
       const output = get(`value-${key}`);
       if (output) output.textContent = `${Math.round(prefs[key] * 100)}%`;
@@ -108,7 +126,20 @@ export function createSelectionMenu({ documentRef, locationRef, course, racer, m
     },
     true,
   );
-  // D-pad / left stick navigation across standard focusable buttons and controls.
+  function moveGrid(grid, key) {
+    const buttons = [...grid.children];
+    const i = buttons.indexOf(documentRef.activeElement);
+    if (i < 0) return false;
+    const columns = Math.max(
+      1,
+      Math.round(grid.clientWidth / buttons[0].getBoundingClientRect().width),
+    );
+    const step =
+      key === "ArrowUp" ? -columns : key === "ArrowDown" ? columns : key === "ArrowLeft" ? -1 : 1;
+    buttons[(i + step + buttons.length) % buttons.length]?.focus();
+    return true;
+  }
+  // D-pad / stick follows the visible grid; horizontal input adjusts option sliders.
   let gamepadClock = 0;
   function updateGamepad(dt) {
     if (get("title-screen").classList.contains("hidden")) return;
@@ -116,24 +147,41 @@ export function createSelectionMenu({ documentRef, locationRef, course, racer, m
     if (gamepadClock > 0) return;
     const pad = globalThis.navigator?.getGamepads?.()?.[0];
     if (!pad) return;
-    const direction =
-      pad.buttons[15]?.pressed || pad.buttons[13]?.pressed || pad.axes[0] > 0.5 || pad.axes[1] > 0.5
-        ? 1
-        : pad.buttons[14]?.pressed ||
-            pad.buttons[12]?.pressed ||
-            pad.axes[0] < -0.5 ||
-            pad.axes[1] < -0.5
-          ? -1
-          : 0;
+    const key =
+      pad.buttons[15]?.pressed || pad.axes[0] > 0.5
+        ? "ArrowRight"
+        : pad.buttons[14]?.pressed || pad.axes[0] < -0.5
+          ? "ArrowLeft"
+          : pad.buttons[13]?.pressed || pad.axes[1] > 0.5
+            ? "ArrowDown"
+            : pad.buttons[12]?.pressed || pad.axes[1] < -0.5
+              ? "ArrowUp"
+              : null;
+    const active = documentRef.activeElement;
     const controls = [...get("title-screen").querySelectorAll("button,input,select")].filter(
       (e) => !e.disabled && e.getClientRects().length,
     );
-    if (direction) {
-      const i = controls.indexOf(documentRef.activeElement);
-      controls[(i + direction + controls.length) % controls.length]?.focus();
+    if (key) {
+      if (active?.type === "range" && ["ArrowLeft", "ArrowRight"].includes(key)) {
+        const step = Number(active.step) || 1;
+        active.value = String(
+          Math.max(
+            Number(active.min),
+            Math.min(
+              Number(active.max),
+              Number(active.value) + (key === "ArrowLeft" ? -step : step),
+            ),
+          ),
+        );
+        active.oninput?.();
+      } else if (!moveGrid(courseGrid, key) && !moveGrid(racerGrid, key)) {
+        const direction = ["ArrowLeft", "ArrowUp"].includes(key) ? -1 : 1;
+        const i = controls.indexOf(active);
+        controls[(i + direction + controls.length) % controls.length]?.focus();
+      }
       gamepadClock = 0.19;
     } else if (pad.buttons[0]?.pressed) {
-      documentRef.activeElement?.click();
+      active?.click();
       gamepadClock = 0.3;
     }
   }
@@ -143,19 +191,15 @@ export function createSelectionMenu({ documentRef, locationRef, course, racer, m
       !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)
     )
       return;
-    if (![...courseGrid.children, ...racerGrid.children].includes(documentRef.activeElement))
-      return;
-    const grid = documentRef.activeElement.parentElement,
-      buttons = [...grid.children],
-      i = buttons.indexOf(documentRef.activeElement);
-    const direction = ["ArrowLeft", "ArrowUp"].includes(event.key) ? -1 : 1;
-    buttons[(i + direction + buttons.length) % buttons.length].focus();
-    event.preventDefault();
+    if (moveGrid(courseGrid, event.key) || moveGrid(racerGrid, event.key)) event.preventDefault();
   });
   chooseCourse(course);
   chooseRacer(racer);
   return {
     preferences: prefs,
+    setFeedbackHandler(callback) {
+      onFeedback = callback;
+    },
     selected,
     updateGamepad,
     setRacerPreview(callback) {

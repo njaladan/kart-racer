@@ -75,6 +75,11 @@ async function startGame() {
     racer.kart = buildKart(racer.color, racer.name, racer.isPlayer, racer.racerId);
   }
   const audio = createAudioController(window);
+  page.selection.setFeedbackHandler(() => {
+    audio.start();
+    audio.resume();
+    audio.play("ui");
+  });
   const particles = new ParticlePool(scene);
   const selectionStage = createSelectionStage({
     canvas: document.getElementById("selection-stage"),

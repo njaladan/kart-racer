@@ -2,7 +2,7 @@
 
 A browser kart racer built with Three.js. Race five rivals over three laps, drift into mini-turbos, launch off ramps, and use items to take the lead.
 
-Twelve playable courses include moving hazards, boost pads, and shortcuts: **Windmill Wilds**, **Neon Harbor**, **Sunstone Ruins**, **Frostpeak Festival**, **Clockwork Citadel**, **Paper Revel**, **Tempest Causeway**, **Pocket Pantry**, **Railstorm Express**, **Metronome Hall**, **Pelagic Glasshouse**, and **Emberwing Observatory**. More courses are in development. Supports keyboard and touch controls.
+Twelve playable courses include moving hazards, boost pads, and shortcuts: **Windmill Wilds**, **Neon Harbor**, **Sunstone Ruins**, **Frostpeak Festival**, **Clockwork Citadel**, **Paper Revel**, **Tempest Causeway**, **Pocket Pantry**, **Railstorm Express**, **Metronome Hall**, **Pelagic Glasshouse**, and **Emberwing Observatory**. Supports keyboard, touch and gamepad controls.
 
 Choose from six distinct **SuperTuxKart** racers: Tux (penguin), Nolok (reptile),
 Pidgin (bird), Kiki (robot), Konqi (dragon), and Wilber (mascot). Each has its
@@ -24,10 +24,8 @@ To regenerate these images, see the [screenshot capture guide](docs/screenshot-c
 | ![Konqi racing across Tempest Causeway](docs/screenshots/tempest-causeway.jpg) | ![Wilber racing through Pocket Pantry](docs/screenshots/pocket-pantry.jpg) |
 | **Railstorm Express** | **Metronome Hall** |
 | ![Nolok racing through a Railstorm Express carriage](docs/screenshots/railstorm-express.jpg) | ![Pidgin racing through the Metronome Hall](docs/screenshots/metronome-hall.jpg) |
-| **Pelagic Glasshouse** | |
-| ![Konqi racing through the flooded Pelagic Glasshouse](docs/screenshots/pelagic-glasshouse.jpg) | |
-| **Emberwing Observatory** | |
-| ![Pidgin at the Emberwing Observatory cannon launch](docs/screenshots/emberwing-observatory.jpg) | |
+| **Pelagic Glasshouse** | **Emberwing Observatory** |
+| ![Konqi racing through the flooded Pelagic Glasshouse](docs/screenshots/pelagic-glasshouse.jpg) | ![Pidgin at the Emberwing Observatory cannon launch](docs/screenshots/emberwing-observatory.jpg) |
 
 ## Run locally
 
