@@ -6,12 +6,21 @@ import clockwork from "./clockwork-citadel.js";
 import paper from "./paper-revel.js";
 import tempest from "./tempest-causeway.js";
 import pantry from "./pocket-pantry.js";
+import railstorm from "./railstorm-express.js";
 import { validateCourseDefinition } from "./course-contract.js";
 
 export const COURSES = Object.freeze(
-  [windmill, neonHarbor, sunstoneRuins, frostpeakFestival, clockwork, paper, tempest, pantry].map(
-    validateCourseDefinition,
-  ),
+  [
+    windmill,
+    neonHarbor,
+    sunstoneRuins,
+    frostpeakFestival,
+    clockwork,
+    paper,
+    tempest,
+    pantry,
+    railstorm,
+  ].map(validateCourseDefinition),
 );
 export const DEFAULT_COURSE = windmill;
 

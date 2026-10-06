@@ -20,7 +20,7 @@ const courseCaptures = [
   { id: "paper-revel", racer: "pidgin", t: 0.4, seconds: 31 },
   { id: "tempest-causeway", racer: "konqi", t: 0.24, seconds: 18 },
   { id: "pocket-pantry", racer: "wilber", t: 0.35, seconds: 18 },
-  { id: "railstorm-express", racer: "nolok", t: 0.5, seconds: 25 },
+  { id: "railstorm-express", racer: "nolok", t: 0.51, seconds: 18 },
   { id: "metronome-hall", racer: "kiki", t: 0.39, seconds: 14 },
   { id: "pelagic-glasshouse", racer: "konqi", t: 0.42, seconds: 25 },
   { id: "emberwing-observatory", racer: "pidgin", t: 0.52, seconds: 18 },
@@ -118,18 +118,32 @@ async function captureCourse(browserContext, courseId) {
     );
 
     if (course.t != null) {
-      await page.evaluate(({ t, seconds }) => {
-        window.postMessage({ type: "test-start" }, location.origin);
-        window.postMessage({ type: "test-freeze", value: true }, location.origin);
-        window.postMessage({ type: "test-step", seconds: 0.1 }, location.origin);
+      await page.waitForFunction(
+        () => typeof window.__turboTrailDiagnostics?.send === "function",
+        undefined,
+        { timeout: timeoutMs },
+      );
+      const state = await page.evaluate(({ t, seconds }) => {
+        const diagnostics = window.__turboTrailDiagnostics;
+        diagnostics.send({ type: "test-start" });
+        diagnostics.send({ type: "test-freeze", value: true });
+        diagnostics.send({ type: "test-step", seconds: 0.1 });
         for (let remaining = seconds; remaining > 0; remaining -= 5)
-          window.postMessage(
-            { type: "test-step", seconds: Math.min(5, remaining) },
-            location.origin,
-          );
-        window.postMessage({ type: "test-seek", t }, location.origin);
+          diagnostics.send({ type: "test-step", seconds: Math.min(5, remaining) });
+        diagnostics.send({ type: "test-seek", t });
+        const state = diagnostics.state();
+        diagnostics.send({ type: "test-report" });
         window.captureFramesRemaining = 3;
+        return state;
       }, course);
+      const expectedProgress = course.t * 2400;
+      if (Math.abs(state.s - expectedProgress) > 0.5)
+        throw new Error(
+          `${course.id}: seek state mismatch (s=${state.s}, expected ${expectedProgress}).`,
+        );
+      console.log(
+        `${course.id} seek state: s=${state.s.toFixed(1)}, position=${state.position.map((value) => value.toFixed(2)).join(",")}, camera=${state.camera.map((value) => value.toFixed(2)).join(",")}, kart=${state.kart.map((value) => value.toFixed(2)).join(",")}`,
+      );
       await page.waitForFunction(() => window.captureFramesRemaining < 0, undefined, {
         timeout: timeoutMs,
         polling: 100,

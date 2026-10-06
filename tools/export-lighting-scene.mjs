@@ -126,7 +126,19 @@ async function loadAssets(id) {
   return assets;
 }
 
-for (const course of COURSES.filter((course) => !wanted.length || wanted.includes(course.id))) {
+const selected = wanted.length
+  ? await Promise.all(
+      wanted.map(async (id) => {
+        if (!/^[a-z0-9-]+$/.test(id)) throw new Error("Expected a course ID");
+        return (
+          COURSES.find((course) => course.id === id) ||
+          (await import(`../src/courses/${id}.js`)).default
+        );
+      }),
+    )
+  : COURSES;
+// Authors can bake a prepared world before exposing it in the playable registry.
+for (const course of selected) {
   const assets = await loadAssets(course.id);
   const track = selectCourse(course);
   const scene = new THREE.Scene();

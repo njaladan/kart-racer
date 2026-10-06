@@ -92,8 +92,8 @@ export function createBrowserDiagnostics({
       windowRef.location.origin,
     );
   }
-  if (enabled)
-    windowRef.addEventListener("message", (event) => {
+  if (enabled) {
+    const receive = (event) => {
       if (
         event.origin !== windowRef.location.origin ||
         event.source !== windowRef.parent ||
@@ -165,7 +165,23 @@ export function createBrowserDiagnostics({
         items.setItem(player, message.item);
       if (message.type === "test-fire" && running && !paused) items.fire(player);
       if (message.type === "test-hit") session.hitRacer(player);
-    });
+    };
+    windowRef.addEventListener("message", receive);
+    // Synchronous test-only transport avoids spending bounded render frames
+    // before queued postMessage seeks reach the game. Normal play exposes none.
+    windowRef.__turboTrailDiagnostics = {
+      send(message) {
+        receive({ origin: windowRef.location.origin, source: windowRef.parent, data: message });
+      },
+      state: () => ({
+        ...session.getState(),
+        s: player?.s,
+        position: player?.worldPos?.toArray(),
+        camera: camera?.position?.toArray(),
+        kart: player?.kart?.root?.position?.toArray(),
+      }),
+    };
+  }
   return {
     get autodrive() {
       return testAutodrive;

@@ -40,6 +40,7 @@ function fixture(enabled, benchmarkMode = false) {
 test("browser diagnostics are inert when normal gameplay disables test mode", () => {
   const app = fixture(false);
   assert.equal(app.listener, undefined);
+  assert.equal(app.windowRef.__turboTrailDiagnostics, undefined);
   app.diagnostics.recordFrame(1);
   app.diagnostics.racerEvent({}, {});
   assert.equal(app.diagnostics.autodrive, false);
@@ -68,4 +69,12 @@ test("test commands require the same-origin parent and freeze is limited to benc
   const benchmark = fixture(true, true);
   benchmark.message("test-freeze", { value: true });
   assert.equal(benchmark.diagnostics.freeze, true);
+});
+
+test("test-only synchronous transport runs commands before bounded capture frames", () => {
+  const app = fixture(true, true);
+  app.windowRef.__turboTrailDiagnostics.send({ type: "test-start" });
+  assert.equal(app.starts, 1);
+  app.windowRef.__turboTrailDiagnostics.send({ type: "test-freeze", value: true });
+  assert.equal(app.diagnostics.freeze, true);
 });

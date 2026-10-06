@@ -183,7 +183,7 @@ export function createGameRenderer({
       .multiply(SHADOW_PLANE_ROTATION);
     const altitude = Math.max(0, state.worldPos.y - kart.shadow.position.y);
     kart.shadow.material.opacity = 0.38 / (1 + altitude * 0.25);
-    kart.shadow.scale.setScalar(1 + altitude * 0.08);
+    kart.shadow.scale.setScalar((kart.renderScale || 1) * (1 + altitude * 0.08));
   }
 
   function render(dt) {

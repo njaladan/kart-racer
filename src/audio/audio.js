@@ -197,6 +197,10 @@ export function createAudioController(audioWindow = window) {
         noise(0.7, 0.17, 3300);
         tone(380, 0.3, "triangle", 0.09, 300);
         break;
+      case "train-board":
+        noise(0.25, 0.24, 420);
+        tone(75, 0.12, "triangle", 0.07, -35);
+        break;
       case "mechanism":
         noise(0.4, 0.22, 240);
         break;
@@ -315,6 +319,10 @@ export function createAudioController(audioWindow = window) {
         pan,
         true,
       );
+    if (id === "railstorm-express" && state.movingDeckId) {
+      noise(0.07, 0.09, 550, Math.sin(time * 1.7) * 0.3, true);
+      if (beat % 8 === 0) noise(0.7, 0.07, 95, 0, true);
+    }
     if (storm && beat % 8 === 0) noise(0.85, 0.17, 95, -0.4, true);
     if (water && beat % 3 === 0) noise(0.2, 0.05, 1900, Math.sin(time), true);
   }
