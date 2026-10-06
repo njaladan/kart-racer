@@ -65,11 +65,13 @@ export function createSceneryDetailController(scene) {
   });
   const camera = { position: new THREE.Vector3(), matrixWorld: new THREE.Matrix4(), zoom: 1 };
   return {
-    setQuality(tier) {
-      const distanceScale = [0.6, 0.8, 1][Math.min(2, Math.max(0, tier))];
+    setQuality() {
+      // Quality tiers adjust optional rendering costs, not authored detail.
+      // Moving LOD thresholds with quality made nearby trees visibly change
+      // color and silhouette whenever the renderer changed tiers.
       for (const lod of lods)
         lod.levels.forEach((level, i) => {
-          level.distance = lod.userData.lodDistances[i] * distanceScale;
+          level.distance = lod.userData.lodDistances[i];
         });
     },
     updateCamera(position) {

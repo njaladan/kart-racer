@@ -205,7 +205,9 @@ export function buildWindmillTerrain({ scene, scenery, textures, mats, palette, 
   for (let i = 0; i < 16; i++) {
     const t = THREE.MathUtils.lerp(BRIDGE_RANGE.start, BRIDGE_RANGE.end, i / 15);
     const g = groupAt(t);
-    box(darkWood, g, [0, -0.28, 0], [12.8, 0.45, 1.5]);
+    // Keep the crossbeam well below the timber deck, including at the raised
+    // bridge hop where a near-flush beam can poke through the road.
+    box(darkWood, g, [0, -1.2, 0], [12.8, 0.45, 1.5]);
     for (const x of [-5, 5]) box(darkWood, g, [x, -4.8, 0], [0.7, 9, 0.7]);
     const brace = box(wood, g, [0, -3.8, 0], [11, 0.5, 0.6]);
     brace.rotation.z = 0.32;
