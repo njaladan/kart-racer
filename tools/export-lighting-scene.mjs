@@ -103,6 +103,7 @@ async function loadAssets(id) {
         "",
       );
       const model = normalizeCourseModel(gltf.scene);
+      model.userData.animationClips = gltf.animations;
       model.userData.lods = entry.lods || null;
       model.userData.lodDistances = entry.lodDistances || [0, 85, 180];
       model.traverse((object) => {

@@ -11,7 +11,7 @@ export function createFestivalKit({ THREE, scene, scenery, track, textures, kit 
     cream: material("#ffead0"),
     dark: material("#304859"),
     cyan: material("#54b6c6", { map: textures.fabric }),
-    red: material("#d96881", { map: textures.fabric }),
+    red: material("#ffffff", { map: textures.frostKnit || textures.fabric }),
     glass: material("#a6d7e7", { roughness: 0.18, metalness: 0.12 }),
     rock: material("#8297b7", { map: textures.stone }),
     gold: material("#ffe8a6", { emissive: "#ffc473", emissiveIntensity: 0.85 }),

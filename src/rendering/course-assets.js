@@ -52,6 +52,7 @@ async function loadModelPack(loader, manifestUrl, models, renderer, optional = f
       const loaded = await loader.loadAsync(fileUrl);
       const object = normalizeCourseModel(loaded.scene);
       object.userData.assetName = entry.name;
+      object.userData.animationClips = loaded.animations;
       object.userData.lods = entry.lods || null;
       object.userData.lodDistances = entry.lodDistances || [0, 85, 180];
       const maxAnisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
@@ -83,7 +84,9 @@ async function loadModelPack(loader, manifestUrl, models, renderer, optional = f
       (manifest.textures || []).map(async (entry) => {
         const fileUrl = new URL(entry.file, new URL(".", new URL(manifestUrl, location.href))).href;
         const texture = await textureLoader.loadAsync(fileUrl);
-        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.colorSpace =
+          entry.colorSpace === "linear" ? THREE.NoColorSpace : THREE.SRGBColorSpace;
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
         texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
         return [entry.name, texture];
       }),

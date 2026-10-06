@@ -49,9 +49,16 @@ export function buildCourseWorld({
       bumpMap: textures.wood,
       bumpScale: 0.04,
     }),
-    ice: material("#9ddaf0", { roughness: 0.2, metalness: 0.2 }),
+    ice: material("#b9e5ff", {
+      map: textures.frostIce,
+      normalMap: textures.frostIceNormal,
+      normalScale: new THREE.Vector2(0.4, 0.4),
+      roughnessMap: textures.frostIceRoughness,
+      roughness: 0.65,
+      metalness: 0.12,
+    }),
     grass: mats.grass,
-    snow: material("#e5f2f5", { map: textures.snow }),
+    snow: material("#f3f6ff", { map: textures.frostSnow || textures.snow }),
     sand: material("#ead3a0", { map: textures.sand }),
     gravel: material("#c7c7ba", {
       map: textures.gravel || textures.stone,
@@ -299,6 +306,7 @@ export function buildCourseWorld({
       textures,
       renderer,
       kit,
+      assets,
       hazardAt: cartAt,
       trafficAt,
     }) || {};
