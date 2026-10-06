@@ -12,7 +12,7 @@ test("global projection chooses the right deck at an elevated crossing", () => {
     ...course,
     controls,
     minimumRadius: 18,
-    sections: course.sections.map((s, i) => ({ ...s, controlIndex: i * 8 })),
+    sections: course.sections.map((s, i) => ({ ...s, controlIndex: i * 6 })),
   });
   for (const t of [0, 0.5]) {
     const p = track.poseAt(t * TRACK, 0).p;

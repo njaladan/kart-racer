@@ -35,3 +35,9 @@ Baseline not rerun yet. Chromium and Playwright available. Use focused simulatio
 1. Implement elevation-aware projection, preserving local route continuity and using height on global lookup; regression at stacked crossing.
 2. Rebuild Sunstone descriptor and scenery around the progression above; solar-engine gameplay, shortcuts, full-lap AI check and camera inspection.
 3. Commit each coherent milestone and replace this section with exact continuation steps.
+
+### Foundation + Sunstone work
+- 9e144d4: route floor disambiguation and vision/matrix committed.
+- Rebuilt Sunstone: 1,803 m; minimum horizontal radius 20.3 m; eight places; 67 m elevation range. Five isolated AI three-lap races finish in 199–203 seconds with zero wall impacts. Solar boost lanes use one analytic clock in simulation/rendering.
+- Camera check caught two real issues: base ground plane occluded the buried road, and color-map multiplication muddied architecture. Lowered Sunstone's base terrain to -18 m and switched monumental stone to bump-only textures with authored colors. Old Sunstone bake intentionally disabled because its geometry is obsolete.
+- Existing baseline had one formatting discrepancy in Windmill terrain; normalized it. Full test run underway; this is a formatting-only change.

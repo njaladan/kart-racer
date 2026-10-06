@@ -69,6 +69,12 @@ export function buildCourseWorld({
     }),
   };
   if (course.theme.wetPavement) installWetPavement(roadMaterials.stone);
+  if (course.edgeStyle === "sunstone") {
+    roadMaterials.stone = material("#d7bc93", { bumpMap: textures.stone, bumpScale: 0.035 });
+    roadMaterials.paving = material("#dccaab", { bumpMap: textures.paving, bumpScale: 0.02 });
+    roadMaterials.sand = material("#ebca85", { bumpMap: textures.sand, bumpScale: 0.03 });
+  }
+  const groundHeight = course.theme.groundHeight ?? -1.7;
   const conveyorTextures = [];
   const materialNames = [
     ...new Set([
@@ -79,7 +85,11 @@ export function buildCourseWorld({
     ]),
   ];
   const roads = materialNames.map((name) => roadMaterials[name] || mats.road);
-  const ground = mesh(new THREE.PlaneGeometry(1800, 1800), mats.grass, scenery, [0, -1.7, 0]);
+  const ground = mesh(new THREE.PlaneGeometry(1800, 1800), mats.grass, scenery, [
+    0,
+    groundHeight,
+    0,
+  ]);
   ground.rotation.x = -Math.PI / 2;
   ground.castShadow = false;
   ground.name = "Course ground";
@@ -105,7 +115,7 @@ export function buildCourseWorld({
           const distance = Math.abs(edge) - (edge > 0 ? bounds.rightEdge : -bounds.leftEdge);
           p.y = THREE.MathUtils.lerp(
             p.y - 0.06,
-            -1.7,
+            groundHeight,
             THREE.MathUtils.clamp(distance / TERRAIN_VERGE_WIDTH, 0, 1),
           );
         } else p.addScaledVector(f.up, lift);
@@ -251,7 +261,7 @@ export function buildCourseWorld({
   for (const side of [-1, 1]) {
     const edge = (t) => (side < 0 ? track.surfaceAt(t).leftEdge : track.surfaceAt(t).rightEdge);
     ribbon(edge, (t) => edge(t) + side * TERRAIN_VERGE_WIDTH, mats.grass, 0, true);
-    if (course.edgeStyle === "port-lumen") continue;
+    if (["port-lumen", "sunstone"].includes(course.edgeStyle)) continue;
     const railMaterial = mats.rail.clone();
     railMaterial.side = THREE.DoubleSide;
     mesh(createRailGeometry(side, { width: 0.15, height: 0.32, above: 0.72 }), railMaterial);
@@ -261,7 +271,7 @@ export function buildCourseWorld({
       box(mats.rail, g, [0, 0.42, 0], [0.19, 0.86, 0.19]);
     }
   }
-  for (let i = 0; course.edgeStyle !== "port-lumen" && i < 330; i++) {
+  for (let i = 0; !["port-lumen", "sunstone"].includes(course.edgeStyle) && i < 330; i++) {
     const t = i / 330,
       g = groupAt(t),
       half = track.roadHalfWidth(t);
@@ -276,6 +286,16 @@ export function buildCourseWorld({
         [side * (half + 0.15), 0.105, 0],
         [0.8, 0.12, track.COURSE_LENGTH / 330 + 0.1],
       );
+    }
+  }
+  if (course.edgeStyle === "sunstone") {
+    const edgeMaterial = material("#c49663", { bumpMap: textures.stone, bumpScale: 0.02 });
+    for (const side of [-1, 1]) {
+      const rail = mesh(
+        createRailGeometry(side, { width: 0.7, height: 0.65, above: 0 }),
+        edgeMaterial,
+      );
+      rail.name = "Continuous sandstone parapet";
     }
   }
   const warningMaterial = material("#ffc850", {

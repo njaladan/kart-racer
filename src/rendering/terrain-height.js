@@ -8,5 +8,5 @@ export function sceneryGroundHeight(surface) {
   const edge = lane > 0 ? surface.rightEdge : surface.leftEdge;
   const blend = Math.max(0, Math.min(1, (Math.abs(lane) - Math.abs(edge)) / TERRAIN_VERGE_WIDTH));
   const edgeHeight = frame.p.y + frame.right.y * edge - 0.06;
-  return edgeHeight + (-1.7 - edgeHeight) * blend;
+  return edgeHeight + ((surface.groundHeight ?? -1.7) - edgeHeight) * blend;
 }

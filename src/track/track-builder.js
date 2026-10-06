@@ -147,6 +147,7 @@ export function createTrack(course) {
     const verge = vergeAt(t, offset);
     return {
       section,
+      groundHeight: course.theme.groundHeight ?? -1.7,
       halfWidth,
       offroad: Math.abs(offset) > halfWidth && !verge?.driveable,
       leftEdge: -halfWidth - 0.55 - vergeWidth(t, -1),
@@ -277,7 +278,7 @@ export function createTrack(course) {
     const start = Math.floor(trackT(nearS) * SAMPLE_COUNT);
     let best = Infinity,
       bestT = 0;
-    const inspect = (index) => {
+    const inspect = (index, elevation = global) => {
       const i = ((index % SAMPLE_COUNT) + SAMPLE_COUNT) % SAMPLE_COUNT;
       const a = samples[i],
         b = samples[i + 1],
@@ -293,7 +294,7 @@ export function createTrack(course) {
         // A horizontal crossing is not a route join. Height disambiguates
         // floors while the bounded local search retains ordered route identity.
         ey = position.y - THREE.MathUtils.lerp(a.y, b.y, u),
-        d = ex * ex + ez * ez + ey * ey * (global ? 1 : 0.25);
+        d = ex * ex + ez * ez + ey * ey * (elevation ? 1 : 0);
       if (d < best) {
         best = d;
         bestT = (i + u) / SAMPLE_COUNT;
@@ -302,7 +303,10 @@ export function createTrack(course) {
     if (global) for (let i = 0; i < SAMPLE_COUNT; i++) inspect(i);
     else {
       for (let i = start - 28; i <= start + 28; i++) inspect(i);
-      if (best > 38 * 38) for (let i = 0; i < SAMPLE_COUNT; i++) inspect(i);
+      if (best > 38 * 38) {
+        best = Infinity;
+        for (let i = 0; i < SAMPLE_COUNT; i++) inspect(i, true);
+      }
     }
     const t = wrap01(bestT),
       frame = frameAt(t);

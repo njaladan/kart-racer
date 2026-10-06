@@ -1,3 +1,4 @@
+import { solarBoostAt } from "./course-mechanics.js";
 import {
   drive,
   verticalMotion,
@@ -262,6 +263,14 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
         padBoost = true;
         break;
       }
+    }
+  }
+  if (state.grounded && state.padCooldown === 0) {
+    const duration = solarBoostAt(activeTrack, after.t, after.offset, raceTime);
+    if (duration) {
+      state.boost = Math.max(state.boost, duration);
+      state.padCooldown = 0.7;
+      padBoost = true;
     }
   }
   state.x = laneFromOffset(after.offset);

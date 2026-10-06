@@ -212,10 +212,7 @@ export function buildWindmillTerrain({ scene, scenery, textures, mats, palette, 
     // followed the steep bridge grade and floated above or pierced the deck.
     const frame = frameAt(t);
     for (const x of [-5, 5]) {
-      const top = frame.p
-        .clone()
-        .addScaledVector(frame.right, x)
-        .addScaledVector(frame.up, -0.25);
+      const top = frame.p.clone().addScaledVector(frame.right, x).addScaledVector(frame.up, -0.25);
       const height = Math.max(0.8, top.y + 1.65);
       box(darkWood, scenery, [top.x, top.y - height / 2, top.z], [0.7, height, 0.7]);
     }
