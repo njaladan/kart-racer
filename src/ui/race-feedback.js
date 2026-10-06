@@ -34,7 +34,7 @@ export function createRaceFeedback({ player, audio, particles, toast, terrain })
     }
     if (events.trickStarted && racer === player) {
       notify("TRICK!");
-      audio.play("pickup");
+      audio.play("trick");
       for (let n = 0; n < 12; n++)
         spawnParticle(
           racer.worldPos.clone().add(new THREE.Vector3(0, 0.7, 0)),
@@ -44,6 +44,7 @@ export function createRaceFeedback({ player, audio, particles, toast, terrain })
         );
     }
     if (events.landed && racer === player) {
+      audio.play("land");
       shake = 0.09;
       notify(events.trickLanded ? "TRICK LANDING BOOST!" : "SMOOTH LANDING");
       if (events.trickLanded) audio.play("boost");
@@ -57,7 +58,7 @@ export function createRaceFeedback({ player, audio, particles, toast, terrain })
       audio.play("boost");
     }
     if (events.cartImpact && racer === player) {
-      notify("DELIVERY CART!");
+      notify("WATCH THE MECHANISM!");
       shake = 0.15;
       audio.play("hit");
     }

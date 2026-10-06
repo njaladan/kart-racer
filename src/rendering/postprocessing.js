@@ -68,6 +68,7 @@ export function createPostProcessing(renderer, theme = {}) {
       }`,
   });
   let quality = 3;
+  let bloomEnabled = true;
   const size = new THREE.Vector2();
   let width = 0,
     height = 0;
@@ -77,6 +78,9 @@ export function createPostProcessing(renderer, theme = {}) {
     renderer.render(fullscreen, camera);
   }
   return {
+    setOptions(preferences) {
+      bloomEnabled = preferences.bloom;
+    },
     setQuality(tier) {
       quality = tier;
     },
@@ -98,7 +102,7 @@ export function createPostProcessing(renderer, theme = {}) {
       renderer.toneMapping = THREE.NoToneMapping;
       renderer.setRenderTarget(target);
       renderer.render(scene, sceneCamera);
-      if (quality >= 2) {
+      if (quality >= 2 && bloomEnabled) {
         draw(extract, bloomA);
         blur.uniforms.source.value = bloomA.texture;
         blur.uniforms.direction.value.set(1 / bloomA.width, 0);
@@ -107,7 +111,7 @@ export function createPostProcessing(renderer, theme = {}) {
         blur.uniforms.direction.value.set(0, 1 / bloomA.height);
         draw(blur, bloomA);
       }
-      grade.uniforms.bloomStrength.value = quality >= 2 ? (night ? 0.18 : 0.08) : 0;
+      grade.uniforms.bloomStrength.value = quality >= 2 && bloomEnabled ? (night ? 0.18 : 0.08) : 0;
       renderer.toneMapping = toneMapping;
       draw(grade, null);
     },

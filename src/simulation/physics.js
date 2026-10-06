@@ -47,6 +47,9 @@ export function resetMotion(state) {
     trickHeld: false,
     trickBuffer: 0,
     trickActive: false,
+    trickVariant: 0,
+    trickCount: 0,
+    trickAge: 0,
   });
 }
 

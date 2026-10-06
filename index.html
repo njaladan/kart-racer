@@ -32,40 +32,31 @@
       </div>
 
       <section id="title-screen" class="screen">
-        <div class="title-card">
-          <div class="eyebrow">
-            <span></span> THE STARTING GRID IS READY <span></span>
-          </div>
-          <h1>READY,<br /><em>SET,</em> RACE.</h1>
-          <p id="course-description">
-            From pine hollow to the working mill.<br />Six places. One wild lap.
-          </p>
-          <div class="race-pickers">
-          <label class="course-picker" for="course-select">CHOOSE YOUR COURSE
-            <select id="course-select" aria-label="Choose race course"></select>
-          </label>
-          <label class="course-picker" for="racer-select">CHOOSE YOUR RACER
-            <select id="racer-select" aria-label="Choose your racer"></select>
-          </label>
-          </div>
-          <button id="start-button" class="primary-button" disabled>
-            LOADING COURSE <span>…</span>
-          </button>
-          <button id="multiplayer-button" class="secondary-button">MULTIPLAYER · HOST / JOIN ROOM</button>
-          <p class="controls-help desktop-help">
-            W / ↑ accelerate · S / ↓ brake &amp; reverse<br />A D / ← → steer ·
-            Space drift / tap at ramps to trick · E item · Esc pause
-          </p>
-          <p class="controls-help mobile-help">
-            Auto-accelerate · Steer with the left and right buttons<br />
-            Hold DRIFT · Tap ITEM (both can be used together)
-          </p>
-          <div class="title-foot">
-            <span>🏁 &nbsp;3 LAPS</span><span>⚡ &nbsp;ITEMS ON</span
-            ><span>🌿 &nbsp;1.5 KM</span>
-          </div>
+        <div class="adventure-menu">
+          <header class="menu-heading"><div><div class="eyebrow">THE TURBO TRAIL RACING CLUB</div><h1>CHASE THE<br/><em>EXTRAORDINARY.</em></h1></div>
+            <nav class="menu-tabs" role="tablist" aria-label="Race setup"><button data-menu-tab="expedition" role="tab" aria-selected="true">COURSES</button><button data-menu-tab="garage" role="tab" aria-selected="false">GARAGE</button><button data-menu-tab="options" role="tab" aria-selected="false">OPTIONS</button></nav>
+          </header>
+          <section id="expedition-panel" class="menu-panel">
+            <div class="course-feature"><img id="course-preview" alt=""/><div class="feature-copy"><span id="course-number"></span><h2 id="selected-course-name"></h2><p id="course-description"></p></div></div>
+            <div id="course-grid" class="course-grid" aria-label="Choose your adventure"></div>
+          </section>
+          <section id="garage-panel" class="menu-panel" hidden>
+            <div class="garage-stage"><canvas id="selection-stage" aria-label="Animated preview of your selected racer"></canvas><div class="garage-copy"><div class="eyebrow">YOUR PARTNER IN ADVENTURE</div><h2 id="selected-racer-name"></h2><p id="racer-personality"></p><span>Real character. Real kart. Ready to roll.</span></div></div>
+            <div id="racer-grid" class="racer-grid" aria-label="Choose your racer"></div>
+          </section>
+          <section id="options-panel" class="menu-panel" hidden>
+            <div class="options-group"><h2>MAKE IT YOURS.</h2><div class="options-grid">
+              <label>Graphics quality<select id="option-quality"><option value="0">Performance</option><option value="1">Balanced</option><option value="2">High</option><option value="3">Ultra</option></select></label>
+              <label class="toggle-option">Adapt quality to frame rate<input id="option-adaptive" type="checkbox"/></label>
+              <label class="toggle-option">Bloom and highlight glow<input id="option-bloom" type="checkbox"/></label>
+              <label class="toggle-option">Camera motion and speed streaks<input id="option-motion" type="checkbox"/></label>
+              <label>Master volume <output id="value-master"></output><input id="option-master" type="range" min="0" max="1" step="0.05"/></label>
+              <label>Engines and effects <output id="value-effects"></output><input id="option-effects" type="range" min="0" max="1" step="0.05"/></label>
+              <label>World ambience <output id="value-ambience"></output><input id="option-ambience" type="range" min="0" max="1" step="0.05"/></label>
+            </div></div>
+          </section>
+          <footer class="menu-footer"><div><button id="start-button" class="primary-button" disabled>LOADING COURSE <span>…</span></button><button id="multiplayer-button" class="secondary-button">RACE WITH FRIENDS</button></div><p class="controls-help">WASD / arrows · Space drift &amp; trick · E item<br/>Touch controls available · Three laps, six racers</p></footer>
         </div>
-        <div class="corner-note">NO DOWNLOADS. JUST DRIVE.</div>
       </section>
 
       <div id="countdown" class="countdown hidden"></div>

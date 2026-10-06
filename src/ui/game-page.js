@@ -1,5 +1,6 @@
-import { RACERS, raceRoster } from "../rendering/racer-roster.js";
-import { COURSES, DEFAULT_COURSE, findCourseById } from "../courses/registry.js";
+import { createSelectionMenu } from "./selection-menu.js";
+import { raceRoster } from "../rendering/racer-roster.js";
+import { DEFAULT_COURSE, findCourseById } from "../courses/registry.js";
 
 /** Read page elements and bind URL-backed selections once at startup. */
 export function createGamePage(documentRef = document, locationRef = location, multiplayer = null) {
@@ -8,36 +9,14 @@ export function createGamePage(documentRef = document, locationRef = location, m
   const course =
     findCourseById(multiplayer?.match.course ?? params.get("course")) ?? DEFAULT_COURSE;
   const get = (id) => documentRef.getElementById(id);
-  function bindSelector(id, entries, selected, param, label) {
-    const selector = get(id);
-    for (const entry of entries) {
-      const option = documentRef.createElement("option");
-      option.value = entry.id;
-      option.textContent = label(entry);
-      selector.append(option);
-    }
-    selector.value = selected;
-    selector.addEventListener("change", () => {
-      const url = new URL(locationRef.href);
-      url.searchParams.set(param, selector.value);
-      locationRef.assign(url);
-    });
-    return selector;
-  }
-  bindSelector(
-    "racer-select",
-    RACERS,
-    roster[0].id,
-    "racer",
-    (racer) => `${racer.name} · ${racer.kind}`,
-  );
-  const courseSelector = bindSelector(
-    "course-select",
-    COURSES,
-    course.id,
-    "course",
-    (entry) => entry.name,
-  );
+  const selection = createSelectionMenu({
+    documentRef,
+    locationRef,
+    course,
+    racer: roster[0],
+    multiplayer,
+  });
+  const courseSelector = selection;
   get("track-name").textContent = course.name.toUpperCase();
   get("course-description").textContent = course.description;
   const ui = Object.fromEntries(
@@ -72,6 +51,7 @@ export function createGamePage(documentRef = document, locationRef = location, m
     roster,
     ui,
     courseSelector,
+    selection,
     canvas: get("game"),
     radar: get("radar"),
     shell: get("game-shell"),

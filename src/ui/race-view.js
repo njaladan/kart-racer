@@ -50,6 +50,7 @@ export function createRaceView({ ui, canvas, radar, shell, courseSelector, racer
       ui.againButton.focus({ preventScroll: true });
       shell.classList.remove("racing");
       audio.stopEngine();
+      audio.play("finish");
     },
     pause(paused) {
       ui.pause.classList.toggle("hidden", !paused);

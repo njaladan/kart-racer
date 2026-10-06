@@ -3,6 +3,7 @@ import { lapNumber } from "../simulation/race.js";
 import { FIXED_DT, MAX_SPEED, clamp, wrapAngle } from "../simulation/physics.js";
 import {
   TRACK,
+  activeTrack,
   frameAt,
   laneWidth,
   poseAt,
@@ -50,6 +51,7 @@ export function createGameRenderer({
   const kartBasis = new THREE.Matrix4();
   const shadowTilt = new THREE.Quaternion();
   const trackForward = new THREE.Vector3();
+  let motionEnabled = true;
   let driftCamera = 0;
   let cameraBank = 0;
   let hudClock = 0;
@@ -80,9 +82,17 @@ export function createGameRenderer({
       else kart.root.rotateX(angle);
     }
 
+    if (state.trickActive) {
+      const q = Math.min(1, (state.trickAge || 0) / 0.4);
+      const spin = q * q * (3 - 2 * q) * Math.PI * 2;
+      if (state.trickVariant === 0) kart.root.rotateY(spin);
+      else if (state.trickVariant === 1) kart.root.rotateZ(spin);
+      else kart.root.rotateX(-spin);
+      kart.root.position.y += Math.sin(q * Math.PI) * 0.25;
+    }
     const trickPose = state.trickActive ? Math.sin(Math.min(1, state.airTime / 0.42) * Math.PI) : 0;
     const bodyLean = state.grounded
-      ? ((state.steering * state.speed) / MAX_SPEED) * 0.065
+      ? ((state.steering * state.speed) / MAX_SPEED) * 0.15
       : trickPose * 0.65;
     const poseBlend = dt ? 1 - Math.exp(-18 * dt) : 1;
     const hitJolt = state.spin > 0 ? Math.min(1, state.spin) : 0;
@@ -91,8 +101,14 @@ export function createGameRenderer({
       (0.045 * Math.sin(frameState.elapsed * 79) + 0.022 * Math.sin(frameState.elapsed * 131));
     kart.bodyGroup.rotation.z +=
       (bodyLean + hitVibration * 0.42 - kart.bodyGroup.rotation.z) * poseBlend;
+    const acceleration =
+      kart.previousSpeed == null || dt === 0
+        ? 0
+        : (state.speed - kart.previousSpeed) / Math.max(0.016, dt);
+    kart.previousSpeed = state.speed;
+    const pitch = THREE.MathUtils.clamp(-acceleration * 0.002, -0.09, 0.14);
     kart.bodyGroup.rotation.x +=
-      (-trickPose * 0.35 + hitVibration * 0.22 - kart.bodyGroup.rotation.x) * poseBlend;
+      (pitch - trickPose * 0.2 + hitVibration * 0.22 - kart.bodyGroup.rotation.x) * poseBlend;
     kart.bodyGroup.position.x = hitVibration;
     const suspension = kart.suspension;
     if (suspension) {
@@ -113,9 +129,10 @@ export function createGameRenderer({
       );
       kart.bodyGroup.position.y = suspension.compression + Math.abs(hitVibration) * 0.3;
       for (const driver of kart.driverParts || []) {
-        driver.object.rotation.z = driver.rotation.z - bodyLean * 0.7;
+        driver.object.rotation.z = driver.rotation.z - bodyLean * 1.2;
         driver.object.rotation.x =
-          driver.rotation.x +
+          driver.rotation.x -
+          pitch * 1.3 +
           Math.sin(frameState.elapsed * 8) * Math.min(0.025, state.speed * 0.0003);
         driver.object.position.y = driver.position.y - suspension.compression * 0.24;
       }
@@ -224,7 +241,18 @@ export function createGameRenderer({
         speed: player.speed,
         time: frameState.raceTime,
       });
-      audio.updateEngine(player.speed, frameState.running && !frameState.finished);
+      audio.updateEngine(player.speed, frameState.running && !frameState.finished, {
+        ...player,
+        surfaceLoose: ["sand", "snow", "gravel", "wood"].includes(
+          sectionAt(trackT(player.s)).material,
+        ),
+      });
+      audio.updateWorld?.(
+        activeTrack,
+        player,
+        frameState.raceTime,
+        frameState.running && !frameState.finished,
+      );
     }
 
     if (!frameState.paused) updateCamera(dt, frameState);
@@ -257,8 +285,8 @@ export function createGameRenderer({
     weather?.update(frameState.raceTime, camera.position, forest);
     displayFinish?.update(
       frameState.raceTime,
-      frameState.running && !frameState.finished ? player.speed : 0,
-      player.boost > 0 && frameState.running && !frameState.finished,
+      motionEnabled && frameState.running && !frameState.finished ? player.speed : 0,
+      motionEnabled && player.boost > 0 && frameState.running && !frameState.finished,
       camera.aspect,
     );
     followShadow(player.worldPos);
@@ -289,7 +317,11 @@ export function createGameRenderer({
     const position = playerKart.root.position.clone();
     position.y -= player.hitLift || 0;
     const driftCameraTarget =
-      frameState.running && player.driftBoost > 0 && player.boost > 0 && player.spin <= 0
+      motionEnabled &&
+      frameState.running &&
+      player.driftBoost > 0 &&
+      player.boost > 0 &&
+      player.spin <= 0
         ? player.driftBoostTier === 2
           ? 1
           : 0.75
@@ -319,18 +351,21 @@ export function createGameRenderer({
     camera.updateProjectionMatrix();
     camera.lookAt(cameraLook);
     const bankTarget =
-      player.grounded && player.spin <= 0
+      motionEnabled && player.grounded && player.spin <= 0
         ? -player.steering * Math.min(0.021, player.speed * 0.0003)
         : 0;
     cameraBank += (bankTarget - cameraBank) * (1 - Math.exp(-5 * dt));
     camera.rotation.z += cameraBank;
-    if (frameState.shake) {
+    if (motionEnabled && frameState.shake) {
       camera.rotation.z += (Math.random() - 0.5) * frameState.shake * 0.05;
     }
   }
 
   return {
     render,
+    setOptions: (preferences) => {
+      motionEnabled = preferences.motion;
+    },
     updateVehicle,
     cameraLook,
     getDriftCamera: () => driftCamera,

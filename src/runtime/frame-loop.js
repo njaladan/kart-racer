@@ -6,6 +6,8 @@ export function createFrameLoop({
   camera,
   initialPixelRatio,
   benchmarkMode = false,
+  initialTier = 3,
+  adaptive = true,
   isPaused,
   shouldStep = () => true,
   step,
@@ -19,7 +21,8 @@ export function createFrameLoop({
   let last = now(),
     accumulator = 0;
   let pixelRatio = initialPixelRatio;
-  let tier = 3;
+  let tier = initialTier;
+  let ceilingTier = initialTier;
   let performanceTime = 0,
     performanceFrames = 0,
     slowWindows = 0,
@@ -54,7 +57,7 @@ export function createFrameLoop({
   }
   function assessPerformance(frameSeconds) {
     // Ignore background-tab/startup stalls, but never use capped simulation dt.
-    if (frameSeconds <= 0 || frameSeconds > 0.25 || benchmarkMode) return;
+    if (frameSeconds <= 0 || frameSeconds > 0.25 || benchmarkMode || !adaptive) return;
     performanceTime += frameSeconds;
     performanceFrames++;
     // Shorter windows make quality responsive, while requiring two consecutive
@@ -76,7 +79,7 @@ export function createFrameLoop({
       const ceiling = Math.min(initialPixelRatio, windowRef.devicePixelRatio || 1);
       if (pixelRatio < ceiling)
         pixelRatio = Math.min(ceiling, Math.round((pixelRatio + 0.1) * 100) / 100);
-      else if (tier < 3) tier++;
+      else if (tier < ceilingTier) tier++;
       applyQuality();
       healthyWindows = 0;
     }
@@ -100,6 +103,12 @@ export function createFrameLoop({
   }
   return {
     start: () => requestFrame(frame),
+    setPreferences(preferences) {
+      ceilingTier = tier = preferences.quality;
+      adaptive = preferences.adaptive;
+      resetWindow();
+      applyQuality();
+    },
     resize,
     resetTiming,
     getAccumulator: () => accumulator,

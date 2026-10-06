@@ -240,7 +240,11 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   if (trickStarted) {
     state.trickActive = true;
     state.trickBuffer = 0;
+    state.trickVariant = (state.trickCount || 0) % 3;
+    state.trickCount = (state.trickCount || 0) + 1;
+    state.trickAge = 0;
   }
+  if (state.trickActive) state.trickAge = (state.trickAge || 0) + dt;
   const landed = verticalMotion(state, after.height, slopeVelocity, dt);
   const trickLanded = landed && state.trickActive && !(state.spin > 0);
   if (trickLanded) state.boost = Math.max(state.boost, 0.7);

@@ -1,3 +1,4 @@
+import { createSelectionStage } from "./rendering/selection-stage.js";
 import * as THREE from "../vendor/three/three.module.js";
 import { createAudioController } from "./audio/audio.js";
 import { createGamePage } from "./ui/game-page.js";
@@ -75,6 +76,12 @@ async function startGame() {
   }
   const audio = createAudioController(window);
   const particles = new ParticlePool(scene);
+  const selectionStage = createSelectionStage({
+    canvas: document.getElementById("selection-stage"),
+    models: courseAssets.models,
+    environment: sharedAssets.environment,
+    menu: page.selection,
+  });
   const view = createRaceView({ ...page, racers, boxes, audio });
   const feedback = createRaceFeedback({
     player,
@@ -239,8 +246,20 @@ async function startGame() {
     isPaused: () => !multiplayer && session.getState().paused,
     shouldStep: () => !diagnostics.freeze || !session.getState().running,
     step: session.step,
-    render: gameRenderer.render,
+    initialTier: page.selection.preferences.quality,
+    adaptive: page.selection.preferences.adaptive,
+    render: (dt) => {
+      if (!ui.title.classList.contains("hidden")) selectionStage.update(dt);
+      else gameRenderer.render(dt);
+    },
     onFrame: (seconds) => diagnostics.recordFrame(seconds),
+  });
+  page.selection.setPreferencesHandler((preferences) => {
+    sceneState.graphicsQuality.apply(preferences.quality);
+    sceneState.postprocessing?.setOptions(preferences);
+    gameRenderer.setOptions(preferences);
+    loop.setPreferences(preferences);
+    audio.setVolumes?.(preferences);
   });
   const diagnostics = createBrowserDiagnostics({
     enabled: testMode,
@@ -302,6 +321,7 @@ async function startGame() {
     session.activate();
   }
   loop.start();
+  if (!multiplayer && new URLSearchParams(location.search).get("race") === "1") begin();
 }
 
 startGame().catch((error) => {
