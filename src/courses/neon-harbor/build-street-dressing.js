@@ -26,7 +26,7 @@ export function buildStreetDressing({ THREE, track, kit, palette, props }) {
   const puddleGeometry = new THREE.ShapeGeometry(outline);
   const curbGeometry = new THREE.BoxGeometry(1, 1, 1);
 
-  for (let district = 0; district < 6; district++)
+  for (let district = 0; district < track.course.sections.length; district++)
     for (let i = 0; i < 22; i++) {
       const t = sectorT(district, (i + 0.5) / 22),
         side = i % 2 ? -1 : 1;

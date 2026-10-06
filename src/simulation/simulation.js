@@ -31,7 +31,7 @@ import {
   advanceRaceProgress,
   CHECKPOINT_COUNT,
 } from "./race.js";
-import { cartAt, cartContact } from "./hazards.js";
+import { cartAt, cartContact, trafficAt, trafficContact } from "./hazards.js";
 
 export function initializeRacer(state) {
   resetMotion(state);
@@ -66,6 +66,14 @@ export function botInput(state, index, elapsed, rivals = []) {
   const cart = cartAt(elapsed);
   const cartGap = progressDelta(cart.s, state.s, TRACK) * WORLD_PER_UNIT;
   if (cartGap > -6 && cartGap < 40) lane = activeTrack.course.hazard.safeLane;
+  const traffic = activeTrack.course.traffic;
+  if (traffic && trackT(state.s) >= activeTrack.sectorT(traffic.section, traffic.startFraction) - 0.03) {
+    for (const vehicle of trafficAt(elapsed)) {
+      const gap = progressDelta(vehicle.s, state.s, TRACK) * WORLD_PER_UNIT;
+      if (vehicle.active && gap > -5 && gap < 42 && Math.abs(lane - vehicle.lane) < 3)
+        lane = traffic.clearLane;
+    }
+  }
   lane = Math.max(bounds.left + 1.1, Math.min(bounds.right - 1.1, lane));
   const target = lookahead.p.clone().addScaledVector(lookahead.right, lane);
   const desired = Math.atan2(-(target.x - state.worldPos.x), -(target.z - state.worldPos.z));
@@ -132,6 +140,28 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     },
     dt,
   );
+  let conveyorMotion = false;
+  if (state.grounded && !state.finished) {
+    for (const belt of activeTrack.CONVEYORS) {
+      if (before.t < belt.start || before.t > belt.end) continue;
+      const inBounds = before.offset >= before.leftEdge && before.offset <= before.rightEdge;
+      if (belt.fullWidth !== false && !inBounds) continue;
+      if (belt.fullWidth === false && Math.abs(before.offset - (belt.offset || 0)) > (belt.width || 4) / 2)
+        continue;
+      const metres = before.t * activeTrack.COURSE_LENGTH;
+      const fromStart = metres - belt.start * activeTrack.COURSE_LENGTH;
+      const toEnd = belt.end * activeTrack.COURSE_LENGTH - metres;
+      const blend = belt.blendDistance > 0
+        ? Math.min(1, Math.max(0, fromStart / belt.blendDistance), Math.max(0, toEnd / belt.blendDistance))
+        : 1;
+      const tangent = before.frame.tangent;
+      const horizontalLength = Math.hypot(tangent.x, tangent.z) || 1;
+      state.worldPos.x += (tangent.x / horizontalLength) * belt.speed * blend * dt;
+      state.worldPos.z += (tangent.z / horizontalLength) * belt.speed * blend * dt;
+      conveyorMotion = true;
+      break;
+    }
+  }
   if (hitWasActive && state.spin === 0) {
     state.vx = state.vz = state.speed = state.longitudinalSpeed = state.lateralSpeed = 0;
     state.yaw = state.hitStartYaw;
@@ -158,7 +188,8 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     penetration,
   );
   if (penetration > 0) state.x = laneFromOffset(edge);
-  const contact = cartContact(state.worldPos, raceTime);
+  const trafficHit = trafficContact(state.worldPos, raceTime);
+  const contact = trafficHit || cartContact(state.worldPos, raceTime);
   const cartImpact = contact
     ? wallContact(state, contact.nx, contact.nz, contact.penetration)
     : false;
@@ -177,7 +208,9 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     const travelled = progressDelta(after.t, before.t, 1);
     for (const ramp of RAMPS) {
       const distance = progressDelta(ramp.t, before.t, 1);
-      if (travelled > 0 && distance > 0 && distance <= travelled) {
+      const rampWidth = ramp.width ?? (ramp.halfWidth != null ? ramp.halfWidth * 2 : null);
+      const onRamp = rampWidth == null || Math.abs(after.offset - (ramp.offset ?? 0)) <= rampWidth / 2;
+      if (travelled > 0 && distance > 0 && distance <= travelled && onRamp) {
         state.grounded = false;
         state.vy = JUMP_TAKEOFF_SPEED;
         state.airTime = 0;
@@ -234,6 +267,8 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     sliding,
     wallImpact,
     cartImpact,
+    trafficImpact: !!trafficHit && cartImpact,
+    conveyorMotion,
     padBoost,
     landed,
     launched: wasGrounded && !state.grounded,

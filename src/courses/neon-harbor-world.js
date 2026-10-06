@@ -2,12 +2,13 @@ import { buildHarborLife } from "./neon-harbor/build-harbor-life.js";
 import { buildWaterfront } from "./neon-harbor/build-waterfront.js";
 import { buildCityProps } from "./neon-harbor/build-city-props.js";
 import { buildStreetDressing } from "./neon-harbor/build-street-dressing.js";
+import { buildPortLandmarks } from "./neon-harbor/build-port-landmarks.js";
 import { installSurfaceDetail } from "../rendering/surface-detail.js";
 
 // Authored imported architecture supplies silhouettes, recesses and baked AO.
 // The shared engine retains every physical road, verge and camera boundary.
 export default function buildWorld(context) {
-  const { THREE, scene, scenery, track, kit, hazardAt, textures = {} } = context;
+  const { THREE, scene, scenery, track, kit, hazardAt, trafficAt, textures = {} } = context;
   const { material, mesh, box, groupAt, sectorT, batch } = kit;
   const steel = material("#647889", { map: textures.metal, metalness: 0.28, roughness: 0.58 });
   const concrete = material("#a0adb5", { map: textures.concrete, roughness: 0.85 });
@@ -20,7 +21,6 @@ export default function buildWorld(context) {
   const dark = material("#202b39", { roughness: 0.87 });
   const glass = material("#324f6d", { metalness: 0, roughness: 0.2, envMapIntensity: 1.25 });
   const window = material("#e6c393", { emissive: "#d39247", emissiveIntensity: 0.95 });
-  const skin = material("#d6b493", { roughness: 0.85 });
   installSurfaceDetail(concrete, { kind: "terrain", scale: 0.12, strength: 0.13 });
   installSurfaceDetail(steel, { kind: "terrain", scale: 0.08, strength: 0.075 });
   const palette = {
@@ -32,7 +32,6 @@ export default function buildWorld(context) {
     glass,
     pink,
     rust,
-    skin,
     steel,
     trim,
     window,
@@ -60,9 +59,20 @@ export default function buildWorld(context) {
       groundShadow(g, 8, 7);
     }
   }
+  // Downtown: uninterrupted storefronts and apartments on both sides of
+  // three linked street bends. Their near walls make the district read as a
+  // street canyon while keeping the road itself open.
+  for (let i = 0; i < 24; i++) {
+    const t = sectorT(1, (i + 0.5) / 24);
+    for (const side of [-1, 1]) {
+      const offset = side * (21 + (i % 3) * 2.5);
+      building(t, offset, 13 + (i % 3) * 2, 17 + (i % 4) * 3, 15, i + 70);
+      if (i % 3 === 0) lamp(t, side * 13.5, i + 80);
+    }
+  }
   // Market: textured rooflines, intimate storefronts and imported kiosks.
   for (let i = 0; i < 18; i++) {
-    const t = sectorT(1, (i + 0.5) / 18),
+    const t = sectorT(2, (i + 0.5) / 18),
       side = i % 2 ? 1 : -1;
     building(t, side * (28 + (i % 3) * 4), 12, 14 + (i % 4) * 2.5, 11, i + 20);
     const edge = side > 0 ? track.surfaceAt(t).rightEdge : -track.surfaceAt(t).leftEdge;
@@ -76,7 +86,7 @@ export default function buildWorld(context) {
   }
   // Banners occupy only the overhead camera-safe envelope.
   for (const f of [0.22, 0.67]) {
-    const g = groupAt(sectorT(1, f), 0, scenery);
+    const g = groupAt(sectorT(2, f), 0, scenery);
     box(steel, g, [0, 13.8, 0], [24, 0.07, 0.07]);
     for (let i = 0; i < 7; i++) {
       const lantern = mesh(
@@ -91,7 +101,7 @@ export default function buildWorld(context) {
   }
   // Industrial hall: structural pieces are appropriate modular trim geometry.
   // All bulky decorative buildings and machinery are offline authored assets.
-  const hall = groupAt(sectorT(2, 0.4), 0, scenery);
+  const hall = groupAt(sectorT(4, 0.4), 0, scenery);
   for (const side of [-1, 1]) {
     box(steel, hall, [side * 15, 6.5, 0], [2, 13, 30]);
     for (const z of [-14, -7, 0, 7, 14]) {
@@ -107,7 +117,7 @@ export default function buildWorld(context) {
   for (const x of [-7, 7]) box(window, hall, [x, 13.05, 0], [0.22, 0.06, 25]);
   batch(hall);
   for (let i = 0; i < 10; i++) {
-    const t = sectorT(2, 0.1 + i * 0.083),
+    const t = sectorT(4, 0.1 + i * 0.083),
       side = i % 2 ? 1 : -1;
     industrialBuilding(t, side * (34 + (i % 3) * 5), 14, 12 + (i % 3) * 5, 12, i);
     const g = safeGroup(t, side * 22, 5.5);
@@ -149,9 +159,9 @@ export default function buildWorld(context) {
     if (i % 3 === 0) lamp(t, side * 14, i + 40);
     if (i % 5 === 0) industrialBuilding(t, side * 54, 18, 22, 14, i);
   }
-  // Boulevard: metropolitan frontage; the service cut stays visually open.
+  // Boulevard: metropolitan frontage around the final competing corner.
   for (let i = 0; i < 22; i++) {
-    const t = sectorT(5, (i + 0.5) / 22),
+    const t = sectorT(7, (i + 0.5) / 22),
       side = i % 2 ? 1 : -1;
     const extra = side > 0 ? track.shortcutWidth(t) : 0;
     lamp(t, side * (14 + extra), i + 60);
@@ -162,9 +172,19 @@ export default function buildWorld(context) {
     }
   }
   buildStreetDressing({ THREE, scenery, track, kit, palette, props });
+  const portLandmarks = buildPortLandmarks({
+    THREE,
+    scenery,
+    kit,
+    palette,
+    track,
+    trafficAt,
+    animated,
+    geometry,
+  });
 
   // Atmospheric layered skylines use the same authored meshes at modest cost.
-  for (const district of [0, 3, 5])
+  for (const district of [0, 3, 7])
     for (let i = 0; i < 12; i++) {
       const t = sectorT(district, 0.045 + i * 0.081),
         offset = district === 3 ? -117 - (i % 3) * 19 : 77 + (i % 3) * 18;
@@ -175,11 +195,10 @@ export default function buildWorld(context) {
       if (district === 3) g.position.y = -1.7;
       fitAsset(`harbor:${i % 2 ? "housing-a" : "housing-b"}`, g, [0, 0, 0], [width, height, 13]);
     }
-  return buildHarborLife({
+  const harborLife = buildHarborLife({
     THREE,
     animated,
     craneHooks,
-    ferries,
     harborPose,
     hazardAt,
     safeGroup,
@@ -190,4 +209,11 @@ export default function buildWorld(context) {
     palette,
     geometry,
   });
+  return {
+    animated,
+    update(time, state) {
+      harborLife.update(time, state);
+      portLandmarks.update(time, state);
+    },
+  };
 }

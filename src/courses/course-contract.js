@@ -67,8 +67,8 @@ export function validateCourseDefinition(course) {
     }
   });
 
-  if (!Array.isArray(course.sections) || course.sections.length !== 6) {
-    fail(course, "sections", "exactly six section descriptors");
+  if (!Array.isArray(course.sections) || course.sections.length < 6) {
+    fail(course, "sections", "at least six section descriptors");
   }
   let previousControlIndex = -1;
   course.sections.forEach((section, index) => {
@@ -112,6 +112,11 @@ export function validateCourseDefinition(course) {
       min: 0,
       exclusiveMin: true,
     });
+    if (ramp.offset != null) finite(course, ramp.offset, `ramps[${index}].offset`);
+    if (ramp.width != null)
+      finite(course, ramp.width, `ramps[${index}].width`, { min: 0, exclusiveMin: true });
+    if (ramp.halfWidth != null)
+      finite(course, ramp.halfWidth, `ramps[${index}].halfWidth`, { min: 0, exclusiveMin: true });
   }
   for (const [index, pad] of (course.pads || []).entries()) {
     sectionFraction(course, pad, `pads[${index}]`);
@@ -124,7 +129,14 @@ export function validateCourseDefinition(course) {
   if (!Array.isArray(course.itemRows) || course.itemRows.length === 0) {
     fail(course, "itemRows", "at least one pickup row");
   }
-  course.itemRows.forEach((row, index) => sectionFraction(course, row, `itemRows[${index}]`));
+  course.itemRows.forEach((row, index) => {
+    sectionFraction(course, row, `itemRows[${index}]`);
+    if (row.offsets != null) {
+      if (!Array.isArray(row.offsets) || row.offsets.length === 0)
+        fail(course, `itemRows[${index}].offsets`, "a non-empty list of lateral offsets");
+      row.offsets.forEach((offset, lane) => finite(course, offset, `itemRows[${index}].offsets[${lane}]`));
+    }
+  });
 
   const shortcut = course.shortcut;
   sectionFraction(
@@ -233,6 +245,15 @@ export function validateCourseDefinition(course) {
         min: 0,
         exclusiveMin: true,
       });
+  }
+
+  for (const [index, conveyor] of (course.conveyors || (course.conveyor ? [course.conveyor] : [])).entries()) {
+    sectionFraction(course, { section: conveyor.section, fraction: conveyor.startFraction }, `conveyors[${index}].startFraction`);
+    finite(course, conveyor.endFraction, `conveyors[${index}].endFraction`, { min: 0, max: 1 });
+    if (conveyor.endFraction <= conveyor.startFraction)
+      fail(course, `conveyors[${index}]`, "an endFraction after startFraction");
+    finite(course, conveyor.speed, `conveyors[${index}].speed`, { min: 0, exclusiveMin: true });
+    finite(course, conveyor.blendDistance ?? 0, `conveyors[${index}].blendDistance`, { min: 0 });
   }
 
   for (const field of REQUIRED_THEME_COLORS) {

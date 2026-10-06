@@ -1,9 +1,8 @@
-/** Bounded pedestrians, signals, steam, ripples, and shuttle animation. */
+/** Environmental signals, steam, water highlights, and cargo-shuttle animation. */
 export function buildHarborLife({
   THREE,
   animated,
   craneHooks,
-  ferries,
   harborPose,
   hazardAt,
   safeGroup,
@@ -15,32 +14,10 @@ export function buildHarborLife({
   geometry,
 }) {
   const { align, batch, box, groupAt, material, mesh, sectorT } = kit;
-  const { amber, blue, cyan, dark, glass, skin, steel, window } = palette;
+  const { amber, blue, cyan, dark, glass, steel, window } = palette;
   const { cylinder, sphere } = geometry;
-  // Bounded animated city life. Instanced figures share just two draw calls.
-  const people = [],
-    personBody = new THREE.CylinderGeometry(0.22, 0.29, 0.85, 6);
-  const crowdMaterial = material("#df9bc6", { emissive: "#592842", emissiveIntensity: 0.2 });
-  for (let i = 0; i < 18; i++) {
-    const district = i < 12 ? 1 : 0,
-      t = sectorT(district, 0.08 + (i % 12) * 0.075),
-      side = i % 2 ? 1 : -1;
-    const s = track.surfaceAt(t),
-      edge = side > 0 ? s.rightEdge : -s.leftEdge;
-    const g = safeGroup(t, side * (edge + 6.6), 1.4);
-    if (!g) continue;
-    people.push({ p: g.position.clone(), q: g.quaternion.clone(), phase: i * 1.9 });
-    scenery.remove(g);
-  }
-  const bodies = new THREE.InstancedMesh(personBody, crowdMaterial, people.length);
-  const heads = new THREE.InstancedMesh(sphere, skin, people.length);
-  bodies.frustumCulled = heads.frustumCulled = false;
-  scenery.add(bodies, heads);
-  animated.push(bodies, heads);
   const dummy = new THREE.Object3D();
   const rippleAxis = new THREE.Vector3(1, 0, 0);
-  const coatColors = ["#d987b9", "#739bdd", "#e0b764", "#69b7aa"];
-  for (let i = 0; i < people.length; i++) bodies.setColorAt(i, new THREE.Color(coatColors[i % 4]));
 
   // An understated intersection signal gives the market a daily rhythm.
   // Its colors are atmospheric only, with no compulsory stopping for racers.
@@ -49,7 +26,7 @@ export function buildHarborLife({
   for (const [district, f] of [
     [0, 0.94],
     [1, 0.86],
-    [5, 0.06],
+    [7, 0.06],
   ])
     for (const side of [-1, 1]) {
       const t = sectorT(district, f),
@@ -82,7 +59,7 @@ export function buildHarborLife({
     [1, 0.2, 1],
     [1, 0.84, -1],
     [2, 0.8, -1],
-    [5, 0.86, 1],
+    [7, 0.86, 1],
   ]) {
     const t = sectorT(district, f),
       s = track.surfaceAt(t),
@@ -154,32 +131,11 @@ export function buildHarborLife({
       warningMaterial.emissiveIntensity = state.warning ? 1.6 + Math.sin(time * 14) * 0.7 : 0;
       signalRed.emissiveIntensity = time % 16 < 8 ? 0.2 : 1.15;
       signalGreen.emissiveIntensity = time % 16 < 8 ? 1.15 : 0.2;
-      for (const ferry of ferries) {
-        ferry.g.position.y = -1.1 + Math.sin(time * 0.8 + ferry.phase) * 0.15;
-        ferry.g.position.x = ferry.x + Math.sin(time * 0.09 + ferry.phase) * 0.6;
-        ferry.g.position.z = ferry.z + Math.cos(time * 0.11 + ferry.phase) * 0.5;
-        ferry.g.rotation.z = Math.sin(time * 0.7 + ferry.phase) * 0.009;
-      }
       for (const crane of craneHooks) {
         const scale = 1 + Math.sin(time * 0.36 + crane.phase) * 0.11;
         crane.g.scale.y = scale;
         crane.g.position.y = -1.1 + 27 * (1 - scale);
       }
-      for (let i = 0; i < people.length; i++) {
-        const person = people[i];
-        dummy.position.copy(person.p);
-        dummy.quaternion.copy(person.q);
-        dummy.position.x += Math.sin(time * 0.32 + person.phase) * 0.4;
-        dummy.position.y += 0.8 + Math.sin(time * 2 + person.phase) * 0.035;
-        dummy.scale.set(1, 1, 1);
-        dummy.updateMatrix();
-        bodies.setMatrixAt(i, dummy.matrix);
-        dummy.position.y += 0.7;
-        dummy.scale.set(0.24, 0.28, 0.24);
-        dummy.updateMatrix();
-        heads.setMatrixAt(i, dummy.matrix);
-      }
-      bodies.instanceMatrix.needsUpdate = heads.instanceMatrix.needsUpdate = true;
       for (let v = 0; v < vents.length; v++)
         for (let j = 0; j < 9; j++) {
           const rise = (time * 0.7 + j * 0.47 + v * 0.8) % 4.7,

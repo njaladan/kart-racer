@@ -8,7 +8,7 @@ import {
   laneWidth,
   poseAt,
 } from "../track/track.js";
-import { cartContact } from "./hazards.js";
+import { cartContact, trafficContact } from "./hazards.js";
 import { progressDelta } from "./race.js";
 import { wrapAngle, clamp } from "./physics.js";
 
@@ -113,7 +113,7 @@ export function advanceShell(shell, dt, raceTime = 0) {
       shell.yaw = Math.atan2(-shell.vx, -shell.vz);
     }
   }
-  const contact = cartContact(shell.worldPos, raceTime, 0.55);
+  const contact = trafficContact(shell.worldPos, raceTime, 0.55) || cartContact(shell.worldPos, raceTime, 0.55);
   if (contact) {
     const outward = shell.vx * contact.nx + shell.vz * contact.nz;
     shell.worldPos.x -= contact.nx * contact.penetration;

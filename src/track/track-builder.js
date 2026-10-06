@@ -62,7 +62,11 @@ export function createTrack(course) {
     ...p,
     t: sectorT(p.section, p.fraction),
   }));
-  const ITEM_ROWS = course.itemRows.map((p) => sectorT(p.section, p.fraction));
+  const ITEM_ROW_DEFINITIONS = course.itemRows.map((p) => ({
+    ...p,
+    t: sectorT(p.section, p.fraction),
+  }));
+  const ITEM_ROWS = ITEM_ROW_DEFINITIONS.map((row) => row.t);
   const SURFACES = (course.surfaces || []).map((s) => ({
     ...s,
     start: sectorT(s.section, s.startFraction),
@@ -77,6 +81,11 @@ export function createTrack(course) {
     ...v,
     start: sectorT(v.section, v.startFraction),
     end: sectorT(v.section, v.endFraction),
+  }));
+  const CONVEYORS = (course.conveyors || (course.conveyor ? [course.conveyor] : [])).map((belt) => ({
+    ...belt,
+    start: sectorT(belt.section, belt.startFraction),
+    end: sectorT(belt.section, belt.endFraction),
   }));
   const smooth = (a, b, v) => THREE.MathUtils.smoothstep(v, a, b);
   function vergePatchWidth(verge, t) {
@@ -142,7 +151,11 @@ export function createTrack(course) {
       offroadDrag:
         verge?.drag ??
         (offset > halfWidth && shortcutWidth(t) > 0 ? (course.shortcut.drag ?? 1) : 1),
-      material: verge?.material ?? patch?.material ?? section.material,
+      material:
+        verge?.material ??
+        (offset > halfWidth && shortcutWidth(t) > 0 ? course.shortcut.material : null) ??
+        patch?.material ??
+        section.material,
       grip: verge?.grip ?? patch?.grip ?? section.grip ?? 12,
       offroadGrip: verge?.grip ?? 5,
       verge,
@@ -166,11 +179,14 @@ export function createTrack(course) {
       0.14,
     );
   }
-  function rampHeight(t) {
+  function rampHeight(t, offset = 0) {
     let height = 0;
     for (const ramp of RAMPS) {
       const q = (Math.abs(progressDelta(t, ramp.t, 1)) * lengths.at(-1)) / ramp.halfLength;
-      if (q < 1) height = Math.max(height, ramp.height * Math.cos((q * Math.PI) / 2) ** 2);
+      const width = ramp.width ?? (ramp.halfWidth != null ? ramp.halfWidth * 2 : null);
+      const laneQ = width == null ? 0 : Math.abs(offset - (ramp.offset ?? 0)) / (width / 2);
+      if (q < 1 && laneQ <= 1)
+        height = Math.max(height, ramp.height * Math.cos((q * Math.PI) / 2) ** 2);
     }
     return height;
   }
@@ -265,8 +281,10 @@ export function createTrack(course) {
     const horizontalRight = new THREE.Vector3(frame.right.x, 0, frame.right.z).normalize();
     const offset =
       (position.x - frame.p.x) * horizontalRight.x + (position.z - frame.p.z) * horizontalRight.z;
+    const centerRamp = rampHeight(t);
     const height =
-      frame.p.y + (offset * frame.right.y) / Math.hypot(frame.right.x, frame.right.z) + 0.065;
+      frame.p.y - centerRamp + rampHeight(t, offset) +
+      (offset * frame.right.y) / Math.hypot(frame.right.x, frame.right.z) + 0.065;
     return {
       t,
       frame,
@@ -282,6 +300,7 @@ export function createTrack(course) {
     SURFACES,
     ELEVATED,
     VERGES,
+    CONVEYORS,
     vergeWidth,
     vergeAt,
     course,
@@ -300,6 +319,7 @@ export function createTrack(course) {
     SHORTCUT,
     BOOST_PADS,
     ITEM_ROWS,
+    ITEM_ROW_DEFINITIONS,
     shortcutWidth,
     roadHalfWidth,
     surfaceAt,

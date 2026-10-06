@@ -167,7 +167,11 @@ export function createGameRenderer({
     const frameState = getFrameState();
     renderer.info?.reset();
     if (!frameState.paused) {
-      getLandscape()?.update(frameState.raceTime);
+      getLandscape()?.update(frameState.raceTime, {
+        playerLap: player.lap,
+        playerT: trackT(player.s),
+        running: frameState.running && !frameState.finished,
+      });
       for (const pad of pads) {
         const pulse = 0.5 + 0.5 * Math.sin(frameState.elapsed * 5 + pad.phase);
         pad.g.children.forEach((mesh, index) => {

@@ -2,7 +2,14 @@ import * as THREE from "../../vendor/three/three.module.js";
 import { bakeVertexShade } from "./vertex-shading.js";
 import { bevelBox, batchStaticMeshes } from "./visuals.js";
 import { addGlow } from "./visual-effects.js";
-import { TRACK, activeTrack, frameAt, poseAt, BOOST_PADS, ITEM_ROWS } from "../track/track.js";
+import {
+  TRACK,
+  activeTrack,
+  frameAt,
+  poseAt,
+  BOOST_PADS,
+  ITEM_ROW_DEFINITIONS,
+} from "../track/track.js";
 
 /** Build the finish landmark, boost panels, and collectible presentation records. */
 export function createRaceProps({
@@ -141,9 +148,13 @@ export function createRaceProps({
   }
   const boxMaterial = itemCubeMaterial();
   function addItemBoxes() {
-    // Authored rows respect the narrow timber crossing and provide three lanes.
-    for (let i = 0; i < ITEM_ROWS.length * 3; i++) {
-      let s = ITEM_ROWS[Math.floor(i / 3)] * TRACK,
+    // District rows can opt into exact world-space offsets for aprons/verges.
+    const defaultOffsets = [-0.58, 0, 0.58];
+    const rows = ITEM_ROW_DEFINITIONS.flatMap((row) =>
+      (row.offsets || defaultOffsets).map((offset, lane) => ({ row, offset, lane })),
+    );
+    for (const { row, offset, lane } of rows) {
+      let s = row.t * TRACK,
         group = new THREE.Group(),
         cube = addMesh(new THREE.BoxGeometry(1.65, 1.65, 1.65), boxMaterial, group);
       cube.castShadow = true;
@@ -155,7 +166,7 @@ export function createRaceProps({
       addGlow(group, { color: "#65ffe2", size: 3.3, opacity: 0.25 });
       const b = {
         s,
-        x: [-0.58, 0, 0.58][i % 3],
+        x: row.offsets ? offset / 6.25 : defaultOffsets[lane],
         group,
         cube,
         active: true,

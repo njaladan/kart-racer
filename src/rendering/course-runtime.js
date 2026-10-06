@@ -1,6 +1,6 @@
 import * as THREE from "../../vendor/three/three.module.js";
 import { createCourseKit, batchScenery } from "./course-kit.js";
-import { cartAt } from "../simulation/hazards.js";
+import { cartAt, trafficAt } from "../simulation/hazards.js";
 import { buildWindmillWorld } from "../courses/windmill-wilds/world.js";
 import { createRailGeometry } from "./course-rails.js";
 import { addDetailedScenery } from "./detailed-scenery.js";
@@ -67,11 +67,13 @@ export function buildCourseWorld({
       bumpScale: 0.035,
     }),
   };
+  const conveyorTextures = [];
   const materialNames = [
     ...new Set([
       ...course.sections.map((s) => s.material),
       ...(course.surfaces || []).map((s) => s.material),
       ...(course.verges || []).map((v) => v.material),
+      ...(course.shortcut?.material ? [course.shortcut.material] : []),
     ]),
   ];
   const roads = materialNames.map((name) => roadMaterials[name] || mats.road);
@@ -95,6 +97,7 @@ export function buildCourseWorld({
         f = track.frameAt(t);
       for (const edge of [edgeA(t), edgeB(t)]) {
         const p = f.p.clone().addScaledVector(f.right, edge);
+        p.y += track.rampHeight(t, edge) - track.rampHeight(t, 0);
         if (terrain) {
           const bounds = track.surfaceAt(t);
           const distance = Math.abs(edge) - (edge > 0 ? bounds.rightEdge : -bounds.leftEdge);
@@ -146,7 +149,7 @@ export function buildCourseWorld({
   ribbon(
     (t) => track.roadHalfWidth(t),
     (t) => track.roadHalfWidth(t) + track.shortcutWidth(t),
-    mats.grass,
+    roadMaterials[course.shortcut.material] || mats.grass,
     0.035,
   );
   for (const v of track.VERGES) {
@@ -159,6 +162,107 @@ export function buildCourseWorld({
       v.start,
       v.end,
     );
+  }
+  for (const belt of track.CONVEYORS) {
+    const canvas = document.createElement("canvas");
+    canvas.width = 128;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+    ctx.fillStyle = "#263846";
+    ctx.fillRect(0, 0, 128, 256);
+    for (let y = 0; y < 256; y += 32) {
+      ctx.fillStyle = y % 64 ? "#56d6d0" : "#e5b768";
+      ctx.beginPath();
+      ctx.moveTo(22, y + 5);
+      ctx.lineTo(70, y + 5);
+      ctx.lineTo(96, y + 16);
+      ctx.lineTo(70, y + 27);
+      ctx.lineTo(22, y + 27);
+      ctx.lineTo(48, y + 16);
+      ctx.closePath();
+      ctx.fill();
+    }
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    const beltMaterial = material("#ffffff", {
+      map: texture,
+      roughness: 0.62,
+      metalness: 0.24,
+      emissive: "#173d45",
+      emissiveIntensity: 0.32,
+    });
+    const half = (t) => track.roadHalfWidth(t) + 0.55;
+    ribbon((t) => -half(t), half, beltMaterial, 0.07, false, belt.start, belt.end);
+    conveyorTextures.push({ texture, speed: belt.speed });
+  }
+  const laneRamps = track.RAMPS.filter((ramp) => ramp.width != null || ramp.halfWidth != null);
+  if (laneRamps.length) {
+    const plateMaterial = material("#b5a374", {
+      color: "#c49a55",
+      metalness: 0.58,
+      roughness: 0.5,
+      emissive: "#382819",
+      emissiveIntensity: 0.25,
+    });
+    for (const ramp of laneRamps) {
+      const width = ramp.width ?? ramp.halfWidth * 2;
+      const center = ramp.offset ?? 0;
+      const rows = Math.max(12, Math.ceil((ramp.halfLength * 2) / 0.65));
+      const columns = 6;
+      const positions = [];
+      const uvs = [];
+      const indices = [];
+      for (let row = 0; row <= rows; row++) {
+        const q = row / rows;
+        const t = ramp.t + ((q - 0.5) * ramp.halfLength * 2) / track.COURSE_LENGTH;
+        const frame = track.frameAt(t);
+        for (let column = 0; column <= columns; column++) {
+          const across = column / columns;
+          const offset = center + (across - 0.5) * width;
+          const p = frame.p.clone().addScaledVector(frame.right, offset);
+          p.y += track.rampHeight(t, offset) - track.rampHeight(t, 0) + 0.045;
+          positions.push(p.x, p.y, p.z);
+          uvs.push(across, q * 3);
+          if (row < rows && column < columns) {
+            const a = row * (columns + 1) + column;
+            indices.push(a, a + 1, a + columns + 1, a + 1, a + columns + 2, a + columns + 1);
+          }
+        }
+      }
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+      geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
+      geometry.setIndex(indices);
+      geometry.computeVertexNormals();
+      const plate = mesh(geometry, plateMaterial);
+      plate.name = "Localized maintenance ramp plate";
+      plate.castShadow = false;
+    }
+  }
+  if (course.bridgeJoint) {
+    const joint = course.bridgeJoint;
+    const t = track.sectorT(joint.section, joint.fraction);
+    const half = track.roadHalfWidth(t) + 0.45;
+    const halfLength = (joint.length || 1) / 2;
+    const positions = [];
+    for (const along of [-1, 1]) {
+      const station = t + (along * halfLength) / track.COURSE_LENGTH;
+      const frame = track.frameAt(station);
+      for (const offset of [-half, half]) {
+        const p = frame.p.clone().addScaledVector(frame.right, offset);
+        p.y += track.rampHeight(station, offset) - track.rampHeight(station, 0) + 0.09;
+        positions.push(p.x, p.y, p.z);
+      }
+    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setIndex([0, 1, 2, 1, 3, 2]);
+    geometry.computeVertexNormals();
+    const jointMaterial = material("#71808b", { metalness: 0.72, roughness: 0.42 });
+    const strip = mesh(geometry, jointMaterial);
+    strip.name = "Bridge expansion joint";
+    strip.castShadow = false;
   }
   for (const side of [-1, 1]) {
     const edge = (t) => (side < 0 ? track.surfaceAt(t).leftEdge : track.surfaceAt(t).rightEdge);
@@ -211,15 +315,17 @@ export function buildCourseWorld({
       renderer,
       kit,
       hazardAt: cartAt,
+      trafficAt,
     }) || {};
   batchScenery(scenery, world.animated || []);
   addDetailedScenery(scene, track, assets);
   return {
     ...createSceneryDetailController(scene),
     animated: world.animated || [],
-    update(time) {
+    update(time, courseState) {
+      for (const belt of conveyorTextures) belt.texture.offset.y = -(time * belt.speed) / 8;
       warningMaterial.emissiveIntensity = cartAt(time).warning ? 1.5 + Math.sin(time * 12) : 0;
-      world.update?.(time);
+      world.update?.(time, courseState);
     },
   };
 }
