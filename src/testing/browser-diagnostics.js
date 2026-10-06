@@ -138,9 +138,7 @@ export function createBrowserDiagnostics({
           camera.position.y,
           projectTrack(camera.position, player.s).height + 2.1,
         );
-        gameRenderer.cameraLook
-          .copy(player.worldPos)
-          .addScaledVector(forward, panoramic ? 4.5 : 6);
+        gameRenderer.cameraLook.copy(player.worldPos).addScaledVector(forward, panoramic ? 4.5 : 6);
         gameRenderer.cameraLook.y += 1.15;
         camera.lookAt(gameRenderer.cameraLook);
       }

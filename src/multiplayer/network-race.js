@@ -213,7 +213,10 @@ export function createNetworkRace({
   function step(dt) {
     const timestamp = now();
     if (!latest) return;
-    const stale = timestamp - latestAt > 1000 || lost || !client.connected;
+    const stale =
+      (!finishShown && client.room?.phase !== "results" && timestamp - latestAt > 1000) ||
+      lost ||
+      !client.connected;
     status.textContent =
       timestamp < errorUntil
         ? errorMessage
