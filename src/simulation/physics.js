@@ -4,12 +4,18 @@ export const FIXED_DT = 1 / 120;
 export const MAX_SPEED = 112; // km/h
 export const MAX_BOOST_SPEED = 144; // km/h
 export const FULL_SPEED_TURN_RADIUS = 22; // metres, also maintained during boosts
-export const DRIFT_TURN_RADIUS = 17; // metres
+const AI_DRIFT_TURN_RADIUS = 17; // metres
+const AI_LOW_SPEED_TURN_RADIUS = 5; // metres
 export const MAX_REVERSE_SPEED = 46; // km/h
 export const JUMP_GRAVITY = 24;
 export const MAX_JUMP_HEIGHT = 1.1; // metres above the racing surface
 export const MAX_JUMP_TIME = 0.85;
 export const JUMP_TAKEOFF_SPEED = 6;
+const LOW_SPEED_YAW_RATE = 2.2; // radians/second
+const FULL_SPEED_YAW_RATE = MAX_SPEED / 3.6 / FULL_SPEED_TURN_RADIUS;
+const STEER_RAMP_SPEED = 4; // metres/second
+const DRIFT_YAW_RATE = 0.7; // radians/second
+const DRIFT_STEER_YAW_RATE = 0.5; // radians/second
 export const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 export const wrapAngle = (a) => Math.atan2(Math.sin(a), Math.cos(a));
 
@@ -56,8 +62,10 @@ export function drive(state, input, surface, dt) {
     state.vz = state.hitSlideVz * fraction;
     state.worldPos.x += state.vx * dt;
     state.worldPos.z += state.vz * dt;
-    const fx = -Math.sin(state.yaw), fz = -Math.cos(state.yaw);
-    const rx = Math.cos(state.yaw), rz = -Math.sin(state.yaw);
+    const fx = -Math.sin(state.yaw),
+      fz = -Math.cos(state.yaw);
+    const rx = Math.cos(state.yaw),
+      rz = -Math.sin(state.yaw);
     state.longitudinalSpeed = state.vx * fx + state.vz * fz;
     state.lateralSpeed = state.vx * rx + state.vz * rz;
     state.speed = Math.hypot(state.vx, state.vz) * 3.6;
@@ -84,7 +92,7 @@ export function drive(state, input, surface, dt) {
     state.grounded &&
     !(state.spin > 0) &&
     forward > (state.driftDirection ? 7 : 9) &&
-    (!!state.driftDirection || Math.abs(state.steering) > 0.15);
+    (!!state.driftDirection || Math.abs(state.steering) >= 0.5);
   state.driftDirection = sliding ? state.driftDirection || Math.sign(state.steering) : 0;
   const boosted = state.boost > 0 || state.star > 0;
   if (state.grounded) {
@@ -131,25 +139,39 @@ export function drive(state, input, surface, dt) {
       lateral = 0;
     }
 
-    // Predictable curvature across the whole analog range, with a tighter
-    // drift line. Boosts retain the full-speed radius instead of widening it.
     const speed = Math.abs(nextSpeed);
-    const radius =
-      5 +
-      ((sliding ? DRIFT_TURN_RADIUS : FULL_SPEED_TURN_RADIUS) - 5) *
-        clamp(speed / (MAX_SPEED / 3.6), 0, 1);
-    const desiredYaw = (-nextSpeed / radius) * state.steering;
-    // Rough ground already lowers grip and adds drag; also capping yaw makes
-    // it impossible to steer back onto the road after a boost expires.
-    const yawLimit = 2.8;
-    const targetYaw = clamp(desiredYaw, -yawLimit, yawLimit);
-    // Human input needs prompt release; AI retains its continuous-correction tuning.
+    let targetYaw;
+    if (state.isPlayer) {
+      // Steering authority is strongest at low speed and tapers with speed.
+      // Above normal top speed, scale yaw with speed to preserve the same radius
+      // through a boost rather than letting the kart drift wide.
+      const fullSpeed = MAX_SPEED / 3.6;
+      const tuningSpeed = Math.min(speed, fullSpeed);
+      const yawRateAtSpeed =
+        (LOW_SPEED_YAW_RATE +
+          (FULL_SPEED_YAW_RATE - LOW_SPEED_YAW_RATE) * clamp(tuningSpeed / fullSpeed, 0, 1)) *
+        clamp(tuningSpeed / STEER_RAMP_SPEED, 0, 1);
+      const yawRate = tuningSpeed > 0 ? yawRateAtSpeed * (speed / tuningSpeed) : 0;
+      const direction = nextSpeed >= 0 ? 1 : -1;
+      targetYaw = sliding
+        ? -state.driftDirection * DRIFT_YAW_RATE - state.steering * DRIFT_STEER_YAW_RATE
+        : -state.steering * direction * yawRate;
+    } else {
+      // Keep the existing AI curve so its learned lines and race pacing hold.
+      const radius =
+        AI_LOW_SPEED_TURN_RADIUS +
+        ((sliding ? AI_DRIFT_TURN_RADIUS : FULL_SPEED_TURN_RADIUS) - AI_LOW_SPEED_TURN_RADIUS) *
+          clamp(speed / (MAX_SPEED / 3.6), 0, 1);
+      targetYaw = clamp((-nextSpeed / radius) * state.steering, -2.8, 2.8);
+    }
+    // Normal steering releases/countersteers promptly. A held drift keeps its
+    // latched turn and uses the reference response rate through neutral input.
     const yawResponse = state.isPlayer
-      ? steeringTarget === 0 || targetYaw * state.yawRate < 0
-        ? 26
-        : sliding
-          ? 12
-          : 16
+      ? sliding
+        ? 12
+        : steeringTarget === 0 || targetYaw * state.yawRate < 0
+          ? 26
+          : 12
       : 8;
     state.yawRate += (targetYaw - state.yawRate) * (1 - Math.exp(-yawResponse * dt));
     const grip =

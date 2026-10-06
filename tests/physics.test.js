@@ -13,7 +13,6 @@ import {
   MAX_SPEED,
   MAX_BOOST_SPEED,
   FULL_SPEED_TURN_RADIUS,
-  DRIFT_TURN_RADIUS,
 } from "../src/simulation/physics.js";
 import { progressDelta, ranking, finishRacer, lapNumber } from "../src/simulation/race.js";
 import { initializeRacer, advanceRacer, botInput } from "../src/simulation/simulation.js";
@@ -81,7 +80,7 @@ test("turn-in, release and countersteer respond promptly without snapping", () =
   assert.ok(s.steering < -0.9 && s.yawRate > 0.6, "countersteer should not feel delayed");
 });
 
-test("cornering preserves cruising speed and boosts preserve the turning radius", () => {
+test("full-speed steering keeps its radius through boosts", () => {
   for (const drift of [false, true]) {
     for (const boost of [0, 1]) {
       const straight = body(),
@@ -96,8 +95,8 @@ test("cornering preserves cruising speed and boosts preserve the turning radius"
         drive(turning, { ...input, steer: 1, drift }, flat, FIXED_DT);
       }
       near(turning.speed, straight.speed, 0.05);
-      const radius = turning.speed / 3.6 / Math.abs(turning.yawRate);
-      assert.ok(radius <= (drift ? DRIFT_TURN_RADIUS : FULL_SPEED_TURN_RADIUS) + 0.1);
+      const expectedYawRate = drift ? 1.2 : turning.speed / 3.6 / FULL_SPEED_TURN_RADIUS;
+      near(Math.abs(turning.yawRate), expectedYawRate, 0.02);
       assert.ok(Math.abs(Math.atan2(turning.lateralSpeed, turning.longitudinalSpeed)) < 0.4);
     }
   }
@@ -122,9 +121,12 @@ test("drift grip survives neutral countersteer and release promptly restores con
   const direction = state.driftDirection;
   for (let i = 0; i < 18; i++) drive(state, { ...input, drift: true }, flat, FIXED_DT);
   assert.equal(state.driftDirection, direction, "neutral steering must retain drift grip");
-  assert.ok(Math.abs(state.yawRate) < 0.25);
+  assert.ok(state.yawRate < -0.6, "neutral steer must retain the latched drift turn");
   for (let i = 0; i < 18; i++) drive(state, { ...input, steer: -1, drift: true }, flat, FIXED_DT);
-  assert.ok(state.yawRate > 0.8, "drift countersteer must respond within 150ms");
+  assert.ok(
+    state.yawRate < 0 && state.yawRate > -0.45,
+    "countersteer should reduce without reversing the drift turn",
+  );
   for (let i = 0; i < 60; i++) drive(state, input, flat, FIXED_DT);
   assert.equal(state.driftDirection, 0);
   assert.ok(Math.abs(state.lateralSpeed) < 0.2);
