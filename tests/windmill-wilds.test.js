@@ -92,5 +92,5 @@ test("Windmill upgraded world is finite and its animations are deterministic on 
         assert.ok(Array.from(a.array).every(Number.isFinite));
   });
   assert.ok(scene.getObjectByName("Authored iron windmill rotor"));
-  assert.ok(track.minimumCurveRadius >= 40);
+  assert.ok(track.minimumCurveRadius >= course.minimumRadius);
 });

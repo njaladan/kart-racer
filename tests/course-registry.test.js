@@ -28,12 +28,12 @@ test("course selection updates geometry, surfaces and hazards without stale cour
     assert.ok(
       isNeonHarbor ? COURSE_LENGTH >= 1800 && COURSE_LENGTH <= 2000 : COURSE_LENGTH >= 1450 && COURSE_LENGTH <= 1600,
     );
-    assert.equal(SECTIONS.length, isNeonHarbor ? 8 : 6);
+    assert.equal(SECTIONS.length, course.sections.length);
     for (let i = 0; i < 120; i++) {
       const t = i / 120,
         p = poseAt(t * TRACK, 2, 0.065).p,
         s = projectTrack(p, t * TRACK);
-      assert.ok(Math.abs(s.offset - 2) < 0.12);
+      assert.ok(Math.abs(s.offset - 2 * Math.hypot(s.frame.right.x, s.frame.right.z)) < 0.12);
       assert.ok(Number.isFinite(s.height));
       const surface = surfaceAt(t),
         kart = collisionBounds(t),

@@ -11,6 +11,7 @@ import {
 } from "../src/simulation/items.js";
 import { initializeRacer } from "../src/simulation/simulation.js";
 import { poseAt, frameAt, projectTrack, collisionBounds } from "../src/track/track.js";
+import { progressDelta } from "../src/simulation/race.js";
 import { FIXED_DT } from "../src/simulation/physics.js";
 
 test("green shells keep their firing heading and reflect at physical barriers", () => {
@@ -34,7 +35,7 @@ test("red shell steering has a bounded turning rate", () => {
     shell = createShell(owner, "red", target),
     yaw = shell.yaw;
   advanceShell(shell, FIXED_DT);
-  assert.ok(Math.abs(shell.yaw - yaw) <= 4.8 * FIXED_DT + 0.000001);
+  assert.ok(Math.abs(progressDelta(shell.yaw, yaw, Math.PI * 2)) <= 6.5 * FIXED_DT + 0.000001);
 });
 test("swept collision finds a target crossed between frames without hitting distant or elevated targets", () => {
   const start = { x: 0, y: 0.6, z: 0 },

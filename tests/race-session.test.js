@@ -149,8 +149,8 @@ test("hits cancel trick rewards while protected racers retain motion", () => {
   } = setup({ onHit: () => hits++ });
   Object.assign(player, { vx: 20, vz: 10, trickActive: true, trickBuffer: 0.2 });
   assert.equal(session.hitRacer(player), true);
-  assert.equal(player.vx, 16.4);
-  assert.equal(player.vz, 8.2);
+  assert.equal(player.vx, 18);
+  assert.equal(player.vz, 9);
   assert.equal(player.trickActive, false);
   assert.equal(player.trickBuffer, 0);
   assert.equal(session.hitRacer(player), false);

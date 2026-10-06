@@ -1,6 +1,6 @@
 import * as THREE from "../../../vendor/three/three.module.js";
 import { sceneryGroundHeight } from "../../rendering/terrain-height.js";
-import { TRACK, poseAt, projectTrack, surfaceAt } from "../../track/track.js";
+import { TRACK, SECTIONS, poseAt, projectTrack, surfaceAt } from "../../track/track.js";
 
 /** Authored branch/cutout foliage in layered stands, rather than solid toy crowns. */
 export function buildWindmillVegetation({ scenery, mats, textures, primitives, random, kit }) {
@@ -56,7 +56,7 @@ export function buildWindmillVegetation({ scenery, mats, textures, primitives, r
 
   // Garden islands repeat a small authored kit with shared textures. Ground
   // coverage is clustered along readable views, keeping the racing edge open.
-  for (let section = 0; section < 6; section++)
+  for (let section = 0; section < SECTIONS.length; section++)
     for (let i = 0; i < 28; i++) {
       const side = i % 2 ? 1 : -1,
         t = sectorT(section, 0.03 + random() * 0.94);
@@ -152,7 +152,7 @@ export function buildWindmillVegetation({ scenery, mats, textures, primitives, r
     roughness: 1,
     vertexColors: true,
   });
-  for (let section = 0; section < 6; section++)
+  for (let section = 0; section < SECTIONS.length; section++)
     for (let i = 0; i < 6; i++) {
       const t = sectorT(section, 0.08 + i * 0.16),
         side = i % 2 ? 1 : -1;
