@@ -4,6 +4,7 @@ import { buildCityProps } from "./neon-harbor/build-city-props.js";
 import { createLumenMaterials } from "./neon-harbor/lumen-materials.js";
 import { buildLumenDistricts } from "./neon-harbor/build-lumen-districts.js";
 import { buildLumenQuays } from "./neon-harbor/build-lumen-quays.js";
+import { buildPortLighting } from "./neon-harbor/build-port-lighting.js";
 import { buildLumenMotion } from "./neon-harbor/build-lumen-motion.js";
 import { buildPortLandmarks } from "./neon-harbor/build-port-landmarks.js";
 import { installSurfaceDetail } from "../rendering/surface-detail.js";
@@ -21,7 +22,7 @@ export default function buildWorld(context) {
   const pink = material("#eb91c7", { emissive: "#bf4789", emissiveIntensity: 1.3 });
   const blue = material("#547896", { map: textures.metal, roughness: 0.57 });
   const rust = material("#a27665", { map: textures.metal, roughness: 0.8 });
-  const dark = material("#202b39", { roughness: 0.87 });
+  const dark = material("#354157", { roughness: 0.87 });
   const glass = material("#324f6d", { metalness: 0, roughness: 0.2, envMapIntensity: 1.25 });
   const window = material("#e6c393", { emissive: "#d39247", emissiveIntensity: 0.95 });
   installSurfaceDetail(concrete, { kind: "terrain", scale: 0.12, strength: 0.13 });
@@ -90,6 +91,7 @@ export default function buildWorld(context) {
     materials: lumenMaterials,
     textures,
   });
+  buildPortLighting({ THREE, scenery, track, kit, props, materials: lumenMaterials });
   const harborLife = buildHarborLife({
     THREE,
     animated,

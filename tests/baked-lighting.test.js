@@ -21,8 +21,23 @@ test("all course lighting bakes are complete, sized and hash-verified", () => {
         `${course.id}/${output.file} hash`,
       );
       assert.equal(bytes.toString("hex", 0, 8), "89504e470d0a1a0a");
-      assert.equal(bytes.readUInt32BE(16), metadata.resolution);
-      assert.equal(bytes.readUInt32BE(20), metadata.resolution);
+      assert.equal(bytes.readUInt32BE(16), output.width ?? metadata.resolution);
+      assert.equal(bytes.readUInt32BE(20), output.height ?? metadata.resolution);
     }
   }
+});
+
+test("Port Lumen spill atlas covers ground, ferry ceilings and skyline without overlapping slices", () => {
+  const metadata = JSON.parse(
+    readFileSync(new URL("../assets/lighting/neon-harbor/bake.json", import.meta.url)),
+  );
+  const volume = metadata.lightVolume;
+  assert.ok(volume.heights[0] <= 0);
+  assert.ok(volume.heights.at(-1) >= 75);
+  assert.ok(volume.heights.some((y) => y >= 12 && y <= 16));
+  assert.ok(volume.heights.every((y, i) => !i || y > volume.heights[i - 1]));
+  assert.ok(volume.columns * volume.rows >= volume.heights.length);
+  const output = metadata.outputs.find((entry) => entry.file === volume.file);
+  assert.equal(output.width, volume.columns * volume.resolution);
+  assert.equal(output.height, volume.rows * volume.resolution);
 });

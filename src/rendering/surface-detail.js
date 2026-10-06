@@ -73,6 +73,27 @@ export function installSurfaceDetail(
   });
 }
 
+/** Most pavement stays matte; broad irregular puddles catch the night sky. */
+export function installWetPavement(material) {
+  return patchMaterial(material, "wet-pavement-v1", (shader) => {
+    addWorldPosition(shader, "vPavementWorld");
+    shader.fragmentShader = `
+      float pavementHash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+      float pavementNoise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+        return mix(mix(pavementHash(i),pavementHash(i+vec2(1.,0.)),f.x),
+          mix(pavementHash(i+vec2(0.,1.)),pavementHash(i+vec2(1.)),f.x),f.y);}
+      ${shader.fragmentShader}`;
+    shader.fragmentShader = shader.fragmentShader.replace(
+      "#include <roughnessmap_fragment>",
+      `#include <roughnessmap_fragment>
+      float puddleNoise=pavementNoise(vPavementWorld.xz*vec2(.17,.31))*.8+
+        pavementNoise(vPavementWorld.xz*.73)*.2;
+      float puddle=smoothstep(.58,.76,puddleNoise);
+      roughnessFactor=mix(.66,.32,puddle);`,
+    );
+  });
+}
+
 /** Two flowing normal layers, physical Fresnel and foam in a single opaque draw. */
 export function createWaterMaterial({
   scene,
@@ -105,7 +126,7 @@ export function createWaterMaterial({
     waterRadius: { value: shoreRadius },
   };
   if (scene) (scene.userData.surfaceAnimations ||= []).push(uniforms.waterTime);
-  patchMaterial(material, "water-two-layer-v2", (shader) => {
+  patchMaterial(material, "water-two-layer-v3", (shader) => {
     Object.assign(shader.uniforms, uniforms);
     addWorldPosition(shader, "vWaterWorld");
     shader.vertexShader = `varying vec2 vWaterLocal;\n${shader.vertexShader}`.replace(
@@ -128,8 +149,8 @@ export function createWaterMaterial({
       normal=normalize(normal+mat3(viewMatrix)*vec3(ripple.x,0.,ripple.y));`,
     );
     shader.fragmentShader = shader.fragmentShader.replace(
-      "#include <roughnessmap_fragment>",
-      `#include <roughnessmap_fragment>
+      "#include <lights_physical_fragment>",
+      `
       // The standard material already samples the PMREM environment with a
       // dielectric Fresnel term. A small angle-dependent tint makes that edge
       // response legible even when the probe is mostly sky or a flat horizon.
@@ -143,7 +164,8 @@ export function createWaterMaterial({
         diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.72,.86,.85),foamMask*.6);
         roughnessFactor=mix(roughnessFactor,.72,foamMask);`
           : ""
-      }`,
+      }
+      #include <lights_physical_fragment>`,
     );
   });
   return material;

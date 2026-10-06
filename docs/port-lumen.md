@@ -35,10 +35,26 @@ and two skyscraper families. All files are local at runtime. Licenses, pinned
 source URLs, sizes and SHA-256 hashes live in the course pack manifest.
 
 Repeated static meshes are regionally instanced/batched; moving assemblies are
-protected from flattening. Light pools use gradient cards and the existing
-three racer lights. The 768-pixel offline BVH lighting bake supplies terrain
-occlusion, bounce and lamp pools without additional shadow-casting lights.
+protected from flattening. Dim gradient cards supplement the existing three
+racer lights. The 768-pixel offline BVH lighting bake supplies terrain occlusion
+and diffuse bounce. Neon Harbor also uses a 1024 × 768 spill atlas: twelve
+256-pixel XZ slices from -2 to 75 m, interpolated in the material shader with two
+texture samples. All 337 static emitters are visibility-tested against the real
+scene during baking, so container faces, bulkheads and upper facades receive
+colored light without additional runtime shadow-casting lights. The extra atlas
+is approximately 151 KB on disk and 3 MiB on the GPU, without mipmaps.
 The bake exporter reads the atlas albedo averages as well as imported textures.
+
+The night palette keeps a dark sky with brighter blue-violet hemisphere fill and
+rim light. Downtown has cyan/pink shop spill and warm display windows; the market
+uses amber canopy lamps; cargo alternates cool floodlights and amber work lamps;
+the ferry has warm ceiling bars and cool bulkhead fixtures. Bridge lamps and
+landmark uplights reveal silhouettes. Road roughness varies between mostly matte
+pavement and sparse puddles, softening broad white highlights. Interior fill
+stays close to exterior fill so the ferry remains readable. The market and
+seawall use the existing paving texture instead of the mossy rock scan. Water
+Fresnel tint now runs after normal construction and before physical lighting,
+fixing the shader compilation error that hid the animated harbor water.
 
 ## Driving views
 
@@ -48,6 +64,12 @@ The bake exporter reads the atlas albedo averages as well as imported textures.
 
 ![Suspension bridge](screenshots/port-lumen-bridge.jpg)
 
+![Ferry ceiling lights](screenshots/port-lumen-ferry.jpg)
+
+![Warm market canopy](screenshots/port-lumen-market.jpg)
+
+![Seawall and lighthouse](screenshots/port-lumen-seawall.jpg)
+
 ## Editing
 
 - Route, widths, ramps and mechanics: `src/courses/neon-harbor.js`.
@@ -56,6 +78,7 @@ The bake exporter reads the atlas albedo averages as well as imported textures.
 - Ambient transport and machinery: `build-lumen-motion.js`.
 - Shared texture materials and sign atlas UVs: `lumen-materials.js`.
 - Bridge, ferry, welcome, lighthouse and ship event: `build-port-landmarks.js`.
+- District fixtures and bake emitters: `build-port-lighting.js`.
 
 All builders live under `src/courses/neon-harbor/` and place from constructed
 track frames. The `edgeStyle: "port-lumen"` option suppresses the shared generic

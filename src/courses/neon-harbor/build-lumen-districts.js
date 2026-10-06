@@ -131,8 +131,8 @@ export function buildLumenDistricts({ THREE, scenery, track, kit, props, materia
     }
     // Near signs cast broad, cheap colored pools onto their sidewalk and lane.
     lightPool(g, index, [face - side * 3.4, 0.045, 0], 12, 11);
-    if (index % 3 === 0)
-      lightAt(g, [face - side * 0.5, 5, 0], index % 2 ? "#f459aa" : "#4bdccd", 3.5, 19);
+    lightAt(g, [face - side * 0.65, 5.8, 0], index % 2 ? "#ec92bc" : "#84dce2", 5, 21);
+    lightAt(g, [face - side * 0.4, 2.8, -2.5], district === 2 ? "#ffd19d" : "#e9c9a3", 3.5, 12);
     groundShadow(g, width + 4, depth + 4);
     batch(g);
   }
@@ -171,6 +171,7 @@ export function buildLumenDistricts({ THREE, scenery, track, kit, props, materia
     }
     sign(g, 1, [-side * 1.96, 2.65, 0], 5.5, 0.8, (-side * Math.PI) / 2);
     lightPool(g, 2, [-side * 2.5, 0.035, 0], 8, 10);
+    lightAt(g, [-side * 2.3, 3.2, 0], "#ffd099", 4.5, 15);
     batch(g);
   }
   for (const fraction of [0.17, 0.43, 0.73]) {

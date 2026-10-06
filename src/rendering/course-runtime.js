@@ -2,6 +2,7 @@ import * as THREE from "../../vendor/three/three.module.js";
 import { createCourseKit, batchScenery } from "./course-kit.js";
 import { cartAt, trafficAt } from "../simulation/hazards.js";
 import { buildWindmillWorld } from "../courses/windmill-wilds/world.js";
+import { installWetPavement } from "./surface-detail.js";
 import { createRailGeometry } from "./course-rails.js";
 import { addDetailedScenery } from "./detailed-scenery.js";
 import { TERRAIN_VERGE_WIDTH } from "./terrain-height.js";
@@ -38,8 +39,8 @@ export function buildCourseWorld({
   const roadMaterials = {
     asphalt: mats.road,
     stone: material("#e0d0ae", {
-      map: textures.stone,
-      roughness: course.id === "neon-harbor" ? 0.36 : 0.85,
+      map: course.id === "neon-harbor" ? textures.paving || textures.concrete : textures.stone,
+      roughness: course.id === "neon-harbor" ? 0.58 : 0.85,
       metalness: course.id === "neon-harbor" ? 0.12 : 0,
     }),
     concrete: material("#b4c4d0", { map: textures.concrete }),
@@ -67,6 +68,7 @@ export function buildCourseWorld({
       bumpScale: 0.035,
     }),
   };
+  if (course.theme.wetPavement) installWetPavement(roadMaterials.stone);
   const conveyorTextures = [];
   const materialNames = [
     ...new Set([

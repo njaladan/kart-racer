@@ -125,6 +125,11 @@ test("water keeps dielectric response and pause-safe animation independent of su
   assert.equal(shader.uniforms.waterRadius.value, 24);
   assert.ok(shader.fragmentShader.includes("texture2D(normalMap,vNormalMapUv*1.83"));
   assert.ok(shader.fragmentShader.includes("waterFresnel"));
+  // Fresnel reads the perturbed normal, which must already be declared, and
+  // tints diffuse color before Three constructs the physical lighting inputs.
+  const fresnel = shader.fragmentShader.indexOf("float waterFresnel");
+  assert.ok(shader.fragmentShader.indexOf("#include <normal_fragment_maps>") < fresnel);
+  assert.ok(fresnel < shader.fragmentShader.indexOf("#include <lights_physical_fragment>"));
 });
 
 test("course reflection probes retain HDR highlights, course palette and enclosed attenuation", async () => {

@@ -6,19 +6,19 @@ export function createLumenMaterials({ THREE, kit, textures, palette }) {
       map: textures[`harborFacade${index}`],
       emissiveMap: textures[`harborFacadeEmission${index}`],
       emissive: "#ffffff",
-      emissiveIntensity: 0.95,
+      emissiveIntensity: 0.8,
       roughness: 0.67,
       metalness: 0.12,
     }),
   );
   const cargo = ["#277f95", "#c87852", "#7763a8", "#b29c51", "#32796f"].map((color) =>
-    material(color, { map: textures.harborCargo, roughness: 0.73, metalness: 0.25 }),
+    material(color, { map: textures.harborCargo, roughness: 0.78, metalness: 0.12 }),
   );
   const signs = material("#ffffff", {
     map: textures.harborSigns,
     emissiveMap: textures.harborSigns,
     emissive: "#ffffff",
-    emissiveIntensity: 1.4,
+    emissiveIntensity: 1.05,
     roughness: 0.5,
     side: THREE.DoubleSide,
   });
@@ -67,7 +67,7 @@ export function createLumenMaterials({ THREE, kit, textures, palette }) {
       const k = (y * 64 + x) * 4;
       const r = Math.hypot((x - 31.5) / 31.5, (y - 31.5) / 31.5);
       data[k] = data[k + 1] = data[k + 2] = 255;
-      data[k + 3] = Math.round(Math.max(0, 1 - r) ** 2 * 105);
+      data[k + 3] = Math.round(Math.max(0, 1 - r) ** 2 * 35);
     }
   const poolMap = new THREE.DataTexture(data, 64, 64);
   poolMap.needsUpdate = true;
