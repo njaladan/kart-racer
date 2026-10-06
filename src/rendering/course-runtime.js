@@ -112,7 +112,15 @@ export function buildCourseWorld({
         )
           continue;
         const range = (course.traversals || []).find((r) => track.SECTIONS[r.section] === section);
-        if (range) continue;
+        if (
+          range ||
+          (course.movingDecks || []).some(
+            (d) =>
+              section.end > track.sectorT(d.section, d.startFraction) &&
+              section.start < track.sectorT(d.endSection ?? d.section, d.endFraction),
+          )
+        )
+          continue;
         const geometry = createRailGeometry(side, {
           width: 0.25,
           height: 0.4,
@@ -185,7 +193,13 @@ export function buildCourseWorld({
           midpoint >= track.sectorT(r.section, r.startFraction) &&
           midpoint < track.sectorT(r.section, r.endFraction),
       );
-      if (i === n || transit || (terrain && isElevated(midpoint))) continue;
+      const moving = (course.movingDecks || []).some(
+        (d) =>
+          midpoint > track.sectorT(d.section, d.startFraction) + 18 / track.COURSE_LENGTH &&
+          midpoint <
+            track.sectorT(d.endSection ?? d.section, d.endFraction) - 18 / track.COURSE_LENGTH,
+      );
+      if (i === n || transit || moving || (terrain && isElevated(midpoint))) continue;
       const a = i * 2,
         start = indices.length;
       if (edgeB(t) >= edgeA(t)) indices.push(a, a + 1, a + 2, a + 1, a + 3, a + 2);

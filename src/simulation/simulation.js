@@ -54,7 +54,8 @@ export function initializeRacer(state) {
   return state;
 }
 export function botInput(state, index, elapsed, rivals = []) {
-  const aheadMetres = 12 + state.speed * 0.1;
+  const carrySpeed = activeTrack.movingSurfaceAt(trackT(state.s))?.speed || 0;
+  const aheadMetres = 12 + (state.speed + carrySpeed * 3.6) * 0.1;
   const aheadT = trackT(state.s + metresToProgress(aheadMetres));
   const lookahead = frameAt(aheadT);
   const bounds = collisionBounds(aheadT);
@@ -106,7 +107,7 @@ export function botInput(state, index, elapsed, rivals = []) {
     ),
   );
   const radius = aheadMetres / Math.max(0.04, curvature);
-  const safeCornerSpeed = Math.sqrt(18 * radius) * 3.6;
+  const safeCornerSpeed = Math.max(24, (Math.sqrt(18 * radius) - carrySpeed) * 3.6);
   const cruise = Math.min(89.5 + (state.skill || 0.8) * 8, safeCornerSpeed);
   return {
     throttle: state.speed < cruise || state.boost > 0,
@@ -173,6 +174,19 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   if (state.grounded && current) {
     state.vx += before.horizontalRight.x * current * dt;
     state.vz += before.horizontalRight.z * current * dt;
+  }
+  const deck = before.movingSurface;
+  const previousDeck = state.movingDeckId;
+  state.movingDeckId = state.grounded && deck ? deck.id : null;
+  state.deckCoordinate = state.movingDeckId ? deck.coordinate : 0;
+  if (state.movingDeckId && !state.finished) {
+    const next = poseAt(
+        (before.t + (deck.speed * dt) / activeTrack.COURSE_LENGTH) * TRACK,
+        before.offset,
+      ),
+      currentPose = poseAt(before.t * TRACK, before.offset);
+    state.worldPos.x += next.p.x - currentPose.p.x;
+    state.worldPos.z += next.p.z - currentPose.p.z;
   }
   let conveyorMotion = false;
   if (state.grounded && !state.finished) {
@@ -331,6 +345,8 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     cartImpact,
     trafficImpact: !!trafficHit && cartImpact,
     conveyorMotion,
+    deckBoarded: !!state.movingDeckId && previousDeck !== state.movingDeckId,
+    deckLeft: !!previousDeck && previousDeck !== state.movingDeckId,
     padBoost,
     landed,
     launched: wasGrounded && !state.grounded,

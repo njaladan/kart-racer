@@ -54,6 +54,8 @@ export function resetMotion(state) {
     traversalProgress: 0,
     traversalDeparture: 0,
     traversalOffset: 0,
+    movingDeckId: null,
+    deckCoordinate: 0,
     scale: 1,
     underwater: false,
   });

@@ -1,3 +1,4 @@
+import { movingDeckAt } from "../simulation/moving-surfaces.js";
 import { unfoldPhase, scaleAt } from "../simulation/course-mechanics.js";
 import * as THREE from "../../vendor/three/three.module.js";
 import { progressDelta } from "../simulation/race.js";
@@ -165,6 +166,8 @@ export function createTrack(course) {
       smooth(section.start, section.start + 0.012, t),
     );
   }
+  const movingSurfaceAt = (t) =>
+    movingDeckAt({ course, sectorT, COURSE_LENGTH: lengths.at(-1) }, wrap01(t), mechanismTime);
   function surfaceAt(t, offset = 0) {
     t = wrap01(t);
     const halfWidth = roadHalfWidth(t),
@@ -173,6 +176,7 @@ export function createTrack(course) {
     const verge = vergeAt(t, offset);
     return {
       section,
+      movingSurface: movingSurfaceAt(t),
       groundHeight: course.theme.groundHeight ?? -1.7,
       halfWidth,
       offroad: Math.abs(offset) > halfWidth && !verge?.driveable,
@@ -304,7 +308,7 @@ export function createTrack(course) {
     const t = trackT(s),
       f = frameAt(t);
     const p = f.p.clone().addScaledVector(f.right, lane);
-    p.y += above + rampHeight(t, lane) - rampHeight(t, 0);
+    p.y += above + rampHeight(t, lane) - rampHeight(t, 0) + (movingSurfaceAt(t)?.height || 0);
     return { ...f, p };
   }
   function projectTrack(position, nearS = 0, global = false) {
@@ -340,6 +344,7 @@ export function createTrack(course) {
           f = frameAt(t),
           horizontalLength = Math.hypot(f.right.x, f.right.z),
           offset = (ex * f.right.x + ez * f.right.z) / horizontalLength;
+        laneHeight += movingSurfaceAt(t)?.height || 0;
         laneHeight +=
           rampHeight(t, offset) - rampHeight(t, 0) + (offset * f.right.y) / horizontalLength;
       }
@@ -366,7 +371,8 @@ export function createTrack(course) {
       (position.x - frame.p.x) * horizontalRight.x + (position.z - frame.p.z) * horizontalRight.z;
     const centerRamp = rampHeight(t);
     const height =
-      frame.p.y -
+      frame.p.y +
+      (movingSurfaceAt(t)?.height || 0) -
       centerRamp +
       rampHeight(t, offset) +
       (offset * frame.right.y) / Math.hypot(frame.right.x, frame.right.z) +
@@ -392,6 +398,7 @@ export function createTrack(course) {
     ELEVATED,
     VERGES,
     CONVEYORS,
+    movingSurfaceAt,
     vergeWidth,
     vergeAt,
     course,
