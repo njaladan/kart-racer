@@ -271,7 +271,8 @@ export function createGameRenderer({
       : (theme.fogFar ??
         (forest ? 330 : theme.terrain === "concrete" ? 520 : theme.terrain === "sand" ? 670 : 720));
     scene.fog.far += (fogFar - scene.fog.far) * atmosphereBlend;
-    scene.fog.near += ((enclosed ? 95 : 180) - scene.fog.near) * atmosphereBlend;
+    scene.fog.near +=
+      ((player.underwater ? 18 : enclosed ? 95 : 180) - scene.fog.near) * atmosphereBlend;
     const fogColor = new THREE.Color(player.underwater ? "#489da8" : theme.fog || "#ffffff");
     if (forest)
       fogColor.lerp(new THREE.Color(theme.terrain === "snow" ? "#b0cbdc" : "#91b5ac"), 0.3);

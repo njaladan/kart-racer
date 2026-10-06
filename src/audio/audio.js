@@ -3,6 +3,7 @@ export function createAudioController(audioWindow = window) {
   let context = null,
     master = null,
     effects = null,
+    effectsFilter = null,
     ambience = null,
     engineGain = null,
     engineOscillator = null,
@@ -14,7 +15,8 @@ export function createAudioController(audioWindow = window) {
     voices = 0,
     lastWorldBeat = -1,
     lastWorldId = null,
-    lastWorldScale = 1;
+    lastWorldScale = 1,
+    lastWorldUnderwater = false;
   let volumes = { master: 0.8, effects: 0.8, ambience: 0.55 };
   const target = (param, value, time = 0.08) =>
     param?.setTargetAtTime(value, context.currentTime, time);
@@ -50,7 +52,11 @@ export function createAudioController(audioWindow = window) {
     effects = context.createGain();
     ambience = context.createGain();
     master.connect(context.destination);
-    effects.connect(master);
+    effectsFilter = context.createBiquadFilter();
+    effectsFilter.type = "lowpass";
+    effectsFilter.frequency.value = 22000;
+    effects.connect(effectsFilter);
+    effectsFilter.connect(master);
     ambience.connect(master);
     setVolumes(volumes);
     engineFilter = context.createBiquadFilter();
@@ -213,7 +219,11 @@ export function createAudioController(audioWindow = window) {
     const load = state.boost > 0 ? 1.18 : 1,
       gear = 1 + Math.floor(speed / 34) * 0.12;
     target(engineOscillator.frequency, ((52 + (speed % 34) * 1.8 + speed * 0.48) * load) / gear);
-    target(engineFilter.frequency, 300 + speed * 7 + (state.boost > 0 ? 280 : 0));
+    target(
+      engineFilter.frequency,
+      state.underwater ? 240 + speed * 1.5 : 300 + speed * 7 + (state.boost > 0 ? 280 : 0),
+    );
+    target(effectsFilter.frequency, state.underwater ? 700 : 22000, 0.25);
     target(engineGain.gain, active ? 0.022 + speed / 9000 : 0);
     target(harmonicOscillator.frequency, 104 + speed * 1.4);
     if (tires) {
@@ -236,19 +246,26 @@ export function createAudioController(audioWindow = window) {
       section.enclosed ||
       ["temple", "warehouse", "ferry", "hall", "pantry", "glass", "tunnel"].includes(section.id);
     const storm = id === "tempest-causeway",
-      water = id === "pelagic-glasshouse";
-    target(wind.filter.frequency, inside ? 180 : water ? 390 : storm ? 1200 : 700, 0.4);
+      water = !!state.underwater;
+    target(wind.filter.frequency, water ? 180 : inside ? 180 : storm ? 1200 : 700, 0.4);
     target(
       wind.gain.gain,
       active ? (inside ? 0.025 : storm ? 0.13 : water ? 0.075 : 0.04) : 0,
       0.35,
     );
-    target(engineFilter.frequency, (inside ? 400 : 650) + state.speed * 4, 0.15);
+    target(
+      engineFilter.frequency,
+      (water ? 240 : inside ? 400 : 650) + state.speed * (water ? 1.5 : 4),
+      0.15,
+    );
     if (lastWorldId !== id) {
       lastWorldId = id;
       lastWorldScale = state.scale ?? 1;
+      lastWorldUnderwater = water;
       lastWorldBeat = -1;
     }
+    if (active && water !== lastWorldUnderwater) noise(0.5, 0.16, water ? 350 : 1100);
+    lastWorldUnderwater = water;
     const scale = state.scale ?? 1;
     if (active && lastWorldScale > 0.6 !== scale > 0.6) {
       noise(0.42, 0.16, scale < 0.6 ? 2400 : 900);
@@ -269,7 +286,10 @@ export function createAudioController(audioWindow = window) {
       const sx = p.x - state.worldPos.x,
         sz = p.z - state.worldPos.z,
         d = Math.hypot(sx, sz, p.y - state.worldPos.y);
-      const volume = Math.max(0, 1 - d / source.range) ** 2 * source.volume;
+      const volume =
+        Math.max(0, 1 - d / source.range) ** 2 *
+        source.volume *
+        (water && source.kind === "birds" ? 0.15 : 1);
       if (volume < 0.008) continue;
       const stereo = (sx * Math.cos(state.yaw) - sz * Math.sin(state.yaw)) / Math.max(8, d);
       if (source.kind === "birds") {

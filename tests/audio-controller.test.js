@@ -37,12 +37,15 @@ class FakeAudioContext {
     this.currentTime = 1;
     this.destination = new FakeNode();
     this.oscillators = [];
+    this.filters = [];
   }
   createGain() {
     return new FakeNode();
   }
   createBiquadFilter() {
-    return new FakeNode();
+    const filter = new FakeNode();
+    this.filters.push(filter);
+    return filter;
   }
   createOscillator() {
     const oscillator = new FakeNode();
@@ -94,4 +97,16 @@ test("audio controller safely no-ops when Web Audio is unavailable", () => {
   audio.stopEngine();
   assert.equal(audio.resume(), undefined);
   assert.equal(audio.suspend(), undefined);
+});
+
+test("immersion filters every race effect and restores clear sound after surfacing", () => {
+  const audio = createAudioController({ AudioContext: FakeAudioContext });
+  audio.start();
+  audio.updateEngine(40, true, { underwater: true });
+  const [effects, engine] = createdContext.filters;
+  assert.equal(effects.frequency.value, 700);
+  assert.equal(engine.frequency.value, 300);
+  audio.updateEngine(40, true, { underwater: false });
+  assert.equal(effects.frequency.value, 22000);
+  assert.equal(engine.frequency.value, 580);
 });

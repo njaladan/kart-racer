@@ -9,6 +9,7 @@ import { TERRAIN_VERGE_WIDTH } from "./terrain-height.js";
 import { createSceneryDetailController } from "./scenery-lod.js";
 import { templePaving } from "../courses/sunstone-ruins/sunstone-materials.js";
 import { kitchenRoadDetail } from "../courses/adventure/pantry-materials.js";
+import { glasshouseRoad } from "../courses/adventure/pelagic-materials.js";
 import { metalDeckDetail } from "../courses/adventure/architectural-detail.js";
 
 // Shared geometry uses exactly the surface/edge queries used by karts and shells.
@@ -92,6 +93,7 @@ export function buildCourseWorld({
     roadMaterials.wood = material(road, { bumpMap: textures.wood, bumpScale: 0.03 });
     roadMaterials.paving = material(road, { bumpMap: textures.paving, bumpScale: 0.025 });
     metalDeckDetail(roadMaterials.metal);
+    if (course.id === "pelagic-glasshouse") glasshouseRoad(roadMaterials.glass, scene);
     if (["pocket-pantry", "metronome-hall"].includes(course.id)) {
       kitchenRoadDetail(roadMaterials.wood);
       kitchenRoadDetail(roadMaterials.paving, true);

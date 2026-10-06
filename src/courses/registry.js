@@ -8,6 +8,7 @@ import tempest from "./tempest-causeway.js";
 import pantry from "./pocket-pantry.js";
 import railstorm from "./railstorm-express.js";
 import metronome from "./metronome-hall.js";
+import pelagic from "./pelagic-glasshouse.js";
 import { validateCourseDefinition } from "./course-contract.js";
 
 export const COURSES = Object.freeze(
@@ -22,6 +23,7 @@ export const COURSES = Object.freeze(
     pantry,
     railstorm,
     metronome,
+    pelagic,
   ].map(validateCourseDefinition),
 );
 export const DEFAULT_COURSE = windmill;

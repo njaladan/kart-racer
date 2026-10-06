@@ -1,6 +1,7 @@
 import {
   solarBoostAt,
   scaleAt,
+  underwaterAt,
   mechanismContact,
   advanceTraversal,
   currentAt,
@@ -43,6 +44,7 @@ import { cartAt, cartContact, trafficAt, trafficContact } from "./hazards.js";
 export function initializeRacer(state) {
   resetMotion(state);
   state.scale = scaleAt(activeTrack, trackT(state.s));
+  state.underwater = underwaterAt(activeTrack, trackT(state.s));
   state.worldPos = poseAt(state.s, laneWidth(state.x || 0), 0.065).p;
   state.yaw = yawFor(frameAt(trackT(state.s)).tangent);
   state.renderYawFrom = state.yaw;
@@ -120,12 +122,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   if (state.finished) return {};
   activeTrack.setTime(raceTime);
   state.scale = scaleAt(activeTrack, trackT(state.s));
-  const underwater = activeTrack.course.underwater;
-  state.underwater =
-    !!underwater &&
-    trackT(state.s) >= activeTrack.sectorT(underwater.section, underwater.startFraction) &&
-    trackT(state.s) <=
-      activeTrack.sectorT(underwater.endSection ?? underwater.section, underwater.endFraction);
+  state.underwater = underwaterAt(activeTrack, trackT(state.s));
   const transit = advanceTraversal(state, activeTrack, dt, raceTime, advanceRaceProgress);
   if (transit) return transit;
   const hitWasActive = state.spin > 0;

@@ -37,6 +37,12 @@ export function scaleAt(track, t) {
   }
   return 1;
 }
+export function underwaterAt(track, t) {
+  const definition = track.course.underwater;
+  if (!definition) return false;
+  const { start, end } = rangeFor(track, definition);
+  return t >= start && t <= end;
+}
 export function pendulumAt(track, definition, time) {
   const t = track.sectorT(definition.section, definition.fraction);
   const phase = (time * 2 * Math.PI) / definition.period + (definition.phase || 0);

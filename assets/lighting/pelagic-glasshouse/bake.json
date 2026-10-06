@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "course": "pelagic-glasshouse",
+  "lighting": "indirect.png",
+  "height": "height.png",
+  "bounds": [
+    -416.3,
+    -306.2,
+    753.6,
+    666.3
+  ],
+  "heightRange": [
+    -12,
+    75
+  ],
+  "bounceScale": 0.65,
+  "resolution": 512,
+  "samples": 12,
+  "radius": 22.0,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
+  "sourceSceneSha256": "37a3054d73e207bc7f0741a94bd96ae4ea83fd7c6013758df30262937367c81f",
+  "triangles": 290120,
+  "lights": 5,
+  "outputs": [
+    {
+      "file": "indirect.png",
+      "width": 512,
+      "height": 512,
+      "bytes": 162340,
+      "sha256": "86b5ede1ec8cf7de046beacac104c6d50a2abe2b29391aa5bf07c06e55c95cf2"
+    },
+    {
+      "file": "height.png",
+      "width": 512,
+      "height": 512,
+      "bytes": 66884,
+      "sha256": "82eb4420c1bc74a903ff6c5eb28f0848c2d67a8a12d63fb508269caa8eda206e"
+    },
+    {
+      "file": "spill.png",
+      "width": 512,
+      "height": 256,
+      "bytes": 16842,
+      "sha256": "9b2c7fb3fa0a3bb00f3a856671e62d5722e0a721bbddb61f9a2e2106457895de"
+    }
+  ],
+  "lightVolume": {
+    "resolution": 128,
+    "columns": 4,
+    "rows": 2,
+    "heights": [
+      -50,
+      -35,
+      -20,
+      -5,
+      15,
+      40
+    ],
+    "strength": 1,
+    "file": "spill.png"
+  }
+}
