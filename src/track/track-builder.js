@@ -4,8 +4,8 @@ import * as THREE from "../../vendor/three/three.module.js";
 import { progressDelta } from "../simulation/race.js";
 import { validateCourseDefinition } from "../courses/course-contract.js";
 export const TRACK = 2400;
-// Bound curvature, not lap-driving skill: even the inside lane must leave
-// margin over the kart's boosted 22 m turn radius. Larger radii are gentler.
+// Default floor for broad roads; individual courses can author tighter
+// technical bends for drifting. Larger radii are gentler.
 export const MIN_ROAD_CURVE_RADIUS = 40;
 export const wrap01 = (t) => ((t % 1) + 1) % 1;
 export const trackT = (s) => wrap01(s / TRACK);
@@ -289,6 +289,15 @@ export function createTrack(course) {
       .applyAxisAngle(tangent, link?.kind === "lift" ? 0 : bankAt(i / SAMPLE_COUNT));
     return { p, tangent, right, up: right.clone().cross(tangent).normalize() };
   });
+  // Signed horizontal curvature is also used to qualify mini-turbo charge.
+  // It never steers a kart; it stops straight-road weaving from farming boosts.
+  for (let i = 0; i < SAMPLE_COUNT; i++) {
+    const a = frames[(i + SAMPLE_COUNT - 1) % SAMPLE_COUNT];
+    const b = frames[(i + 1) % SAMPLE_COUNT];
+    const turn = yawFor(b.tangent) - yawFor(a.tangent);
+    const distance = Math.hypot(b.p.x - a.p.x, b.p.z - a.p.z);
+    frames[i].curvature = Math.atan2(Math.sin(turn), Math.cos(turn)) / Math.max(0.001, distance);
+  }
   function frameAt(t) {
     const index = wrap01(t) * SAMPLE_COUNT,
       i = Math.floor(index),
@@ -301,6 +310,7 @@ export function createTrack(course) {
       p: samples[i].clone().lerp(samples[i + 1], f),
       tangent,
       right,
+      curvature: THREE.MathUtils.lerp(a.curvature, b.curvature, f),
       up: right.clone().cross(tangent).normalize(),
     };
   }

@@ -2,6 +2,8 @@ import { buildWorld } from "./sunstone-ruins-world.js";
 
 // A clockwise expedition: the final sustained right bend puts the sand on
 // the inside, while the temple approach faces the monument from the ridge.
+// The courtyard exits into one continuous dune crescent rather than a series
+// of little direction changes: hold the slide, open it out, boost toward home.
 export default {
   id: "sunstone-ruins",
   topology: "adventure",
@@ -42,19 +44,19 @@ export default {
     [-41.46, -1.26, 107.6],
     [-45.86, -5.88, 72.4],
     [-81.14, -8.12, 27.6],
-    [-114.8, -9.0, 16.16],
-    [-165.2, -9.0, 31.84],
-    [-197.1, -7.9, 56.04],
-    [-227.9, -5.1, 101.96],
-    [-262.0, -2.68, 125.5],
-    [-318.0, 0.68, 139.5],
-    [-351.0, 3.1, 125.2],
-    [-379.0, 5.9, 74.8],
-    [-383.4, 7.44, 27.5],
-    [-366.6, 8.56, -42.5],
-    [-346.8, 7.9, -88.7],
-    [-313.2, 5.1, -136.3],
-    [-286.8, 3.34, -167.1],
+    [-116, -9, 6],
+    [-158, -9, 10],
+    [-193, -7.9, 36],
+    [-223, -5.1, 76],
+    [-260, -2.68, 70],
+    [-300, 0.68, 70],
+    [-330, 3.1, 61.96],
+    [-351.96, 5.9, 40],
+    [-360, 7.44, 10],
+    [-351.96, 8.56, -20],
+    [-330, 7.9, -41.96],
+    [-301, 5.1, -89],
+    [-279, 3.34, -147],
   ],
   sections: [
     {
@@ -111,8 +113,8 @@ export default {
       controlIndex: 30,
       id: "courtyard",
       name: "HALL OF A THOUSAND SHADOWS",
-      hint: "Follow the sun",
-      halfWidth: 10.5,
+      hint: "Set up the dune entry · release out of the shadow hall",
+      halfWidth: 11,
       material: "paving",
       color: "#d4b685",
       grip: 12,
@@ -121,8 +123,8 @@ export default {
       controlIndex: 34,
       id: "dunes",
       name: "SCULPTED DUNE SEA",
-      hint: "Follow the sun",
-      halfWidth: 10,
+      hint: "Hold the crescent · orange sparks toward the oasis",
+      halfWidth: 11,
       material: "sand",
       color: "#f1cf87",
       grip: 12,
@@ -146,7 +148,7 @@ export default {
     { section: 0, fraction: 0.73, offset: -3.3, duration: 0.8 },
     { section: 2, fraction: 0.78, offset: 0, duration: 0.8 },
     { section: 4, fraction: 0.85, offset: 2.7, duration: 0.7 },
-    ...[0.28, 0.58].map((fraction) => ({ section: 6, fraction, offset: -5.2, duration: 0.45 })),
+    ...[0.82, 0.94].map((fraction) => ({ section: 6, fraction, offset: -5.2, duration: 0.45 })),
   ],
   itemRows: [
     { section: 0, fraction: 0.26 },

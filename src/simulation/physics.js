@@ -14,8 +14,12 @@ export const JUMP_TAKEOFF_SPEED = 6;
 const LOW_SPEED_YAW_RATE = 2.2; // radians/second
 const PLAYER_TURN_RAMP_SPEED = (MAX_SPEED / 3.6) * 0.75; // metres/second
 const LOW_SPEED_STEER_RAMP = 4; // metres/second
-const DRIFT_YAW_RATE = 0.7; // radians/second
-const DRIFT_STEER_YAW_RATE = 0.5; // radians/second
+export const DRIFT_TIGHT_RADIUS = 17; // inward steering at cruise and boost speed
+export const DRIFT_WIDE_RADIUS = 120; // countersteering opens the line without flipping it
+export const DRIFT_RECOVERY_TIME = 0.3;
+const DRIFT_ENTRY_SPEED = 12; // metres/second; no stationary or low-speed farming
+const DRIFT_HOLD_SPEED = 10;
+const DRIFT_ENTRY_TIME = 0.18;
 export const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 export const wrapAngle = (a) => Math.atan2(Math.sin(a), Math.cos(a));
 
@@ -40,7 +44,18 @@ export function resetMotion(state) {
     longitudinalSpeed: 0,
     contactCooldown: 0,
     invulnerable: 0,
+    drift: 0,
+    driftTier: 0,
     driftHeld: false,
+    driftButtonDown: false,
+    driftCooldown: 0,
+    driftAge: 0,
+    driftExit: 0,
+    driftTime: 0,
+    driftArc: 0,
+    driftTurnRate: 0,
+    driftSurfaceValid: false,
+    driftCornerQuality: 0,
     driftDirection: 0,
     driftBoost: 0,
     driftBoostTier: 0,
@@ -62,7 +77,12 @@ export function resetMotion(state) {
 }
 
 export function drive(state, input, surface, dt) {
+  const pressed = !!input.drift && !state.driftButtonDown;
+  state.driftButtonDown = !!input.drift;
+  state.driftCooldown = Math.max(0, state.driftCooldown - dt);
+  state.driftExit = Math.max(0, state.driftExit - dt);
   if (state.spin > 0) {
+    cancelDrift(state);
     // Coast along the incoming line while the visual flip plays, then settle
     // at a complete stop. Keep the chassis heading locked through the hit.
     const fraction = clamp(state.spin / (state.hitFlipDuration || 1), 0, 1);
@@ -96,15 +116,31 @@ export function drive(state, input, surface, dt) {
       : 18
     : 10;
   state.steering += (steeringTarget - state.steering) * (1 - Math.exp(-steeringResponse * dt));
-  // Latch the slide so crossing neutral during countersteer does not abruptly
-  // switch tire grip. Release, a hit, a jump or low speed ends the drift.
+  // Entry is a deliberate press while steering at racing speed. Holding the
+  // button through a failed entry, landing or collision cannot restart a slide.
+  state.driftSurfaceValid = state.grounded && !surface.offroad && !input.brake;
+  const wasSliding = !!state.driftDirection;
+  const canSlide = state.driftSurfaceValid && forward > DRIFT_HOLD_SPEED;
   const sliding =
     !!input.drift &&
-    state.grounded &&
-    !(state.spin > 0) &&
-    forward > (state.driftDirection ? 7 : 9) &&
-    (!!state.driftDirection || Math.abs(state.steering) >= 0.5);
-  state.driftDirection = sliding ? state.driftDirection || Math.sign(state.steering) : 0;
+    canSlide &&
+    (wasSliding ||
+      (pressed &&
+        state.driftCooldown === 0 &&
+        !(state.driftBoost > 0) &&
+        forward >= DRIFT_ENTRY_SPEED &&
+        Math.abs(steeringTarget) >= 0.45));
+  state.driftDirection = sliding ? state.driftDirection || Math.sign(steeringTarget) : 0;
+  state.driftAge = sliding ? state.driftAge + dt : 0;
+  if (wasSliding && !sliding) {
+    state.driftCooldown = DRIFT_RECOVERY_TIME;
+    state.driftExit = 0.2;
+  }
+  state.driftCornerQuality =
+    surface.curvature == null
+      ? 1
+      : clamp((-state.driftDirection * surface.curvature - 1 / 240) / (1 / 100 - 1 / 240), 0, 1);
+  const previousTravelYaw = Math.atan2(-state.vx, -state.vz);
   const boosted = state.boost > 0 || state.star > 0;
   if (state.grounded) {
     const limit = (boosted ? MAX_BOOST_SPEED : MAX_SPEED) / 3.6;
@@ -134,6 +170,9 @@ export function drive(state, input, surface, dt) {
       (0.45 +
         0.002 * travelSpeed * travelSpeed +
         (surface.offroad && !boosted ? (5 + travelSpeed * 0.38) * (surface.offroadDrag ?? 1) : 0));
+    // A slide pays a small speed cost; weaving down a straight is slower than
+    // cruising. Momentum is still conserved by the tire-grip calculation.
+    if (sliding) acceleration -= 0.9;
     acceleration -= surface.slope * 9.81;
     const next = signedSpeed + acceleration * dt;
     const nextSpeed =
@@ -170,9 +209,16 @@ export function drive(state, input, surface, dt) {
           clamp(tuningSpeed / LOW_SPEED_STEER_RAMP, 0, 1);
       const yawRate = tuningSpeed > 0 ? yawRateAtSpeed * (speed / tuningSpeed) : 0;
       const direction = nextSpeed >= 0 ? 1 : -1;
-      targetYaw = sliding
-        ? -state.driftDirection * DRIFT_YAW_RATE - state.steering * DRIFT_STEER_YAW_RATE
-        : -state.steering * direction * yawRate;
+      targetYaw = -state.steering * direction * yawRate;
+      if (sliding) {
+        // Blend curvature (rather than a fixed yaw rate) so boost speed keeps
+        // the same line. Neutral holds the bend; countersteer widens it.
+        const inward = (state.steering * state.driftDirection + 1) / 2;
+        const curvature =
+          1 / DRIFT_WIDE_RADIUS + inward * (1 / DRIFT_TIGHT_RADIUS - 1 / DRIFT_WIDE_RADIUS);
+        const entry = clamp(state.driftAge / DRIFT_ENTRY_TIME, 0, 1);
+        targetYaw += (-state.driftDirection * speed * curvature - targetYaw) * entry;
+      }
     } else {
       // Keep the existing AI curve so its learned lines and race pacing hold.
       const radius =
@@ -195,8 +241,8 @@ export function drive(state, input, surface, dt) {
       surface.offroad && !boosted
         ? (surface.offroadGrip ?? 5)
         : sliding
-          ? (surface.grip || 12) * 0.5
-          : surface.grip || 12;
+          ? (surface.grip || 12) * 0.46
+          : (surface.grip || 12) * (1 - 0.35 * clamp(state.driftExit / 0.2, 0, 1));
     // Grip redirects momentum; it must not delete sideways energy every tick.
     // Retain a bounded slip angle in a drift, then regain traction on release.
     const momentum = Math.hypot(forward, lateral);
@@ -223,7 +269,11 @@ export function drive(state, input, surface, dt) {
   state.longitudinalSpeed = forward;
   state.lateralSpeed = lateral;
   state.speed = Math.hypot(state.vx, state.vz) * 3.6;
-  return sliding && (Math.abs(state.steering) > 0.1 || Math.abs(lateral) > 0.6);
+  const travelYaw = Math.atan2(-state.vx, -state.vz);
+  state.driftTurnRate = sliding
+    ? clamp((-state.driftDirection * wrapAngle(travelYaw - previousTravelYaw)) / dt, 0, 3)
+    : 0;
+  return sliding;
 }
 
 export function wallContact(state, nx, nz, penetration) {
@@ -273,21 +323,64 @@ export function verticalMotion(state, height, slopeVelocity, dt) {
   return landed;
 }
 
+/** Cancel rewards as well as steering; a new press is required after interruption. */
+export function cancelDrift(state) {
+  state.driftDirection = 0;
+  state.drift = 0;
+  state.driftTier = 0;
+  state.driftAge = 0;
+  state.driftTime = 0;
+  state.driftArc = 0;
+  state.driftTurnRate = 0;
+  state.driftSurfaceValid = false;
+  state.driftCornerQuality = 0;
+  state.driftCooldown = DRIFT_RECOVERY_TIME;
+}
+
+function driftTier(state) {
+  // Both time and corner rotation must be earned within one uninterrupted
+  // slide. Blue needs ~40 degrees; orange needs ~80, never a string of taps.
+  return state.drift >= 0.8 && state.driftTime >= 1.65 && state.driftArc >= 1.4
+    ? 2
+    : state.drift >= 0.42 && state.driftTime >= 0.85 && state.driftArc >= 0.7
+      ? 1
+      : 0;
+}
+
 export function chargeDrift(state, sliding, held, dt) {
+  const valid =
+    state.driftSurfaceValid &&
+    state.grounded &&
+    !(state.spin > 0) &&
+    !(state.boost > 0 || state.star > 0) &&
+    state.speed >= DRIFT_HOLD_SPEED * 3.6;
   let releasedTier = 0;
-  if (!state.grounded || state.spin > 0) {
+  if (!valid) {
     state.drift = 0;
-    state.driftHeld = held;
-    state.driftTier = 0;
-    return 0;
+    state.driftTime = 0;
+    state.driftArc = 0;
+  } else if (sliding && held) {
+    const inward = clamp(state.steering * state.driftDirection, 0, 1);
+    const slip = Math.abs(Math.atan2(state.lateralSpeed, state.longitudinalSpeed));
+    const corner = clamp((state.driftTurnRate - 0.12) / 0.25, 0, 1);
+    const quality = corner * clamp((slip - 0.012) / 0.035, 0, 1) * state.driftCornerQuality;
+    state.driftTime += dt * quality;
+    state.driftArc += state.driftTurnRate * dt * quality;
+    state.drift = clamp(state.drift + dt * (0.22 + 0.4 * inward) * quality, 0, 1);
+  } else if (state.driftHeld && !held) {
+    releasedTier = driftTier(state);
+  } else {
+    // Low speed, lost grip or a failed entry cannot bank progress for later.
+    state.drift = 0;
+    state.driftTime = 0;
+    state.driftArc = 0;
   }
-  if (sliding) state.drift = Math.min(1, state.drift + dt * 0.48);
-  else if (held) state.drift = Math.max(0, state.drift - dt * 0.8);
-  if (state.driftHeld && !held) {
-    releasedTier = state.drift >= 0.8 ? 2 : state.drift >= 0.42 ? 1 : 0;
+  if (!held) {
     state.drift = 0;
-  } else if (!held) state.drift = 0;
-  state.driftHeld = held;
-  state.driftTier = state.drift >= 0.8 ? 2 : state.drift >= 0.42 ? 1 : 0;
+    state.driftTime = 0;
+    state.driftArc = 0;
+  }
+  state.driftHeld = !!held;
+  state.driftTier = driftTier(state);
   return releasedTier;
 }

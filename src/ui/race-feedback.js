@@ -60,7 +60,7 @@ export function createRaceFeedback({ player, audio, particles, toast, terrain })
     }
     if (events.turboTier && racer === player) {
       notify(events.turboTier === 2 ? "ORANGE MINI-TURBO!" : "BLUE MINI-TURBO!");
-      audio.play("boost");
+      audio.play(events.turboTier === 2 ? "turbo-orange" : "turbo-blue");
     }
     if (events.padBoost && !events.traversalFinished && racer === player) {
       notify("TURBO PANEL!");

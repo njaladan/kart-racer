@@ -13,6 +13,8 @@ import {
   MAX_SPEED,
   MAX_BOOST_SPEED,
   FULL_SPEED_TURN_RADIUS,
+  DRIFT_TIGHT_RADIUS,
+  cancelDrift,
 } from "../src/simulation/physics.js";
 import { progressDelta, ranking, finishRacer, lapNumber } from "../src/simulation/race.js";
 import { initializeRacer, advanceRacer, botInput } from "../src/simulation/simulation.js";
@@ -94,8 +96,12 @@ test("full-speed steering keeps its radius through boosts", () => {
         drive(straight, input, flat, FIXED_DT);
         drive(turning, { ...input, steer: 1, drift }, flat, FIXED_DT);
       }
-      near(turning.speed, straight.speed, 0.05);
-      const expectedYawRate = drift ? 1.2 : turning.speed / 3.6 / FULL_SPEED_TURN_RADIUS;
+      if (drift) {
+        assert.ok(turning.speed < straight.speed, "sliding pays a small speed cost");
+        assert.ok(turning.speed > straight.speed - 3);
+      } else near(turning.speed, straight.speed, 0.05);
+      const expectedYawRate =
+        turning.speed / 3.6 / (drift ? DRIFT_TIGHT_RADIUS : FULL_SPEED_TURN_RADIUS);
       near(Math.abs(turning.yawRate), expectedYawRate, 0.02);
       assert.ok(Math.abs(Math.atan2(turning.lateralSpeed, turning.longitudinalSpeed)) < 0.4);
     }
@@ -124,7 +130,7 @@ test("drift grip survives neutral countersteer and release promptly restores con
   assert.ok(state.yawRate < -0.6, "neutral steer must retain the latched drift turn");
   for (let i = 0; i < 18; i++) drive(state, { ...input, steer: -1, drift: true }, flat, FIXED_DT);
   assert.ok(
-    state.yawRate < 0 && state.yawRate > -0.45,
+    state.yawRate < 0 && state.yawRate > -0.7,
     "countersteer should reduce without reversing the drift turn",
   );
   for (let i = 0; i < 60; i++) drive(state, input, flat, FIXED_DT);
@@ -195,7 +201,14 @@ test("wall contact removes outward velocity while preserving motion along the wa
 });
 test("mini turbo fires exactly once on drift release", () => {
   const s = body();
-  for (let i = 0; i < 250; i++) near(chargeDrift(s, true, true, FIXED_DT), 0);
+  s.isPlayer = true;
+  s.vz = -30;
+  for (let i = 0; i < 250; i++) {
+    const sliding = drive(s, { ...input, steer: 1, drift: true }, flat, FIXED_DT);
+    near(chargeDrift(s, sliding, true, FIXED_DT), 0);
+  }
+  assert.equal(s.driftTier, 2);
+  drive(s, input, flat, FIXED_DT);
   near(chargeDrift(s, false, false, FIXED_DT), 2);
   for (let i = 0; i < 100; i++) near(chargeDrift(s, false, false, FIXED_DT), 0);
   near(s.drift, 0);
@@ -350,4 +363,143 @@ test("contact and surface corrections cannot generate an accidental takeoff", ()
   assert.ok(s.grounded && !event.launched);
   assert.ok(s.vy <= 3);
   assert.ok(Math.abs(s.worldPos.y - projectTrack(s.worldPos, s.s).height) < 0.01);
+});
+
+function driftStep(state, controls = {}, surface = flat) {
+  const controlsNow = { ...input, steer: 1, drift: true, ...controls };
+  const sliding = drive(state, controlsNow, surface, FIXED_DT);
+  return chargeDrift(state, sliding, controlsNow.drift, FIXED_DT);
+}
+
+function cruisingPlayer() {
+  const state = body();
+  state.isPlayer = true;
+  state.vz = -30;
+  return state;
+}
+
+test("drift entry needs a fresh press at speed and steering, with progressive turn-in", () => {
+  const state = cruisingPlayer();
+  driftStep(state, { steer: 0 });
+  for (let i = 0; i < 120; i++) driftStep(state);
+  assert.equal(state.driftDirection, 0, "steering later cannot turn a held button into an entry");
+  driftStep(state, { drift: false });
+  const previousYawRate = state.yawRate;
+  driftStep(state);
+  assert.equal(state.driftDirection, 1);
+  assert.ok(
+    Math.abs(state.yawRate - previousYawRate) < 0.15,
+    "entry must blend from the existing turn",
+  );
+  for (let i = 0; i < 60; i++) driftStep(state);
+  assert.ok(Math.abs(state.yawRate) > 1.5);
+
+  const slow = cruisingPlayer();
+  slow.vz = -8;
+  driftStep(slow);
+  for (let i = 0; i < 600; i++) driftStep(slow);
+  assert.equal(slow.driftDirection, 0, "accelerating with drift already held cannot auto-enter");
+  assert.equal(slow.driftTier, 0);
+});
+
+test("inward steering earns readiness faster than countersteering a wider line", () => {
+  const run = (steer) => {
+    const state = cruisingPlayer();
+    let readyAt = Infinity;
+    for (let i = 0; i < 600; i++) {
+      driftStep(state, { steer: i < 30 ? 1 : steer });
+      if (state.driftTier && readyAt === Infinity) readyAt = (i + 1) * FIXED_DT;
+    }
+    return { readyAt, radius: state.speed / 3.6 / Math.abs(state.yawRate) };
+  };
+  const tight = run(1),
+    wide = run(-0.5);
+  assert.ok(tight.radius < FULL_SPEED_TURN_RADIUS);
+  assert.ok(wide.radius > 45 && wide.radius < 50);
+  assert.ok(tight.readyAt >= 0.85 && tight.readyAt < 1.2);
+  assert.ok(wide.readyAt > tight.readyAt + 0.6);
+});
+
+test("rapid taps and alternating steering cannot accumulate or release a turbo", () => {
+  const state = cruisingPlayer();
+  let rewards = 0;
+  for (let i = 0; i < 3600; i++) {
+    const phase = i % 48;
+    rewards += driftStep(state, { drift: phase < 24, steer: i % 96 < 48 ? 1 : -1 });
+  }
+  assert.equal(rewards, 0);
+  assert.equal(state.driftTier, 0);
+  assert.equal(state.driftArc, 0);
+});
+
+test("recovery and active boosts prevent chaining drift rewards", () => {
+  const state = cruisingPlayer();
+  for (let i = 0; i < 150; i++) driftStep(state);
+  assert.equal(driftStep(state, { drift: false }), 1);
+  driftStep(state);
+  assert.equal(state.driftDirection, 0, "an immediate re-press fails during tire recovery");
+  for (let i = 0; i < 60; i++) driftStep(state);
+  assert.equal(state.driftDirection, 0, "a failed press cannot auto-start after recovery");
+  driftStep(state, { drift: false });
+  state.driftBoost = 0.55;
+  driftStep(state);
+  assert.equal(state.driftDirection, 0, "mini-turbo must finish before another entry");
+  state.driftBoost = 0;
+  for (let i = 0; i < 60; i++) driftStep(state);
+  assert.equal(state.driftDirection, 0);
+
+  for (const effect of ["boost", "star"]) {
+    const boosted = cruisingPlayer();
+    boosted[effect] = 5;
+    for (let i = 0; i < 360; i++) driftStep(boosted);
+    assert.equal(driftStep(boosted, { drift: false }), 0);
+    assert.equal(boosted.driftTier, 0, `${effect} speed cannot feed a second boost`);
+  }
+});
+
+test("braking, rough ground, low speed, hits and air cancel an earned drift", () => {
+  for (const interrupt of ["brake", "offroad", "slow", "hit", "air", "contact"]) {
+    const state = cruisingPlayer();
+    for (let i = 0; i < 150; i++) driftStep(state);
+    assert.equal(state.driftTier, 1);
+    const controls = { drift: false };
+    let surface = flat;
+    if (interrupt === "brake") controls.brake = true;
+    if (interrupt === "offroad") surface = { ...flat, offroad: true };
+    if (interrupt === "slow") state.vx = state.vz = 0;
+    if (interrupt === "hit") state.spin = 1;
+    if (interrupt === "air") state.grounded = false;
+    if (interrupt === "contact") cancelDrift(state);
+    assert.equal(driftStep(state, controls, surface), 0, interrupt);
+    assert.equal(state.driftTier, 0);
+    for (let i = 0; i < 120; i++) driftStep(state, {}, surface);
+    if (["brake", "offroad", "hit", "air"].includes(interrupt)) assert.equal(state.driftTier, 0);
+  }
+});
+
+test("elapsed sliding time alone cannot earn charge without a turning travel line", () => {
+  const state = cruisingPlayer();
+  Object.assign(state, {
+    speed: 100,
+    driftDirection: 1,
+    steering: 1,
+    lateralSpeed: 6,
+    longitudinalSpeed: 25,
+    driftSurfaceValid: true,
+    driftTurnRate: 0,
+  });
+  for (let i = 0; i < 1200; i++) chargeDrift(state, true, true, FIXED_DT);
+  assert.equal(chargeDrift(state, false, false, FIXED_DT), 0);
+  assert.equal(state.driftArc, 0);
+});
+
+test("a straight or opposite course bend cannot feed charge even during a real slide", () => {
+  for (const curvature of [0, 1 / 45]) {
+    const state = cruisingPlayer();
+    for (let i = 0; i < 600; i++) driftStep(state, {}, { ...flat, curvature });
+    assert.ok(Math.abs(state.yawRate) > 1, "the kart is physically turning");
+    assert.ok(Math.abs(state.lateralSpeed) > 1, "the kart is genuinely sliding");
+    assert.equal(state.driftTier, 0);
+    assert.equal(driftStep(state, { drift: false }, { ...flat, curvature }), 0);
+  }
 });

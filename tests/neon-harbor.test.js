@@ -20,7 +20,7 @@ test("Neon Harbor has eight separated districts, an elevated bridge, and a driva
     assert.ok((section.end - section.start) * track.COURSE_LENGTH > 140);
     if (i < track.SECTIONS.length - 1) assert.equal(section.end, track.SECTIONS[i + 1].start);
   }
-  assert.ok(track.minimumCurveRadius >= 40);
+  assert.ok(track.minimumCurveRadius >= course.minimumRadius);
   assert.ok(track.ELEVATED.length === 1 && track.ELEVATED[0].section === 3);
   assert.ok(track.frameAt(track.sectorT(3, 0.5)).p.y > 20);
 });

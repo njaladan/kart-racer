@@ -11,6 +11,7 @@ import {
   verticalMotion,
   wallContact,
   chargeDrift,
+  cancelDrift,
   resetMotion,
   FIXED_DT,
   JUMP_TAKEOFF_SPEED,
@@ -124,7 +125,12 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   state.scale = scaleAt(activeTrack, trackT(state.s));
   state.underwater = underwaterAt(activeTrack, trackT(state.s));
   const transit = advanceTraversal(state, activeTrack, dt, raceTime, advanceRaceProgress);
-  if (transit) return transit;
+  if (transit) {
+    cancelDrift(state);
+    state.driftButtonDown = !!input.drift;
+    state.driftHeld = !!input.drift;
+    return transit;
+  }
   const hitWasActive = state.spin > 0;
   state.prevS = state.s;
   state.renderYawFrom = state.yaw;
@@ -164,6 +170,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
       grip: before.grip,
       bank: -before.frame.up.dot(before.horizontalRight),
       slope: before.frame.tangent.y,
+      curvature: before.frame.curvature,
     },
     dt,
   );
@@ -295,7 +302,10 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   const trickLanded = landed && state.trickActive && !(state.spin > 0);
   if (trickLanded) state.boost = Math.max(state.boost, 0.7);
   if (landed || state.spin > 0) state.trickActive = false;
-  const turboTier = chargeDrift(state, sliding, input.drift, dt);
+  // Even a glancing wall scrape interrupts the attempt. Cancel after contact
+  // and vertical motion so releasing on the collision/takeoff tick cannot pay.
+  if (penetration > 0 || contact || !state.grounded || landed) cancelDrift(state);
+  const turboTier = chargeDrift(state, sliding && !!state.driftDirection, input.drift, dt);
   if (turboTier) {
     state.boost = Math.max(state.boost, turboTier === 2 ? 1.05 : 0.55);
     state.driftBoost = turboTier === 2 ? 1.05 : 0.55;
@@ -337,7 +347,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     state.finishTime = raceTime - dt + dt * fraction;
   }
   return {
-    sliding,
+    sliding: sliding && !!state.driftDirection,
     wallImpact,
     cartImpact,
     trafficImpact: !!trafficHit && cartImpact,

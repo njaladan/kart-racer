@@ -179,6 +179,13 @@ export function createAudioController(audioWindow = window) {
         noise(0.45, 0.24, 1200);
         tone(95, 0.32, "sawtooth", 0.065, 420);
         break;
+      case "turbo-blue":
+      case "turbo-orange": {
+        const orange = kind === "turbo-orange";
+        noise(orange ? 0.5 : 0.3, 0.22, orange ? 1800 : 1300);
+        tone(orange ? 160 : 120, 0.28, "triangle", 0.085, orange ? 640 : 420);
+        break;
+      }
       case "shell":
         noise(0.17, 0.16, 1700);
         tone(260, 0.15, "square", 0.04, -150);
@@ -244,7 +251,14 @@ export function createAudioController(audioWindow = window) {
       lastBrakeTime = now;
     }
     const tier = active ? state.driftTier || 0 : 0;
-    if (tier > lastDriftTier) noise(0.12, 0.13, tier === 2 ? 2600 : 1500);
+    if (tier > lastDriftTier) {
+      // Original rising intervals: a fifth for blue, an octave for orange.
+      // Each plays once on earning the tier, separate from the release whoosh.
+      const orange = tier === 2;
+      noise(0.1, 0.09, orange ? 3200 : 2100);
+      tone(orange ? 880 : 660, 0.2, "sine", 0.09, orange ? 880 : 330);
+      tone(orange ? 1320 : 990, 0.12, "triangle", 0.045, orange ? 440 : 165);
+    }
     lastDriftTier = tier;
     lastEngineSpeed = speed;
     lastEngineTime = now;
@@ -288,13 +302,18 @@ export function createAudioController(audioWindow = window) {
         state.surfaceLoose ? 0.018 : 0.005,
       ];
       const slip = Math.min(0.075, Math.abs(state.lateralSpeed || 0) * 0.006);
+      const slide = state.driftDirection ? 1 + Math.min(1, state.drift || 0) * 0.35 : 1;
       target(
         tires.gain.gain,
-        active && state.grounded ? (rolling + slip) * Math.min(1, speed / 45) : 0,
+        active && state.grounded ? (rolling + slip * slide) * Math.min(1, speed / 45) : 0,
       );
       target(
         tires.filter.frequency,
-        (state.driftTier ? frequency * 1.4 : frequency) * (state.underwater ? 0.4 : 1),
+        (state.driftDirection
+          ? frequency * (1.15 + (state.drift || 0) * 0.5)
+          : state.driftTier
+            ? frequency * 1.4
+            : frequency) * (state.underwater ? 0.4 : 1),
       );
     }
   }

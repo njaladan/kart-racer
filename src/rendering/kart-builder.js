@@ -1,4 +1,5 @@
 import * as THREE from "../../vendor/three/three.module.js";
+import { createDriftReadiness } from "./drift-readiness.js";
 import { addGlow } from "./visual-effects.js";
 
 /** Build locally bundled SuperTuxKart racers with independent materials and wheels. */
@@ -104,6 +105,8 @@ export function createKartBuilder({ scene, models, textures, shadowTexture, them
     });
     boostGlow.visible = false;
 
+    const driftReadiness = createDriftReadiness(root);
+
     const aura = new THREE.Group();
     const ring = new THREE.Mesh(
       new THREE.TorusGeometry(1.34, 0.055, 8, 40),
@@ -149,6 +152,7 @@ export function createKartBuilder({ scene, models, textures, shadowTexture, them
       wheels,
       flame,
       boostGlow,
+      driftReadiness,
       aura,
       name,
       isPlayer,

@@ -1,6 +1,6 @@
 import { scaleAt, underwaterAt } from "./course-mechanics.js";
 import { advanceRacer, botInput } from "./simulation.js";
-import { resetMotion } from "./physics.js";
+import { resetMotion, cancelDrift } from "./physics.js";
 import { ranking } from "./race.js";
 import { resetRaceGrid } from "./race-grid.js";
 import { resolveRacerContacts } from "./racer-contact.js";
@@ -78,7 +78,7 @@ export function createRaceSession({
     racer.vx = racer.hitSlideVx;
     racer.vz = racer.hitSlideVz;
     racer.yawRate = 0;
-    racer.drift = 0;
+    cancelDrift(racer);
     racer.trickActive = false;
     racer.trickBuffer = 0;
     onHit(racer);

@@ -202,3 +202,23 @@ test("all twelve authored soundscapes resolve spatial sources without exceeding 
     }
   }
 });
+
+test("blue and orange readiness have distinct rising tones and release whooshes", () => {
+  const audio = createAudioController({ AudioContext: NoisyAudioContext });
+  audio.start();
+  const state = { grounded: true, traversalIndex: -1, driftTier: 1 };
+  audio.updateEngine(80, true, state);
+  const blue = createdContext.oscillators.slice(2);
+  assert.equal(blue.length, 2);
+  const bluePitches = blue.map((node) => node.frequency.value);
+  for (let i = 0; i < 20; i++) audio.updateEngine(80, true, state);
+  assert.equal(createdContext.oscillators.length, 4, "the held readiness tone does not repeat");
+  audio.updateEngine(80, true, { ...state, driftTier: 2 });
+  const orange = createdContext.oscillators.slice(4);
+  assert.ok(orange[0].frequency.value > bluePitches[0]);
+  assert.ok(orange[1].frequency.value > bluePitches[1]);
+  audio.play("turbo-blue");
+  const blueRelease = createdContext.oscillators.at(-1).frequency.value;
+  audio.play("turbo-orange");
+  assert.ok(createdContext.oscillators.at(-1).frequency.value > blueRelease);
+});

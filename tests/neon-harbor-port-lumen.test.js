@@ -13,7 +13,7 @@ test("Port Lumen builds eight sections at the planned distance and safe curve ra
     ["promenade", "downtown", "market", "bridge", "cargo", "ferry", "seawall", "boulevard"],
   );
   assert.ok(track.COURSE_LENGTH >= 1800 && track.COURSE_LENGTH <= 2000);
-  assert.ok(track.minimumCurveRadius >= 40);
+  assert.ok(track.minimumCurveRadius >= course.minimumRadius);
 });
 
 test("optional ramps raise only their authored lane", () => {

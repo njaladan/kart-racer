@@ -11,6 +11,7 @@ import {
   sectionAt,
   trackT,
 } from "../track/track.js";
+import { updateDriftReadiness } from "./drift-readiness.js";
 import { advanceSurfaceDetails } from "./surface-detail.js";
 import { renderRaceHud } from "../ui/race-hud.js";
 
@@ -161,6 +162,7 @@ export function createGameRenderer({
       wheel.spin.rotation.x += (state.longitudinalSpeed * dt) / wheel.radius;
       wheel.pivot.rotation.y = wheel.front ? -state.steering * 0.32 : 0;
     }
+    if (kart.driftReadiness) updateDriftReadiness(kart.driftReadiness, state, frameState.elapsed);
     kart.flame.visible = state.boost > 0;
     if (kart.boostGlow) {
       kart.boostGlow.visible = kart.flame.visible;

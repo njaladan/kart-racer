@@ -1,7 +1,7 @@
 import * as THREE from "../../vendor/three/three.module.js";
 import { activeTrack, trackT } from "../track/track.js";
 
-const SPARK_COLORS = ["#d6edf1", "#8af6ff", "#ffc05e"];
+import { DRIFT_COLORS } from "./drift-readiness.js";
 
 /** Fixed-step visual emissions; clocks live here rather than in physics state. */
 export function createRacerEffects({ spawnParticle, terrain = "grass" }) {
@@ -25,7 +25,7 @@ export function createRacerEffects({ spawnParticle, terrain = "grass" }) {
       paper = activeTrack.course.theme.terrain === "paper";
     let clock = clocks.get(state);
     if (!clock) {
-      clock = { drift: 0, boost: 0, surface: 0, flight: 0, scale: state.scale ?? 1 };
+      clock = { drift: 0, boost: 0, surface: 0, flight: 0, tier: 0, scale: state.scale ?? 1 };
       clocks.set(state, clock);
     }
     const scale = state.scale ?? 1;
@@ -120,7 +120,28 @@ export function createRacerEffects({ spawnParticle, terrain = "grass" }) {
     }
 
     const drifting = events.sliding && state.grounded;
-    clock.drift = drifting ? clock.drift + dt * (state.isPlayer ? 30 : 7) : 0;
+    const tier = drifting ? Math.min(2, state.driftTier || 0) : 0;
+    // A short crown of sparks makes the exact readiness transition readable.
+    if (tier > clock.tier) {
+      for (const side of [-1, 1]) {
+        for (let i = 0; i < (state.isPlayer ? 8 : 3); i++) {
+          const spread = (i / 8) * Math.PI * 2;
+          spawnParticle(
+            positionBehind(state, side * 0.82, 0.72, 0.28),
+            DRIFT_COLORS[tier],
+            0.34,
+            0.14,
+            new THREE.Vector3(
+              Math.cos(spread) * 2.5 + Math.sin(state.yaw) * 3,
+              1 + Math.sin(spread) * 0.6,
+              Math.sin(spread) * 2.5 + Math.cos(state.yaw) * 3,
+            ),
+          );
+        }
+      }
+    }
+    clock.tier = tier;
+    clock.drift = drifting ? clock.drift + dt * (state.isPlayer ? 18 + tier * 12 : 7) : 0;
     while (clock.drift >= 1) {
       clock.drift--;
       for (const side of [-1, 1]) {
@@ -129,12 +150,11 @@ export function createRacerEffects({ spawnParticle, terrain = "grass" }) {
           0.7 + Math.random() * 0.8,
           Math.cos(state.yaw) * 2.8 - side * Math.sin(state.yaw) * 1.6,
         );
-        const tier = Math.min(2, state.driftTier || 0);
         spawnParticle(
           positionBehind(state, side * 0.68, 0.62, 0.2),
-          SPARK_COLORS[tier],
+          DRIFT_COLORS[tier],
           tier ? 0.28 : 0.2,
-          tier ? 0.14 : 0.085,
+          tier === 2 ? 0.17 : tier ? 0.13 : 0.07,
           velocity,
         );
       }
