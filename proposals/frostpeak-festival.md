@@ -160,6 +160,11 @@ objects changing phases from lap to lap, without random road-blocking events.
 
 ## Implementation status
 
-The new eight-section route, terrain, snow and timber edges, driveable alternate
-lanes, banking, ramps, gondola route and groomer are implemented. Section-specific
-festival structures and motion are the next self-contained artwork chunk.
+The eight-section route, terrain, snow and timber edges, driveable alternate
+lanes, banked climbs, localized trick ramps, gondola route and warned groomer are
+implemented. The festival stalls, alpine lodge facades, elevated timber passage,
+glacier arches, summit pavilion and turning wheel, snow dragon, waterfall, skating
+pond, climbing and descent routes, fox, visitors, skaters, gondolas, lanterns,
+fireworks, drifting aurora and independent snowfall are also in the course.
+Detailed ice, snow, knit and sign textures are bundled locally. Static geometry is
+region-batched; moving life uses bounded shared meshes and point buffers.

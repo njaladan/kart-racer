@@ -72,7 +72,7 @@ export function buildFestivalTown({ THREE, scenery, track, festival, textures })
     const t = sectorT(section, fraction),
       g = groupAt(t);
     const half = Math.max(-track.surfaceAt(t).leftEdge, track.surfaceAt(t).rightEdge) + 3;
-    const high = plain ? 13.5 : 14;
+    const high = section === 6 ? 24 : plain ? 13.5 : 14;
     for (const side of [-1, 1]) box(p.timber, g, [side * half, high / 2, 0], [0.28, high, 0.28]);
     for (let i = 0; i < 12; i++) {
       const x = -half + i * ((half * 2) / 11),
@@ -147,14 +147,14 @@ export function buildFestivalTown({ THREE, scenery, track, festival, textures })
       g = groupAt(t),
       half = track.roadHalfWidth(t) + 4.5;
     for (const side of [-1, 1]) {
-      box(p.timber, g, [side * half, 5.5, 0], [0.45, 11, 0.45]);
-      beam(g, [side * half, 8, 0], [side * half * 0.68, 11, 0], 0.2, p.bark);
+      box(p.timber, g, [side * half, 24, 0], [0.45, 11, 0.45]);
+      beam(g, [side * half, 21, 0], [side * half * 0.68, 24, 0], 0.2, p.bark);
     }
-    box(p.timber, g, [0, 11.5, 0], [half * 2, 0.5, 2.8]);
-    box(p.snow, g, [0, 11.85, 0], [half * 2 + 0.4, 0.28, 3]);
+    box(p.timber, g, [0, 24, 0], [half * 2, 0.5, 2.8]);
+    box(p.snow, g, [0, 24.35, 0], [half * 2 + 0.4, 0.28, 3]);
     for (let i = 0; i < 10; i++)
       box(p.timber, g, [-half + (i * half * 2) / 9, 12.4, -1.3], [0.12, 1.2, 0.12]);
-    box(p.timber, g, [0, 12.9, -1.3], [half * 2, 0.12, 0.12]);
+    box(p.timber, g, [0, 25.4, -1.3], [half * 2, 0.12, 0.12]);
   }
   // Firewood, sleds, mittens and domestic marks fill the backstreets.
   for (let i = 0; i < 15; i++)
