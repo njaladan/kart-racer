@@ -12,8 +12,8 @@ export const MAX_JUMP_HEIGHT = 1.1; // metres above the racing surface
 export const MAX_JUMP_TIME = 0.85;
 export const JUMP_TAKEOFF_SPEED = 6;
 const LOW_SPEED_YAW_RATE = 2.2; // radians/second
-const FULL_SPEED_YAW_RATE = MAX_SPEED / 3.6 / FULL_SPEED_TURN_RADIUS;
-const STEER_RAMP_SPEED = 4; // metres/second
+const PLAYER_TURN_RAMP_SPEED = (MAX_SPEED / 3.6) * 0.75; // metres/second
+const LOW_SPEED_STEER_RAMP = 4; // metres/second
 const DRIFT_YAW_RATE = 0.7; // radians/second
 const DRIFT_STEER_YAW_RATE = 0.5; // radians/second
 export const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
@@ -147,10 +147,17 @@ export function drive(state, input, surface, dt) {
       // through a boost rather than letting the kart drift wide.
       const fullSpeed = MAX_SPEED / 3.6;
       const tuningSpeed = Math.min(speed, fullSpeed);
+      const lowSpeedBlend = clamp(
+        (PLAYER_TURN_RAMP_SPEED - tuningSpeed) /
+          (PLAYER_TURN_RAMP_SPEED - LOW_SPEED_STEER_RAMP),
+        0,
+        1,
+      );
       const yawRateAtSpeed =
-        (LOW_SPEED_YAW_RATE +
-          (FULL_SPEED_YAW_RATE - LOW_SPEED_YAW_RATE) * clamp(tuningSpeed / fullSpeed, 0, 1)) *
-        clamp(tuningSpeed / STEER_RAMP_SPEED, 0, 1);
+        tuningSpeed / FULL_SPEED_TURN_RADIUS +
+        (LOW_SPEED_YAW_RATE - LOW_SPEED_STEER_RAMP / FULL_SPEED_TURN_RADIUS) *
+          lowSpeedBlend *
+          clamp(tuningSpeed / LOW_SPEED_STEER_RAMP, 0, 1);
       const yawRate = tuningSpeed > 0 ? yawRateAtSpeed * (speed / tuningSpeed) : 0;
       const direction = nextSpeed >= 0 ? 1 : -1;
       targetYaw = sliding
