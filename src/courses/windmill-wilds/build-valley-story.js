@@ -180,7 +180,7 @@ export function buildValleyStory({ scene, scenery, track, kit, textures }) {
   let waterMap = null;
   if (waterfall) {
     waterfall.name = "Reedwater cascade and limestone spring";
-    const height = 23;
+    const height = 8;
     // Keep the waterfall's framing rocks at natural boulder scale. The source
     // kit models are already substantial; 25–28x made one read as a cliff.
     imported("kenney:nature/rock-largee", waterfall, [-5, -0.5, 2], 6);
@@ -198,7 +198,7 @@ export function buildValleyStory({ scene, scenery, track, kit, textures }) {
       opacity: 0.82,
       side: THREE.DoubleSide,
     });
-    const sheet = mesh(new THREE.PlaneGeometry(5.5, height, 4, 8), water, waterfall, [
+    const sheet = mesh(new THREE.PlaneGeometry(4.2, height, 4, 8), water, waterfall, [
       0,
       height / 2,
       -0.4,
