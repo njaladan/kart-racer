@@ -210,6 +210,12 @@ export default {
     period: 12,
     warningSeconds: 2,
   },
+  ambientSources: [
+    { section: 1, fraction: 0.5, offset: -25, kind: "birds", range: 85, volume: 0.055 },
+    { section: 3, fraction: 0.5, offset: -30, kind: "water", range: 95, volume: 0.09 },
+    { section: 4, fraction: 0.55, offset: 22, kind: "wood", range: 70, volume: 0.12 },
+    { section: 5, fraction: 0.5, offset: 25, kind: "birds", range: 85, volume: 0.045 },
+  ],
   theme: {
     sky: "#49b8ef",
     fog: "#bce3ec",

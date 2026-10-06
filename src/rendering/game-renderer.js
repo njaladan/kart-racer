@@ -259,8 +259,9 @@ export function createGameRenderer({
       });
       audio.updateEngine(player.speed, frameState.running && !frameState.finished, {
         ...player,
-        surfaceLoose: ["sand", "snow", "gravel", "wood"].includes(
-          sectionAt(trackT(player.s)).material,
+        surfaceMaterial: activeTrack.surfaceAt(trackT(player.s), player.x * 6.25).material,
+        surfaceLoose: ["sand", "snow", "gravel", "earth", "needles", "grass", "paper"].includes(
+          activeTrack.surfaceAt(trackT(player.s), player.x * 6.25).material,
         ),
       });
       audio.updateWorld?.(
@@ -268,6 +269,7 @@ export function createGameRenderer({
         player,
         frameState.raceTime,
         frameState.running && !frameState.finished,
+        bots,
       );
     }
 

@@ -1,6 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createAudioController } from "../src/audio/audio.js";
+import { COURSES } from "../src/courses/registry.js";
+import { selectCourse } from "../src/track/track.js";
 
 class FakeAudioParam {
   setValueAtTime(value) {
@@ -18,10 +20,15 @@ class FakeNode {
   constructor() {
     this.gain = new FakeAudioParam();
     this.frequency = new FakeAudioParam();
+    this.pan = new FakeAudioParam();
     this.connections = [];
   }
   connect(node) {
     this.connections.push(node);
+  }
+  disconnect() {
+    this.disconnected = true;
+    this.connections = [];
   }
   start() {
     this.started = true;
@@ -109,4 +116,89 @@ test("immersion filters every race effect and restores clear sound after surfaci
   audio.updateEngine(40, true, { underwater: false });
   assert.equal(effects.frequency.value, 22000);
   assert.equal(engine.frequency.value, 580);
+});
+
+class NoisyAudioContext extends FakeAudioContext {
+  constructor() {
+    super();
+    this.sampleRate = 60;
+    this.sources = [];
+    this.panners = [];
+  }
+  createBuffer(_channels, samples) {
+    return { getChannelData: () => new Float32Array(samples) };
+  }
+  createBufferSource() {
+    const node = new FakeNode();
+    this.sources.push(node);
+    return node;
+  }
+  createStereoPanner() {
+    const node = new FakeNode();
+    this.panners.push(node);
+    return node;
+  }
+}
+
+test("transient noise caps concurrent voices and releases every spatial panner", () => {
+  const audio = createAudioController({ AudioContext: NoisyAudioContext });
+  audio.start();
+  for (let i = 0; i < 100; i++) audio.play("mechanism");
+  assert.equal(createdContext.sources.length, 26); // Two permanent loops +24 bounded transients.
+  const panners = [...createdContext.panners];
+  for (const source of createdContext.sources.slice(2)) source.onended();
+  assert.equal(panners.length, 24);
+  assert.ok(panners.every((node) => node.disconnected && node.connections.length === 0));
+  audio.play("mechanism");
+  assert.equal(createdContext.sources.length, 27);
+});
+
+test("drift tiers sound once, tyres follow material and braking noise has a cooldown", () => {
+  const audio = createAudioController({ AudioContext: NoisyAudioContext });
+  audio.start();
+  const state = { grounded: true, traversalIndex: -1, surfaceMaterial: "sand", driftTier: 1 };
+  for (let i = 0; i < 40; i++) audio.updateEngine(60, true, state);
+  assert.equal(createdContext.sources.length, 3);
+  assert.equal(createdContext.filters[3].frequency.value, 360 * 1.4);
+  audio.updateEngine(60, true, { ...state, driftTier: 2, surfaceMaterial: "ice" });
+  assert.equal(createdContext.sources.length, 4);
+  assert.equal(createdContext.filters[3].frequency.value, 2700 * 1.4);
+  createdContext.currentTime += 0.06;
+  audio.updateEngine(45, true, { ...state, driftTier: 0 });
+  assert.equal(createdContext.sources.length, 5);
+  createdContext.currentTime += 0.06;
+  audio.updateEngine(30, true, { ...state, driftTier: 0 });
+  assert.equal(createdContext.sources.length, 5);
+  audio.stopEngine();
+  audio.updateEngine(60, true, state);
+  assert.equal(createdContext.sources.length, 6);
+});
+
+test("all twelve authored soundscapes resolve spatial sources without exceeding the graph budget", () => {
+  const audio = createAudioController({ AudioContext: NoisyAudioContext });
+  audio.start();
+  let released = 2;
+  for (const course of COURSES) {
+    const track = selectCourse(course);
+    assert.ok(course.ambientSources.length > 0, course.id);
+    for (const source of course.ambientSources) {
+      assert.ok(source.section >= 0 && source.section < course.sections.length);
+      assert.ok(source.range > 0 && source.volume > 0);
+      const t = track.sectorT(source.section, source.fraction);
+      const pose = track.poseAt(t * track.TRACK, 0, 0.065);
+      const state = {
+        s: t * track.TRACK,
+        worldPos: pose.p,
+        yaw: track.yawFor(pose.tangent),
+        speed: 30,
+      };
+      assert.doesNotThrow(() =>
+        audio.updateWorld(track, state, 14, true, [{ ...state, finished: false }]),
+      );
+      const current = createdContext.sources.length;
+      assert.ok(current - released <= 24);
+      for (const node of createdContext.sources.slice(released)) node.onended();
+      released = current;
+    }
+  }
 });

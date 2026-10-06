@@ -249,6 +249,12 @@ export default {
     period: 13,
     warningSeconds: 2,
   },
+  ambientSources: [
+    { section: 1, fraction: 0.4, offset: 25, kind: "birds", range: 80, volume: 0.035 },
+    { section: 2, fraction: 0.55, offset: -20, kind: "ice", range: 65, volume: 0.12 },
+    { section: 3, fraction: 0.5, offset: 25, kind: "wood", range: 65, volume: 0.1 },
+    { section: 5, fraction: 0.5, offset: -25, kind: "ice", range: 80, volume: 0.1 },
+  ],
   theme: {
     terrain: "snow",
     sky: "#829cc9",

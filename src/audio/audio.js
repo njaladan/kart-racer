@@ -16,7 +16,12 @@ export function createAudioController(audioWindow = window) {
     lastWorldBeat = -1,
     lastWorldId = null,
     lastWorldScale = 1,
-    lastWorldUnderwater = false;
+    lastWorldUnderwater = false,
+    lastDriftTier = 0,
+    lastEngineSpeed = 0,
+    lastEngineTime = null,
+    lastBrakeTime = -Infinity,
+    engineInterior = false;
   let volumes = { master: 0.8, effects: 0.8, ambience: 0.55 };
   const target = (param, value, time = 0.08) =>
     param?.setTargetAtTime(value, context.currentTime, time);
@@ -147,8 +152,9 @@ export function createAudioController(audioWindow = window) {
     gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
     source.connect(filter);
     filter.connect(gain);
+    let panner = null;
     if (context.createStereoPanner) {
-      const panner = context.createStereoPanner();
+      panner = context.createStereoPanner();
       panner.pan.value = Math.max(-1, Math.min(1, pan));
       gain.connect(panner);
       panner.connect(world ? ambience : effects);
@@ -160,6 +166,7 @@ export function createAudioController(audioWindow = window) {
       source.disconnect();
       filter.disconnect();
       gain.disconnect();
+      panner?.disconnect();
     };
   }
   function play(kind) {
@@ -221,28 +228,78 @@ export function createAudioController(audioWindow = window) {
   }
   function updateEngine(speed, active, state = {}) {
     if (!engineOscillator || !context) return;
+    const now = context.currentTime;
+    const sampleDt = lastEngineTime === null ? 0 : now - lastEngineTime;
+    const deceleration =
+      sampleDt > 0.01 && sampleDt < 0.5 ? (lastEngineSpeed - speed) / sampleDt : 0;
+    if (
+      active &&
+      state.grounded &&
+      state.traversalIndex < 0 &&
+      speed > 18 &&
+      deceleration > 24 &&
+      now - lastBrakeTime > 0.35
+    ) {
+      noise(0.16, 0.09, state.surfaceLoose ? 500 : 2300);
+      lastBrakeTime = now;
+    }
+    const tier = active ? state.driftTier || 0 : 0;
+    if (tier > lastDriftTier) noise(0.12, 0.13, tier === 2 ? 2600 : 1500);
+    lastDriftTier = tier;
+    lastEngineSpeed = speed;
+    lastEngineTime = now;
+    const character =
+      { nolok: 0.78, konqi: 0.92, pidgin: 1.14, kiki: 1.2, wilber: 1.02 }[state.racerId] || 1;
     const load = state.boost > 0 ? 1.18 : 1,
       gear = 1 + Math.floor(speed / 34) * 0.12;
-    target(engineOscillator.frequency, ((52 + (speed % 34) * 1.8 + speed * 0.48) * load) / gear);
+    target(
+      engineOscillator.frequency,
+      ((52 + (speed % 34) * 1.8 + speed * 0.48) * load * character) / gear,
+    );
     target(
       engineFilter.frequency,
-      state.underwater ? 240 + speed * 1.5 : 300 + speed * 7 + (state.boost > 0 ? 280 : 0),
+      state.underwater
+        ? 240 + speed * 1.5
+        : (300 + speed * 7 + (state.boost > 0 ? 280 : 0)) * (engineInterior ? 0.68 : 1),
     );
     target(effectsFilter.frequency, state.underwater ? 700 : 22000, 0.25);
     target(engineGain.gain, active ? 0.022 + speed / 9000 : 0);
     target(harmonicOscillator.frequency, 104 + speed * 1.4);
     if (tires) {
+      const profiles = {
+        wood: [480, 0.013],
+        metal: [820, 0.012],
+        glass: [1250, 0.007],
+        ice: [2700, 0.004],
+        sand: [360, 0.02],
+        snow: [950, 0.017],
+        gravel: [620, 0.023],
+        needles: [780, 0.015],
+        earth: [520, 0.018],
+        grass: [400, 0.014],
+        paper: [3300, 0.01],
+        stone: [1450, 0.008],
+        paving: [1300, 0.007],
+        concrete: [1700, 0.006],
+        asphalt: [1600, 0.005],
+      };
+      const [frequency, rolling] = profiles[state.surfaceMaterial] || [
+        state.surfaceLoose ? 500 : 1500,
+        state.surfaceLoose ? 0.018 : 0.005,
+      ];
+      const slip = Math.min(0.075, Math.abs(state.lateralSpeed || 0) * 0.006);
       target(
         tires.gain.gain,
-        active && state.grounded
-          ? (Math.abs(state.lateralSpeed || 0) * 0.006 + (state.surfaceLoose ? 0.018 : 0)) *
-              Math.min(1, speed / 45)
-          : 0,
+        active && state.grounded ? (rolling + slip) * Math.min(1, speed / 45) : 0,
       );
-      target(tires.filter.frequency, state.driftTier ? 2400 : state.surfaceLoose ? 500 : 1500);
+      target(
+        tires.filter.frequency,
+        (state.driftTier ? frequency * 1.4 : frequency) * (state.underwater ? 0.4 : 1),
+      );
     }
   }
-  function updateWorld(track, state, time, active) {
+
+  function updateWorld(track, state, time, active, opponents = []) {
     if (!context || !wind) return;
     const t = track.trackT(state.s),
       section = track.sectionAt(t),
@@ -258,11 +315,7 @@ export function createAudioController(audioWindow = window) {
       active ? (inside ? 0.025 : storm ? 0.13 : water ? 0.075 : 0.04) : 0,
       0.35,
     );
-    target(
-      engineFilter.frequency,
-      (water ? 240 : inside ? 400 : 650) + state.speed * (water ? 1.5 : 4),
-      0.15,
-    );
+    engineInterior = inside;
     if (lastWorldId !== id) {
       lastWorldId = id;
       lastWorldScale = state.scale ?? 1;
@@ -282,6 +335,21 @@ export function createAudioController(audioWindow = window) {
     lastWorldBeat = beat;
     if (track.course.theme.atmosphere === "storm" && Math.sin(time * 0.24) > 0.97 && beat % 2 === 0)
       noise(1.8, 0.18, 65, 0.3, true);
+    const nearby = opponents
+      .filter((r) => !r.finished && r.worldPos.distanceTo(state.worldPos) < 32)
+      .sort(
+        (a, b) =>
+          a.worldPos.distanceToSquared(state.worldPos) -
+          b.worldPos.distanceToSquared(state.worldPos),
+      )
+      .slice(0, 3);
+    for (const other of nearby) {
+      const dx = other.worldPos.x - state.worldPos.x,
+        dz = other.worldPos.z - state.worldPos.z;
+      const distance = other.worldPos.distanceTo(state.worldPos);
+      const pan = (dx * Math.cos(state.yaw) - dz * Math.sin(state.yaw)) / Math.max(5, distance);
+      noise(0.36, 0.045 * (1 - distance / 32) ** 2, 90 + other.speed * 0.8, pan, true);
+    }
     for (const source of track.course.ambientSources || []) {
       const p = track.poseAt(
         track.sectorT(source.section, source.fraction) * track.TRACK,
@@ -303,8 +371,15 @@ export function createAudioController(audioWindow = window) {
       } else if (source.kind === "drip") {
         if (beat % 3 === 0)
           tone(700 + Math.random() * 600, 0.045, "sine", volume, -400, true, stereo);
-      } else if (source.kind === "wood") {
-        if (beat % 7 === 0) noise(0.045, volume, 280, stereo, true);
+      } else if (source.kind === "wood" || source.kind === "ice") {
+        if (beat % 7 === 0)
+          noise(
+            source.kind === "ice" ? 0.25 : 0.045,
+            volume,
+            source.kind === "ice" ? 180 : 280,
+            stereo,
+            true,
+          );
       } else
         noise(
           source.kind === "lava" ? 0.8 : source.kind === "water" ? 0.4 : 0.2,
@@ -357,6 +432,8 @@ export function createAudioController(audioWindow = window) {
   }
   function stopEngine() {
     if (context) {
+      lastDriftTier = 0;
+      lastEngineTime = null;
       target(engineGain?.gain, 0, 0.1);
       if (wind) target(wind.gain.gain, 0, 0.2);
       if (tires) target(tires.gain.gain, 0, 0.1);

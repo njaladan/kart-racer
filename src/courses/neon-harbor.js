@@ -244,6 +244,12 @@ export default {
     period: 12,
     warningSeconds: 2,
   },
+  ambientSources: [
+    { section: 0, fraction: 0.45, offset: -45, kind: "water", range: 90, volume: 0.08 },
+    { section: 4, fraction: 0.45, offset: 20, kind: "engine", range: 90, volume: 0.13 },
+    { section: 5, fraction: 0.5, offset: 20, kind: "engine", range: 80, volume: 0.12 },
+    { section: 6, fraction: 0.5, offset: -30, kind: "water", range: 100, volume: 0.11 },
+  ],
   theme: {
     terrain: "concrete",
     sky: "#090c23",
