@@ -2,10 +2,11 @@ import windmill from "./windmill-wilds.js";
 import neonHarbor from "./neon-harbor.js";
 import sunstoneRuins from "./sunstone-ruins.js";
 import frostpeakFestival from "./frostpeak-festival.js";
+import clockwork from "./clockwork-citadel.js";
 import { validateCourseDefinition } from "./course-contract.js";
 
 export const COURSES = Object.freeze(
-  [windmill, neonHarbor, sunstoneRuins, frostpeakFestival].map(validateCourseDefinition),
+  [windmill, neonHarbor, sunstoneRuins, frostpeakFestival, clockwork].map(validateCourseDefinition),
 );
 export const DEFAULT_COURSE = windmill;
 

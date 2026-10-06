@@ -5,7 +5,7 @@ import { CART_T, TRACK, poseAt, activeTrack } from "../track/track.js";
 // inside half of the yard. There is always a clear outside passing lane.
 export function cartAt(time) {
   const definition = activeTrack.course.hazard;
-  const active = time >= definition.activation;
+  const active = definition.enabled !== false && time >= definition.activation;
   const cycle = active ? (time - definition.activation) % definition.period : 0;
   const warningSeconds = definition.warningSeconds;
   const moveSeconds = (definition.period - warningSeconds - 4) / 2;
@@ -30,6 +30,7 @@ export function cartAt(time) {
 // Resolve oriented-box contact in world space. A collision cannot grant
 // progress or launch a vehicle. Returned normal also reflects projectiles.
 export function cartContact(position, time, radius = 0.9) {
+  if (activeTrack.course.hazard.enabled === false) return null;
   const cart = cartAt(time);
   const dx = position.x - cart.p.x,
     dz = position.z - cart.p.z;

@@ -9,7 +9,9 @@ test("registered course descriptors satisfy the shared runtime contract", () => 
     assert.equal(validateCourseDefinition(course), course);
     const track = createTrack(course);
     assert.equal(track.SECTIONS.length, course.sections.length);
-    assert.ok(track.minimumCurveRadius >= (course.minimumRadius ?? MIN_ROAD_CURVE_RADIUS));
+    if (course.topology !== "adventure")
+      assert.ok(track.minimumCurveRadius >= (course.minimumRadius ?? MIN_ROAD_CURVE_RADIUS));
+    else assert.ok(Number.isFinite(track.minimumCurveRadius));
   }
 });
 

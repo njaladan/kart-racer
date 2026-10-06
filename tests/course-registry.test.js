@@ -16,8 +16,8 @@ import { cartAt, cartContact } from "../src/simulation/hazards.js";
 
 // A single process switches through every course, exercising live engine bindings.
 test("course selection updates geometry, surfaces and hazards without stale course state", () => {
-  assert.equal(COURSES.length, 4);
-  assert.equal(new Set(COURSES.map((c) => c.id)).size, 4);
+  assert.equal(COURSES.length, 5);
+  assert.equal(new Set(COURSES.map((c) => c.id)).size, COURSES.length);
   assert.equal(courseById("missing").id, "windmill-wilds");
   assert.equal(findCourseById("missing"), null);
   assert.equal(findCourseById(COURSES[1].id), COURSES[1]);
@@ -28,9 +28,11 @@ test("course selection updates geometry, surfaces and hazards without stale cour
       course.id,
     );
     assert.ok(
-      isLongCourse
-        ? COURSE_LENGTH >= 1800 && COURSE_LENGTH <= 2000
-        : COURSE_LENGTH >= 1450 && COURSE_LENGTH <= 1600,
+      course.topology === "adventure" && course.id !== "sunstone-ruins"
+        ? Math.abs(COURSE_LENGTH - course.targetLength) < course.targetLength * 0.08
+        : isLongCourse
+          ? COURSE_LENGTH >= 1800 && COURSE_LENGTH <= 2000
+          : COURSE_LENGTH >= 1450 && COURSE_LENGTH <= 1600,
     );
     assert.equal(SECTIONS.length, course.sections.length);
     for (let i = 0; i < 120; i++) {

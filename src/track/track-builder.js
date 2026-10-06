@@ -20,6 +20,21 @@ export function createTrack(course) {
     true,
     "centripetal",
   );
+  // Authored transport links can be literal straight/vertical connections.
+  // Adjacent dock links keep the spline from bowing into the lift shaft.
+  const splinePoint = curve.getPoint.bind(curve);
+  curve.getPoint = (t, target = new THREE.Vector3()) => {
+    const link = (course.routeLinks || []).find(
+      (link) => t * controls.length >= link.startControl && t * controls.length <= link.endControl,
+    );
+    if (!link) return splinePoint(t, target);
+    return target
+      .copy(curve.points[link.startControl])
+      .lerp(
+        curve.points[link.endControl],
+        (t * controls.length - link.startControl) / (link.endControl - link.startControl),
+      );
+  };
   curve.arcLengthDivisions = 4096;
   const scale = (course.targetLength ?? 1500) / curve.getLength();
   for (const point of curve.points) {
@@ -41,6 +56,11 @@ export function createTrack(course) {
     ...section,
     start: arcAtControl(section.controlIndex),
     end: i + 1 < course.sections.length ? arcAtControl(course.sections[i + 1].controlIndex) : 1,
+  }));
+  const ROUTE_LINKS = (course.routeLinks || []).map((link) => ({
+    ...link,
+    start: arcAtControl(link.startControl),
+    end: arcAtControl(link.endControl),
   }));
   function sectionAt(t) {
     t = wrap01(t);
@@ -254,9 +274,15 @@ export function createTrack(course) {
       .clone()
       .sub(samples[(i - 1 + SAMPLE_COUNT) % SAMPLE_COUNT])
       .normalize();
+    const link = ROUTE_LINKS.find(
+      (link) => i / SAMPLE_COUNT >= link.start && i / SAMPLE_COUNT <= link.end,
+    );
+    // A lift platform stays level. Its route moves vertically while its kart
+    // heading and lateral frame follow the authored docking orientation.
+    if (link?.kind === "lift") tangent.set(...(link.heading || [1, 0, 0])).normalize();
     const right = new THREE.Vector3(-tangent.z, 0, tangent.x)
       .normalize()
-      .applyAxisAngle(tangent, bankAt(i / SAMPLE_COUNT));
+      .applyAxisAngle(tangent, link?.kind === "lift" ? 0 : bankAt(i / SAMPLE_COUNT));
     return { p, tangent, right, up: right.clone().cross(tangent).normalize() };
   });
   function frameAt(t) {
@@ -275,32 +301,51 @@ export function createTrack(course) {
     };
   }
   function poseAt(s, lane = 0, above = 0.06) {
-    const f = frameAt(trackT(s));
+    const t = trackT(s),
+      f = frameAt(t);
     const p = f.p.clone().addScaledVector(f.right, lane);
-    p.y += above;
+    p.y += above + rampHeight(t, lane) - rampHeight(t, 0);
     return { ...f, p };
   }
   function projectTrack(position, nearS = 0, global = false) {
     const start = Math.floor(trackT(nearS) * SAMPLE_COUNT);
+    const localElevation = ROUTE_LINKS.some(
+      (link) => link.kind === "lift" && trackT(nearS) >= link.start && trackT(nearS) <= link.end,
+    );
     let best = Infinity,
       bestT = 0;
-    const inspect = (index, elevation = global) => {
+    const inspect = (index, elevation = global || localElevation) => {
       const i = ((index % SAMPLE_COUNT) + SAMPLE_COUNT) % SAMPLE_COUNT;
       const a = samples[i],
         b = samples[i + 1],
         dx = b.x - a.x,
-        dz = b.z - a.z;
+        dz = b.z - a.z,
+        dy = b.y - a.y,
+        vertical = dx * dx + dz * dz < 1e-8;
       const u = THREE.MathUtils.clamp(
-        ((position.x - a.x) * dx + (position.z - a.z) * dz) / (dx * dx + dz * dz),
+        ((position.x - a.x) * dx +
+          (position.z - a.z) * dz +
+          (vertical ? (position.y - 0.065 - a.y) * dy : 0)) /
+          Math.max(1e-12, dx * dx + dz * dz + (vertical ? dy * dy : 0)),
         0,
         1,
       );
       const ex = position.x - a.x - dx * u,
-        ez = position.z - a.z - dz * u,
-        // A horizontal crossing is not a route join. Height disambiguates
-        // floors while the bounded local search retains ordered route identity.
-        ey = position.y - THREE.MathUtils.lerp(a.y, b.y, u),
-        d = ex * ex + ez * ez + ey * ey * (elevation ? 1 : 0);
+        ez = position.z - a.z - dz * u;
+      // Compare the actual lane surface, including bank and localized ramps.
+      // Centerline height alone can pull a kart away from a side-lane ramp.
+      let laneHeight = 0.065;
+      if (elevation && !vertical && ex * ex + ez * ez < 2500) {
+        const t = (i + u) / SAMPLE_COUNT,
+          f = frameAt(t),
+          horizontalLength = Math.hypot(f.right.x, f.right.z),
+          offset = (ex * f.right.x + ez * f.right.z) / horizontalLength;
+        laneHeight +=
+          rampHeight(t, offset) - rampHeight(t, 0) + (offset * f.right.y) / horizontalLength;
+      }
+      // A horizontal crossing is not a route join. Height disambiguates floors.
+      const ey = position.y - laneHeight - THREE.MathUtils.lerp(a.y, b.y, u),
+        d = ex * ex + ez * ez + ey * ey * (elevation || vertical ? 1 : 0);
       if (d < best) {
         best = d;
         bestT = (i + u) / SAMPLE_COUNT;
@@ -343,6 +388,7 @@ export function createTrack(course) {
       mechanismTime = time;
     },
     SURFACES,
+    ROUTE_LINKS,
     ELEVATED,
     VERGES,
     CONVEYORS,

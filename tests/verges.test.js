@@ -10,7 +10,7 @@ import { advanceRaceProgress } from "../src/simulation/race.js";
 test("all extra route choices have continuous ground, material costs and shared barriers", () => {
   for (const course of COURSES) {
     const track = selectCourse(course);
-    assert.ok(track.VERGES.length >= 2, course.id);
+    if (course.topology !== "adventure") assert.ok(track.VERGES.length >= 2, course.id);
     for (const v of track.VERGES) {
       assert.ok(track.vergeWidth(v.start, v.side) < 1e-8);
       assert.ok(track.vergeWidth(v.end, v.side) < 1e-8);

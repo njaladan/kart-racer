@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "course": "clockwork-citadel",
+  "lighting": "indirect.png",
+  "height": "height.png",
+  "bounds": [
+    -345,
+    -375,
+    715,
+    685
+  ],
+  "heightRange": [
+    -12,
+    110
+  ],
+  "bounceScale": 0.65,
+  "resolution": 512,
+  "samples": 12,
+  "radius": 22.0,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
+  "sourceSceneSha256": "f63fc87799204cf9ffe62f2c185e95af033d3f32806f4ae427ff08b908e1fb1f",
+  "triangles": 267020,
+  "lights": 94,
+  "outputs": [
+    {
+      "file": "indirect.png",
+      "width": 512,
+      "height": 512,
+      "bytes": 203181,
+      "sha256": "f9b8c468ec5196495738ac91278ec741df827ae5ea8b9e88d05ed5ea5748a0a8"
+    },
+    {
+      "file": "height.png",
+      "width": 512,
+      "height": 512,
+      "bytes": 48774,
+      "sha256": "30653ea5a45111a3779d3cf9a038e34d39d186be0949ee96b39e2463784d8906"
+    },
+    {
+      "file": "spill.png",
+      "width": 640,
+      "height": 320,
+      "bytes": 4863,
+      "sha256": "c0a6753ff858a25cf26dc19ae67cd467b1353943e2391b66e853461f0866d1c8"
+    }
+  ],
+  "lightVolume": {
+    "resolution": 160,
+    "columns": 4,
+    "rows": 2,
+    "heights": [
+      -20,
+      0,
+      20,
+      45,
+      75,
+      105
+    ],
+    "strength": 1,
+    "file": "spill.png"
+  }
+}

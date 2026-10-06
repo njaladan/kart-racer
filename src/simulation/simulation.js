@@ -72,7 +72,8 @@ export function botInput(state, index, elapsed, rivals = []) {
   }
   const cart = cartAt(elapsed);
   const cartGap = progressDelta(cart.s, state.s, TRACK) * WORLD_PER_UNIT;
-  if (cartGap > -6 && cartGap < 40) lane = activeTrack.course.hazard.safeLane;
+  if (activeTrack.course.hazard.enabled !== false && cartGap > -6 && cartGap < 40)
+    lane = activeTrack.course.hazard.safeLane;
   for (const pendulum of activeTrack.course.pendulums || []) {
     const gap =
       progressDelta(
