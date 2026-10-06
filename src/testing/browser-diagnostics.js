@@ -127,6 +127,19 @@ export function createBrowserDiagnostics({
         player.yaw = yawFor(frameAt(trackT(player.s)).tangent);
         player.renderYawFrom = player.yaw;
         player.speed = 0;
+        // A seek should show its destination before the chase camera settles.
+        gameRenderer.updateVehicle(player, player.kart, 0);
+        gameRenderer.reset();
+        const forward = frameAt(trackT(player.s)).tangent.clone().setY(0).normalize();
+        camera.position.copy(player.worldPos).addScaledVector(forward, -8.7);
+        camera.position.y += 4.7;
+        camera.position.y = Math.max(
+          camera.position.y,
+          projectTrack(camera.position, player.s).height + 2.1,
+        );
+        gameRenderer.cameraLook.copy(player.worldPos).addScaledVector(forward, 6);
+        gameRenderer.cameraLook.y += 1.15;
+        camera.lookAt(gameRenderer.cameraLook);
       }
       if (message.type === "test-step" && started && !finished && !paused) {
         const seconds = Math.max(0, Math.min(5, Number(message.seconds) || 0));

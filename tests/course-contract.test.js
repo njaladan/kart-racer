@@ -8,14 +8,14 @@ test("registered course descriptors satisfy the shared runtime contract", () => 
   for (const course of COURSES) {
     assert.equal(validateCourseDefinition(course), course);
     const track = createTrack(course);
-    assert.equal(track.SECTIONS.length, 6);
-    assert.ok(track.minimumCurveRadius >= MIN_ROAD_CURVE_RADIUS);
+    assert.equal(track.SECTIONS.length, course.sections.length);
+    assert.ok(track.minimumCurveRadius >= (course.minimumRadius ?? MIN_ROAD_CURVE_RADIUS));
   }
 });
 
 test("track construction rejects road bends below the curvature floor", () => {
   const course = { ...COURSES[0], targetLength: 200 };
-  assert.throws(() => createTrack(course), /road curves require at least 40 m radius/);
+  assert.throws(() => createTrack(course), /road curves require at least 18 m radius/);
 });
 
 test("course validation reports the path of invalid authored data", () => {

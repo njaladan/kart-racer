@@ -110,10 +110,11 @@ export function createTrack(course) {
     );
   }
   function shortcutWidth(t) {
+    const taper = Math.min(0.018, (SHORTCUT.end - SHORTCUT.start) / 3);
     return (
       SHORTCUT.extraWidth *
-      smooth(SHORTCUT.start, SHORTCUT.start + 0.018, t) *
-      (1 - smooth(SHORTCUT.end - 0.018, SHORTCUT.end, t))
+      smooth(SHORTCUT.start, SHORTCUT.start + taper, t) *
+      (1 - smooth(SHORTCUT.end - taper, SHORTCUT.end, t))
     );
   }
   function roadHalfWidth(t) {
@@ -136,7 +137,7 @@ export function createTrack(course) {
     return {
       section,
       halfWidth,
-      offroad: Math.abs(offset) > halfWidth,
+      offroad: Math.abs(offset) > halfWidth && !verge?.driveable,
       leftEdge: -halfWidth - 0.55 - vergeWidth(t, -1),
       rightEdge: halfWidth + 0.55 + Math.max(shortcutWidth(t), vergeWidth(t, 1)),
       offroadDrag:
@@ -157,13 +158,34 @@ export function createTrack(course) {
     };
   }
   function bankAt(t) {
-    if (shortcutWidth(wrap01(t)) > 0 || vergeWidth(t, -1) > 0 || vergeWidth(t, 1) > 0) return 0;
+    t = wrap01(t);
+    // Flatten before an expanded route opens, so a bank cannot snap sideways
+    // at a verge boundary. Section tilt also blends over the width transition.
+    const fade = 12 / lengths.at(-1);
+    const flatten = Math.max(
+      ...[SHORTCUT, ...VERGES].map(
+        (patch) =>
+          smooth(patch.start - fade, patch.start, t) * (1 - smooth(patch.end, patch.end + fade, t)),
+      ),
+    );
     const a = curve.getTangentAt(wrap01(t - 0.005)),
       b = curve.getTangentAt(wrap01(t + 0.005));
-    return THREE.MathUtils.clamp(
-      progressDelta(yawFor(b), yawFor(a), Math.PI * 2) * -0.6,
-      -0.14,
-      0.14,
+    const section = sectionAt(t);
+    const previous = SECTIONS[(SECTIONS.indexOf(section) + SECTIONS.length - 1) % SECTIONS.length];
+    const blend = smooth(section.start, section.start + 0.012, t);
+    const strength = THREE.MathUtils.lerp(
+      previous.bankStrength ?? 0.6,
+      section.bankStrength ?? 0.6,
+      blend,
+    );
+    const limit = THREE.MathUtils.lerp(previous.maxBank ?? 0.14, section.maxBank ?? 0.14, blend);
+    return (
+      THREE.MathUtils.clamp(
+        progressDelta(yawFor(b), yawFor(a), Math.PI * 2) * -strength,
+        -limit,
+        limit,
+      ) *
+      (1 - flatten)
     );
   }
   function rampHeight(t) {
@@ -194,9 +216,10 @@ export function createTrack(course) {
     if (cross > 1e-9)
       minimumCurveRadius = Math.min(minimumCurveRadius, (ab * bc * ac) / (2 * cross));
   }
-  if (minimumCurveRadius < MIN_ROAD_CURVE_RADIUS) {
+  const radiusFloor = course.minimumRadius ?? MIN_ROAD_CURVE_RADIUS;
+  if (minimumCurveRadius < radiusFloor) {
     throw new RangeError(
-      `Course "${course.id}" has a ${minimumCurveRadius.toFixed(1)} m bend; road curves require at least ${MIN_ROAD_CURVE_RADIUS} m radius`,
+      `Course "${course.id}" has a ${minimumCurveRadius.toFixed(1)} m bend; road curves require at least ${radiusFloor} m radius`,
     );
   }
   const COURSE_LENGTH = samples.slice(1).reduce((sum, p, i) => sum + p.distanceTo(samples[i]), 0);

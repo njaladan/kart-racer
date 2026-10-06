@@ -4,9 +4,9 @@
   "lighting": "indirect.png",
   "height": "height.png",
   "bounds": [
-    -289.19,
+    -306,
     -245.6,
-    556.72,
+    573.53,
     481.93
   ],
   "heightRange": [
@@ -14,23 +14,23 @@
     75
   ],
   "bounceScale": 0.65,
-  "resolution": 512,
-  "samples": 8,
+  "resolution": 768,
+  "samples": 12,
   "radius": 22.0,
   "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded.",
-  "sourceSceneSha256": "304359c0a606ad8b0f388954fbadff1db5ecdd63f47c8685a50cb68662cbb57f",
-  "triangles": 505632,
+  "sourceSceneSha256": "217d89592e28bcafdb472c9dfd639f361f3dd9e89a4e351683e347aa7e2b0589",
+  "triangles": 696644,
   "lights": 0,
   "outputs": [
     {
       "file": "indirect.png",
-      "bytes": 185271,
-      "sha256": "98cf7fd3f290271080a35816fc5d4680d4bbd91590aa8dbfe57905ec8e597932"
+      "bytes": 480700,
+      "sha256": "b521a55467707bab870cfef1676152009f90c96ce98cb3e7849b918f208bfa2f"
     },
     {
       "file": "height.png",
-      "bytes": 200225,
-      "sha256": "63e2c179435dba14a5fadb3523d0a91d02c4dcff3cb7093f64089acb586139de"
+      "bytes": 485604,
+      "sha256": "c2a89bf0dcd8e2c72d95ee7be83fddd8b6059b827ca896158a75d643b969698b"
     }
   ]
 }

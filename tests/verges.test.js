@@ -24,7 +24,7 @@ test("all extra route choices have continuous ground, material costs and shared 
         const p = track.poseAt(t * TRACK, offset, 0.065).p;
         const local = track.projectTrack(p, t * TRACK),
           global = track.projectTrack(p, 0, true);
-        assert.ok(local.offroad);
+        assert.equal(local.offroad, !v.driveable);
         assert.equal(local.material, v.material);
         assert.equal(local.grip, v.grip);
         assert.equal(local.offroadDrag, v.drag);

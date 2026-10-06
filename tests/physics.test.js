@@ -223,9 +223,13 @@ test("track projection is continuous across the finish seam and honors banking",
       frame = frameAt(s / TRACK),
       position = poseAt(s, 3, 0).p,
       projection = projectTrack(position, s);
-    assert.ok(Math.abs(projection.offset - 3) < 0.08);
+    const horizontalTangent = Math.hypot(frame.tangent.x, frame.tangent.z);
+    const along =
+      (frame.right.x * frame.tangent.x + frame.right.z * frame.tangent.z) / horizontalTangent;
+    const expectedOffset = 3 * Math.sqrt(frame.right.x ** 2 + frame.right.z ** 2 - along ** 2);
+    assert.ok(Math.abs(projection.offset - expectedOffset) < 0.08);
     near(frame.up.dot(frame.right), 0);
-    assert.ok(frame.up.y > 0.9); // The ridge has a deliberate steep descent.
+    assert.ok(frame.up.y > Math.cos(Math.PI / 4)); // Combined bank/grade stays below 45°.
   }
 });
 test("rivals finish, keep their rank, and backwards crossings do not add laps", () => {

@@ -1,0 +1,7 @@
+Kenney Nature Kit harvest additions
+Author: Kenney
+License: CC0 1.0 Universal
+Source / license evidence: https://kenney.nl/assets/nature-kit
+Mirror catalog: https://raw.githubusercontent.com/Hidencod/tge-assets/main/catalog.json
+Added models: crop-pumpkin, crops-cornstagec, crops-wheatstageb, flower-purpleb.
+Exact downloads, byte sizes and SHA-256 digests appear in ../manifest.json.

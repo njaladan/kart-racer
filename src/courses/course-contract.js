@@ -67,8 +67,16 @@ export function validateCourseDefinition(course) {
     }
   });
 
-  if (!Array.isArray(course.sections) || course.sections.length !== 6) {
-    fail(course, "sections", "exactly six section descriptors");
+  if (!Array.isArray(course.sections) || course.sections.length < 6 || course.sections.length > 8) {
+    fail(course, "sections", "six to eight section descriptors");
+  }
+  if (course.minimumRadius != null)
+    finite(course, course.minimumRadius, "minimumRadius", { min: 18, max: 40 });
+  for (const [index, section] of course.sections.entries()) {
+    if (section.bankStrength != null)
+      finite(course, section.bankStrength, `sections[${index}].bankStrength`, { min: 0, max: 6 });
+    if (section.maxBank != null)
+      finite(course, section.maxBank, `sections[${index}].maxBank`, { min: 0, max: 0.45 });
   }
   let previousControlIndex = -1;
   course.sections.forEach((section, index) => {
@@ -217,6 +225,8 @@ export function validateCourseDefinition(course) {
     if (verge.endFraction <= verge.startFraction)
       fail(course, `verges[${index}]`, "an endFraction after startFraction");
     if (verge.side !== -1 && verge.side !== 1) fail(course, `verges[${index}].side`, "-1 or 1");
+    if (verge.driveable != null && typeof verge.driveable !== "boolean")
+      fail(course, `verges[${index}].driveable`, "a boolean");
     finite(course, verge.extraWidth, `verges[${index}].extraWidth`, {
       min: 0,
       exclusiveMin: true,
