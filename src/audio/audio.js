@@ -84,7 +84,15 @@ export function createAudioController(audioWindow = window) {
       tires = noiseLoop(effects, 1800, "bandpass");
     }
   }
-  function tone(frequency = 440, duration = 0.13, type = "triangle", volume = 0.13, slide = 0) {
+  function tone(
+    frequency = 440,
+    duration = 0.13,
+    type = "triangle",
+    volume = 0.13,
+    slide = 0,
+    world = false,
+    pan = 0,
+  ) {
     if (!context || voices >= 24) return;
     voices++;
     const oscillator = context.createOscillator(),
@@ -100,10 +108,18 @@ export function createAudioController(audioWindow = window) {
     gain.gain.setValueAtTime(volume, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
     oscillator.connect(gain);
-    gain.connect(effects);
+    if (world && context.createStereoPanner) {
+      const panner = context.createStereoPanner();
+      panner.pan.value = Math.max(-1, Math.min(1, pan));
+      gain.connect(panner);
+      panner.connect(ambience);
+      oscillator.onended = () => panner.disconnect?.();
+    } else gain.connect(world ? ambience : effects);
     oscillator.start(now);
     oscillator.stop(now + duration + 0.02);
+    const releasePanner = oscillator.onended;
     oscillator.onended = () => {
+      releasePanner?.();
       voices = Math.max(0, voices - 1);
       oscillator.disconnect?.();
       gain.disconnect?.();
@@ -225,6 +241,30 @@ export function createAudioController(audioWindow = window) {
     const beat = Math.floor(time * (id === "metronome-hall" ? 2 : 2.5));
     if (!active || beat === lastWorldBeat) return;
     lastWorldBeat = beat;
+    for (const source of track.course.ambientSources || []) {
+      const p = track.poseAt(
+        track.sectorT(source.section, source.fraction) * track.TRACK,
+        source.offset,
+        2,
+      ).p;
+      const sx = p.x - state.worldPos.x,
+        sz = p.z - state.worldPos.z,
+        d = Math.hypot(sx, sz, p.y - state.worldPos.y);
+      const volume = Math.max(0, 1 - d / source.range) ** 2 * source.volume;
+      if (volume < 0.008) continue;
+      const stereo = (sx * Math.cos(state.yaw) - sz * Math.sin(state.yaw)) / Math.max(8, d);
+      if (source.kind === "birds") {
+        if (beat % 5 === 0)
+          tone(1200 + Math.random() * 700, 0.08, "sine", volume, 400, true, stereo);
+      } else
+        noise(
+          source.kind === "water" ? 0.4 : 0.2,
+          volume,
+          source.kind === "engine" ? 140 : source.kind === "sandfall" ? 1800 : 900,
+          stereo,
+          true,
+        );
+    }
     const mechanism = track.course.solarEngine;
     let station = mechanism
       ? track.sectorT(mechanism.section, 0.5)

@@ -51,7 +51,7 @@ async function startGame() {
     sharedAssets,
   });
   const { pads, boxes } = createRaceProps({ ...sceneState, course });
-  const courseBake = course.solarEngine ? null : await loadCourseBake(course.id);
+  const courseBake = course.staticBake === false ? null : await loadCourseBake(course.id);
   installCourseBake(scene, courseBake);
   const racers = createRaceGrid(roster);
   if (multiplayer) {

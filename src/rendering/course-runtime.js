@@ -7,6 +7,7 @@ import { createRailGeometry } from "./course-rails.js";
 import { addDetailedScenery } from "./detailed-scenery.js";
 import { TERRAIN_VERGE_WIDTH } from "./terrain-height.js";
 import { createSceneryDetailController } from "./scenery-lod.js";
+import { templePaving } from "../courses/sunstone-ruins/sunstone-materials.js";
 
 // Shared geometry uses exactly the surface/edge queries used by karts and shells.
 export function buildCourseWorld({
@@ -111,6 +112,8 @@ export function buildCourseWorld({
     roadMaterials.stone = material("#d7bc93", { bumpMap: textures.stone, bumpScale: 0.035 });
     roadMaterials.paving = material("#dccaab", { bumpMap: textures.paving, bumpScale: 0.02 });
     roadMaterials.sand = material("#ebca85", { bumpMap: textures.sand, bumpScale: 0.03 });
+    templePaving(roadMaterials.stone);
+    templePaving(roadMaterials.paving, { ceremonial: true });
   }
   const groundHeight = course.theme.groundHeight ?? -1.7;
   const conveyorTextures = [];

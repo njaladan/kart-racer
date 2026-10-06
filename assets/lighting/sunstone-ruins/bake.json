@@ -4,33 +4,59 @@
   "lighting": "indirect.png",
   "height": "height.png",
   "bounds": [
-    -311.83000000000004,
-    -272.27,
-    608.8800000000001,
-    527.87
+    -468.4,
+    -338.9,
+    779.5999999999999,
+    692.3
   ],
   "heightRange": [
     -12,
-    75
+    77.34
   ],
   "bounceScale": 0.65,
   "resolution": 512,
-  "samples": 8,
+  "samples": 12,
   "radius": 22.0,
-  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded.",
-  "sourceSceneSha256": "c4c5cff7d45b573cf5710db490eafa91cda77995383db25064ff5f681aa6cd3e",
-  "triangles": 375384,
-  "lights": 6,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
+  "sourceSceneSha256": "d793c8da4ace946af4932be56a614ac503226afef9cfb765d13bb231aecc4923",
+  "triangles": 561762,
+  "lights": 9,
   "outputs": [
     {
       "file": "indirect.png",
-      "bytes": 206059,
-      "sha256": "b488b4825a76202e042c69b3d9e98c2ec0735d18b0d378a995fe497004e619fa"
+      "width": 512,
+      "height": 512,
+      "bytes": 294992,
+      "sha256": "0177b5f7385436000cb3b519be03b934a0efaa6d892c2c69f405e21178a13421"
     },
     {
       "file": "height.png",
-      "bytes": 314966,
-      "sha256": "2ee94cc3bdf44ee03b967137f6b22708ad1c87c4273645d737714788190389fc"
+      "width": 512,
+      "height": 512,
+      "bytes": 295450,
+      "sha256": "cf39e44c8fcb187f7c6e7fa4d0e67eb459fd43bcbd3a624df5c869b7c8e72453"
+    },
+    {
+      "file": "spill.png",
+      "width": 768,
+      "height": 384,
+      "bytes": 8158,
+      "sha256": "b66dd6d4561c5baeecb3225cb081885cf1c83dd294abd610faf41d8587be7c88"
     }
-  ]
+  ],
+  "lightVolume": {
+    "resolution": 192,
+    "columns": 4,
+    "rows": 2,
+    "heights": [
+      -10,
+      0,
+      12,
+      24,
+      45,
+      65
+    ],
+    "strength": 1,
+    "file": "spill.png"
+  }
 }

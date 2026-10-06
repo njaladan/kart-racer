@@ -1,7 +1,7 @@
 # Turbo Trail — adventure racer continuity
 
 ## Vision
-Twelve authored journeys with readable racing surfaces, powerful silhouettes, purposeful motion and distinct playable mechanics. Sunstone is the first complete milestone. No course music changes. Main agent works alone. User requests focused checks and brief browser inspection, then implementation.
+Twelve authored journeys with readable racing surfaces, powerful silhouettes, purposeful motion and distinct playable mechanics. Sunstone is the first flagship target; its initial route milestone was rejected as visually incomplete. No course music changes. Main agent works alone. User requests focused checks and brief browser inspection, then implementation.
 
 ## Creative matrix
 | Course | World / progression | Signature | Route / choice |
@@ -62,3 +62,15 @@ User explicitly rejects the sparse Sunstone pass as a final course. Existing thr
 3. Before new-course rollout, reach the user's much higher ambition bar. Expand authored layouts and visual scenes substantially beyond sparse primitive scaffolds. Complete one new world at a time, validate AI/recovery/multiplayer mechanics, capture briefly, commit/push.
 4. Finish Paper/Tempest/Metronome/Pelagic/Emberwing scenery, register each completed course, generate local postcards/manifests and integrate menus. Total goal remains twelve courses; current registry still four. Rewrite old count/distance/bake assumptions only when appropriate.
 5. Main menu screenshot attempt previously timed out in software Chromium; keyboard/touch/gamepad visual smoke still pending. No course music changes. Existing local assets retain their licenses.
+
+### Sunstone lighting and inhabited-world milestone
+- 0088f19: idea-led topology/traversal foundation committed and pushed. Contract permits new topology; engine supports shared traversal state, scale, currents and unfolding.
+- Visual correction: reused locally credited STK ruined architecture, cliffs, shrubs, grasses, torch and merchant props; added procedural stone vaults, articulated solar gimbals, floor mosaics, route-space worn paving, distant dunes/settlements, reed beds, birds, reptiles, sailing cloth and bounded sand. Low warm sun, cool interior fill, real camera-following shadows, torch spill and skylight shafts. All added shaders/geometry and ambience synthesis are original project work. Existing packs retain their published licenses.
+- Rebuilt static lighting from the actual scene: 561,762 static triangles exported, 512x512 AO/bounce, six-height spill atlas and nine lamps. Bake took 16.6 s in local Blender; this measures offline bake time, not player hardware performance.
+- Corrected right temple wall/pillars/reliefs/solar supports to clear the expanded temple apron. Brief normal-camera software Chromium capture succeeds with no page or shader errors: docs/screenshots/sunstone-engine-polish.jpg. It shows actual roof shadows, warm/cool light, detailed stone paving and solar inlays. Capture at 640x360 also exposes the narrow-width touch overlay; full menu/touch layout review remains.
+- Focused scenery, Sunstone full AI races, shortcut/solar mechanisms, lighting hashes and graphics checks: 16 pass. No extended browser runs or beauty tests. Sunstone remains open for iterative refinement; this is a substantial visual correction, not a claim that the full twelve-course goal is finished.
+
+### Current next actions
+1. Commit/push this Sunstone visual correction; record its hash in the next milestone.
+2. Finish Clockwork as the first new course: replace its initial diagonal lift scaffold with an actual vertical transfer and authored docks; support literal line/vertical route links and stable frames/projection. Compose an inhabited mechanical city around the stacked spiral, gears, clock-face balcony and rooftop. Full AI laps, lift/recovery/snapshot smoke, brief driving-camera inspection, commit/push.
+3. Continue the matrix one finished world at a time. Eight descriptors and three early scene scaffolds remain unregistered; current playable roster has four. Do not expose missing scenery imports as completed courses.

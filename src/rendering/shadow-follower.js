@@ -1,7 +1,7 @@
 import * as THREE from "../../vendor/three/three.module.js";
 
-export function createStableShadowFollower(sun) {
-  const offset = new THREE.Vector3(-65, 95, 45);
+export function createStableShadowFollower(sun, lightOffset = [-65, 95, 45]) {
+  const offset = new THREE.Vector3(...lightOffset);
   const z = offset.clone().normalize();
   const x = new THREE.Vector3().crossVectors(new THREE.Vector3(0, 1, 0), z).normalize();
   const y = new THREE.Vector3().crossVectors(z, x);

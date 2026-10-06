@@ -4,6 +4,7 @@ import { buildWorld } from "./sunstone-ruins-world.js";
 // the inside, while the temple approach faces the monument from the ridge.
 export default {
   id: "sunstone-ruins",
+  topology: "adventure",
   name: "Sunstone Ruins",
   description:
     "Climb sandfall canyons to a sunlit mesa, dive into the buried solar engine, and drift home through a sculpted dune sea.",
@@ -196,6 +197,13 @@ export default {
     period: 12,
     warningSeconds: 2,
   },
+  ambientSources: [
+    { section: 0, fraction: 0.43, offset: -55, kind: "water", range: 100, volume: 0.12 },
+    { section: 0, fraction: 0.7, offset: 30, kind: "birds", range: 90, volume: 0.07 },
+    { section: 1, fraction: 0.3, offset: 18, kind: "sandfall", range: 65, volume: 0.16 },
+    { section: 1, fraction: 0.7, offset: -18, kind: "sandfall", range: 65, volume: 0.16 },
+    { section: 4, fraction: 0.48, offset: 0, kind: "engine", range: 120, volume: 0.2 },
+  ],
   solarEngine: { section: 4, fractions: [0.22, 0.48, 0.74], period: 8, offset: 5, duration: 0.9 },
   theme: {
     terrain: "sand",
@@ -209,8 +217,23 @@ export default {
     hemisphere: "#d6e9ff",
     ambientGround: "#697f9f",
     sun: "#ffe3ae",
-    sunIntensity: 2.3,
-    exposure: 1.3,
+    sunIntensity: 3.1,
+    sunPosition: [-95, 76, 35],
+    ambientIntensity: 0.68,
+    interiorAmbientScale: 0.32,
+    environmentIntensity: 0.35,
+    rimColor: "#91b4d1",
+    rimIntensity: 0.3,
+    cameraFar: 1050,
+    fogFar: 900,
+    lightVolume: {
+      resolution: 192,
+      columns: 3,
+      rows: 2,
+      heights: [-10, 0, 12, 24, 45, 65],
+      strength: 1.4,
+    },
+    exposure: 1.15,
   },
   buildWorld,
 };

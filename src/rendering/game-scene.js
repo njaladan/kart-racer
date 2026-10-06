@@ -108,7 +108,7 @@ export async function createGameScene({ canvas, course, viewport = window }) {
     63,
     viewport.innerWidth / viewport.innerHeight,
     0.1,
-    750,
+    course.theme.cameraFar ?? 750,
   );
   camera.layers.enable(1);
   const renderer = new THREE.WebGLRenderer({
@@ -160,7 +160,7 @@ export async function createGameScene({ canvas, course, viewport = window }) {
   sun.shadow.bias = -0.00025;
   scene.add(sun, sun.target);
 
-  const followShadow = createStableShadowFollower(sun);
+  const followShadow = createStableShadowFollower(sun, course.theme.sunPosition);
   const sharedAssets = await loadGraphicsAssets(renderer);
   const environmentMaps = createCourseEnvironments(renderer, course.theme);
   sharedAssets.environment = environmentMaps.exterior;

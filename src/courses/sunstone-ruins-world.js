@@ -1,3 +1,5 @@
+import { buildExpeditionLife } from "./sunstone-ruins/build-expedition-life.js";
+import { buildSolarArchitecture } from "./sunstone-ruins/build-solar-architecture.js";
 import { createWaterMaterial, installSurfaceDetail } from "../rendering/surface-detail.js";
 import { solarLaneAt } from "../simulation/course-mechanics.js";
 import { addGlow } from "../rendering/visual-effects.js";
@@ -137,8 +139,7 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
       side = i % 2 ? 1 : -1;
     const g = groupAt(t, side * 28);
     const h = 24 + (i % 4) * 6;
-    mesh(rock, stone, g, [0, -h / 2, 0], [12, h, 11]);
-    mesh(rock, pale, g, [0, 2, 0], [13, 4, 12]);
+    mesh(rock, stone, g, [0, -h / 2 - 8, 0], [12, h, 11]);
   }
   const crown = groupAt(sectorT(3, 0.26), -70);
   for (let i = 0; i < 6; i++)
@@ -161,21 +162,24 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
   // three rotating lenses. A fixed left lane remains clear of the sentinel.
   for (let i = 0; i < 22; i++) {
     const t = sectorT(4, (i + 0.5) / 22),
-      g = groupAt(t),
-      width = 17;
+      g = groupAt(t);
     for (const side of [-1, 1]) {
+      const edge = side < 0 ? -track.surfaceAt(t).leftEdge : track.surfaceAt(t).rightEdge;
+      const width = Math.max(17, edge + 5);
       box(shade, g, [side * width, 8.5, 0], [4, 20, 14]);
       box(dark, g, [side * (width - 2.1), 7.5, 0], [0.2, 9, 7]);
       box(coolGlow, g, [side * (width - 2.3), 4, 0], [0.15, 0.2, 11]);
-      if (i % 3 === 0) column(g, side * 14.5, 18);
+      if (i % 3 === 0) column(g, side * Math.max(14.5, edge + 3.5), 18);
     }
-    box(dark, g, [0, 20, 0], [38, 4, 16]);
-    box(stone, g, [0, 18, 0], [28, 1, 15]);
+    // Central skylight slots admit shafts and actual moving-camera shadows.
+    if (i % 3 !== 1) box(dark, g, [0, 24, 0], [38, 3, 15]);
+    else for (const side of [-1, 1]) box(stone, g, [side * 14, 24, 0], [9, 3, 15]);
+    box(stone, g, [0, 22, 0], [36, 1.1, 1.4]);
   }
   for (let i = 0; i < 3; i++) {
     const t = sectorT(4, track.course.solarEngine.fractions[i]);
     const g = groupAt(t),
-      lens = mesh(ring, gold, g, [0, 11, 0], [8, 8, 8]);
+      lens = mesh(ring, gold, g, [0, 18, 0], [6, 6, 6]);
     pulse(lens, (time) => {
       lens.rotation.z = time * 0.35 + i * 2;
     });
@@ -188,7 +192,7 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
     }
     animated.push(pad);
     solar.push({ pad, t, index: i });
-    addGlow(g, { color: "#ffcf83", size: 8, opacity: 0.18, position: [0, 11, 0] });
+    addGlow(g, { color: "#ffcf83", size: 8, opacity: 0.18, position: [0, 18, 0] });
   }
   portal(sectorT(4, 0.96), 19, 24);
   // Courtyard roof fragments frame the newly open sky; giant statues and pools.
@@ -221,6 +225,25 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
     d.rotation.y = i * 0.73;
     if (i % 7 === 0) kit.asset("ruins:ruined-house", g, [0, 0, 0], [10, 10, 10]);
   }
+  buildExpeditionLife({
+    THREE,
+    scene,
+    scenery,
+    track,
+    kit,
+    textures,
+    palette: { stone, pale, dark, sand, gold, teal, glow },
+    animated,
+    motions,
+  });
+  buildSolarArchitecture({
+    THREE,
+    kit,
+    track,
+    palette: { stone, pale, gold, dark, glow },
+    animated,
+    motions,
+  });
   // Bounded points: drifting sandfall grains and dune motes, no sprite storm.
   const grains = [];
   for (let i = 0; i < 160; i++) {
