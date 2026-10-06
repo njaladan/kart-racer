@@ -22,9 +22,20 @@ import { createFrameLoop } from "./runtime/frame-loop.js";
 import { loadCourseBake, installCourseBake } from "./rendering/baked-lighting.js";
 import { installHeightHaze, installFoliageWind } from "./rendering/surface-detail.js";
 import { createBrowserDiagnostics } from "./testing/browser-diagnostics.js";
+import { enterMultiplayer } from "./ui/multiplayer-lobby.js";
+import { createNetworkRace } from "./multiplayer/network-race.js";
 
 async function startGame() {
-  const page = createGamePage();
+  document.getElementById("multiplayer-button").addEventListener("click", () => {
+    const url = new URL(location.href);
+    url.searchParams.set("mode", "multiplayer");
+    location.assign(url);
+  });
+  const multiplayer =
+    new URLSearchParams(location.search).get("mode") === "multiplayer"
+      ? await enterMultiplayer()
+      : null;
+  const page = createGamePage(document, location, multiplayer);
   const { course, roster, canvas, radar, ui, testMode, benchmarkMode } = page;
   selectCourse(course);
   const sceneState = await createGameScene({ canvas, course });
@@ -42,6 +53,15 @@ async function startGame() {
   const courseBake = await loadCourseBake(course.id);
   installCourseBake(scene, courseBake);
   const racers = createRaceGrid(roster);
+  if (multiplayer) {
+    racers.forEach((racer, index) => {
+      racer.playerId = roster[index].playerId;
+      racer.name = roster[index].name;
+      racer.isPlayer = racer.playerId === multiplayer.client.identity.playerId;
+    });
+    const localIndex = racers.findIndex((racer) => racer.isPlayer);
+    racers.unshift(...racers.splice(localIndex, 1));
+  }
   const [player, ...bots] = racers;
   const buildKart = createKartBuilder({
     scene,
@@ -64,7 +84,7 @@ async function startGame() {
     terrain: course.theme.terrain,
   });
   const itemEffects = createItemEffects(sceneState);
-  const items = createRaceItems({
+  let items = createRaceItems({
     racers,
     boxes,
     createEffect: itemEffects.create,
@@ -90,7 +110,7 @@ async function startGame() {
   const keys = Object.create(null);
   const pointer = { down: false, x: 0, steer: 0 };
   const clearInput = () => input.clear();
-  const session = createRaceSession({
+  const sessionOptions = {
     racers,
     items,
     getPlayerInput: (raceTime) =>
@@ -115,7 +135,14 @@ async function startGame() {
       gameRenderer.updateVehicle(player, player.kart, 0);
     },
     onBegin: view.begin,
-    onFinish: () => view.finish(session.place(), player.finishTime),
+    onFinish() {
+      view.finish(session.place(), player.finishTime);
+      if (multiplayer) {
+        ui.againButton.disabled = ui.changeCourseButton.disabled =
+          multiplayer.client.room.phase !== "results";
+        ui.finishCopy.textContent = "Waiting for the remaining racers to finish…";
+      }
+    },
     onPause(value) {
       clearInput();
       loop.resetTiming();
@@ -133,7 +160,26 @@ async function startGame() {
       feedback.racerEvent(racer, events, dt);
       diagnostics.racerEvent(racer, events);
     },
-  });
+  };
+  const session = multiplayer
+    ? createNetworkRace({
+        ...sessionOptions,
+        ...multiplayer,
+        boxes,
+        createEffect: itemEffects.create,
+        removeEffect: itemEffects.remove,
+        onInventory: view.syncItem,
+        onCollect: feedback.collected,
+        onUse: feedback.itemUsed,
+        onImpact: feedback.impact,
+        onRoom(room) {
+          ui.againButton.disabled = ui.changeCourseButton.disabled = room.phase !== "results";
+          if (room.phase === "results")
+            ui.finishCopy.textContent = "Race complete. Return to the room for another round.";
+        },
+      })
+    : createRaceSession(sessionOptions);
+  if (multiplayer) items = session.items;
   const begin = () => session.begin(benchmarkMode ? 0.01 : 3.45);
   const input = bindGameInput({
     canvas,
@@ -164,6 +210,7 @@ async function startGame() {
     updateRadar: radarView.update,
     place: session.place,
     getLandscape: () => landscape,
+    totalLaps: multiplayer?.match.laps ?? 3,
     getFrameState: () => ({
       ...session.getState(),
       shake: feedback.getShake(),
@@ -189,7 +236,7 @@ async function startGame() {
     initialPixelRatio: sceneState.pixelRatio,
     benchmarkMode,
     onQualityChange: ({ tier }) => sceneState.graphicsQuality.apply(tier),
-    isPaused: () => session.getState().paused,
+    isPaused: () => !multiplayer && session.getState().paused,
     shouldStep: () => !diagnostics.freeze || !session.getState().running,
     step: session.step,
     render: gameRenderer.render,
@@ -217,6 +264,10 @@ async function startGame() {
     begin,
     setPaused: session.setPaused,
     showTitle() {
+      if (multiplayer) {
+        multiplayer.client.send({ type: "lobby" });
+        return;
+      }
       session.reset();
       view.showTitle();
     },
@@ -226,13 +277,30 @@ async function startGame() {
     loop.resize();
   });
   racers.forEach((racer) => gameRenderer.updateVehicle(racer, racer.kart, 0));
-  view.showTitle();
+  if (!multiplayer) view.showTitle();
   camera.position.copy(player.worldPos).addScaledVector(frameAt(0).tangent, -12);
   camera.position.y += 7;
   gameRenderer.cameraLook.copy(player.worldPos);
   camera.lookAt(gameRenderer.cameraLook);
   view.syncItem(player);
   view.ready();
+  if (multiplayer) {
+    ui.againButton.textContent = "RETURN TO ROOM";
+    ui.changeCourseButton.textContent = "RETURN TO ROOM";
+    document.querySelector("#pause-screen p").textContent =
+      "The race continues. Your kart coasts while this menu is open.";
+    document
+      .querySelector("#pause-screen .pause-card")
+      .insertAdjacentHTML(
+        "beforeend",
+        '<button id="leave-race" class="secondary-button">LEAVE RACE</button>',
+      );
+    document.getElementById("leave-race").onclick = () => {
+      multiplayer.client.leave();
+      location.assign(`${location.pathname}?mode=multiplayer`);
+    };
+    session.activate();
+  }
   loop.start();
 }
 

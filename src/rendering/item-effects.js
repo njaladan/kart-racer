@@ -86,11 +86,7 @@ export function createItemEffects({ scene, materials: mats, createMaterial: mat 
         bellyMat,
         g,
       );
-      addMesh(
-        new THREE.SphereGeometry(0.6, 28, 18, 0, Math.PI * 2, 0, Math.PI / 2),
-        shellMat,
-        g,
-      );
+      addMesh(new THREE.SphereGeometry(0.6, 28, 18, 0, Math.PI * 2, 0, Math.PI / 2), shellMat, g);
       const rim = addMesh(new THREE.TorusGeometry(0.555, 0.09, 10, 32), bellyMat, g);
       rim.rotation.x = Math.PI / 2;
       const seam = addMesh(new THREE.TorusGeometry(0.46, 0.018, 6, 32), seamMat, g);

@@ -60,8 +60,10 @@ export function createGameRenderer({
     const frame = frameAt(trackT(state.s));
     const blend = dt ? frameState.accumulator / FIXED_DT : 1;
     const previousYaw = state.renderYawFrom ?? state.yaw;
-    const yaw = previousYaw + wrapAngle(state.yaw - previousYaw) * blend;
+    const yaw =
+      previousYaw + wrapAngle(state.yaw - previousYaw) * blend + (state.visualYawOffset || 0);
     kart.root.position.copy(state.renderFrom || state.worldPos).lerp(state.worldPos, blend);
+    if (state.visualOffset) kart.root.position.add(state.visualOffset);
     kartUp.copy(state.grounded ? frame.up : WORLD_UP);
     kartForward.set(Math.sin(yaw), 0, Math.cos(yaw));
     kartForward.addScaledVector(kartUp, -kartForward.dot(kartUp)).normalize();

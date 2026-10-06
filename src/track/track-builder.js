@@ -82,11 +82,13 @@ export function createTrack(course) {
     start: sectorT(v.section, v.startFraction),
     end: sectorT(v.section, v.endFraction),
   }));
-  const CONVEYORS = (course.conveyors || (course.conveyor ? [course.conveyor] : [])).map((belt) => ({
-    ...belt,
-    start: sectorT(belt.section, belt.startFraction),
-    end: sectorT(belt.section, belt.endFraction),
-  }));
+  const CONVEYORS = (course.conveyors || (course.conveyor ? [course.conveyor] : [])).map(
+    (belt) => ({
+      ...belt,
+      start: sectorT(belt.section, belt.startFraction),
+      end: sectorT(belt.section, belt.endFraction),
+    }),
+  );
   const smooth = (a, b, v) => THREE.MathUtils.smoothstep(v, a, b);
   function vergePatchWidth(verge, t) {
     const taper = Math.min(12 / lengths.at(-1), (verge.end - verge.start) / 3);
@@ -283,8 +285,11 @@ export function createTrack(course) {
       (position.x - frame.p.x) * horizontalRight.x + (position.z - frame.p.z) * horizontalRight.z;
     const centerRamp = rampHeight(t);
     const height =
-      frame.p.y - centerRamp + rampHeight(t, offset) +
-      (offset * frame.right.y) / Math.hypot(frame.right.x, frame.right.z) + 0.065;
+      frame.p.y -
+      centerRamp +
+      rampHeight(t, offset) +
+      (offset * frame.right.y) / Math.hypot(frame.right.x, frame.right.z) +
+      0.065;
     return {
       t,
       frame,

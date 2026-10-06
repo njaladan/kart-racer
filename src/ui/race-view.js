@@ -39,7 +39,7 @@ export function createRaceView({ ui, canvas, radar, shell, courseSelector, racer
     },
     finish(rank, time) {
       ui.finalPlace.textContent = formatOrdinal(rank);
-      ui.finalTime.textContent = formatRaceTime(time);
+      ui.finalTime.textContent = Number.isFinite(time) ? formatRaceTime(time) : "DNF";
       ui.finishTitle.textContent =
         rank === 1 ? "WHAT A RACE!" : rank <= 3 ? "PODIUM FINISH!" : "RACE COMPLETE!";
       ui.finishCopy.textContent =
@@ -77,7 +77,7 @@ export function createRaceView({ ui, canvas, radar, shell, courseSelector, racer
     },
     ready() {
       ui.startButton.disabled = false;
-      ui.startButton.innerHTML = "START YOUR ENGINES <span>↗</span>";
+      ui.startButton.innerHTML = "SINGLE PLAYER <span>↗</span>";
     },
   };
 }

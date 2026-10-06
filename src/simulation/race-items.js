@@ -125,7 +125,10 @@ export function createRaceItems({
         if (target.finished || p.life <= 0 || (target === p.owner && p.grace > 0)) continue;
         const center = target.worldPos.clone();
         center.y += 0.6;
-        if (sweptDistanceSquared(center, p.previous, p.worldPos) < 1.5 ** 2 && onHit(target, 1.05, p)) {
+        if (
+          sweptDistanceSquared(center, p.previous, p.worldPos) < 1.5 ** 2 &&
+          onHit(target, 1.05, p)
+        ) {
           p.life = 0;
           onImpact(target, "SHELL HIT!");
           break;

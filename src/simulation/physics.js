@@ -148,8 +148,7 @@ export function drive(state, input, surface, dt) {
       const fullSpeed = MAX_SPEED / 3.6;
       const tuningSpeed = Math.min(speed, fullSpeed);
       const lowSpeedBlend = clamp(
-        (PLAYER_TURN_RAMP_SPEED - tuningSpeed) /
-          (PLAYER_TURN_RAMP_SPEED - LOW_SPEED_STEER_RAMP),
+        (PLAYER_TURN_RAMP_SPEED - tuningSpeed) / (PLAYER_TURN_RAMP_SPEED - LOW_SPEED_STEER_RAMP),
         0,
         1,
       );

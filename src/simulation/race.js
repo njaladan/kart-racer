@@ -5,7 +5,10 @@ export function progressDelta(current, previous, length) {
 }
 export function ranking(racers) {
   return [...racers].sort((a, b) => {
-    if (a.finished && b.finished) return a.finishTime - b.finishTime;
+    if (a.finished && b.finished) {
+      const difference = a.finishTime - b.finishTime;
+      return Number.isNaN(difference) ? b.s - a.s : difference;
+    }
     if (a.finished !== b.finished) return a.finished ? -1 : 1;
     return b.s - a.s;
   });

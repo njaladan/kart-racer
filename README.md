@@ -21,13 +21,24 @@ To regenerate these images, see the [screenshot capture guide](docs/screenshot-c
 
 ## Run locally
 
-Requires Python 3 and npm to use the start command:
+Requires Node.js 22+ and npm:
 
 ```sh
+npm ci
 npm start
 ```
 
-Open [localhost:5173](http://127.0.0.1:5173). Any static HTTP server also works. No install or build step is needed; Three.js, fonts, and game assets are bundled locally.
+Open [localhost:5173](http://127.0.0.1:5173). Three.js, fonts, and game assets are bundled locally; no build step is needed. A static server still supports single player, but multiplayer requires the Node server.
+
+## Multiplayer
+
+Choose **Multiplayer** on the main screen, enter your name, then host a room or join with its six-character code. The host can copy an invite link. Up to six players choose their characters; the host chooses any of the four courses and **1 or 3 laps**. Everyone readies up, then the host starts. The countdown waits for all course loads.
+
+The server simulates every kart, collision, pickup, item, and finish at 120 Hz in an isolated worker per room. Clients predict their own driving, replay unacknowledged controls after corrections, smooth visual corrections, and interpolate opponents using an adaptive buffer. Input sends run at 30 Hz and snapshots at 20 Hz, with bounded extrapolation and slow-connection backpressure. Network delay can still affect when hits and item use are confirmed; severe outages cannot be made invisible.
+
+In multiplayer, Esc opens a local menu while the race continues. Your kart coasts; the menu includes **Leave race**. Reconnecting or refreshing restores your racer using a private token saved in the tab. Once the race finishes, return to the room to choose another course and ready up again. Other racers have up to 60 seconds after the first finish before receiving DNF.
+
+For friends on your network, share this machine's reachable address and port 5173. For Internet play, deploy this Node process on a server accessible to everyone, with HTTPS and WebSocket forwarding for `/multiplayer`. `PORT` and `HOST` configure the listener (defaults: `5173`, `0.0.0.0`). Rooms live in memory on one process, so restarting it clears rooms; multiple instances need sticky routing or a shared room service. A static-only host such as GitHub Pages cannot serve room connections.
 
 ## Controls
 

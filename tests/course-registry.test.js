@@ -26,7 +26,9 @@ test("course selection updates geometry, surfaces and hazards without stale cour
     assert.equal(activeTrack.course, course);
     const isNeonHarbor = course.id === "neon-harbor";
     assert.ok(
-      isNeonHarbor ? COURSE_LENGTH >= 1800 && COURSE_LENGTH <= 2000 : COURSE_LENGTH >= 1450 && COURSE_LENGTH <= 1600,
+      isNeonHarbor
+        ? COURSE_LENGTH >= 1800 && COURSE_LENGTH <= 2000
+        : COURSE_LENGTH >= 1450 && COURSE_LENGTH <= 1600,
     );
     assert.equal(SECTIONS.length, isNeonHarbor ? 8 : 6);
     for (let i = 0; i < 120; i++) {

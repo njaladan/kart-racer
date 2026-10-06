@@ -67,7 +67,10 @@ export function botInput(state, index, elapsed, rivals = []) {
   const cartGap = progressDelta(cart.s, state.s, TRACK) * WORLD_PER_UNIT;
   if (cartGap > -6 && cartGap < 40) lane = activeTrack.course.hazard.safeLane;
   const traffic = activeTrack.course.traffic;
-  if (traffic && trackT(state.s) >= activeTrack.sectorT(traffic.section, traffic.startFraction) - 0.03) {
+  if (
+    traffic &&
+    trackT(state.s) >= activeTrack.sectorT(traffic.section, traffic.startFraction) - 0.03
+  ) {
     for (const vehicle of trafficAt(elapsed)) {
       const gap = progressDelta(vehicle.s, state.s, TRACK) * WORLD_PER_UNIT;
       if (vehicle.active && gap > -5 && gap < 42 && Math.abs(lane - vehicle.lane) < 3)
@@ -94,7 +97,7 @@ export function botInput(state, index, elapsed, rivals = []) {
     drift: false,
   };
 }
-export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
+export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLaps = 3) {
   if (state.finished) return {};
   const hitWasActive = state.spin > 0;
   state.prevS = state.s;
@@ -114,9 +117,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     state[key] = Math.max(0, (state[key] || 0) - dt);
   if (hitWasActive) {
     state.hitFlipElapsed = Math.min(state.hitFlipDuration, state.hitFlipElapsed + dt);
-    const progress = state.hitFlipDuration
-      ? state.hitFlipElapsed / state.hitFlipDuration
-      : 1;
+    const progress = state.hitFlipDuration ? state.hitFlipElapsed / state.hitFlipDuration : 1;
     const flight = Math.min(1, progress / 0.82);
     const landing = Math.max(0, (progress - 0.82) / 0.18);
     state.hitLift =
@@ -146,14 +147,22 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
       if (before.t < belt.start || before.t > belt.end) continue;
       const inBounds = before.offset >= before.leftEdge && before.offset <= before.rightEdge;
       if (belt.fullWidth !== false && !inBounds) continue;
-      if (belt.fullWidth === false && Math.abs(before.offset - (belt.offset || 0)) > (belt.width || 4) / 2)
+      if (
+        belt.fullWidth === false &&
+        Math.abs(before.offset - (belt.offset || 0)) > (belt.width || 4) / 2
+      )
         continue;
       const metres = before.t * activeTrack.COURSE_LENGTH;
       const fromStart = metres - belt.start * activeTrack.COURSE_LENGTH;
       const toEnd = belt.end * activeTrack.COURSE_LENGTH - metres;
-      const blend = belt.blendDistance > 0
-        ? Math.min(1, Math.max(0, fromStart / belt.blendDistance), Math.max(0, toEnd / belt.blendDistance))
-        : 1;
+      const blend =
+        belt.blendDistance > 0
+          ? Math.min(
+              1,
+              Math.max(0, fromStart / belt.blendDistance),
+              Math.max(0, toEnd / belt.blendDistance),
+            )
+          : 1;
       const tangent = before.frame.tangent;
       const horizontalLength = Math.hypot(tangent.x, tangent.z) || 1;
       state.worldPos.x += (tangent.x / horizontalLength) * belt.speed * blend * dt;
@@ -209,7 +218,8 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
     for (const ramp of RAMPS) {
       const distance = progressDelta(ramp.t, before.t, 1);
       const rampWidth = ramp.width ?? (ramp.halfWidth != null ? ramp.halfWidth * 2 : null);
-      const onRamp = rampWidth == null || Math.abs(after.offset - (ramp.offset ?? 0)) <= rampWidth / 2;
+      const onRamp =
+        rampWidth == null || Math.abs(after.offset - (ramp.offset ?? 0)) <= rampWidth / 2;
       if (travelled > 0 && distance > 0 && distance <= travelled && onRamp) {
         state.grounded = false;
         state.vy = JUMP_TAKEOFF_SPEED;
@@ -256,11 +266,15 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0) {
   }
   state.x = laneFromOffset(after.offset);
   state.speed = Math.hypot(state.vx, state.vz) * 3.6;
-  state.lap = lapNumber(state.s, TRACK, 3) - 1;
+  state.lap = lapNumber(state.s, TRACK, totalLaps) - 1;
   const finished =
-    state.nextCheckpoint > CHECKPOINT_COUNT * 3 && finishRacer(state, TRACK * 3, raceTime);
+    state.nextCheckpoint > CHECKPOINT_COUNT * totalLaps &&
+    finishRacer(state, TRACK * totalLaps, raceTime);
   if (finished) {
-    const fraction = Math.max(0, Math.min(1, (TRACK * 3 - state.prevS) / (state.s - state.prevS)));
+    const fraction = Math.max(
+      0,
+      Math.min(1, (TRACK * totalLaps - state.prevS) / (state.s - state.prevS)),
+    );
     state.finishTime = raceTime - dt + dt * fraction;
   }
   return {

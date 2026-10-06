@@ -2,10 +2,11 @@ import { RACERS, raceRoster } from "../rendering/racer-roster.js";
 import { COURSES, DEFAULT_COURSE, findCourseById } from "../courses/registry.js";
 
 /** Read page elements and bind URL-backed selections once at startup. */
-export function createGamePage(documentRef = document, locationRef = location) {
+export function createGamePage(documentRef = document, locationRef = location, multiplayer = null) {
   const params = new URLSearchParams(locationRef.search);
-  const roster = raceRoster(params.get("racer"));
-  const course = findCourseById(params.get("course")) ?? DEFAULT_COURSE;
+  const roster = multiplayer?.match.players ?? raceRoster(params.get("racer"));
+  const course =
+    findCourseById(multiplayer?.match.course ?? params.get("course")) ?? DEFAULT_COURSE;
   const get = (id) => documentRef.getElementById(id);
   function bindSelector(id, entries, selected, param, label) {
     const selector = get(id);

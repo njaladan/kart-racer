@@ -10,6 +10,9 @@ export function createRaceSession({
   racers,
   items,
   getPlayerInput,
+  getRacerInput = null,
+  totalLaps = 3,
+  stopOnPlayerFinish = true,
   onReset = () => {},
   onBegin = () => {},
   onFinish = () => {},
@@ -80,7 +83,7 @@ export function createRaceSession({
     onHit(racer);
     return true;
   }
-  function recoverPlayer() {
+  function recoverPlayer(player = racers[0]) {
     const pose = poseAt(player.s, 0, 0.065);
     player.worldPos.copy(pose.p);
     player.renderFrom.copy(pose.p);
@@ -88,13 +91,14 @@ export function createRaceSession({
     player.renderYawFrom = player.yaw;
     player.x = 0;
     resetMotion(player);
+    player.speed = 0;
     player.spin = 0;
     player.drift = 0;
     player.invulnerable = 1.5;
     onRecover();
   }
   function moveRacer(racer, input, dt) {
-    const events = advanceRacer(racer, input, dt, state.raceTime);
+    const events = advanceRacer(racer, input, dt, state.raceTime, totalLaps);
     if (events.wallImpact && racer.contactCooldown === 0) {
       racer.contactCooldown = 0.45;
       events.wallContact = true;
@@ -123,7 +127,7 @@ export function createRaceSession({
     if (!state.running || state.finished) return;
     state.raceTime += dt;
     if (!player.finished) moveRacer(player, getPlayerInput(state.raceTime, racers), dt);
-    else {
+    else if (stopOnPlayerFinish) {
       player.finishDelay -= dt;
       if (player.finishDelay <= 0) {
         state.finished = true;
@@ -135,7 +139,12 @@ export function createRaceSession({
     }
     bots.forEach((bot, index) => {
       if (bot.finished) return;
-      moveRacer(bot, botInput(bot, index, state.raceTime, racers), dt);
+      moveRacer(
+        bot,
+        getRacerInput ? getRacerInput(bot) : botInput(bot, index, state.raceTime, racers),
+        dt,
+      );
+      if (getRacerInput) return;
       bot.cooldown -= dt;
       if (bot.item && bot.cooldown <= 0) {
         items.fire(bot);

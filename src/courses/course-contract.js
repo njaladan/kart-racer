@@ -134,7 +134,9 @@ export function validateCourseDefinition(course) {
     if (row.offsets != null) {
       if (!Array.isArray(row.offsets) || row.offsets.length === 0)
         fail(course, `itemRows[${index}].offsets`, "a non-empty list of lateral offsets");
-      row.offsets.forEach((offset, lane) => finite(course, offset, `itemRows[${index}].offsets[${lane}]`));
+      row.offsets.forEach((offset, lane) =>
+        finite(course, offset, `itemRows[${index}].offsets[${lane}]`),
+      );
     }
   });
 
@@ -247,8 +249,14 @@ export function validateCourseDefinition(course) {
       });
   }
 
-  for (const [index, conveyor] of (course.conveyors || (course.conveyor ? [course.conveyor] : [])).entries()) {
-    sectionFraction(course, { section: conveyor.section, fraction: conveyor.startFraction }, `conveyors[${index}].startFraction`);
+  for (const [index, conveyor] of (
+    course.conveyors || (course.conveyor ? [course.conveyor] : [])
+  ).entries()) {
+    sectionFraction(
+      course,
+      { section: conveyor.section, fraction: conveyor.startFraction },
+      `conveyors[${index}].startFraction`,
+    );
     finite(course, conveyor.endFraction, `conveyors[${index}].endFraction`, { min: 0, max: 1 });
     if (conveyor.endFraction <= conveyor.startFraction)
       fail(course, `conveyors[${index}]`, "an endFraction after startFraction");

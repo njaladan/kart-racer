@@ -80,17 +80,11 @@ export function advanceShell(shell, dt, raceTime = 0) {
     // the road barrier, so reserve direct homing for the final few metres.
     const targetGap = Math.max(0, progressDelta(shell.target.s, shell.s, TRACK) * WORLD_PER_UNIT);
     const lookAhead = clamp(targetGap * 0.55, 4, 12);
-    const waypoint = poseAt(
-      shell.s + lookAhead / WORLD_PER_UNIT,
-      laneWidth(shell.target.x),
-      0.6,
-    ).p;
+    const waypoint = poseAt(shell.s + lookAhead / WORLD_PER_UNIT, laneWidth(shell.target.x), 0.6).p;
     const directBlend = clamp((7 - targetGap) / 5, 0, 1);
     waypoint.lerp(shell.target.worldPos, directBlend);
     const desired = Math.atan2(-(waypoint.x - shell.worldPos.x), -(waypoint.z - shell.worldPos.z));
-    shell.yaw = wrapAngle(
-      shell.yaw + clamp(wrapAngle(desired - shell.yaw), -6.5 * dt, 6.5 * dt),
-    );
+    shell.yaw = wrapAngle(shell.yaw + clamp(wrapAngle(desired - shell.yaw), -6.5 * dt, 6.5 * dt));
     shell.vx = -Math.sin(shell.yaw) * shell.speed;
     shell.vz = -Math.cos(shell.yaw) * shell.speed;
   }
@@ -113,7 +107,8 @@ export function advanceShell(shell, dt, raceTime = 0) {
       shell.yaw = Math.atan2(-shell.vx, -shell.vz);
     }
   }
-  const contact = trafficContact(shell.worldPos, raceTime, 0.55) || cartContact(shell.worldPos, raceTime, 0.55);
+  const contact =
+    trafficContact(shell.worldPos, raceTime, 0.55) || cartContact(shell.worldPos, raceTime, 0.55);
   if (contact) {
     const outward = shell.vx * contact.nx + shell.vz * contact.nz;
     shell.worldPos.x -= contact.nx * contact.penetration;

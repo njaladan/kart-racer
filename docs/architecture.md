@@ -15,6 +15,9 @@ Turbo Trail uses native browser ES modules and bundled Three.js. There is no bui
 | Page and feedback | `src/ui/game-page.js`, `race-view.js`, `race-feedback.js`, `radar.js` | Selection URLs, screen transitions, focus, toast/shake/sound/spark responses, minimap |
 | Input and sound | `src/input/game-input.js`, `src/audio/audio.js` | Held controls and the Web Audio graph |
 | Browser diagnostics | `src/testing/browser-diagnostics.js` | Same-origin test messages and telemetry, enabled only with `?test` |
+| Multiplayer rooms | `src/multiplayer/server.js`, `room-worker.js` | Same-origin HTTP/WebSocket service, names, room codes, readiness, host settings, resume tokens; isolated authoritative simulation per room |
+| Network race | `src/multiplayer/client.js`, `network-race.js`, `protocol.js` | Connection recovery, input sequence acknowledgments, local prediction/replay, smooth reconciliation, buffered opponent poses and shared item meshes |
+| Multiplayer lobby | `src/ui/multiplayer-lobby.js` | Host/join flow, character selection, course/lap controls, invites and race loading |
 
 ## Dependency boundaries
 

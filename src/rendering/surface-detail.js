@@ -128,8 +128,8 @@ export function createWaterMaterial({
       normal=normalize(normal+mat3(viewMatrix)*vec3(ripple.x,0.,ripple.y));`,
     );
     shader.fragmentShader = shader.fragmentShader.replace(
-      "#include <roughnessmap_fragment>",
-      `#include <roughnessmap_fragment>
+      "#include <lights_physical_fragment>",
+      `// Run after normal setup and before physical lighting consumes the tint.
       // The standard material already samples the PMREM environment with a
       // dielectric Fresnel term. A small angle-dependent tint makes that edge
       // response legible even when the probe is mostly sky or a flat horizon.
@@ -143,7 +143,8 @@ export function createWaterMaterial({
         diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.72,.86,.85),foamMask*.6);
         roughnessFactor=mix(roughnessFactor,.72,foamMask);`
           : ""
-      }`,
+      }
+      #include <lights_physical_fragment>`,
     );
   });
   return material;
