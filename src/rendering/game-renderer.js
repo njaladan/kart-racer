@@ -76,6 +76,17 @@ export function createGameRenderer({
     kartRight.crossVectors(kartUp, kartForward).normalize();
     kartBasis.makeBasis(kartRight, kartUp, kartForward);
     kart.root.quaternion.setFromRotationMatrix(kartBasis);
+    const flight = activeTrack.course.traversals?.[state.traversalIndex];
+    if (flight?.kind === "cannon") {
+      // Presentation follows the arc; gameplay continues to use the shared traversal clock.
+      const q = state.traversalProgress || 0;
+      kart.root.rotateX(
+        Math.cos(q * Math.PI) *
+          -0.32 *
+          Math.sin((Math.min(1, q * 12) * Math.PI) / 2) *
+          Math.sin((Math.min(1, (1 - q) * 12) * Math.PI) / 2),
+      );
+    }
     kart.root.position.y += state.hitLift || 0;
     if (state.spin > 0 && state.hitFlipDuration > 0) {
       const progress = clamp(state.hitFlipElapsed / state.hitFlipDuration, 0, 1);

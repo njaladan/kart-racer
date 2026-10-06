@@ -207,6 +207,11 @@ export function createAudioController(audioWindow = window) {
         noise(0.25, 0.24, 420);
         tone(75, 0.12, "triangle", 0.07, -35);
         break;
+      case "cannon":
+        noise(0.75, 0.45, 90);
+        tone(95, 0.5, "sine", 0.18, -60);
+        noise(0.38, 0.2, 2200);
+        break;
       case "mechanism":
         noise(0.4, 0.22, 240);
         break;
@@ -302,17 +307,19 @@ export function createAudioController(audioWindow = window) {
         if (beat % 7 === 0) noise(0.045, volume, 280, stereo, true);
       } else
         noise(
-          source.kind === "water" ? 0.4 : 0.2,
+          source.kind === "lava" ? 0.8 : source.kind === "water" ? 0.4 : 0.2,
           volume,
-          source.kind === "engine"
-            ? 140
-            : source.kind === "sandfall"
-              ? 1800
-              : source.kind === "steam"
-                ? 3100
-                : source.kind === "paper"
-                  ? 4200
-                  : 900,
+          source.kind === "lava"
+            ? 75
+            : source.kind === "engine"
+              ? 140
+              : source.kind === "sandfall"
+                ? 1800
+                : source.kind === "steam"
+                  ? 3100
+                  : source.kind === "paper"
+                    ? 4200
+                    : 900,
           stereo,
           true,
         );

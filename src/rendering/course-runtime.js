@@ -371,23 +371,6 @@ export function buildCourseWorld({
       );
     }
   }
-  if (course.edgeStyle === "adventure") {
-    const rail = material(course.theme.shoulder, { metalness: 0.25 });
-    for (const side of [-1, 1]) {
-      for (const section of track.SECTIONS) {
-        const range = (course.traversals || []).find((r) => track.SECTIONS[r.section] === section);
-        if (range) continue;
-        const geometry = createRailGeometry(side, {
-          width: 0.25,
-          height: 0.4,
-          above: 0.5,
-          start: section.start,
-          end: section.end,
-        });
-        mesh(geometry, rail);
-      }
-    }
-  }
   if (course.edgeStyle === "sunstone") {
     const edgeMaterial = material("#c49663", { bumpMap: textures.stone, bumpScale: 0.02 });
     for (const side of [-1, 1]) {

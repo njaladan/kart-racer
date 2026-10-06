@@ -9,6 +9,7 @@ import pantry from "./pocket-pantry.js";
 import railstorm from "./railstorm-express.js";
 import metronome from "./metronome-hall.js";
 import pelagic from "./pelagic-glasshouse.js";
+import emberwing from "./emberwing-observatory.js";
 import { validateCourseDefinition } from "./course-contract.js";
 
 export const COURSES = Object.freeze(
@@ -24,6 +25,7 @@ export const COURSES = Object.freeze(
     railstorm,
     metronome,
     pelagic,
+    emberwing,
   ].map(validateCourseDefinition),
 );
 export const DEFAULT_COURSE = windmill;

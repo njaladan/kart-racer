@@ -77,6 +77,7 @@ export default adventure({
     fogFar: 850,
     cameraFar: 1150,
     exposure: 1.2,
+    gradeTint: [0.97, 1.015, 1.025],
     terrain: "sand",
     groundHeight: -55,
     lightVolume: {

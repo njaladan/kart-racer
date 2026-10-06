@@ -144,7 +144,11 @@ export function advanceTraversal(state, track, dt, time, advanceProgress) {
   const travel = state.worldPos.distanceTo(state.renderFrom);
   advanceProgress(state, pose.t * track.TRACK, track.TRACK, track.WORLD_PER_UNIT, travel);
   state.traversalProgress = q;
-  state.vx = state.vz = state.vy = state.speed = 0;
+  const flying = definition.kind === "cannon";
+  state.vx = flying ? (state.worldPos.x - state.renderFrom.x) / dt : 0;
+  state.vz = flying ? (state.worldPos.z - state.renderFrom.z) / dt : 0;
+  state.vy = flying ? (state.worldPos.y - state.renderFrom.y) / dt : 0;
+  state.speed = Math.hypot(state.vx, state.vz) * 3.6;
   state.grounded = definition.kind !== "cannon";
   state.air = state.grounded ? 0 : 1;
   state.boost = Math.max(0, (state.boost || 0) - dt);

@@ -29,7 +29,7 @@ export function createRaceFeedback({ player, audio, particles, toast, terrain })
     if (events.deckLeft && racer === player) audio.play("land");
     if (events.traversalStarted && racer === player) {
       notify(events.traversalKind === "lift" ? "ALL ABOARD THE SKY LIFT" : "CANNON FLIGHT!");
-      audio.play(events.traversalKind === "lift" ? "mechanism" : "hit");
+      audio.play(events.traversalKind === "lift" ? "mechanism" : "cannon");
     }
     if (events.wallContact) {
       if (racer === player) {
@@ -62,7 +62,7 @@ export function createRaceFeedback({ player, audio, particles, toast, terrain })
       notify(events.turboTier === 2 ? "ORANGE MINI-TURBO!" : "BLUE MINI-TURBO!");
       audio.play("boost");
     }
-    if (events.padBoost && racer === player) {
+    if (events.padBoost && !events.traversalFinished && racer === player) {
       notify("TURBO PANEL!");
       audio.play("boost");
     }

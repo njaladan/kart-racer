@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "course": "emberwing-observatory",
+  "lighting": "indirect.png",
+  "height": "height.png",
+  "bounds": [
+    -415.2,
+    -352.9,
+    752.7,
+    718.0999999999999
+  ],
+  "heightRange": [
+    -12,
+    99.36
+  ],
+  "bounceScale": 0.65,
+  "resolution": 768,
+  "samples": 12,
+  "radius": 22.0,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
+  "sourceSceneSha256": "e423c819db74b9f8d87ab026c05598dd18d6263611751875b4f69c541204de58",
+  "triangles": 129928,
+  "lights": 7,
+  "outputs": [
+    {
+      "file": "indirect.png",
+      "width": 768,
+      "height": 768,
+      "bytes": 377409,
+      "sha256": "477beeaef49534be8553fb3c34c280caf2a52b36b3cbdb61aa31a30409876532"
+    },
+    {
+      "file": "height.png",
+      "width": 768,
+      "height": 768,
+      "bytes": 232259,
+      "sha256": "c2171bb1e8cff989c29484e069f8e9130a273e3e2cf69c8ba6679af443162a07"
+    },
+    {
+      "file": "spill.png",
+      "width": 512,
+      "height": 256,
+      "bytes": 15419,
+      "sha256": "eef3318dd557f01361aa781c1d1c5daec519b63e0ac404ad69fc3dc24fa1fe5b"
+    }
+  ],
+  "lightVolume": {
+    "resolution": 128,
+    "columns": 4,
+    "rows": 2,
+    "heights": [
+      -15,
+      0,
+      25,
+      50,
+      80,
+      120
+    ],
+    "strength": 1,
+    "file": "spill.png"
+  }
+}

@@ -25,7 +25,7 @@ export function createRacerEffects({ spawnParticle, terrain = "grass" }) {
       paper = activeTrack.course.theme.terrain === "paper";
     let clock = clocks.get(state);
     if (!clock) {
-      clock = { drift: 0, boost: 0, surface: 0, scale: state.scale ?? 1 };
+      clock = { drift: 0, boost: 0, surface: 0, flight: 0, scale: state.scale ?? 1 };
       clocks.set(state, clock);
     }
     const scale = state.scale ?? 1;
@@ -102,6 +102,21 @@ export function createRacerEffects({ spawnParticle, terrain = "grass" }) {
             Math.cos(state.yaw) * 2 - side * Math.sin(state.yaw) * 0.8,
           ),
         );
+    }
+
+    const flight =
+      state.traversalIndex >= 0 &&
+      activeTrack.course.traversals?.[state.traversalIndex]?.kind === "cannon";
+    clock.flight = flight ? clock.flight + dt * (state.isPlayer ? 24 : 6) : 0;
+    while (clock.flight >= 1) {
+      clock.flight--;
+      spawnParticle(
+        positionBehind(state, 0, 1.2, 0.6),
+        "#ffc77e",
+        0.48,
+        0.12,
+        new THREE.Vector3(Math.sin(state.yaw) * 3, -0.6, Math.cos(state.yaw) * 3),
+      );
     }
 
     const drifting = events.sliding && state.grounded;

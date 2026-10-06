@@ -39,7 +39,7 @@ export function createPostProcessing(renderer, theme = {}) {
         c+=(texture2D(source,vUv+direction*3.230769).rgb+texture2D(source,vUv-direction*3.230769).rgb)*.070270;
         gl_FragColor=vec4(c,1.);}`,
   });
-  const night = theme.terrain === "concrete";
+  const night = theme.night ?? theme.terrain === "concrete";
   const grade = new THREE.ShaderMaterial({
     depthTest: false,
     depthWrite: false,
@@ -49,13 +49,14 @@ export function createPostProcessing(renderer, theme = {}) {
       bloomStrength: { value: night ? 0.18 : 0.08 },
       gradeTint: {
         value: new THREE.Vector3(
-          ...(theme.terrain === "snow"
-            ? [0.98, 1, 1.025]
-            : theme.terrain === "sand"
-              ? [1.025, 1, 0.965]
-              : night
-                ? [0.98, 1, 1.02]
-                : [1.015, 1.01, 0.99]),
+          ...(theme.gradeTint ??
+            (theme.terrain === "snow"
+              ? [0.98, 1, 1.025]
+              : theme.terrain === "sand"
+                ? [1.025, 1, 0.965]
+                : night
+                  ? [0.98, 1, 1.02]
+                  : [1.015, 1.01, 0.99])),
         ),
       },
     },

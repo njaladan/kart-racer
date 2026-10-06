@@ -23,7 +23,7 @@ const courseCaptures = [
   { id: "railstorm-express", racer: "nolok", t: 0.4974, seconds: 18 },
   { id: "metronome-hall", racer: "kiki", t: 0.39, seconds: 14 },
   { id: "pelagic-glasshouse", racer: "konqi", t: 0.42, seconds: 25 },
-  { id: "emberwing-observatory", racer: "pidgin", t: 0.52, seconds: 18 },
+  { id: "emberwing-observatory", racer: "pidgin", t: 0.3785, seconds: 18 },
 ];
 const courses = process.argv.slice(2).length ? process.argv.slice(2) : COURSES.map(({ id }) => id);
 const port = Number(process.env.SCREENSHOT_CAPTURE_PORT || 5173);

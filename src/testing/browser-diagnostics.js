@@ -10,7 +10,7 @@ import {
   projectTrack,
   metresToProgress,
 } from "../track/track.js";
-import { scaleAt, underwaterAt } from "../simulation/course-mechanics.js";
+import { scaleAt, underwaterAt, rangeFor, traversalPose } from "../simulation/course-mechanics.js";
 import { FIXED_DT, resetMotion } from "../simulation/physics.js";
 import { resetRaceProgress } from "../simulation/race.js";
 
@@ -131,6 +131,25 @@ export function createBrowserDiagnostics({
         player.speed = 0;
         player.scale = scaleAt(activeTrack, trackT(player.s));
         player.underwater = underwaterAt(activeTrack, trackT(player.s));
+        const t = trackT(player.s);
+        const traversalIndex = (activeTrack.course.traversals || []).findIndex((definition) => {
+          const range = rangeFor(activeTrack, definition);
+          return definition.kind === "cannon" && t >= range.start && t < range.end;
+        });
+        if (traversalIndex >= 0) {
+          const definition = activeTrack.course.traversals[traversalIndex];
+          const range = rangeFor(activeTrack, definition);
+          const q = (t - range.start) / (range.end - range.start);
+          player.traversalIndex = traversalIndex;
+          player.traversalProgress = q;
+          player.traversalDeparture = session.getState().raceTime - q * definition.duration;
+          player.traversalOffset = 0;
+          player.traversalLap = 0;
+          player.grounded = false;
+          player.air = 1;
+          player.worldPos.copy(traversalPose(activeTrack, definition, q).p);
+          player.renderFrom.copy(player.worldPos);
+        }
         // A seek should show its destination before the chase camera settles.
         gameRenderer.updateVehicle(player, player.kart, 0);
         gameRenderer.reset();
