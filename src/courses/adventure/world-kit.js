@@ -131,19 +131,27 @@ export function worldKit(context) {
   function pendulums(style, color) {
     for (const [i, d] of (track.course.pendulums || []).entries()) {
       const g = at(d.section, d.fraction),
-        moving = new THREE.Group();
-      scenery.add(moving);
-      const m = mat(color, "metal", { metalness: 0.5, roughness: 0.4 });
+        m = mat(color, "metal", { metalness: 0.55, roughness: 0.32 }),
+        bob = mesh(
+          style === "hammer" ? new THREE.BoxGeometry(1, 1, 1) : sphere,
+          m,
+          g,
+          [0, 1.1, 0],
+          [d.radius || 1.3, 1.3, d.radius || 1.3],
+        ),
+        rod = tube(g, [0, 21, 0], [0, 1.1, 0], style === "hammer" ? 0.3 : 0.12, m);
       portal(d.section, d.fraction, color, 18, 21);
-      mesh(sphere, m, moving, [0, 1.1, 0], [d.radius || 1.3, 1.3, d.radius || 1.3]);
-      box(
-        m,
-        moving,
-        [0, 10, 0],
-        [style === "hammer" ? 1 : 0.18, 18, style === "hammer" ? 1 : 0.18],
-      );
-      motion(moving, (time) => {
-        align(moving, pendulumAt(track, d, time));
+      motion(g, (time) => {
+        const pose = pendulumAt(track, d, time);
+        g.updateWorldMatrix(true, false);
+        const local = g.worldToLocal(pose.p.clone());
+        local.y += 0.85;
+        bob.position.copy(local);
+        const anchor = new THREE.Vector3(0, 21, 0),
+          direction = local.clone().sub(anchor);
+        rod.position.copy(anchor).add(local).multiplyScalar(0.5);
+        rod.scale.y = direction.length();
+        rod.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
       });
       for (const side of [-1, 1]) box(m, g, [side * 8, 0.08, 0], [0.25, 0.05, 9]);
       box(

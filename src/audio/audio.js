@@ -319,6 +319,8 @@ export function createAudioController(audioWindow = window) {
         pan,
         true,
       );
+    if (id === "metronome-hall" && ["tappets", "hall", "bells", "hammers"].includes(section.id))
+      noise(0.065, 0.07, beat % 2 ? 430 : 280, beat % 2 ? 0.3 : -0.3, true);
     if (id === "railstorm-express" && state.movingDeckId) {
       noise(0.07, 0.09, 550, Math.sin(time * 1.7) * 0.3, true);
       if (beat % 8 === 0) noise(0.7, 0.07, 95, 0, true);

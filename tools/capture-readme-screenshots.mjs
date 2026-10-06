@@ -20,7 +20,7 @@ const courseCaptures = [
   { id: "paper-revel", racer: "pidgin", t: 0.4, seconds: 31 },
   { id: "tempest-causeway", racer: "konqi", t: 0.24, seconds: 18 },
   { id: "pocket-pantry", racer: "wilber", t: 0.35, seconds: 18 },
-  { id: "railstorm-express", racer: "nolok", t: 0.51, seconds: 18 },
+  { id: "railstorm-express", racer: "nolok", t: 0.4974, seconds: 18 },
   { id: "metronome-hall", racer: "kiki", t: 0.39, seconds: 14 },
   { id: "pelagic-glasshouse", racer: "konqi", t: 0.42, seconds: 25 },
   { id: "emberwing-observatory", racer: "pidgin", t: 0.52, seconds: 18 },

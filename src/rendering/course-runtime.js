@@ -92,7 +92,7 @@ export function buildCourseWorld({
     roadMaterials.wood = material(road, { bumpMap: textures.wood, bumpScale: 0.03 });
     roadMaterials.paving = material(road, { bumpMap: textures.paving, bumpScale: 0.025 });
     metalDeckDetail(roadMaterials.metal);
-    if (course.id === "pocket-pantry") {
+    if (["pocket-pantry", "metronome-hall"].includes(course.id)) {
       kitchenRoadDetail(roadMaterials.wood);
       kitchenRoadDetail(roadMaterials.paving, true);
     } else templePaving(roadMaterials.paving);

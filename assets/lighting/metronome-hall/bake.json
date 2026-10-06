@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "course": "metronome-hall",
+  "lighting": "indirect.png",
+  "height": "height.png",
+  "bounds": [
+    -414,
+    -334,
+    764.7,
+    728
+  ],
+  "heightRange": [
+    -12,
+    75
+  ],
+  "bounceScale": 0.65,
+  "resolution": 512,
+  "samples": 12,
+  "radius": 22.0,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
+  "sourceSceneSha256": "680c3f5a9732d60e5ee52f188fc6628aabb7d49ccd68c3bd0c6b5ff275f543ae",
+  "triangles": 275546,
+  "lights": 9,
+  "outputs": [
+    {
+      "file": "indirect.png",
+      "width": 512,
+      "height": 512,
+      "bytes": 157332,
+      "sha256": "6beec61e15b1cebfc42ff1e03673433b0623039b178a5c43340157b81371e861"
+    },
+    {
+      "file": "height.png",
+      "width": 512,
+      "height": 512,
+      "bytes": 140733,
+      "sha256": "bef98e6bb6edd7a81511b1211a4babfb14ccdbf82a542c9ef80d09c3164412e4"
+    },
+    {
+      "file": "spill.png",
+      "width": 512,
+      "height": 256,
+      "bytes": 9343,
+      "sha256": "9484e01e7a8d43c0b17116470f4348b91f74e617748ea8e8e9584cfec532b77d"
+    }
+  ],
+  "lightVolume": {
+    "resolution": 128,
+    "columns": 4,
+    "rows": 2,
+    "heights": [
+      -20,
+      0,
+      15,
+      30,
+      45,
+      65
+    ],
+    "strength": 1,
+    "file": "spill.png"
+  }
+}

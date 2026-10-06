@@ -263,7 +263,8 @@ export function createGameRenderer({
     if (!frameState.paused) updateCamera(dt, frameState);
     const section = sectionAt(trackT(player.s));
     const forest = ["forest", "pines"].includes(section.id);
-    const enclosed = forest || ["warehouse", "temple", "canyon"].includes(section.id);
+    const enclosed =
+      section.enclosed || forest || ["warehouse", "temple", "canyon"].includes(section.id);
     const atmosphereBlend = 1 - Math.exp(-1.5 * dt);
     const fogFar = player.underwater
       ? 200
