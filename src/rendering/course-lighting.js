@@ -40,12 +40,14 @@ export function createCourseLighting(scene, { theme, ambientLight, sun, environm
       ].includes(section.id);
       enclosure += ((enclosed ? 1 : 0) - enclosure) * (dt ? 1 - Math.exp(-2.2 * dt) : 1);
       const baseAmbient = theme.ambientIntensity ?? 1.55;
-      ambientLight.intensity = baseAmbient * (1 - enclosure * 0.22);
+      ambientLight.intensity =
+        baseAmbient * (1 - enclosure * (1 - (theme.interiorAmbientScale ?? 0.78)));
       sun.intensity = theme.sunIntensity * (1 - enclosure * 0.12);
       // Switch filtered maps only at the shaded midpoint, avoiding per-frame captures.
       const environment = enclosure > 0.65 ? environmentMaps.interior : environmentMaps.exterior;
       scene.environment = environment;
-      scene.environmentIntensity = theme.terrain === "concrete" ? 0.38 : 0.5;
+      scene.environmentIntensity =
+        theme.environmentIntensity ?? (theme.terrain === "concrete" ? 0.38 : 0.5);
       for (const state of racers) {
         const kart = state.kart;
         if (!kart) continue;
@@ -61,7 +63,9 @@ export function createCourseLighting(scene, { theme, ambientLight, sun, environm
         ].includes(racerSection.id);
         const shade = state.renderShade ?? 1;
         state.renderShade =
-          shade + ((racerEnclosed ? 0.76 : 1) - shade) * (1 - Math.exp(-2.8 * dt));
+          shade +
+          ((racerEnclosed ? (theme.interiorAmbientScale ?? 0.76) : 1) - shade) *
+            (1 - Math.exp(-2.8 * dt));
         for (const material of kart.litMaterials || []) {
           if (material.envMap !== environment) material.envMap = environment;
           const baseline = material.userData.baseKartColor;

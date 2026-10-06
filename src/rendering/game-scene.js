@@ -11,7 +11,7 @@ import { createCourseEnvironments } from "./reflection-environments.js";
 import { createCourseLighting } from "./course-lighting.js";
 import { createPostProcessing } from "./postprocessing.js";
 import { createGraphicsQuality } from "./graphics-quality.js";
-import { installSurfaceDetail } from "./surface-detail.js";
+import { installSurfaceDetail, installWetPavement } from "./surface-detail.js";
 
 const SHARED_TEXTURES = [
   "grass",
@@ -53,12 +53,20 @@ function createMaterials(theme, textures, environment) {
 
   return {
     grass: material(theme.ground, 0.96, surface(textures[theme.terrain || "grass"], 0.06)),
-    road: material(theme.road, theme.terrain === "concrete" ? 0.34 : 0.96, {
-      ...surface(textures.asphalt, theme.terrain === "concrete" ? 0.004 : 0.008),
-      ...(theme.terrain === "concrete"
-        ? { envMap: environment, envMapIntensity: 0.13, metalness: 0.16 }
-        : {}),
-    }),
+    road: material(
+      theme.road,
+      theme.roadRoughness ?? (theme.terrain === "concrete" ? 0.34 : 0.96),
+      {
+        ...surface(textures.asphalt, theme.terrain === "concrete" ? 0.004 : 0.008),
+        ...(theme.terrain === "concrete"
+          ? {
+              envMap: environment,
+              envMapIntensity: theme.roadReflectionIntensity ?? 0.13,
+              metalness: theme.roadMetalness ?? 0.16,
+            }
+          : {}),
+      },
+    ),
     roadside: material(theme.shoulder, 0.95, surface(textures.asphalt, 0.008)),
     white: material("#fff9e8", 0.65),
     red: material("#ff3028"),
@@ -131,8 +139,8 @@ export async function createGameScene({ canvas, course, viewport = window }) {
   );
   const ambientLight = scene.children.at(-1);
   const rim = new THREE.DirectionalLight(
-    course.theme.terrain === "concrete" ? "#98bfff" : "#a8d4ee",
-    0.24,
+    course.theme.rimColor ?? (course.theme.terrain === "concrete" ? "#98bfff" : "#a8d4ee"),
+    course.theme.rimIntensity ?? 0.24,
   );
   rim.position.set(65, 35, -55);
   scene.add(rim);
@@ -177,6 +185,7 @@ export async function createGameScene({ canvas, course, viewport = window }) {
   const materials = createMaterials(course.theme, textures, sharedAssets.environment);
   installSurfaceDetail(materials.grass, { kind: "terrain", strength: 0.18 });
   installSurfaceDetail(materials.road, { kind: "road", strength: 0.08 });
+  if (course.theme.wetPavement) installWetPavement(materials.road);
   installSurfaceDetail(materials.roadside, { kind: "road", strength: 0.14 });
   const lighting = createCourseLighting(scene, {
     theme: course.theme,

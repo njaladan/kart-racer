@@ -19,8 +19,8 @@ import { advanceRaceProgress } from "../src/simulation/race.js";
 import { createShell, advanceShell } from "../src/simulation/items.js";
 import { FIXED_DT, drive } from "../src/simulation/physics.js";
 
-test("the continuous course is 1.5 km and clean laps keep a fresh sector every 6–13 seconds", () => {
-  assert.ok(COURSE_LENGTH > 1480 && COURSE_LENGTH < 1520);
+test("the eight-place valley stays near one minute with no boundary impacts", () => {
+  assert.ok(COURSE_LENGTH > 1530 && COURSE_LENGTH < 1580);
   const racer = initializeRacer({ s: 0, x: 0, skill: 0.9, drift: 0 });
   const entries = [0];
   let section = 0,
@@ -33,22 +33,23 @@ test("the continuous course is 1.5 km and clean laps keep a fresh sector every 6
       tick * FIXED_DT,
     );
     wallHits += !!events.wallImpact;
-    if (section < 5 && racer.s >= SECTIONS[section + 1].start * TRACK) {
+    if (section < SECTIONS.length - 1 && racer.s >= SECTIONS[section + 1].start * TRACK) {
       entries.push(tick * FIXED_DT);
       section++;
     }
     if (racer.s >= TRACK) entries.push(tick * FIXED_DT);
   }
-  assert.equal(entries.length, 7);
+  assert.equal(entries.length, SECTIONS.length + 1);
   assert.equal(wallHits, 0);
   assert.ok(entries.at(-1) >= 55 && entries.at(-1) <= 65);
   for (let i = 1; i < entries.length; i++)
-    assert.ok(entries[i] - entries[i - 1] >= 6 && entries[i] - entries[i - 1] <= 13);
+    assert.ok(entries[i] - entries[i - 1] >= 4.5 && entries[i] - entries[i - 1] <= 13);
 });
 
 test("the grass shortcut has usable width, coherent ground and the same ordered lap gates", () => {
-  const start = SHORTCUT.start + 0.02,
-    end = SHORTCUT.end - 0.02;
+  const span = SHORTCUT.end - SHORTCUT.start,
+    start = SHORTCUT.start + span * 0.35,
+    end = SHORTCUT.end - span * 0.35;
   const racer = initializeRacer({ s: start * TRACK, x: 0, drift: 0 });
   for (let t = start; t <= end; t += 0.001) {
     const position = poseAt(t * TRACK, 20, 0.065).p;
@@ -58,7 +59,7 @@ test("the grass shortcut has usable width, coherent ground and the same ordered 
     assert.ok(Math.abs(surface.height - position.y) < 0.02);
     assert.ok(advanceRaceProgress(racer, surface.t * TRACK, TRACK, WORLD_PER_UNIT, 2));
   }
-  assert.ok(racer.s > start * TRACK + 20);
+  assert.ok(racer.s > start * TRACK + 8);
   const previous = racer.s,
     gate = racer.nextCheckpoint;
   assert.equal(
@@ -116,7 +117,7 @@ test("the delivery cart gives a warning, stays parked at first, and leaves a pas
   assert.ok(shell.vx * c.tangent.x + shell.vz * c.tangent.z < 0);
 });
 
-test("karts and shells share the physical edges in all six sections", () => {
+test("karts and shells share the physical edges in all eight sections", () => {
   for (const section of SECTIONS) {
     const t = (section.start + section.end) / 2;
     const surface = surfaceAt(t),

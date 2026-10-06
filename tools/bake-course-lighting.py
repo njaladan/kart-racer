@@ -7,6 +7,8 @@ Uses real placed scene triangles, cosine hemisphere visibility, local material
 color bounce and registered lamp pools. No sun direct-light bake, so the runtime
 sun shadow is not counted twice. Outputs near-ground irradiance/AO and 16-bit
 height encoded in RG, with source digest and reproducible sampling parameters.
+Courses with lightVolume metadata additionally receive an occluded colored spill
+atlas at authored heights; its lighting replaces ground-only lamp illumination.
 """
 import hashlib
 import json
@@ -30,7 +32,7 @@ samples = int(os.environ.get('LIGHTING_BAKE_SAMPLES', '12'))
 radius = 22.0
 
 def save_image(path, rgba):
-    image = bpy.data.images.new(path.stem, width=size, height=size, alpha=True)
+    image = bpy.data.images.new(path.stem, width=rgba.shape[1], height=rgba.shape[0], alpha=True)
     image.colorspace_settings.name = 'Non-Color'
     # Blender image rows and world XZ coordinates both run bottom to top.
     image.pixels.foreach_set(rgba.ravel())
@@ -69,6 +71,7 @@ for course in courses:
         a = sample * 2.399963229728653
         directions.append(Vector((math.cos(a) * r, math.sqrt(1 - r*r), math.sin(a) * r)))
     lights = metadata['lights']
+    volume = metadata.get('lightVolume')
     low, high = metadata['heightRange']
     for row in range(size):
         z = bounds[1] + (row + .5) / size * bounds[3]
@@ -94,7 +97,7 @@ for course in courses:
                 bounce += Vector(albedo[:3]) * (obstruction * .19)
             ao = max(.25, visibility / samples)
             bounce /= samples
-            for pool in lights:
+            for pool in ([] if volume else lights):
                 delta = origin - Vector(pool['position'])
                 distance = delta.length
                 if distance >= pool['radius']:
@@ -113,6 +116,56 @@ for course in courses:
     destination.mkdir(parents=True, exist_ok=True)
     save_image(destination / 'indirect.png', light)
     save_image(destination / 'height.png', heights)
+    outputs = ['indirect.png', 'height.png']
+    if volume:
+        # A small XZ atlas at several heights also lights vertical facades and
+        # container faces. Each sample is visibility-tested against the scene.
+        # Iterate lamp footprints rather than the entire city for every lamp.
+        resolution = volume['resolution']
+        levels = volume['heights']
+        columns = 4
+        rows = math.ceil(len(levels) / columns)
+        spill = np.zeros((rows * resolution, columns * resolution, 4), dtype=np.float32)
+        spill[:, :, 3] = 1
+        step_x, step_z = bounds[2] / resolution, bounds[3] / resolution
+        ray_count = 0
+        for lamp_index, pool in enumerate(lights):
+            position = Vector(pool['position'])
+            reach = pool['radius']
+            left = max(0, math.floor((position.x - reach - bounds[0]) / step_x))
+            right = min(resolution, math.ceil((position.x + reach - bounds[0]) / step_x))
+            bottom = max(0, math.floor((position.z - reach - bounds[1]) / step_z))
+            top = min(resolution, math.ceil((position.z + reach - bounds[1]) / step_z))
+            rgb = np.array(pool['color']) * min(8, pool['intensity']) * .38
+            for layer, y in enumerate(levels):
+                if abs(y - position.y) >= reach:
+                    continue
+                tile_x, tile_y = layer % columns * resolution, layer // columns * resolution
+                for row in range(bottom, top):
+                    z = bounds[1] + (row + .5) * step_z
+                    for column in range(left, right):
+                        x = bounds[0] + (column + .5) * step_x
+                        origin = Vector((x, y, z))
+                        delta = position - origin
+                        distance = delta.length
+                        if distance >= reach:
+                            continue
+                        falloff = (1 - distance / reach) ** 2
+                        if falloff < .015:
+                            continue
+                        ray_count += 1
+                        direction = delta.normalized() if distance > .001 else Vector((0, 1, 0))
+                        obstruction, _, _, _ = bvh.ray_cast(origin, direction, max(.01, distance - .35))
+                        if obstruction is None:
+                            spill[tile_y + row, tile_x + column, :3] += rgb * falloff
+            if lamp_index % 64 == 0:
+                print(f'{course}: spill {lamp_index}/{len(lights)} lamps, {ray_count} rays', flush=True)
+        # LDR storage is enough for diffuse night spill; global exposure remains
+        # independent. Clamp only after all contributing lamps accumulate.
+        np.clip(spill, 0, 1, out=spill)
+        save_image(destination / 'spill.png', spill)
+        outputs.append('spill.png')
+        volume = {**volume, 'columns': columns, 'rows': rows, 'file': 'spill.png', 'strength': 1}
     result = {
         'version': 1, 'course': course, 'lighting': 'indirect.png', 'height': 'height.png',
         'bounds': bounds, 'heightRange': metadata['heightRange'], 'bounceScale': .65,
@@ -120,7 +173,10 @@ for course in courses:
         'method': 'Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded.',
         'sourceSceneSha256': hashlib.sha256(metadata_path.read_bytes() + binary).hexdigest(),
         'triangles': metadata['triangles'], 'lights': len(lights),
-        'outputs': [{ 'file': name, 'bytes': (destination/name).stat().st_size, 'sha256': hashlib.sha256((destination/name).read_bytes()).hexdigest() } for name in ['indirect.png', 'height.png']],
+        'outputs': [{ 'file': name, 'width': columns * resolution if name == 'spill.png' else size, 'height': rows * resolution if name == 'spill.png' else size, 'bytes': (destination/name).stat().st_size, 'sha256': hashlib.sha256((destination/name).read_bytes()).hexdigest() } for name in outputs],
     }
+    if volume:
+        result['lightVolume'] = volume
+        result['method'] += ' Colored spill volume samples at authored heights illuminate vertical surfaces.'
     (destination / 'bake.json').write_text(json.dumps(result, indent=2) + '\n')
     print(f'{course}: baked in {time.monotonic()-started:.1f}s', flush=True)

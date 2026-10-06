@@ -255,6 +255,7 @@ for (const course of COURSES.filter((course) => !wanted.length || wanted.include
     ],
     bounds: [minX, minZ, maxX - minX, maxZ - minZ],
     heightRange: [-12, 75],
+    lightVolume: course.theme.lightVolume,
     lights: (scene.userData.localLightPools || []).map((pool) => ({
       position: pool.position.toArray(),
       color: pool.color.toArray(),

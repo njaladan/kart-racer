@@ -7,6 +7,7 @@ import buildWindmillLife from "../windmill-wilds-world.js";
 import { buildWindmillTerrain } from "./terrain.js";
 import { buildWindmillVegetation } from "./vegetation.js";
 import { buildWindmillLandmarks } from "./landmarks.js";
+import { buildValleyStory } from "./build-valley-story.js";
 
 /** Compose countryside terrain, vegetation, landmarks, and animated life. */
 export function buildWindmillWorld({
@@ -118,12 +119,14 @@ export function buildWindmillWorld({
     kit,
     textures,
   });
-  batchScenery(scenery, [...landmarks.animated, ...life.animated]);
+  const story = buildValleyStory({ scene, scenery, track, kit, textures });
+  batchScenery(scenery, [...landmarks.animated, ...life.animated, ...story.animated]);
   return {
     update(time) {
       landmarks.update(time);
       if (lake.material.map) lake.material.map.offset.set(time * 0.006, time * 0.003);
       life.update(time);
+      story.update(time);
     },
   };
 }

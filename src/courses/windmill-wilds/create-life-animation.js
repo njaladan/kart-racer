@@ -113,7 +113,9 @@ export function createLifeAnimation({
         for (let i = 0; i < a.length; i += 3) {
           const x = f.rest[i];
           a[i + 2] = Math.sin(time * 3 + f.phase - x * 2.6) * 0.21 * (x / f.length);
-          a[i + 1] = f.rest[i + 1] + Math.sin(time * 2 + f.phase - x) * 0.04 * (x / f.length);
+          // Let the cloth ripple sideways while keeping its top and hem steady;
+          // vertical flutter made the opening roadside pennants seem to bob.
+          a[i + 1] = f.rest[i + 1];
         }
         f.geo.attributes.position.needsUpdate = true;
       }

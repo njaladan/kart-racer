@@ -180,8 +180,8 @@
       },
       "lodDistances": [
         0,
-        95,
-        210
+        180,
+        360
       ]
     },
     {
@@ -211,8 +211,8 @@
       },
       "lodDistances": [
         0,
-        95,
-        210
+        180,
+        360
       ]
     },
     {
@@ -242,8 +242,8 @@
       },
       "lodDistances": [
         0,
-        95,
-        210
+        180,
+        360
       ]
     },
     {
@@ -432,6 +432,50 @@
       "sha256": "adad3b5c54324ea228728fa6788f115f2c97c14addb7cf3cb980da0a7cd6b403",
       "bytes": 892584,
       "triangles": 368
+    },
+    {
+      "name": "kenney:nature/crop-pumpkin",
+      "key": "kenney:nature/crop-pumpkin",
+      "type": "gltf",
+      "file": "crop-pumpkin.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/crop-pumpkin.glb",
+      "license": "CC0-1.0",
+      "sha256": "5b4878c5996033629419c26ac32153ce8ac06bbbdac98e4fa8a5cbab98f78077",
+      "bytes": 10840
+    },
+    {
+      "name": "kenney:nature/crops-cornstagec",
+      "key": "kenney:nature/crops-cornstagec",
+      "type": "gltf",
+      "file": "crops-cornstagec.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/crops-cornstagec.glb",
+      "license": "CC0-1.0",
+      "sha256": "deb8b4b74247fd8dc8834cf0a954c818c76c5da9564b244a6354ec4ab65da059",
+      "bytes": 11960
+    },
+    {
+      "name": "kenney:nature/crops-wheatstageb",
+      "key": "kenney:nature/crops-wheatstageb",
+      "type": "gltf",
+      "file": "crops-wheatstageb.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/crops-wheatstageb.glb",
+      "license": "CC0-1.0",
+      "sha256": "589db4d6fe0bd7616c1f1c2f10a335704b2dad5d24638dc08a5b2e5334c68852",
+      "bytes": 30040
+    },
+    {
+      "name": "kenney:nature/flower-purpleb",
+      "key": "kenney:nature/flower-purpleb",
+      "type": "gltf",
+      "file": "flower-purpleb.glb",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/main/packs/nature-kit/flower-purpleb.glb",
+      "license": "CC0-1.0",
+      "sha256": "2afb10cd68a9a7b185fc46110be0da550ea2aef86ef9ac6b7339f217eb4b636a",
+      "bytes": 8084
     }
   ],
   "fidelitySource": {
