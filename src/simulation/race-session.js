@@ -1,3 +1,4 @@
+import { scaleAt } from "./course-mechanics.js";
 import { advanceRacer, botInput } from "./simulation.js";
 import { resetMotion } from "./physics.js";
 import { ranking } from "./race.js";
@@ -99,6 +100,7 @@ export function createRaceSession({
     player.renderYawFrom = player.yaw;
     player.x = 0;
     resetMotion(player);
+    player.scale = scaleAt(activeTrack, activeTrack.trackT(player.s));
     player.speed = 0;
     player.spin = 0;
     player.drift = 0;

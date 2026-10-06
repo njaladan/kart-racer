@@ -8,6 +8,7 @@ import { addDetailedScenery } from "./detailed-scenery.js";
 import { TERRAIN_VERGE_WIDTH } from "./terrain-height.js";
 import { createSceneryDetailController } from "./scenery-lod.js";
 import { templePaving } from "../courses/sunstone-ruins/sunstone-materials.js";
+import { kitchenRoadDetail } from "../courses/adventure/pantry-materials.js";
 import { metalDeckDetail } from "../courses/adventure/architectural-detail.js";
 
 // Shared geometry uses exactly the surface/edge queries used by karts and shells.
@@ -91,7 +92,10 @@ export function buildCourseWorld({
     roadMaterials.wood = material(road, { bumpMap: textures.wood, bumpScale: 0.03 });
     roadMaterials.paving = material(road, { bumpMap: textures.paving, bumpScale: 0.025 });
     metalDeckDetail(roadMaterials.metal);
-    templePaving(roadMaterials.paving);
+    if (course.id === "pocket-pantry") {
+      kitchenRoadDetail(roadMaterials.wood);
+      kitchenRoadDetail(roadMaterials.paving, true);
+    } else templePaving(roadMaterials.paving);
   }
   if (course.theme.wetPavement) installWetPavement(roadMaterials.stone);
   if (course.edgeStyle === "adventure") {
@@ -100,7 +104,10 @@ export function buildCourseWorld({
       for (const section of track.SECTIONS) {
         if (
           (course.verges || []).some(
-            (v) => v.gate === "unfold" && v.side === side && track.SECTIONS[v.section] === section,
+            (v) =>
+              (v.gate === "unfold" || v.maxScale) &&
+              v.side === side &&
+              track.SECTIONS[v.section] === section,
           )
         )
           continue;

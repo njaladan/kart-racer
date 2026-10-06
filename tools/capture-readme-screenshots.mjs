@@ -19,7 +19,7 @@ const courseCaptures = [
   { id: "clockwork-citadel", racer: "kiki", t: 0.265, seconds: 18 },
   { id: "paper-revel", racer: "pidgin", t: 0.4, seconds: 31 },
   { id: "tempest-causeway", racer: "konqi", t: 0.24, seconds: 18 },
-  { id: "pocket-pantry", racer: "wilber", t: 0.39, seconds: 25 },
+  { id: "pocket-pantry", racer: "wilber", t: 0.35, seconds: 18 },
   { id: "railstorm-express", racer: "nolok", t: 0.5, seconds: 25 },
   { id: "metronome-hall", racer: "kiki", t: 0.39, seconds: 14 },
   { id: "pelagic-glasshouse", racer: "konqi", t: 0.42, seconds: 25 },

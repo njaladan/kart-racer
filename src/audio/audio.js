@@ -12,7 +12,9 @@ export function createAudioController(audioWindow = window) {
     wind = null,
     tires = null,
     voices = 0,
-    lastWorldBeat = -1;
+    lastWorldBeat = -1,
+    lastWorldId = null,
+    lastWorldScale = 1;
   let volumes = { master: 0.8, effects: 0.8, ambience: 0.55 };
   const target = (param, value, time = 0.08) =>
     param?.setTargetAtTime(value, context.currentTime, time);
@@ -238,6 +240,17 @@ export function createAudioController(audioWindow = window) {
       0.35,
     );
     target(engineFilter.frequency, (inside ? 400 : 650) + state.speed * 4, 0.15);
+    if (lastWorldId !== id) {
+      lastWorldId = id;
+      lastWorldScale = state.scale ?? 1;
+      lastWorldBeat = -1;
+    }
+    const scale = state.scale ?? 1;
+    if (active && lastWorldScale > 0.6 !== scale > 0.6) {
+      noise(0.42, 0.16, scale < 0.6 ? 2400 : 900);
+      tone(scale < 0.6 ? 850 : 350, 0.24, "sine", 0.08, scale < 0.6 ? -500 : 700);
+    }
+    lastWorldScale = scale;
     const beat = Math.floor(time * (id === "metronome-hall" ? 2 : 2.5));
     if (!active || beat === lastWorldBeat) return;
     lastWorldBeat = beat;
@@ -258,6 +271,11 @@ export function createAudioController(audioWindow = window) {
       if (source.kind === "birds") {
         if (beat % 5 === 0)
           tone(1200 + Math.random() * 700, 0.08, "sine", volume, 400, true, stereo);
+      } else if (source.kind === "drip") {
+        if (beat % 3 === 0)
+          tone(700 + Math.random() * 600, 0.045, "sine", volume, -400, true, stereo);
+      } else if (source.kind === "wood") {
+        if (beat % 7 === 0) noise(0.045, volume, 280, stereo, true);
       } else
         noise(
           source.kind === "water" ? 0.4 : 0.2,
@@ -266,9 +284,11 @@ export function createAudioController(audioWindow = window) {
             ? 140
             : source.kind === "sandfall"
               ? 1800
-              : source.kind === "paper"
-                ? 4200
-                : 900,
+              : source.kind === "steam"
+                ? 3100
+                : source.kind === "paper"
+                  ? 4200
+                  : 900,
           stereo,
           true,
         );
@@ -284,7 +304,10 @@ export function createAudioController(audioWindow = window) {
       distance = Math.hypot(dx, dz, source.y - state.worldPos.y);
     const falloff = Math.max(0, 1 - distance / 90) ** 2;
     const pan = (dx * Math.cos(state.yaw) - dz * Math.sin(state.yaw)) / Math.max(8, distance);
-    if (falloff > 0.02)
+    if (
+      falloff > 0.02 &&
+      (mechanism || ["clockwork-citadel", "railstorm-express", "metronome-hall"].includes(id))
+    )
       noise(
         0.12 + Math.random() * 0.08,
         falloff * 0.18,

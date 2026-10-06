@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "course": "pocket-pantry",
+  "lighting": "indirect.png",
+  "height": "height.png",
+  "bounds": [
+    -396.20000000000005,
+    -290.6,
+    762.4000000000001,
+    639
+  ],
+  "heightRange": [
+    -12,
+    75
+  ],
+  "bounceScale": 0.65,
+  "resolution": 512,
+  "samples": 12,
+  "radius": 22.0,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
+  "sourceSceneSha256": "94a336d4feaddf88dc848017213e93f5a5f019b5c5d3573ff179484d1676f03e",
+  "triangles": 309260,
+  "lights": 3,
+  "outputs": [
+    {
+      "file": "indirect.png",
+      "width": 512,
+      "height": 512,
+      "bytes": 155687,
+      "sha256": "17711df7fea8dac4e29262733a291170e5197fd926572c0334a425881f887c10"
+    },
+    {
+      "file": "height.png",
+      "width": 512,
+      "height": 512,
+      "bytes": 154242,
+      "sha256": "4e69b208313cd4457a7e5d35e2fe0ca718b05fbf695e1ef99ee59444fff308c7"
+    },
+    {
+      "file": "spill.png",
+      "width": 512,
+      "height": 256,
+      "bytes": 7503,
+      "sha256": "4188935a2b596945c6d2538f3c4f6052fa5205b3528a619412b03b4ceba9f834"
+    }
+  ],
+  "lightVolume": {
+    "resolution": 128,
+    "columns": 4,
+    "rows": 2,
+    "heights": [
+      -20,
+      0,
+      15,
+      30,
+      45,
+      70
+    ],
+    "strength": 1,
+    "file": "spill.png"
+  }
+}

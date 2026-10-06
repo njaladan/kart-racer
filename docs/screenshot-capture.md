@@ -1,6 +1,6 @@
 # README screenshot capture
 
-The README shows one driving-camera frame for each of the seven playable
+The README shows one driving-camera frame for each of the eight playable
 courses. Captures are saved under `docs/screenshots/`. The capture script uses
 the browser test hook to place the kart at a chosen course location, then saves
 the rendered frame. Its animation-frame limit keeps capture time bounded on

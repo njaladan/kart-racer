@@ -1,4 +1,5 @@
 import {
+  activeTrack,
   TRACK,
   RAMPS,
   frameAt,
@@ -9,6 +10,7 @@ import {
   projectTrack,
   metresToProgress,
 } from "../track/track.js";
+import { scaleAt } from "../simulation/course-mechanics.js";
 import { FIXED_DT, resetMotion } from "../simulation/physics.js";
 import { resetRaceProgress } from "../simulation/race.js";
 
@@ -127,6 +129,7 @@ export function createBrowserDiagnostics({
         player.yaw = yawFor(frameAt(trackT(player.s)).tangent);
         player.renderYawFrom = player.yaw;
         player.speed = 0;
+        player.scale = scaleAt(activeTrack, trackT(player.s));
         // A seek should show its destination before the chase camera settles.
         gameRenderer.updateVehicle(player, player.kart, 0);
         gameRenderer.reset();

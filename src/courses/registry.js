@@ -5,10 +5,11 @@ import frostpeakFestival from "./frostpeak-festival.js";
 import clockwork from "./clockwork-citadel.js";
 import paper from "./paper-revel.js";
 import tempest from "./tempest-causeway.js";
+import pantry from "./pocket-pantry.js";
 import { validateCourseDefinition } from "./course-contract.js";
 
 export const COURSES = Object.freeze(
-  [windmill, neonHarbor, sunstoneRuins, frostpeakFestival, clockwork, paper, tempest].map(
+  [windmill, neonHarbor, sunstoneRuins, frostpeakFestival, clockwork, paper, tempest, pantry].map(
     validateCourseDefinition,
   ),
 );

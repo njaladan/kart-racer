@@ -42,6 +42,7 @@ import { cartAt, cartContact, trafficAt, trafficContact } from "./hazards.js";
 
 export function initializeRacer(state) {
   resetMotion(state);
+  state.scale = scaleAt(activeTrack, trackT(state.s));
   state.worldPos = poseAt(state.s, laneWidth(state.x || 0), 0.065).p;
   state.yaw = yawFor(frameAt(trackT(state.s)).tangent);
   state.renderYawFrom = state.yaw;

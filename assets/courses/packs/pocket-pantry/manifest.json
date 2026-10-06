@@ -1,0 +1,104 @@
+{
+  "course": "pocket-pantry",
+  "models": [],
+  "textures": [
+    {
+      "name": "sunberry-label",
+      "file": "textures/sunberry-label.webp",
+      "bytes": 7612,
+      "sha256": "f5126298dce845561457227e6ef464cf95ebc6b00f2f2cbe73edf4802374945a",
+      "source": "Original fictional packaging; tools/create-pantry-labels.mjs",
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "flour-label",
+      "file": "textures/flour-label.webp",
+      "bytes": 7020,
+      "sha256": "3fd24d6bfe5dbf6c79fadeca2eb6e33c49f9665f317adbe8f53793bcf9b03219",
+      "source": "Original fictional packaging; tools/create-pantry-labels.mjs",
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "butter-label",
+      "file": "textures/butter-label.webp",
+      "bytes": 6904,
+      "sha256": "aaeb6d9ef8aa3e36732d9ea91c9a459a0d4e38fb9df11a6edcf413e1ff7b5147",
+      "source": "Original fictional packaging; tools/create-pantry-labels.mjs",
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "biscuit-label",
+      "file": "textures/biscuit-label.webp",
+      "bytes": 8118,
+      "sha256": "f539501b21b72235b31fd5e09fa16c436e9bf971c21f2f6619a69286e9824ac0",
+      "source": "Original fictional packaging; tools/create-pantry-labels.mjs",
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "pantry-label",
+      "file": "textures/pantry-label.webp",
+      "bytes": 9958,
+      "sha256": "751ec966f94288028ca0a148c7d0b1bd8ae938284f11b1462c8902470f8bc4d2",
+      "source": "Original fictional packaging; tools/create-pantry-labels.mjs",
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "grow-label",
+      "file": "textures/grow-label.webp",
+      "bytes": 8302,
+      "sha256": "f71b8e1df103560febea5edebd59b12d3e2acaf5f2bcc1812029a19d43ac2611",
+      "source": "Original fictional packaging; tools/create-pantry-labels.mjs",
+      "license": "CC0-1.0"
+    }
+  ],
+  "sources": [
+    {
+      "name": "sunberry-label",
+      "file": "textures/sunberry-label.webp",
+      "bytes": 7612,
+      "sha256": "f5126298dce845561457227e6ef464cf95ebc6b00f2f2cbe73edf4802374945a",
+      "source": "Original fictional packaging; tools/create-pantry-labels.mjs",
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "flour-label",
+      "file": "textures/flour-label.webp",
+      "bytes": 7020,
+      "sha256": "3fd24d6bfe5dbf6c79fadeca2eb6e33c49f9665f317adbe8f53793bcf9b03219",
+      "source": "Original fictional packaging; tools/create-pantry-labels.mjs",
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "butter-label",
+      "file": "textures/butter-label.webp",
+      "bytes": 6904,
+      "sha256": "aaeb6d9ef8aa3e36732d9ea91c9a459a0d4e38fb9df11a6edcf413e1ff7b5147",
+      "source": "Original fictional packaging; tools/create-pantry-labels.mjs",
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "biscuit-label",
+      "file": "textures/biscuit-label.webp",
+      "bytes": 8118,
+      "sha256": "f539501b21b72235b31fd5e09fa16c436e9bf971c21f2f6619a69286e9824ac0",
+      "source": "Original fictional packaging; tools/create-pantry-labels.mjs",
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "pantry-label",
+      "file": "textures/pantry-label.webp",
+      "bytes": 9958,
+      "sha256": "751ec966f94288028ca0a148c7d0b1bd8ae938284f11b1462c8902470f8bc4d2",
+      "source": "Original fictional packaging; tools/create-pantry-labels.mjs",
+      "license": "CC0-1.0"
+    },
+    {
+      "name": "grow-label",
+      "file": "textures/grow-label.webp",
+      "bytes": 8302,
+      "sha256": "f71b8e1df103560febea5edebd59b12d3e2acaf5f2bcc1812029a19d43ac2611",
+      "source": "Original fictional packaging; tools/create-pantry-labels.mjs",
+      "license": "CC0-1.0"
+    }
+  ]
+}

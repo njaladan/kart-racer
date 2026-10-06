@@ -8,13 +8,14 @@ export function createRacerEffects({ spawnParticle, terrain = "grass" }) {
   const clocks = new Map();
 
   function positionBehind(state, side, rear, height) {
+    const scale = state.scale ?? 1;
     return state.worldPos
       .clone()
       .add(
         new THREE.Vector3(
-          Math.cos(state.yaw) * side + Math.sin(state.yaw) * rear,
-          height,
-          -Math.sin(state.yaw) * side + Math.cos(state.yaw) * rear,
+          (Math.cos(state.yaw) * side + Math.sin(state.yaw) * rear) * scale,
+          height * scale,
+          (-Math.sin(state.yaw) * side + Math.cos(state.yaw) * rear) * scale,
         ),
       );
   }
@@ -24,9 +25,25 @@ export function createRacerEffects({ spawnParticle, terrain = "grass" }) {
       paper = activeTrack.course.theme.terrain === "paper";
     let clock = clocks.get(state);
     if (!clock) {
-      clock = { drift: 0, boost: 0, surface: 0 };
+      clock = { drift: 0, boost: 0, surface: 0, scale: state.scale ?? 1 };
       clocks.set(state, clock);
     }
+    const scale = state.scale ?? 1;
+    if (clock.scale > 0.6 !== scale > 0.6) {
+      for (let i = 0; i < 12; i++) {
+        const a = (i / 12) * Math.PI * 2;
+        spawnParticle(
+          state.worldPos
+            .clone()
+            .add(new THREE.Vector3(Math.cos(a) * scale, 0.5, Math.sin(a) * scale)),
+          scale < 0.6 ? "#ffc9df" : "#9bebd0",
+          0.5,
+          0.12,
+          new THREE.Vector3(Math.cos(a) * 2, 1.2, Math.sin(a) * 2),
+        );
+      }
+    }
+    clock.scale = scale;
     if (events.landed) {
       const color =
         state.underwater || storm
