@@ -241,6 +241,8 @@ export function createAudioController(audioWindow = window) {
     const beat = Math.floor(time * (id === "metronome-hall" ? 2 : 2.5));
     if (!active || beat === lastWorldBeat) return;
     lastWorldBeat = beat;
+    if (track.course.theme.atmosphere === "storm" && Math.sin(time * 0.24) > 0.97 && beat % 2 === 0)
+      noise(1.8, 0.18, 65, 0.3, true);
     for (const source of track.course.ambientSources || []) {
       const p = track.poseAt(
         track.sectorT(source.section, source.fraction) * track.TRACK,

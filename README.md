@@ -2,7 +2,7 @@
 
 A browser kart racer built with Three.js. Race five rivals over three laps, drift into mini-turbos, launch off ramps, and use items to take the lead.
 
-Four courses include moving hazards, boost pads, and shortcuts: **Windmill Wilds**, **Neon Harbor**, **Sunstone Ruins**, and **Frostpeak Festival**. Supports keyboard and touch controls.
+Seven playable courses include moving hazards, boost pads, and shortcuts: **Windmill Wilds**, **Neon Harbor**, **Sunstone Ruins**, **Frostpeak Festival**, **Clockwork Citadel**, **Paper Revel**, and **Tempest Causeway**. More courses are in development. Supports keyboard and touch controls.
 
 Choose from six distinct **SuperTuxKart** racers: Tux (penguin), Nolok (reptile),
 Pidgin (bird), Kiki (robot), Konqi (dragon), and Wilber (mascot). Each has its
@@ -17,7 +17,11 @@ To regenerate these images, see the [screenshot capture guide](docs/screenshot-c
 | --- | --- |
 | ![Tux racing in Windmill Wilds](docs/screenshots/windmill-wilds.jpg) | ![Kiki racing in Neon Harbor](docs/screenshots/neon-harbor.jpg) |
 | **Sunstone Ruins** | **Frostpeak Festival** |
-| ![Nolok racing in Sunstone Ruins](docs/screenshots/sunstone-ruins.jpg) | ![Konqi racing in Frostpeak Festival](docs/screenshots/frostpeak-festival.jpg) |
+| ![Nolok racing through a Sunstone temple](docs/screenshots/sunstone-engine-polish.jpg) | ![Konqi racing in Frostpeak Festival](docs/screenshots/frostpeak-festival.jpg) |
+| **Clockwork Citadel** | **Paper Revel** |
+| ![Kiki racing through Clockwork Citadel](docs/screenshots/clockwork-citadel.jpg) | ![Pidgin racing through Paper Revel](docs/screenshots/paper-crossing.jpg) |
+| **Tempest Causeway** | |
+| ![Konqi racing across Tempest Causeway](docs/screenshots/tempest-causeway.jpg) | |
 
 ## Run locally
 
@@ -32,7 +36,7 @@ Open [localhost:5173](http://127.0.0.1:5173). Three.js, fonts, and game assets a
 
 ## Multiplayer
 
-Choose **Multiplayer** on the main screen, enter your name, then host a room or join with its six-character code. The host can copy an invite link. Up to six players choose their characters; the host chooses any of the four courses and **1 or 3 laps**. Everyone readies up, then the host starts. The countdown waits for all course loads.
+Choose **Multiplayer** on the main screen, enter your name, then host a room or join with its six-character code. The host can copy an invite link. Up to six players choose their characters; the host chooses any of the seven courses and **1 or 3 laps**. Everyone readies up, then the host starts. The countdown waits for all course loads.
 
 The server simulates every kart, collision, pickup, item, and finish at 120 Hz in an isolated worker per room. Clients predict their own driving, replay unacknowledged controls after corrections, smooth visual corrections, and interpolate opponents using an adaptive buffer. Input sends run at 30 Hz and snapshots at 20 Hz, with bounded extrapolation and slow-connection backpressure. Network delay can still affect when hits and item use are confirmed; severe outages cannot be made invisible.
 

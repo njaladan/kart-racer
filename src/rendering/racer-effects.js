@@ -1,5 +1,5 @@
 import * as THREE from "../../vendor/three/three.module.js";
-import { sectionAt, trackT } from "../track/track.js";
+import { activeTrack, trackT } from "../track/track.js";
 
 const SPARK_COLORS = ["#d6edf1", "#8af6ff", "#ffc05e"];
 
@@ -20,13 +20,24 @@ export function createRacerEffects({ spawnParticle, terrain = "grass" }) {
   }
 
   function update(state, events, dt) {
+    const storm = activeTrack.course.theme.atmosphere === "storm",
+      paper = activeTrack.course.theme.terrain === "paper";
     let clock = clocks.get(state);
     if (!clock) {
       clock = { drift: 0, boost: 0, surface: 0 };
       clocks.set(state, clock);
     }
     if (events.landed) {
-      const color = terrain === "snow" ? "#e9f5ff" : terrain === "sand" ? "#efd4a4" : "#c7d2c8";
+      const color =
+        state.underwater || storm
+          ? "#b6eaf3"
+          : paper
+            ? "#f2b5c7"
+            : terrain === "snow"
+              ? "#e9f5ff"
+              : terrain === "sand"
+                ? "#efd4a4"
+                : "#c7d2c8";
       const count = state.isPlayer ? 10 : 5;
       for (let i = 0; i < count; i++) {
         const angle = (i / count) * Math.PI * 2;
@@ -41,10 +52,11 @@ export function createRacerEffects({ spawnParticle, terrain = "grass" }) {
       }
     }
 
-    const surface = sectionAt(trackT(state.s)).material;
+    const surface = activeTrack.surfaceAt(trackT(state.s), (state.x || 0) * 6.25).material;
     const loose =
-      ["snow", "sand", "gravel", "needles", "grass"].includes(surface) || Math.abs(state.x) > 1;
-    const wet = terrain === "concrete" || surface === "ice";
+      ["snow", "sand", "gravel", "needles", "grass", "paper"].includes(surface) ||
+      Math.abs(state.x) > 1;
+    const wet = state.underwater || storm || terrain === "concrete" || surface === "ice";
     clock.surface =
       state.grounded && state.speed > 12 && (loose || wet)
         ? clock.surface + dt * (state.isPlayer ? 14 : 3)
@@ -54,11 +66,13 @@ export function createRacerEffects({ spawnParticle, terrain = "grass" }) {
       const color =
         surface === "snow" || terrain === "snow"
           ? "#e8f6ff"
-          : wet
-            ? "#96cdd9"
-            : terrain === "sand"
-              ? "#d8b985"
-              : "#aaa785";
+          : paper
+            ? ["#f6a6c0", "#a6b4e0", "#ffdb88"][Math.floor(state.s) % 3]
+            : wet
+              ? "#96cdd9"
+              : terrain === "sand"
+                ? "#d8b985"
+                : "#aaa785";
       for (const side of [-1, 1])
         spawnParticle(
           positionBehind(state, side * 0.7, 0.74, 0.12),

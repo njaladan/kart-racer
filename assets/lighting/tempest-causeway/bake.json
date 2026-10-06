@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "course": "tempest-causeway",
+  "lighting": "indirect.png",
+  "height": "height.png",
+  "bounds": [
+    -480.6,
+    -375.1,
+    859.1,
+    771.4000000000001
+  ],
+  "heightRange": [
+    -12,
+    75
+  ],
+  "bounceScale": 0.65,
+  "resolution": 512,
+  "samples": 12,
+  "radius": 22.0,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
+  "sourceSceneSha256": "4ac2b55496fc4bd8c7b838beab500142c9c150bb016a6f86a2285044ad561e9a",
+  "triangles": 214508,
+  "lights": 94,
+  "outputs": [
+    {
+      "file": "indirect.png",
+      "width": 512,
+      "height": 512,
+      "bytes": 185450,
+      "sha256": "85b5580c8157fdd3c57569fa5df6bc49a467762a722707640bae5fc1cdfcea0b"
+    },
+    {
+      "file": "height.png",
+      "width": 512,
+      "height": 512,
+      "bytes": 93385,
+      "sha256": "f839e960ede2cdab86f5a9adaa02dcac6296d0f5c8ca0750ad0ffc2acdf8b8ce"
+    },
+    {
+      "file": "spill.png",
+      "width": 512,
+      "height": 256,
+      "bytes": 3392,
+      "sha256": "5cbb2a05a8ce127e569753b447070debaa4a0bb1c4f18391292ab9b510f7e25c"
+    }
+  ],
+  "lightVolume": {
+    "resolution": 128,
+    "columns": 4,
+    "rows": 2,
+    "heights": [
+      -15,
+      0,
+      15,
+      30,
+      50,
+      75
+    ],
+    "strength": 1,
+    "file": "spill.png"
+  }
+}

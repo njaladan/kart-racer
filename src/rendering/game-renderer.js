@@ -283,7 +283,7 @@ export function createGameRenderer({
     lighting?.update(dt, player.worldPos, section, [player, ...bots]);
     advanceSurfaceDetails(scene, frameState.raceTime);
     getLandscape()?.updateCamera?.(camera.position, graphicsQuality?.getTier() ?? 3);
-    sky?.update(frameState.raceTime);
+    sky?.update(frameState.raceTime, motionEnabled);
     weather?.update(frameState.raceTime, camera.position, forest);
     displayFinish?.update(
       frameState.raceTime,
