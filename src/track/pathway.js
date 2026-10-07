@@ -18,6 +18,8 @@ export function createPathwayQueries(track) {
   function floorAt(surface) {
     if (surface.branchIndex) {
       const branch = track.branches[surface.branchIndex - 1];
+      if (branch.areaSurface)
+        return { supported: !surface.offroad, height: surface.height, outside: surface.offroad };
       return {
         supported: !surface.offroad || !branch.dropToMain,
         height: surface.height,

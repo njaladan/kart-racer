@@ -5,11 +5,11 @@ import { registerLightPool } from "../../rendering/course-lighting.js";
 /** A chamber enclosing both routes around an open movement well. */
 export function buildWatchInterior({ track, kit, scenery, animated, updates, sign }) {
   const { mesh, box, material } = kit;
+  const bowl = track.areaSurfaces[0];
   const section = track.SECTIONS[track.course.watchBowl.section];
-  const a = track.frameAt(section.start).p,
-    b = track.frameAt(section.end).p;
-  const center = a.clone().add(b).multiplyScalar(0.5);
-  const radius = Math.hypot(a.x - b.x, a.z - b.z) / 2;
+  const a = track.frameAt(section.start).p;
+  const center = bowl.center;
+  const radius = bowl.radius;
   const brass = material("#cfa25d", { metalness: 0.65, roughness: 0.35 });
   const dark = material("#354457", { metalness: 0.4 });
   const cream = material("#dfceb5");
@@ -41,6 +41,37 @@ export function buildWatchInterior({ track, kit, scenery, animated, updates, sig
   const top = mesh(new THREE.RingGeometry(radius * 0.35, radius + 25, 96), dark, room, [0, 65, 0]);
   top.rotation.x = Math.PI / 2;
   top.material.side = THREE.DoubleSide;
+  // A dark, recessed shaft gives the open well depth instead of exposing sky
+  // through the terrain excavation. Its rim follows just below the floor edge.
+  const wellGeometry = new THREE.CylinderGeometry(
+    bowl.innerRadius,
+    bowl.innerRadius,
+    44,
+    96,
+    1,
+    true,
+  );
+  const wellPositions = wellGeometry.attributes.position;
+  for (let i = 0; i < wellPositions.count; i++) {
+    const p = center
+      .clone()
+      .add(new THREE.Vector3(wellPositions.getX(i), 0, wellPositions.getZ(i)));
+    wellPositions.setY(
+      i,
+      wellPositions.getY(i) > 0 ? bowl.heightAt(p) - center.y - 0.1 : -radius - 46,
+    );
+  }
+  wellGeometry.computeVertexNormals();
+  const wellWall = mesh(wellGeometry, dark.clone(), room);
+  wellWall.material.side = THREE.DoubleSide;
+  wellWall.name = "Recessed gear well shaft";
+  const wellBase = mesh(new THREE.CircleGeometry(bowl.innerRadius, 96), dark, room, [
+    0,
+    -radius - 46,
+    0,
+  ]);
+  wellBase.rotation.x = -Math.PI / 2;
+  wellBase.name = "Deep gear well base";
   // Deep gears and shafts make the central gap visibly fall into a watch.
   const gearGeo = new THREE.TorusGeometry(1, 0.075, 6, 40);
   for (let i = 0; i < 8; i++) {
@@ -78,11 +109,11 @@ export function buildWatchInterior({ track, kit, scenery, animated, updates, sig
   }
   for (let i = 0; i < 13; i++) {
     const angle = i * 2.4,
-      r = radius * (0.13 + (i % 3) * 0.11);
+      r = bowl.innerRadius * (0.18 + (i % 3) * 0.22);
     const gear = new THREE.Group();
     room.add(gear);
-    gear.position.set(Math.cos(angle) * r, -12 - (i % 4) * 4, Math.sin(angle) * r);
-    const size = 13 + (i % 4) * 3;
+    gear.position.set(Math.cos(angle) * r, -radius - 10 - (i % 4) * 5, Math.sin(angle) * r);
+    const size = 3 + (i % 4);
     mesh(gearGeo, brass, gear, [0, 0, 0], [size, size, size]).rotation.x = Math.PI / 2;
     for (let n = 0; n < 24; n++) {
       const q = (n * Math.PI * 2) / 24;

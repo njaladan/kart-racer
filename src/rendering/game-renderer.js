@@ -1,3 +1,4 @@
+import { clearAreaCamera } from "./area-camera.js";
 import { createSunGlare } from "./sun-glare.js";
 import { racerProjection } from "../track/route-branches.js";
 import { createBoostMotion } from "./boost-motion.js";
@@ -425,6 +426,11 @@ export function createGameRenderer({
     cameraLook.lerp(look, 1 - Math.exp(-(12 - boostStrength * 3) * dt));
     const cameraTrack = racerProjection(activeTrack, player, camera.position);
     camera.position.y = Math.max(camera.position.y, cameraTrack.height + 2.1);
+    clearAreaCamera(
+      activeTrack.branches[player.routeChoice - 1]?.areaSurface,
+      camera.position,
+      position,
+    );
     camera.fov +=
       ((panoramic ? 68 : 63) +
         Math.min(7, player.speed * 0.045) +

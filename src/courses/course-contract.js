@@ -157,6 +157,16 @@ export function validateCourseDefinition(course) {
       if (typeof branch[field] !== "string" || !branch[field].trim())
         fail(course, `${path}.${field}`, "a non-empty string");
     }
+    if (branch.shape === "bowl") {
+      if (branch.side !== -1 && branch.side !== 1)
+        fail(course, `${path}.side`, "-1 or 1 for a bowl guide");
+      if (branch.wellRatio != null)
+        finite(course, branch.wellRatio, `${path}.wellRatio`, {
+          min: 0,
+          max: 0.5,
+          exclusiveMin: true,
+        });
+    }
     finite(course, branch.halfWidth, `${path}.halfWidth`, { min: 0, exclusiveMin: true });
     if (!Array.isArray(branch.points) || branch.points.length < 2)
       fail(course, `${path}.points`, "route-relative [fraction, offset, height?] points");

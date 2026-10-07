@@ -1,3 +1,4 @@
+import { groundGeometry } from "./area-surfaces.js";
 import { buildAdventureArt } from "../courses/fidelity/index.js";
 import { buildExperienceWorld } from "../courses/experiences/world.js";
 import * as THREE from "../../vendor/three/three.module.js";
@@ -186,11 +187,7 @@ export function buildCourseWorld({
     ]),
   ];
   const roads = materialNames.map((name) => roadMaterials[name] || mats.road);
-  const ground = mesh(new THREE.PlaneGeometry(1800, 1800), mats.grass, scenery, [
-    0,
-    groundHeight,
-    0,
-  ]);
+  const ground = mesh(groundGeometry(track, 1800), mats.grass, scenery, [0, groundHeight, 0]);
   ground.rotation.x = -Math.PI / 2;
   ground.castShadow = false;
   ground.name = "Course ground";

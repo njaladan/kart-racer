@@ -281,7 +281,7 @@ for (const course of selected) {
     ],
     bounds: [minX, minZ, maxX - minX, maxZ - minZ],
     heightRange: [
-      Math.min(-12, (course.theme.groundHeight ?? -1.7) - 10, ...controls.map((p) => p[1] - 30)),
+      Math.min(-12, (course.theme.groundHeight ?? -1.7) - 10, ...controls.map((p) => p[1] - 30), ...track.areaSurfaces.map((area) => area.heightAt(area.center) - 30)),
       Math.max(75, ...controls.map((p) => p[1] + 70)),
     ],
     lightVolume: course.theme.lightVolume,

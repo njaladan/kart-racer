@@ -1,3 +1,4 @@
+import { clearAreaCamera } from "../rendering/area-camera.js";
 import { racerProjection } from "../track/route-branches.js";
 import {
   activeTrack,
@@ -191,6 +192,11 @@ export function createBrowserDiagnostics({
           camera.position.y += 18 * reveal;
           gameRenderer.cameraLook.y -= 32 * reveal;
         }
+        clearAreaCamera(
+          activeTrack.branches[player.routeChoice - 1]?.areaSurface,
+          camera.position,
+          player.worldPos,
+        );
         camera.lookAt(gameRenderer.cameraLook);
       }
       if (message.type === "test-step" && started && !finished && !paused) {

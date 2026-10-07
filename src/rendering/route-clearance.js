@@ -17,7 +17,24 @@ export function createRouteClearance(track) {
     }
     return bounds.expandByVector(new THREE.Vector3(0.3, 0, 0.3));
   });
+  for (const area of track.areaSurfaces || []) {
+    const sectors = 96,
+      rings = 24;
+    for (let i = 0; i < sectors; i++)
+      for (let j = 0; j < rings; j++) {
+        const bounds = new THREE.Box3();
+        for (const angle of [i, i + 1])
+          for (const ring of [j, j + 1]) {
+            const r = THREE.MathUtils.lerp(area.innerRadius, area.radius, ring / rings);
+            const p = area.pointAt((angle / sectors) * Math.PI * 2, r);
+            bounds.expandByPoint(p.clone().add(new THREE.Vector3(0, 0.35, 0)));
+            bounds.expandByPoint(p.clone().add(new THREE.Vector3(0, 7, 0)));
+          }
+        corridor.push(bounds.expandByVector(new THREE.Vector3(0.3, 0, 0.3)));
+      }
+  }
   for (const branch of track.branches || []) {
+    if (branch.areaSurface) continue;
     for (let i = 0; i < branch.count; i++) {
       const bounds = new THREE.Box3();
       for (const q of [i / branch.count, (i + 1) / branch.count])

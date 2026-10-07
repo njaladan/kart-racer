@@ -37,7 +37,12 @@ export function auditRouteGeometry(scene, track, animated = [], lap = 0) {
     for (const offset of [left + 1.5, left / 2, 0, right / 2, right - 1.5])
       stations.push({p: track.poseAt(t * track.TRACK, offset, .5).p, route: "main", fraction: t, offset});
   }
+  for (const area of track.areaSurfaces) {
+    for (let i = 0; i < 96; i++) for (const ratio of [0.18, 0.3, 0.5, 0.7, 0.84, 0.94, 0.98])
+      stations.push({p: area.pointAt(i / 96 * Math.PI * 2, area.radius * ratio, .5), route: area.id, fraction: i / 96, offset: area.radius * ratio});
+  }
   for (const branch of track.branches) {
+    if (branch.areaSurface) continue;
     if (branch.lap != null && branch.lap !== lap) continue;
     const count = Math.ceil(branch.length / 3);
     for (let i = 0; i <= count; i++) for (const offset of [-branch.halfWidth + 1.5, 0, branch.halfWidth - 1.5])

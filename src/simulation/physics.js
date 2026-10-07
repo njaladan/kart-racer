@@ -190,7 +190,10 @@ export function drive(state, input, surface, dt) {
     // A slide pays a small speed cost; weaving down a straight is slower than
     // cruising. Momentum is still conserved by the tire-grip calculation.
     if (sliding) acceleration -= 0.9;
-    acceleration -= surface.slope * 9.81;
+    // Area floors can be driven in any direction, so gravity follows the
+    // vehicle heading and the local normal rather than a route guide's bank.
+    const slope = surface.normal ? -(surface.normal.x * fx + surface.normal.z * fz) : surface.slope;
+    acceleration -= slope * 9.81;
     const next = signedSpeed + acceleration * dt;
     const nextSpeed =
       (!input.throttle || input.brake) &&
@@ -273,7 +276,10 @@ export function drive(state, input, surface, dt) {
       forward = 0;
       lateral = 0;
       state.yawRate = 0;
-    } else lateral += surface.bank * 9.81 * dt;
+    } else {
+      const bank = surface.normal ? surface.normal.x * rx + surface.normal.z * rz : surface.bank;
+      lateral += bank * 9.81 * dt;
+    }
     state.vx = fx * forward + rx * lateral;
     state.vz = fz * forward + rz * lateral;
   } else {

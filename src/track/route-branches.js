@@ -1,12 +1,22 @@
+import { createBowlSurface } from "./bowl-surface.js";
 import * as THREE from "../../vendor/three/three.module.js";
 
 const clamp = (q) => Math.max(0, Math.min(1, q));
 
 /** Separate ribbons with explicit entry/rejoin gates and signed lap progress. */
 export function createRouteBranches(track) {
+  const areaSurfaces = [];
   const branches = (track.course.branches || []).map((definition, index) => {
     const start = track.sectorT(definition.section, definition.startFraction);
     const end = track.sectorT(definition.endSection ?? definition.section, definition.endFraction);
+    let areaSurface;
+    if (definition.shape === "bowl") {
+      areaSurface = areaSurfaces.find((area) => area.id === definition.group);
+      if (!areaSurface) {
+        areaSurface = createBowlSurface(track, definition, start, end);
+        areaSurfaces.push(areaSurface);
+      }
+    }
     let controls = definition.points.map(([q, offset, height = 0]) => {
       const p = track.poseAt((start + (end - start) * q) * track.TRACK, offset, 0).p;
       p.y += height;
@@ -34,6 +44,8 @@ export function createRouteBranches(track) {
       }
       controls.push(b.clone().addScaledVector(along, -lead), b);
     }
+    if (areaSurface)
+      controls = Array.from({ length: 41 }, (_, i) => areaSurface.guideAt(i / 40, definition.side));
     const curve = new THREE.CatmullRomCurve3(controls, false, "centripetal");
     curve.arcLengthDivisions = 1024;
     const length = curve.getLength();
@@ -71,6 +83,11 @@ export function createRouteBranches(track) {
       }
       const bank = (definition.bank || 0) * Math.sin(clamp(q) * Math.PI);
       right.applyAxisAngle(tangent, bank);
+      if (areaSurface) {
+        const p = a.p.clone().lerp(b.p, mix);
+        p.y = areaSurface.heightAt(p);
+        return areaSurface.frameAt(p, tangent, THREE.MathUtils.lerp(a.curvature, b.curvature, mix));
+      }
       return {
         p: a.p.clone().lerp(b.p, mix),
         tangent,
@@ -80,12 +97,20 @@ export function createRouteBranches(track) {
       };
     }
     function poseAt(q, offset = 0, above = 0.065) {
+      if (areaSurface) {
+        const frame = frameAt(q);
+        const horizontalRight = new THREE.Vector3(-frame.tangent.z, 0, frame.tangent.x).normalize();
+        const p = frame.p.clone().addScaledVector(horizontalRight, offset);
+        p.y = areaSurface.heightAt(p) + above;
+        return areaSurface.frameAt(p, frame.tangent, frame.curvature);
+      }
       const frame = frameAt(q),
         p = frame.p.clone().addScaledVector(frame.right, offset);
       p.y += above + branchRampHeight(definition, q);
       return { ...frame, p };
     }
     function project(position, nearT, global = false) {
+      global ||= !!areaSurface;
       const near = Math.round(clamp((nearT - start) / (end - start)) * count);
       let best = Infinity,
         bestQ = 0;
@@ -111,12 +136,35 @@ export function createRouteBranches(track) {
         i++
       )
         inspect(i);
-      const frame = frameAt(bestQ),
-        horizontalRight = new THREE.Vector3(frame.right.x, 0, frame.right.z).normalize();
+      if (areaSurface) {
+        // Invert the interpolated guide normal, not just the sampled segment.
+        // This keeps a broad offset recoverable without drifting along the guide.
+        for (let i = 0; i < 3; i++) {
+          const f = frameAt(bestQ);
+          const direction = f.tangent.clone().setY(0).normalize();
+          const low = clamp(bestQ - 0.0001),
+            high = clamp(bestQ + 0.0001);
+          const speed = frameAt(high).p.sub(frameAt(low).p).dot(direction) / (high - low);
+          if (Math.abs(speed) < 0.001) break;
+          bestQ = clamp(bestQ + position.clone().sub(f.p).dot(direction) / speed);
+        }
+      }
+      let frame = frameAt(bestQ);
+      const horizontalRight = areaSurface
+        ? new THREE.Vector3(-frame.tangent.z, 0, frame.tangent.x).normalize()
+        : new THREE.Vector3(frame.right.x, 0, frame.right.z).normalize();
       const offset =
         position.clone().sub(frame.p).dot(horizontalRight) /
-        Math.hypot(frame.right.x, frame.right.z);
-      const height = poseAt(bestQ, offset).p.y;
+        (areaSurface ? 1 : Math.hypot(frame.right.x, frame.right.z));
+      const height = areaSurface
+        ? areaSurface.heightAt(position) + 0.065
+        : poseAt(bestQ, offset).p.y;
+      if (areaSurface)
+        frame = areaSurface.frameAt(
+          position.clone().setY(height - 0.065),
+          frame.tangent,
+          frame.curvature,
+        );
       const halfWidth = definition.halfWidth;
       return {
         t: start + (end - start) * bestQ,
@@ -136,14 +184,25 @@ export function createRouteBranches(track) {
         grip: definition.grip ?? 12,
         offroadGrip: 5,
         offroadDrag: 1,
-        offroad: Math.abs(offset) > halfWidth,
+        offroad: areaSurface ? !areaSurface.contains(position) : Math.abs(offset) > halfWidth,
         groundHeight: height,
         material: definition.material,
         section: track.sectionAt(start),
         movingSurface: null,
       };
     }
-    return { ...definition, index: index + 1, start, end, length, count, frameAt, poseAt, project };
+    return {
+      ...definition,
+      areaSurface,
+      index: index + 1,
+      start,
+      end,
+      length,
+      count,
+      frameAt,
+      poseAt,
+      project,
+    };
   });
   const groups = [];
   for (const branch of branches) {
@@ -156,7 +215,7 @@ export function createRouteBranches(track) {
     group.branches.push(branch);
     branch.groupIndex = groups.indexOf(group);
   }
-  return { branches, branchGroups: groups };
+  return { branches, branchGroups: groups, areaSurfaces };
 }
 
 export function branchRampHeight(branch, q) {

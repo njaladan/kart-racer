@@ -76,7 +76,7 @@ const course = adventure({
       resolution: 160,
       columns: 3,
       rows: 2,
-      heights: [-20, 0, 20, 45, 75, 105],
+      heights: [-95, -65, -35, 0, 45, 105],
       strength: 1.2,
     },
   },

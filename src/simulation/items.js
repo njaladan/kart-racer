@@ -115,8 +115,8 @@ export function advanceShell(shell, dt, raceTime = 0) {
     ? {
         left: -branch.halfWidth + 0.55,
         right: branch.halfWidth - 0.55,
-        leftSolid: !branch.dropToMain,
-        rightSolid: !branch.dropToMain,
+        leftSolid: !branch.dropToMain && !branch.areaSurface,
+        rightSolid: !branch.dropToMain && !branch.areaSurface,
       }
     : collisionBounds(surface.t, 0.55);
   const side = surface.offset < bounds.left ? -1 : 1;
@@ -135,10 +135,11 @@ export function advanceShell(shell, dt, raceTime = 0) {
     }
   }
   const contact =
-    !branch &&
-    (activeTrack.pathwayContact(shell.worldPos, 0.55) ||
-      trafficContact(shell.worldPos, raceTime, 0.55) ||
-      cartContact(shell.worldPos, raceTime, 0.55));
+    branch?.areaSurface?.contactAt(shell.worldPos, 0.55) ||
+    (!branch &&
+      (activeTrack.pathwayContact(shell.worldPos, 0.55) ||
+        trafficContact(shell.worldPos, raceTime, 0.55) ||
+        cartContact(shell.worldPos, raceTime, 0.55)));
   if (contact) {
     const outward = shell.vx * contact.nx + shell.vz * contact.nz;
     shell.worldPos.x -= contact.nx * contact.penetration;

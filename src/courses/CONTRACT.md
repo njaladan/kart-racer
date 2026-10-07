@@ -12,7 +12,7 @@ Route progress remains signed and checkpoints ordered. Local projection keeps ro
 
 ## Course experiences
 
-Separate spline ribbons can depart from and rejoin the main route. Their distance maps to the same ordered checkpoints, while steering, floors, banking, recovery and shells use the selected ribbon. Required choices can replace a stretch entirely. Lap-specific paper routes remain available to racers who already occupy them even while another racer reaches the next form.
+Separate spline ribbons can depart from and rejoin the main route. Their distance maps to the same ordered checkpoints, while steering, floors, banking, recovery and shells use the selected ribbon. Required choices can replace a stretch entirely. Area floors can share multiple guide routes without inheriting ribbon width limits. Spherical bowls define continuous height, normals, perimeter contact, an open center well and terrain excavation; karts, shells, recovery, scenery clearance and tessellated meshes consume that same floor. Gravity follows the vehicle heading on these surfaces. Lap-specific paper routes remain available to racers who already occupy them even while another racer reaches the next form.
 
 Moving temple rings carry grounded karts and show the same motion in their surface markings. Freight roofs use carriage coordinates for travelling curved ramps. Quarterpipes have a concave launch face and an open lip, higher airtime, a larger trick and a slightly stronger landing boost. Rooftops and the broad snow descent can have a supported lower surface after leaving an upper ribbon.
 

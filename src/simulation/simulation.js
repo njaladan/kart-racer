@@ -167,6 +167,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
       grip: before.grip * (activeTrack.course.storm ? 0.87 : 1),
       bank: -before.frame.up.dot(before.horizontalRight),
       slope: before.frame.tangent.y,
+      normal: activeTrack.branches[before.branchIndex - 1]?.areaSurface ? before.frame.up : null,
       curvature: before.frame.curvature,
     },
     dt,
@@ -263,20 +264,24 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     ? {
         left: -selectedBranch.halfWidth + 0.9,
         right: selectedBranch.halfWidth - 0.9,
-        leftSolid: !selectedBranch.dropToMain,
-        rightSolid: !selectedBranch.dropToMain,
+        leftSolid: !selectedBranch.dropToMain && !selectedBranch.areaSurface,
+        rightSolid: !selectedBranch.dropToMain && !selectedBranch.areaSurface,
       }
     : collisionBounds(projection.t, 0.9 * state.scale);
   const side = projection.offset < bounds.left ? -1 : 1;
   const edge = side < 0 ? bounds.left : bounds.right;
   const solid = side < 0 ? bounds.leftSolid : bounds.rightSolid;
   const penetration = solid && !state.falling ? side * (projection.offset - edge) : 0;
-  const wallImpact = wallContact(
+  let wallImpact = wallContact(
     state,
     projection.horizontalRight.x * side,
     projection.horizontalRight.z * side,
     penetration,
   );
+  const areaContact = selectedBranch?.areaSurface?.contactAt(state.worldPos, 0.9 * state.scale);
+  if (areaContact && !state.falling)
+    wallImpact =
+      wallContact(state, areaContact.nx, areaContact.nz, areaContact.penetration) || wallImpact;
   if (penetration > 0) state.x = laneFromOffset(edge);
   const trafficHit = !selectedBranch && trafficContact(state.worldPos, raceTime);
   const contact =
@@ -429,7 +434,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   }
   // Even a glancing wall scrape interrupts the attempt. Cancel after contact
   // and vertical motion so releasing on the collision/takeoff tick cannot pay.
-  if (penetration > 0 || contact || !state.grounded || landed) cancelDrift(state);
+  if (penetration > 0 || areaContact || contact || !state.grounded || landed) cancelDrift(state);
   const turboTier = chargeDrift(state, sliding && !!state.driftDirection, input.drift, dt);
   if (turboTier) {
     state.boost = Math.max(state.boost, turboTier === 2 ? 1.05 : 0.55);

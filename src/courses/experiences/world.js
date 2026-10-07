@@ -1,3 +1,4 @@
+import { buildAreaSurfaces } from "../../rendering/area-surfaces.js";
 import { buildWatchInterior } from "./watch-interior.js";
 import * as THREE from "../../../vendor/three/three.module.js";
 import { createCourseKit, batchScenery } from "../../rendering/course-kit.js";
@@ -99,7 +100,9 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
     update();
     return { road, update };
   }
+  buildAreaSurfaces(track, kit, textures);
   for (const branch of track.branches) {
+    if (branch.areaSurface) continue;
     const branchGroup = new THREE.Group();
     branchGroup.name = branch.label;
     scenery.add(branchGroup);
