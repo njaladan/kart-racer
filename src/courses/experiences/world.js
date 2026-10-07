@@ -347,6 +347,8 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
   }
   if (track.course.watchBowl) buildWatchInterior({ track, kit, scenery, animated, updates, sign });
   if (track.drumField) {
+    // The separate head closes the shell; a shell cap here would be coplanar with it.
+    const shell = new THREE.CylinderGeometry(1, 1, 1, 16, 1, true);
     const drumMaterials = ["#b77982", "#7b97bd", "#c7a260", "#74a69c", "#9c83b3", "#d68e60"].map(
       (color) => material(color, { map: textures.metal, metalness: 0.45 }),
     );
@@ -360,7 +362,7 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
         track.yawFor(track.frameAt(drum.t).tangent) + Math.PI,
       );
       mesh(
-        cylinder,
+        shell,
         drumMaterials[drum.index % drumMaterials.length],
         g,
         [0, -2.7, 0],

@@ -3,8 +3,43 @@ import assert from "node:assert/strict";
 import * as THREE from "../vendor/three/three.module.js";
 import { COURSES } from "../src/courses/registry.js";
 import { createTrack } from "../src/track/track-builder.js";
-import { createCourseKit } from "../src/rendering/course-kit.js";
+import { createCourseKit, batchScenery } from "../src/rendering/course-kit.js";
 import { buildPathwayEdges } from "../src/rendering/pathway-edges.js";
+import { buildExperienceWorld } from "../src/courses/experiences/world.js";
+
+test("snare drumheads have one visible surface before and after scenery batching", () => {
+  const track = createTrack(COURSES.find((course) => course.id === "metronome-hall"));
+  const { scenery } = buildExperienceWorld({ scene: new THREE.Scene(), track });
+  for (const batched of [false, true]) {
+    if (batched) batchScenery(scenery);
+    scenery.updateMatrixWorld(true);
+    for (const drum of track.drumField.drums) {
+      for (const radius of [0.25, 0.5, 0.85]) {
+        for (let angle = 0.13; angle < Math.PI * 2; angle += Math.PI / 4) {
+          const origin = drum.p
+            .clone()
+            .add(
+              new THREE.Vector3(
+                Math.cos(angle) * drum.radius * radius,
+                1,
+                Math.sin(angle) * drum.radius * radius,
+              ),
+            );
+          const ray = new THREE.Raycaster(origin, new THREE.Vector3(0, -1, 0), 0, 2);
+          const hits = ray
+            .intersectObject(scenery, true)
+            .filter((hit) => Math.abs(hit.point.y - drum.p.y) < 0.001);
+          assert.equal(
+            new Set(hits.map((hit) => hit.object)).size,
+            1,
+            `drum ${drum.index + 1}: one head surface (batched=${batched})`,
+          );
+          assert.equal(hits[0].object.material.color.getHexString(), "ede5d2");
+        }
+      }
+    }
+  }
+});
 
 test("rendered shoulders match physical support and exposed faces leave the sky open", () => {
   for (const course of COURSES) {
