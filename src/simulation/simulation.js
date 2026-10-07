@@ -1,5 +1,5 @@
 import { racerProjection, updateRouteChoice } from "../track/route-branches.js";
-import { routeCarry } from "./experience-mechanics.js";
+import { routeCarry, trainRampAt } from "./experience-mechanics.js";
 export { botInput } from "./ai-driver.js";
 import {
   solarBoostAt,
@@ -25,6 +25,7 @@ import {
   trackT,
   poseAt,
   WORLD_PER_UNIT,
+  metresToProgress,
   TRACK,
   yawFor,
   activeTrack,
@@ -76,6 +77,13 @@ export function recoverRacer(state) {
   const safeChoice = state.routeChoice > 0 ? state.lastSafeRoute || state.routeChoice : 0;
   const safeGroup = state.routeGroup;
   const branch = activeTrack.branches[safeChoice - 1];
+  const recoveryDeck = activeTrack.movingSurfaceAt(trackT(state.s));
+  if (!branch && recoveryDeck?.gap && !recoveryDeck.docked) {
+    // Rejoin a current roof, with a run-up to its ramp, even after the cars move.
+    let rewind = recoveryDeck.coordinate - recoveryDeck.spacing / 2;
+    if (rewind < 0) rewind += recoveryDeck.spacing;
+    state.s -= metresToProgress(rewind);
+  }
   const offset = branch ? state.lastSafeOffset || 0 : 0;
   const pose = branch
     ? branch.poseAt((trackT(state.s) - branch.start) / (branch.end - branch.start), offset)
@@ -171,10 +179,15 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   const ringCarry = routeCarry(activeTrack, state, before, dt);
   const deck = before.movingSurface;
   const previousDeck = state.movingDeckId;
-  // Keep the train identity during roof jumps; carrying applies on contact only.
+  // Roof jumps retain the express's forward momentum while steering stays relative to it.
   state.movingDeckId = deck && !state.falling ? deck.id : null;
   state.deckCoordinate = state.movingDeckId ? deck.coordinate : 0;
-  if (state.movingDeckId && state.grounded && !state.finished) {
+  if (
+    state.movingDeckId &&
+    (state.grounded || state.jumpKind === "train") &&
+    !state.falling &&
+    !state.finished
+  ) {
     const next = poseAt(
         (before.t + (deck.speed * dt) / activeTrack.COURSE_LENGTH) * TRACK,
         before.offset,
@@ -223,7 +236,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   const floor = activeTrack.floorAt(projection);
   const overGap =
     !state.grounded &&
-    ["drum", "quarterpipe", "drop"].includes(state.jumpKind) &&
+    ["drum", "quarterpipe", "train", "drop"].includes(state.jumpKind) &&
     state.worldPos.y >= floor.height - 0.5;
   if (!floor.supported && !overGap) {
     state.falling = true;
@@ -331,18 +344,24 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   }
   const roofRamp = selectedBranch?.ramp;
   const roofLaunch = roofRamp && before.q < roofRamp.lip && after.q >= roofRamp.lip;
+  const trainRamp = trainRampAt(activeTrack, deck);
   const trainLaunch =
-    deck &&
-    activeTrack.course.trainRamps &&
-    before.movingSurface.coordinate / deck.spacing < activeTrack.course.trainRamps.lip &&
-    after.movingSurface?.coordinate / deck.spacing >= activeTrack.course.trainRamps.lip;
+    trainRamp &&
+    deck.supported &&
+    deck.coordinate < trainRamp.lip &&
+    after.movingSurface?.coordinate >= trainRamp.lip &&
+    Math.abs(before.offset - trainRamp.offset) <= trainRamp.width / 2;
   if (state.grounded && state.speed > 45 && (roofLaunch || trainLaunch)) {
     state.grounded = false;
-    state.jumpKind = "quarterpipe";
-    state.jumpTakeoffSpeed = 9;
+    state.jumpKind = trainLaunch ? "train" : "quarterpipe";
+    state.jumpTakeoffSpeed = trainLaunch ? 11 : 9;
     state.jumpMaxHeight = 7;
     state.trickReward = 1;
-    state.vy = 9;
+    state.vy = state.jumpTakeoffSpeed;
+    if (trainLaunch) {
+      state.falling = false;
+      state.offPathTime = 0;
+    }
     state.airTime = 0;
     state.trickActive = false;
   }

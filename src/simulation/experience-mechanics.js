@@ -82,12 +82,25 @@ export function drumAt(track, surface) {
 }
 
 /** Actual moving ramps use carriage coordinates, so they travel with the train. */
-export function trainRampHeight(track, t) {
+export function trainRampAt(track, surface) {
+  const definition = track.course.trainRamps;
+  if (!surface || !definition || surface.docked) return null;
+  const lip = surface.spacing - surface.gap / 2;
+  const lipDistance = surface.distance + lip - surface.coordinate;
+  if (lipDistance > surface.length - surface.dockLength) return null;
+  return {
+    ...definition,
+    start: lip - definition.length,
+    lip,
+    offset: surface.style?.offset || 0,
+  };
+}
+
+export function trainRampHeight(track, t, offset = 0) {
   const surface = track.movingSurfaceAt(t);
-  if (!surface || !track.course.trainRamps) return 0;
-  const q = surface.coordinate / surface.spacing;
-  const ramp = track.course.trainRamps;
-  const phase = (q - ramp.start) / (ramp.lip - ramp.start);
+  const ramp = trainRampAt(track, surface);
+  if (!ramp || Math.abs(offset - ramp.offset) > ramp.width / 2) return 0;
+  const phase = (surface.coordinate - ramp.start) / (ramp.lip - ramp.start);
   return phase >= 0 && phase < 1
     ? ramp.height * (1 - Math.sqrt(Math.max(0, 1 - phase * phase)))
     : 0;

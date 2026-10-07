@@ -1,8 +1,6 @@
 import { worldKit } from "./world-kit.js";
-import { trainCarriages } from "../../simulation/moving-surfaces.js";
+import { buildExpressCars } from "./railstorm-train.js";
 import { registerLightPool } from "../../rendering/course-lighting.js";
-import { metalDeckDetail } from "./architectural-detail.js";
-import { bakeVertexShade } from "../../rendering/vertex-shading.js";
 
 /** Train decks themselves are the racing surface; no static road under them. */
 export function buildRailstorm(context) {
@@ -18,118 +16,20 @@ export function buildRailstorm(context) {
     moss = mat("#668875", "leaves"),
     glow = mat("#ffe1a3", "metal", { emissive: "#eab87b", emissiveIntensity: 0.65 });
   const river = mat("#709999", "water", { roughness: 0.24, metalness: 0.2 });
-  const definition = track.course.movingDecks[0],
-    cars = trainCarriages(track, definition, 0);
-  const roof = mat("#b9bdb8", "metal", { metalness: 0.42, roughness: 0.6 });
-  metalDeckDetail(roof);
-  // Every carriage has a deforming, seamless deck and a rigid undercarriage.
-  // Only these bounded deck vertices change; repeated static pieces are batched.
-  let posesTime = NaN,
-    poses;
-  const carriageAt = (time, index) => {
-    if (posesTime !== time) {
-      posesTime = time;
-      poses = trainCarriages(track, definition, time);
-    }
-    return poses[index];
-  };
-  const vehicles = cars.map((car) => {
-    const g = new THREE.Group();
-    scenery.add(g);
-    const wheels = [];
-    box(car.index % 2 ? red : iron, g, [0, -1.6, 0], [22, 3.2, car.length + 0.15]);
-    for (const side of [-1, 1]) {
-      for (const z of [-car.length * 0.3, car.length * 0.3]) {
-        const wheel = new THREE.Group();
-        g.add(wheel);
-        wheel.position.set(side * 10, -3.1, z);
-        wheel.rotation.z = Math.PI / 2;
-        mesh(cylinder, dark, wheel, [0, 0, 0], [1.5, 1.2, 1.5]);
-        for (let i = 0; i < 3; i++)
-          box(silver, wheel, [0, 0.62, 0], [2.4, 0.08, 0.15]).rotation.y = (i * Math.PI) / 3;
-        context.kit.batch(wheel);
-        wheels.push(wheel);
-        box(iron, g, [side * 8, -2.8, z], [5, 1, 4]);
-      }
-      // Side panels, ladders and coupling hardware make the carriage legible
-      // from the roof edge while the wheels turn and the ground slips past.
-      for (let i = 0; i < 5; i++)
-        box(silver, g, [side * 11.08, -1.7, ((i - 2) * car.length) / 5], [0.12, 2.7, 0.2]);
-      for (let i = 0; i < 4; i++)
-        box(cream, g, [side * 11.3, -i * 0.6, car.length * 0.4], [0.2, 0.12, 2]);
-      for (const z of [-car.length * 0.25, car.length * 0.25]) {
-        if (car.index % 4 === 0) continue;
-        box(wood, g, [side * 9.2, 2.4, z], [2.5, 4.8, 6]);
-        for (const y of [0.8, 3.9]) box(cream, g, [side * 9.2, y, z + 3.03], [2.6, 0.2, 0.12]);
-        tube(g, [side * 8, 0.2, z + 3.04], [side * 10.4, 4.5, z + 3.04], 0.09, dark);
-      }
-    }
-    if (car.index % 4 === 2) {
-      for (const side of [-1, 1]) box(red, g, [side * 10.5, 7, 0], [0.5, 14, car.length]);
-      box(red, g, [0, 14, 0], [22, 1, car.length]);
-      box(glow, g, [0, 13.4, 0], [1.5, 0.15, car.length * 0.8]);
-    }
-    box(iron, g, [0, -2, car.length / 2 + 0.6], [2.5, 0.8, 2.5]);
-    for (const wheel of wheels) g.remove(wheel);
-    context.kit.batch(g);
-    for (const wheel of wheels) g.add(wheel);
-    const geometry = new THREE.BufferGeometry(),
-      positions = new Float32Array(66 * 3),
-      uv = [],
-      indices = [];
-    for (let i = 0; i <= 32; i++) {
-      uv.push(-11 / 8, (i * car.length) / 256, 11 / 8, (i * car.length) / 256);
-      if (i < 32) {
-        const q = i * 2;
-        indices.push(q, q + 1, q + 2, q + 1, q + 3, q + 2);
-      }
-    }
-    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
-    geometry.setIndex(indices);
-    const deck = mesh(geometry, roof);
-    deck.receiveShadow = true;
-    deck.castShadow = true;
-    deck.frustumCulled = false;
-    const update = (time) => {
-      track.setTime(time);
-      const pose = carriageAt(time, car.index);
-      w.align(g, track.poseAt(pose.t * track.TRACK, 0, -0.03));
-      wheels.forEach((wheel) => {
-        wheel.rotation.y = (time * definition.speed) / 1.5;
-      });
-      for (let i = 0; i <= 32; i++) {
-        const t = pose.start + ((pose.end - pose.start) * i) / 32;
-        for (let side = 0; side < 2; side++) {
-          const p = track.poseAt(t * track.TRACK, track.platformEdgeAt(t, side ? 1 : -1), 0.025).p,
-            q = (i * 2 + side) * 3;
-          positions[q] = p.x;
-          positions[q + 1] = p.y;
-          positions[q + 2] = p.z;
-        }
-      }
-      geometry.attributes.position.needsUpdate = true;
-      geometry.computeVertexNormals();
-      bakeVertexShade(geometry, 0.14);
-    };
-    g.name = `Moving freight carriage ${car.index + 1}`;
-    motion(g, update);
-    motion(deck, () => {});
-    update(0);
-    return g;
-  });
+  const definition = track.course.movingDecks[0];
+  const vehicles = buildExpressCars(w, { iron, cream, wood, dark, silver, glow });
   // Covered docks hide the convoy's analytic return and overlap its clipped ends.
   for (const t of [
     track.sectorT(definition.section, definition.startFraction),
     track.sectorT(definition.endSection, definition.endFraction),
   ]) {
     const g = w.groupAt(t);
-    box(wood, g, [0, -0.18, 0], [23, 0.35, 40]);
+    box(wood, g, [0, -0.18, 0], [23, 0.35, definition.dockLength * 2]);
     for (const side of [-1, 1])
-      for (const z of [-24, -8, 8, 24]) box(iron, g, [side * 13, 10, z], [0.8, 20, 0.8]);
-    box(red, g, [0, 21, 0], [30, 1.6, 56]);
-    for (const side of [-1, 1]) box(cream, g, [side * 13, 15, 0], [1, 4, 55]);
-    box(glow, g, [0, 19, 0], [5, 0.2, 38]);
+      for (const z of [-48, -24, 0, 24, 48]) box(iron, g, [side * 13, 10, z], [0.8, 20, 0.8]);
+    box(red, g, [0, 21, 0], [30, 1.6, 110]);
+    for (const side of [-1, 1]) box(cream, g, [side * 13, 15, 0], [1, 4, 110]);
+    box(glow, g, [0, 19, 0], [5, 0.2, 90]);
     g.updateWorldMatrix(true, false);
     registerLightPool(scene, {
       position: g.localToWorld(new THREE.Vector3(0, 14, 0)),
@@ -153,6 +53,23 @@ export function buildRailstorm(context) {
         for (const side of [-1, 1]) box(iron, g, [side * 10, -height / 2 - 6, 0], [1.5, height, 2]);
         tube(g, [-10, -6, 0], [10, -height - 6, 0], 0.7, iron);
         tube(g, [10, -6, 0], [-10, -height - 6, 0], 0.7, iron);
+      }
+    }
+    // Close, repeated trackside details make the train's speed readable from its roof.
+    const markerCount = Math.ceil(
+      ((track.SECTIONS[section].end - track.SECTIONS[section].start) * track.COURSE_LENGTH) / 14,
+    );
+    for (let i = 0; i < markerCount; i++) {
+      for (const side of [-1, 1]) {
+        const g = at(section, (i + 0.5) / markerCount, side * 15.5);
+        box(iron, g, [0, 1, 0], [0.35, 12, 0.35]);
+        box(cream, g, [0, 4.5, 0], [0.9, 1.6, 0.25]);
+        box(red, g, [0, 4.5, -0.14], [0.92, 0.3, 0.06]);
+        if (i % 3 === 0) {
+          box(wood, g, [0, 10, 0], [0.5, 25, 0.5]);
+          box(iron, g, [0, 20, 0], [5, 0.25, 0.3]);
+          for (const x of [-2, 0, 2]) mesh(sphere, glow, g, [x, 20.4, 0], [0.18, 0.3, 0.18]);
+        }
       }
     }
   }

@@ -359,6 +359,9 @@ export function createGameRenderer({
   }
 
   function updateCamera(dt, frameState) {
+    const trainSpeed = player.movingDeckId
+      ? activeTrack.movingSurfaceAt(activeTrack.trackT(player.s))?.speed || 0
+      : 0;
     const boost = boostMotion.update(
       player,
       motionEnabled && frameState.running && !frameState.finished,
@@ -427,6 +430,7 @@ export function createGameRenderer({
         Math.min(7, player.speed * 0.045) +
         boostStrength * 13 +
         boostKick * 4 +
+        (motionEnabled ? Math.min(4, trainSpeed * 0.25) : 0) +
         driftCamera * 3.5 -
         camera.fov) *
       (1 - Math.exp(-(boostStrength > 0.1 ? 12 : 5) * dt));
@@ -440,7 +444,10 @@ export function createGameRenderer({
     camera.rotation.z += cameraBank;
     // Bounded vibration: the chase rig strains under acceleration, while the
     // road and kart stay readable. Race time keeps pause/resume deterministic.
-    const vibration = boostStrength * 0.0025 + boostKick * 0.005;
+    const vibration =
+      boostStrength * 0.0025 +
+      boostKick * 0.005 +
+      (motionEnabled && frameState.running ? Math.min(0.0018, trainSpeed * 0.0001) : 0);
     camera.rotation.x += Math.sin(frameState.raceTime * 67) * vibration;
     camera.rotation.y += Math.sin(frameState.raceTime * 53) * vibration * 0.7;
     camera.rotation.z += Math.sin(frameState.raceTime * 43) * vibration;

@@ -24,6 +24,8 @@ export function createPathwayQueries(track) {
         outside: surface.offroad && !!branch.dropToMain,
       };
     }
+    const deck = track.movingSurfaceAt(surface.t);
+    if (deck && !deck.supported) return { supported: false, height: surface.height, outside: true };
     const drum = drumAt(track, surface);
     if (drum !== undefined)
       return {

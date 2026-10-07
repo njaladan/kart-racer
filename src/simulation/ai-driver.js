@@ -13,9 +13,12 @@ import {
 import { progressDelta } from "./race.js";
 import { cartAt, trafficAt } from "./hazards.js";
 import { bridgeWaveAt } from "./course-mechanics.js";
+import { trainRampAt } from "./experience-mechanics.js";
 
 export function botInput(state, index, elapsed, rivals = [], items = {}) {
-  const carrySpeed = activeTrack.movingSurfaceAt(trackT(state.s))?.speed || 0;
+  const deck = activeTrack.movingSurfaceAt(trackT(state.s));
+  const carrySpeed = deck?.speed || 0;
+  const trainRamp = trainRampAt(activeTrack, deck);
   const aheadMetres = 12 + (state.speed + carrySpeed * 3.6) * 0.09;
   const upcoming = activeTrack.branches.find(
     (b) =>
@@ -112,6 +115,11 @@ export function botInput(state, index, elapsed, rivals = [], items = {}) {
     }
   }
   if (branch) lane = 0;
+  if (trainRamp) {
+    // Commit early to this car's launch lane and keep that line across the gap.
+    if (deck.coordinate >= trainRamp.start - 30) lane = trainRamp.offset;
+  }
+  if (!state.grounded && state.jumpKind === "train") lane = state.lastSafeOffset || 0;
   const field = activeTrack.drumField;
   if (field && currentT >= field.start - 0.02 && currentT <= field.end) {
     const drum =
@@ -137,14 +145,20 @@ export function botInput(state, index, elapsed, rivals = [], items = {}) {
   }
   const headingCorrection = Math.max(-1, Math.min(1, -headingError * 3.1));
   // Tap a trick just before a ramp; do not hold the drift button through flight.
-  const rampAhead = RAMPS.some((ramp) => {
-    const gap = progressDelta(ramp.t * TRACK, state.s, TRACK) * WORLD_PER_UNIT;
-    return (
-      gap > 0 &&
-      gap < Math.max(1.5, (state.speed / 3.6) * 0.12) &&
-      (ramp.width == null || Math.abs(laneWidth(state.x) - (ramp.offset || 0)) < ramp.width / 2)
-    );
-  });
+  const trainRampAhead =
+    trainRamp &&
+    trainRamp.lip - deck.coordinate > 0 &&
+    trainRamp.lip - deck.coordinate < Math.max(1.5, (state.speed / 3.6) * 0.12);
+  const rampAhead =
+    trainRampAhead ||
+    RAMPS.some((ramp) => {
+      const gap = progressDelta(ramp.t * TRACK, state.s, TRACK) * WORLD_PER_UNIT;
+      return (
+        gap > 0 &&
+        gap < Math.max(1.5, (state.speed / 3.6) * 0.12) &&
+        (ramp.width == null || Math.abs(laneWidth(state.x) - (ramp.offset || 0)) < ramp.width / 2)
+      );
+    });
   const risingCrest = !branch && bridgeWaveAt(activeTrack, currentT, elapsed).launch;
   return {
     throttle: state.speed < cruise + 1,

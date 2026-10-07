@@ -356,7 +356,10 @@ export function createAudioController(audioWindow = window) {
       tone(scale < 0.6 ? 850 : 350, 0.24, "sine", 0.08, scale < 0.6 ? -500 : 700);
     }
     lastWorldScale = scale;
-    const beat = Math.floor(time * (id === "metronome-hall" ? 2 : 2.5));
+    const deck = state.movingDeckId ? track.movingSurfaceAt(t) : null;
+    const beat = Math.floor(
+      time * (deck ? Math.max(2.5, deck.speed / 3.2) : id === "metronome-hall" ? 2 : 2.5),
+    );
     if (!active || beat === lastWorldBeat) return;
     lastWorldBeat = beat;
     const thunder = stormAt(track.course, time).thunder;
@@ -454,7 +457,8 @@ export function createAudioController(audioWindow = window) {
     if (id === "metronome-hall" && ["tappets", "hall", "bells", "hammers"].includes(section.id))
       noise(0.065, 0.07, beat % 2 ? 430 : 280, beat % 2 ? 0.3 : -0.3, true);
     if (id === "railstorm-express" && state.movingDeckId) {
-      noise(0.07, 0.09, 550, Math.sin(time * 1.7) * 0.3, true);
+      noise(0.065, 0.12, beat % 2 ? 580 : 380, beat % 2 ? 0.25 : -0.25, true);
+      if (beat % 3 === 0) noise(0.55, 0.045, 2400, Math.sin(time) * 0.3, true);
       if (beat % 8 === 0) noise(0.7, 0.07, 95, 0, true);
     }
     if (storm && beat % 3 === 0) noise(0.8, 0.15, 2400, -0.4, true);

@@ -354,7 +354,7 @@ export function createTrack(course) {
       rampHeight(t, lane) -
       rampHeight(t, 0) +
       (movingSurfaceAt(t)?.height || 0) +
-      trainRampHeight({ course, movingSurfaceAt }, t);
+      trainRampHeight({ course, movingSurfaceAt }, t, lane);
     return { ...f, p };
   }
   function projectTrack(position, nearS = 0, global = false) {
@@ -392,6 +392,7 @@ export function createTrack(course) {
           offset = (ex * f.right.x + ez * f.right.z) / horizontalLength;
         laneHeight += movingSurfaceAt(t)?.height || 0;
         laneHeight += bridgeWaveAt({ course, SECTIONS, COURSE_LENGTH }, t, mechanismTime).height;
+        laneHeight += trainRampHeight({ course, movingSurfaceAt }, t, offset);
         laneHeight +=
           rampHeight(t, offset) - rampHeight(t, 0) + (offset * f.right.y) / horizontalLength;
       }
@@ -420,7 +421,7 @@ export function createTrack(course) {
     const height =
       frame.p.y +
       (movingSurfaceAt(t)?.height || 0) +
-      trainRampHeight({ course, movingSurfaceAt }, t) -
+      trainRampHeight({ course, movingSurfaceAt }, t, offset) -
       centerRamp +
       rampHeight(t, offset) +
       (offset * frame.right.y) / Math.hypot(frame.right.x, frame.right.z) +

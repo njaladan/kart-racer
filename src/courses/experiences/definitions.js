@@ -365,8 +365,8 @@ export function withCourseExperience(course) {
       break;
     case "railstorm-express":
       course.description =
-        "Board a moving freight train and race its carriage roofs, launch from travelling trick ramps, then disembark into Ironvale.";
-      course.trainRamps = { start: 0.1, lip: 0.35, height: 1.3 };
+        "Race a speeding express through colorful freight cars. Line up each launch ramp to clear the open couplings, then disembark into Ironvale.";
+      course.trainRamps = { length: 10, height: 1.8, width: 8 };
       break;
     case "metronome-hall":
       course.description =
