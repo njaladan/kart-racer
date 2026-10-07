@@ -359,7 +359,7 @@ export function withCourseExperience(course) {
       break;
     case "tempest-causeway":
       course.description =
-        "Cross wet coastal bridges in driving rain, with reduced grip, swaying decks, lightning flashes and delayed rolling thunder.";
+        "Cross wet coastal bridges in driving rain. Time a trick tap on the exposed bridge’s rising waves to launch above its heaving deck, amid lightning and rolling thunder.";
       course.storm = { period: 17, flashAt: 10.5, thunderDelay: 1.6, sway: 0.035 };
       course.bridgeSway = [1, 3, 5];
       break;

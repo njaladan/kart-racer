@@ -100,6 +100,15 @@ const course = adventure({
     { section: 5, startFraction: 0.1, endFraction: 0.9, strength: 3.8, frequency: 0.9 },
   ],
   elevated: [1, 3, 5].map((section) => ({ section, startFraction: 0, endFraction: 1 })),
+  // The exposed span flexes between fixed suspension towers.
+  bridgeWave: {
+    section: 1,
+    anchors: [0, 0.12, 0.4, 0.68, 0.92, 1],
+    amplitude: 3.2,
+    wavelength: 85,
+    period: 3.8,
+  },
+  ramps: [{ section: 5, fraction: 0.55, halfLength: 12, height: 0.8 }],
 });
 
 export default withCourseExperience(course);

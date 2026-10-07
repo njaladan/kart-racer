@@ -107,6 +107,7 @@ export function buildPathwayEdges({ track, kit, textures = {} }) {
     // Transit and moving train surfaces provide their own exposed sides.
     if (
       track.course.traversals?.some((r) => r.section === index) ||
+      track.course.bridgeWave?.section === index ||
       track.course.drumField?.section === index ||
       track.course.branches?.some((b) => b.required && b.section === index)
     )

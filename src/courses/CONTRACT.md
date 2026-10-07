@@ -16,7 +16,7 @@ Separate spline ribbons can depart from and rejoin the main route. Their distanc
 
 Moving temple rings carry grounded karts and show the same motion in their surface markings. Freight roofs use carriage coordinates for travelling curved ramps. Quarterpipes have a concave launch face and an open lip, higher airtime, a larger trick and a slightly stronger landing boost. Rooftops and the broad snow descent can have a supported lower surface after leaving an upper ribbon.
 
-Snare drums provide discrete circular floors over a gap. Contact launches the kart toward the next head, with aerial steering and a different voice for each drum; missing a head causes a fall. Storms share an analytic lightning/thunder cycle and bridge roll across authority and rendering. Straight cannon arcs and a flight camera reveal can expose a caldera beneath the kart.
+Snare drums provide discrete circular floors over a gap. Contact launches the kart toward the next head, with aerial steering and a different voice for each drum; missing a head causes a fall. Storms share an analytic lightning/thunder cycle and bridge roll across authority and rendering. Bridge wind waves share analytic height, slope and vertical velocity, pin their tower anchors, carry grounded karts and allow a fresh trick tap on a rising crest to launch with upward deck momentum. Straight cannon arcs and a flight camera reveal can expose a caldera beneath the kart.
 
 These are current tools for expressing the course idea, not a closed list of allowed designs. Change this document and extend the engine when the next idea needs it.
 

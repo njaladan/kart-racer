@@ -397,6 +397,15 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
     );
   }
   if (track.course.bridgeSway) {
+    if (track.course.bridgeWave) {
+      const section = track.SECTIONS[track.course.bridgeWave.section];
+      sign(
+        groupAt(track.poseAt(section.start * track.TRACK, 0, 0)),
+        "RISING CREST · TAP SPACE / SHIFT",
+        "#ffe4a9",
+        24,
+      );
+    }
     for (const index of track.course.bridgeSway) {
       const section = track.SECTIONS[index];
       const deck = ribbon(
@@ -411,7 +420,10 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
         Math.ceil(((section.end - section.start) * track.COURSE_LENGTH) / 2),
       );
       animated.push(deck.road);
-      updates.push(() => deck.update());
+      updates.push((time) => {
+        track.setTime(time);
+        deck.update();
+      });
     }
     const lightning = new THREE.DirectionalLight("#d9eaff", 0);
     lightning.position.set(90, 180, -60);

@@ -8,6 +8,7 @@ import {
   mechanismContact,
   advanceTraversal,
   currentAt,
+  bridgeWaveAt,
 } from "./course-mechanics.js";
 import {
   drive,
@@ -282,6 +283,30 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   const after = racerProjection(activeTrack, state);
   const slopeVelocity = (after.height - before.height) / dt;
   const wasGrounded = state.grounded;
+  const wave = bridgeWaveAt(activeTrack, after.t, raceTime);
+  if (
+    !selectedBranch &&
+    floor.supported &&
+    !after.offroad &&
+    state.grounded &&
+    state.speed > 45 &&
+    !(state.spin > 0) &&
+    !contact &&
+    penetration <= 0 &&
+    state.trickBuffer > 0 &&
+    wave.launch
+  ) {
+    state.grounded = false;
+    state.jumpKind = "wave";
+    state.jumpTakeoffSpeed = Math.min(12, 8 + wave.velocity * 0.65);
+    state.jumpMaxHeight = 6;
+    state.trickReward = 1;
+    // Start on the current moving deck; its upward momentum adds to the hop.
+    state.worldPos.y = after.height;
+    state.vy = state.jumpTakeoffSpeed;
+    state.airTime = 0;
+    state.trickActive = false;
+  }
   // Arcade ramp hops: boost changes horizontal speed, never jump height.
   // Do not infer takeoff from a noisy surface derivative after a collision.
   if (floor.supported && state.grounded && state.speed > 50) {

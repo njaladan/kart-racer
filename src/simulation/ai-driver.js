@@ -12,6 +12,7 @@ import {
 } from "../track/track.js";
 import { progressDelta } from "./race.js";
 import { cartAt, trafficAt } from "./hazards.js";
+import { bridgeWaveAt } from "./course-mechanics.js";
 
 export function botInput(state, index, elapsed, rivals = [], items = {}) {
   const carrySpeed = activeTrack.movingSurfaceAt(trackT(state.s))?.speed || 0;
@@ -144,11 +145,16 @@ export function botInput(state, index, elapsed, rivals = [], items = {}) {
       (ramp.width == null || Math.abs(laneWidth(state.x) - (ramp.offset || 0)) < ramp.width / 2)
     );
   });
+  const risingCrest = !branch && bridgeWaveAt(activeTrack, currentT, elapsed).launch;
   return {
     throttle: state.speed < cruise + 1,
     brake: state.speed > cruise + 5,
     steer: headingCorrection,
-    drift: state.grounded && rampAhead && !state.trickHeld && Math.abs(current.curvature) < 0.018,
+    drift:
+      state.grounded &&
+      (rampAhead || risingCrest) &&
+      !state.trickHeld &&
+      Math.abs(current.curvature) < 0.018,
   };
 }
 

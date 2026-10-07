@@ -63,27 +63,57 @@ export function buildTempest(context) {
       g,
     );
   }
+  // Flexible skins stay connected to the driving surface rather than leaving
+  // a static slab or exposed side wall sticking through a wave trough.
+  function flexibleSkin(section, left, right, aboveA, aboveB = aboveA) {
+    const skin = w.sweep(section, 0, 1, left, right, iron, aboveA);
+    skin.name = "Wind-flexed bridge structure";
+    const positions = skin.geometry.attributes.position;
+    const count = positions.count / 2 - 1;
+    motion(skin, (time) => {
+      track.setTime(time);
+      for (let i = 0; i <= count; i++) {
+        const t = track.sectorT(section, i / count);
+        for (const [side, offset] of [left(t), right(t)].entries()) {
+          const p = track.poseAt(t * track.TRACK, offset, side ? aboveB : aboveA).p;
+          positions.setXYZ(i * 2 + side, p.x, p.y, p.z);
+        }
+      }
+      positions.needsUpdate = true;
+      skin.geometry.computeVertexNormals();
+      skin.geometry.computeBoundingSphere();
+    });
+    return skin;
+  }
   for (const section of [1, 3, 5]) {
+    const flexing = track.course.bridgeWave?.section === section;
     // Connected underside and girders follow every elevation/bank of the deck.
-    w.sweep(
-      section,
-      0,
-      1,
-      (t) => track.platformEdgeAt(t, -1),
-      (t) => track.platformEdgeAt(t, 1),
-      iron,
-      -1.4,
-    );
+    const leftEdge = (t) => track.platformEdgeAt(t, -1);
+    const rightEdge = (t) => track.platformEdgeAt(t, 1);
+    if (flexing) flexibleSkin(section, leftEdge, rightEdge, -1.4);
+    else w.sweep(section, 0, 1, leftEdge, rightEdge, iron, -1.4);
+    if (flexing) {
+      for (const side of [-1, 1]) {
+        const edge = (t) => track.platformEdgeAt(t, side);
+        flexibleSkin(section, edge, edge, 0, -1.4);
+      }
+    }
     const count = Math.ceil(
-      ((track.SECTIONS[section].end - track.SECTIONS[section].start) * track.COURSE_LENGTH) / 10,
+      ((track.SECTIONS[section].end - track.SECTIONS[section].start) * track.COURSE_LENGTH) /
+        (flexing ? 4 : 10),
     );
     for (let i = 0; i < count; i++) {
       const g = at(section, (i + 0.5) / count);
+      g.name = "Suspension bridge deck girder";
       box(
         concrete,
         g,
         [0, -1.1, 0],
-        [track.roadHalfWidth(track.sectorT(section, (i + 0.5) / count)) * 2 + 1.1, 1.5, 11],
+        [
+          track.roadHalfWidth(track.sectorT(section, (i + 0.5) / count)) * 2 + 1.1,
+          1.5,
+          flexing ? 4.5 : 11,
+        ],
       );
       for (const side of [-1, 1]) {
         const edge = Math.max(
@@ -94,6 +124,14 @@ export function buildTempest(context) {
         tube(g, [side * edge, -8, -5], [side * edge, -8, 5], 0.3, iron);
         for (const z of [-5, 5]) tube(g, [side * edge, -2, z], [side * edge, -8, z], 0.3, iron);
         if (i % 4 === 0) lamp(g, side * (edge + 2), 4, 0);
+      }
+      if (flexing) {
+        context.kit.batch(g);
+        const t = track.sectorT(section, (i + 0.5) / count);
+        motion(g, (time) => {
+          track.setTime(time);
+          context.kit.align(g, track.poseAt(t * track.TRACK, 0, 0));
+        });
       }
     }
     // Four suspension towers stand on real piers, with sweeping main cables.
@@ -133,7 +171,19 @@ export function buildTempest(context) {
           points.push(p.toArray());
           if (j % 4 === 0 && j > 0 && j < 32) {
             const bottom = track.poseAt(t * track.TRACK, side * (half - 2), -1.8).p;
-            tube(scenery, p.toArray(), bottom.toArray(), 0.1, iron);
+            const hanger = tube(scenery, p.toArray(), bottom.toArray(), 0.1, iron);
+            if (flexing) {
+              hanger.name = "Flexible suspension hanger";
+              const axis = new THREE.Vector3(0, 1, 0);
+              motion(hanger, (time) => {
+                track.setTime(time);
+                const bottom = track.poseAt(t * track.TRACK, side * (half - 2), -1.8).p;
+                const direction = bottom.clone().sub(p);
+                hanger.position.copy(p).add(bottom).multiplyScalar(0.5);
+                hanger.scale.y = direction.length();
+                hanger.quaternion.setFromUnitVectors(axis, direction.normalize());
+              });
+            }
           }
         }
         cable(scenery, points, 0.32);

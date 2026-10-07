@@ -6,7 +6,7 @@ import {
   trainRampHeight,
 } from "../simulation/experience-mechanics.js";
 import { movingDeckAt } from "../simulation/moving-surfaces.js";
-import { unfoldPhase, scaleAt } from "../simulation/course-mechanics.js";
+import { unfoldPhase, scaleAt, bridgeWaveAt } from "../simulation/course-mechanics.js";
 import * as THREE from "../../vendor/three/three.module.js";
 import { progressDelta } from "../simulation/race.js";
 import { validateCourseDefinition } from "../courses/course-contract.js";
@@ -325,12 +325,20 @@ export function createTrack(course) {
       b = frames[(i + 1) % SAMPLE_COUNT];
     const tangent = a.tangent.clone().lerp(b.tangent, f).normalize();
     const right = a.right.clone().lerp(b.right, f).normalize();
+    const p = samples[i].clone().lerp(samples[i + 1], f);
+    const wave = bridgeWaveAt({ course, SECTIONS, COURSE_LENGTH }, wrap01(t), mechanismTime);
+    p.y += wave.height;
+    if (wave.slope) {
+      tangent.y += wave.slope * Math.hypot(tangent.x, tangent.z);
+      tangent.normalize();
+      right.addScaledVector(tangent, -right.dot(tangent)).normalize();
+    }
     right.applyAxisAngle(
       tangent,
       bridgeRoll({ course, SECTIONS, sectionAt }, wrap01(t), mechanismTime),
     );
     return {
-      p: samples[i].clone().lerp(samples[i + 1], f),
+      p,
       tangent,
       right,
       curvature: THREE.MathUtils.lerp(a.curvature, b.curvature, f),
@@ -383,6 +391,7 @@ export function createTrack(course) {
           horizontalLength = Math.hypot(f.right.x, f.right.z),
           offset = (ex * f.right.x + ez * f.right.z) / horizontalLength;
         laneHeight += movingSurfaceAt(t)?.height || 0;
+        laneHeight += bridgeWaveAt({ course, SECTIONS, COURSE_LENGTH }, t, mechanismTime).height;
         laneHeight +=
           rampHeight(t, offset) - rampHeight(t, 0) + (offset * f.right.y) / horizontalLength;
       }

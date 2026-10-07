@@ -323,7 +323,7 @@ export function verticalMotion(state, height, slopeVelocity, dt, supported = tru
   }
   if (state.grounded) {
     // Surface corrections, banks and kart contact cannot launch the kart.
-    // A deliberate ramp takeoff is the only way to leave the ground.
+    // Authored takeoffs (ramps, drums, timed bridge waves) leave the ground.
     state.worldPos.y = height;
     state.vy = clamp(slopeVelocity, -3, 3);
     state.airTime = 0;

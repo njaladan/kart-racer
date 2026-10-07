@@ -82,6 +82,36 @@ export function currentAt(track, t, time) {
   }
   return 0;
 }
+
+/** Travelling wind waves with zero displacement and slope at each fixed tower. */
+export function bridgeWaveAt(track, t, time) {
+  const wave = track.course.bridgeWave;
+  const still = { height: 0, slope: 0, velocity: 0, launch: false };
+  if (!wave) return still;
+  const section = track.SECTIONS[wave.section];
+  if (t <= section.start || t >= section.end) return still;
+  const fraction = (t - section.start) / (section.end - section.start);
+  const anchors = wave.anchors;
+  const index = anchors.findIndex((end) => end > fraction);
+  const start = anchors[index - 1],
+    end = anchors[index];
+  const length = (section.end - section.start) * track.COURSE_LENGTH;
+  const bayLength = (end - start) * length;
+  const q = (fraction - start) / (end - start);
+  const envelope = Math.sin(q * Math.PI) ** 2;
+  const envelopeSlope = (Math.PI * Math.sin(q * Math.PI * 2)) / bayLength;
+  const omega = (Math.PI * 2) / wave.period;
+  const k = (Math.PI * 2) / wave.wavelength;
+  const phase = omega * time - k * fraction * length;
+  const height = wave.amplitude * envelope * Math.sin(phase);
+  const velocity = wave.amplitude * envelope * omega * Math.cos(phase);
+  return {
+    height,
+    slope: wave.amplitude * (envelopeSlope * Math.sin(phase) - envelope * k * Math.cos(phase)),
+    velocity,
+    launch: height > wave.amplitude * 0.35 && velocity > 1.5,
+  };
+}
 export function liftPhase(definition, time) {
   const period = definition.period || 10,
     hold = definition.hold || 1,
