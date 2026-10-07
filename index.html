@@ -55,7 +55,7 @@
               <label>World ambience <output id="value-ambience"></output><input id="option-ambience" type="range" min="0" max="1" step="0.05"/></label>
             </div></div>
           </section>
-          <footer class="menu-footer"><div><button id="start-button" class="primary-button" disabled>LOADING COURSE <span>…</span></button><button id="multiplayer-button" class="secondary-button">RACE WITH FRIENDS</button></div><p class="controls-help">WASD / arrows · Space drift &amp; trick · E item<br/>Touch controls available · Three laps, six racers</p></footer>
+          <footer class="menu-footer"><div><button id="start-button" class="primary-button" disabled>LOADING COURSE <span>…</span></button><button id="multiplayer-button" class="secondary-button">RACE WITH FRIENDS</button></div><p class="controls-help">WASD / arrows · Space drift &amp; trick · E item<br/>Touch: drag anywhere to steer · Auto accelerate</p></footer>
         </div>
       </section>
 
@@ -67,9 +67,10 @@
         aria-label="Race minimap"
       ></canvas>
       <div id="touch-controls" aria-label="Touch driving controls">
-        <div class="touch-steer">
-          <button data-key="a" aria-label="Steer left" aria-pressed="false">‹</button
-          ><button data-key="d" aria-label="Steer right" aria-pressed="false">›</button>
+        <div class="touch-steer-help">
+          <span aria-hidden="true">↔</span>
+          <strong>DRAG TO STEER</strong>
+          <small>Touch anywhere · slide left or right</small>
         </div>
         <div class="touch-drive">
           <button
@@ -86,6 +87,9 @@
             ITEM
           </button>
         </div>
+      </div>
+      <div id="touch-steering" class="touch-steering" aria-hidden="true" hidden>
+        <span class="steering-center"></span><span class="steering-thumb"></span>
       </div>
       <div class="race-actions">
         <button data-action="recover" aria-label="Recover kart when stopped">

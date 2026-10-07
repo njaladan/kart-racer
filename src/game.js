@@ -148,6 +148,7 @@ async function startGame() {
     },
     onBegin: view.begin,
     onFinish() {
+      clearInput();
       view.finish(session.place(), player.finishTime);
       if (multiplayer) {
         ui.againButton.disabled = ui.changeCourseButton.disabled =

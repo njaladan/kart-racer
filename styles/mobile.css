@@ -145,16 +145,70 @@
     inset 0 0 0 3px #95b42b,
     0 0 22px #d5fa5140;
 }
-.touch-steer,
 .touch-drive {
   display: flex;
   gap: 8px;
   align-items: flex-end;
 }
-#touch-controls .touch-steer button {
-  width: clamp(58px, 17vw, 76px);
-  height: 84px;
-  font-size: 42px;
+.touch-steer-help {
+  max-width: 170px;
+  padding: 8px;
+  color: #fff7e9;
+  text-shadow: 0 2px 4px #071323;
+  pointer-events: none;
+}
+.touch-steer-help > span {
+  display: block;
+  color: var(--lime);
+  font-size: 36px;
+  line-height: 1;
+}
+.touch-steer-help strong,
+.touch-steer-help small {
+  display: block;
+  margin-top: 6px;
+  font:
+    700 11px "DM Mono",
+    monospace;
+}
+.touch-steer-help small {
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.touch-steering {
+  display: none;
+  position: fixed;
+  z-index: 3;
+  width: calc(var(--steering-range) * 2);
+  height: 44px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: linear-gradient(90deg, #ffffff20, #ffffff90, #ffffff20) center / 100% 2px no-repeat;
+}
+.racing:not(.paused) .touch-steering:not([hidden]) {
+  display: block;
+}
+.steering-center,
+.steering-thumb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+.steering-center {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #fff7e990;
+  background: #07132350;
+}
+.steering-thumb {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--lime);
+  background: #d5fa5130;
+  transform: translate(calc(-50% + var(--steering-offset)), -50%);
 }
 .touch-drive {
   display: grid;
@@ -303,12 +357,6 @@
   }
   #touch-controls .touch-drive button {
     font-size: 10px;
-  }
-  #touch-controls .touch-steer {
-    gap: 5px;
-  }
-  #touch-controls .touch-steer button {
-    width: clamp(52px, 15vw, 68px);
   }
   .title-card {
     transform: translateY(-50%);

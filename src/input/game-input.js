@@ -16,7 +16,10 @@ export function bindGameInput({
   const keyboardKeys = new Set();
   const heldPointers = new Map();
   const touchButtons = [...documentRef.querySelectorAll("#touch-controls [data-key]")];
+  const steeringIndicator = documentRef.getElementById?.("touch-steering");
   let steeringPointer = null;
+  let steeringRange = 72;
+  const steeringDeadZone = 6;
 
   pointer.autoThrottle =
     !!windowRef.matchMedia?.("(pointer: coarse)").matches ||
@@ -39,10 +42,17 @@ export function bindGameInput({
     heldPointers.clear();
     touchButtons.forEach(showHeld);
     for (const key of Object.keys(keys)) delete keys[key];
+    clearSteering();
+  }
+
+  function clearSteering() {
     steeringPointer = null;
     pointer.down = false;
     pointer.steer = 0;
+    if (steeringIndicator) steeringIndicator.hidden = true;
   }
+
+  windowRef.addEventListener("resize", clearSteering);
 
   windowRef.addEventListener("keydown", (event) => {
     if (event.target.closest("select,input,textarea,button")) return;
@@ -108,23 +118,39 @@ export function bindGameInput({
 
   canvas.addEventListener("pointerdown", (event) => {
     event.preventDefault?.();
-    if (!isRunning() || steeringPointer !== null) return;
+    if (!isRunning() || steeringPointer !== null || (event.button ?? 0) !== 0) return;
     steeringPointer = event.pointerId;
+    // Each touch starts neutral. Short thumb movements give proportional steering
+    // with a little slack for finger jitter, scaled to the available screen width.
+    steeringRange = clamp((canvas.clientWidth || windowRef.innerWidth || 400) * 0.18, 48, 72);
     pointer.down = true;
     pointer.x = event.clientX;
     pointer.steer = 0;
+    if (event.pointerType === "touch") pointer.autoThrottle = true;
+    if (steeringIndicator && event.pointerType !== "mouse") {
+      steeringIndicator.style.left = `${event.clientX}px`;
+      steeringIndicator.style.top = `${event.clientY}px`;
+      steeringIndicator.style.setProperty("--steering-range", `${steeringRange}px`);
+      steeringIndicator.style.setProperty("--steering-offset", "0px");
+      steeringIndicator.hidden = false;
+    }
     canvas.setPointerCapture(event.pointerId);
   });
   canvas.addEventListener("pointermove", (event) => {
-    if (pointer.down && event.pointerId === steeringPointer)
-      pointer.steer = clamp((event.clientX - pointer.x) / 85, -1, 1);
+    if (!pointer.down || event.pointerId !== steeringPointer) return;
+    const delta = event.clientX - pointer.x;
+    pointer.steer =
+      Math.sign(delta) *
+      clamp((Math.abs(delta) - steeringDeadZone) / (steeringRange - steeringDeadZone), 0, 1);
+    steeringIndicator?.style.setProperty(
+      "--steering-offset",
+      `${clamp(delta, -steeringRange, steeringRange)}px`,
+    );
   });
   for (const eventName of ["pointerup", "pointercancel", "lostpointercapture"]) {
     canvas.addEventListener(eventName, (event) => {
       if (event.pointerId !== steeringPointer) return;
-      steeringPointer = null;
-      pointer.down = false;
-      pointer.steer = 0;
+      clearSteering();
     });
   }
 
