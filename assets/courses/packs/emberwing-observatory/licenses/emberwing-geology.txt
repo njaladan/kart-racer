@@ -1,0 +1,4 @@
+Original Turbo Trail volcanic geology, authored through Blender Python.
+Dedicated to the public domain under CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/
+Rebuild: blender -b -t 2 --python tools/build-emberwing-geology.py
+No external meshes or textures are embedded in these GLB assets.

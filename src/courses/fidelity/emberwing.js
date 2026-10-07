@@ -1,7 +1,7 @@
 /** Volcanic terraces meet an inhabited scientific outpost under drifting stars. */
 export function emberwingArt(w) {
-  const { THREE, track, mat, safe, at, asset, box, motion, lamp, beam, particles } = w;
-  const basalt = mat("#696679", "rock"),
+  const { THREE, track, kit, mat, safe, at, asset, box, motion, lamp, beam, particles } = w;
+  const basalt = mat("#b5a5ad", "rock", { map: null }),
     distant = mat("#978a9d", "rock");
   for (let section = 0; section < track.SECTIONS.length; section++) {
     for (let i = 0; i < 8; i++) {
@@ -10,12 +10,14 @@ export function emberwingArt(w) {
       if (!g) continue;
       const floor = track.course.theme.groundHeight,
         top = 13 + (i % 3) * 8;
-      const rock = asset(
-        "rock-tallb",
-        g,
-        [0, floor - g.position.y, 0],
-        [27, g.position.y + top - floor, 32],
-      );
+      const rock = kit.hasAsset("ember:basalt-near")
+        ? kit.fitAsset(
+            "ember:basalt-near",
+            g,
+            [0, floor - g.position.y, 0],
+            [27, g.position.y + top - floor, 32],
+          )
+        : null;
       if (rock)
         rock.traverse((m) => {
           if (m.isMesh) m.material = basalt;

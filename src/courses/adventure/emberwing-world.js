@@ -3,6 +3,7 @@ import { worldKit } from "./world-kit.js";
 import { registerLightPool } from "../../rendering/course-lighting.js";
 import { patchMaterial } from "../../rendering/surface-detail.js";
 import { rangeFor } from "../../simulation/course-mechanics.js";
+import { buildEmberwingGeology } from "./emberwing-geology.js";
 
 /** The observatory watches a living caldera; its missing road is a cannon flight. */
 export function buildEmberwing(context) {
@@ -42,6 +43,9 @@ export function buildEmberwing(context) {
           "#include <emissivemap_fragment>\ntotalEmissiveRadiance*=smoothstep(.1,.55,crust);",
         );
   });
+  // Vertex-authored strata carry the color; the scan contributes fine normals
+  // without multiplying the new cliff relief by an almost-black albedo.
+  buildEmberwingGeology(w, mat("#b5a5ad", "rock", { map: null }));
   // Rock shoulders remain connected everywhere except the deliberate flight gap.
   for (let section = 0; section < track.SECTIONS.length; section++) {
     if (section === 2) {
@@ -57,17 +61,6 @@ export function buildEmberwing(context) {
         basalt,
         -0.22,
       );
-    if (section === 2) continue;
-    for (const side of [-1, 1])
-      for (let i = 0; i < 9; i++) {
-        const village = [0, 4, 6, 7].includes(section);
-        const g = at(section, (i + 0.5) / 9, side * ((village ? 48 : 30) + (i % 3) * 5));
-        mesh(w.rock, basalt, g, [0, -8, 0], [15, 12, 15]);
-        if (i % 3 === 0) {
-          mesh(cylinder, basalt, g, [0, -(g.position.y + 22) / 2, 0], [10, g.position.y + 22, 10]);
-          mesh(cylinder, pale, g, [0, 0.3, 0], [9, 0.6, 9]);
-        }
-      }
   }
   const flight = track.course.traversals[0],
     { start, end } = rangeFor(track, flight),
@@ -80,46 +73,19 @@ export function buildEmberwing(context) {
   caldera.name = "Volcanic caldera beneath the cannon flight";
   caldera.position.set(centre.x, -7, centre.z);
   mesh(cylinder, magma, caldera, [0, 0, 0], [calderaRadius * 0.72, 2, calderaRadius * 0.72]);
-  mesh(
-    torus,
-    basalt,
-    caldera,
-    [0, 0, 0],
-    [calderaRadius, calderaRadius, calderaRadius],
-  ).rotation.x = Math.PI / 2;
-  for (let i = 0; i < 28; i++) {
+  for (let i = 0; i < 28; i += 4) {
     const angle = (i / 28) * Math.PI * 2,
-      r = calderaRadius + (i % 3) * 5;
-    const rock = mesh(
-      w.rock,
-      basalt,
-      caldera,
-      [Math.cos(angle) * r, 8 + (i % 4) * 3, Math.sin(angle) * r],
-      [19, 21 + (i % 3) * 5, 19],
-    );
-    rock.rotation.y = angle;
-    if (i % 4 === 0) {
-      const vent = mesh(
+      vent = mesh(
         new THREE.ConeGeometry(1, 1, 8),
         magma,
         caldera,
         [Math.cos(angle) * calderaRadius * 0.6, 2, Math.sin(angle) * calderaRadius * 0.6],
         [3, 10, 3],
       );
-      motion(vent, (time) => {
-        vent.scale.y = 5 + Math.sin(time * 0.8 + i) * 4;
-      });
-    }
+    motion(vent, (time) => {
+      vent.scale.y = 5 + Math.sin(time * 0.8 + i) * 4;
+    });
   }
-  const walls = mesh(
-    new THREE.CylinderGeometry(calderaRadius, calderaRadius * 0.72, 42, 64, 1, true),
-    basalt.clone(),
-    caldera,
-    [0, 20, 0],
-  );
-  walls.material.side = THREE.DoubleSide;
-  walls.castShadow = false;
-  walls.receiveShadow = false;
   registerLightPool(scene, {
     position: new THREE.Vector3(centre.x, 5, centre.z),
     color: "#ff9656",
