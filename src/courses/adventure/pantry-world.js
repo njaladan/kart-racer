@@ -93,7 +93,13 @@ export function buildPantry(context) {
     const g = new THREE.Group();
     parent.add(g);
     g.position.set(...position);
-    mesh(cylinder, material, g, [0, height * 0.44, 0], [radius, height * 0.88, radius]);
+    mesh(
+      context.kit.authoredGeometry("blender:preserve-jar", cylinder),
+      material,
+      g,
+      [0, height * 0.44, 0],
+      [radius, height * 0.88, radius],
+    );
     mesh(cylinder, silver, g, [0, height * 0.94, 0], [radius * 1.07, height * 0.12, radius * 1.07]);
     for (let i = 0; i < 3; i++)
       mesh(
@@ -111,7 +117,13 @@ export function buildPantry(context) {
     parent.add(g);
     g.position.set(...position);
     mesh(cylinder, porcelain, g, [0, 0.35 * size, 0], [size * 1.65, size * 0.35, size * 1.65]);
-    mesh(cylinder, color, g, [0, size * 1.4, 0], [size, size * 2.1, size]);
+    mesh(
+      context.kit.authoredGeometry("blender:ceramic-cup", cylinder),
+      color,
+      g,
+      [0, size * 1.4, 0],
+      [size, size * 2.1, size],
+    );
     mesh(cylinder, dark, g, [0, size * 2.48, 0], [size * 0.83, size * 0.025, size * 0.83]);
     mesh(torus, cream, g, [0, size * 2.48, 0], [size, size, size]).rotation.x = Math.PI / 2;
     mesh(torus, color, g, [size * 1.05, size * 1.5, 0], [size * 0.75, size * 0.9, size * 0.75]);

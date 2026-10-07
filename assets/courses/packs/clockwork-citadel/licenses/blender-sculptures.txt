@@ -1,0 +1,3 @@
+Original Turbo Trail Blender sculptures. No external meshes or textures are embedded.
+Dedicated to CC0 1.0: https://creativecommons.org/publicdomain/zero/1.0/
+Modeling source: tools/build-course-sculptures.py

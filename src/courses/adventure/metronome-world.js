@@ -213,7 +213,13 @@ export function buildMetronome(context) {
       box(dark, g, [0, 2, 0], [29, 4, 24]);
       for (let j = 0; j < 5; j++) {
         const height = 26 + j * 7;
-        mesh(cylinder, gold, g, [-10 + j * 5, height / 2 + 4, 0], [2.1, height, 2.1]);
+        mesh(
+          context.kit.authoredGeometry("blender:organ-pipe", cylinder),
+          gold,
+          g,
+          [-10 + j * 5, height / 2 + 4, 0],
+          [2.1, height, 2.1],
+        );
         mesh(torus, ivory, g, [-10 + j * 5, height + 4, 0], [2.2, 2.2, 2.2]).rotation.x =
           Math.PI / 2;
         const hammer = box(velvet, g, [-10 + j * 5, height * 0.5, 6], [3, 4, 3]);

@@ -199,6 +199,32 @@
       "modifications": "Beveled eroded silhouette, offline 512px stratified atlas, ray-traced vertex AO",
       "bytes": 183576,
       "sha256": "8fbc3dd9eb810f0d2dd4e6819a40349751b9f559e66c6049e63f3737a3f5fc2f"
+    },
+    {
+      "name": "blender:sandstone-mesa",
+      "file": "models/blender-sandstone-mesa.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Layered undercuts; cloud displacement; decimation",
+      "triangles": 1166,
+      "bytes": 118112,
+      "sha256": "b26894fdbca7126c8c5a2dfcd1b04dbc69dee06a72e06e1b3d9f4cb57f67c858"
+    },
+    {
+      "name": "blender:temple-column",
+      "file": "models/blender-temple-column.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Fluted lathed shaft and moulded collars",
+      "triangles": 1024,
+      "bytes": 47204,
+      "sha256": "537c2835e7ea4b85b883c5289959082427bdadb77d95e368e02401caf927487f"
     }
   ],
   "archiveSha256": "ad61912093e7d4b399c8e4841156f45550a8b60dc59a290ad84058a9bae0622d"

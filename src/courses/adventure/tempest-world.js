@@ -20,6 +20,8 @@ export function buildTempest(context) {
   ocean.geometry.dispose();
   ocean.geometry = new THREE.PlaneGeometry(1700, 1700, 80, 80);
   const time = { value: 0 };
+  const towerPier = w.kit.authoredGeometry("blender:storm-pier", new THREE.BoxGeometry());
+  const seaStack = w.kit.authoredGeometry("blender:sea-stack", rock);
   (scene.userData.surfaceAnimations ||= []).push(time);
   patchMaterial(ocean.material, "storm-swells", (shader) => {
     shader.uniforms.stormTime = time;
@@ -144,7 +146,7 @@ export function buildTempest(context) {
             track.platformEdgeAt(track.sectorT(section, f), 1),
           ) + 4;
       for (const side of [-1, 1]) {
-        box(concrete, g, [side * half, height / 2, 0], [4, height, 5]);
+        mesh(towerPier, concrete, g, [side * half, height / 2, 0], [4, height, 5]);
         box(iron, g, [side * half, height * 0.55, 0.1], [0.4, height - 4, 5.6]);
         box(concrete, g, [side * half, -22, 0], [7, 45, 9]);
         box(copper, g, [side * half, height + 1, 0], [7, 2, 7]);
@@ -313,7 +315,7 @@ export function buildTempest(context) {
   for (let i = 0; i < 28; i++) {
     const a = (i * Math.PI) / 14;
     mesh(
-      rock,
+      seaStack,
       stone,
       scenery,
       [Math.sin(a) * 500, -22, Math.cos(a) * 440],

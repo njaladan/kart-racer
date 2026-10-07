@@ -5,7 +5,7 @@ import { TRACK, surfaceAt, MILL_T } from "../../track/track.js";
 import { cartAt } from "../../simulation/hazards.js";
 
 /** Authored countryside buildings, curved mill masonry, and the cart hazard. */
-export function buildWindmillLandmarks({ scene, scenery, mats, palette, primitives, kit }) {
+export function buildWindmillLandmarks({ scene, scenery, mats, palette, primitives, kit, track }) {
   const { wood, darkWood, stone } = palette;
   const { mesh, box, groupAt, sectorT, sphereGeo, cylinderGeo, align } = primitives;
   const asset = (name, parent, position, size) =>
@@ -71,10 +71,16 @@ export function buildWindmillLandmarks({ scene, scenery, mats, palette, primitiv
     }
 
   // Purpose-built bevelled arch module replaces the rectangular mill portal.
-  // Intrados is at least 13 m over the complete 16.4 m racing deck, leaving
-  // camera and hop clearance. It follows the same supported road as before.
+  // The 13 m intrados covers the complete deck and asymmetric soft apron,
+  // with three metres of clearance for the curve through its eight-metre depth.
   const mill = groupAt(MILL_T);
   mill.name = "Working countryside windmill arch";
+  mill.userData.scenicAssembly = false;
+  const left = track.platformEdgeAt(MILL_T, -1),
+    right = track.platformEdgeAt(MILL_T, 1),
+    passageScale = (right - left + 6) / 21,
+    passageCenter = (left + right) / 2;
+  mill.position.addScaledVector(track.frameAt(MILL_T).right, passageCenter);
   const shape = new THREE.Shape();
   shape.moveTo(-14, 0);
   shape.lineTo(-14, 21);
@@ -94,15 +100,22 @@ export function buildWindmillLandmarks({ scene, scenery, mats, palette, primitiv
     curveSegments: 24,
     steps: 1,
   });
-  const archMesh = mesh(arch, stone, mill, [0, 0, -4]);
+  arch.scale(passageScale, 1, 1);
+  const archMesh = mesh(
+    kit.authoredGeometry("blender:mill-masonry", arch),
+    stone,
+    mill,
+    [0, 0, -4],
+  );
+  archMesh.name = "Blender mill arch masonry";
   // Architectural masonry uses a consistent metre-based tile density.
   const uv = archMesh.geometry.getAttribute("uv");
   for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) / 4, uv.getY(i) / 4);
   asset("farmhouse", mill, [0, 21.5, -0.5], 10);
   for (const side of [-1, 1]) {
-    asset("stone-wall", mill, [side * 12, 0, 4.2], 1.7);
-    box(darkWood, mill, [side * 11.2, 6, 4.15], [0.3, 12, 0.45]);
-    box(wood, mill, [side * 12, 12.7, 4.15], [3.7, 0.35, 0.5]);
+    asset("stone-wall", mill, [side * (12 * passageScale + 2), 0, 4.2], 1.7);
+    box(darkWood, mill, [side * 11.2 * passageScale, 6, 4.15], [0.3, 12, 0.45]);
+    box(wood, mill, [side * 12 * passageScale, 12.7, 4.15], [3.7, 0.35, 0.5]);
   }
   const rotor = new THREE.Group();
   rotor.position.set(0, 26.5, 7);

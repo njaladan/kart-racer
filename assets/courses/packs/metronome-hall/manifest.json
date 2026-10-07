@@ -83,6 +83,32 @@
       "sourceSha256": "811719593d676ff76f7b5904d52c845ce0396af2bc9a6a2636c4818ead320b99",
       "sha256": "811719593d676ff76f7b5904d52c845ce0396af2bc9a6a2636c4818ead320b99",
       "bytes": 10524
+    },
+    {
+      "name": "blender:velvet-drape",
+      "file": "models/blender-velvet-drape.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Pinned Blender cloth relaxation, subdivision, solidify and decimation",
+      "triangles": 732,
+      "bytes": 34172,
+      "sha256": "ee00de2d2b9fec47c1bdeda534373f869a8aaddc6c58a5c737d384d74ca34ef7"
+    },
+    {
+      "name": "blender:organ-pipe",
+      "file": "models/blender-organ-pipe.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Flared lathed resonator; Boolean flue; bevelled rim",
+      "triangles": 704,
+      "bytes": 33652,
+      "sha256": "ea6a4a14c2878e04872b68c4ad416054a72c7653d8f693cd294b6071097696b7"
     }
   ],
   "textures": [

@@ -100,6 +100,32 @@
       "modifications": "512px embedded textures, 20-ray geometry/ground vertex AO, cutout foliage, GLB conversion",
       "bytes": 163636,
       "sha256": "6dfd1e432f49e78e1f06119e425a2a067ecf3d9e51ac8d27f26d1284128d1851"
+    },
+    {
+      "name": "blender:storm-pier",
+      "file": "models/blender-storm-pier.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Tapered buttress and recessed wind-weathered channels",
+      "triangles": 556,
+      "bytes": 60932,
+      "sha256": "80ffa69fa76d4704aeb36b4671a6390724f5d98a3fe2eecb94fdb36a99ff4ed8"
+    },
+    {
+      "name": "blender:sea-stack",
+      "file": "models/blender-sea-stack.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Wave-cut strata, cloud displacement and decimation",
+      "triangles": 1192,
+      "bytes": 120992,
+      "sha256": "f533ba3e69d09c3f66cb29cbbafd41f009b6935c6ee6ceb434530249c06feb6b"
     }
   ],
   "textures": [

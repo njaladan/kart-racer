@@ -165,6 +165,32 @@
       "sourceSha256": "8f2496feed85a745ffb6e554075b8450d647f8f68b01d6a010fcac1510fc173a",
       "sha256": "8f2496feed85a745ffb6e554075b8450d647f8f68b01d6a010fcac1510fc173a",
       "bytes": 8168
+    },
+    {
+      "name": "blender:ceramic-cup",
+      "file": "models/blender-ceramic-cup.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Revolved hollow ceramic wall, rounded foot, bevelled lip",
+      "triangles": 956,
+      "bytes": 35968,
+      "sha256": "0c5f7c58f40766c7d0f0406cb22d563b15085111d3d189d8015f711a94737bdc"
+    },
+    {
+      "name": "blender:preserve-jar",
+      "file": "models/blender-preserve-jar.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Revolved rounded shoulders, recessed neck and physical inner wall",
+      "triangles": 996,
+      "bytes": 43016,
+      "sha256": "384dd3273e74cfc13a979e45aeeb50d575190e3af938da8431f7853ae4f94242"
     }
   ],
   "textures": [

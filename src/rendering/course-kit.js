@@ -3,11 +3,13 @@ import * as THREE from "../../vendor/three/three.module.js";
 import { batchStaticMeshes } from "./visuals.js";
 import { bakeVertexShade } from "./vertex-shading.js";
 import { sceneryGroundHeight } from "./terrain-height.js";
+import { createAuthoredGeometryLibrary } from "./authored-geometry.js";
 
 // Scenery authors get placement and reusable primitives, never engine globals.
 export function createCourseKit(scenery, track, assets = { models: {} }) {
   reserveSceneryForTrack(scenery, track);
   const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
+  const authoredGeometry = createAuthoredGeometryLibrary(assets.models);
   const material = (color, extra = {}) =>
     new THREE.MeshStandardMaterial({
       color,
@@ -139,6 +141,7 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
     sectorT,
     asset,
     fitAsset,
+    authoredGeometry,
     hasAsset: (name) => !!assets.models[name],
     batch: batchStaticMeshes,
   };

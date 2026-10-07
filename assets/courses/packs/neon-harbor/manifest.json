@@ -139,6 +139,32 @@
       "name": "lumen:building-skyscraper-d",
       "file": "models/lumen-building-skyscraper-d.glb",
       "type": "gltf"
+    },
+    {
+      "name": "blender:lumen-tower",
+      "file": "models/blender-lumen-tower.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Tapered shell; Boolean window bays; bevel and weighted normals",
+      "triangles": 1070,
+      "bytes": 94472,
+      "sha256": "3038ba64b000137a166c58f8ec96ed57f6345f22752e5b3987d9104eb7fd9c31"
+    },
+    {
+      "name": "blender:harbor-pier",
+      "file": "models/blender-harbor-pier.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Buttressed profile; recessed channels; bevel and weighted normals",
+      "triangles": 556,
+      "bytes": 60932,
+      "sha256": "a5a121ac1db660a907d9250b6db190958f58ab91647bdcf1fd5d4d23a182fb93"
     }
   ],
   "sources": [

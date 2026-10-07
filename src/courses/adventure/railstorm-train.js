@@ -9,6 +9,7 @@ export function buildExpressCars(w, materials) {
   const definition = track.course.movingDecks[0];
   const cars = trainCarriages(track, definition, 0);
   const ramp = track.course.trainRamps;
+  const pipeGeometry = kit.authoredGeometry("blender:freight-pipe", cylinder);
   const roofs = definition.carStyles.map((style) => {
     const material = mat(style.color, "metal", {
       metalness: 0.32,
@@ -116,7 +117,7 @@ export function buildExpressCars(w, materials) {
               mesh(cylinder, wood, g, [x + dx, y, z], [0.65, 13, 0.65]).rotation.x = Math.PI / 2;
         } else if (style.cargo === "pipes") {
           for (const y of [0.8, 2.1])
-            mesh(cylinder, silver, g, [x, y, z], [1, 15, 1]).rotation.x = Math.PI / 2;
+            mesh(pipeGeometry, silver, g, [x, y, z], [1, 15, 1]).rotation.x = Math.PI / 2;
         } else if (style.cargo === "crates") {
           box(wood, g, [x, 2, z], [2.2, 4, 10]);
           for (const y of [0.6, 3.4]) box(cream, g, [x, y, z + 5.03], [2.3, 0.2, 0.12]);

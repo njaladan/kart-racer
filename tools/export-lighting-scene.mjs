@@ -185,6 +185,17 @@ for (const course of selected) {
   createCourseKit(new THREE.Group(), track, assets);
   world.update(0);
   scene.updateMatrixWorld(true);
+  if (process.env.COURSE_SCENE_STATS) {
+    let meshes = 0, triangles = 0;
+    scene.traverse((object) => {
+      if (!object.isMesh) return;
+      meshes++;
+      triangles += (object.geometry.index?.count || object.geometry.attributes.position.count) / 3
+        * (object.isInstancedMesh ? object.count : 1);
+    });
+    console.log("Scene inventory", JSON.stringify({course: course.id, meshes, triangles}));
+    if (process.env.COURSE_SCENE_STATS === "only") continue;
+  }
   if (process.env.COURSE_ROUTE_AUDIT) {
     const reports = [];
     for (const lap of track.branches.some(b => b.lap != null) ? [0, 1, 2] : [0]) {

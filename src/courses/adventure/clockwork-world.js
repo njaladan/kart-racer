@@ -72,6 +72,22 @@ export function buildClockwork(context) {
     const root = new THREE.Group();
     parent.add(root);
     root.position.set(...position);
+    const authoredName = `blender:gear-${teeth}`;
+    if (context.kit.hasAsset(authoredName)) {
+      const reference = new THREE.CylinderGeometry(1, 1, 1, 32).rotateX(Math.PI / 2);
+      mesh(
+        context.kit.authoredGeometry(authoredName, reference),
+        bronze,
+        root,
+        [0, 0, 0],
+        [radius, radius, 1.8],
+      );
+      context.kit.batch(root);
+      motion(root, (time) => {
+        root.rotation.z = time * speed;
+      });
+      return root;
+    }
     mesh(torus, bronze, root, [0, 0, 0], [radius, radius, radius]);
     mesh(
       new THREE.CylinderGeometry(1, 1, 1, 24),

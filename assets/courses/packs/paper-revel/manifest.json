@@ -1,6 +1,59 @@
 {
   "course": "paper-revel",
-  "models": [],
+  "models": [
+    {
+      "name": "blender:paper-body",
+      "file": "models/blender-paper-body.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Folded shell with solidify and fine crease bevels",
+      "triangles": 156,
+      "bytes": 17452,
+      "sha256": "a084fa92065188f0bc6d88b0ba06647142347e0569fbf0ce32dfaf32798d3b37"
+    },
+    {
+      "name": "blender:paper-wing-right",
+      "file": "models/blender-paper-wing-right.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Separate creased wing, solidify and edge bevels",
+      "triangles": 96,
+      "bytes": 10992,
+      "sha256": "465dd8daec23695a42fad809e2c827a420195090d309dbc52faa8df1cff420c9"
+    },
+    {
+      "name": "blender:paper-wing-left",
+      "file": "models/blender-paper-wing-left.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Mirrored wing with preserved hinge pivot",
+      "triangles": 96,
+      "bytes": 11000,
+      "sha256": "a3890e780b42546fec48e71ad43a7c0eae5450c4e6b4d61c33b8f5fa1e5c7b0f"
+    },
+    {
+      "name": "blender:paper-lantern",
+      "file": "models/blender-paper-lantern.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Lathed accordion folds and solidified paper rim",
+      "triangles": 288,
+      "bytes": 28436,
+      "sha256": "db2b7826f19e479b0d742d4fd8b379a45cc76b3176164fd60ef6423953ee50c4"
+    }
+  ],
   "textures": [],
   "sources": [],
   "license": "Original project origami, architecture, animation and shaders. Shared bundled textures retain their credited licenses."

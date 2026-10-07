@@ -46,7 +46,13 @@ export function buildPortLandmarks({
       emissive: "#15334a",
       emissiveIntensity: 0.5,
     });
-  box(steel, tower, [0, 37, 0], [19, 74, 22]);
+  mesh(
+    kit.authoredGeometry("blender:lumen-tower", new THREE.BoxGeometry()),
+    steel,
+    tower,
+    [0, 37, 0],
+    [19, 74, 22],
+  );
   for (let y = 8; y < 70; y += 8) {
     box(towerGlass, tower, [0, y, 11.08], [15.5, 3.7, 0.12]);
     box(cyan, tower, [0, y + 2, 11.16], [16.2, 0.16, 0.16]);
@@ -64,7 +70,13 @@ export function buildPortLandmarks({
       tower = groupAt(t, 0, scenery);
     tower.rotation.set(0, track.yawFor(track.frameAt(t).tangent), 0);
     for (const x of [-15, 15]) {
-      box(concrete, tower, [x, 18, 0], [2.8, 38, 3]);
+      mesh(
+        kit.authoredGeometry("blender:harbor-pier", new THREE.BoxGeometry()),
+        concrete,
+        tower,
+        [x, 18, 0],
+        [2.8, 38, 3],
+      );
       box(cyan, tower, [x, 20, 1.56], [0.18, 34, 0.08]);
       box(pink, tower, [x, 35.5, 0], [3.2, 0.3, 3.4]);
     }

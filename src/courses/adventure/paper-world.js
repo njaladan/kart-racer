@@ -39,12 +39,26 @@ export function buildPaper(context) {
     bamboo = mat("#ad826c", "wood"),
     gold = mat("#e2ba69", "metal"),
     glow = mat("#ffdb93", "paper", { emissive: "#ffb46c", emissiveIntensity: 0.7 });
-  function folded(vertices, indices, material, parent, position = [0, 0, 0], scale = [1, 1, 1]) {
+  function folded(
+    vertices,
+    indices,
+    material,
+    parent,
+    position = [0, 0, 0],
+    scale = [1, 1, 1],
+    authored = null,
+  ) {
     const geo = new THREE.BufferGeometry();
     geo.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
     geo.setIndex(indices);
     geo.computeVertexNormals();
-    return mesh(geo, material, parent, position, scale);
+    return mesh(
+      authored ? context.kit.authoredGeometry(authored, geo) : geo,
+      material,
+      parent,
+      position,
+      scale,
+    );
   }
   // Original pointed crane: separate wing pivots give a real origami silhouette.
   function crane(parent, position, size, color = 0, flap = false) {
@@ -60,6 +74,9 @@ export function buildPaper(context) {
       [0, 1, 2, 0, 2, 3, 1, 4, 2, 3, 2, 4, 0, 5, 1, 0, 3, 5, 5, 6, 7],
       papers[color],
       g,
+      [0, 0, 0],
+      [1, 1, 1],
+      "blender:paper-body",
     );
     for (const side of [-1, 1]) {
       const wing = new THREE.Group();
@@ -69,6 +86,9 @@ export function buildPaper(context) {
         [0, 1, 3, 0, 3, 2, 1, 2, 3],
         papers[(color + 1) % 5],
         wing,
+        [0, 0, 0],
+        [1, 1, 1],
+        `blender:paper-wing-${side > 0 ? "right" : "left"}`,
       );
       if (flap)
         motion(wing, (time) => {
@@ -179,7 +199,7 @@ export function buildPaper(context) {
           y = height - 1 - Math.sin((j * Math.PI) / 6) * 2;
         tube(g, [x, height, 0], [x, y, 0], 0.025, ink);
         const lantern = mesh(
-          new THREE.SphereGeometry(1, 8, 6),
+          context.kit.authoredGeometry("blender:paper-lantern", new THREE.SphereGeometry(1, 8, 6)),
           papers[(section + j) % 5],
           g,
           [x, y - 0.8, 0],

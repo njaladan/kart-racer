@@ -60,3 +60,19 @@ image before using it in the README, since camera framing can vary by course.
 
 Screenshot file names match the paths embedded in `README.md`. Regenerate and
 inspect the files before updating the README.
+
+## Asset review views
+
+`SCREENSHOT_CAPTURE_DIR` selects another output directory, and
+`SCREENSHOT_CAPTURE_POINTS_JSON` overrides capture positions without editing
+the standard presets. For example:
+
+```sh
+SCREENSHOT_CAPTURE_DIR=docs/screenshots/sculptures \
+SCREENSHOT_CAPTURE_POINTS_JSON='{"windmill-wilds":{"t":0.55}}' \
+  node tools/capture-readme-screenshots.mjs windmill-wilds
+```
+
+Set `SCREENSHOT_CAPTURE_REPORTS=1` to save the diagnostic race state and render
+counters beside each image. Software-rendered capture FPS includes loading and
+bounded capture frames; use a target-hardware benchmark for performance claims.

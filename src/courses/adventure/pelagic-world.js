@@ -24,6 +24,11 @@ export function buildPelagic(context) {
     });
   for (const m of [sand, pink, lavender, ivory, brass, teal, leaves]) marineCaustics(m, scene);
   const sea = mesh(new THREE.PlaneGeometry(1600, 1600), glasshouseWater(scene), w.scenery);
+  const kelpBlade = context.kit.authoredGeometry("blender:kelp-leaf", sphere);
+  const coralCluster = context.kit.authoredGeometry(
+    "blender:reef-coral",
+    new THREE.BoxGeometry(11.4, 6.5, 3),
+  );
   sea.name = "Pelagic water surface";
   sea.rotation.x = -Math.PI / 2;
   sea.castShadow = false;
@@ -107,7 +112,7 @@ export function buildPelagic(context) {
       tube(blade, [0, 0, 0], [1.2, height, 0], 0.12, leaves);
       for (let k = 0; k < 4; k++) {
         const leaf = mesh(
-          sphere,
+          kelpBlade,
           underwater ? leaves : teal,
           blade,
           [1 + k * 0.4, 2 + k * 2, 0],
@@ -140,7 +145,9 @@ export function buildPelagic(context) {
             (i % 3) * 6),
       );
       if (i % 3 === 0) plant(g, 1.1, i + section, true);
-      else
+      else if (context.kit.hasAsset("blender:reef-coral")) {
+        mesh(coralCluster, i % 2 ? pink : lavender, g, [0, 3.25, 0]);
+      } else
         for (let j = 0; j < 5; j++) {
           const x = -4 + j * 2,
             height = 2.5 + (j % 3) * 1.5;

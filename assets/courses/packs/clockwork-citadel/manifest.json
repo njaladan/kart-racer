@@ -17,6 +17,45 @@
       "modifications": "Complete authored SPM converted to static glTF; original diffuse UVs and house normal maps retained; color textures capped at 1024px.",
       "bytes": 6117900,
       "sha256": "8b8c1d9c8cddc39263fb6d58b39606d1243c602aa439f622f94ed0723e07ea1b"
+    },
+    {
+      "name": "blender:gear-16",
+      "file": "models/blender-gear-16.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Involute tooth curves; extruded web; Boolean bores; bevelled metal",
+      "triangles": 2948,
+      "bytes": 293980,
+      "sha256": "d30e5dadf6eb2b27498dcbcbea0cd6c92a89edbca8096ea52388acca38e14807"
+    },
+    {
+      "name": "blender:gear-20",
+      "file": "models/blender-gear-20.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Involute tooth curves; extruded web; Boolean bores; bevelled metal",
+      "triangles": 3468,
+      "bytes": 345980,
+      "sha256": "c02cdd62d3d44e162bb544422311694d5862e20e068f829dd9e8622bbcf6a7dd"
+    },
+    {
+      "name": "blender:gear-28",
+      "file": "models/blender-gear-28.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Involute tooth curves; extruded web; Boolean bores; bevelled metal",
+      "triangles": 4408,
+      "bytes": 443036,
+      "sha256": "c20202188da52f38d9eafdab1a8472bd7290bde603cec27374919c5ccd31fefb"
     }
   ],
   "textures": [],

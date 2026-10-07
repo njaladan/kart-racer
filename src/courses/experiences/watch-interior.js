@@ -73,7 +73,7 @@ export function buildWatchInterior({ track, kit, scenery, animated, updates, sig
   wellBase.rotation.x = -Math.PI / 2;
   wellBase.name = "Deep gear well base";
   // Deep gears and shafts make the central gap visibly fall into a watch.
-  const gearGeo = new THREE.TorusGeometry(1, 0.075, 6, 40);
+  const gearGeo = kit.authoredGeometry("blender:gear-28", new THREE.TorusGeometry(1, 0.075, 6, 40));
   for (let i = 0; i < 8; i++) {
     const angle = ((i + 0.5) * Math.PI) / 4,
       r = radius + 29;
@@ -89,7 +89,7 @@ export function buildWatchInterior({ track, kit, scenery, animated, updates, sig
     const rotor = new THREE.Group();
     mount.add(rotor);
     mesh(gearGeo, brass, rotor, [0, 0, 0], [size, size, size]);
-    for (let n = 0; n < 24; n++) {
+    for (let n = 0; !kit.hasAsset("blender:gear-28") && n < 24; n++) {
       const q = (n * Math.PI) / 12;
       box(brass, rotor, [Math.cos(q) * size, Math.sin(q) * size, 0], [1.5, 1.5, 0.8]).rotation.z =
         q;
@@ -115,7 +115,7 @@ export function buildWatchInterior({ track, kit, scenery, animated, updates, sig
     gear.position.set(Math.cos(angle) * r, -radius - 10 - (i % 4) * 5, Math.sin(angle) * r);
     const size = 3 + (i % 4);
     mesh(gearGeo, brass, gear, [0, 0, 0], [size, size, size]).rotation.x = Math.PI / 2;
-    for (let n = 0; n < 24; n++) {
+    for (let n = 0; !kit.hasAsset("blender:gear-28") && n < 24; n++) {
       const q = (n * Math.PI * 2) / 24;
       const tooth = box(brass, gear, [Math.cos(q) * size, 0, Math.sin(q) * size], [1.8, 1.4, 1.4]);
       tooth.rotation.y = -q;

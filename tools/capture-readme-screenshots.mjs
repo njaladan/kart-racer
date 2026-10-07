@@ -3,14 +3,15 @@
 import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
 import { existsSync } from "node:fs";
-import { writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { COURSES } from "../src/courses/registry.js";
 
 const require = createRequire(import.meta.url);
 const repoRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
-const screenshotDir = resolve(repoRoot, "docs/screenshots");
+const screenshotDir = resolve(repoRoot, process.env.SCREENSHOT_CAPTURE_DIR || "docs/screenshots");
+const captureOverrides = JSON.parse(process.env.SCREENSHOT_CAPTURE_POINTS_JSON || "{}");
 const courseCaptures = [
   { id: "windmill-wilds", racer: "tux", t: 0.61, seconds: 24 },
   { id: "neon-harbor", racer: "kiki", t: 0.15, seconds: 12 },
@@ -80,16 +81,21 @@ async function startServer() {
 }
 
 async function captureCourse(browserContext, courseId) {
-  const course = courseCaptures.find(({ id }) => id === courseId);
-  if (!course) {
+  const preset = courseCaptures.find(({ id }) => id === courseId);
+  if (!preset) {
     throw new Error(
       `Unknown course "${courseId}". Choose: ${courseCaptures.map(({ id }) => id).join(", ")}.`,
     );
   }
+  const course = { ...preset, ...captureOverrides[courseId] };
 
   const page = await browserContext.newPage();
   const deadline = setTimeout(() => page.close().catch(() => {}), timeoutMs);
   await page.addInitScript((quality) => {
+    window.captureReport = null;
+    window.addEventListener("message", ({ data }) => {
+      if (data?.type === "racer-state") window.captureReport = data;
+    });
     localStorage.setItem(
       "turbo-trail-preferences-v1",
       JSON.stringify({ quality, adaptive: false }),
@@ -186,6 +192,14 @@ async function captureCourse(browserContext, courseId) {
     });
     const output = resolve(screenshotDir, `${course.id}.jpg`);
     await writeFile(output, Buffer.from(screenshot.data, "base64"));
+    if (process.env.SCREENSHOT_CAPTURE_REPORTS) {
+      await page.evaluate(() => window.__turboTrailDiagnostics.send({ type: "test-report" }));
+      await page.waitForFunction(() => window.captureReport !== null);
+      await writeFile(
+        resolve(screenshotDir, `${course.id}.json`),
+        JSON.stringify(await page.evaluate(() => window.captureReport), null, 2) + "\n",
+      );
+    }
     console.log(`Saved ${output}`);
   } catch (error) {
     const detail = errors.length ? `\nBrowser errors: ${errors.join("; ")}` : "";
@@ -197,6 +211,7 @@ async function captureCourse(browserContext, courseId) {
 }
 
 async function main() {
+  await mkdir(screenshotDir, { recursive: true });
   const { chromium } = loadPlaywright();
   const server = await startServer();
   const chromiumPath = process.env.CHROMIUM_PATH || "/usr/bin/chromium";

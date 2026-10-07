@@ -77,6 +77,20 @@ test("Windmill upgraded world is finite and its animations are deterministic on 
     track,
     assets: await loadArt(),
   });
+  const mill = scene.getObjectByName("Working countryside windmill arch");
+  const centre =
+    (track.platformEdgeAt(track.MILL_T, -1) + track.platformEdgeAt(track.MILL_T, 1)) / 2;
+  assert.ok(mill, "clearance must retain the gateway");
+  assert.ok(
+    scene.getObjectByName("Blender mill arch masonry"),
+    "clearance must retain the fitted arch mesh",
+  );
+  assert.ok(
+    mill
+      .getWorldPosition(new THREE.Vector3())
+      .distanceTo(track.poseAt(track.MILL_T * track.TRACK, centre, 0).p) < 1e-5,
+    "the mill gateway stays centred over the complete road and apron",
+  );
   for (const t of [0, 30, 31, 35, 40]) world.update(t);
   world.update(12.5);
   scene.updateMatrixWorld(true);

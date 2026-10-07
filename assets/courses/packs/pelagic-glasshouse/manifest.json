@@ -126,6 +126,32 @@
       "modifications": "512px embedded textures, 20-ray geometry/ground vertex AO, cutout foliage, GLB conversion",
       "bytes": 163636,
       "sha256": "6dfd1e432f49e78e1f06119e425a2a067ecf3d9e51ac8d27f26d1284128d1851"
+    },
+    {
+      "name": "blender:reef-coral",
+      "file": "models/blender-reef-coral.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Tapered Bezier branches, voxel union, smoothing and decimation",
+      "triangles": 1442,
+      "bytes": 80472,
+      "sha256": "58fa6b6f62aa01c68c7dee43bba389e8ea6f17e57413bafa09c338b36bfcac7a"
+    },
+    {
+      "name": "blender:kelp-leaf",
+      "file": "models/blender-kelp-leaf.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Undulating ribbed blade, subdivision and solidify",
+      "triangles": 416,
+      "bytes": 17596,
+      "sha256": "eb74613c67388e0617e50b73868884e0101e2352b88342195276058c10e9d9ca"
     }
   ],
   "textures": [

@@ -2,7 +2,7 @@ import { patchMaterial } from "../../rendering/surface-detail.js";
 
 /** A jewel-box concert interior: velvet, brass, balconies and dancing dust. */
 export function metronomeArt(w) {
-  const { THREE, track, mat, safe, asset, mesh, box, motion, lamp, beam, particles } = w;
+  const { THREE, track, kit, mat, safe, asset, mesh, box, motion, lamp, beam, particles } = w;
   const wood = mat("#784c3c", "wood"),
     gold = mat("#e6c383", "metal", { metalness: 0.72, roughness: 0.27 });
   const velvet = mat("#303b60", "fabric", { roughness: 0.98 });
@@ -26,7 +26,13 @@ export function metronomeArt(w) {
         if (!g) continue;
         // Deep pleated curtains and balconies make enclosure tangible.
         box(wood, g, [0, 22, 0], [2, 46, 21]);
-        box(velvet, g, [-side * 2, 25, 0], [1, 40, 18]);
+        mesh(
+          kit.authoredGeometry("blender:velvet-drape", new THREE.BoxGeometry()),
+          velvet,
+          g,
+          [-side * 2, 25, 0],
+          [1, 40, 18],
+        );
         for (const z of [-10, 10]) {
           mesh(new THREE.CylinderGeometry(0.5, 0.65, 46, 10), gold, g, [0, 23, z]);
           mesh(new THREE.SphereGeometry(1.3, 10, 8), gold, g, [0, 47, z]);

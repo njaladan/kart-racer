@@ -32,6 +32,8 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
   const dune = new THREE.SphereGeometry(1, 20, 10, 0, Math.PI * 2, 0, Math.PI / 2);
   const ring = new THREE.TorusGeometry(1, 0.075, 6, 48);
   const rock = new THREE.IcosahedronGeometry(1, 1);
+  const mesa = kit.authoredGeometry("blender:sandstone-mesa", rock);
+  const shaft = kit.authoredGeometry("blender:temple-column", cyl);
   const safe = (t, offset, footprint) => kit.safeGroup(t, offset, footprint);
   const pulse = (object, fn) => {
     animated.push(object);
@@ -40,7 +42,7 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
   function column(g, x, height = 19) {
     if (!allows(g, [x, height / 2, 0], [5.2, height + 2, 5.2])) return;
     box(dark, g, [x, 0.7, 0], [5.2, 1.4, 5.2]);
-    mesh(cyl, stone, g, [x, height / 2, 0], [1.7, height, 1.7]);
+    mesh(shaft, stone, g, [x, height / 2, 0], [1.7, height, 1.7]);
     for (const y of [1.6, height - 1.5, height]) box(pale, g, [x, y, 0], [4.5, 0.7, 4.5]);
     for (let y = 4; y < height - 2; y += 4) box(gold, g, [x, y, -1.72], [0.45, 1.3, 0.08]);
   }
@@ -156,7 +158,7 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
       side = i % 2 ? 1 : -1;
     const g = groupAt(t, side * 28);
     const h = 24 + (i % 4) * 6;
-    mesh(rock, stone, g, [0, -h / 2 - 8, 0], [12, h, 11]);
+    mesh(mesa, stone, g, [0, -h / 2 - 8, 0], [12, h, 11]);
   }
   const crown = groupAt(sectorT(3, 0.26), -70);
   for (let i = 0; i < 6; i++)

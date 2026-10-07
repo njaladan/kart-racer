@@ -179,6 +179,19 @@
       "modifications": "Complete authored SPM converted to static glTF; original diffuse UVs and house normal maps retained; color textures capped at 1024px.",
       "bytes": 1243976,
       "sha256": "4189bfb3dd85c17446c6b703d216a48aa48c3c19cc520a10ad3b7c0a21dc07a5"
+    },
+    {
+      "name": "blender:freight-pipe",
+      "file": "models/blender-freight-pipe.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Hollow solidified shell and rolled bevelled ends",
+      "triangles": 672,
+      "bytes": 25464,
+      "sha256": "b9b7d42a9e9e9b7c21d7a3abe3e9c5d284b01536d508b4f5f9ed78c5127afeb6"
     }
   ],
   "textures": [

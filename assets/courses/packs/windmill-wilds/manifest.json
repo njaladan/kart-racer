@@ -476,6 +476,19 @@
       "license": "CC0-1.0",
       "sha256": "2afb10cd68a9a7b185fc46110be0da550ea2aef86ef9ac6b7339f217eb4b636a",
       "bytes": 8084
+    },
+    {
+      "name": "blender:mill-masonry",
+      "file": "models/blender-mill-masonry.glb",
+      "type": "gltf",
+      "author": "Turbo Trail project",
+      "license": "CC0-1.0",
+      "source": "Original Blender geometry; tools/build-course-sculptures.py",
+      "attribution": "licenses/blender-sculptures.txt",
+      "features": "Exact boolean intrados; bevelled staggered masonry and radial voussoirs",
+      "triangles": 2444,
+      "bytes": 280888,
+      "sha256": "b0fd807678c64952b9d030be5888cfcc99423f0b5627a0bd020f229a17fef528"
     }
   ],
   "fidelitySource": {
