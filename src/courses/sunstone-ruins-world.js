@@ -27,13 +27,12 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
   for (const m of [stone, pale, shade, dark, sand, paleSand])
     installSurfaceDetail(m, { kind: "terrain", strength: 0.18 });
   for (const m of [stone, pale, shade, dark]) carvedSandstone(m, { carved: true });
-  const cyl = new THREE.CylinderGeometry(1, 1, 1, 12);
   const sphere = new THREE.SphereGeometry(1, 12, 8);
   const dune = new THREE.SphereGeometry(1, 20, 10, 0, Math.PI * 2, 0, Math.PI / 2);
   const ring = new THREE.TorusGeometry(1, 0.075, 6, 48);
   const rock = new THREE.IcosahedronGeometry(1, 1);
   const mesa = kit.authoredGeometry("blender:sandstone-mesa", rock);
-  const shaft = kit.authoredGeometry("blender:temple-column", cyl);
+  const shaft = kit.authoredGeometry("blender:temple-column", [2, 1, 2]);
   const safe = (t, offset, footprint) => kit.safeGroup(t, offset, footprint);
   const pulse = (object, fn) => {
     animated.push(object);

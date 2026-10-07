@@ -21,10 +21,7 @@ export function buildMountainWonders({ THREE, scene, scenery, track, festival })
     roughness: 0.28,
     metalness: 0.12,
   });
-  const shard = festival.authoredGeometry(
-    "blender:glacier-cluster",
-    new THREE.CylinderGeometry(0.4, 1, 1, 6, 3),
-  );
+  const shard = festival.authoredGeometry("blender:glacier-cluster", [Math.sqrt(3), 1, 2]);
   const icicle = new THREE.ConeGeometry(1, 1, 5);
   function arch(section, fraction, height, ice = false) {
     const t = sectorT(section, fraction),

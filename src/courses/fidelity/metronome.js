@@ -27,7 +27,7 @@ export function metronomeArt(w) {
         // Deep pleated curtains and balconies make enclosure tangible.
         box(wood, g, [0, 22, 0], [2, 46, 21]);
         mesh(
-          kit.authoredGeometry("blender:velvet-drape", new THREE.BoxGeometry()),
+          kit.authoredGeometry("blender:velvet-drape"),
           velvet,
           g,
           [-side * 2, 25, 0],

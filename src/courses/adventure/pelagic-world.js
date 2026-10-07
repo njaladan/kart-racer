@@ -13,7 +13,6 @@ export function buildPelagic(context) {
     leaves = mat("#539882", "leaves"),
     pink = mat("#db92a6", "rock"),
     lavender = mat("#9b9ed0", "rock"),
-    gold = mat("#eccb7d"),
     glow = mat("#b9f4dd", "glass", { emissive: "#87dec9", emissiveIntensity: 0.6 }),
     glass = mat("#b8e1db", "glass", {
       transparent: true,
@@ -25,10 +24,7 @@ export function buildPelagic(context) {
   for (const m of [sand, pink, lavender, ivory, brass, teal, leaves]) marineCaustics(m, scene);
   const sea = mesh(new THREE.PlaneGeometry(1600, 1600), glasshouseWater(scene), w.scenery);
   const kelpBlade = context.kit.authoredGeometry("blender:kelp-leaf", sphere);
-  const coralCluster = context.kit.authoredGeometry(
-    "blender:reef-coral",
-    new THREE.BoxGeometry(11.4, 6.5, 3),
-  );
+  const coralCluster = context.kit.authoredGeometry("blender:reef-coral", [11.4, 6.5, 3]);
   sea.name = "Pelagic water surface";
   sea.rotation.x = -Math.PI / 2;
   sea.castShadow = false;
@@ -145,23 +141,7 @@ export function buildPelagic(context) {
             (i % 3) * 6),
       );
       if (i % 3 === 0) plant(g, 1.1, i + section, true);
-      else if (context.kit.hasAsset("blender:reef-coral")) {
-        mesh(coralCluster, i % 2 ? pink : lavender, g, [0, 3.25, 0]);
-      } else
-        for (let j = 0; j < 5; j++) {
-          const x = -4 + j * 2,
-            height = 2.5 + (j % 3) * 1.5;
-          tube(g, [x, 0, 0], [x, height, 0], 0.45, i % 2 ? pink : lavender);
-          for (const side of [-1, 1])
-            tube(
-              g,
-              [x, height * 0.5, 0],
-              [x + side * 1.4, height + 0.4, side],
-              0.28,
-              i % 2 ? pink : lavender,
-            );
-          mesh(sphere, gold, g, [x, height, 0], [0.5, 0.6, 0.5]);
-        }
+      else mesh(coralCluster, i % 2 ? pink : lavender, g, [0, 3.25, 0]);
       for (let j = 0; j < 3; j++)
         mesh(sphere, i % 2 ? teal : lavender, g, [-3 + j * 3, 0.6, 5], [1.2, 0.7, 1.2]);
     }

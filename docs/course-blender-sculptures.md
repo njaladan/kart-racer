@@ -36,6 +36,12 @@ local bounds. Matching parts share the fitted geometry. Existing regional
 batching and instancing still apply. The GLBs embed no external textures and
 total about 2.27 MB; their manifests record CC0 attribution, sizes and hashes.
 
+Retired procedural gear, crane and coral builders have been removed. Parts use
+declared dimensions or bounds instead of generating reference meshes solely to
+measure them; shared primitives remain where other scenery still uses them.
+Geometry-only simulation fixtures use cached box placeholders when art is omitted.
+All eleven exported lighting scene hashes stayed identical after this cleanup.
+
 The full world inventory across these eleven courses grew by approximately
 575,000 triangles, or 10%. Clockwork's mesh-object count fell from 831 to 616;
 Pelagic's fell from 1,486 to 1,457. Individual increases vary: paper folds,

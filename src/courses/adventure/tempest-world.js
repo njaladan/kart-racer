@@ -20,7 +20,7 @@ export function buildTempest(context) {
   ocean.geometry.dispose();
   ocean.geometry = new THREE.PlaneGeometry(1700, 1700, 80, 80);
   const time = { value: 0 };
-  const towerPier = w.kit.authoredGeometry("blender:storm-pier", new THREE.BoxGeometry());
+  const towerPier = w.kit.authoredGeometry("blender:storm-pier");
   const seaStack = w.kit.authoredGeometry("blender:sea-stack", rock);
   (scene.userData.surfaceAnimations ||= []).push(time);
   patchMaterial(ocean.material, "storm-swells", (shader) => {

@@ -72,49 +72,13 @@ export function buildClockwork(context) {
     const root = new THREE.Group();
     parent.add(root);
     root.position.set(...position);
-    const authoredName = `blender:gear-${teeth}`;
-    if (context.kit.hasAsset(authoredName)) {
-      const reference = new THREE.CylinderGeometry(1, 1, 1, 32).rotateX(Math.PI / 2);
-      mesh(
-        context.kit.authoredGeometry(authoredName, reference),
-        bronze,
-        root,
-        [0, 0, 0],
-        [radius, radius, 1.8],
-      );
-      context.kit.batch(root);
-      motion(root, (time) => {
-        root.rotation.z = time * speed;
-      });
-      return root;
-    }
-    mesh(torus, bronze, root, [0, 0, 0], [radius, radius, radius]);
     mesh(
-      new THREE.CylinderGeometry(1, 1, 1, 24),
-      iron,
+      context.kit.authoredGeometry(`blender:gear-${teeth}`, [2, 2, 1]),
+      bronze,
       root,
       [0, 0, 0],
-      [radius * 0.23, 1.8, radius * 0.23],
-    ).rotation.x = Math.PI / 2;
-    for (let j = 0; j < teeth; j++) {
-      const a = (j * Math.PI * 2) / teeth;
-      const tooth = box(
-        bronze,
-        root,
-        [Math.cos(a) * radius, Math.sin(a) * radius, 0],
-        [radius * 0.13, radius * 0.11, 1.8],
-      );
-      tooth.rotation.z = a;
-      if (j % 4 === 0) {
-        const spoke = box(
-          copper,
-          root,
-          [Math.cos(a) * radius * 0.5, Math.sin(a) * radius * 0.5, 0],
-          [radius, 0.55, 0.6],
-        );
-        spoke.rotation.z = a;
-      }
-    }
+      [radius, radius, 1.8],
+    );
     context.kit.batch(root);
     motion(root, (time) => {
       root.rotation.z = time * speed;

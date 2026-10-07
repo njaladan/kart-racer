@@ -1,13 +1,41 @@
 import * as THREE from "../../vendor/three/three.module.js";
 import { mergeGeometries } from "../../vendor/three/addons/utils/BufferGeometryUtils.js";
 
-/** Fit an imported, detailed part to its existing bounds and local animation pivot. */
+/** Fit an imported part to dimensions, explicit bounds, or a still-used geometry. */
 export function createAuthoredGeometryLibrary(models = {}) {
   const sources = new Map();
   const fitted = new Map();
-  return (name, reference) => {
+  return (name, reference = [1, 1, 1]) => {
+    let bounds;
+    if (reference.isBufferGeometry) {
+      reference.computeBoundingBox();
+      bounds = reference.boundingBox;
+    } else {
+      const min = Array.isArray(reference) ? reference.map((value) => -value / 2) : reference.min;
+      const max = Array.isArray(reference) ? reference.map((value) => value / 2) : reference.max;
+      // Match the Float32 envelopes formerly measured from generated meshes.
+      bounds = new THREE.Box3(
+        new THREE.Vector3(...min.map(Math.fround)),
+        new THREE.Vector3(...max.map(Math.fround)),
+      );
+    }
+    const key = `${name}:${bounds.min.toArray()}:${bounds.max.toArray()}`;
     const model = models[name];
-    if (!model?.isObject3D) return reference;
+    if (!model?.isObject3D) {
+      if (reference.isBufferGeometry) return reference;
+      // Geometry-only simulation fixtures omit art. They need a small finite
+      // placeholder, rather than copies of the retired scenery builders.
+      const placeholderKey = `placeholder:${key}`;
+      if (!fitted.has(placeholderKey)) {
+        const size = bounds.getSize(new THREE.Vector3());
+        const center = bounds.getCenter(new THREE.Vector3());
+        fitted.set(
+          placeholderKey,
+          new THREE.BoxGeometry(...size.toArray()).translate(...center.toArray()),
+        );
+      }
+      return fitted.get(placeholderKey);
+    }
     if (!sources.has(name)) {
       model.updateWorldMatrix(true, true);
       const pieces = [];
@@ -28,9 +56,6 @@ export function createAuthoredGeometryLibrary(models = {}) {
       geometry.computeBoundingBox();
       sources.set(name, geometry);
     }
-    reference.computeBoundingBox();
-    const bounds = reference.boundingBox;
-    const key = `${name}:${bounds.min.toArray()}:${bounds.max.toArray()}`;
     if (!fitted.has(key)) {
       const source = sources.get(name);
       const size = source.boundingBox.getSize(new THREE.Vector3());

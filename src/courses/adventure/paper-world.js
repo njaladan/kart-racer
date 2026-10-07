@@ -39,57 +39,35 @@ export function buildPaper(context) {
     bamboo = mat("#ad826c", "wood"),
     gold = mat("#e2ba69", "metal"),
     glow = mat("#ffdb93", "paper", { emissive: "#ffb46c", emissiveIntensity: 0.7 });
-  function folded(
-    vertices,
-    indices,
-    material,
-    parent,
-    position = [0, 0, 0],
-    scale = [1, 1, 1],
-    authored = null,
-  ) {
+  const craneBody = context.kit.authoredGeometry("blender:paper-body", {
+    min: [-0.6, -0.35, -1.5],
+    max: [0.6, 1.2, 1.3],
+  });
+  const craneWings = [-1, 1].map((side) =>
+    context.kit.authoredGeometry(`blender:paper-wing-${side > 0 ? "right" : "left"}`, {
+      min: [Math.min(0, side * 2.7), 0, -0.35],
+      max: [Math.max(0, side * 2.7), 0.7, 1.2],
+    }),
+  );
+  const lanternShell = context.kit.authoredGeometry("blender:paper-lantern", [2, 2, 2]);
+  function folded(vertices, indices, material, parent, position = [0, 0, 0], scale = [1, 1, 1]) {
     const geo = new THREE.BufferGeometry();
     geo.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
     geo.setIndex(indices);
     geo.computeVertexNormals();
-    return mesh(
-      authored ? context.kit.authoredGeometry(authored, geo) : geo,
-      material,
-      parent,
-      position,
-      scale,
-    );
+    return mesh(geo, material, parent, position, scale);
   }
-  // Original pointed crane: separate wing pivots give a real origami silhouette.
+  // Authored crane parts retain separate wing pivots for their existing flap.
   function crane(parent, position, size, color = 0, flap = false) {
     const g = new THREE.Group();
     parent.add(g);
     g.position.set(...position);
     g.scale.setScalar(size);
-    folded(
-      [
-        0, 0, -1, -0.6, -0.35, 0, 0, 0.3, 0.6, 0.6, -0.35, 0, 0, 0, 1.3, 0, 0.8, -0.8, 0, 1.2, -1.3,
-        0.3, 0.85, -1.5,
-      ],
-      [0, 1, 2, 0, 2, 3, 1, 4, 2, 3, 2, 4, 0, 5, 1, 0, 3, 5, 5, 6, 7],
-      papers[color],
-      g,
-      [0, 0, 0],
-      [1, 1, 1],
-      "blender:paper-body",
-    );
+    mesh(craneBody, papers[color], g);
     for (const side of [-1, 1]) {
       const wing = new THREE.Group();
       g.add(wing);
-      folded(
-        [0, 0, 0, side * 2.7, 0.4, -0.35, side * 0.65, 0.2, 1.2, side * 1.1, 0.7, 0.2],
-        [0, 1, 3, 0, 3, 2, 1, 2, 3],
-        papers[(color + 1) % 5],
-        wing,
-        [0, 0, 0],
-        [1, 1, 1],
-        `blender:paper-wing-${side > 0 ? "right" : "left"}`,
-      );
+      mesh(craneWings[(side + 1) / 2], papers[(color + 1) % 5], wing);
       if (flap)
         motion(wing, (time) => {
           wing.rotation.z = side * Math.sin(time * 1.7 + size) * 0.16;
@@ -199,7 +177,7 @@ export function buildPaper(context) {
           y = height - 1 - Math.sin((j * Math.PI) / 6) * 2;
         tube(g, [x, height, 0], [x, y, 0], 0.025, ink);
         const lantern = mesh(
-          context.kit.authoredGeometry("blender:paper-lantern", new THREE.SphereGeometry(1, 8, 6)),
+          lanternShell,
           papers[(section + j) % 5],
           g,
           [x, y - 0.8, 0],

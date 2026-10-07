@@ -81,28 +81,15 @@ export function buildWindmillLandmarks({ scene, scenery, mats, palette, primitiv
     passageScale = (right - left + 6) / 21,
     passageCenter = (left + right) / 2;
   mill.position.addScaledVector(track.frameAt(MILL_T).right, passageCenter);
-  const shape = new THREE.Shape();
-  shape.moveTo(-14, 0);
-  shape.lineTo(-14, 21);
-  shape.quadraticCurveTo(0, 25, 14, 21);
-  shape.lineTo(14, 0);
-  shape.lineTo(10.5, 0);
-  shape.lineTo(10.5, 13);
-  shape.quadraticCurveTo(0, 19, -10.5, 13);
-  shape.lineTo(-10.5, 0);
-  shape.closePath();
-  const arch = new THREE.ExtrudeGeometry(shape, {
-    depth: 8,
-    bevelEnabled: true,
-    bevelSize: 0.16,
-    bevelThickness: 0.16,
-    bevelSegments: 2,
-    curveSegments: 24,
-    steps: 1,
-  });
-  arch.scale(passageScale, 1, 1);
+  // Preserve the fitted envelope, including the former bevel/crown extents,
+  // without constructing and immediately discarding an extruded arch.
+  const halfSpan = Math.fround(Math.fround(14.16) * passageScale);
+  const archBounds = {
+    min: [-halfSpan, -0.16, -0.16],
+    max: [halfSpan, 23.160011291503906, 8.16],
+  };
   const archMesh = mesh(
-    kit.authoredGeometry("blender:mill-masonry", arch),
+    kit.authoredGeometry("blender:mill-masonry", archBounds),
     stone,
     mill,
     [0, 0, -4],

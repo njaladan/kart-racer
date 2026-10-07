@@ -26,11 +26,20 @@ test("authored parts fit translated animation pivots without mutating either inp
   const fit = createAuthoredGeometryLibrary({ part: model });
   const reference = new THREE.BoxGeometry(7, 8, 9).translate(3.5, 4, -2);
   const geometry = fit("part", reference);
+  assert.equal(
+    fit("part", { min: [0, 0, -6.5], max: [7, 8, 2.5] }),
+    geometry,
+    "declared bounds replace reference meshes without changing the fitted part",
+  );
   reference.computeBoundingBox();
   for (const end of ["min", "max"])
     assert.ok(geometry.boundingBox[end].distanceTo(reference.boundingBox[end]) < 1e-5);
   assert.equal(fit("part", reference), geometry, "repeated parts share fitted geometry");
   assert.equal(fit("missing", reference), reference, "headless callers retain the fallback");
+  const placeholder = fit("missing", [2, 3, 4]);
+  assert.equal(fit("missing", [2, 3, 4]), placeholder, "headless placeholders share geometry");
+  placeholder.computeBoundingBox();
+  assert.deepEqual(placeholder.boundingBox.getSize(new THREE.Vector3()).toArray(), [2, 3, 4]);
   assert.deepEqual(source.attributes.position.array, original);
   for (const name of ["normal", "uv", "color"])
     assert.ok(geometry.attributes[name], `fitting preserves ${name}`);
