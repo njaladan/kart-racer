@@ -49,29 +49,25 @@ export function createRaceItems({
       who.star = 6.2;
       who.boost = 3.3;
     } else if (type === "banana") {
-      for (let n = 0; n < 3; n++) {
-        bananas.push({
-          s: from - 14 - n * 8,
-          x: lane + (n - 1) * 0.08,
-          routeChoice: who.routeChoice || 0,
-          fixedPosition: true,
-          worldPos: (() => {
-            const branch = activeTrack.branches[who.routeChoice - 1];
-            const s = from - 14 - n * 8;
-            return branch
-              ? branch.poseAt(
-                  (activeTrack.trackT(s) - branch.start) / (branch.end - branch.start),
-                  laneWidth(lane),
-                  0.25,
-                ).p
-              : poseAt(s, laneWidth(lane), 0.25).p;
-          })(),
-          mesh: createEffect("banana"),
-          life: 18,
-          owner: who,
-          grace: 0.6,
-        });
-      }
+      const s = from - 14;
+      const branch = activeTrack.branches[who.routeChoice - 1];
+      bananas.push({
+        s,
+        x: lane,
+        routeChoice: who.routeChoice || 0,
+        fixedPosition: true,
+        worldPos: branch
+          ? branch.poseAt(
+              (activeTrack.trackT(s) - branch.start) / (branch.end - branch.start),
+              laneWidth(lane),
+              0.25,
+            ).p
+          : poseAt(s, laneWidth(lane), 0.25).p,
+        mesh: createEffect("banana"),
+        life: 18,
+        owner: who,
+        grace: 0.6,
+      });
     } else if (type === "green" || type === "red") {
       const target =
         type === "red"

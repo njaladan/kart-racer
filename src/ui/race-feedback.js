@@ -6,7 +6,7 @@ const PICKUP_NAMES = {
   mushroom: "TRIPLE MUSHROOMS",
   green: "GREEN SHELL",
   red: "HOMING RED SHELL",
-  banana: "BANANA PEELS",
+  banana: "BANANA PEEL",
   star: "RAINBOW STAR",
 };
 
@@ -94,7 +94,7 @@ export function createRaceFeedback({ player, audio, particles, toast, terrain })
       notify(
         {
           star: "RAINBOW STAR!",
-          banana: "BANANAS AWAY!",
+          banana: "BANANA AWAY!",
           red: "HOMING RED SHELL!",
           green: "GREEN SHELL!",
         }[type],

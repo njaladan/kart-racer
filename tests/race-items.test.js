@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { createRaceItems } from "../src/simulation/race-items.js";
 import { createRaceGrid } from "../src/simulation/race-grid.js";
 import { RACERS } from "../src/rendering/racer-roster.js";
-import { selectCourse } from "../src/track/track.js";
+import { selectCourse, laneWidth, poseAt } from "../src/track/track.js";
 import { DEFAULT_COURSE } from "../src/courses/registry.js";
 
 function setup(boxes = []) {
@@ -61,25 +61,32 @@ test("active effects expire exactly once and restart removes effects and restore
   } = setup([box]);
   items.setItem(player, "banana");
   items.fire(player);
-  assert.equal(items.bananas.length, 3);
+  assert.equal(items.bananas.length, 1);
+  const [banana] = items.bananas;
+  assert.equal(banana.s, player.s - 14);
+  assert.equal(banana.x, player.x);
+  assert.deepEqual(banana.worldPos, poseAt(banana.s, laneWidth(player.x), 0.25).p);
+  assert.equal(player.item, null);
+  items.fire(player);
+  assert.equal(items.bananas.length, 1);
   const expired = items.bananas.map((banana) => banana.mesh);
   items.step(19, 0);
   assert.deepEqual(removed, expired.toReversed());
   items.step(1, 0);
-  assert.equal(removed.length, 3);
+  assert.equal(removed.length, 1);
   items.setItem(player, "green");
   items.fire(player);
   items.setItem(player, "banana");
   items.fire(player);
   const active = [...items.projectiles, ...items.bananas].map((effect) => effect.mesh);
   items.reset();
-  assert.deepEqual(removed.slice(3), active);
+  assert.deepEqual(removed.slice(1), active);
   assert.equal(items.projectiles.length, 0);
   assert.equal(items.bananas.length, 0);
   assert.equal(box.active, true);
   assert.equal(box.respawn, 0);
   items.reset();
-  assert.equal(removed.length, 7);
+  assert.equal(removed.length, 3);
 });
 
 test("all three mushroom charges emit use events and blocked uses leave inventory intact", () => {
