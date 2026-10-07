@@ -1,7 +1,10 @@
-/** Vaulted stone and the articulated sun engine; all movement is decorative. */
+import { createRouteClearance } from "../../rendering/route-clearance.js";
+
+/** Vaulted stone frames the sun engine's moving driving rings. */
 export function buildSolarArchitecture({ THREE, kit, track, palette, animated, motions }) {
   const { mesh, box, groupAt, sectorT } = kit;
   const { stone, pale, gold, dark, glow } = palette;
+  const allows = createRouteClearance(track);
   const torus = new THREE.TorusGeometry(1, 0.028, 6, 64);
   const cylinder = new THREE.CylinderGeometry(1, 1, 1, 16);
   const orbit = (object, update) => {
@@ -23,6 +26,10 @@ export function buildSolarArchitecture({ THREE, kit, track, palette, animated, m
   }
   for (let i = 0; i < 7; i++) {
     const g = groupAt(sectorT(4, 0.04 + i * 0.15));
+    if (!allows(g, [0, 16, 0], [45, 25, 4])) {
+      g.removeFromParent();
+      continue;
+    }
     for (const [j, wedge] of wedges.entries()) mesh(wedge, j % 4 ? stone : pale, g, [0, 5, -1.1]);
     for (const side of [-1, 1]) {
       box(stone, g, [side * 20.5, 2.5, 0], [3, 5, 3.5]);

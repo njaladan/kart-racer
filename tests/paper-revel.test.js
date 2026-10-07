@@ -5,7 +5,7 @@ import { selectCourse, TRACK } from "../src/track/track.js";
 import { initializeRacer, advanceRacer, botInput } from "../src/simulation/simulation.js";
 import { unfoldPhase } from "../src/simulation/course-mechanics.js";
 const track = selectCourse(course);
-test("paper crossing preserves its two floors and the fan opens once without closing on racers", () => {
+test("paper crossing preserves its two floors and the route takes three different lap forms", () => {
   const upper = track.frameAt(0),
     lower = track.frameAt(0.5);
   assert.ok(upper.p.y - lower.p.y > 45);
@@ -14,26 +14,20 @@ test("paper crossing preserves its two floors and the fan opens once without clo
       s = track.projectTrack(p, 0, true);
     assert.ok(Math.abs(s.height - p.y) < 0.03);
   }
-  const verge = track.VERGES.find((v) => v.gate === "unfold"),
-    mid = (verge.start + verge.end) / 2;
-  for (const time of [0, 27, 28, 29]) {
-    track.setTime(time);
-    assert.equal(track.vergeWidth(mid, 1), 0);
+  assert.deepEqual(
+    track.branches.map((b) => b.lap),
+    [0, 1, 2],
+  );
+  const heights = track.branches.map((b) => b.poseAt(0.5).p.y);
+  assert.ok(heights[1] - heights[0] > 20);
+  assert.ok(Math.abs(track.branches[2].frameAt(0.5).right.y) > 0.2);
+  for (const branch of track.branches) {
+    const pose = branch.poseAt(0.5),
+      surface = branch.project(pose.p, (branch.start + branch.end) / 2);
+    assert.ok(track.floorAt(surface).supported);
+    assert.ok(Math.abs(surface.height - pose.p.y) < 0.03);
   }
-  for (const time of [30, 60, 120]) {
-    track.setTime(time);
-    assert.equal(unfoldPhase(course, time), 1);
-    assert.equal(track.vergeWidth(mid, 1), 13);
-  }
-  for (let i = 1; i < 30; i++) {
-    const t = verge.start + ((verge.end - verge.start) * i) / 30,
-      w = track.vergeWidth(t, 1),
-      offset = track.roadHalfWidth(t) + w * 0.5;
-    const p = track.poseAt(t * TRACK, offset, 0.065).p,
-      s = track.projectTrack(p, t * TRACK);
-    assert.ok(Math.abs(s.height - p.y) < 0.03);
-    assert.ok(s.rightEdge > offset);
-  }
+  for (const time of [30, 60, 120]) assert.equal(unfoldPhase(course, time), 1);
 });
 test("five AI drivers complete all paper places and layered crossings", () => {
   for (let i = 0; i < 5; i++) {

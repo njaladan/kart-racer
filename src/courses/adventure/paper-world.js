@@ -2,12 +2,22 @@ import { worldKit } from "./world-kit.js";
 import { unfoldPhase } from "../../simulation/course-mechanics.js";
 import { registerLightPool } from "../../rendering/course-lighting.js";
 import { patchMaterial } from "../../rendering/surface-detail.js";
+import { createRouteClearance } from "../../rendering/route-clearance.js";
 
 /** A folded, inhabited festival; its paper apron really becomes driveable. */
 export function buildPaper(context) {
   const w = worldKit(context),
     { THREE, scene, track, mat, mesh, box, at, motion, tube, sphere, cylinder } = w;
   const colors = ["#fff1cc", "#e98b9e", "#8b98c9", "#75b6aa", "#f4bc64"];
+  const allows = createRouteClearance(track);
+  const clearFold = (g, t, side, center, size) => {
+    for (let i = 0; i < 10; i++) {
+      if (allows(g, center, size)) return true;
+      g.position.addScaledVector(track.frameAt(t).right, side * 18);
+    }
+    g.removeFromParent();
+    return false;
+  };
   const papers = colors.map((color) => {
     const m = mat(color, "fabric", { side: THREE.DoubleSide, roughness: 0.92 });
     patchMaterial(m, "paper-fibres", (shader) => {
@@ -110,7 +120,9 @@ export function buildPaper(context) {
       for (let i = 0; i < 8; i++) {
         const t = track.sectorT(section, (i + 0.5) / 8),
           edge = side > 0 ? track.surfaceAt(t).rightEdge : -track.surfaceAt(t).leftEdge;
-        const g = w.groupAt(t, side * (edge + 22));
+        const changing = track.branches.some((b) => b.section === section);
+        const g = w.groupAt(t, side * (edge + (changing ? 95 : 22)));
+        if (!clearFold(g, t, side, [0, 11, 2], [38, 36, 30])) continue;
         folded(
           [-18, -5, -12, 18, -5, -12, 0, 13 + (i % 3) * 7, 0, -14, -5, 16, 18, -5, 16],
           [0, 1, 2, 1, 4, 2, 4, 3, 2, 3, 0, 2],
@@ -119,6 +131,7 @@ export function buildPaper(context) {
         );
         if (i % 3 === 0) {
           const far = at(section, (i + 0.5) / 8, side * (100 + i * 9));
+          if (!clearFold(far, t, side, [0, 10, 5], [115, 70, 95])) continue;
           folded(
             [-55, -25, -40, 55, -25, -40, 0, 42, 0, -45, -25, 50, 55, -25, 50],
             [0, 1, 2, 1, 4, 2, 4, 3, 2, 3, 0, 2],
@@ -199,7 +212,7 @@ export function buildPaper(context) {
     track.setTime(0);
     return width;
   };
-  for (let i = 0; i < tiles; i++) {
+  for (let i = 0; verge && i < tiles; i++) {
     const a = verge.start + ((verge.end - verge.start) * i) / tiles,
       b = verge.start + ((verge.end - verge.start) * (i + 1)) / tiles,
       t = (a + b) / 2;

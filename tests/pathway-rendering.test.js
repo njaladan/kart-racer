@@ -15,6 +15,8 @@ test("rendered shoulders match physical support and exposed faces leave the sky 
     for (const [index] of track.SECTIONS.entries()) {
       if (
         course.traversals?.some((r) => r.section === index) ||
+        course.branches?.some((b) => b.required && b.section === index) ||
+        course.drumField?.section === index ||
         course.movingDecks?.some((d) => index >= d.section && index <= (d.endSection ?? d.section))
       )
         continue;

@@ -6,12 +6,14 @@ import { carvedSandstone } from "./sunstone-ruins/sunstone-materials.js";
 import { buildTempleAtmosphere } from "./sunstone-ruins/build-temple-atmosphere.js";
 import { createSandfall } from "./sunstone-ruins/sandfall.js";
 import { createSolarFocus } from "./sunstone-ruins/solar-focus.js";
+import { createRouteClearance } from "../rendering/route-clearance.js";
 
 /** The road travels through the monument; architecture follows its actual frames. */
 export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazardAt }) {
   const { material, mesh, box, groupAt, sectorT, align } = kit;
   const animated = [],
     motions = [];
+  const allows = createRouteClearance(track);
   const stone = material("#dfb87f", { bumpMap: textures.stone, bumpScale: 0.05 });
   const pale = material("#ffe0a0", { bumpMap: textures.stone, bumpScale: 0.05 });
   const shade = material("#957958", { bumpMap: textures.stone, bumpScale: 0.05 });
@@ -36,6 +38,7 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
     motions.push(fn);
   };
   function column(g, x, height = 19) {
+    if (!allows(g, [x, height / 2, 0], [5.2, height + 2, 5.2])) return;
     box(dark, g, [x, 0.7, 0], [5.2, 1.4, 5.2]);
     mesh(cyl, stone, g, [x, height / 2, 0], [1.7, height, 1.7]);
     for (const y of [1.6, height - 1.5, height]) box(pale, g, [x, y, 0], [4.5, 0.7, 4.5]);
@@ -162,15 +165,16 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
     for (const side of [-1, 1]) {
       const edge = side < 0 ? -track.surfaceAt(t).leftEdge : track.surfaceAt(t).rightEdge;
       const width = Math.max(17, edge + 5);
+      if (!allows(g, [side * width, 8.5, 0], [5, 22, 14])) continue;
       box(shade, g, [side * width, 8.5, 0], [4, 20, 14]);
       box(dark, g, [side * (width - 2.1), 7.5, 0], [0.2, 9, 7]);
       box(coolGlow, g, [side * (width - 2.3), 4, 0], [0.15, 0.2, 11]);
       if (i % 3 === 0) column(g, side * Math.max(14.5, edge + 3.5), 18);
     }
     // Central skylight slots admit shafts and actual moving-camera shadows.
-    if (i % 3 !== 1) box(dark, g, [0, 24, 0], [38, 3, 15]);
+    if (i % 3 !== 1 && allows(g, [0, 24, 0], [38, 3, 15])) box(dark, g, [0, 24, 0], [38, 3, 15]);
     else for (const side of [-1, 1]) box(stone, g, [side * 14, 24, 0], [9, 3, 15]);
-    box(stone, g, [0, 22, 0], [36, 1.1, 1.4]);
+    if (allows(g, [0, 22, 0], [36, 1.1, 1.4])) box(stone, g, [0, 22, 0], [36, 1.1, 1.4]);
   }
   for (let i = 0; i < 3; i++) {
     const t = sectorT(4, track.course.solarEngine.fractions[i]);

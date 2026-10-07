@@ -1,3 +1,4 @@
+import { stormAt } from "../simulation/experience-mechanics.js";
 /** Original synthesis only: engines, Foley and spatial world noise. No music. */
 export function createAudioController(audioWindow = window) {
   let context = null,
@@ -21,7 +22,8 @@ export function createAudioController(audioWindow = window) {
     lastEngineSpeed = 0,
     lastEngineTime = null,
     lastBrakeTime = -Infinity,
-    engineInterior = false;
+    engineInterior = false,
+    lastThunder = -1;
   let volumes = { master: 0.8, effects: 0.8, ambience: 0.55 };
   const target = (param, value, time = 0.08) =>
     param?.setTargetAtTime(value, context.currentTime, time);
@@ -169,7 +171,7 @@ export function createAudioController(audioWindow = window) {
       panner?.disconnect();
     };
   }
-  function play(kind) {
+  function play(kind, value = 0) {
     switch (kind) {
       case "pickup":
         tone(660, 0.1, "sine", 0.1, 280);
@@ -225,6 +227,10 @@ export function createAudioController(audioWindow = window) {
         noise(0.75, 0.45, 90);
         tone(95, 0.5, "sine", 0.18, -60);
         noise(0.38, 0.2, 2200);
+        break;
+      case "drum":
+        tone(135 + value * 37, 0.28, "sine", 0.2, -95);
+        noise(0.18 + (value % 3) * 0.04, 0.25, 1600 + value * 390);
         break;
       case "mechanism":
         noise(0.4, 0.22, 240);
@@ -340,6 +346,7 @@ export function createAudioController(audioWindow = window) {
       lastWorldScale = state.scale ?? 1;
       lastWorldUnderwater = water;
       lastWorldBeat = -1;
+      lastThunder = stormAt(track.course, time).thunder;
     }
     if (active && water !== lastWorldUnderwater) noise(0.5, 0.16, water ? 350 : 1100);
     lastWorldUnderwater = water;
@@ -352,8 +359,12 @@ export function createAudioController(audioWindow = window) {
     const beat = Math.floor(time * (id === "metronome-hall" ? 2 : 2.5));
     if (!active || beat === lastWorldBeat) return;
     lastWorldBeat = beat;
-    if (track.course.theme.atmosphere === "storm" && Math.sin(time * 0.24) > 0.97 && beat % 2 === 0)
-      noise(1.8, 0.18, 65, 0.3, true);
+    const thunder = stormAt(track.course, time).thunder;
+    if (storm && thunder > lastThunder) {
+      noise(3.2, 0.6, 65, 0.3, true);
+      noise(0.45, 0.3, 320, -0.2, true);
+    }
+    lastThunder = thunder;
     const nearby = opponents
       .filter((r) => !r.finished && r.worldPos.distanceTo(state.worldPos) < 32)
       .sort(
@@ -446,7 +457,7 @@ export function createAudioController(audioWindow = window) {
       noise(0.07, 0.09, 550, Math.sin(time * 1.7) * 0.3, true);
       if (beat % 8 === 0) noise(0.7, 0.07, 95, 0, true);
     }
-    if (storm && beat % 8 === 0) noise(0.85, 0.17, 95, -0.4, true);
+    if (storm && beat % 3 === 0) noise(0.8, 0.15, 2400, -0.4, true);
     if (water && beat % 3 === 0) noise(0.2, 0.05, 1900, Math.sin(time), true);
   }
   function stopEngine() {

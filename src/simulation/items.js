@@ -1,6 +1,6 @@
+import { racerProjection, updateRouteChoice } from "../track/route-branches.js";
 import * as THREE from "../../vendor/three/three.module.js";
 import {
-  projectTrack,
   TRACK,
   WORLD_PER_UNIT,
   collisionBounds,
@@ -53,10 +53,12 @@ export function chooseItem(who, racers, random = Math.random()) {
 export function createShell(owner, type, target = null) {
   const velocity = new THREE.Vector3(-Math.sin(owner.yaw), 0, -Math.cos(owner.yaw));
   const worldPos = owner.worldPos.clone().addScaledVector(velocity, 2.2);
-  const surface = projectTrack(worldPos, owner.s);
+  const surface = racerProjection(activeTrack, owner, worldPos);
   worldPos.y = surface.height + 0.6;
   return {
     type,
+    routeChoice: owner.routeChoice || 0,
+    routeGroup: owner.routeGroup ?? -1,
     owner,
     target,
     worldPos,
@@ -81,8 +83,19 @@ export function advanceShell(shell, dt, raceTime = 0) {
     // the road barrier, so reserve direct homing for the final few metres.
     const targetGap = Math.max(0, progressDelta(shell.target.s, shell.s, TRACK) * WORLD_PER_UNIT);
     const lookAhead = clamp(targetGap * 0.55, 4, 12);
-    const waypoint = poseAt(shell.s + lookAhead / WORLD_PER_UNIT, laneWidth(shell.target.x), 0.6).p;
-    const directBlend = clamp((7 - targetGap) / 5, 0, 1);
+    const branch = activeTrack.branches[shell.routeChoice - 1];
+    const waypoint = branch
+      ? branch.poseAt(
+          (activeTrack.trackT(shell.s) - branch.start) / (branch.end - branch.start) +
+            lookAhead / branch.length,
+          laneWidth(shell.target.x),
+          0.6,
+        ).p
+      : poseAt(shell.s + lookAhead / WORLD_PER_UNIT, laneWidth(shell.target.x), 0.6).p;
+    const directBlend =
+      (shell.routeChoice || 0) === (shell.target.routeChoice || 0)
+        ? clamp((7 - targetGap) / 5, 0, 1)
+        : 0;
     waypoint.lerp(shell.target.worldPos, directBlend);
     const desired = Math.atan2(-(waypoint.x - shell.worldPos.x), -(waypoint.z - shell.worldPos.z));
     shell.yaw = wrapAngle(shell.yaw + clamp(wrapAngle(desired - shell.yaw), -6.5 * dt, 6.5 * dt));
@@ -91,13 +104,21 @@ export function advanceShell(shell, dt, raceTime = 0) {
   }
   shell.worldPos.x += shell.vx * dt;
   shell.worldPos.z += shell.vz * dt;
-  const surface = projectTrack(shell.worldPos, shell.s);
+  const surface = racerProjection(activeTrack, shell);
   const support = activeTrack.floorAt(surface);
   if (!support.supported || support.outside) {
     shell.life = 0;
     return;
   }
-  const bounds = collisionBounds(surface.t, 0.55);
+  const branch = activeTrack.branches[shell.routeChoice - 1];
+  const bounds = branch
+    ? {
+        left: -branch.halfWidth + 0.55,
+        right: branch.halfWidth - 0.55,
+        leftSolid: !branch.dropToMain,
+        rightSolid: !branch.dropToMain,
+      }
+    : collisionBounds(surface.t, 0.55);
   const side = surface.offset < bounds.left ? -1 : 1;
   const edge = side < 0 ? bounds.left : bounds.right;
   const penetration = side * (surface.offset - edge);
@@ -114,9 +135,10 @@ export function advanceShell(shell, dt, raceTime = 0) {
     }
   }
   const contact =
-    activeTrack.pathwayContact(shell.worldPos, 0.55) ||
-    trafficContact(shell.worldPos, raceTime, 0.55) ||
-    cartContact(shell.worldPos, raceTime, 0.55);
+    !branch &&
+    (activeTrack.pathwayContact(shell.worldPos, 0.55) ||
+      trafficContact(shell.worldPos, raceTime, 0.55) ||
+      cartContact(shell.worldPos, raceTime, 0.55));
   if (contact) {
     const outward = shell.vx * contact.nx + shell.vz * contact.nz;
     shell.worldPos.x -= contact.nx * contact.penetration;
@@ -127,10 +149,14 @@ export function advanceShell(shell, dt, raceTime = 0) {
     }
     shell.yaw = Math.atan2(-shell.vx, -shell.vz);
   }
-  const after = projectTrack(shell.worldPos, shell.s);
+  const after = racerProjection(activeTrack, shell);
   shell.s += progressDelta(after.t * TRACK, shell.s, TRACK);
   shell.x = laneFromOffset(after.offset);
   shell.worldPos.y = activeTrack.floorAt(after).height + 0.6;
+  if (branch && after.q > 0.99) {
+    shell.routeChoice = 0;
+    shell.routeGroup = -1;
+  } else if (!branch) updateRouteChoice(activeTrack, shell);
 }
 export function sweptDistanceSquared(point, start, end) {
   const dx = end.x - start.x,

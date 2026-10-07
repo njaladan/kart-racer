@@ -1,3 +1,4 @@
+import { withCourseExperience } from "./experiences/definitions.js";
 import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { adventure } from "./adventure-definition.js";
 import { buildClockwork } from "./adventure/clockwork-world.js";
@@ -119,4 +120,4 @@ for (const section of [5, 6]) {
   course.sections[section].bankStrength = 1.2;
   course.sections[section].maxBank = 0.22;
 }
-export default course;
+export default withCourseExperience(course);

@@ -1,3 +1,4 @@
+import { withCourseExperience } from "./experiences/definitions.js";
 import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { buildWorld } from "./frostpeak-festival-world.js";
 
@@ -115,7 +116,7 @@ const places = [
   ],
 ];
 
-export default {
+export default withCourseExperience({
   id: "frostpeak-festival",
   pathwayEdges: PATHWAY_EDGES["frostpeak-festival"],
   name: "Frostpeak Festival",
@@ -275,4 +276,4 @@ export default {
     rimIntensity: 0.35,
   },
   buildWorld,
-};
+});

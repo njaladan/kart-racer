@@ -56,6 +56,7 @@ export function pendulumAt(track, definition, time) {
 }
 export function mechanismContact(track, position, time, radius = 0.9) {
   for (const definition of track.course.pendulums || []) {
+    if (track.drumField && definition.section === track.course.drumField.section) continue;
     const pose = pendulumAt(track, definition, time),
       dx = position.x - pose.p.x,
       dz = position.z - pose.p.z;
@@ -95,7 +96,15 @@ export function traversalPose(track, definition, q, offset = 0) {
   const { start, end } = rangeFor(track, definition);
   const t = start + (end - start) * q,
     pose = track.poseAt(t * track.TRACK, offset, 0.065);
-  if (definition.kind === "cannon") pose.p.y += Math.sin(q * Math.PI) * (definition.height || 45);
+  if (definition.kind === "cannon") {
+    if (definition.straight) {
+      const a = track.poseAt(start * track.TRACK, offset, 0.065);
+      const b = track.poseAt(end * track.TRACK, offset, 0.065);
+      pose.p.copy(a.p).lerp(b.p, q);
+      pose.tangent.copy(b.p).sub(a.p).normalize();
+    }
+    pose.p.y += Math.sin(q * Math.PI) * (definition.height || 45);
+  }
   return { ...pose, t };
 }
 
@@ -108,7 +117,7 @@ export function advanceTraversal(state, track, dt, time, advanceProgress) {
     const t = track.trackT(state.s);
     index = definitions.findIndex((definition) => {
       const r = rangeFor(track, definition);
-      return t >= r.start && t < r.end - 1 / track.COURSE_LENGTH;
+      return t >= r.start - 1e-9 && t < r.end - 1 / track.COURSE_LENGTH;
     });
     if (index < 0) return null;
     const definition = definitions[index],

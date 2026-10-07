@@ -1,4 +1,4 @@
-import { TRACK, WORLD_PER_UNIT, laneWidth, poseAt } from "../track/track.js";
+import { TRACK, WORLD_PER_UNIT, laneWidth, poseAt, activeTrack } from "../track/track.js";
 import {
   createShell,
   advanceShell,
@@ -53,6 +53,19 @@ export function createRaceItems({
         bananas.push({
           s: from - 14 - n * 8,
           x: lane + (n - 1) * 0.08,
+          routeChoice: who.routeChoice || 0,
+          fixedPosition: true,
+          worldPos: (() => {
+            const branch = activeTrack.branches[who.routeChoice - 1];
+            const s = from - 14 - n * 8;
+            return branch
+              ? branch.poseAt(
+                  (activeTrack.trackT(s) - branch.start) / (branch.end - branch.start),
+                  laneWidth(lane),
+                  0.25,
+                ).p
+              : poseAt(s, laneWidth(lane), 0.25).p;
+          })(),
           mesh: createEffect("banana"),
           life: 18,
           owner: who,
@@ -83,7 +96,7 @@ export function createRaceItems({
           if (
             !racer.finished &&
             !racer.item &&
-            Math.abs(racer.worldPos.y - poseAt(box.s, laneWidth(box.x), 0.065).p.y) < 2 &&
+            racer.worldPos.distanceTo(poseAt(box.s, laneWidth(box.x), 0.065).p) < 3.3 &&
             Math.abs(nearestDelta(racer.s, box.s)) * WORLD_PER_UNIT < 3 &&
             Math.abs(racer.x - box.x) < 0.26
           ) {
@@ -104,8 +117,9 @@ export function createRaceItems({
         )
           continue;
         if (
-          Math.abs(nearestDelta(racer.s, banana.s)) * WORLD_PER_UNIT < 2 &&
-          Math.abs(racer.x - banana.x) < 0.22 &&
+          racer.worldPos.distanceTo(
+            banana.worldPos || poseAt(banana.s, laneWidth(banana.x), 0.25).p,
+          ) < 1.6 &&
           onHit(racer)
         ) {
           banana.life = 0;

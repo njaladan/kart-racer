@@ -79,7 +79,14 @@ function snapshot() {
       vx: p.vx,
       vz: p.vz,
     })),
-    bananas: items.bananas.map((p) => ({ id: p.mesh, s: p.s, x: p.x })),
+    bananas: items.bananas.map((p) => ({
+      id: p.mesh,
+      s: p.s,
+      x: p.x,
+      routeChoice: p.routeChoice,
+      fixedPosition: p.fixedPosition,
+      worldPos: p.worldPos?.toArray(),
+    })),
     events: events.splice(0),
   });
 }

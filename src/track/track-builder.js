@@ -1,3 +1,10 @@
+import { createRouteBranches } from "./route-branches.js";
+import {
+  bridgeRoll,
+  createDrumField,
+  quarterPipeHeight,
+  trainRampHeight,
+} from "../simulation/experience-mechanics.js";
 import { movingDeckAt } from "../simulation/moving-surfaces.js";
 import { unfoldPhase, scaleAt } from "../simulation/course-mechanics.js";
 import * as THREE from "../../vendor/three/three.module.js";
@@ -248,7 +255,12 @@ export function createTrack(course) {
       const width = ramp.width ?? (ramp.halfWidth != null ? ramp.halfWidth * 2 : null);
       const laneQ = width == null ? 0 : Math.abs(offset - (ramp.offset ?? 0)) / (width / 2);
       if (q < 1 && laneQ <= 1)
-        height = Math.max(height, ramp.height * Math.cos((q * Math.PI) / 2) ** 2);
+        height = Math.max(
+          height,
+          ramp.kind === "quarterpipe"
+            ? quarterPipeHeight(ramp, progressDelta(t, ramp.t, 1) * lengths.at(-1))
+            : ramp.height * Math.cos((q * Math.PI) / 2) ** 2,
+        );
     }
     return height;
   }
@@ -313,6 +325,10 @@ export function createTrack(course) {
       b = frames[(i + 1) % SAMPLE_COUNT];
     const tangent = a.tangent.clone().lerp(b.tangent, f).normalize();
     const right = a.right.clone().lerp(b.right, f).normalize();
+    right.applyAxisAngle(
+      tangent,
+      bridgeRoll({ course, SECTIONS, sectionAt }, wrap01(t), mechanismTime),
+    );
     return {
       p: samples[i].clone().lerp(samples[i + 1], f),
       tangent,
@@ -325,7 +341,12 @@ export function createTrack(course) {
     const t = trackT(s),
       f = frameAt(t);
     const p = f.p.clone().addScaledVector(f.right, lane);
-    p.y += above + rampHeight(t, lane) - rampHeight(t, 0) + (movingSurfaceAt(t)?.height || 0);
+    p.y +=
+      above +
+      rampHeight(t, lane) -
+      rampHeight(t, 0) +
+      (movingSurfaceAt(t)?.height || 0) +
+      trainRampHeight({ course, movingSurfaceAt }, t);
     return { ...f, p };
   }
   function projectTrack(position, nearS = 0, global = false) {
@@ -389,7 +410,8 @@ export function createTrack(course) {
     const centerRamp = rampHeight(t);
     const height =
       frame.p.y +
-      (movingSurfaceAt(t)?.height || 0) -
+      (movingSurfaceAt(t)?.height || 0) +
+      trainRampHeight({ course, movingSurfaceAt }, t) -
       centerRamp +
       rampHeight(t, offset) +
       (offset * frame.right.y) / Math.hypot(frame.right.x, frame.right.z) +
@@ -452,6 +474,8 @@ export function createTrack(course) {
     projectTrack,
     sectorT,
   };
+  Object.assign(track, createRouteBranches(track));
+  track.drumField = createDrumField(track);
   Object.assign(track, createPathwayQueries(track));
   return track;
 }

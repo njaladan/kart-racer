@@ -43,7 +43,7 @@ test("cannon snapshots agree through landing, recovery returns to the lip, and r
   assert.ok(a.speed > 100);
   const b = createRacerState();
   applyRacer(b, packRacer(a));
-  for (let k = 110; k < 337; k++) {
+  for (let k = 110; k < Math.ceil(course.traversals[0].duration * 120) + 2; k++) {
     advanceRacer(a, {}, 1 / 120, k / 120);
     advanceRacer(b, {}, 1 / 120, k / 120);
     assert.ok(a.worldPos.distanceTo(b.worldPos) < 1e-8);

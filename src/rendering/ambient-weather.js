@@ -7,7 +7,7 @@ export function addAmbientWeather(scene, theme = {}) {
     dust = theme.terrain === "sand",
     storm = theme.atmosphere === "storm";
   const city = theme.terrain === "concrete";
-  const count = storm ? 180 : snow ? 140 : dust ? 72 : city ? 44 : 50;
+  const count = storm ? 720 : snow ? 140 : dust ? 72 : city ? 44 : 50;
   let seed = 8041;
   const random = () => (seed = (seed * 1664525 + 1013904223) >>> 0) / 4294967296;
   const source = Array.from({ length: count }, () => ({
@@ -34,7 +34,7 @@ export function addAmbientWeather(scene, theme = {}) {
         storm ? "#c1dbe8" : snow ? "#effaff" : dust ? "#ffe3b1" : city ? "#9dc7df" : "#dff6a0",
       ),
     },
-    opacity: { value: storm ? 0.5 : snow ? 0.64 : dust ? 0.24 : city ? 0.18 : 0.6 },
+    opacity: { value: storm ? 0.7 : snow ? 0.64 : dust ? 0.24 : city ? 0.18 : 0.6 },
     size: { value: storm ? 95 : snow ? 100 : dust ? 72 : 45 },
     rain: { value: storm ? 1 : 0 },
   };
@@ -42,12 +42,13 @@ export function addAmbientWeather(scene, theme = {}) {
     uniforms,
     transparent: true,
     depthWrite: false,
-    vertexShader: `attribute float flakeSize; uniform float size; varying float fade;
+    vertexShader: `attribute float flakeSize; uniform float size,rain; varying float fade;
       void main(){vec4 p=modelViewMatrix*vec4(position,1.);gl_Position=projectionMatrix*p;
-        gl_PointSize=clamp(size*flakeSize/max(1.,-p.z),1.,6.);fade=1.-smoothstep(18.,55.,-p.z);}`,
+        gl_PointSize=clamp(size*flakeSize/max(1.,-p.z),1.,rain>.5?14.:6.);fade=1.-smoothstep(18.,55.,-p.z);}`,
     fragmentShader: `uniform vec3 tint;uniform float opacity,rain;varying float fade;
       void main(){float a=(1.-smoothstep(.08,.5,length(gl_PointCoord-.5)))*fade*opacity;
-        if(rain>.5)a=(1.-smoothstep(.045,.13,abs(gl_PointCoord.x-.5)))*fade*opacity;
+        if(rain>.5)a=(1.-smoothstep(.025,.09,abs(gl_PointCoord.x-.5+(gl_PointCoord.y-.5)*.2)))
+          *(1.-smoothstep(.35,.5,abs(gl_PointCoord.y-.5)))*fade*opacity;
         if(a<.015)discard;gl_FragColor=vec4(tint,a);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>

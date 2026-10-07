@@ -39,6 +39,7 @@ export function buildMetronome(context) {
   });
   // Continuous instrument case with gilded rims and pierced support cabinets.
   for (let section = 0; section < 6; section++) {
+    if (section === track.course.drumField?.section) continue;
     w.sweep(
       section,
       0,

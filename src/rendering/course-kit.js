@@ -55,6 +55,12 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
     const p = track.poseAt(t * track.TRACK, offset, 0).p,
       s = track.projectTrack(p, 0, true);
     const edge = s.offset > 0 ? s.rightEdge : -s.leftEdge;
+    if (
+      (track.branches || []).some(
+        (branch) => branch.project(p, t, true).distance < branch.halfWidth + footprint + 2,
+      )
+    )
+      return null;
     return s.distance > edge + footprint + 1 ? landGroup(t, offset, parent) : null;
   };
   const asset = (name, parent = scenery, position = [0, 0, 0], scale = [1, 1, 1]) => {

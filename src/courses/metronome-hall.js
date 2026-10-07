@@ -1,7 +1,8 @@
+import { withCourseExperience } from "./experiences/definitions.js";
 import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { adventure } from "./adventure-definition.js";
 import { buildMetronome } from "./adventure/metronome-world.js";
-export default adventure({
+const course = adventure({
   id: "metronome-hall",
   pathwayEdges: PATHWAY_EDGES["metronome-hall"],
   name: "Metronome Hall",
@@ -94,3 +95,5 @@ export default adventure({
     { section: 4, fraction: 0.72, period: 2, phase: 0 },
   ],
 });
+
+export default withCourseExperience(course);

@@ -1,7 +1,8 @@
+import { withCourseExperience } from "./experiences/definitions.js";
 import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { adventure } from "./adventure-definition.js";
 import { buildRailstorm } from "./adventure/railstorm-world.js";
-export default adventure({
+const course = adventure({
   id: "railstorm-express",
   pathwayEdges: PATHWAY_EDGES["railstorm-express"],
   name: "Railstorm Express",
@@ -105,3 +106,5 @@ export default adventure({
   ],
   elevated: [2, 3, 4].map((section) => ({ section, startFraction: 0, endFraction: 1 })),
 });
+
+export default withCourseExperience(course);
