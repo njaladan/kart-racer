@@ -35,7 +35,8 @@ export function createWetRoadReflections() {
           vec4 reflected=wetReflectionMatrix*vec4(vPavementWorld,1.);
           vec2 reflectionUv=reflected.xy/max(reflected.w,.0001);
           float inFrame=step(0.,reflectionUv.x)*step(reflectionUv.x,1.)*
-            step(0.,reflectionUv.y)*step(reflectionUv.y,1.)*step(.0001,reflected.w);
+            step(0.,reflectionUv.y)*step(reflectionUv.y,1.)*
+            step(0.,reflected.z)*step(reflected.z,reflected.w)*step(.0001,reflected.w);
           float planeFade=1.-smoothstep(.12,.65,abs(vPavementWorld.y-wetReflectionHeight));
           float distanceFade=1.-smoothstep(28.,65.,length(vPavementWorld-cameraPosition));
           reflectionUv+=vec2(sin(vPavementWorld.z*17.),cos(vPavementWorld.x*13.))*.0008;
