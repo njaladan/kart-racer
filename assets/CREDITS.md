@@ -34,3 +34,28 @@ and Wilber (mascot), each with its own vehicle. These adapted models use
 **CC BY-SA 3.0 / 4.0**, with original author notices, source links, modifications
 and reproduction instructions in [the racer credits](courses/packs/shared/LICENSES.md).
 The shared pack manifest records exact runtime hashes.
+
+## Six adventure art packs
+
+Tempest, Pantry, Railstorm, Metronome, Pelagic and Emberwing add local models from
+[Kenney's kits](https://kenney.nl/assets) and PBR scans from
+[ambientCG](https://ambientcg.com), under CC0. Their manifests include original
+source URLs, redistribution URLs, source hashes and adapted-file hashes. Rock
+models are beveled, scan-textured and vertex-occlusion baked offline.
+
+Additional detailed foliage and cottages share existing SuperTuxKart derivatives
+from the Windmill and Sunstone packs under CC BY-SA 3.0/4.0. Each reused entry links
+to its retained original author/license notice; shared local paths avoid copying
+these assets into six packs. See [the art and verification notes](../docs/adventure-fidelity.md)
+and `tools/prepare-adventure-fidelity.py` / `tools/polish-adventure-models.py`.
+
+Complete authored old-house and steam-locomotive landmarks by **Sven Andreas
+Belting** are converted from the pinned [SuperTuxKart asset distribution](https://github.com/Nomagno/stk-assets/tree/b917b6c01b55b43208c5eaa1b4d187bbf59457ac/library),
+under CC BY-SA 4.0 with separately attributed source textures. Original UVs and
+house normal maps are retained, diffuse textures are resized to 1024px, and SPM
+is converted to GLB. See the [house notice](courses/packs/railstorm-express/licenses/old-house.txt),
+[locomotive notice](courses/packs/railstorm-express/licenses/steam-engine.txt) and
+[texture notices](courses/packs/railstorm-express/licenses/landmark-textures.txt).
+Clockwork shares the local house file; source revision, original and derivative
+hashes and modifications are in both course manifests. Reproduce with
+`tools/prepare-course-landmarks.py`.

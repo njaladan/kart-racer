@@ -79,21 +79,26 @@ export function buildMetronome(context) {
   // Sculpted cover lid becomes a luminous ceiling for the pendulum galleries.
   for (const section of [2, 3, 4])
     for (let i = 0; i < 8; i++) {
+      const t = track.sectorT(section, (i + 0.5) / 8);
+      const half = Math.max(Math.abs(track.platformEdgeAt(t, -1)), track.platformEdgeAt(t, 1)) + 4;
       const g = at(section, (i + 0.5) / 8);
       for (const side of [-1, 1]) {
-        box(wood, g, [side * 19, 15, 0], [2, 30, 2]);
-        box(gold, g, [side * 19, 2, 0], [3, 4, 3]);
-        box(gold, g, [side * 19, 29, 0], [3, 2, 3]);
+        const foundation = g.position.y - track.course.theme.groundHeight;
+        box(wood, g, [side * half, -foundation / 2, 0], [2, foundation, 2]);
+        tube(g, [side * half, -1, 0], [side * (half - 5), -1, 0], 0.45, gold);
+        box(wood, g, [side * half, 15, 0], [2, 30, 2]);
+        box(gold, g, [side * half, 2, 0], [3, 4, 3]);
+        box(gold, g, [side * half, 29, 0], [3, 2, 3]);
       }
       const arch = mesh(
         new THREE.TorusGeometry(1, 0.04, 6, 32, Math.PI),
         gold,
         g,
         [0, 22, 0],
-        [19, 11, 19],
+        [half, 11, half],
       );
       arch.name = "Gilded instrument arch";
-      box(velvet, g, [0, 33, 0], [40, 1.3, 15]);
+      box(velvet, g, [0, 33, 0], [half * 2 + 2, 1.3, 15]);
       for (const x of [-12, 0, 12]) box(glow, g, [x, 32.1, 0], [5, 0.12, 8]);
       if (i % 3 === 1) {
         g.updateWorldMatrix(true, false);
@@ -149,7 +154,9 @@ export function buildMetronome(context) {
   for (const section of [0, 5])
     for (let i = 0; i < 7; i++) {
       const g = at(section, 0.06 + i * 0.135, (i % 2 ? 1 : -1) * 36);
-      box(wood, g, [0, 3, 0], [18, 6, 15]);
+      if (context.kit.hasAsset("art:cabinettelevision"))
+        context.kit.asset("art:cabinettelevision", g, [0, 0, 0], [6, 6, 6]);
+      else box(wood, g, [0, 3, 0], [18, 6, 15]);
       box(velvet, g, [0, 6.1, 0], [17, 0.15, 14]);
       for (const x of [-7, 7])
         for (const z of [-5, 5])

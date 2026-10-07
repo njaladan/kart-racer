@@ -84,6 +84,8 @@ export default function buildWindmillLife(context) {
     const edge = near.offset > 0 ? near.rightEdge : -near.leftEdge;
     if (near.distance < edge + radius + 1) return null;
     const g = new THREE.Group();
+    g.userData.scenicAssembly = true;
+    g.userData.groundPlanted = true;
     g.position.set(frame.p.x, sceneryGroundHeight(near), frame.p.z);
     g.rotation.y = Math.atan2(-frame.tangent.x, -frame.tangent.z);
     parent.add(g);

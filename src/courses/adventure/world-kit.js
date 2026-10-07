@@ -1,3 +1,5 @@
+import { createScenerySite } from "../../rendering/scenery-sites.js";
+import { importedRockGeometry } from "../fidelity/imported-rock.js";
 import { createWaterMaterial, installSurfaceDetail } from "../../rendering/surface-detail.js";
 import { pendulumAt } from "../../simulation/course-mechanics.js";
 export function worldKit(context) {
@@ -6,13 +8,23 @@ export function worldKit(context) {
   const animated = [],
     updates = [];
   const mat = (color, kind = "stone", extra = {}) => {
-    const m = material(color, { bumpMap: textures[kind], bumpScale: 0.025, ...extra });
+    const m = material(color, {
+      map: textures[kind],
+      normalMap: textures[`${kind}Normal`],
+      roughnessMap: textures[`${kind}Roughness`],
+      ...(kind === "rock" && textures.rockNormal
+        ? { roughnessMap: null, roughness: 0.94, normalScale: new THREE.Vector2(0.32, 0.32) }
+        : {}),
+      bumpMap: textures[`${kind}Normal`] ? undefined : textures[kind],
+      bumpScale: 0.025,
+      ...extra,
+    });
     if (!extra.transparent) installSurfaceDetail(m, { kind: "terrain", strength: 0.12 });
     return m;
   };
   const cylinder = new THREE.CylinderGeometry(1, 1, 1, 12),
     sphere = new THREE.SphereGeometry(1, 16, 10),
-    rock = new THREE.IcosahedronGeometry(1, 1),
+    rock = importedRockGeometry(context.assets) || new THREE.IcosahedronGeometry(1, 1),
     torus = new THREE.TorusGeometry(1, 0.065, 6, 48),
     arch = new THREE.TorusGeometry(1, 0.05, 6, 24, Math.PI);
   const motion = (object, update) => {
@@ -21,8 +33,7 @@ export function worldKit(context) {
     return object;
   };
   const at = (section, fraction, offset = 0) => groupAt(sectorT(section, fraction), offset);
-  const safe = (section, fraction, offset, footprint = 5) =>
-    kit.safeGroup(sectorT(section, fraction), offset, footprint);
+  const safe = createScenerySite(kit, track, scenery);
   function tube(parent, start, end, radius, material) {
     const a = new THREE.Vector3(...start),
       b = new THREE.Vector3(...end),
@@ -66,6 +77,12 @@ export function worldKit(context) {
     return result;
   }
   function portal(section, fraction, color, width = 18, height = 20) {
+    const t = sectorT(section, fraction);
+    width = Math.max(
+      width,
+      Math.abs(track.platformEdgeAt(t, -1)) + 3,
+      track.platformEdgeAt(t, 1) + 3,
+    );
     const g = at(section, fraction),
       m = mat(color);
     for (const side of [-1, 1]) {

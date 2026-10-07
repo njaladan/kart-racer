@@ -69,6 +69,10 @@ export function buildPantry(context) {
     } else box(cream, parent, position, [scale[0], scale[1], 0.12]);
   };
   function toast(parent, position, size, topping = false) {
+    if (context.kit.hasAsset("art:bread")) {
+      context.kit.fitAsset("art:bread", parent, position, size * 2);
+      return;
+    }
     mesh(breadGeo, crust, parent, position, [size, size, size]);
     mesh(
       breadGeo,
@@ -160,6 +164,12 @@ export function buildPantry(context) {
   box(coral, room, [530, 48, 0], [4, 145, 1000]);
   for (let i = 0; i < 12; i++) {
     const x = -490 + i * 86;
+    if (context.kit.hasAsset("art:kitchencabinet")) {
+      context.kit.asset("art:kitchencabinet", room, [x, -22, -472], [52, 52, 52]);
+      if (i % 2 === 0 && context.kit.hasAsset("art:kitchencabinetupper"))
+        context.kit.asset("art:kitchencabinetupper", room, [x, 60, -484], [56, 56, 56]);
+      continue;
+    }
     box(porcelain, room, [x, 4, -472], [82, 50, 44]);
     box(wood, room, [x, 30, -458], [84, 3, 85]);
     for (const side of [-1, 1]) {
@@ -385,7 +395,8 @@ export function buildPantry(context) {
     }
   }
   for (let i = 0; i < 9; i++) {
-    const g = at(3, (i + 0.5) / 9, i % 2 ? 26 : -27);
+    const g = w.safe(3, (i + 0.5) / 9, i % 2 ? 42 : -42, 32, 8);
+    if (!g) continue;
     box(silver, g, [0, 0.8, 0], [3.5, 1.4, 40]);
     if (i % 2) {
       for (let j = 0; j < 4; j++) box(silver, g, [-6 + j * 4, 1, -24], [1.2, 1.6, 15]);
@@ -428,17 +439,19 @@ export function buildPantry(context) {
     });
   }
   for (let i = 0; i < 5; i++) {
+    const t = track.sectorT(6, 0.1 + i * 0.17);
+    const half = Math.max(Math.abs(track.platformEdgeAt(t, -1)), track.platformEdgeAt(t, 1)) + 3;
     const g = at(6, 0.1 + i * 0.17);
     for (const side of [-1, 1]) {
-      tube(g, [side * 16, 0, 0], [side * 16, 23, 0], 0.7, silver);
-      toast(g, [side * 23, 0, 0], 10, i % 2 === 0);
+      tube(g, [side * half, 0, 0], [side * half, 23, 0], 0.7, silver);
+      toast(g, [side * (half + 12), 0, 0], 10, i % 2 === 0);
     }
     const arch = mesh(
       new THREE.TorusGeometry(1, 0.027, 6, 28, Math.PI),
       silver,
       g,
       [0, 23, 0],
-      [16, 7, 16],
+      [half, 7, half],
     );
     arch.name = "Toast-rack gateway";
   }

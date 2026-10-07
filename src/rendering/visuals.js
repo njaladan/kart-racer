@@ -53,7 +53,7 @@ export function batchStaticMeshes(parent, excluded = []) {
     const materialKey = Array.isArray(child.material)
       ? child.material.map((material) => material.id).join("+")
       : child.material.id;
-    const key = `${materialKey}:${Math.floor(center.x / 80)}:${Math.floor(center.z / 80)}:${channels}:${child.castShadow}:${child.receiveShadow}`;
+    const key = `${materialKey}:${Math.floor(center.x / 96)}:${Math.floor(center.z / 96)}:${channels}:${child.castShadow}:${child.receiveShadow}:${!!child.userData.routeObstacle}:${!!child.userData.routeStructure}`;
     if (!batches.has(key)) batches.set(key, []);
     batches.get(key).push(child);
   }
@@ -84,6 +84,8 @@ export function batchStaticMeshes(parent, excluded = []) {
       });
       instanced.castShadow = instances[0].castShadow;
       instanced.receiveShadow = instances[0].receiveShadow;
+      instanced.userData.routeObstacle = instances.every((mesh) => mesh.userData.routeObstacle);
+      instanced.userData.routeStructure = instances.every((mesh) => mesh.userData.routeStructure);
       instanced.userData.bakeReceiver = instances.every((mesh) => mesh.userData.bakeReceiver);
       instanced.computeBoundingBox();
       instanced.computeBoundingSphere();
@@ -107,9 +109,11 @@ export function batchStaticMeshes(parent, excluded = []) {
           normalized: attribute.normalized,
           values: [],
         });
+    const sceneryParts = [];
     let offset = 0;
     for (const m of remaining) {
       const g = m.geometry.clone().applyMatrix4(m.matrix);
+      const partStart = indices.length;
       // Imported detailed props can exceed JavaScript's argument-count limit.
       for (const value of g.attributes.position.array) positions.push(value);
       for (const value of g.attributes.normal.array) normals.push(value);
@@ -122,6 +126,7 @@ export function batchStaticMeshes(parent, excluded = []) {
       }
       if (g.index) for (const index of g.index.array) indices.push(index + offset);
       else for (let i = 0; i < g.attributes.position.count; i++) indices.push(i + offset);
+      sceneryParts.push({ start: partStart, count: indices.length - partStart });
       offset += g.attributes.position.count;
       for (const [name, channel] of extraChannels) {
         const attribute = g.getAttribute(name);
@@ -148,6 +153,9 @@ export function batchStaticMeshes(parent, excluded = []) {
     merged.castShadow = remaining[0].castShadow;
     merged.receiveShadow = remaining[0].receiveShadow;
     merged.name = "Regional static scenery batch";
+    merged.userData.sceneryParts = sceneryParts;
+    merged.userData.routeObstacle = remaining.every((mesh) => mesh.userData.routeObstacle);
+    merged.userData.routeStructure = remaining.every((mesh) => mesh.userData.routeStructure);
     merged.userData.bakeReceiver = remaining.every((mesh) => mesh.userData.bakeReceiver);
     g.computeBoundingBox();
     g.computeBoundingSphere();

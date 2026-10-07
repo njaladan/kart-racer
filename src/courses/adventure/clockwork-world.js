@@ -184,10 +184,10 @@ export function buildClockwork(context) {
       supportBox(iron, g, [(left + right) / 2, -1.1, 0], [right - left, 1.6, 9.3]);
       for (const side of [-1, 1]) {
         if (i % 2 === 0) {
-          pipe(g, [side * 10, -1, 0], [side * 20, -9, 0], 0.45, iron);
+          pipe(g, [side * 10, -1, -4], [side * 2, -1, 4], 0.45, iron);
         }
         if (i % 7 === 0) {
-          const x = (side < 0 ? left : right) + side * 0.2;
+          const x = (side < 0 ? left : right) + side * 1.5;
           pipe(g, [x, -1, 0], [x, 2.2, 0], 0.1, iron);
           lamp(g, [x, 2.4, 0]);
         }
@@ -234,6 +234,11 @@ export function buildClockwork(context) {
   // Foundry neighborhoods: nested roofs, arched shops, pipes, courtyards,
   // repair awnings and chimneys create near, middle and distant silhouettes.
   function building(g, i, size = 1) {
+    if (context.kit.hasAsset("art:old-house")) {
+      context.kit.asset("art:old-house", g, [0, 0, 0], [24 * size, 24 * size, 24 * size]);
+      shade(g, 28 * size, 25 * size);
+      return;
+    }
     const root = new THREE.Group();
     g.add(root);
     root.scale.setScalar(size);

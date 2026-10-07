@@ -1,3 +1,4 @@
+import { reserveSceneryForTrack, clearSceneryFootprints } from "./scenery-clearance.js";
 import * as THREE from "../../vendor/three/three.module.js";
 import { batchStaticMeshes } from "./visuals.js";
 import { bakeVertexShade } from "./vertex-shading.js";
@@ -5,6 +6,7 @@ import { sceneryGroundHeight } from "./terrain-height.js";
 
 // Scenery authors get placement and reusable primitives, never engine globals.
 export function createCourseKit(scenery, track, assets = { models: {} }) {
+  reserveSceneryForTrack(scenery, track);
   const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
   const material = (color, extra = {}) =>
     new THREE.MeshStandardMaterial({
@@ -20,6 +22,12 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
     const m = new THREE.Mesh(geometry, mat);
     m.position.set(...position);
     m.scale.set(...scale);
+    let owner = parent;
+    while (owner && owner !== scenery) {
+      if (owner.userData.pathwayEdge) m.userData.routeObstacle = true;
+      if (owner.userData.routeStructure) m.userData.routeStructure = true;
+      owner = owner.parent;
+    }
     m.castShadow = true;
     m.receiveShadow = true;
     parent.add(m);
@@ -36,6 +44,7 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
   const groupAt = (t, offset = 0, parent = scenery) => {
     const g = new THREE.Group();
     align(g, track.poseAt(t * track.TRACK, offset, 0));
+    g.userData.scenicAssembly = offset !== 0;
     parent.add(g);
     return g;
   };
@@ -47,6 +56,8 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
     const g = new THREE.Group();
     g.position.copy(pose.p);
     g.position.y = sceneryGroundHeight(surface);
+    g.userData.scenicAssembly = true;
+    g.userData.groundPlanted = true;
     g.rotation.y = track.yawFor(pose.tangent);
     parent.add(g);
     return g;
@@ -65,6 +76,10 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
   };
   const asset = (name, parent = scenery, position = [0, 0, 0], scale = [1, 1, 1]) => {
     const model = assets.models[name];
+    if (parent !== scenery && parent.userData.scenicAssembly == null) {
+      parent.userData.scenicAssembly = true;
+      parent.userData.groundPlanted = true;
+    }
     if (!model) throw new Error(`Unknown course scenery asset: ${name}`);
     if (model.isObject3D) {
       const inferred = name.endsWith("-near") ? name.slice(0, -5) : name;
@@ -93,6 +108,26 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
     }
     return mesh(model.geometry, model.material, parent, position, scale);
   };
+  const fitAsset = (name, parent, position, dimensions) => {
+    const object = asset(name, parent, position);
+    object.updateWorldMatrix(true, true);
+    const inverse = object.matrixWorld.clone().invert(),
+      bounds = new THREE.Box3();
+    object.traverse((child) => {
+      if (!child.isMesh) return;
+      child.geometry.computeBoundingBox();
+      bounds.union(
+        child.geometry.boundingBox
+          .clone()
+          .applyMatrix4(inverse.clone().multiply(child.matrixWorld)),
+      );
+    });
+    const size = bounds.getSize(new THREE.Vector3());
+    if (Array.isArray(dimensions))
+      object.scale.set(...dimensions.map((n, i) => n / Math.max(0.001, size.getComponent(i))));
+    else object.scale.setScalar(dimensions / Math.max(size.x, size.y, size.z, 0.001));
+    return object;
+  };
   return {
     material,
     mesh,
@@ -103,12 +138,14 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
     safeGroup,
     sectorT,
     asset,
+    fitAsset,
     hasAsset: (name) => !!assets.models[name],
     batch: batchStaticMeshes,
   };
 }
 
 export function batchScenery(scenery, animated = []) {
+  clearSceneryFootprints(scenery, animated);
   scenery.updateMatrixWorld(true);
   const protectedGroups = [...animated];
   scenery.traverse((object) => {

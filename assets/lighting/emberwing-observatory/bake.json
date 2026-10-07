@@ -4,44 +4,44 @@
   "lighting": "indirect.png",
   "height": "height.png",
   "bounds": [
-    -415.2,
-    -352.9,
-    752.7,
-    718.0999999999999
+    -412.74,
+    -310.6,
+    758.8199999999999,
+    682.52
   ],
   "heightRange": [
-    -12,
-    99.36
+    -58,
+    157.34
   ],
   "bounceScale": 0.65,
-  "resolution": 768,
+  "resolution": 512,
   "samples": 12,
   "radius": 22.0,
   "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
-  "sourceSceneSha256": "424a0d1c25877225c0c6030ade006903e4e2c98d101c6ab7c7a4ab71b84be09c",
-  "triangles": 72620,
-  "lights": 7,
+  "sourceSceneSha256": "2865d00ca6e9131a9864b265128705892c291247729da1d1d77aaf0810f31090",
+  "triangles": 234582,
+  "lights": 70,
   "outputs": [
     {
       "file": "indirect.png",
-      "width": 768,
-      "height": 768,
-      "bytes": 361413,
-      "sha256": "98263a62b7915aec06e917bb6e2b5b4c8e69bdc02c5303ee62c6115ebb9d21da"
+      "width": 512,
+      "height": 512,
+      "bytes": 185810,
+      "sha256": "fe7e8b2ffc57c31e3ce247d4f3c77562bd5fd2949853b365d3412f801af2727e"
     },
     {
       "file": "height.png",
-      "width": 768,
-      "height": 768,
-      "bytes": 189327,
-      "sha256": "ba0f886309c598495dc2e5447d77cc67115864db70ea626a404cfd26787ffa14"
+      "width": 512,
+      "height": 512,
+      "bytes": 138308,
+      "sha256": "a3b07f45bdccde52fc15b4432dd2d1ff9627070adf3a8628079e182888540558"
     },
     {
       "file": "spill.png",
       "width": 512,
       "height": 256,
-      "bytes": 15346,
-      "sha256": "713ee89dc970a8f41c37eb50f86b7e57071c89a3fc2064b26da1b50e964b2728"
+      "bytes": 29248,
+      "sha256": "e6bd40ac698fc009cce8c49aa6e43116560f7ff96d1799b76f8c2b713fcdcc09"
     }
   ],
   "lightVolume": {
@@ -49,11 +49,11 @@
     "columns": 4,
     "rows": 2,
     "heights": [
-      -15,
+      -40,
       0,
-      25,
-      50,
-      80,
+      20,
+      45,
+      75,
       120
     ],
     "strength": 1,

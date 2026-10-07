@@ -77,7 +77,7 @@ for course in courses:
         z = bounds[1] + (row + .5) / size * bounds[3]
         for column in range(size):
             x = bounds[0] + (column + .5) / size * bounds[2]
-            location, normal, _, _ = surface.ray_cast(Vector((x, 120, z)), Vector((0, -1, 0)), 160)
+            location, normal, _, _ = surface.ray_cast(Vector((x, high + 20, z)), Vector((0, -1, 0)), high - low + 40)
             y = location.y if location is not None else -1.7
             encoded = int(np.clip((y-low)/(high-low), 0, 1) * 65535)
             heights[row, column] = [encoded // 256 / 255, encoded % 256 / 255, 0, 1]

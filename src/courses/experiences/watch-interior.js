@@ -50,9 +50,13 @@ export function buildWatchInterior({ track, kit, scenery, animated, updates, sig
     room.add(mount);
     mount.position.set(Math.cos(angle) * r, 8, Math.sin(angle) * r);
     mount.rotation.y = -angle - Math.PI / 2;
+    const size = 9 + (i % 3) * 2;
+    if (!allows(mount, [0, 0, 0], [size * 2 + 3, size * 2 + 3, 3])) {
+      mount.removeFromParent();
+      continue;
+    }
     const rotor = new THREE.Group();
     mount.add(rotor);
-    const size = 9 + (i % 3) * 2;
     mesh(gearGeo, brass, rotor, [0, 0, 0], [size, size, size]);
     for (let n = 0; n < 24; n++) {
       const q = (n * Math.PI) / 12;

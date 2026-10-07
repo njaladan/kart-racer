@@ -37,11 +37,11 @@ export function buildSantorini(w) {
       const t = track.sectorT(section, (i + 0.5) / 14);
       const side = i % 2 ? 1 : -1;
       const offset = side * (track.roadHalfWidth(t) + 12 + (i % 3) * 4);
-      const g = w.safe(section, (i + 0.5) / 14, offset, 8);
+      const g = w.safe(section, (i + 0.5) / 14, offset, 17, 20, -46);
       if (!g) continue;
       // These are cliff terraces at the lane elevation, with retaining walls
       // down to the sea; ground-planted houses disappear beneath the route.
-      g.position.y = track.poseAt(t * track.TRACK, offset, 0).p.y;
+
       g.name = "Whitewashed caldera terrace";
       const foundation = g.position.y + 46;
       box(stone, g, [0, -foundation / 2, 0], [19, foundation, 17]);
@@ -64,15 +64,19 @@ export function buildSantorini(w) {
   // Flat pergolas frame the lanes without placing roof beams in the camera path.
   for (const section of [0, 7]) {
     for (let i = 0; i < 5; i++) {
+      const t = track.sectorT(section, (i + 0.5) / 5);
+      const half = Math.max(Math.abs(track.platformEdgeAt(t, -1)), track.platformEdgeAt(t, 1)) + 4;
       const g = at(section, (i + 0.5) / 5, 0);
-      for (const side of [-1, 1]) box(white, g, [side * 12, 7, 0], [0.7, 14, 0.7]);
-      for (let n = 0; n < 5; n++) box(wood, g, [0, 15.2, n - 2], [25, 0.35, 0.25]);
-      for (const side of [-1, 1]) mesh(sphere, leaves, g, [side * 11, 14.5, 0], [4, 0.5, 4]);
+      for (const side of [-1, 1]) box(white, g, [side * half, 7, 0], [0.7, 14, 0.7]);
+      for (let n = 0; n < 5; n++) box(wood, g, [0, 15.2, n - 2], [half * 2 + 1, 0.35, 0.25]);
+      for (const side of [-1, 1])
+        mesh(sphere, leaves, g, [side * (half - 1), 14.5, 0], [4, 0.5, 4]);
     }
   }
   // Obsidian vineyard: orderly terraces against irregular volcanic slopes.
   for (let i = 0; i < 12; i++) {
-    const g = at(5, (i + 0.5) / 12, (i % 2 ? 1 : -1) * 24);
+    const g = w.safe(5, (i + 0.5) / 12, (i % 2 ? 1 : -1) * 24, 8, 5);
+    if (!g) continue;
     box(stone, g, [0, -1, 0], [12, 2, 10]);
     for (const x of [-4, 0, 4]) {
       box(wood, g, [x, 1.5, 0], [0.18, 3, 0.18]);
@@ -101,7 +105,10 @@ export function buildSantorini(w) {
       boat.position.y = Math.sin(time * 0.8 + i) * 0.35;
       boat.rotation.z = Math.sin(time * 0.65 + i) * 0.04;
     });
-    const dock = at(6, (i + 0.5) / 8, 19);
-    box(wood, dock, [0, -2, 0], [5, 0.5, 15]);
+    const dock = at(6, (i + 0.5) / 8, 23);
+    dock.rotation.set(0, g.rotation.y, 0);
+    dock.position.y = -28;
+    box(wood, dock, [0, 0, 0], [5, 0.5, 15]);
+    for (const x of [-2, 2]) for (const z of [-6, 6]) box(wood, dock, [x, -9, z], [0.5, 18, 0.5]);
   }
 }

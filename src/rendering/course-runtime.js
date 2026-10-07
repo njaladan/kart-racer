@@ -1,3 +1,4 @@
+import { buildAdventureArt } from "../courses/fidelity/index.js";
 import { buildExperienceWorld } from "../courses/experiences/world.js";
 import * as THREE from "../../vendor/three/three.module.js";
 import { createCourseKit, batchScenery } from "./course-kit.js";
@@ -92,17 +93,34 @@ export function buildCourseWorld({
   };
   if (course.edgeStyle === "adventure") {
     const road = course.theme.road;
-    roadMaterials.stone = material(road, { bumpMap: textures.stone, bumpScale: 0.025 });
+    roadMaterials.stone = material(road, {
+      map: textures.stone,
+      bumpMap: textures.stoneNormal ? undefined : textures.stone,
+      bumpScale: 0.025,
+    });
     roadMaterials.paper = material(road, { roughness: 0.8 });
     roadMaterials.glass = material(road, { roughness: 0.3, metalness: 0.2 });
     roadMaterials.metal = material(road, {
-      bumpMap: textures.metal,
+      map: textures.metal,
+      bumpMap: textures.metalNormal ? undefined : textures.metal,
       bumpScale: 0.02,
-      metalness: 0.42,
-      roughness: 0.5,
+      metalness: textures.metalNormal ? 0.28 : 0.42,
+      roughness: textures.metalNormal ? 0.66 : 0.5,
+      // A worn driveable deck retains broader highlights than polished props.
+      ...(textures.metalNormal
+        ? { roughnessMap: null, normalScale: new THREE.Vector2(0.3, 0.3) }
+        : {}),
     });
-    roadMaterials.wood = material(road, { bumpMap: textures.wood, bumpScale: 0.03 });
-    roadMaterials.paving = material(road, { bumpMap: textures.paving, bumpScale: 0.025 });
+    roadMaterials.wood = material(road, {
+      map: textures.wood,
+      bumpMap: textures.woodNormal ? undefined : textures.wood,
+      bumpScale: 0.03,
+    });
+    roadMaterials.paving = material(road, {
+      map: textures.paving,
+      bumpMap: textures.pavingNormal ? undefined : textures.paving,
+      bumpScale: 0.025,
+    });
     metalDeckDetail(roadMaterials.metal);
     if (course.id === "pelagic-glasshouse") glasshouseRoad(roadMaterials.glass, scene);
     if (["pocket-pantry", "metronome-hall"].includes(course.id)) {
@@ -453,15 +471,26 @@ export function buildCourseWorld({
     textures,
     surfaces: Object.values(roadMaterials),
   });
+  const art = buildAdventureArt({ scene, track, textures, kit, renderer });
   const detail = createSceneryDetailController(scene);
   return composeCourseEnvironment(
     {
       ...world,
+      animated: [...(world.animated || []), ...(art?.animated || [])],
+      setQuality(tier) {
+        world.setQuality?.(tier);
+        art?.setQuality(tier);
+      },
+      updateCamera(position, tier) {
+        world.updateCamera?.(position, tier);
+        art?.updateCamera(position, tier);
+      },
       update(time, courseState) {
         for (const belt of conveyorTextures) belt.texture.offset.y = -(time * belt.speed) / 8;
         warningMaterial.emissiveIntensity = cartAt(time).warning ? 1.5 + Math.sin(time * 12) : 0;
         world.update?.(time, courseState);
         experience.update(time, courseState);
+        art?.update(time, courseState);
       },
     },
     environment,

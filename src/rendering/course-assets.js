@@ -36,7 +36,15 @@ export async function loadCourseAssets(renderer, courseId = "windmill-wilds") {
         true,
       )
     : {};
-  return { textures: { ...Object.fromEntries(maps), ...courseTextures }, models };
+  const textures = { ...Object.fromEntries(maps), ...courseTextures };
+  for (const [name, texture] of Object.entries(textures)) {
+    if (textures[`${name}Normal`])
+      texture.userData.pbr = {
+        normalMap: textures[`${name}Normal`],
+        roughnessMap: textures[`${name}Roughness`],
+      };
+  }
+  return { textures, models };
 }
 
 async function loadModelPack(loader, manifestUrl, models, renderer, optional = false) {

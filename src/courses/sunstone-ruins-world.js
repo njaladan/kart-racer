@@ -101,7 +101,8 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
         f = track.frameAt(t);
       const h = 27 + Math.sin(i * 0.17) * 6 + Math.sin(i * 0.53) * 2;
       for (let j = 0; j < levels; j++) {
-        const offset = side * (track.roadHalfWidth(t) + 9 + j * 1.8 + Math.sin(i * 0.25 + j) * 1.1);
+        const offset =
+          track.platformEdgeAt(t, side) + side * (8 + j * 1.8 + Math.sin(i * 0.25 + j) * 1.1);
         const p = f.p.clone().addScaledVector(f.right, offset);
         p.y += (j * h) / (levels - 1) - 3;
         positions.push(p.x, p.y, p.z);
@@ -116,9 +117,26 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
     const geo = new THREE.BufferGeometry();
     geo.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
     geo.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
-    geo.setIndex(indices);
+    // Cut the cliff back wherever another elevation of the road passes it.
+    const triangle = new THREE.Triangle(),
+      bounds = new THREE.Box3(),
+      safeIndices = [];
+    for (let i = 0; i < indices.length; i += 3) {
+      triangle.a.fromBufferAttribute(geo.attributes.position, indices[i]);
+      triangle.b.fromBufferAttribute(geo.attributes.position, indices[i + 1]);
+      triangle.c.fromBufferAttribute(geo.attributes.position, indices[i + 2]);
+      bounds.setFromPoints([triangle.a, triangle.b, triangle.c]);
+      if (
+        !allows.corridor.some(
+          (cell) => cell.intersectsBox(bounds) && cell.intersectsTriangle(triangle),
+        )
+      )
+        safeIndices.push(indices[i], indices[i + 1], indices[i + 2]);
+    }
+    geo.setIndex(safeIndices);
     geo.computeVertexNormals();
-    mesh(geo, material("#ffffff", { side: THREE.DoubleSide }), scenery);
+    mesh(geo, material("#ffffff", { side: THREE.DoubleSide }), scenery).name =
+      "Sculpted canyon walls";
   }
   const sandfall = createSandfall(THREE);
   motions.push(sandfall.update);

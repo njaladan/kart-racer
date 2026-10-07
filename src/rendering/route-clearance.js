@@ -29,7 +29,7 @@ export function createRouteClearance(track) {
       corridor.push(bounds);
     }
   }
-  return (group, center, size) => {
+  const allows = (group, center, size) => {
     group.updateWorldMatrix(true, false);
     const half = new THREE.Vector3(...size).multiplyScalar(0.5);
     const bounds = new THREE.Box3(
@@ -38,4 +38,6 @@ export function createRouteClearance(track) {
     ).applyMatrix4(group.matrixWorld);
     return !corridor.some((road) => road.intersectsBox(bounds));
   };
+  allows.corridor = corridor;
+  return allows;
 }

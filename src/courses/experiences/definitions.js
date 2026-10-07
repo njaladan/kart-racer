@@ -153,7 +153,7 @@ export function withCourseExperience(course) {
       // A broad mountain face needs a flowing descent instead of a tightly
       // folded ribbon whose inside edge would turn over at this width.
       for (const [i, point] of [
-        [24, [78, 46, 217]],
+        [24, [78, 46, 218]],
         [25, [45, 29, 223]],
         [26, [12, 17, 225]],
         [27, [-21, 10, 219]],

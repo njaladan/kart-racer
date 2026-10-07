@@ -79,7 +79,8 @@ export function buildPathwayEdges({ track, kit, textures = {} }) {
         }
         const p = frame.p.clone().addScaledVector(frame.right, offset);
         p.y =
-          track.course.downhill?.section === track.SECTIONS.indexOf(section)
+          track.course.downhill?.section === track.SECTIONS.indexOf(section) &&
+          profile.mode === "soft"
             ? mountainHeight(track, p, t) + 0.008
             : height + (profile.mode === "soft" ? 0.008 : 0);
         positions.push(p.x, p.y, p.z);

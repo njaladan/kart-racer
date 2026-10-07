@@ -125,11 +125,12 @@ export function createEnvironmentParticleField(track, spec, seed = 1, source = n
       fieldSize: { value: new THREE.Vector2(...size) },
       fieldOpacity: { value: spec.opacity ?? 0.55 },
       fieldMotion: { value: PARTICLE_MOTIONS[spec.motion ?? "drift"] },
+      waterCeiling: { value: spec.waterCeiling ?? 1e6 },
       fieldShape: { value: PARTICLE_SHAPES[spec.shape ?? "mote"] },
     },
     vertexShader: `attribute vec3 particleBase,particleRight,particleForward,particleTint;
       attribute vec4 particleSeed;
-      uniform float fieldTime,fieldHeight,fieldLifetime,fieldMotion,fieldShape;
+      uniform float fieldTime,fieldHeight,fieldLifetime,fieldMotion,fieldShape,waterCeiling;
       uniform vec2 fieldSize;uniform vec3 fieldWind;
       varying vec2 vEffectUv;varying vec3 vEffectTint;
       varying float vEffectFade,vEffectSeed,vEffectPhase;
@@ -168,6 +169,7 @@ export function createEnvironmentParticleField(track, spec, seed = 1, source = n
         vEffectUv=uv;vEffectTint=particleTint;vEffectSeed=particleSeed.y;
         vEffectPhase=cycle;
         vEffectFade=smoothstep(0.,.12,cycle)*(1.-smoothstep(.72,1.,cycle));
+        vEffectFade*=1.-smoothstep(waterCeiling-.5,waterCeiling,(modelMatrix*vec4(p,1.)).y);
         vEffectFade*=smoothstep(.4,2.5,-mvPosition.z)*(1.-smoothstep(100.,170.,-mvPosition.z));
         if(fieldShape>10.5)vEffectFade*=.25+.75*pow(.5+.5*sin(fieldTime*2.1+phase),3.);
         #include <fog_vertex>

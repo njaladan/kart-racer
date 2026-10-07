@@ -1,3 +1,4 @@
+import { createSunGlare } from "./sun-glare.js";
 import { racerProjection } from "../track/route-branches.js";
 import { createBoostMotion } from "./boost-motion.js";
 import * as THREE from "../../vendor/three/three.module.js";
@@ -46,6 +47,7 @@ export function createGameRenderer({
   getLandscape,
   totalLaps = 3,
 }) {
+  const sunGlare = createSunGlare(scene, theme);
   const cameraLook = new THREE.Vector3();
   const kartUp = new THREE.Vector3(0, 1, 0);
   const kartForward = new THREE.Vector3();
@@ -313,6 +315,12 @@ export function createGameRenderer({
     advanceSurfaceDetails(scene, frameState.raceTime);
     getLandscape()?.updateCamera?.(camera.position, graphicsQuality?.getTier() ?? 3);
     sky?.update(frameState.raceTime, motionEnabled);
+    sunGlare.update(
+      frameState.raceTime,
+      camera,
+      player.underwater,
+      graphicsQuality?.getTier() ?? 3,
+    );
     weather?.update(frameState.raceTime, camera.position, forest);
     displayFinish?.update(
       frameState.raceTime,

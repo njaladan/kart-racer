@@ -5,6 +5,7 @@ import { stormAt, mountainHeight } from "../../simulation/experience-mechanics.j
 import { branchRampHeight } from "../../track/route-branches.js";
 import { carvedSandstone, templePaving } from "../sunstone-ruins/sunstone-materials.js";
 import { metalDeckDetail } from "../adventure/architectural-detail.js";
+import { bakeVertexShade } from "../../rendering/vertex-shading.js";
 
 /** Authored route surfaces and their scenery are built from authoritative frames. */
 export function buildExperienceWorld({ scene, track, textures = {}, assets = {} }) {
@@ -28,6 +29,7 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
     const group = new THREE.Group();
     scenery.add(group);
     kit.align(group, pose);
+    group.userData.scenicAssembly = false;
     return group;
   }
   function sign(parent, text, color, width = 16) {
@@ -76,6 +78,7 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
     geo.setIndex(indices);
     const road = mesh(geo, mat);
     road.name = "Authored experience driving surface";
+    road.userData.bakeReceiver = true;
     road.receiveShadow = true;
     const update = () => {
       for (let i = 0; i <= count; i++) {
@@ -90,6 +93,7 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
       }
       geo.attributes.position.needsUpdate = true;
       geo.computeVertexNormals();
+      if (!geo.getAttribute("color")) bakeVertexShade(geo, 0.14);
       geo.computeBoundingSphere();
     };
     update();
@@ -153,12 +157,13 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
       branchGroup.add(g);
       if (!branch.dropToMain) {
         for (const side of [-1, 1]) {
-          box(
+          const rail = box(
             metal,
             g,
             [side * branch.halfWidth, 0.35, 0],
             [0.3, 0.7, branch.length / count + 0.2],
           );
+          rail.userData.routeStructure = true;
           box(trim, g, [side * (branch.halfWidth - 0.35), 0.075, 0], [0.16, 0.08, 3.6]);
         }
       }
@@ -338,6 +343,7 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
     geo.computeVertexNormals();
     const mountain = mesh(geo, material("#eef3ff", { map: textures.frostSnow || textures.snow }));
     mountain.name = "Open Dragonback downhill snow face";
+    mountain.userData.bakeReceiver = true;
   }
   if (track.course.watchBowl) buildWatchInterior({ track, kit, scenery, animated, updates, sign });
   if (track.drumField) {
@@ -348,6 +354,7 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
     for (const drum of track.drumField.drums) {
       const g = groupAt(track.poseAt(drum.t * track.TRACK, drum.offset, 0));
       g.name = `Snare drum ${drum.index + 1}`;
+      g.userData.routeStructure = true;
       g.quaternion.setFromAxisAngle(
         new THREE.Vector3(0, 1, 0),
         track.yawFor(track.frameAt(drum.t).tangent) + Math.PI,

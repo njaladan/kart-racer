@@ -128,6 +128,7 @@ export function buildEmberwing(context) {
   // Cannon throat is a readable arch on the launch lip, pointed at the landing.
   const cannon = w.groupAt(start - 3 / track.COURSE_LENGTH),
     barrel = new THREE.Group();
+  cannon.userData.routeStructure = true;
   cannon.add(barrel);
   barrel.position.y = 12;
   barrel.rotation.x = -0.3;
@@ -166,7 +167,7 @@ export function buildEmberwing(context) {
   for (const side of [-1, 1]) box(glow, landing, [side * 15, 1, 0], [1.2, 2, 9]);
   // Rotating telescope domes and complete mountings give each terrace purpose.
   function observatory(g, size, phase) {
-    const foundation = g.position.y + 22;
+    const foundation = g.position.y + 48;
     mesh(cylinder, basalt, g, [0, -foundation / 2, 0], [24 * size, foundation, 24 * size]);
     mesh(cylinder, pale, g, [0, 8 * size, 0], [23 * size, 16 * size, 23 * size]);
     for (let i = 0; i < 12; i++) {
@@ -218,8 +219,10 @@ export function buildEmberwing(context) {
     [3, 0.7, 1, 1],
     [4, 0.5, -1, 0.8],
     [5, 0.45, 1, 0.9],
-  ])
-    observatory(at(section, f, side * 70), size, section * 0.4);
+  ]) {
+    const g = w.safe(section, f, side * 70, 37 * size, 42 * size, -48);
+    if (g) observatory(g, size, section * 0.4);
+  }
   buildSantorini(w);
   // Orrery gardens tell the story of the observatory without duplicating gears.
   for (let i = 0; i < 5; i++) {

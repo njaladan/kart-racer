@@ -1,6 +1,24 @@
 {
   "course": "clockwork-citadel",
-  "models": [],
+  "models": [
+    {
+      "name": "art:old-house",
+      "file": "../railstorm-express/models/old-house.glb",
+      "type": "gltf",
+      "license": "CC-BY-SA-4.0",
+      "author": "Sven Andreas Belting; texture contributors listed in retained notices",
+      "source": "https://supertuxkart.net",
+      "download": "https://raw.githubusercontent.com/Nomagno/stk-assets/b917b6c01b55b43208c5eaa1b4d187bbf59457ac/library/stklib_old_house_a/stklib_old_house_a_main.spm",
+      "sourceRevision": "b917b6c01b55b43208c5eaa1b4d187bbf59457ac",
+      "sourcePath": "library/stklib_old_house_a/stklib_old_house_a_main.spm",
+      "sourceSha256": "2589e768bd00da0db8abb6135b16ef99696e0422057c2388622a5f55be3ba296",
+      "attribution": "licenses/old-house.txt",
+      "additionalAttribution": "licenses/landmark-textures.txt",
+      "modifications": "Complete authored SPM converted to static glTF; original diffuse UVs and house normal maps retained; color textures capped at 1024px.",
+      "bytes": 6117900,
+      "sha256": "8b8c1d9c8cddc39263fb6d58b39606d1243c602aa439f622f94ed0723e07ea1b"
+    }
+  ],
   "textures": [],
   "sources": [],
   "license": "Original project procedural architecture; shared locally bundled textures retain their documented licenses."

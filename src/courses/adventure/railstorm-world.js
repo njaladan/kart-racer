@@ -159,16 +159,20 @@ export function buildRailstorm(context) {
   const locomotive = new THREE.Group();
   locomotive.userData.environmentSource = "express-boiler";
   scenery.add(locomotive);
-  box(iron, locomotive, [0, 3.5, 0], [13, 7, 31]);
-  mesh(cylinder, red, locomotive, [0, 8, -4], [5, 19, 5]).rotation.x = Math.PI / 2;
-  box(red, locomotive, [0, 10, 10], [14, 13, 9]);
-  box(cream, locomotive, [0, 17, 10], [17, 1, 12]);
-  mesh(cylinder, iron, locomotive, [0, 15, -8], [2, 10, 2]);
-  for (const side of [-1, 1]) {
-    box(glow, locomotive, [side * 4, 11, 5.4], [4, 4, 0.3]);
-    for (const z of [-11, -4, 3, 11])
-      mesh(cylinder, dark, locomotive, [side * 7, 1, z], [2, 1, 2]).rotation.z = Math.PI / 2;
-    tube(locomotive, [side * 7.6, 1, -11], [side * 7.6, 1, 11], 0.35, cream);
+  if (context.kit.hasAsset("art:steam-engine")) {
+    context.kit.asset("art:steam-engine", locomotive, [0, 0, 0], [18, 18, 18]);
+  } else {
+    box(iron, locomotive, [0, 3.5, 0], [13, 7, 31]);
+    mesh(cylinder, red, locomotive, [0, 8, -4], [5, 19, 5]).rotation.x = Math.PI / 2;
+    box(red, locomotive, [0, 10, 10], [14, 13, 9]);
+    box(cream, locomotive, [0, 17, 10], [17, 1, 12]);
+    mesh(cylinder, iron, locomotive, [0, 15, -8], [2, 10, 2]);
+    for (const side of [-1, 1]) {
+      box(glow, locomotive, [side * 4, 11, 5.4], [4, 4, 0.3]);
+      for (const z of [-11, -4, 3, 11])
+        mesh(cylinder, dark, locomotive, [side * 7, 1, z], [2, 1, 2]).rotation.z = Math.PI / 2;
+      tube(locomotive, [side * 7.6, 1, -11], [side * 7.6, 1, 11], 0.35, cream);
+    }
   }
   context.kit.batch(locomotive);
   motion(locomotive, (time) => {
@@ -201,6 +205,10 @@ export function buildRailstorm(context) {
   mesh(riverGeo, river).castShadow = false;
   // Ironvale station: pitched slate roofs, window rhythm and a busy platform.
   function building(g, width, height, length, color) {
+    if (context.kit.hasAsset("art:old-house")) {
+      context.kit.asset("art:old-house", g, [0, 0, 0], [height * 1.4, height * 1.4, height * 1.4]);
+      return;
+    }
     box(cream, g, [0, height / 2, 0], [width, height, length]);
     const roof = mesh(
       new THREE.CylinderGeometry(1, 1, 1, 3),
@@ -256,6 +264,10 @@ export function buildRailstorm(context) {
         if (!g) continue;
         mesh(sphere, moss, g, [0, 2, 0], [13, 4, 13]);
         for (let j = 0; j < 3; j++) {
+          if (context.kit.hasAsset("art:fir")) {
+            context.kit.asset("art:fir", g, [-8 + j * 8, 0, 0], [23, 23, 23]);
+            continue;
+          }
           box(wood, g, [-8 + j * 8, 6, 0], [1, 12, 1]);
           mesh(new THREE.ConeGeometry(1, 1, 7), moss, g, [-8 + j * 8, 12, 0], [5, 16, 5]);
         }
@@ -266,14 +278,18 @@ export function buildRailstorm(context) {
   // Signal gantries and telegraph wires guide the driver between districts.
   for (let section = 0; section < 7; section++)
     for (let i = 0; i < 3; i++) {
+      const t = track.sectorT(section, 0.15 + i * 0.32);
+      const half = Math.max(Math.abs(track.platformEdgeAt(t, -1)), track.platformEdgeAt(t, 1)) + 4;
       const g = at(section, 0.15 + i * 0.32);
       for (const side of [-1, 1]) {
-        box(iron, g, [side * 17, 12, 0], [0.5, 24, 0.5]);
+        const foundation = g.position.y - track.course.theme.groundHeight;
+        box(iron, g, [side * half, -foundation / 2, 0], [0.5, foundation, 0.5]);
+        box(iron, g, [side * half, 12, 0], [0.5, 24, 0.5]);
         mesh(
           sphere,
           section === 2 || section === 5 ? glow : red,
           g,
-          [side * 17, 20, 0],
+          [side * half, 20, 0],
           [0.6, 0.6, 0.6],
         );
       }

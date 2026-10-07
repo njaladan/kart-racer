@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { auditRouteGeometry } from "./scene-route-audit.mjs";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { resolve } from "node:path";
@@ -184,6 +185,18 @@ for (const course of selected) {
   createCourseKit(new THREE.Group(), track, assets);
   world.update(0);
   scene.updateMatrixWorld(true);
+  if (process.env.COURSE_ROUTE_AUDIT) {
+    const reports = [];
+    for (const lap of track.branches.some(b => b.lap != null) ? [0, 1, 2] : [0]) {
+      world.update(0, {playerLap: lap, racers: [], motionEnabled: false, running: false});
+      scene.updateMatrixWorld(true);
+      reports.push(auditRouteGeometry(scene, track, world.animated, lap));
+    }
+    const report = { course: course.id, clearance: scene.userData.sceneryClearance, stations: reports.reduce((n,r)=>n+r.stations,0), hits: reports.flatMap((r,lap)=>r.hits.map(h=>({...h,lap}))) };
+    await writeFile(`${output}/${course.id}-audit.json`, JSON.stringify(report, null, 2));
+    console.log("Route audit", course.id, report.stations, "rays", report.hits.length, "intersections");
+    if (process.env.COURSE_ROUTE_AUDIT === "only") continue;
+  }
   const positions = [],
     indices = [],
     colors = [],
@@ -267,7 +280,10 @@ for (const course of selected) {
       streams[0].byteLength + streams[1].byteLength + streams[2].byteLength,
     ],
     bounds: [minX, minZ, maxX - minX, maxZ - minZ],
-    heightRange: [-12, Math.max(75, ...controls.map((p) => p[1] + 20))],
+    heightRange: [
+      Math.min(-12, (course.theme.groundHeight ?? -1.7) - 10, ...controls.map((p) => p[1] - 30)),
+      Math.max(75, ...controls.map((p) => p[1] + 70)),
+    ],
     lightVolume: course.theme.lightVolume,
     lights: (scene.userData.localLightPools || []).map((pool) => ({
       position: pool.position.toArray(),

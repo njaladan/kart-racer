@@ -86,21 +86,32 @@ export function buildTempest(context) {
         [track.roadHalfWidth(track.sectorT(section, (i + 0.5) / count)) * 2 + 1.1, 1.5, 11],
       );
       for (const side of [-1, 1]) {
-        tube(g, [side * 12, -2, -5], [side * 12, -8, 5], 0.3, iron);
-        if (i % 4 === 0) lamp(g, side * 12, 4, 0);
+        const edge = Math.max(
+          Math.abs(track.platformEdgeAt(track.sectorT(section, (i + 0.5) / count), -1)),
+          track.platformEdgeAt(track.sectorT(section, (i + 0.5) / count), 1),
+        );
+        tube(g, [side * edge, -2, -5], [side * edge, -8, 5], 0.3, iron);
+        tube(g, [side * edge, -8, -5], [side * edge, -8, 5], 0.3, iron);
+        for (const z of [-5, 5]) tube(g, [side * edge, -2, z], [side * edge, -8, z], 0.3, iron);
+        if (i % 4 === 0) lamp(g, side * (edge + 2), 4, 0);
       }
     }
     // Four suspension towers stand on real piers, with sweeping main cables.
     for (const f of [0.12, 0.4, 0.68, 0.92]) {
       const g = at(section, f),
-        height = 32 + (section === 1 ? 14 : 0);
+        height = 32 + (section === 1 ? 14 : 0),
+        half =
+          Math.max(
+            Math.abs(track.platformEdgeAt(track.sectorT(section, f), -1)),
+            track.platformEdgeAt(track.sectorT(section, f), 1),
+          ) + 4;
       for (const side of [-1, 1]) {
-        box(concrete, g, [side * 16, height / 2, 0], [4, height, 5]);
-        box(iron, g, [side * 16, height * 0.55, 0.1], [0.4, height - 4, 5.6]);
-        box(concrete, g, [side * 16, -22, 0], [7, 45, 9]);
-        box(copper, g, [side * 16, height + 1, 0], [7, 2, 7]);
+        box(concrete, g, [side * half, height / 2, 0], [4, height, 5]);
+        box(iron, g, [side * half, height * 0.55, 0.1], [0.4, height - 4, 5.6]);
+        box(concrete, g, [side * half, -22, 0], [7, 45, 9]);
+        box(copper, g, [side * half, height + 1, 0], [7, 2, 7]);
       }
-      box(concrete, g, [0, height - 2, 0], [36, 3, 5]);
+      box(concrete, g, [0, height - 2, 0], [half * 2 + 4, 3, 5]);
     }
     // Cable and hanger paths use actual road frames, so curved spans cannot
     // drive their straight tangent supports back through the racing line.
@@ -117,10 +128,11 @@ export function buildTempest(context) {
             h =
               THREE.MathUtils.lerp(i === 0 ? 3 : height, i === anchors.length - 2 ? 3 : height, q) -
               Math.sin(q * Math.PI) * 12,
-            p = track.poseAt(t * track.TRACK, side * 16, h).p;
+            half = Math.max(Math.abs(track.platformEdgeAt(t, -1)), track.platformEdgeAt(t, 1)) + 4,
+            p = track.poseAt(t * track.TRACK, side * half, h).p;
           points.push(p.toArray());
           if (j % 4 === 0 && j > 0 && j < 32) {
-            const bottom = track.poseAt(t * track.TRACK, side * 12, 2.5).p;
+            const bottom = track.poseAt(t * track.TRACK, side * (half - 2), -1.8).p;
             tube(scenery, p.toArray(), bottom.toArray(), 0.1, iron);
           }
         }
@@ -130,6 +142,10 @@ export function buildTempest(context) {
   // Lighthouse islands have a rugged shore, a small inhabited refuge and
   // warm windows; each exposure ends in a materially different shelter.
   function cottage(g, size = 1) {
+    if (context.kit.hasAsset("art:coastal-cottage")) {
+      context.kit.asset("art:coastal-cottage", g, [0, 0, 0], [19 * size, 19 * size, 19 * size]);
+      return;
+    }
     const root = new THREE.Group();
     g.add(root);
     root.scale.setScalar(size);

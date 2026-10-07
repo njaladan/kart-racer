@@ -168,10 +168,17 @@ export function buildPelagic(context) {
   for (let school = 0; school < 12; school++) {
     const g = at(1 + (school % 4), 0.15 + (school % 3) * 0.3, school % 2 ? 29 : -29),
       group = new THREE.Group();
+    g.rotation.set(0, track.yawFor(track.frameAt(track.sectorT(1 + (school % 4), 0.5)).tangent), 0);
+    g.position.y = Math.min(g.position.y, -16);
+    group.name = "Submerged fish school";
     g.add(group);
     for (let i = 0; i < 12; i++) {
       const x = (i % 4) * 2.5,
         y = 5 + Math.floor(i / 4) * 2;
+      if (context.kit.hasAsset("art:fish")) {
+        context.kit.asset("art:fish", group, [x, y, (-i % 3) * 3], [1.3, 1.3, 1.3]);
+        continue;
+      }
       mesh(
         fishBody,
         school % 2 ? fishGold : fishBlue,
@@ -207,6 +214,9 @@ export function buildPelagic(context) {
   for (let i = 0; i < 7; i++) {
     const g = at(2 + (i % 2), 0.08 + (i % 4) * 0.24, (i % 2 ? 1 : -1) * 28),
       jelly = new THREE.Group();
+    g.rotation.set(0, 0, 0);
+    g.position.y = Math.min(g.position.y, -34);
+    jelly.name = "Submerged jellyfish";
     g.add(jelly);
     jelly.position.y = 17 + (i % 2) * 7;
     mesh(

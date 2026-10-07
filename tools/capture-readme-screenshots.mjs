@@ -30,6 +30,7 @@ const port = Number(process.env.SCREENSHOT_CAPTURE_PORT || 5173);
 const baseUrl = `http://127.0.0.1:${port}`;
 const captureAtSeconds = Number(process.env.SCREENSHOT_CAPTURE_AT_SECONDS || 2);
 const timeoutMs = Number(process.env.SCREENSHOT_CAPTURE_TIMEOUT_MS || 120_000);
+const quality = Number(process.env.SCREENSHOT_CAPTURE_QUALITY || 2);
 
 function loadPlaywright() {
   const candidates = [
@@ -88,10 +89,10 @@ async function captureCourse(browserContext, courseId) {
 
   const page = await browserContext.newPage();
   const deadline = setTimeout(() => page.close().catch(() => {}), timeoutMs);
-  await page.addInitScript(() => {
+  await page.addInitScript((quality) => {
     localStorage.setItem(
       "turbo-trail-preferences-v1",
-      JSON.stringify({ quality: 2, adaptive: false }),
+      JSON.stringify({ quality, adaptive: false }),
     );
     const request = window.requestAnimationFrame.bind(window);
     window.requestAnimationFrame = (callback) =>
@@ -100,9 +101,12 @@ async function captureCourse(browserContext, courseId) {
           return;
         callback(time);
       });
-  });
+  }, quality);
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
 
   try {
     await page.goto(`${baseUrl}/?course=${course.id}&racer=${course.racer}&test&benchmark`, {
@@ -173,6 +177,7 @@ async function captureCourse(browserContext, courseId) {
         await page.keyboard.up("w").catch(() => {});
       }
     }
+    if (errors.length) throw new Error(errors.join("; "));
     const cdp = await browserContext.newCDPSession(page);
     const screenshot = await cdp.send("Page.captureScreenshot", {
       format: "jpeg",
