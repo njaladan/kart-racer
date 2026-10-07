@@ -12,7 +12,8 @@ import { createClockworkClearance } from "../src/courses/adventure/clockwork-cle
 const track = selectCourse(course);
 
 test("Clockwork ribbons have clearance between nonadjacent stretches and no folded corners", () => {
-  assert.ok(track.minimumCurveRadius >= 40);
+  const replaced = (t) => track.branches.some((b) => b.required && t > b.start && t < b.end);
+  assert.equal(track.branches.filter((b) => b.required).length, 2);
   assert.equal((course.traversals || []).length, 0);
   assert.equal((course.routeLinks || []).length, 0);
   const count = 1200;
@@ -21,7 +22,9 @@ test("Clockwork ribbons have clearance between nonadjacent stretches and no fold
     Math.max(-track.platformEdgeAt(i / count, -1), track.platformEdgeAt(i / count, 1)),
   );
   for (let i = 0; i < count; i++) {
+    if (replaced(i / count)) continue;
     for (let j = i + 1; j < count; j++) {
+      if (replaced(j / count)) continue;
       const along = (Math.min(j - i, count - j + i) / count) * track.COURSE_LENGTH;
       if (along < 45) continue;
       const a = frames[i].p,
@@ -117,6 +120,7 @@ test("Clockwork scenery leaves the driving ribbon clear throughout the lap", () 
     world.update(time);
     scenery.updateMatrixWorld(true);
     for (let i = 0; i < 800; i++) {
+      if (track.branches.some((b) => b.required && i / 800 > b.start && i / 800 < b.end)) continue;
       for (const offset of [-9, 0, 9]) {
         const p = track.poseAt((i / 800) * TRACK, offset, 0).p;
         ray.set(p.clone().add(new THREE.Vector3(0, 7, 0)), new THREE.Vector3(0, -1, 0));

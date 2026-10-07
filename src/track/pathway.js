@@ -1,3 +1,4 @@
+import { drumAt, mountainHeight } from "../simulation/experience-mechanics.js";
 import { PATHWAY_KINDS } from "../courses/pathway-edges.js";
 
 /** Shared environmental geometry and support rules for rendering and authority. */
@@ -15,6 +16,42 @@ export function createPathwayQueries(track) {
     };
   }
   function floorAt(surface) {
+    if (surface.branchIndex) {
+      const branch = track.branches[surface.branchIndex - 1];
+      return {
+        supported: !surface.offroad || !branch.dropToMain,
+        height: surface.height,
+        outside: surface.offroad && !!branch.dropToMain,
+      };
+    }
+    const drum = drumAt(track, surface);
+    if (drum !== undefined)
+      return {
+        supported: !!drum,
+        height: drum ? drum.p.y + 0.065 : surface.height,
+        outside: !drum,
+        drum,
+      };
+    if (
+      track.course.watchBowl &&
+      track.SECTIONS[track.course.watchBowl.section] === track.sectionAt(surface.t) &&
+      Math.abs(surface.offset) > surface.halfWidth + 0.6
+    )
+      return { supported: false, height: surface.height, outside: true };
+    if (track.course.downhill?.section === track.SECTIONS.indexOf(track.sectionAt(surface.t))) {
+      const p = { x: surface.worldX, y: surface.height, z: surface.worldZ };
+      const point = track.frameAt(surface.t).p.clone().set(p.x, p.y, p.z);
+      const section = track.SECTIONS[track.course.downhill.section];
+      const q = (surface.t - section.start) / (section.end - section.start);
+      const width =
+        surface.halfWidth +
+        (track.course.downhill.width - surface.halfWidth) * Math.min(1, q / 0.08, (1 - q) / 0.08);
+      return {
+        supported: Math.abs(surface.offset) <= width,
+        outside: Math.abs(surface.offset) > width,
+        height: mountainHeight(track, point, surface.t) + 0.065,
+      };
+    }
     const side = surface.offset < 0 ? -1 : 1;
     let t = surface.t;
     // Banking on a slope tips the cross-section forward in XZ. Invert that

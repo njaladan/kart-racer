@@ -1,3 +1,5 @@
+import { racerProjection, updateRouteChoice } from "../track/route-branches.js";
+import { routeCarry } from "./experience-mechanics.js";
 export { botInput } from "./ai-driver.js";
 import {
   solarBoostAt,
@@ -21,7 +23,6 @@ import {
   frameAt,
   trackT,
   poseAt,
-  projectTrack,
   WORLD_PER_UNIT,
   TRACK,
   yawFor,
@@ -71,8 +72,18 @@ export function recoverRacer(state) {
   } else if ((state.falling || state.offPathTime > 0) && Number.isFinite(state.lastSafeS)) {
     state.s = state.lastSafeS;
   }
-  const pose = poseAt(state.s, 0, 0.065);
+  const safeChoice = state.routeChoice > 0 ? state.lastSafeRoute || state.routeChoice : 0;
+  const safeGroup = state.routeGroup;
+  const branch = activeTrack.branches[safeChoice - 1];
+  const offset = branch ? state.lastSafeOffset || 0 : 0;
+  const pose = branch
+    ? branch.poseAt((trackT(state.s) - branch.start) / (branch.end - branch.start), offset)
+    : poseAt(state.s, 0, 0.065);
   resetMotion(state);
+  state.routeChoice = safeChoice;
+  state.routeGroup = safeGroup;
+  state.lastSafeRoute = safeChoice;
+  state.lastSafeOffset = offset;
   state.worldPos.copy(pose.p);
   if (!state.renderFrom) state.renderFrom = pose.p.clone();
   else state.renderFrom.copy(pose.p);
@@ -95,7 +106,8 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   activeTrack.setTime(raceTime);
   state.scale = scaleAt(activeTrack, trackT(state.s));
   state.underwater = underwaterAt(activeTrack, trackT(state.s));
-  const entry = projectTrack(state.worldPos, state.s);
+  updateRouteChoice(activeTrack, state);
+  const entry = racerProjection(activeTrack, state);
   const transit =
     !state.falling &&
     !entry.offroad &&
@@ -120,6 +132,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     "contactCooldown",
     "padCooldown",
     "driftBoost",
+    "drumCooldown",
   ])
     state[key] = Math.max(0, (state[key] || 0) - dt);
   if (hitWasActive) {
@@ -134,7 +147,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   const trickPressed = !!input.drift && !state.trickHeld;
   state.trickHeld = !!input.drift;
   state.trickBuffer = trickPressed ? 0.22 : Math.max(0, state.trickBuffer - dt);
-  const before = projectTrack(state.worldPos, state.s);
+  const before = racerProjection(activeTrack, state);
   const sliding = drive(
     state,
     input,
@@ -142,7 +155,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
       offroad: before.offroad,
       offroadDrag: before.offroadDrag,
       offroadGrip: before.offroadGrip,
-      grip: before.grip,
+      grip: before.grip * (activeTrack.course.storm ? 0.87 : 1),
       bank: -before.frame.up.dot(before.horizontalRight),
       slope: before.frame.tangent.y,
       curvature: before.frame.curvature,
@@ -154,11 +167,13 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     state.vx += before.horizontalRight.x * current * dt;
     state.vz += before.horizontalRight.z * current * dt;
   }
+  const ringCarry = routeCarry(activeTrack, state, before, dt);
   const deck = before.movingSurface;
   const previousDeck = state.movingDeckId;
-  state.movingDeckId = state.grounded && deck ? deck.id : null;
+  // Keep the train identity during roof jumps; carrying applies on contact only.
+  state.movingDeckId = deck && !state.falling ? deck.id : null;
   state.deckCoordinate = state.movingDeckId ? deck.coordinate : 0;
-  if (state.movingDeckId && !state.finished) {
+  if (state.movingDeckId && state.grounded && !state.finished) {
     const next = poseAt(
         (before.t + (deck.speed * dt) / activeTrack.COURSE_LENGTH) * TRACK,
         before.offset,
@@ -168,7 +183,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     state.worldPos.z += next.p.z - currentPose.p.z;
   }
   let conveyorMotion = false;
-  if (state.grounded && !state.finished) {
+  if (state.grounded && !state.finished && !before.branchIndex) {
     for (const belt of activeTrack.CONVEYORS) {
       if (before.t < belt.start || before.t > belt.end) continue;
       const inBounds = before.offset >= before.leftEdge && before.offset <= before.rightEdge;
@@ -203,9 +218,13 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     state.yawRate = 0;
     state.hitLift = 0;
   }
-  const projection = projectTrack(state.worldPos, state.s);
+  const projection = racerProjection(activeTrack, state);
   const floor = activeTrack.floorAt(projection);
-  if (!floor.supported) {
+  const overGap =
+    !state.grounded &&
+    ["drum", "quarterpipe", "drop"].includes(state.jumpKind) &&
+    state.worldPos.y >= floor.height - 0.5;
+  if (!floor.supported && !overGap) {
     state.falling = true;
     state.trickActive = false;
     state.trickBuffer = 0;
@@ -214,8 +233,9 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     if (state.worldPos.y < floor.height - 0.4) floor.supported = false;
     else state.falling = false;
   }
-  state.offPathTime = floor.outside || state.falling ? (state.offPathTime || 0) + dt : 0;
-  if (!state.falling && !floor.outside)
+  state.offPathTime =
+    (floor.outside && !overGap) || state.falling ? (state.offPathTime || 0) + dt : 0;
+  if (!state.falling && (!floor.outside || overGap))
     advanceRaceProgress(
       state,
       projection.t * TRACK,
@@ -224,7 +244,15 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
       state.worldPos.distanceTo(state.renderFrom),
     );
   state.x = laneFromOffset(projection.offset);
-  const bounds = collisionBounds(projection.t, 0.9 * state.scale);
+  const selectedBranch = activeTrack.branches[state.routeChoice - 1];
+  const bounds = selectedBranch
+    ? {
+        left: -selectedBranch.halfWidth + 0.9,
+        right: selectedBranch.halfWidth - 0.9,
+        leftSolid: !selectedBranch.dropToMain,
+        rightSolid: !selectedBranch.dropToMain,
+      }
+    : collisionBounds(projection.t, 0.9 * state.scale);
   const side = projection.offset < bounds.left ? -1 : 1;
   const edge = side < 0 ? bounds.left : bounds.right;
   const solid = side < 0 ? bounds.leftSolid : bounds.rightSolid;
@@ -236,12 +264,12 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     penetration,
   );
   if (penetration > 0) state.x = laneFromOffset(edge);
-  const trafficHit = trafficContact(state.worldPos, raceTime);
+  const trafficHit = !selectedBranch && trafficContact(state.worldPos, raceTime);
   const contact =
-    activeTrack.pathwayContact(state.worldPos, 0.9 * state.scale) ||
+    (!selectedBranch && activeTrack.pathwayContact(state.worldPos, 0.9 * state.scale)) ||
     mechanismContact(activeTrack, state.worldPos, raceTime, 0.9 * state.scale) ||
     trafficHit ||
-    cartContact(state.worldPos, raceTime, 0.9 * state.scale);
+    (!selectedBranch && cartContact(state.worldPos, raceTime, 0.9 * state.scale));
   const cartImpact = contact
     ? wallContact(state, contact.nx, contact.nz, contact.penetration)
     : false;
@@ -251,26 +279,47 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     state.invulnerable = 0.8;
     state.drift = 0;
   }
-  const after = projectTrack(state.worldPos, state.s);
+  const after = racerProjection(activeTrack, state);
   const slopeVelocity = (after.height - before.height) / dt;
   const wasGrounded = state.grounded;
   // Arcade ramp hops: boost changes horizontal speed, never jump height.
   // Do not infer takeoff from a noisy surface derivative after a collision.
   if (floor.supported && state.grounded && state.speed > 50) {
     const travelled = progressDelta(after.t, before.t, 1);
-    for (const ramp of RAMPS) {
+    for (const ramp of selectedBranch ? [] : RAMPS) {
       const distance = progressDelta(ramp.t, before.t, 1);
       const rampWidth = ramp.width ?? (ramp.halfWidth != null ? ramp.halfWidth * 2 : null);
       const onRamp =
         rampWidth == null || Math.abs(after.offset - (ramp.offset ?? 0)) <= rampWidth / 2;
       if (travelled > 0 && distance > 0 && distance <= travelled && onRamp) {
         state.grounded = false;
-        state.vy = JUMP_TAKEOFF_SPEED;
+        state.jumpKind = ramp.kind === "quarterpipe" ? "quarterpipe" : "hop";
+        state.jumpTakeoffSpeed = ramp.kind === "quarterpipe" ? 9 : JUMP_TAKEOFF_SPEED;
+        state.jumpMaxHeight = ramp.kind === "quarterpipe" ? 5 : 1.1;
+        state.trickReward = ramp.kind === "quarterpipe" ? 1 : 0.7;
+        state.vy = state.jumpTakeoffSpeed;
         state.airTime = 0;
         state.trickActive = false;
         break;
       }
     }
+  }
+  const roofRamp = selectedBranch?.ramp;
+  const roofLaunch = roofRamp && before.q < roofRamp.lip && after.q >= roofRamp.lip;
+  const trainLaunch =
+    deck &&
+    activeTrack.course.trainRamps &&
+    before.movingSurface.coordinate / deck.spacing < activeTrack.course.trainRamps.lip &&
+    after.movingSurface?.coordinate / deck.spacing >= activeTrack.course.trainRamps.lip;
+  if (state.grounded && state.speed > 45 && (roofLaunch || trainLaunch)) {
+    state.grounded = false;
+    state.jumpKind = "quarterpipe";
+    state.jumpTakeoffSpeed = 9;
+    state.jumpMaxHeight = 7;
+    state.trickReward = 1;
+    state.vy = 9;
+    state.airTime = 0;
+    state.trickActive = false;
   }
   // A fresh tap shortly before takeoff or early in the jump earns one trick.
   const trickStarted =
@@ -297,8 +346,43 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     floor.supported && support.supported,
   );
   const trickLanded = landed && state.trickActive && !(state.spin > 0);
-  if (trickLanded) state.boost = Math.max(state.boost, 0.7);
+  if (trickLanded) state.boost = Math.max(state.boost, state.trickReward ?? 0.7);
   if (landed || state.spin > 0) state.trickActive = false;
+  let drumBounce = null;
+  if (support.drum && state.grounded && state.drumCooldown === 0 && !(state.spin > 0)) {
+    drumBounce = support.drum.index;
+    state.grounded = false;
+    state.falling = false;
+    state.jumpKind = "drum";
+    const nextDrum = activeTrack.drumField.drums[support.drum.index + 1];
+    const destination = nextDrum
+      ? nextDrum.p
+      : poseAt((activeTrack.drumField.end + 12 / activeTrack.COURSE_LENGTH) * TRACK).p;
+    const dx = destination.x - state.worldPos.x,
+      dz = destination.z - state.worldPos.z;
+    const distance = Math.hypot(dx, dz);
+    const speed = Math.max(23, Math.min(34, state.speed / 3.6));
+    const flightTime = Math.max(0.45, distance / speed, activeTrack.drumField.bounce / 12);
+    state.vx = dx / flightTime;
+    state.vz = dz / flightTime;
+    state.yaw = Math.atan2(-state.vx, -state.vz);
+    state.jumpTakeoffSpeed = Math.max(
+      7,
+      Math.min(19, (destination.y - state.worldPos.y + 12 * flightTime * flightTime) / flightTime),
+    );
+    state.jumpMaxHeight = 12;
+    state.lastDrumIndex = support.drum.index;
+    state.lastDrumAt = raceTime;
+    state.lastSafeS = state.s;
+    state.lastSafeRoute = 0;
+    state.lastSafeOffset = after.offset;
+    state.trickReward = 0.85;
+    state.vy = state.jumpTakeoffSpeed;
+    state.airTime = 0;
+    state.air = 1;
+    state.drumCooldown = 0.2;
+    state.offPathTime = 0;
+  }
   // Even a glancing wall scrape interrupts the attempt. Cancel after contact
   // and vertical motion so releasing on the collision/takeoff tick cannot pay.
   if (penetration > 0 || contact || !state.grounded || landed) cancelDrift(state);
@@ -332,7 +416,12 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   }
   state.x = laneFromOffset(after.offset);
   state.speed = Math.hypot(state.vx, state.vz) * 3.6;
-  if (state.grounded && !after.offroad && !state.falling) state.lastSafeS = state.s;
+  if (state.grounded && !after.offroad && !state.falling) {
+    state.lastSafeS = state.s;
+    state.lastSafeRoute = state.routeChoice;
+    state.lastSafeOffset = after.offset;
+  }
+  updateRouteChoice(activeTrack, state);
   if (
     !Number.isFinite(state.worldPos.y) ||
     (state.falling && (state.airTime > 1.15 || state.worldPos.y < after.height - 14)) ||
@@ -358,6 +447,8 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     cartImpact,
     trafficImpact: !!trafficHit && cartImpact,
     conveyorMotion,
+    ringCarry,
+    drumBounce,
     deckBoarded: !!state.movingDeckId && previousDeck !== state.movingDeckId,
     deckLeft: !!previousDeck && previousDeck !== state.movingDeckId,
     padBoost,

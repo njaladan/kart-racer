@@ -1,9 +1,10 @@
+import { withCourseExperience } from "./experiences/definitions.js";
 import { PATHWAY_EDGES } from "./pathway-edges.js";
 import buildWorld from "./neon-harbor-world.js";
 
 // Port Lumen: a waterfront loop from the promenade, through the city and
 // market, over the suspension bridge, and back via the industrial island.
-export default {
+export default withCourseExperience({
   id: "neon-harbor",
   pathwayEdges: PATHWAY_EDGES["neon-harbor"],
   name: "Neon Harbor",
@@ -279,4 +280,4 @@ export default {
     exposure: 1.15,
   },
   buildWorld,
-};
+});

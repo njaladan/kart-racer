@@ -1,3 +1,4 @@
+import { buildExperienceWorld } from "../courses/experiences/world.js";
 import * as THREE from "../../vendor/three/three.module.js";
 import { createCourseKit, batchScenery } from "./course-kit.js";
 import { cartAt, trafficAt } from "../simulation/hazards.js";
@@ -35,6 +36,13 @@ export function buildCourseWorld({
       nature: commonAssets?.nature,
       assets,
     });
+    const experience = buildExperienceWorld({ scene, track, textures, assets });
+    batchScenery(experience.scenery, experience.animated);
+    const updateWorld = world.update?.bind(world);
+    world.update = (time, state) => {
+      updateWorld?.(time, state);
+      experience.update(time, state);
+    };
     addDetailedScenery(scene, track, assets);
     const environment = buildCourseEnvironment({ scene, track, textures, surfaces: [mats.road] });
     return composeCourseEnvironment(world, environment, createSceneryDetailController(scene));
@@ -209,7 +217,24 @@ export function buildCourseWorld({
           midpoint <
             track.sectorT(d.endSection ?? d.section, d.endFraction) - 18 / track.COURSE_LENGTH,
       );
-      if (i === n || transit || moving || (terrain && isElevated(midpoint))) continue;
+      const drumGap =
+        track.drumField && midpoint >= track.drumField.start && midpoint <= track.drumField.end;
+      const swaying = course.bridgeSway?.includes(
+        track.SECTIONS.indexOf(track.sectionAt(midpoint)),
+      );
+      const branchGap = track.branches.some(
+        (b) => b.required && midpoint > b.start && midpoint < b.end,
+      );
+      if (
+        i === n ||
+        transit ||
+        moving ||
+        drumGap ||
+        swaying ||
+        branchGap ||
+        (terrain && isElevated(midpoint))
+      )
+        continue;
       const a = i * 2,
         start = indices.length;
       if (edgeB(t) >= edgeA(t)) indices.push(a, a + 1, a + 2, a + 1, a + 3, a + 2);
@@ -419,6 +444,8 @@ export function buildCourseWorld({
       trafficAt,
     }) || {};
   batchScenery(scenery, world.animated || []);
+  const experience = buildExperienceWorld({ scene, track, textures, assets });
+  batchScenery(experience.scenery, experience.animated);
   addDetailedScenery(scene, track, assets);
   const environment = buildCourseEnvironment({
     scene,
@@ -434,6 +461,7 @@ export function buildCourseWorld({
         for (const belt of conveyorTextures) belt.texture.offset.y = -(time * belt.speed) / 8;
         warningMaterial.emissiveIntensity = cartAt(time).warning ? 1.5 + Math.sin(time * 12) : 0;
         world.update?.(time, courseState);
+        experience.update(time, courseState);
       },
     },
     environment,

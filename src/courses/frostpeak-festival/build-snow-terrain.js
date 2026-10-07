@@ -9,6 +9,7 @@ export function buildSnowTerrain({ THREE, scenery, track, kit, textures, edgeOff
   const rows = 44,
     columns = 10;
   for (let section = 0; section < track.SECTIONS.length; section++) {
+    if (section === track.course.downhill?.section) continue;
     for (const side of [-1, 1]) {
       if (track.edgeAt(kit.sectorT(section, 0.5), side).mode === "drop") continue;
       const positions = [],

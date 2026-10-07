@@ -8,7 +8,17 @@ Descriptors carry world controls, ordered place boundaries, palette, surfaces an
 
 All gameplay must run in shared fixed-step simulation used by authoritative workers and prediction. Scenery consumes the same race clock and analytic mechanism functions. A visual transform must never quietly invent collision or progress rules. Current mechanisms live in `simulation/course-mechanics.js`.
 
-Route progress remains signed and checkpoints ordered. Local projection keeps route continuity; global lookup uses elevation to distinguish floors. Special traversal states use scalar fields that survive network snapshots. Lifts wait for their shared cycle, carry karts across elevation, and rejoin with exit velocity. Cannon flights have authored duration/arc/landing. Recovery returns to their entrance. New graph branches should provide explicit route identity, ordered entry/rejoin gates and an authoritative recovery frame; do not infer a route join from nearest horizontal distance.
+Route progress remains signed and checkpoints ordered. Local projection keeps route continuity; global lookup uses elevation to distinguish floors. Special traversal states use scalar fields that survive network snapshots. Lifts wait for their shared cycle, carry karts across elevation, and rejoin with exit velocity. Cannon flights have authored duration/arc/landing. Recovery returns to their entrance. Branches carry explicit route identity, entry/rejoin gates and a recovery frame. A chosen path stays committed until its rejoin gate; authored rooftop drops can return to the lower route without unlocking another branch.
+
+## Course experiences
+
+Separate spline ribbons can depart from and rejoin the main route. Their distance maps to the same ordered checkpoints, while steering, floors, banking, recovery and shells use the selected ribbon. Required choices can replace a stretch entirely. Lap-specific paper routes remain available to racers who already occupy them even while another racer reaches the next form.
+
+Moving temple rings carry grounded karts and show the same motion in their surface markings. Freight roofs use carriage coordinates for travelling curved ramps. Quarterpipes have a concave launch face and an open lip, higher airtime, a larger trick and a slightly stronger landing boost. Rooftops and the broad snow descent can have a supported lower surface after leaving an upper ribbon.
+
+Snare drums provide discrete circular floors over a gap. Contact launches the kart toward the next head, with aerial steering and a different voice for each drum; missing a head causes a fall. Storms share an analytic lightning/thunder cycle and bridge roll across authority and rendering. Straight cannon arcs and a flight camera reveal can expose a caldera beneath the kart.
+
+These are current tools for expressing the course idea, not a closed list of allowed designs. Change this document and extend the engine when the next idea needs it.
 
 ## Surface and visual ownership
 

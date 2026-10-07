@@ -1,4 +1,5 @@
 import * as THREE from "../../vendor/three/three.module.js";
+import { mountainHeight } from "../simulation/experience-mechanics.js";
 import { PATHWAY_KINDS } from "../courses/pathway-edges.js";
 
 /** Open shoulders, exposed platform faces and irregular environmental clusters. */
@@ -77,7 +78,10 @@ export function buildPathwayEdges({ track, kit, textures = {} }) {
           height += j === 0 ? -0.25 : j === 1 ? profile.height * variation : -0.3;
         }
         const p = frame.p.clone().addScaledVector(frame.right, offset);
-        p.y = height + (profile.mode === "soft" ? 0.008 : 0);
+        p.y =
+          track.course.downhill?.section === track.SECTIONS.indexOf(section)
+            ? mountainHeight(track, p, t) + 0.008
+            : height + (profile.mode === "soft" ? 0.008 : 0);
         positions.push(p.x, p.y, p.z);
         uv.push((offset - edge.offset) / 6, (t * track.COURSE_LENGTH) / 6);
         if (i < count && j < columns) {
@@ -100,7 +104,12 @@ export function buildPathwayEdges({ track, kit, textures = {} }) {
   }
   for (const [index, section] of track.SECTIONS.entries()) {
     // Transit and moving train surfaces provide their own exposed sides.
-    if (track.course.traversals?.some((r) => r.section === index)) continue;
+    if (
+      track.course.traversals?.some((r) => r.section === index) ||
+      track.course.drumField?.section === index ||
+      track.course.branches?.some((b) => b.required && b.section === index)
+    )
+      continue;
     for (const side of [-1, 1]) {
       const kind = track.course.pathwayEdges[index][side < 0 ? "left" : "right"];
       if (

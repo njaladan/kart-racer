@@ -5,7 +5,7 @@ export function buildWinterValley({ THREE, scenery, track, festival }) {
     const count = section === 1 ? 29 : section === 2 ? 12 : section === 6 ? 5 : 15;
     for (let i = 0; i < count; i++)
       for (const side of [-1, 1]) {
-        if ((section === 3 || section === 4) && side === 1) continue;
+        if (section === track.course.downhill?.section || (section === 3 && side === 1)) continue;
         const t = sectorT(section, (i + 0.45) / count);
         const height = 10 + (i % 5) * 1.6;
         for (const depth of [0, 21]) {

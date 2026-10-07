@@ -1,3 +1,4 @@
+import { racerProjection } from "../track/route-branches.js";
 import {
   activeTrack,
   TRACK,
@@ -7,7 +8,6 @@ import {
   poseAt,
   yawFor,
   sectionAt,
-  projectTrack,
   metresToProgress,
 } from "../track/track.js";
 import { scaleAt, underwaterAt, rangeFor, traversalPose } from "../simulation/course-mechanics.js";
@@ -59,7 +59,11 @@ export function createBrowserDiagnostics({
           item: player.item,
           itemCount: player.itemCount,
           grounded: player.grounded,
-          altitude: player.worldPos.y - projectTrack(player.worldPos, player.s).height,
+          altitude: player.worldPos.y - racerProjection(activeTrack, player).height,
+          routeChoice: player.routeChoice,
+          lap: player.lap,
+          recoveryCount: player.recoveryCount,
+          position: player.worldPos.toArray(),
           airTime: player.airTime,
           drift: player.drift,
           boost: player.boost,
@@ -128,9 +132,19 @@ export function createBrowserDiagnostics({
         player.worldPos.copy(poseAt(player.s, offset, 0.065).p);
         player.renderFrom.copy(player.worldPos);
         resetMotion(player);
+        const branch = activeTrack.branches[(message.branchIndex || 0) - 1];
+        if (branch) {
+          const q = Number.isFinite(message.q) ? Math.max(0, Math.min(1, message.q)) : 0.5;
+          player.s = (branch.start + (branch.end - branch.start) * q) * TRACK;
+          player.routeChoice = branch.index;
+          player.routeGroup = branch.groupIndex;
+          player.lastSafeRoute = branch.index;
+          player.worldPos.copy(branch.poseAt(q, offset).p);
+          player.renderFrom.copy(player.worldPos);
+        }
         player.lastSafeS = player.s;
         resetRaceProgress(player, TRACK);
-        player.yaw = yawFor(frameAt(trackT(player.s)).tangent);
+        player.yaw = yawFor(racerProjection(activeTrack, player).frame.tangent);
         player.renderYawFrom = player.yaw;
         player.speed = 0;
         player.scale = scaleAt(activeTrack, trackT(player.s));
@@ -157,16 +171,26 @@ export function createBrowserDiagnostics({
         // A seek should show its destination before the chase camera settles.
         gameRenderer.updateVehicle(player, player.kart, 0);
         gameRenderer.reset();
-        const forward = frameAt(trackT(player.s)).tangent.clone().setY(0).normalize();
+        const forward = racerProjection(activeTrack, player)
+          .frame.tangent.clone()
+          .setY(0)
+          .normalize();
         const panoramic = camera.aspect > 1.8;
         camera.position.copy(player.worldPos).addScaledVector(forward, panoramic ? -10.5 : -8.7);
         camera.position.y += 4.7;
         camera.position.y = Math.max(
           camera.position.y,
-          projectTrack(camera.position, player.s).height + 2.1,
+          racerProjection(activeTrack, player, camera.position).height + 2.1,
         );
         gameRenderer.cameraLook.copy(player.worldPos).addScaledVector(forward, panoramic ? 4.5 : 6);
         gameRenderer.cameraLook.y += 1.15;
+        const flight = activeTrack.course.traversals?.[player.traversalIndex];
+        if (flight?.kind === "cannon" && flight.straight) {
+          const reveal = Math.sin((player.traversalProgress || 0) * Math.PI);
+          camera.position.addScaledVector(forward, -12 * reveal);
+          camera.position.y += 18 * reveal;
+          gameRenderer.cameraLook.y -= 32 * reveal;
+        }
         camera.lookAt(gameRenderer.cameraLook);
       }
       if (message.type === "test-step" && started && !finished && !paused) {

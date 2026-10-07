@@ -109,7 +109,7 @@ export function buildClockwork(context) {
   const tower = new THREE.Group();
   scenery.add(tower);
   tower.name = "The hollow clockwork bastion";
-  for (let tier = 0; tier < 7; tier++) {
+  for (let tier = 0; !track.course.watchBowl && tier < 7; tier++) {
     const y = tier * 15 - 12;
     mesh(cylinder, tier % 2 ? bronze : iron, tower, [0, y, 0], [54, 1.7, 54]);
     for (let bay = 0; bay < 12; bay++) {
@@ -132,7 +132,7 @@ export function buildClockwork(context) {
       if (bay % 3 === 0 && tier % 2 === 0) lamp(g, [0, 11, 1.5], 18);
     }
   }
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; !track.course.watchBowl && i < 12; i++) {
     const a = (i * Math.PI) / 6;
     box(iron, tower, [Math.sin(a) * 51, 103, Math.cos(a) * 51], [10, 14, 10]);
     mesh(cone, bronze, tower, [Math.sin(a) * 51, 115, Math.cos(a) * 51], [7, 11, 7]);
@@ -143,8 +143,10 @@ export function buildClockwork(context) {
       0.7,
     );
   }
-  mesh(cone, copper, tower, [0, 111, 0], [49, 25, 49]);
-  mesh(cylinder, bronze, tower, [0, 128, 0], [4, 20, 4]);
+  if (!track.course.watchBowl) {
+    mesh(cone, copper, tower, [0, 111, 0], [49, 25, 49]);
+    mesh(cylinder, bronze, tower, [0, 128, 0], [4, 20, 4]);
+  }
   const windRose = new THREE.Group();
   tower.add(windRose);
   windRose.position.y = 140;
@@ -169,6 +171,7 @@ export function buildClockwork(context) {
   // Stacked racing galleries have connected subdecks and diagonals, never
   // ground hills stretched up into the elevated road.
   for (let section = 1; section <= 6; section++) {
+    if (section === track.course.watchBowl?.section) continue;
     const count = Math.ceil(
       ((track.SECTIONS[section].end - track.SECTIONS[section].start) * track.COURSE_LENGTH) / 8,
     );
@@ -178,7 +181,7 @@ export function buildClockwork(context) {
       const t = track.sectorT(section, (i + 0.5) / count);
       const left = track.platformEdgeAt(t, -1),
         right = track.platformEdgeAt(t, 1);
-      box(iron, g, [(left + right) / 2, -1.1, 0], [right - left, 1.6, 9.3]);
+      supportBox(iron, g, [(left + right) / 2, -1.1, 0], [right - left, 1.6, 9.3]);
       for (const side of [-1, 1]) {
         if (i % 2 === 0) {
           pipe(g, [side * 10, -1, 0], [side * 20, -9, 0], 0.45, iron);
@@ -267,6 +270,7 @@ export function buildClockwork(context) {
     }
   for (let section = 1; section <= 3; section++)
     for (let i = 0; i < 4; i++) {
+      if (track.course.watchBowl && section >= 2) continue;
       const g = clearAt(section, 0.15 + i * 0.23, -36, [0, 12, -2], [30, 32, 30]);
       if (!g) continue;
       g.name = "Spiral workshop balcony";

@@ -1,7 +1,8 @@
+import { withCourseExperience } from "./experiences/definitions.js";
 import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { adventure } from "./adventure-definition.js";
 import { buildPelagic } from "./adventure/pelagic-world.js";
-export default adventure({
+const course = adventure({
   id: "pelagic-glasshouse",
   pathwayEdges: PATHWAY_EDGES["pelagic-glasshouse"],
   name: "Pelagic Glasshouse",
@@ -91,3 +92,5 @@ export default adventure({
     },
   },
 });
+
+export default withCourseExperience(course);

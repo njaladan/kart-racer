@@ -22,6 +22,11 @@ export function createRaceFeedback({ player, audio, particles, toast, terrain })
   }
   function racerEvent(racer, events, dt) {
     racerEffects.update(racer, events, dt);
+    if (events.drumBounce != null && racer === player) {
+      notify("SNARE BOUNCE! · STEER TOWARD THE NEXT DRUM");
+      audio.play("drum", events.drumBounce);
+      shake = 0.075;
+    }
     if (events.deckBoarded && racer === player) {
       notify("ALL ABOARD THE EXPRESS");
       audio.play("train-board");
@@ -37,12 +42,12 @@ export function createRaceFeedback({ player, audio, particles, toast, terrain })
         audio.play("hit");
       }
     }
-    if (events.launched && racer === player) {
+    if (events.launched && events.drumBounce == null && racer === player) {
       notify("TAP DRIFT TO TRICK!");
       audio.play("jump");
     }
     if (events.trickStarted && racer === player) {
-      notify("TRICK!");
+      notify(racer.jumpKind === "quarterpipe" ? "BIG AIR TRICK!" : "TRICK!");
       audio.play("trick");
       for (let n = 0; n < 12; n++)
         spawnParticle(
@@ -52,7 +57,7 @@ export function createRaceFeedback({ player, audio, particles, toast, terrain })
           0.15,
         );
     }
-    if (events.landed && racer === player) {
+    if (events.landed && events.drumBounce == null && racer === player) {
       audio.play("land");
       shake = 0.09;
       notify(events.trickLanded ? "TRICK LANDING BOOST!" : "SMOOTH LANDING");

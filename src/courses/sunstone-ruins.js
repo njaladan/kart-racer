@@ -1,3 +1,4 @@
+import { withCourseExperience } from "./experiences/definitions.js";
 import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { buildWorld } from "./sunstone-ruins-world.js";
 
@@ -5,7 +6,7 @@ import { buildWorld } from "./sunstone-ruins-world.js";
 // the inside, while the temple approach faces the monument from the ridge.
 // The courtyard exits into one continuous dune crescent rather than a series
 // of little direction changes: hold the slide, open it out, boost toward home.
-export default {
+export default withCourseExperience({
   id: "sunstone-ruins",
   pathwayEdges: PATHWAY_EDGES["sunstone-ruins"],
   topology: "adventure",
@@ -240,4 +241,4 @@ export default {
     exposure: 1.15,
   },
   buildWorld,
-};
+});

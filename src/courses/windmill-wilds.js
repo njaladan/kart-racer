@@ -1,3 +1,4 @@
+import { withCourseExperience } from "./experiences/definitions.js";
 import { PATHWAY_EDGES } from "./pathway-edges.js";
 // Eight connected places: a broad valley loop folds into a compact willow maze.
 // The willow maze has two rounded lobes with a short recovery line between
@@ -100,7 +101,7 @@ const definitions = [
   ],
 ];
 
-export default {
+export default withCourseExperience({
   id: "windmill-wilds",
   pathwayEdges: PATHWAY_EDGES["windmill-wilds"],
   name: "Windmill Wilds",
@@ -232,4 +233,4 @@ export default {
     sunIntensity: 2.6,
     exposure: 1.3,
   },
-};
+});

@@ -1,3 +1,4 @@
+import { withCourseExperience } from "./experiences/definitions.js";
 import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { adventure } from "./adventure-definition.js";
 import { buildPaper } from "./adventure/paper-world.js";
@@ -5,7 +6,7 @@ const points = Array.from({ length: 32 }, (_, i) => {
   const a = (i / 32) * Math.PI * 2;
   return [Math.sin(a) * 290, 32 + Math.cos(a) * 25, Math.sin(2 * a) * 170];
 });
-export default adventure({
+const course = adventure({
   id: "paper-revel",
   pathwayEdges: PATHWAY_EDGES["paper-revel"],
   name: "Paper Revel",
@@ -76,3 +77,5 @@ export default adventure({
     endFraction: 1,
   })),
 });
+
+export default withCourseExperience(course);

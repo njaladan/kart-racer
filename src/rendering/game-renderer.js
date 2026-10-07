@@ -1,3 +1,4 @@
+import { racerProjection } from "../track/route-branches.js";
 import { createBoostMotion } from "./boost-motion.js";
 import * as THREE from "../../vendor/three/three.module.js";
 import { lapNumber } from "../simulation/race.js";
@@ -8,7 +9,6 @@ import {
   frameAt,
   laneWidth,
   poseAt,
-  projectTrack,
   sectionAt,
   trackT,
 } from "../track/track.js";
@@ -64,7 +64,8 @@ export function createGameRenderer({
 
   function updateVehicle(state, kart, dt) {
     const frameState = getFrameState();
-    const frame = frameAt(trackT(state.s));
+    const surface = racerProjection(activeTrack, state);
+    const frame = surface.frame;
     const blend = dt ? frameState.accumulator / FIXED_DT : 1;
     const previousYaw = state.renderYawFrom ?? state.yaw;
     const yaw =
@@ -103,8 +104,9 @@ export function createGameRenderer({
     }
 
     if (state.trickActive) {
-      const q = Math.min(1, (state.trickAge || 0) / 0.4);
-      const spin = q * q * (3 - 2 * q) * Math.PI * 2;
+      const bigAir = state.jumpKind === "quarterpipe";
+      const q = Math.min(1, (state.trickAge || 0) / (bigAir ? 0.7 : 0.4));
+      const spin = q * q * (3 - 2 * q) * Math.PI * (bigAir ? 4 : 2);
       if (state.trickVariant === 0) kart.root.rotateY(spin);
       else if (state.trickVariant === 1) kart.root.rotateZ(spin);
       else kart.root.rotateX(-spin);
@@ -193,7 +195,7 @@ export function createGameRenderer({
         star.rotation.x += dt * 3;
       }
     }
-    kart.shadow.position.copy(poseAt(state.s, laneWidth(state.x), 0.08).p);
+    kart.shadow.position.set(state.worldPos.x, surface.height + 0.015, state.worldPos.z);
     kart.shadow.quaternion
       .copy(kart.root.quaternion)
       .premultiply(shadowTilt.setFromUnitVectors(kartUp, frame.up))
@@ -210,6 +212,7 @@ export function createGameRenderer({
     if (!frameState.paused) {
       getLandscape()?.update(frameState.raceTime, {
         playerLap: player.lap,
+        racers: [player, ...bots],
         playerT: trackT(player.s),
         running: frameState.running && !frameState.finished,
         motionEnabled,
@@ -236,7 +239,11 @@ export function createGameRenderer({
         box.group.rotateY(frameState.elapsed * 0.6 + box.phase);
       }
       for (const banana of bananas) {
-        banana.mesh.position.copy(poseAt(banana.s, laneWidth(banana.x), 0.25).p);
+        banana.mesh.position.copy(
+          (banana.fixedPosition || banana.anchor) && banana.worldPos
+            ? banana.worldPos
+            : poseAt(banana.s, laneWidth(banana.x), 0.25).p,
+        );
         banana.mesh.rotation.y += dt * 1.5;
       }
       for (const projectile of projectiles) {
@@ -266,7 +273,7 @@ export function createGameRenderer({
       });
       audio.updateEngine(player.speed, frameState.running && !frameState.finished, {
         ...player,
-        surfaceMaterial: activeTrack.surfaceAt(trackT(player.s), player.x * 6.25).material,
+        surfaceMaterial: racerProjection(activeTrack, player).material,
         surfaceLoose: ["sand", "snow", "gravel", "earth", "needles", "grass", "paper"].includes(
           activeTrack.surfaceAt(trackT(player.s), player.x * 6.25).material,
         ),
@@ -389,9 +396,16 @@ export function createGameRenderer({
           driftCamera * 0.4,
       );
     desired.y += 4.7 * viewScale - boostStrength * 0.35;
+    const flight = activeTrack.course.traversals?.[player.traversalIndex];
+    if (flight?.kind === "cannon" && flight.straight) {
+      const reveal = Math.sin((player.traversalProgress || 0) * Math.PI);
+      desired.addScaledVector(forward, -12 * reveal);
+      desired.y += 18 * reveal;
+      look.y -= 32 * reveal;
+    }
     camera.position.lerp(desired, 1 - Math.exp(-(9 - boostStrength * 4) * dt));
     cameraLook.lerp(look, 1 - Math.exp(-(12 - boostStrength * 3) * dt));
-    const cameraTrack = projectTrack(camera.position, player.s);
+    const cameraTrack = racerProjection(activeTrack, player, camera.position);
     camera.position.y = Math.max(camera.position.y, cameraTrack.height + 2.1);
     camera.fov +=
       ((panoramic ? 68 : 63) +

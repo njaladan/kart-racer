@@ -1,7 +1,8 @@
+import { withCourseExperience } from "./experiences/definitions.js";
 import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { adventure } from "./adventure-definition.js";
 import { buildTempest } from "./adventure/tempest-world.js";
-export default adventure({
+const course = adventure({
   id: "tempest-causeway",
   pathwayEdges: PATHWAY_EDGES["tempest-causeway"],
   name: "Tempest Causeway",
@@ -100,3 +101,5 @@ export default adventure({
   ],
   elevated: [1, 3, 5].map((section) => ({ section, startFraction: 0, endFraction: 1 })),
 });
+
+export default withCourseExperience(course);

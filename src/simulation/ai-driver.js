@@ -16,10 +16,27 @@ import { cartAt, trafficAt } from "./hazards.js";
 export function botInput(state, index, elapsed, rivals = [], items = {}) {
   const carrySpeed = activeTrack.movingSurfaceAt(trackT(state.s))?.speed || 0;
   const aheadMetres = 12 + (state.speed + carrySpeed * 3.6) * 0.09;
-  const aheadT = trackT(state.s + metresToProgress(aheadMetres));
-  const lookahead = frameAt(aheadT);
-  const bounds = collisionBounds(aheadT);
-  const current = frameAt(trackT(state.s));
+  const upcoming = activeTrack.branches.find(
+    (b) =>
+      b.required &&
+      b.start > trackT(state.s) &&
+      (b.start - trackT(state.s)) * activeTrack.COURSE_LENGTH < 45 &&
+      (b.lap == null || b.lap === Math.floor(Math.max(0, state.s) / TRACK) % 3),
+  );
+  const branch = activeTrack.branches[state.routeChoice - 1] || upcoming;
+  const currentT = trackT(state.s);
+  const aheadT = branch
+    ? Math.min(branch.end, currentT + (aheadMetres * (branch.end - branch.start)) / branch.length)
+    : trackT(state.s + metresToProgress(aheadMetres));
+  const routeFrame = (t) =>
+    branch && t >= branch.start && t <= branch.end
+      ? branch.frameAt((t - branch.start) / (branch.end - branch.start))
+      : frameAt(t);
+  const lookahead = routeFrame(aheadT);
+  const bounds = branch
+    ? { left: -branch.halfWidth + 0.9, right: branch.halfWidth - 0.9 }
+    : collisionBounds(aheadT);
+  const current = routeFrame(currentT);
   const skill = state.skill ?? 0.95;
   let lane = (index % 2 ? 1 : -1) * 0.8;
   // Seek the closest useful pickup or boost, without making a last-second dive.
@@ -93,6 +110,13 @@ export function botInput(state, index, elapsed, rivals = [], items = {}) {
         lane = traffic.clearLane;
     }
   }
+  if (branch) lane = 0;
+  const field = activeTrack.drumField;
+  if (field && currentT >= field.start - 0.02 && currentT <= field.end) {
+    const drum =
+      field.drums.find((d) => d.t > currentT + 2 / activeTrack.COURSE_LENGTH) || field.drums.at(-1);
+    lane = drum.offset;
+  }
   lane = Math.max(bounds.left + 1.1, Math.min(bounds.right - 1.1, lane));
   const target = lookahead.p.clone().addScaledVector(lookahead.right, lane);
   const desired = Math.atan2(-(target.x - state.worldPos.x), -(target.z - state.worldPos.z));
@@ -101,7 +125,11 @@ export function botInput(state, index, elapsed, rivals = [], items = {}) {
   // straight. Brake early enough to reach the next corner's grip budget.
   let cruise = state.boost > 0 || state.star > 0 ? 143 : 117 + skill * 7;
   for (const distance of [0, 12, 28, 48]) {
-    const preview = frameAt(trackT(state.s + metresToProgress(distance)));
+    const preview = routeFrame(
+      branch
+        ? Math.min(branch.end, currentT + (distance * (branch.end - branch.start)) / branch.length)
+        : trackT(state.s + metresToProgress(distance)),
+    );
     const radius = 1 / Math.max(0.003, Math.abs(preview.curvature));
     const cornerSpeed = Math.max(9, Math.sqrt((22 + skill * 2) * radius) - carrySpeed);
     cruise = Math.min(cruise, Math.sqrt(cornerSpeed ** 2 + 2 * 22 * distance) * 3.6);

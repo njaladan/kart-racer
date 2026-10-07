@@ -145,6 +145,31 @@ export function validateCourseDefinition(course) {
     if (ramp.halfWidth != null)
       finite(course, ramp.halfWidth, `ramps[${index}].halfWidth`, { min: 0, exclusiveMin: true });
   }
+  for (const [index, branch] of (course.branches || []).entries()) {
+    const path = `branches[${index}]`;
+    sectionFraction(course, { section: branch.section, fraction: branch.startFraction }, path);
+    sectionFraction(
+      course,
+      { section: branch.endSection ?? branch.section, fraction: branch.endFraction },
+      `${path}.exit`,
+    );
+    for (const field of ["id", "group", "material"]) {
+      if (typeof branch[field] !== "string" || !branch[field].trim())
+        fail(course, `${path}.${field}`, "a non-empty string");
+    }
+    finite(course, branch.halfWidth, `${path}.halfWidth`, { min: 0, exclusiveMin: true });
+    if (!Array.isArray(branch.points) || branch.points.length < 2)
+      fail(course, `${path}.points`, "route-relative [fraction, offset, height?] points");
+    for (const [i, point] of branch.points.entries()) {
+      if (
+        !Array.isArray(point) ||
+        point.length < 2 ||
+        point.length > 3 ||
+        point.some((v) => !Number.isFinite(v))
+      )
+        fail(course, `${path}.points[${i}]`, "finite route-relative coordinates");
+    }
+  }
   for (const [index, pad] of (course.pads || []).entries()) {
     sectionFraction(course, pad, `pads[${index}]`);
     finite(course, pad.offset, `pads[${index}].offset`);

@@ -1,3 +1,4 @@
+import { buildSantorini } from "./santorini.js";
 import { worldKit } from "./world-kit.js";
 import { registerLightPool } from "../../rendering/course-lighting.js";
 import { patchMaterial } from "../../rendering/surface-detail.js";
@@ -8,9 +9,10 @@ export function buildEmberwing(context) {
   const w = worldKit(context),
     { THREE, scene, scenery, track, mat, mesh, box, at, motion, sphere, cylinder, torus } = w;
   const basalt = mat("#605c78", "rock"),
-    pale = mat("#b0a5b9"),
+    pale = mat("#f0e8da"),
     brass = mat("#c9a477", "metal", { metalness: 0.65, roughness: 0.34 }),
     copper = mat("#bf7c6d", "metal", { metalness: 0.45 }),
+    blueDome = mat("#3483bd", "paving", { roughness: 0.62 }),
     ink = mat("#383c59", "metal"),
     glass = mat("#a6c6d5", "glass", { roughness: 0.2, metalness: 0.25 }),
     glow = mat("#ffe1a8", "stone", { emissive: "#ffb46a", emissiveIntensity: 0.9 });
@@ -41,10 +43,10 @@ export function buildEmberwing(context) {
         );
   });
   // Rock shoulders remain connected everywhere except the deliberate flight gap.
-  for (let section = 0; section < 6; section++) {
+  for (let section = 0; section < track.SECTIONS.length; section++) {
     if (section === 2) {
-      w.sweep(2, 0, 0.16, -22, 22, basalt, -0.22);
-      w.sweep(2, 0.88, 1, -22, 22, basalt, -0.22);
+      w.sweep(2, 0, track.course.traversals[0].startFraction, -22, 22, basalt, -0.22);
+      w.sweep(2, track.course.traversals[0].endFraction, 1, -22, 22, basalt, -0.22);
     } else
       w.sweep(
         section,
@@ -58,7 +60,8 @@ export function buildEmberwing(context) {
     if (section === 2) continue;
     for (const side of [-1, 1])
       for (let i = 0; i < 9; i++) {
-        const g = at(section, (i + 0.5) / 9, side * (24 + (i % 3) * 5));
+        const village = [0, 4, 6, 7].includes(section);
+        const g = at(section, (i + 0.5) / 9, side * ((village ? 48 : 30) + (i % 3) * 5));
         mesh(w.rock, basalt, g, [0, -8, 0], [15, 12, 15]);
         if (i % 3 === 0) {
           mesh(cylinder, basalt, g, [0, -(g.position.y + 22) / 2, 0], [10, g.position.y + 22, 10]);
@@ -73,12 +76,20 @@ export function buildEmberwing(context) {
     centre = a.clone().add(b).multiplyScalar(0.5),
     caldera = new THREE.Group();
   scenery.add(caldera);
+  const calderaRadius = Math.hypot(a.x - b.x, a.z - b.z) * 0.5 + 22;
+  caldera.name = "Volcanic caldera beneath the cannon flight";
   caldera.position.set(centre.x, -7, centre.z);
-  mesh(cylinder, magma, caldera, [0, 0, 0], [88, 2, 88]);
-  mesh(torus, basalt, caldera, [0, 0, 0], [102, 102, 102]).rotation.x = Math.PI / 2;
+  mesh(cylinder, magma, caldera, [0, 0, 0], [calderaRadius * 0.72, 2, calderaRadius * 0.72]);
+  mesh(
+    torus,
+    basalt,
+    caldera,
+    [0, 0, 0],
+    [calderaRadius, calderaRadius, calderaRadius],
+  ).rotation.x = Math.PI / 2;
   for (let i = 0; i < 28; i++) {
     const angle = (i / 28) * Math.PI * 2,
-      r = 100 + (i % 3) * 5;
+      r = calderaRadius + (i % 3) * 5;
     const rock = mesh(
       w.rock,
       basalt,
@@ -92,7 +103,7 @@ export function buildEmberwing(context) {
         new THREE.ConeGeometry(1, 1, 8),
         magma,
         caldera,
-        [Math.cos(angle) * 70, 2, Math.sin(angle) * 70],
+        [Math.cos(angle) * calderaRadius * 0.6, 2, Math.sin(angle) * calderaRadius * 0.6],
         [3, 10, 3],
       );
       motion(vent, (time) => {
@@ -100,6 +111,14 @@ export function buildEmberwing(context) {
       });
     }
   }
+  const walls = new THREE.Mesh(
+    new THREE.CylinderGeometry(calderaRadius, calderaRadius * 0.72, 42, 64, 1, true),
+    basalt,
+  );
+  walls.material = basalt.clone();
+  walls.material.side = THREE.DoubleSide;
+  walls.position.y = 20;
+  caldera.add(walls);
   registerLightPool(scene, {
     position: new THREE.Vector3(centre.x, 5, centre.z),
     color: "#ff9656",
@@ -126,6 +145,11 @@ export function buildEmberwing(context) {
     box(glow, cannon, [side * 16, 9, -4], [1, 1, 3]);
   }
   const flare = mesh(sphere, glow, barrel, [0, 0, -12], [10, 10, 1]);
+  flare.material = glow.clone();
+  flare.material.transparent = true;
+  flare.material.opacity = 0.3;
+  flare.material.depthWrite = false;
+  flare.material.blending = THREE.AdditiveBlending;
   flare.castShadow = false;
   motion(flare, (_time, state) => {
     flare.visible = !!state?.running && state.playerT > start && state.playerT < start + 0.008;
@@ -159,7 +183,7 @@ export function buildEmberwing(context) {
     dome.position.y = 16 * size;
     mesh(
       new THREE.SphereGeometry(1, 24, 10, 0.25, Math.PI * 2 - 0.5, 0, Math.PI / 2),
-      copper,
+      blueDome,
       dome,
       [0, 0, 0],
       [24 * size, 20 * size, 24 * size],
@@ -196,28 +220,7 @@ export function buildEmberwing(context) {
     [5, 0.45, 1, 0.9],
   ])
     observatory(at(section, f, side * 70), size, section * 0.4);
-  // Scholar settlement: tiled roofs, stacked terraces and warm little windows.
-  for (const section of [0, 4, 5])
-    for (let i = 0; i < 7; i++) {
-      const g = at(section, 0.06 + i * 0.135, (i % 2 ? 1 : -1) * 37),
-        foundation = g.position.y + 22;
-      box(basalt, g, [0, -foundation / 2, 0], [18, foundation, 18]);
-      box(pale, g, [0, 5, 0], [16, 10, 13]);
-      mesh(new THREE.ConeGeometry(1, 1, 4), copper, g, [0, 12, 0], [13, 5, 11]).rotation.y =
-        Math.PI / 4;
-      for (const x of [-5, 0, 5]) {
-        box(ink, g, [x, 5, 6.6], [2.5, 4, 0.2]);
-        box(glow, g, [x, 5, 6.8], [2, 3.5, 0.15]);
-      }
-      if (i % 2 === 0) {
-        mesh(sphere, ink, g, [0, 1.8, 12], [0.8, 1.8, 0.8]);
-        mesh(sphere, pale, g, [0, 3.9, 12], [0.7, 0.7, 0.7]);
-        const book = box(copper, g, [0, 2.4, 13], [1.8, 0.8, 0.2]);
-        motion(book, (time) => {
-          book.rotation.x = Math.sin(time * 0.5 + i) * 0.1;
-        });
-      }
-    }
+  buildSantorini(w);
   // Orrery gardens tell the story of the observatory without duplicating gears.
   for (let i = 0; i < 5; i++) {
     const g = at(3, 0.05 + i * 0.21, i % 2 ? 28 : -28);

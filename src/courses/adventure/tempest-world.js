@@ -31,8 +31,8 @@ export function buildTempest(context) {
     shader.fragmentShader = `uniform float stormTime;\n${shader.fragmentShader}`.replace(
       "#include <color_fragment>",
       `#include <color_fragment>
-      float crest=sin(vWaterWorld.x*.026-vWaterWorld.z*.035+stormTime*.65);
-      float foam=smoothstep(.89,.99,crest)*(.4+.6*sin(vWaterWorld.x*.23+vWaterWorld.z*.27)*sin(vWaterWorld.x*.23+vWaterWorld.z*.27));
+      float stormCrest=sin(vWaterWorld.x*.026-vWaterWorld.z*.035+stormTime*.65);
+      float foam=smoothstep(.89,.99,stormCrest)*(.4+.6*sin(vWaterWorld.x*.23+vWaterWorld.z*.27)*sin(vWaterWorld.x*.23+vWaterWorld.z*.27));
       diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.63,.80,.82),foam*.62);`,
     );
   });

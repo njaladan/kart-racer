@@ -69,6 +69,16 @@ export function resetMotion(state) {
     trickVariant: 0,
     trickCount: 0,
     trickAge: 0,
+    routeChoice: 0,
+    routeGroup: -1,
+    lastSafeRoute: 0,
+    lastSafeOffset: 0,
+    jumpKind: "hop",
+    jumpMaxHeight: MAX_JUMP_HEIGHT,
+    jumpMaxTime: MAX_JUMP_TIME,
+    jumpTakeoffSpeed: JUMP_TAKEOFF_SPEED,
+    trickReward: 0.7,
+    drumCooldown: 0,
     traversalIndex: -1,
     traversalProgress: 0,
     traversalDeparture: 0,
@@ -267,7 +277,16 @@ export function drive(state, input, surface, dt) {
     state.vx = fx * forward + rx * lateral;
     state.vz = fz * forward + rz * lateral;
   } else {
-    // No tire forces or air steering; momentum survives a jump.
+    // Drum and quarter-pipe flights retain momentum with modest aerial control.
+    if (["drum", "quarterpipe"].includes(state.jumpKind)) {
+      const turn = -steeringTarget * 0.65 * dt;
+      const cosine = Math.cos(turn),
+        sine = Math.sin(turn),
+        vx = state.vx;
+      state.vx = vx * cosine + state.vz * sine;
+      state.vz = state.vz * cosine - vx * sine;
+      state.yaw = wrapAngle(state.yaw + turn);
+    }
     state.yawRate *= Math.exp(-3 * dt);
   }
   state.yaw = wrapAngle(state.yaw + state.yawRate * dt);
@@ -313,16 +332,23 @@ export function verticalMotion(state, height, slopeVelocity, dt, supported = tru
     state.vy = clamp(
       state.vy - JUMP_GRAVITY * (state.underwater ? 0.4 : 1) * dt,
       -32,
-      JUMP_TAKEOFF_SPEED,
+      state.jumpTakeoffSpeed ?? JUMP_TAKEOFF_SPEED,
     );
     state.worldPos.y += state.vy * dt;
-    if (supported && state.worldPos.y > height + MAX_JUMP_HEIGHT * (state.underwater ? 2.3 : 1)) {
-      state.worldPos.y = height + MAX_JUMP_HEIGHT * (state.underwater ? 2.3 : 1);
+    if (
+      supported &&
+      state.worldPos.y >
+        height + (state.jumpMaxHeight ?? MAX_JUMP_HEIGHT) * (state.underwater ? 2.3 : 1)
+    ) {
+      state.worldPos.y =
+        height + (state.jumpMaxHeight ?? MAX_JUMP_HEIGHT) * (state.underwater ? 2.3 : 1);
       state.vy = Math.min(state.vy, 0);
     }
     if (
       supported &&
-      (state.worldPos.y <= height || state.airTime >= MAX_JUMP_TIME * (state.underwater ? 1.6 : 1))
+      (state.worldPos.y <= height ||
+        (state.jumpKind === "hop" &&
+          state.airTime >= (state.jumpMaxTime ?? MAX_JUMP_TIME) * (state.underwater ? 1.6 : 1)))
     ) {
       landed = true;
       state.grounded = true;

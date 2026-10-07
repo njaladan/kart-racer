@@ -4,6 +4,8 @@ A browser kart racer built with Three.js. Start at the back and race five fast r
 
 Twelve playable courses include moving hazards, boost pads, and shortcuts: **Windmill Wilds**, **Neon Harbor**, **Sunstone Ruins**, **Frostpeak Festival**, **Clockwork Citadel**, **Paper Revel**, **Tempest Causeway**, **Pocket Pantry**, **Railstorm Express**, **Metronome Hall**, **Pelagic Glasshouse**, and **Emberwing Observatory**. Supports keyboard, touch and gamepad controls.
 
+Choose separate routes through the firefly grove and lantern-eel grotto, climb container rooftops, carve an open ski descent, enter a watch movement, and bounce across snare drums above an abyss. Paper Revel changes its driving form every lap. Moving temple rings and freight-roof ramps carry karts, Tempest brings wet grip and a shared lightning/thunder cycle, and Emberwing's whitewashed island leads to a cannon flight over a visible caldera. [Course mechanics and route choices](docs/course-experiences.md).
+
 Course edges now come from meadows, dunes, snow, kitchen shelves, reef beds and exposed decks. Most boundaries are open: explore rough shoulders, or fall from a ledge and recover automatically onto the course. [Pathway designs for all twelve courses](docs/pathway-design.md).
 
 Every course has its own environmental layers: petals and fireflies, rain and sea spray, sand gusts, powder snow, steam and sparks, confetti, flour, bubbles, plankton and volcanic embers. Animated surface lighting and working roadside details give each world motion. [Environment effects across all twelve courses](docs/environment-effects.md).
