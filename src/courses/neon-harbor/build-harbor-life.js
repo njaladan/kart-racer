@@ -91,6 +91,7 @@ export function buildHarborLife({
   // Cheap world-space moving highlights read as harbor ripples and distant
   // ferry wake. No overlapping full-water transparent layers are involved.
   const rippleMaterial = material("#418d9f", {
+    vertexColors: false,
     emissive: "#397b96",
     emissiveIntensity: 0.28,
     roughness: 0.3,

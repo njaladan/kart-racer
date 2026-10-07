@@ -66,6 +66,22 @@ test("static batching preserves colored geometry even when handmade props have n
   assert.ok(Math.abs(group.children[0].geometry.getAttribute("color").getX(0) - 0.8) < 1e-6);
 });
 
+test("singletons, excluded meshes and instances retain colors after a scenery material override", () => {
+  const parent = new THREE.Group(),
+    material = new THREE.MeshStandardMaterial({ color: "#539777", vertexColors: true }),
+    singleton = new THREE.Mesh(new THREE.BoxGeometry(), material),
+    excluded = new THREE.Mesh(new THREE.SphereGeometry(), material),
+    instances = new THREE.InstancedMesh(new THREE.PlaneGeometry(), material, 3);
+  parent.add(singleton, excluded, instances);
+  batchStaticMeshes(parent, [excluded]);
+  for (const mesh of [singleton, excluded, instances]) {
+    const colors = mesh.geometry.getAttribute("color");
+    assert.ok(colors);
+    assert.equal(colors.count, mesh.geometry.attributes.position.count);
+    assert.ok(colors.array.every((value) => Number.isFinite(value) && value > 0));
+  }
+});
+
 test("all asset-backed scenery assembles and stays finite while each hazard moves", async () => {
   for (const course of COURSES) {
     const track = selectCourse(course),
@@ -93,7 +109,7 @@ test("all asset-backed scenery assembles and stays finite while each hazard move
     const mats = Object.fromEntries(
       ["grass", "road", "roadside", "rail", "white", "red", "black", "pine2", "trunk"].map((k) => [
         k,
-        new THREE.MeshStandardMaterial({ color: "#ffffff" }),
+        new THREE.MeshStandardMaterial({ color: "#ffffff", vertexColors: true }),
       ]),
     );
     const world = buildCourseWorld({
@@ -111,6 +127,12 @@ test("all asset-backed scenery assembles and stays finite while each hazard move
       if (!object.isMesh) return;
       meshes++;
       if (object.isInstancedMesh) instanced++;
+      const materials = Array.isArray(object.material) ? object.material : [object.material];
+      if (materials.some((material) => material.vertexColors)) {
+        const colors = object.geometry.getAttribute("color");
+        assert.ok(colors, `${course.id}: ${object.name} material needs vertex colors`);
+        assert.equal(colors.count, object.geometry.attributes.position.count);
+      }
       for (const attribute of Object.values(object.geometry.attributes))
         assert.ok(
           Array.from(attribute.array).every(Number.isFinite),

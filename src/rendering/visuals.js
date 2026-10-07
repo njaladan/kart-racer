@@ -38,6 +38,19 @@ export function contactShadow() {
 export function batchStaticMeshes(parent, excluded = []) {
   const batches = new Map();
   for (const child of [...parent.children]) {
+    // Singletons and instances bypass the merger's white-color fallback.
+    // Material overrides on imported scenery can enable vertex colors after
+    // placement, so initialize their geometry before choosing a batching path.
+    if (child.isMesh) {
+      const materials = Array.isArray(child.material) ? child.material : [child.material];
+      if (
+        materials.some((material) => material.vertexColors) &&
+        !child.geometry.getAttribute("color")
+      ) {
+        const colors = new Float32Array(child.geometry.attributes.position.count * 3).fill(1);
+        child.geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+      }
+    }
     if (!child.isMesh || child.isInstancedMesh || excluded.includes(child)) continue;
     child.updateMatrix();
     child.geometry.computeBoundingBox();

@@ -111,14 +111,15 @@ export function buildEmberwing(context) {
       });
     }
   }
-  const walls = new THREE.Mesh(
+  const walls = mesh(
     new THREE.CylinderGeometry(calderaRadius, calderaRadius * 0.72, 42, 64, 1, true),
-    basalt,
+    basalt.clone(),
+    caldera,
+    [0, 20, 0],
   );
-  walls.material = basalt.clone();
   walls.material.side = THREE.DoubleSide;
-  walls.position.y = 20;
-  caldera.add(walls);
+  walls.castShadow = false;
+  walls.receiveShadow = false;
   registerLightPool(scene, {
     position: new THREE.Vector3(centre.x, 5, centre.z),
     color: "#ff9656",

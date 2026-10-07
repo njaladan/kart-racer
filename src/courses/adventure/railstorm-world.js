@@ -2,6 +2,7 @@ import { worldKit } from "./world-kit.js";
 import { trainCarriages } from "../../simulation/moving-surfaces.js";
 import { registerLightPool } from "../../rendering/course-lighting.js";
 import { metalDeckDetail } from "./architectural-detail.js";
+import { bakeVertexShade } from "../../rendering/vertex-shading.js";
 
 /** Train decks themselves are the racing surface; no static road under them. */
 export function buildRailstorm(context) {
@@ -86,8 +87,7 @@ export function buildRailstorm(context) {
     geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
     geometry.setIndex(indices);
-    const deck = new THREE.Mesh(geometry, roof);
-    scenery.add(deck);
+    const deck = mesh(geometry, roof);
     deck.receiveShadow = true;
     deck.castShadow = true;
     deck.frustumCulled = false;
@@ -110,6 +110,7 @@ export function buildRailstorm(context) {
       }
       geometry.attributes.position.needsUpdate = true;
       geometry.computeVertexNormals();
+      bakeVertexShade(geometry, 0.14);
     };
     g.name = `Moving freight carriage ${car.index + 1}`;
     motion(g, update);
