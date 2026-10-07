@@ -1,6 +1,6 @@
 import { worldKit } from "./world-kit.js";
 import { registerLightPool } from "../../rendering/course-lighting.js";
-import { marineCaustics } from "./pelagic-materials.js";
+import { glasshouseWater, marineCaustics } from "./pelagic-materials.js";
 
 /** A conservatory reclaimed by the sea: glass ribs, reef terraces and living water. */
 export function buildPelagic(context) {
@@ -22,9 +22,12 @@ export function buildPelagic(context) {
       side: THREE.DoubleSide,
       roughness: 0.2,
     });
-  for (const m of [sand, pink, ivory, teal, leaves]) marineCaustics(m, scene);
-  const sea = w.water("#659eab", 0, 1600);
-  sea.material.side = THREE.DoubleSide;
+  for (const m of [sand, pink, lavender, ivory, brass, teal, leaves]) marineCaustics(m, scene);
+  const sea = mesh(new THREE.PlaneGeometry(1600, 1600), glasshouseWater(scene), w.scenery);
+  sea.name = "Pelagic water surface";
+  sea.rotation.x = -Math.PI / 2;
+  sea.castShadow = false;
+  scene.userData.waterLevel = 0;
   // The underwater road has broad reef terraces instead of a featureless seabed.
   for (let section = 1; section <= 4; section++) {
     w.sweep(

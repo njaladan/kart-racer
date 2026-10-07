@@ -110,7 +110,7 @@ export function installWetPavement(material) {
   });
 }
 
-/** Two flowing normal layers, physical Fresnel and foam in a single opaque draw. */
+/** Flowing normals and Fresnel; flooded courses can opt into physical refraction. */
 export function createWaterMaterial({
   scene,
   color = "#278caa",
@@ -121,8 +121,14 @@ export function createWaterMaterial({
   flow = 0.035,
   shoreRadius = 0,
   opacity = 1,
+  transmission = 0,
+  ior = 1.333,
+  thickness = 3,
+  attenuationColor = "#8dd9cb",
+  attenuationDistance = 65,
 } = {}) {
-  const material = new THREE.MeshStandardMaterial({
+  const Material = transmission > 0 ? THREE.MeshPhysicalMaterial : THREE.MeshStandardMaterial;
+  const material = new Material({
     color,
     roughness,
     metalness: 0,
@@ -132,8 +138,17 @@ export function createWaterMaterial({
     normalScale: new THREE.Vector2(0.26, 0.26),
     transparent: opacity < 1,
     opacity,
-    depthWrite: opacity >= 1,
+    depthWrite: opacity >= 1 && transmission === 0,
     side: THREE.DoubleSide,
+    ...(transmission > 0
+      ? {
+          transmission,
+          ior,
+          thickness,
+          attenuationColor: new THREE.Color(attenuationColor),
+          attenuationDistance,
+        }
+      : {}),
   });
   material.name = "Flowing Fresnel water with shoreline foam";
   const uniforms = {
@@ -142,7 +157,7 @@ export function createWaterMaterial({
     waterRadius: { value: shoreRadius },
   };
   if (scene) (scene.userData.surfaceAnimations ||= []).push(uniforms.waterTime);
-  patchMaterial(material, "water-two-layer-v3", (shader) => {
+  patchMaterial(material, "water-two-layer-v4", (shader) => {
     Object.assign(shader.uniforms, uniforms);
     addWorldPosition(shader, "vWaterWorld");
     shader.vertexShader = `varying vec2 vWaterLocal;\n${shader.vertexShader}`.replace(
@@ -171,7 +186,7 @@ export function createWaterMaterial({
       // dielectric Fresnel term. A small angle-dependent tint makes that edge
       // response legible even when the probe is mostly sky or a flat horizon.
       float waterFresnel=.02+.72*pow(1.-clamp(abs(dot(normalize(normal),normalize(vViewPosition))),0.,1.),5.);
-      diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.58,.83,.9),waterFresnel*.24);
+      ${transmission > 0 ? "" : "diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.58,.83,.9),waterFresnel*.24);"}
       ${
         foam
           ? `float shore=waterRadius>0.?smoothstep(waterRadius*.86,waterRadius*.985,length(vWaterLocal)):0.;

@@ -47,6 +47,8 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
       source: { value: target.texture },
       bloom: { value: bloomA.texture },
       boostBlur: { value: 0 },
+      waterImmersion: { value: 0 },
+      waterTime: { value: 0 },
       bloomStrength: { value: night ? 0.18 : 0.08 },
       gradeTint: {
         value: new THREE.Vector3(
@@ -62,9 +64,15 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
       },
     },
     vertexShader,
-    fragmentShader: `uniform sampler2D source,bloom;uniform float bloomStrength,boostBlur;uniform vec3 gradeTint;varying vec2 vUv;
+    fragmentShader: `uniform sampler2D source,bloom;uniform float bloomStrength,boostBlur,waterImmersion,waterTime;uniform vec3 gradeTint;varying vec2 vUv;
       void main(){
-        vec3 c=texture2D(source,vUv).rgb;
+        vec2 sampleUv=vUv;
+        if(waterImmersion>.001){
+          float crossing=4.*waterImmersion*(1.-waterImmersion);
+          vec2 waterRipple=vec2(sin(vUv.y*28.+waterTime*1.7),sin(vUv.x*23.-waterTime*1.3));
+          sampleUv=clamp(vUv+waterRipple*(waterImmersion*.00035+crossing*.002),vec2(.001),vec2(.999));
+        }
+        vec3 c=texture2D(source,sampleUv).rgb;
         // Four extra taps in the existing grade pass; no history or new targets.
         // The center stays sharp and Performance bypasses this pass entirely.
         if(boostBlur>.001){
@@ -74,8 +82,8 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
           c=c*.4;
           for(int i=1;i<=4;i++) c+=texture2D(source,clamp(vUv-stepUv*float(i),vec2(0.),vec2(1.))).rgb*.15;
         }
-        c+=texture2D(bloom,vUv).rgb*bloomStrength;
-        c*=gradeTint;gl_FragColor=vec4(c,1.);
+        c+=texture2D(bloom,sampleUv).rgb*bloomStrength;
+        c*=gradeTint*mix(vec3(1.),vec3(.9,1.,1.025),waterImmersion);gl_FragColor=vec4(c,1.);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
       }`,
@@ -91,6 +99,10 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
     renderer.render(fullscreen, camera);
   }
   return {
+    setWaterMedium(immersion, time) {
+      grade.uniforms.waterImmersion.value = immersion;
+      grade.uniforms.waterTime.value = time;
+    },
     setBoostMotion(strength, kick) {
       grade.uniforms.boostBlur.value = strength + kick * 0.35;
     },

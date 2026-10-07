@@ -56,3 +56,52 @@ test("five drivers submerge, traverse the flooded domes and return to the garden
     assert.equal(hits, 0);
   }
 });
+
+test("the chase camera enters and leaves water continuously at the visible surface", async () => {
+  const { waterImmersion } = await import("../src/rendering/water-medium.js");
+  assert.equal(waterImmersion(4.7, 0), 0, "kart entry does not submerge an above-water camera");
+  assert.equal(waterImmersion(-4.7, 0), 1);
+  assert.equal(waterImmersion(10.45, 10), 0);
+  assert.equal(waterImmersion(9.35, 10), 1);
+  const samples = [0.45, 0.2, 0, -0.2, -0.65].map((y) => waterImmersion(y, 0));
+  assert.ok(
+    samples.every((value, i) => value >= 0 && value <= 1 && (!i || value > samples[i - 1])),
+  );
+});
+
+test("Pelagic refraction and caustics preserve earlier shading, instancing and frozen clocks", async () => {
+  const THREE = await import("../vendor/three/three.module.js");
+  const { glasshouseWater, glasshouseRoad } =
+    await import("../src/courses/adventure/pelagic-materials.js");
+  const { advanceSurfaceDetails } = await import("../src/rendering/surface-detail.js");
+  const scene = new THREE.Scene(),
+    water = glasshouseWater(scene);
+  assert.equal(water.isMeshPhysicalMaterial, true);
+  assert.equal(water.transmission, 1);
+  assert.equal(water.ior, 1.333);
+  assert.equal(water.depthWrite, false, "surface must not hide submerged transparent scenery");
+  const road = new THREE.MeshStandardMaterial();
+  road.onBeforeCompile = (shader) => {
+    shader.uniforms.priorBake = { value: 1 };
+  };
+  glasshouseRoad(road, scene);
+  const shader = {
+    uniforms: {},
+    vertexShader: THREE.ShaderLib.standard.vertexShader,
+    fragmentShader: THREE.ShaderLib.standard.fragmentShader,
+  };
+  road.onBeforeCompile(shader);
+  assert.equal(shader.uniforms.priorBake.value, 1);
+  assert.ok(shader.vertexShader.includes("reefWorld=batchingMatrix*reefWorld"));
+  assert.ok(shader.vertexShader.includes("reefWorld=instanceMatrix*reefWorld"));
+  assert.ok(shader.fragmentShader.includes("vCeramic"));
+  advanceSurfaceDetails(scene, 12);
+  assert.equal(shader.uniforms.waterClock.value, 12);
+  advanceSurfaceDetails(scene, 12);
+  assert.equal(shader.uniforms.waterClock.value, 12);
+  advanceSurfaceDetails(scene, 0);
+  assert.equal(shader.uniforms.waterClock.value, 0);
+  const key = road.customProgramCacheKey();
+  glasshouseRoad(road, scene);
+  assert.equal(road.customProgramCacheKey(), key);
+});

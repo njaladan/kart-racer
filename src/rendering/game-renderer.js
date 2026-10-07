@@ -15,6 +15,7 @@ import {
 } from "../track/track.js";
 import { updateDriftReadiness } from "./drift-readiness.js";
 import { advanceSurfaceDetails } from "./surface-detail.js";
+import { waterImmersion } from "./water-medium.js";
 import { renderRaceHud } from "../ui/race-hud.js";
 
 /** Own interpolated kart presentation, HUD refresh, camera motion, and drawing. */
@@ -290,19 +291,26 @@ export function createGameRenderer({
     }
 
     if (!frameState.paused) updateCamera(dt, frameState);
+    const waterLevel = scene.userData.waterLevel;
+    const immersion = Number.isFinite(waterLevel)
+      ? waterImmersion(camera.position.y, waterLevel)
+      : Number(player.underwater);
     const section = sectionAt(trackT(player.s));
     const forest = ["forest", "pines"].includes(section.id);
     const enclosed =
       section.enclosed || forest || ["warehouse", "temple", "canyon"].includes(section.id);
     const atmosphereBlend = 1 - Math.exp(-1.5 * dt);
-    const fogFar = player.underwater
-      ? 200
-      : (theme.fogFar ??
-        (forest ? 330 : theme.terrain === "concrete" ? 520 : theme.terrain === "sand" ? 670 : 720));
+    const dryFogFar =
+      theme.fogFar ??
+      (forest ? 330 : theme.terrain === "concrete" ? 520 : theme.terrain === "sand" ? 670 : 720);
+    const fogFar = THREE.MathUtils.lerp(dryFogFar, 200, immersion);
     scene.fog.far += (fogFar - scene.fog.far) * atmosphereBlend;
     scene.fog.near +=
-      ((player.underwater ? 18 : enclosed ? 95 : 180) - scene.fog.near) * atmosphereBlend;
-    const fogColor = new THREE.Color(player.underwater ? "#489da8" : theme.fog || "#ffffff");
+      (THREE.MathUtils.lerp(enclosed ? 95 : 180, 18, immersion) - scene.fog.near) * atmosphereBlend;
+    const fogColor = new THREE.Color(theme.fog || "#ffffff").lerp(
+      new THREE.Color("#489da8"),
+      immersion,
+    );
     if (forest)
       fogColor.lerp(new THREE.Color(theme.terrain === "snow" ? "#b0cbdc" : "#91b5ac"), 0.3);
     if (section.id === "temple") fogColor.lerp(new THREE.Color("#b5a7a0"), 0.22);
@@ -315,12 +323,7 @@ export function createGameRenderer({
     advanceSurfaceDetails(scene, frameState.raceTime);
     getLandscape()?.updateCamera?.(camera.position, graphicsQuality?.getTier() ?? 3);
     sky?.update(frameState.raceTime, motionEnabled);
-    sunGlare.update(
-      frameState.raceTime,
-      camera,
-      player.underwater,
-      graphicsQuality?.getTier() ?? 3,
-    );
+    sunGlare.update(frameState.raceTime, camera, immersion > 0.5, graphicsQuality?.getTier() ?? 3);
     weather?.update(frameState.raceTime, camera.position, forest);
     displayFinish?.update(
       frameState.raceTime,
@@ -329,6 +332,10 @@ export function createGameRenderer({
       camera.aspect,
     );
     postprocessing?.setBoostMotion(boostStrength, boostKick);
+    postprocessing?.setWaterMedium?.(
+      Number.isFinite(waterLevel) ? immersion : 0,
+      motionEnabled ? frameState.raceTime : 0,
+    );
     followShadow(player.worldPos);
     if (scene.userData.wetRoadReflections && graphicsQuality?.getTier() === 3) {
       const t = trackT(player.s);
