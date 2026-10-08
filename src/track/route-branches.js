@@ -244,6 +244,16 @@ export function racerProjection(track, state, position = state.worldPos) {
 export function updateRouteChoice(track, state) {
   const t = track.trackT(state.s);
   const branch = track.branches[state.routeChoice - 1];
+  if (!branch && track.mountainSurface?.containsT(t)) {
+    // The open powder can approach a physical quarterpipe midway through its
+    // run. Enter its driving surface before takeoff, even after the fork gate.
+    const ramp = track.mountainSurface.rampAt(state.worldPos, t);
+    if (ramp && state.grounded && !state.falling) {
+      state.routeChoice = ramp.branch.index;
+      state.routeGroup = ramp.branch.groupIndex;
+      return;
+    }
+  }
   if (branch) {
     const surface = branch.project(state.worldPos, t);
     const exit = branch.frameAt(1);

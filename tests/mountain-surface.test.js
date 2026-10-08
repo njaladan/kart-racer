@@ -1,9 +1,10 @@
+import { createRacerState } from "../src/simulation/racer-state.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import * as THREE from "../vendor/three/three.module.js";
 import course from "../src/courses/frostpeak-festival.js";
-import { selectCourse } from "../src/track/track.js";
-import { initializeRacer, advanceRacer } from "../src/simulation/simulation.js";
+import { selectCourse, TRACK } from "../src/track/track.js";
+import { initializeRacer, advanceRacer, botInput } from "../src/simulation/simulation.js";
 import { buildExperienceWorld } from "../src/courses/experiences/world.js";
 import { createRouteClearance } from "../src/rendering/route-clearance.js";
 
@@ -92,4 +93,29 @@ test("steering from either ski run into adjacent powder keeps tires on the same 
         assert.ok(left, `${branch.id}: the run can be exited sideways`);
         assert.ok(!racer.recoveryCount);
       }
+});
+
+test("a powder approach can enter the physical quarterpipe after the original fork", () => {
+  const track = selectCourse(course),
+    branch = track.branches.find((b) => b.ramp);
+  const q = branch.ramp.start - 0.015,
+    s = (branch.start + (branch.end - branch.start) * q) * TRACK;
+  const racer = initializeRacer(createRacerState({ s, x: 0, isPlayer: true }));
+  racer.routeGroup = branch.groupIndex;
+  racer.worldPos.copy(branch.poseAt(q).p);
+  racer.renderFrom.copy(racer.worldPos);
+  racer.yaw = track.yawFor(branch.frameAt(q).tangent);
+  racer.vx = branch.frameAt(q).tangent.x * 25;
+  racer.vz = branch.frameAt(q).tangent.z * 25;
+  racer.speed = 90;
+  let entered = false,
+    jumped = false;
+  for (let step = 1; step <= 120 * 3; step++) {
+    advanceRacer(racer, botInput(racer, 0, step / 120), 1 / 120, step / 120);
+    entered ||= racer.routeChoice === branch.index;
+    jumped ||= racer.jumpKind === "quarterpipe" && !racer.grounded;
+    assert.equal(racer.falling, false);
+  }
+  assert.ok(entered && jumped, "powder line uses the visible launch surface");
+  assert.equal(racer.recoveryCount || 0, 0);
 });

@@ -11,3 +11,20 @@ export function clearAreaCamera(area, camera, kart, clearance = 0.35) {
     camera.y = Math.max(camera.y, (floor - target.y * (1 - q)) / q);
   }
 }
+
+/** Quarterpipes rise above the open snow floor, including beside the powder line. */
+export function clearMountainCamera(track, camera, kart, nearT) {
+  const mountain = track.mountainSurface;
+  if (!mountain?.containsT(nearT)) return;
+  clearAreaCamera(
+    {
+      contains: (p) => {
+        const c = mountain.coordinatesAt(p, nearT);
+        return mountain.containsT(c.t) && Math.abs(c.offset) <= mountain.widthAt(c.t);
+      },
+      heightAt: (p) => mountain.heightAt(p, nearT) + (mountain.rampAt(p, nearT)?.height || 0),
+    },
+    camera,
+    kart,
+  );
+}

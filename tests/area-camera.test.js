@@ -35,3 +35,24 @@ test("chase sightlines clear steep bowl entry, exit and wide banks", () => {
       assert.ok(Number.isFinite(camera.y));
     }
 });
+
+test("Frostpeak's powder camera clears the separate quarterpipe behind the kart", async () => {
+  const { default: course } = await import("../src/courses/frostpeak-festival.js");
+  const { clearMountainCamera } = await import("../src/rendering/area-camera.js");
+  const track = createTrack(course),
+    t = track.sectorT(4, 0.6);
+  const pose = track.poseAt(t * track.TRACK, 45, 0.065);
+  const camera = pose.p.clone().addScaledVector(pose.tangent.clone().setY(0).normalize(), -8.7);
+  camera.y += 4.7;
+  const original = camera.y;
+  clearMountainCamera(track, camera, pose.p, t);
+  assert.ok(camera.y > original + 0.5, "camera rises out of the launch face");
+  const target = pose.p.clone();
+  target.y += 0.9;
+  for (let i = 1; i <= 32; i++) {
+    const p = target.clone().lerp(camera, i / 32),
+      ramp = track.mountainSurface.rampAt(p, t);
+    if (ramp && ramp.height > 0)
+      assert.ok(p.y >= track.mountainSurface.heightAt(p, t) + ramp.height + 0.35 - 1e-8);
+  }
+});

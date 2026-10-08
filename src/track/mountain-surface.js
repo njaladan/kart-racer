@@ -74,7 +74,25 @@ export function installMountainSurface(track) {
     }
     return base + correction / Math.max(1, total);
   }
-  track.mountainSurface = { containsT, widthAt, heightAt, coordinatesAt };
+  function rampAt(position, nearT) {
+    for (const run of runs) {
+      if (!run.branch.ramp) continue;
+      const surface = run.project(position, nearT, true);
+      const ramp = run.branch.ramp;
+      if (
+        surface.q >= ramp.start - 0.03 &&
+        surface.q <= ramp.lip + 0.03 &&
+        surface.distance <= run.branch.halfWidth
+      )
+        return {
+          branch: run.branch,
+          q: surface.q,
+          height: branchRampHeight(run.branch, surface.q),
+        };
+    }
+    return null;
+  }
+  track.mountainSurface = { containsT, widthAt, heightAt, coordinatesAt, rampAt };
   track.poseAt = (s, offset = 0, above = 0.06) => {
     const pose = rawPose(s, offset, above);
     const t = track.trackT(s);
