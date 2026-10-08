@@ -16,6 +16,20 @@ export function clearAreaCamera(area, camera, kart, clearance = 0.35) {
 export function clearMountainCamera(track, camera, kart, nearT) {
   const mountain = track.mountainSurface;
   if (!mountain?.containsT(nearT)) return;
+  const target = kart.clone();
+  target.y += 0.1;
+  // A launch face immediately behind the kart can hide its body even when
+  // the head remains visible. Bring the rig in front of that face first.
+  for (let i = 1; i <= 32; i++) {
+    const q = i / 32,
+      p = target.clone().lerp(camera, q),
+      ramp = mountain.rampAt(p, nearT);
+    if (!ramp?.height || p.y >= mountain.heightAt(p, nearT) + ramp.height + 0.35) continue;
+    const shortened = target.clone().lerp(camera, Math.max(0.2, q - 0.12));
+    camera.x = shortened.x;
+    camera.z = shortened.z;
+    break;
+  }
   clearAreaCamera(
     {
       contains: (p) => {

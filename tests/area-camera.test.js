@@ -1,3 +1,5 @@
+import * as THREE from "../vendor/three/three.module.js";
+import { buildExperienceWorld } from "../src/courses/experiences/world.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createTrack } from "../src/track/track-builder.js";
@@ -44,9 +46,25 @@ test("Frostpeak's powder camera clears the separate quarterpipe behind the kart"
   const pose = track.poseAt(t * track.TRACK, 45, 0.065);
   const camera = pose.p.clone().addScaledVector(pose.tangent.clone().setY(0).normalize(), -8.7);
   camera.y += 4.7;
-  const original = camera.y;
+  const original = camera.clone();
   clearMountainCamera(track, camera, pose.p, t);
-  assert.ok(camera.y > original + 0.5, "camera rises out of the launch face");
+  assert.ok(camera.distanceTo(original) > 0.5, "camera clears the launch face");
+  const scene = new THREE.Scene();
+  buildExperienceWorld({ scene, track, assets: { models: {} } });
+  scene.updateMatrixWorld(true);
+  for (const elevation of [0.1, 0.9]) {
+    const target = pose.p.clone();
+    target.y += elevation;
+    const delta = target.clone().sub(camera);
+    const ray = new THREE.Raycaster(camera, delta.clone().normalize(), 0, delta.length());
+    assert.equal(
+      ray
+        .intersectObject(scene, true)
+        .filter((h) => h.object.name === "Curved quarterpipe with open launch lip").length,
+      0,
+      "whole kart clears the real ramp triangles",
+    );
+  }
   const target = pose.p.clone();
   target.y += 0.9;
   for (let i = 1; i <= 32; i++) {
