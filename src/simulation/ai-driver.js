@@ -12,7 +12,7 @@ import {
 } from "../track/track.js";
 import { progressDelta } from "./race.js";
 import { cartAt, trafficAt } from "./hazards.js";
-import { bridgeWaveAt } from "./course-mechanics.js";
+import { bridgeWaveAt, pendulumOffsetAt } from "./course-mechanics.js";
 import { trainRampAt } from "./experience-mechanics.js";
 
 export function botInput(state, index, elapsed, rivals = [], items = {}) {
@@ -43,6 +43,7 @@ export function botInput(state, index, elapsed, rivals = [], items = {}) {
   const current = routeFrame(currentT);
   const skill = state.skill ?? 0.95;
   let lane = (index % 2 ? 1 : -1) * 0.8;
+  let gateSpeed = Infinity;
   // Seek the closest useful pickup or boost, without making a last-second dive.
   let bestGap = 48;
   for (const pad of BOOST_PADS) {
@@ -101,7 +102,31 @@ export function botInput(state, index, elapsed, rivals = [], items = {}) {
         state.s,
         TRACK,
       ) * WORLD_PER_UNIT;
-    if (gap > -12 && gap < 60) lane = -7.9;
+    if (!(pendulum.radius > 5)) {
+      if (gap > -12 && gap < 60) lane = -7.9;
+      continue;
+    }
+    if (gap > -pendulum.radius - 3 && gap < 75) {
+      lane = 0;
+      // Forecast the whole crossing, including acceleration from a stopped kart.
+      let blocked = false;
+      for (const acceleration of [10, 19, 27]) {
+        let distance = gap,
+          speed = Math.max(0, state.speed / 3.6);
+        for (let dt = 0; dt < 6 && distance > -pendulum.radius - 3; dt += 0.05) {
+          const offset = pendulumOffsetAt(pendulum, elapsed + dt);
+          if (Math.hypot(distance, offset) < pendulum.radius + 3) blocked = true;
+          speed +=
+            0.05 * (acceleration * Math.max(0, 1 - (speed / 34) ** 3) - 0.45 - 0.002 * speed ** 2);
+          distance -= speed * 0.05;
+        }
+      }
+      if (blocked && gap > pendulum.radius + 2.5)
+        gateSpeed = Math.min(
+          gateSpeed,
+          Math.sqrt(2 * 20 * Math.max(0, gap - pendulum.radius - 4)) * 3.6,
+        );
+    }
   }
   const traffic = activeTrack.course.traffic;
   if (
@@ -143,6 +168,7 @@ export function botInput(state, index, elapsed, rivals = [], items = {}) {
     const cornerSpeed = Math.max(9, Math.sqrt((22 + skill * 2) * radius) - carrySpeed);
     cruise = Math.min(cruise, Math.sqrt(cornerSpeed ** 2 + 2 * 22 * distance) * 3.6);
   }
+  cruise = Math.min(cruise, gateSpeed);
   const headingCorrection = Math.max(-1, Math.min(1, -headingError * 3.1));
   // Tap a trick just before a ramp; do not hold the drift button through flight.
   const trainRampAhead =
@@ -161,8 +187,8 @@ export function botInput(state, index, elapsed, rivals = [], items = {}) {
     });
   const risingCrest = !branch && bridgeWaveAt(activeTrack, currentT, elapsed).launch;
   return {
-    throttle: state.speed < cruise + 1,
-    brake: state.speed > cruise + 5,
+    throttle: cruise > 0 && state.speed < cruise + 1,
+    brake: state.speed > cruise + 5 && state.speed > 1,
     steer: headingCorrection,
     drift:
       state.grounded &&

@@ -360,7 +360,7 @@ export function withCourseExperience(course) {
       break;
     case "metronome-hall":
       course.description =
-        "Race a giant music box and bounce across a small field of differently voiced snare drums suspended over an open abyss.";
+        "Time your passage through road-blocking metronome hammers, then bounce across differently voiced snare drums suspended over an open abyss.";
       course.theme.groundHeight = -150;
       course.pendulums = course.pendulums.filter((d) => d.section !== 2);
       course.drumField = {

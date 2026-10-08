@@ -43,10 +43,14 @@ export function underwaterAt(track, t) {
   const { start, end } = rangeFor(track, definition);
   return t >= start && t <= end;
 }
+export function pendulumOffsetAt(definition, time) {
+  const phase = (time * 2 * Math.PI) / definition.period + (definition.phase || 0);
+  return Math.sin(phase) * (definition.amplitude || 4.4);
+}
 export function pendulumAt(track, definition, time) {
   const t = track.sectorT(definition.section, definition.fraction);
   const phase = (time * 2 * Math.PI) / definition.period + (definition.phase || 0);
-  const offset = Math.sin(phase) * (definition.amplitude || 4.4);
+  const offset = pendulumOffsetAt(definition, time);
   return {
     ...track.poseAt(t * track.TRACK, offset, 0.25),
     t,
@@ -60,7 +64,13 @@ export function mechanismContact(track, position, time, radius = 0.9) {
     const pose = pendulumAt(track, definition, time),
       dx = position.x - pose.p.x,
       dz = position.z - pose.p.z;
-    if (Math.abs(position.y - pose.p.y) > 2.5) continue;
+    if (definition.height) {
+      if (
+        position.y + radius < pose.p.y - 2 ||
+        position.y - radius > pose.p.y + definition.height - 2
+      )
+        continue;
+    } else if (Math.abs(position.y - pose.p.y) > 2.5) continue;
     const distance = Math.hypot(dx, dz),
       overlap = (definition.radius || 1.3) + radius - distance;
     if (overlap > 0)

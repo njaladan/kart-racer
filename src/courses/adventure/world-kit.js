@@ -150,19 +150,25 @@ export function worldKit(context) {
       const g = at(d.section, d.fraction),
         m = mat(color, "metal", { metalness: 0.55, roughness: 0.32 }),
         bob = mesh(
-          style === "hammer" ? new THREE.BoxGeometry(1, 1, 1) : sphere,
+          style === "hammer" ? cylinder : sphere,
           m,
           g,
           [0, 1.1, 0],
-          [d.radius || 1.3, 1.3, d.radius || 1.3],
+          [d.radius || 1.3, d.height || 1.3, d.radius || 1.3],
         ),
-        rod = tube(g, [0, 21, 0], [0, 1.1, 0], style === "hammer" ? 0.3 : 0.12, m);
-      portal(d.section, d.fraction, color, 18, 21);
+        rod = tube(g, [0, 21, 0], [0, 1.1, 0], style === "hammer" ? 0.65 : 0.12, m);
+      portal(
+        d.section,
+        d.fraction,
+        color,
+        Math.max(18, (d.amplitude || 4.4) + (d.radius || 1.3) + 3),
+        21,
+      );
       motion(g, (time) => {
         const pose = pendulumAt(track, d, time);
         g.updateWorldMatrix(true, false);
         const local = g.worldToLocal(pose.p.clone());
-        local.y += 0.85;
+        local.y += d.height ? d.height / 2 - 2 : 0.85;
         bob.position.copy(local);
         const anchor = new THREE.Vector3(0, 21, 0),
           direction = local.clone().sub(anchor);
