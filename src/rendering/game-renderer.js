@@ -329,7 +329,7 @@ export function createGameRenderer({
     displayFinish?.update(
       frameState.raceTime,
       motionEnabled && frameState.running && !frameState.finished ? player.speed : 0,
-      boostStrength,
+      (player.boost > 0 || player.star > 0) && player.spin <= 0 ? boostStrength : 0,
       camera.aspect,
     );
     postprocessing?.setBoostMotion(boostStrength, boostKick);
