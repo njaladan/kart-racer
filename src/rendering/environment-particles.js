@@ -1,6 +1,7 @@
 import * as THREE from "../../vendor/three/three.module.js";
 import { GRAPHICS_TIERS } from "./graphics-quality.js";
 import { sceneryGroundHeight } from "./terrain-height.js";
+import { courseWind } from "./wind-field.js";
 
 export const PARTICLE_SHAPES = Object.freeze({
   mote: 0,
@@ -64,7 +65,7 @@ export function createEnvironmentParticleField(track, spec, seed = 1, source = n
     colors.push(...tint.toArray());
   }
   const height = spec.height ?? 12,
-    wind = spec.wind ?? [2, 0, 0.6],
+    wind = spec.wind ?? courseWind(track.course.theme).map((value) => value * 2.1),
     size = spec.size ?? [0.18, 0.18],
     sizeMargin = Math.max(...size) * 3;
   bounds.min.add(

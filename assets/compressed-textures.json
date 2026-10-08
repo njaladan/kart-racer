@@ -1,0 +1,1083 @@
+{
+  "version": 1,
+  "encoder": "Basis Universal ETC1S quality 230 with mipmaps",
+  "textures": {
+    "assets/asphalt.webp": {
+      "file": "./assets/compressed/asphalt.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "486a911ef626d3fc9d725bacac76651470255af34cf37e280dfa52875d4f4214",
+      "sha256": "cdfb2f5c4976658f69813016f09747cba3af1465a782aae5aae81f160b3e8373",
+      "sourceBytes": 13098,
+      "bytes": 26898
+    },
+    "assets/courses/packs/emberwing-observatory/textures/metal-color.webp": {
+      "file": "./assets/compressed/courses/packs/emberwing-observatory/textures/metal-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "a7031ce32bed5cc4df4a414048c1b96090cefc7b388edd11245d13a9ee40209c",
+      "sha256": "a89b42c84895a19d4061f6c999a6d957baac22f1041366c457f69b1c20e2d095",
+      "sourceBytes": 52816,
+      "bytes": 90986
+    },
+    "assets/courses/packs/emberwing-observatory/textures/metal-normal.webp": {
+      "file": "./assets/compressed/courses/packs/emberwing-observatory/textures/metal-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "2baec018b8e43cd55bfb35c4da3733b768ac8d5f981f930921b62dfffcef5213",
+      "sha256": "e1f693ad45c42730dcf24243eab50690c3fc9fc56c283e0d47babe851c11403d",
+      "sourceBytes": 85538,
+      "bytes": 19366
+    },
+    "assets/courses/packs/emberwing-observatory/textures/metal-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/emberwing-observatory/textures/metal-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "6c6f11fddfd62c8cdbbf4e67e43be9318a1394d2fcd7a48e71a1699d5845420a",
+      "sha256": "be4521bd903dc98c8cb3ab029d9cc576d1b0db0cf5520b996daec6a70a5386a7",
+      "sourceBytes": 26862,
+      "bytes": 33508
+    },
+    "assets/courses/packs/emberwing-observatory/textures/paving-color.webp": {
+      "file": "./assets/compressed/courses/packs/emberwing-observatory/textures/paving-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "620e203be3833c17fbdfb1463473db82339578cf093b45a42454971ca3795cf2",
+      "sha256": "a439ad932aafa1011182238fad5f6a00722e1e443193d223b9c42cacd9f46513",
+      "sourceBytes": 244702,
+      "bytes": 226175
+    },
+    "assets/courses/packs/emberwing-observatory/textures/paving-normal.webp": {
+      "file": "./assets/compressed/courses/packs/emberwing-observatory/textures/paving-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "2106b04e010c62ed22bb4f1612bf7ec37c31d79526bae77f3b3fd0d92f2344a8",
+      "sha256": "1f181484f68b2f18192c26f10645ba05cb6b0124d973adc480ce26b170e87b26",
+      "sourceBytes": 433814,
+      "bytes": 46523
+    },
+    "assets/courses/packs/emberwing-observatory/textures/paving-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/emberwing-observatory/textures/paving-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "b86f9b751e7f5c3d7add0608571faa4c10d15b00bce48fd80ed30dae5b050a1e",
+      "sha256": "7df4da9a505d9057cca79867663d139bdcd01aa29e348142bf924342c6701edf",
+      "sourceBytes": 41374,
+      "bytes": 86881
+    },
+    "assets/courses/packs/emberwing-observatory/textures/rock-color.webp": {
+      "file": "./assets/compressed/courses/packs/emberwing-observatory/textures/rock-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "5c99687f46aa9d40e681e9ef4865796d42e12894d59117e48ec8b9743eb25826",
+      "sha256": "dc1a87c0fb25884d04fe4defa0597d009314c777949977e708ee27db10083b3c",
+      "sourceBytes": 287976,
+      "bytes": 243476
+    },
+    "assets/courses/packs/emberwing-observatory/textures/rock-normal.webp": {
+      "file": "./assets/compressed/courses/packs/emberwing-observatory/textures/rock-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "edd302f2faa77c5ab2e4a70e952107def84799b0e0f1fd19026162706202cbb2",
+      "sha256": "23f954ede928639ebb15b730c240c0b985592b026bba15b66bf31244fb52e0e0",
+      "sourceBytes": 634122,
+      "bytes": 120660
+    },
+    "assets/courses/packs/emberwing-observatory/textures/rock-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/emberwing-observatory/textures/rock-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "c3374b5bf18e1ea82d6ece0ad35f871847442bcf8852f888da4686a00cb4b58e",
+      "sha256": "62a45811541ba3a96bc23de8ef69bcd2ccaf4987ce64b5a0df82e96252627ebd",
+      "sourceBytes": 73400,
+      "bytes": 96078
+    },
+    "assets/courses/packs/emberwing-observatory/textures/stone-color.webp": {
+      "file": "./assets/compressed/courses/packs/emberwing-observatory/textures/stone-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "4a7f9e7768703c229d2a27e096587d17d8ad5032d66513b554613a102d1ab326",
+      "sha256": "d5d7715ff8074d842fef7fb2726cabf5037b01b0c483d32b0268a6e0bce0e4a5",
+      "sourceBytes": 80500,
+      "bytes": 173882
+    },
+    "assets/courses/packs/emberwing-observatory/textures/stone-normal.webp": {
+      "file": "./assets/compressed/courses/packs/emberwing-observatory/textures/stone-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "e898fa1be54ae76f6b34cff6a3ffa1067b8a28f570cd56da3467c527adba5ccc",
+      "sha256": "e28b6a6e067d47700e07ad798f89bbe19f1fb9fc55edcd44cbf80c28f4e03d1b",
+      "sourceBytes": 401320,
+      "bytes": 80449
+    },
+    "assets/courses/packs/emberwing-observatory/textures/stone-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/emberwing-observatory/textures/stone-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "03aaa548023ef885866c6d5fcc6208601867fa3011dbc95a7dde7f446feea76d",
+      "sha256": "639983335887726efb8290c295d39e66d6ebd850963b9def6f39b0fada85289e",
+      "sourceBytes": 23474,
+      "bytes": 66646
+    },
+    "assets/courses/packs/frostpeak-festival/textures/blue-ice-normal.webp": {
+      "file": "./assets/compressed/courses/packs/frostpeak-festival/textures/blue-ice-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "db16f9b49fb4ebb8fcef4b49e08674e60e0b7f9ad7b0222c1f44d69ad6d12291",
+      "sha256": "b09b71c51fb09224206b084aed622219001625e230031008e3e0469ba71c79c2",
+      "sourceBytes": 10328,
+      "bytes": 18320
+    },
+    "assets/courses/packs/frostpeak-festival/textures/blue-ice-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/frostpeak-festival/textures/blue-ice-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "413759972ed726a0dc00efa5f206ff32892850155877f52e65c0955db2fdfcd7",
+      "sha256": "e85f6ec9dbc446afbe1b71d709d5a9ab97b4db19848b613d010416ab7e2b41cb",
+      "sourceBytes": 3566,
+      "bytes": 16805
+    },
+    "assets/courses/packs/frostpeak-festival/textures/blue-ice.webp": {
+      "file": "./assets/compressed/courses/packs/frostpeak-festival/textures/blue-ice.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "7727d397bc238511b311f6aa9c63cf4ac46e6533534ceaa9d7b71906eac062fd",
+      "sha256": "babb6ce7c88445d42be89f0d06312fe37d822b23927107c7ccd2718757a39da5",
+      "sourceBytes": 28050,
+      "bytes": 32336
+    },
+    "assets/courses/packs/frostpeak-festival/textures/festival-knit.webp": {
+      "file": "./assets/compressed/courses/packs/frostpeak-festival/textures/festival-knit.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "682c8ec8c04bff4cc1885603286243bce976c59251a606c0d85fa636f1351a59",
+      "sha256": "95eb593e873f4e51993ff540a59662f70a6c533205390e1fe2bd5862e4747955",
+      "sourceBytes": 64844,
+      "bytes": 22874
+    },
+    "assets/courses/packs/frostpeak-festival/textures/groomed-snow.webp": {
+      "file": "./assets/compressed/courses/packs/frostpeak-festival/textures/groomed-snow.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "0efaaa6dfd4050cfd3d65c9c970f5c3433d7ddb5ae7352be7e2cd67da8b2960b",
+      "sha256": "453ee89f03f7c70d3f4c9d164575307cc86264dcb5c59219a557504675a8d36c",
+      "sourceBytes": 2468,
+      "bytes": 13593
+    },
+    "assets/courses/packs/frostpeak-festival/textures/shop-signs.webp": {
+      "file": "./assets/compressed/courses/packs/frostpeak-festival/textures/shop-signs.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "cb78d4cf899418d18af0c8aa06e11fc3a458c1cbbf02fda37ee94c167f9c5067",
+      "sha256": "d22ae3862c73e621c9cff47ef28b6edfd439c42f6a01d2a2006cd5e9159214cf",
+      "sourceBytes": 16532,
+      "bytes": 27240
+    },
+    "assets/courses/packs/metronome-hall/textures/metal-color.webp": {
+      "file": "./assets/compressed/courses/packs/metronome-hall/textures/metal-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "a7031ce32bed5cc4df4a414048c1b96090cefc7b388edd11245d13a9ee40209c",
+      "sha256": "a89b42c84895a19d4061f6c999a6d957baac22f1041366c457f69b1c20e2d095",
+      "sourceBytes": 52816,
+      "bytes": 90986
+    },
+    "assets/courses/packs/metronome-hall/textures/metal-normal.webp": {
+      "file": "./assets/compressed/courses/packs/metronome-hall/textures/metal-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "2baec018b8e43cd55bfb35c4da3733b768ac8d5f981f930921b62dfffcef5213",
+      "sha256": "e1f693ad45c42730dcf24243eab50690c3fc9fc56c283e0d47babe851c11403d",
+      "sourceBytes": 85538,
+      "bytes": 19366
+    },
+    "assets/courses/packs/metronome-hall/textures/metal-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/metronome-hall/textures/metal-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "6c6f11fddfd62c8cdbbf4e67e43be9318a1394d2fcd7a48e71a1699d5845420a",
+      "sha256": "be4521bd903dc98c8cb3ab029d9cc576d1b0db0cf5520b996daec6a70a5386a7",
+      "sourceBytes": 26862,
+      "bytes": 33508
+    },
+    "assets/courses/packs/metronome-hall/textures/wood-color.webp": {
+      "file": "./assets/compressed/courses/packs/metronome-hall/textures/wood-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "1cbda8fce097d13e974fc402f53db09391239f6c01521d14bce2fa6562d7807f",
+      "sha256": "7c9eb4c3967af16ece350d7674e6ac83e5a0ba669a9d2ee6678a1c700061bc6a",
+      "sourceBytes": 150676,
+      "bytes": 212146
+    },
+    "assets/courses/packs/metronome-hall/textures/wood-normal.webp": {
+      "file": "./assets/compressed/courses/packs/metronome-hall/textures/wood-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "c4ca43570ff0f1fda7bf28dfc738173a8a4c4dddb719d89a41c0d9f837e7bb87",
+      "sha256": "c9d909a3445557a26db4ffad061a94eae5859d2fae70475b098676a41314a18c",
+      "sourceBytes": 328034,
+      "bytes": 49203
+    },
+    "assets/courses/packs/metronome-hall/textures/wood-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/metronome-hall/textures/wood-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "171caa1f1b1638fcb4184ee64a62ad7abef5d62ee478af6c598af6d3b63c4c5c",
+      "sha256": "e13a5d5bec085bc0573d48c3dd4a9a1b425064ac0dd2e0804e6db0d06ac63a90",
+      "sourceBytes": 28638,
+      "bytes": 58538
+    },
+    "assets/courses/packs/neon-harbor/models/Textures/colormap.png": {
+      "file": "./assets/compressed/courses/packs/neon-harbor/models/Textures/colormap.png.ktx2",
+      "channel": "color",
+      "sourceSha256": "4a912ef8e95fbec4ac0cacc295b9221a4b66c482d4f90bec4e2277689c21a623",
+      "sha256": "ab24bf0c945a9b9645fe39dd84155e159aa561bcf99b2ce4dd48153b54e04176",
+      "sourceBytes": 11107,
+      "bytes": 10986
+    },
+    "assets/courses/packs/neon-harbor/textures/cargo-corrugated.webp": {
+      "file": "./assets/compressed/courses/packs/neon-harbor/textures/cargo-corrugated.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "342d225d6b07f70d78c72b63097563503116648f1f5cdcc171b1b8d84b8bca9c",
+      "sha256": "ef9eb9ece5550e62a66736f343ceccea012e6d05ad7f80cbf2d7f7ba8b9db4e0",
+      "sourceBytes": 75498,
+      "bytes": 117404
+    },
+    "assets/courses/packs/neon-harbor/textures/conveyor.webp": {
+      "file": "./assets/compressed/courses/packs/neon-harbor/textures/conveyor.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "5df37f80d93a9ced698934b86039d8f5359bc43bba3d60cad268ce3aac60ee04",
+      "sha256": "b295066fdcdc2725aae8e8d0e8d6acd67c3f47db0209e24137a990d60eb00c7c",
+      "sourceBytes": 10544,
+      "bytes": 8523
+    },
+    "assets/courses/packs/neon-harbor/textures/facade-0-emission.webp": {
+      "file": "./assets/compressed/courses/packs/neon-harbor/textures/facade-0-emission.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "99ce9b8ec78f9e7bb4e96dbda5e13cfaebba068f6db6cac9ddd73f416ffaba45",
+      "sha256": "b1c2566a7b0d34669cba0913b3161ca1e1abaa17d3722ef5f82f1d6a98596a64",
+      "sourceBytes": 19168,
+      "bytes": 29050
+    },
+    "assets/courses/packs/neon-harbor/textures/facade-0.webp": {
+      "file": "./assets/compressed/courses/packs/neon-harbor/textures/facade-0.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "b233d7c9a4648d782e82c7f2711583cbc28c1b712e2cae8e63be49c849e9c1f2",
+      "sha256": "14f0915bf11832b533fad44c1bfc4bf5b8aeb77caf15225272cedac70325a237",
+      "sourceBytes": 47554,
+      "bytes": 82032
+    },
+    "assets/courses/packs/neon-harbor/textures/facade-1-emission.webp": {
+      "file": "./assets/compressed/courses/packs/neon-harbor/textures/facade-1-emission.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "7b2b0942aca8c6502851b654812bdc559be841efb7016c7f38b90808950def5f",
+      "sha256": "01a7ba150de71256fd957ddccb1f5b3ee76a582d913ae0da4e5e1e6634f58662",
+      "sourceBytes": 19182,
+      "bytes": 30361
+    },
+    "assets/courses/packs/neon-harbor/textures/facade-1.webp": {
+      "file": "./assets/compressed/courses/packs/neon-harbor/textures/facade-1.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "de6335f67bb80d300c91b26a1202a7854560c03d7d84014816d883071a145467",
+      "sha256": "27bbdfaca2e454006446f8fcbe431d416fe2d5f31ee609aeab7c3320585ca7e0",
+      "sourceBytes": 47120,
+      "bytes": 81778
+    },
+    "assets/courses/packs/neon-harbor/textures/facade-2-emission.webp": {
+      "file": "./assets/compressed/courses/packs/neon-harbor/textures/facade-2-emission.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "66ccab301a5e117e5f2858999d3e3a803c9c72169e5a95a348dcf1638a4f4613",
+      "sha256": "90e1b222992d0bb9cb265a4a64c1eaa1351ac1303cfa83165a16d63d64e7d393",
+      "sourceBytes": 15990,
+      "bytes": 26365
+    },
+    "assets/courses/packs/neon-harbor/textures/facade-2.webp": {
+      "file": "./assets/compressed/courses/packs/neon-harbor/textures/facade-2.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "c6f4b160959bee5154f7a1cead9a2398ff3e44b5889de4513a4cf3fb31bcc3b1",
+      "sha256": "79da6c5e4e51200792ce2ff04ef347392fd0751de9eb178ee302b717a9fb7e45",
+      "sourceBytes": 44816,
+      "bytes": 80663
+    },
+    "assets/courses/packs/neon-harbor/textures/shopfront-atlas.webp": {
+      "file": "./assets/compressed/courses/packs/neon-harbor/textures/shopfront-atlas.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "70d1d90eb3720ce62ae8633acf53e5a921db77b2797d1ae62e551feb11e63c5c",
+      "sha256": "2e0f1120ae95d976b3bd0949a52429a0cae78c29bfda8c673509591647906645",
+      "sourceBytes": 34722,
+      "bytes": 46899
+    },
+    "assets/courses/packs/neon-harbor/textures/sign-atlas.webp": {
+      "file": "./assets/compressed/courses/packs/neon-harbor/textures/sign-atlas.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "8a2db6ba39ed6c623e1e3a5b7f7179fd00af2b2920a436882697a9a347bb993b",
+      "sha256": "7254c97a38e5ec6968e94558ff96eea27f30cecb4be9e7ad9aa0e97342aba7d9",
+      "sourceBytes": 126528,
+      "bytes": 144827
+    },
+    "assets/courses/packs/neon-harbor/textures/welcome.webp": {
+      "file": "./assets/compressed/courses/packs/neon-harbor/textures/welcome.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "8c9294f5a27757f05656a30e801a2bd48522e24a7111969634333799aec67bff",
+      "sha256": "ef539fa49ea39064b90bd8d5d5d765bc9ddcde2d43ee2789f9dae51079f5d4c5",
+      "sourceBytes": 12466,
+      "bytes": 17238
+    },
+    "assets/courses/packs/pelagic-glasshouse/textures/metal-color.webp": {
+      "file": "./assets/compressed/courses/packs/pelagic-glasshouse/textures/metal-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "a7031ce32bed5cc4df4a414048c1b96090cefc7b388edd11245d13a9ee40209c",
+      "sha256": "a89b42c84895a19d4061f6c999a6d957baac22f1041366c457f69b1c20e2d095",
+      "sourceBytes": 52816,
+      "bytes": 90986
+    },
+    "assets/courses/packs/pelagic-glasshouse/textures/metal-normal.webp": {
+      "file": "./assets/compressed/courses/packs/pelagic-glasshouse/textures/metal-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "2baec018b8e43cd55bfb35c4da3733b768ac8d5f981f930921b62dfffcef5213",
+      "sha256": "e1f693ad45c42730dcf24243eab50690c3fc9fc56c283e0d47babe851c11403d",
+      "sourceBytes": 85538,
+      "bytes": 19366
+    },
+    "assets/courses/packs/pelagic-glasshouse/textures/metal-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/pelagic-glasshouse/textures/metal-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "6c6f11fddfd62c8cdbbf4e67e43be9318a1394d2fcd7a48e71a1699d5845420a",
+      "sha256": "be4521bd903dc98c8cb3ab029d9cc576d1b0db0cf5520b996daec6a70a5386a7",
+      "sourceBytes": 26862,
+      "bytes": 33508
+    },
+    "assets/courses/packs/pelagic-glasshouse/textures/paving-color.webp": {
+      "file": "./assets/compressed/courses/packs/pelagic-glasshouse/textures/paving-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "620e203be3833c17fbdfb1463473db82339578cf093b45a42454971ca3795cf2",
+      "sha256": "a439ad932aafa1011182238fad5f6a00722e1e443193d223b9c42cacd9f46513",
+      "sourceBytes": 244702,
+      "bytes": 226175
+    },
+    "assets/courses/packs/pelagic-glasshouse/textures/paving-normal.webp": {
+      "file": "./assets/compressed/courses/packs/pelagic-glasshouse/textures/paving-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "2106b04e010c62ed22bb4f1612bf7ec37c31d79526bae77f3b3fd0d92f2344a8",
+      "sha256": "1f181484f68b2f18192c26f10645ba05cb6b0124d973adc480ce26b170e87b26",
+      "sourceBytes": 433814,
+      "bytes": 46523
+    },
+    "assets/courses/packs/pelagic-glasshouse/textures/paving-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/pelagic-glasshouse/textures/paving-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "b86f9b751e7f5c3d7add0608571faa4c10d15b00bce48fd80ed30dae5b050a1e",
+      "sha256": "7df4da9a505d9057cca79867663d139bdcd01aa29e348142bf924342c6701edf",
+      "sourceBytes": 41374,
+      "bytes": 86881
+    },
+    "assets/courses/packs/pelagic-glasshouse/textures/rock-color.webp": {
+      "file": "./assets/compressed/courses/packs/pelagic-glasshouse/textures/rock-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "5c99687f46aa9d40e681e9ef4865796d42e12894d59117e48ec8b9743eb25826",
+      "sha256": "dc1a87c0fb25884d04fe4defa0597d009314c777949977e708ee27db10083b3c",
+      "sourceBytes": 287976,
+      "bytes": 243476
+    },
+    "assets/courses/packs/pelagic-glasshouse/textures/rock-normal.webp": {
+      "file": "./assets/compressed/courses/packs/pelagic-glasshouse/textures/rock-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "edd302f2faa77c5ab2e4a70e952107def84799b0e0f1fd19026162706202cbb2",
+      "sha256": "23f954ede928639ebb15b730c240c0b985592b026bba15b66bf31244fb52e0e0",
+      "sourceBytes": 634122,
+      "bytes": 120660
+    },
+    "assets/courses/packs/pelagic-glasshouse/textures/rock-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/pelagic-glasshouse/textures/rock-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "c3374b5bf18e1ea82d6ece0ad35f871847442bcf8852f888da4686a00cb4b58e",
+      "sha256": "62a45811541ba3a96bc23de8ef69bcd2ccaf4987ce64b5a0df82e96252627ebd",
+      "sourceBytes": 73400,
+      "bytes": 96078
+    },
+    "assets/courses/packs/pelagic-glasshouse/textures/sand-color.webp": {
+      "file": "./assets/compressed/courses/packs/pelagic-glasshouse/textures/sand-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "a7eb68bee22c76d3c2b00216da24ae5c5a4dd42e5b4903a1df9edc6930d4efee",
+      "sha256": "3f530c7dd734de895d66d10ca31590cfc36f26dd1a0f24c6b1ac11eea1fc596a",
+      "sourceBytes": 24886,
+      "bytes": 49237
+    },
+    "assets/courses/packs/pelagic-glasshouse/textures/sand-normal.webp": {
+      "file": "./assets/compressed/courses/packs/pelagic-glasshouse/textures/sand-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "29cff61b558dfde8cbb2c2f4049cb1b0af7884b8090e4e66716bd3197942dfca",
+      "sha256": "b01402c1e1692ea4438eaa6aa37f66b4cde1d94dd63d94c61996b2ef60a941af",
+      "sourceBytes": 373168,
+      "bytes": 87357
+    },
+    "assets/courses/packs/pelagic-glasshouse/textures/sand-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/pelagic-glasshouse/textures/sand-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "1c5e9c7aa73ae157e6cc71bf020a83e2b21595865ff8c97b9f14a4528a309bb4",
+      "sha256": "07b25d8d1a1daec0c3d40c5cb54d5d5284e5e7d9521a1412c82d838504c29819",
+      "sourceBytes": 19604,
+      "bytes": 59044
+    },
+    "assets/courses/packs/pocket-pantry/textures/biscuit-label.webp": {
+      "file": "./assets/compressed/courses/packs/pocket-pantry/textures/biscuit-label.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "f539501b21b72235b31fd5e09fa16c436e9bf971c21f2f6619a69286e9824ac0",
+      "sha256": "94944653b67c89e6a4337ba238ddf875e87a940bc4a849677db71ef529b070df",
+      "sourceBytes": 8118,
+      "bytes": 10142
+    },
+    "assets/courses/packs/pocket-pantry/textures/butter-label.webp": {
+      "file": "./assets/compressed/courses/packs/pocket-pantry/textures/butter-label.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "aaeb6d9ef8aa3e36732d9ea91c9a459a0d4e38fb9df11a6edcf413e1ff7b5147",
+      "sha256": "cfc8be5821637c6e22b5dbb565e6f08e20daa1db90d36862b1f49b6c8fdc06dd",
+      "sourceBytes": 6904,
+      "bytes": 9547
+    },
+    "assets/courses/packs/pocket-pantry/textures/flour-label.webp": {
+      "file": "./assets/compressed/courses/packs/pocket-pantry/textures/flour-label.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "3fd24d6bfe5dbf6c79fadeca2eb6e33c49f9665f317adbe8f53793bcf9b03219",
+      "sha256": "ba189b3ba80dafcc931be493b90834d98d9f88e1d7ee3a99c5926114fcd7afce",
+      "sourceBytes": 7020,
+      "bytes": 9129
+    },
+    "assets/courses/packs/pocket-pantry/textures/grow-label.webp": {
+      "file": "./assets/compressed/courses/packs/pocket-pantry/textures/grow-label.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "f71b8e1df103560febea5edebd59b12d3e2acaf5f2bcc1812029a19d43ac2611",
+      "sha256": "2045d77c9b2740a2c1ef6935f7e5dedcaa41fcaa333ecda808d51d0011ab610c",
+      "sourceBytes": 8302,
+      "bytes": 10034
+    },
+    "assets/courses/packs/pocket-pantry/textures/metal-color.webp": {
+      "file": "./assets/compressed/courses/packs/pocket-pantry/textures/metal-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "a7031ce32bed5cc4df4a414048c1b96090cefc7b388edd11245d13a9ee40209c",
+      "sha256": "a89b42c84895a19d4061f6c999a6d957baac22f1041366c457f69b1c20e2d095",
+      "sourceBytes": 52816,
+      "bytes": 90986
+    },
+    "assets/courses/packs/pocket-pantry/textures/metal-normal.webp": {
+      "file": "./assets/compressed/courses/packs/pocket-pantry/textures/metal-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "2baec018b8e43cd55bfb35c4da3733b768ac8d5f981f930921b62dfffcef5213",
+      "sha256": "e1f693ad45c42730dcf24243eab50690c3fc9fc56c283e0d47babe851c11403d",
+      "sourceBytes": 85538,
+      "bytes": 19366
+    },
+    "assets/courses/packs/pocket-pantry/textures/metal-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/pocket-pantry/textures/metal-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "6c6f11fddfd62c8cdbbf4e67e43be9318a1394d2fcd7a48e71a1699d5845420a",
+      "sha256": "be4521bd903dc98c8cb3ab029d9cc576d1b0db0cf5520b996daec6a70a5386a7",
+      "sourceBytes": 26862,
+      "bytes": 33508
+    },
+    "assets/courses/packs/pocket-pantry/textures/pantry-label.webp": {
+      "file": "./assets/compressed/courses/packs/pocket-pantry/textures/pantry-label.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "751ec966f94288028ca0a148c7d0b1bd8ae938284f11b1462c8902470f8bc4d2",
+      "sha256": "921e7008d9da01d726a0f0792d10a8fffca4f06dfc5f38a40bed6e7804db9470",
+      "sourceBytes": 9958,
+      "bytes": 10654
+    },
+    "assets/courses/packs/pocket-pantry/textures/paving-color.webp": {
+      "file": "./assets/compressed/courses/packs/pocket-pantry/textures/paving-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "620e203be3833c17fbdfb1463473db82339578cf093b45a42454971ca3795cf2",
+      "sha256": "a439ad932aafa1011182238fad5f6a00722e1e443193d223b9c42cacd9f46513",
+      "sourceBytes": 244702,
+      "bytes": 226175
+    },
+    "assets/courses/packs/pocket-pantry/textures/paving-normal.webp": {
+      "file": "./assets/compressed/courses/packs/pocket-pantry/textures/paving-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "2106b04e010c62ed22bb4f1612bf7ec37c31d79526bae77f3b3fd0d92f2344a8",
+      "sha256": "1f181484f68b2f18192c26f10645ba05cb6b0124d973adc480ce26b170e87b26",
+      "sourceBytes": 433814,
+      "bytes": 46523
+    },
+    "assets/courses/packs/pocket-pantry/textures/paving-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/pocket-pantry/textures/paving-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "b86f9b751e7f5c3d7add0608571faa4c10d15b00bce48fd80ed30dae5b050a1e",
+      "sha256": "7df4da9a505d9057cca79867663d139bdcd01aa29e348142bf924342c6701edf",
+      "sourceBytes": 41374,
+      "bytes": 86881
+    },
+    "assets/courses/packs/pocket-pantry/textures/sunberry-label.webp": {
+      "file": "./assets/compressed/courses/packs/pocket-pantry/textures/sunberry-label.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "f5126298dce845561457227e6ef464cf95ebc6b00f2f2cbe73edf4802374945a",
+      "sha256": "81349720608172f53afe2a08b3ffb90b2487d196d5f6f4c1c5d5cd55a918d6e0",
+      "sourceBytes": 7612,
+      "bytes": 10004
+    },
+    "assets/courses/packs/pocket-pantry/textures/wood-color.webp": {
+      "file": "./assets/compressed/courses/packs/pocket-pantry/textures/wood-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "1cbda8fce097d13e974fc402f53db09391239f6c01521d14bce2fa6562d7807f",
+      "sha256": "7c9eb4c3967af16ece350d7674e6ac83e5a0ba669a9d2ee6678a1c700061bc6a",
+      "sourceBytes": 150676,
+      "bytes": 212146
+    },
+    "assets/courses/packs/pocket-pantry/textures/wood-normal.webp": {
+      "file": "./assets/compressed/courses/packs/pocket-pantry/textures/wood-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "c4ca43570ff0f1fda7bf28dfc738173a8a4c4dddb719d89a41c0d9f837e7bb87",
+      "sha256": "c9d909a3445557a26db4ffad061a94eae5859d2fae70475b098676a41314a18c",
+      "sourceBytes": 328034,
+      "bytes": 49203
+    },
+    "assets/courses/packs/pocket-pantry/textures/wood-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/pocket-pantry/textures/wood-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "171caa1f1b1638fcb4184ee64a62ad7abef5d62ee478af6c598af6d3b63c4c5c",
+      "sha256": "e13a5d5bec085bc0573d48c3dd4a9a1b425064ac0dd2e0804e6db0d06ac63a90",
+      "sourceBytes": 28638,
+      "bytes": 58538
+    },
+    "assets/courses/packs/railstorm-express/textures/gravel-color.webp": {
+      "file": "./assets/compressed/courses/packs/railstorm-express/textures/gravel-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "28dc4e976855deb4a82fa7b187e760eec7138b4d085573bb812e397e25f2ba02",
+      "sha256": "027775436b62d6d8d85cbdf8b8484c8e7553a1308b26b80ea55ee9398baf90b4",
+      "sourceBytes": 308188,
+      "bytes": 269035
+    },
+    "assets/courses/packs/railstorm-express/textures/gravel-normal.webp": {
+      "file": "./assets/compressed/courses/packs/railstorm-express/textures/gravel-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "7c915888bcbb17e6d030838e712735f56e415d1b50dcdb6b2b99b6817161b9f5",
+      "sha256": "86baab3e4061899e2abfd1160b00ea4acfecf1869823f1e02069a32908d680b5",
+      "sourceBytes": 649628,
+      "bytes": 116027
+    },
+    "assets/courses/packs/railstorm-express/textures/gravel-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/railstorm-express/textures/gravel-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "afff68ff457cac5757ac467f1308311409e03406d7d58d1109df56b9d4e5a976",
+      "sha256": "c5602e177de7eea718f82b9a59911555863f5740bfe7cef91bfa5de9cc66e453",
+      "sourceBytes": 55752,
+      "bytes": 93153
+    },
+    "assets/courses/packs/railstorm-express/textures/metal-color.webp": {
+      "file": "./assets/compressed/courses/packs/railstorm-express/textures/metal-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "a7031ce32bed5cc4df4a414048c1b96090cefc7b388edd11245d13a9ee40209c",
+      "sha256": "a89b42c84895a19d4061f6c999a6d957baac22f1041366c457f69b1c20e2d095",
+      "sourceBytes": 52816,
+      "bytes": 90986
+    },
+    "assets/courses/packs/railstorm-express/textures/metal-normal.webp": {
+      "file": "./assets/compressed/courses/packs/railstorm-express/textures/metal-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "2baec018b8e43cd55bfb35c4da3733b768ac8d5f981f930921b62dfffcef5213",
+      "sha256": "e1f693ad45c42730dcf24243eab50690c3fc9fc56c283e0d47babe851c11403d",
+      "sourceBytes": 85538,
+      "bytes": 19366
+    },
+    "assets/courses/packs/railstorm-express/textures/metal-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/railstorm-express/textures/metal-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "6c6f11fddfd62c8cdbbf4e67e43be9318a1394d2fcd7a48e71a1699d5845420a",
+      "sha256": "be4521bd903dc98c8cb3ab029d9cc576d1b0db0cf5520b996daec6a70a5386a7",
+      "sourceBytes": 26862,
+      "bytes": 33508
+    },
+    "assets/courses/packs/railstorm-express/textures/rock-color.webp": {
+      "file": "./assets/compressed/courses/packs/railstorm-express/textures/rock-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "5c99687f46aa9d40e681e9ef4865796d42e12894d59117e48ec8b9743eb25826",
+      "sha256": "dc1a87c0fb25884d04fe4defa0597d009314c777949977e708ee27db10083b3c",
+      "sourceBytes": 287976,
+      "bytes": 243476
+    },
+    "assets/courses/packs/railstorm-express/textures/rock-normal.webp": {
+      "file": "./assets/compressed/courses/packs/railstorm-express/textures/rock-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "edd302f2faa77c5ab2e4a70e952107def84799b0e0f1fd19026162706202cbb2",
+      "sha256": "23f954ede928639ebb15b730c240c0b985592b026bba15b66bf31244fb52e0e0",
+      "sourceBytes": 634122,
+      "bytes": 120660
+    },
+    "assets/courses/packs/railstorm-express/textures/rock-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/railstorm-express/textures/rock-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "c3374b5bf18e1ea82d6ece0ad35f871847442bcf8852f888da4686a00cb4b58e",
+      "sha256": "62a45811541ba3a96bc23de8ef69bcd2ccaf4987ce64b5a0df82e96252627ebd",
+      "sourceBytes": 73400,
+      "bytes": 96078
+    },
+    "assets/courses/packs/railstorm-express/textures/wood-color.webp": {
+      "file": "./assets/compressed/courses/packs/railstorm-express/textures/wood-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "1cbda8fce097d13e974fc402f53db09391239f6c01521d14bce2fa6562d7807f",
+      "sha256": "7c9eb4c3967af16ece350d7674e6ac83e5a0ba669a9d2ee6678a1c700061bc6a",
+      "sourceBytes": 150676,
+      "bytes": 212146
+    },
+    "assets/courses/packs/railstorm-express/textures/wood-normal.webp": {
+      "file": "./assets/compressed/courses/packs/railstorm-express/textures/wood-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "c4ca43570ff0f1fda7bf28dfc738173a8a4c4dddb719d89a41c0d9f837e7bb87",
+      "sha256": "c9d909a3445557a26db4ffad061a94eae5859d2fae70475b098676a41314a18c",
+      "sourceBytes": 328034,
+      "bytes": 49203
+    },
+    "assets/courses/packs/railstorm-express/textures/wood-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/railstorm-express/textures/wood-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "171caa1f1b1638fcb4184ee64a62ad7abef5d62ee478af6c598af6d3b63c4c5c",
+      "sha256": "e13a5d5bec085bc0573d48c3dd4a9a1b425064ac0dd2e0804e6db0d06ac63a90",
+      "sourceBytes": 28638,
+      "bytes": 58538
+    },
+    "assets/courses/packs/tempest-causeway/textures/metal-color.webp": {
+      "file": "./assets/compressed/courses/packs/tempest-causeway/textures/metal-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "a7031ce32bed5cc4df4a414048c1b96090cefc7b388edd11245d13a9ee40209c",
+      "sha256": "a89b42c84895a19d4061f6c999a6d957baac22f1041366c457f69b1c20e2d095",
+      "sourceBytes": 52816,
+      "bytes": 90986
+    },
+    "assets/courses/packs/tempest-causeway/textures/metal-normal.webp": {
+      "file": "./assets/compressed/courses/packs/tempest-causeway/textures/metal-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "2baec018b8e43cd55bfb35c4da3733b768ac8d5f981f930921b62dfffcef5213",
+      "sha256": "e1f693ad45c42730dcf24243eab50690c3fc9fc56c283e0d47babe851c11403d",
+      "sourceBytes": 85538,
+      "bytes": 19366
+    },
+    "assets/courses/packs/tempest-causeway/textures/metal-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/tempest-causeway/textures/metal-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "6c6f11fddfd62c8cdbbf4e67e43be9318a1394d2fcd7a48e71a1699d5845420a",
+      "sha256": "be4521bd903dc98c8cb3ab029d9cc576d1b0db0cf5520b996daec6a70a5386a7",
+      "sourceBytes": 26862,
+      "bytes": 33508
+    },
+    "assets/courses/packs/tempest-causeway/textures/rock-color.webp": {
+      "file": "./assets/compressed/courses/packs/tempest-causeway/textures/rock-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "5c99687f46aa9d40e681e9ef4865796d42e12894d59117e48ec8b9743eb25826",
+      "sha256": "dc1a87c0fb25884d04fe4defa0597d009314c777949977e708ee27db10083b3c",
+      "sourceBytes": 287976,
+      "bytes": 243476
+    },
+    "assets/courses/packs/tempest-causeway/textures/rock-normal.webp": {
+      "file": "./assets/compressed/courses/packs/tempest-causeway/textures/rock-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "edd302f2faa77c5ab2e4a70e952107def84799b0e0f1fd19026162706202cbb2",
+      "sha256": "23f954ede928639ebb15b730c240c0b985592b026bba15b66bf31244fb52e0e0",
+      "sourceBytes": 634122,
+      "bytes": 120660
+    },
+    "assets/courses/packs/tempest-causeway/textures/rock-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/tempest-causeway/textures/rock-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "c3374b5bf18e1ea82d6ece0ad35f871847442bcf8852f888da4686a00cb4b58e",
+      "sha256": "62a45811541ba3a96bc23de8ef69bcd2ccaf4987ce64b5a0df82e96252627ebd",
+      "sourceBytes": 73400,
+      "bytes": 96078
+    },
+    "assets/courses/packs/tempest-causeway/textures/stone-color.webp": {
+      "file": "./assets/compressed/courses/packs/tempest-causeway/textures/stone-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "4a7f9e7768703c229d2a27e096587d17d8ad5032d66513b554613a102d1ab326",
+      "sha256": "d5d7715ff8074d842fef7fb2726cabf5037b01b0c483d32b0268a6e0bce0e4a5",
+      "sourceBytes": 80500,
+      "bytes": 173882
+    },
+    "assets/courses/packs/tempest-causeway/textures/stone-normal.webp": {
+      "file": "./assets/compressed/courses/packs/tempest-causeway/textures/stone-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "e898fa1be54ae76f6b34cff6a3ffa1067b8a28f570cd56da3467c527adba5ccc",
+      "sha256": "e28b6a6e067d47700e07ad798f89bbe19f1fb9fc55edcd44cbf80c28f4e03d1b",
+      "sourceBytes": 401320,
+      "bytes": 80449
+    },
+    "assets/courses/packs/tempest-causeway/textures/stone-roughness.webp": {
+      "file": "./assets/compressed/courses/packs/tempest-causeway/textures/stone-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "03aaa548023ef885866c6d5fcc6208601867fa3011dbc95a7dde7f446feea76d",
+      "sha256": "639983335887726efb8290c295d39e66d6ebd850963b9def6f39b0fada85289e",
+      "sourceBytes": 23474,
+      "bytes": 66646
+    },
+    "assets/courses/textures/asphalt.webp": {
+      "file": "./assets/compressed/courses/textures/asphalt.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "9ab46c8dc29431371a898af06e297d4a5c4b88965162f9017a2c0bf8730bcd0b",
+      "sha256": "910694bbab97cfe542a92c3ef5b0540dc1bf999cd63be183267bb42d0e212207",
+      "sourceBytes": 1628,
+      "bytes": 7019
+    },
+    "assets/courses/textures/bark.webp": {
+      "file": "./assets/compressed/courses/textures/bark.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "ef311ce9525d427df336aa59486fde2430882ed98134f517c4a97d71997b5679",
+      "sha256": "45d090195f6a9c32fa9957f3b21dcc0ae365c905e388b336ed28d92f0007ba54",
+      "sourceBytes": 32400,
+      "bytes": 93126
+    },
+    "assets/courses/textures/brick.webp": {
+      "file": "./assets/compressed/courses/textures/brick.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "9f9c4bd8a85174cb194e81f3f0a7aa79504eb0911d6c7f7454c1e7ba2ec8ee3d",
+      "sha256": "853418f6f1c14a1a9ace019e795cc40a70e4378d2713fe0d25321d4cc8c16e32",
+      "sourceBytes": 3330,
+      "bytes": 20193
+    },
+    "assets/courses/textures/concrete.webp": {
+      "file": "./assets/compressed/courses/textures/concrete.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "48bb46711853e46ec890327a6ab7c72b7fadf5e6f75e9219d98a16311328fc22",
+      "sha256": "e47ac7be1caee4a3e14388345fc72b9de37c466b4578f16b77deef0600c18f6c",
+      "sourceBytes": 2022,
+      "bytes": 12159
+    },
+    "assets/courses/textures/metal.webp": {
+      "file": "./assets/compressed/courses/textures/metal.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "4c005c682f860837da821f949522c2139907f666775d13c7b4e025910670d6de",
+      "sha256": "1d6779972e3a4a08c27f21cc69ff2289a8d3bfe7ab0e1373efee768cbf1c63eb",
+      "sourceBytes": 7488,
+      "bytes": 14462
+    },
+    "assets/courses/textures/sand.webp": {
+      "file": "./assets/compressed/courses/textures/sand.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "72497816bf67de6580796479bce17444427a20c044e7117d88b64371d47e0f64",
+      "sha256": "a6dedd4462d9b86315537a164262d1118495f19f3c45dc14805e5df844145a92",
+      "sourceBytes": 1258,
+      "bytes": 4840
+    },
+    "assets/courses/textures/snow.webp": {
+      "file": "./assets/compressed/courses/textures/snow.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "16ff9364d43143e996bb2c169c767f09bb3c813e25233f58c8ee02291a10e281",
+      "sha256": "492ab6a8b500ea8d473cfe22d19c7cbf607975fc2cd2069d7d14cd7700adaf72",
+      "sourceBytes": 642,
+      "bytes": 1339
+    },
+    "assets/courses/textures/stone.webp": {
+      "file": "./assets/compressed/courses/textures/stone.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "240acc6521d854fa3bf5d90943ade1620a15f3e43ffd694ac7be11df91da6733",
+      "sha256": "307352ec1e163a844b3d147627f5da8c562fe411037d6533c8f425517ae8f058",
+      "sourceBytes": 20526,
+      "bytes": 83113
+    },
+    "assets/courses/textures/wood.webp": {
+      "file": "./assets/compressed/courses/textures/wood.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "e5d6356e3da21a0c85a3d5bf39e7c74c6d606a5f9a8f79fbbf9d951dcfcd6ba0",
+      "sha256": "c0e3c6887571728dec7aa38730dc2071cb51a052c4e5f9c16c20c7ac52dc7076",
+      "sourceBytes": 5974,
+      "bytes": 37735
+    },
+    "assets/grass.webp": {
+      "file": "./assets/compressed/grass.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "0c24754ead312c599a1604456b6478be4eaa054fa4c610364c513fd07520dc04",
+      "sha256": "7adbed0093c07f41ee8e6a4fed84602039cdb6b212f687d4b9b3a19483145450",
+      "sourceBytes": 26034,
+      "bytes": 28175
+    },
+    "assets/living/props/painted_wooden_bench-painted_wooden_bench_arm_1k.webp": {
+      "file": "./assets/compressed/living/props/painted_wooden_bench-painted_wooden_bench_arm_1k.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "ad9bf921b6c0650c4f87f9ecbc1edbe0a80aedf322fbbff17bfa4bfb04186410",
+      "sha256": "1ef0720613b1f1c98b3728a9dc882b9abaa419ab55cf37289e37ca01b28c79d7",
+      "sourceBytes": 31240,
+      "bytes": 69781
+    },
+    "assets/living/props/painted_wooden_bench-painted_wooden_bench_diff_1k.webp": {
+      "file": "./assets/compressed/living/props/painted_wooden_bench-painted_wooden_bench_diff_1k.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "79366e79c2e347791bf54cc7b31d6a98fe99363e1ab4110c58629aa9577269db",
+      "sha256": "34ff6088f950c0092ae895603a084107b2737b4be98b87ecb434860793cb287f",
+      "sourceBytes": 25728,
+      "bytes": 72646
+    },
+    "assets/living/props/painted_wooden_bench-painted_wooden_bench_nor_gl_1k.webp": {
+      "file": "./assets/compressed/living/props/painted_wooden_bench-painted_wooden_bench_nor_gl_1k.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "016c714b629c81e697b444dcfd6c9fb0d2b27ae78da012bafe9093c4d69fa22d",
+      "sha256": "743a0ddb63e6ce80495530cf7dd07ee75da983cb6b5e7b24cdc26309961a5c9d",
+      "sourceBytes": 351820,
+      "bytes": 68309
+    },
+    "assets/living/props/planter_box_01-planter_box_01_arm_1k.webp": {
+      "file": "./assets/compressed/living/props/planter_box_01-planter_box_01_arm_1k.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "1898e27af00e511c28bf107c3a6d04f242f5a385138b01375f2f15c5bf9b0384",
+      "sha256": "e40ef7a6150ca45c659a88c0f2d8fc11b9b6373ba5eb1a0cf827049510ee9708",
+      "sourceBytes": 57306,
+      "bytes": 104437
+    },
+    "assets/living/props/planter_box_01-planter_box_01_diff_1k.webp": {
+      "file": "./assets/compressed/living/props/planter_box_01-planter_box_01_diff_1k.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "f14b9084e8005c5e44388b0c83daa84cac49c8856c127bc323fef3653265911a",
+      "sha256": "d11f07cd283fccb1ee17e5bca3c3f59986964a93d08ab7d1250a42622bae072b",
+      "sourceBytes": 43584,
+      "bytes": 93515
+    },
+    "assets/living/props/planter_box_01-planter_box_01_nor_gl_1k.webp": {
+      "file": "./assets/compressed/living/props/planter_box_01-planter_box_01_nor_gl_1k.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "43219023a437ccd32bc84a30a8e65d6deaa777f4d87e4bf2491aae8aa04a5d76",
+      "sha256": "3b0c80822135aaa6c325ee54ed2f651a32695f5939c04fc09e595ef20ac7b58d",
+      "sourceBytes": 332686,
+      "bytes": 77994
+    },
+    "assets/living/props/street_lamp_02-street_lamp_02_arm_1k.webp": {
+      "file": "./assets/compressed/living/props/street_lamp_02-street_lamp_02_arm_1k.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "be1f7f69ac5f035444fecb39e590715de667c69cc839a01da8aa9fac410fd690",
+      "sha256": "0428811cadc4860d5d088f75a82148f4ca60dbf97817c34e815cf8a09709fe39",
+      "sourceBytes": 55448,
+      "bytes": 103054
+    },
+    "assets/living/props/street_lamp_02-street_lamp_02_diff_1k.webp": {
+      "file": "./assets/compressed/living/props/street_lamp_02-street_lamp_02_diff_1k.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "eccc9729bcdb4efb068551ee78991325d959a564390865f93c7414f5c86f7db1",
+      "sha256": "e7b703fe53751557ab23ad6b21f76124bbececaa8f4fb1d5825edd81ca983d72",
+      "sourceBytes": 16492,
+      "bytes": 47087
+    },
+    "assets/living/props/street_lamp_02-street_lamp_02_nor_gl_1k.webp": {
+      "file": "./assets/compressed/living/props/street_lamp_02-street_lamp_02_nor_gl_1k.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "36a83cfa6efffc335a3b4cdb6dab7c2ce323399a39c898cb3fbbfe0783262a2c",
+      "sha256": "7654cf461b1905db5e60291687108192682b6f208254c4f5d52538002bfd8234",
+      "sourceBytes": 184282,
+      "bytes": 20192
+    },
+    "assets/living/textures/asphalt-color.webp": {
+      "file": "./assets/compressed/living/textures/asphalt-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "f1a82ea293e4e131ef8e5fbe74c241afc68aee02c25e75b3c03055a6c6682a53",
+      "sha256": "dee88133281532de1fcef2320050d76180cf4f644048f54910066c6bcdb0617d",
+      "sourceBytes": 413794,
+      "bytes": 240610
+    },
+    "assets/living/textures/asphalt-normal.webp": {
+      "file": "./assets/compressed/living/textures/asphalt-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "b342d7b35a18ca8e1808bde93baef47f5db9cf08b7ad29d7526c04d8b8df7815",
+      "sha256": "709337f25275c3f51f728701910b85e90bceb62bb8da47957f91404f8b15341a",
+      "sourceBytes": 470804,
+      "bytes": 77042
+    },
+    "assets/living/textures/asphalt-roughness.webp": {
+      "file": "./assets/compressed/living/textures/asphalt-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "b4e7f84659e04dfbe31b9833b37cc5b902e2488a735c7601b6cb35f3472258c9",
+      "sha256": "242479f4288b26f0075fa8d7488a999f74d2ebc9e765d561474da3049a013daf",
+      "sourceBytes": 104998,
+      "bytes": 94755
+    },
+    "assets/living/textures/brick-color.webp": {
+      "file": "./assets/compressed/living/textures/brick-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "e15abde640deb0f310a2fb040a9ab5ec33a74d9e89c3818458807ca682db435a",
+      "sha256": "e225ca2b51e93fd2cc9bb0777e2fa40914c18f8017ede89e7a233678091c83a2",
+      "sourceBytes": 296674,
+      "bytes": 265503
+    },
+    "assets/living/textures/brick-normal.webp": {
+      "file": "./assets/compressed/living/textures/brick-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "1ffdc052ed7e2023001643a007feae64b819f5d899691979b92d26622fb51c6e",
+      "sha256": "bf0e2484c21f477502298630bc5fcb57ff6817e189eeb335d08482ec3d5e13bf",
+      "sourceBytes": 544652,
+      "bytes": 110580
+    },
+    "assets/living/textures/brick-roughness.webp": {
+      "file": "./assets/compressed/living/textures/brick-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "97db2fd6ad975328c0036c5e9e8660619a17b30a4367c8af2a2bea540447ac91",
+      "sha256": "69887a7bdc987cd10eb058a5033d055fc2696ff016c22e358b34e29436a94937",
+      "sourceBytes": 61004,
+      "bytes": 95634
+    },
+    "assets/living/textures/grass-color.webp": {
+      "file": "./assets/compressed/living/textures/grass-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "c99fe4c3a3f73ef3cc752084ce6fc90f8ac1c8b5854a26773c91145fdc356681",
+      "sha256": "33b10e7d184f9f367a0df21e07dd79faa8e56d46eb2626a5cf620e7a6708e12f",
+      "sourceBytes": 441678,
+      "bytes": 274746
+    },
+    "assets/living/textures/grass-normal.webp": {
+      "file": "./assets/compressed/living/textures/grass-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "14622e323fc7a0abbec781da662af02accfc5fce69d7be7da5626300d171a2e1",
+      "sha256": "984222186876f165aac768e6b3904bdda43dc746f61e7957cddb054ad9ebf84b",
+      "sourceBytes": 609120,
+      "bytes": 102311
+    },
+    "assets/living/textures/grass-roughness.webp": {
+      "file": "./assets/compressed/living/textures/grass-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "38711ffd4b0f4abea08e0f9010e382cffb1f1c29c61a5d3832acfeff51a4717d",
+      "sha256": "39152b14e225d22e5251b4de1c660e0ca7e3e60c574609003da56115870ce570",
+      "sourceBytes": 108366,
+      "bytes": 97706
+    },
+    "assets/living/textures/gravel-color.webp": {
+      "file": "./assets/compressed/living/textures/gravel-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "d13200390a668fb777099c42ccaf5f93ba342920189b2c0bf505af0d3314e7b8",
+      "sha256": "0ba010434f5d313c8e55a54d5678b23a66ecfe9b7f1783009f01233a6566a0a5",
+      "sourceBytes": 318008,
+      "bytes": 269976
+    },
+    "assets/living/textures/gravel-normal.webp": {
+      "file": "./assets/compressed/living/textures/gravel-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "7c915888bcbb17e6d030838e712735f56e415d1b50dcdb6b2b99b6817161b9f5",
+      "sha256": "86baab3e4061899e2abfd1160b00ea4acfecf1869823f1e02069a32908d680b5",
+      "sourceBytes": 649628,
+      "bytes": 116027
+    },
+    "assets/living/textures/gravel-roughness.webp": {
+      "file": "./assets/compressed/living/textures/gravel-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "afff68ff457cac5757ac467f1308311409e03406d7d58d1109df56b9d4e5a976",
+      "sha256": "c5602e177de7eea718f82b9a59911555863f5740bfe7cef91bfa5de9cc66e453",
+      "sourceBytes": 55752,
+      "bytes": 93153
+    },
+    "assets/living/textures/needles-color.webp": {
+      "file": "./assets/compressed/living/textures/needles-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "b24a639d5e82e311b1fd6ff1b316b17ee28d2f8b94e0516fbfb1259622ba55a8",
+      "sha256": "a8e1de025055f5d72af31a5b3045d77f2efc5a030f6525d043c4cd79a8f3123e",
+      "sourceBytes": 578618,
+      "bytes": 276785
+    },
+    "assets/living/textures/needles-normal.webp": {
+      "file": "./assets/compressed/living/textures/needles-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "48c267a961ef1d28ab9e133c7718d5eb99e76cc6c481a051b25cdcfecb77e57c",
+      "sha256": "641537f5f575d9aece0d08afe09005c4a273ffab689322108a3de671ea32fe98",
+      "sourceBytes": 569106,
+      "bytes": 94992
+    },
+    "assets/living/textures/needles-roughness.webp": {
+      "file": "./assets/compressed/living/textures/needles-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "a4279cbb77ad4181af999246249e4e264512cf158b5bb0fd69b9be990356ef6d",
+      "sha256": "de4dbce091136d17ae8781dc488d40fa5a394c61c94329fafe3b371e761daab5",
+      "sourceBytes": 50438,
+      "bytes": 91523
+    },
+    "assets/living/textures/paving-color.webp": {
+      "file": "./assets/compressed/living/textures/paving-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "735755a09ec588a8ec69d25aae72ae2a4eba77a9893257aa21687c94ddbfabe8",
+      "sha256": "ea7967f145646b470bac95d684dfbdeffcece569094c0ebbffb37932af422a76",
+      "sourceBytes": 253768,
+      "bytes": 227083
+    },
+    "assets/living/textures/paving-normal.webp": {
+      "file": "./assets/compressed/living/textures/paving-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "2106b04e010c62ed22bb4f1612bf7ec37c31d79526bae77f3b3fd0d92f2344a8",
+      "sha256": "1f181484f68b2f18192c26f10645ba05cb6b0124d973adc480ce26b170e87b26",
+      "sourceBytes": 433814,
+      "bytes": 46523
+    },
+    "assets/living/textures/paving-roughness.webp": {
+      "file": "./assets/compressed/living/textures/paving-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "b86f9b751e7f5c3d7add0608571faa4c10d15b00bce48fd80ed30dae5b050a1e",
+      "sha256": "7df4da9a505d9057cca79867663d139bdcd01aa29e348142bf924342c6701edf",
+      "sourceBytes": 41374,
+      "bytes": 86881
+    },
+    "assets/living/textures/rock-color.webp": {
+      "file": "./assets/compressed/living/textures/rock-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "b0ad5c0de64d5568d72d8d67f67f98cb013927e2288e106a02b84828c5f62d77",
+      "sha256": "12a09d19efd25db3d1fb0bbb11d452334ef139bfa081e84f42cf58914603dd79",
+      "sourceBytes": 293790,
+      "bytes": 246120
+    },
+    "assets/living/textures/rock-normal.webp": {
+      "file": "./assets/compressed/living/textures/rock-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "edd302f2faa77c5ab2e4a70e952107def84799b0e0f1fd19026162706202cbb2",
+      "sha256": "23f954ede928639ebb15b730c240c0b985592b026bba15b66bf31244fb52e0e0",
+      "sourceBytes": 634122,
+      "bytes": 120660
+    },
+    "assets/living/textures/rock-roughness.webp": {
+      "file": "./assets/compressed/living/textures/rock-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "c3374b5bf18e1ea82d6ece0ad35f871847442bcf8852f888da4686a00cb4b58e",
+      "sha256": "62a45811541ba3a96bc23de8ef69bcd2ccaf4987ce64b5a0df82e96252627ebd",
+      "sourceBytes": 73400,
+      "bytes": 96078
+    },
+    "assets/living/textures/roof-color.webp": {
+      "file": "./assets/compressed/living/textures/roof-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "48c54f67d90810a08cd865a24f13955634d411f4cede153803fcbf0b92a8fe9e",
+      "sha256": "e10d27cf4c28eb2cf1adf2348cb26ce91cd58dfbde27bf15a66938e393a5d962",
+      "sourceBytes": 25442,
+      "bytes": 67500
+    },
+    "assets/living/textures/roof-normal.webp": {
+      "file": "./assets/compressed/living/textures/roof-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "abe23472dbb72a7391ef6ccf3edeadaef50b6fa3c627d457c1a542600069e07f",
+      "sha256": "489cab4fe40088491d15bbd51ad1be79a2792256d067f8329f13eca543a2121b",
+      "sourceBytes": 195832,
+      "bytes": 48831
+    },
+    "assets/living/textures/roof-roughness.webp": {
+      "file": "./assets/compressed/living/textures/roof-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "f6b84ca9e4b23253d0531d884413cbd953e528da8e30847826b2ddcf78426715",
+      "sha256": "5e5b8678621393926465d072bad5cc264d96f3e8a211266c66d05007f10e151e",
+      "sourceBytes": 38282,
+      "bytes": 91309
+    },
+    "assets/living/textures/sand-color.webp": {
+      "file": "./assets/compressed/living/textures/sand-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "b286cb69d0f8b72d241af05d7f8fab35d90cad1cd4e24c701a86f19dfb7408f2",
+      "sha256": "0bb6606cd13ba91e7c3a24b7400aca2b30bce8c3349e150e8ccea8c0f4635d82",
+      "sourceBytes": 34300,
+      "bytes": 52706
+    },
+    "assets/living/textures/sand-normal.webp": {
+      "file": "./assets/compressed/living/textures/sand-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "29cff61b558dfde8cbb2c2f4049cb1b0af7884b8090e4e66716bd3197942dfca",
+      "sha256": "b01402c1e1692ea4438eaa6aa37f66b4cde1d94dd63d94c61996b2ef60a941af",
+      "sourceBytes": 373168,
+      "bytes": 87357
+    },
+    "assets/living/textures/sand-roughness.webp": {
+      "file": "./assets/compressed/living/textures/sand-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "1c5e9c7aa73ae157e6cc71bf020a83e2b21595865ff8c97b9f14a4528a309bb4",
+      "sha256": "07b25d8d1a1daec0c3d40c5cb54d5d5284e5e7d9521a1412c82d838504c29819",
+      "sourceBytes": 19604,
+      "bytes": 59044
+    },
+    "assets/living/textures/wood-color.webp": {
+      "file": "./assets/compressed/living/textures/wood-color.webp.ktx2",
+      "channel": "color",
+      "sourceSha256": "f2b9846a0d6d4af2d732de06f8572f1dc03a70a387725800a38240b3496dbdea",
+      "sha256": "96b1ef6d210d048cc06f17c1fa4c74bf26ea9e154df889d99afce6600ab979c3",
+      "sourceBytes": 155486,
+      "bytes": 214363
+    },
+    "assets/living/textures/wood-normal.webp": {
+      "file": "./assets/compressed/living/textures/wood-normal.webp.ktx2",
+      "channel": "normal",
+      "sourceSha256": "c4ca43570ff0f1fda7bf28dfc738173a8a4c4dddb719d89a41c0d9f837e7bb87",
+      "sha256": "c9d909a3445557a26db4ffad061a94eae5859d2fae70475b098676a41314a18c",
+      "sourceBytes": 328034,
+      "bytes": 49203
+    },
+    "assets/living/textures/wood-roughness.webp": {
+      "file": "./assets/compressed/living/textures/wood-roughness.webp.ktx2",
+      "channel": "linear",
+      "sourceSha256": "171caa1f1b1638fcb4184ee64a62ad7abef5d62ee478af6c598af6d3b63c4c5c",
+      "sha256": "e13a5d5bec085bc0573d48c3dd4a9a1b425064ac0dd2e0804e6db0d06ac63a90",
+      "sourceBytes": 28638,
+      "bytes": 58538
+    }
+  },
+  "summary": {
+    "count": 134,
+    "sourceBytes": 21149893,
+    "compressedBytes": 11764638
+  }
+}

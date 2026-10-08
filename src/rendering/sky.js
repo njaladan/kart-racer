@@ -1,4 +1,5 @@
 import * as THREE from "../../vendor/three/three.module.js";
+import { stormAt } from "../simulation/experience-mechanics.js";
 
 // A single sky pass supplies layered clouds, the celestial disk and atmospheric
 // scattering. All movement is driven by the race clock, never wall-clock time.
@@ -22,6 +23,7 @@ export function addGradientSky(scene, theme = {}) {
     cloudSpeed: { value: theme.cloudSpeed ?? 1 },
     celestialAmount: { value: theme.sunDisk ?? 1 },
     storm: { value: theme.atmosphere === "storm" ? 1 : 0 },
+    stormFlash: { value: 0 },
   };
   const sky = new THREE.Mesh(
     new THREE.SphereGeometry(700, 24, 12),
@@ -34,7 +36,7 @@ export function addGradientSky(scene, theme = {}) {
       vertexShader: `varying vec3 direction;
       void main(){direction=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
       fragmentShader: `uniform vec3 zenith,horizon,cloudLight,cloudShade,celestial,sunDirection;
-      uniform float time,night,cloudCover,cloudSpeed,celestialAmount,storm; varying vec3 direction;
+      uniform float time,night,cloudCover,cloudSpeed,celestialAmount,storm,stormFlash; varying vec3 direction;
       float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
       float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
         return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.)),f.x),f.y);}
@@ -56,7 +58,7 @@ export function addGradientSky(scene, theme = {}) {
         vec3 clouds=mix(cloudShade,cloudLight,smoothstep(.35,.68,field));
         clouds+=celestial*pow(sun,12.)*.08;
         color=mix(color,clouds,density);
-        color+=vec3(.4,.5,.6)*pow(max(0.,sin(time*.24)),128.)*storm*density;
+        color+=vec3(.4,.5,.6)*stormFlash*storm*(.3+.7*density);
         if(night>.5){
           vec2 stars=d.xz/(h+.35)*360.; vec2 cell=floor(stars); vec2 local=fract(stars)-.5;
           float star=(1.-smoothstep(.035,.12,length(local)))*step(.994,hash(cell));
@@ -77,9 +79,10 @@ export function addGradientSky(scene, theme = {}) {
   scene.add(sky);
   return {
     mesh: sky,
-    update(time, motionEnabled = true) {
-      uniforms.time.value = time;
+    update(time, motionEnabled = true, course = null) {
+      uniforms.time.value = motionEnabled ? time : 0;
       uniforms.storm.value = theme.atmosphere === "storm" && motionEnabled ? 1 : 0;
+      uniforms.stormFlash.value = motionEnabled && course ? stormAt(course, time).flash : 0;
     },
   };
 }

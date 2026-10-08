@@ -17,6 +17,7 @@ import { glasshouseRoad } from "../courses/adventure/pelagic-materials.js";
 import { metalDeckDetail } from "../courses/adventure/architectural-detail.js";
 import { buildCourseEnvironment, composeCourseEnvironment } from "../courses/course-environment.js";
 import { addHeroScenery } from "./hero-scenery.js";
+import { buildCoursePolish } from "../courses/polish/index.js";
 
 // Shared geometry uses exactly the surface/edge queries used by karts and shells.
 export function buildCourseWorld({
@@ -48,6 +49,15 @@ export function buildCourseWorld({
     };
     addDetailedScenery(scene, track, assets);
     addHeroScenery(scene, track, assets, textures);
+    const polish = buildCoursePolish({ scene, track, textures, assets, baseWorld: world });
+    const updateBase = world.update.bind(world);
+    world.update = (time, state = {}) => {
+      updateBase(time, state);
+      polish.update(time, state);
+    };
+    world.setQuality = polish.setQuality;
+    world.updateCamera = polish.updateCamera;
+    world.animated = [...(world.animated || []), ...polish.animated];
     const environment = buildCourseEnvironment({ scene, track, textures, surfaces: [mats.road] });
     return composeCourseEnvironment(world, environment, createSceneryDetailController(scene));
   }
@@ -484,18 +494,21 @@ export function buildCourseWorld({
     surfaces: Object.values(roadMaterials),
   });
   const art = buildAdventureArt({ scene, track, textures, kit, renderer });
+  const polish = buildCoursePolish({ scene, track, textures, assets, baseWorld: world });
   const detail = createSceneryDetailController(scene);
   return composeCourseEnvironment(
     {
       ...world,
-      animated: [...(world.animated || []), ...(art?.animated || [])],
+      animated: [...(world.animated || []), ...(art?.animated || []), ...polish.animated],
       setQuality(tier) {
         world.setQuality?.(tier);
         art?.setQuality(tier);
+        polish.setQuality(tier);
       },
       updateCamera(position, tier) {
         world.updateCamera?.(position, tier);
         art?.updateCamera(position, tier);
+        polish.updateCamera(position, tier);
       },
       update(time, courseState) {
         for (const belt of conveyorTextures) belt.texture.offset.y = -(time * belt.speed) / 8;
@@ -503,6 +516,7 @@ export function buildCourseWorld({
         world.update?.(time, courseState);
         experience.update(time, courseState);
         art?.update(time, courseState);
+        polish.update(time, courseState);
       },
     },
     environment,

@@ -13,6 +13,7 @@ import { COURSES } from "../src/courses/registry.js";
 import { selectCourse } from "../src/track/track.js";
 import { NodeIO } from "@gltf-transform/core";
 import { ALL_EXTENSIONS } from "@gltf-transform/extensions";
+import { exportMeshLighting } from "./export-mesh-lighting.mjs";
 
 const root = resolve(new URL("..", import.meta.url).pathname);
 const require = createRequire(import.meta.url);
@@ -238,7 +239,7 @@ for (const course of selected) {
   });
   // Exercise kit import in the same runtime contract used by course authors.
   createCourseKit(new THREE.Group(), track, assets);
-  world.update(0);
+  world.update(0, { motionEnabled: false, racers: [], bake: true });
   scene.updateMatrixWorld(true);
   if (process.env.COURSE_SCENE_STATS) {
     let meshes = 0,
@@ -388,5 +389,14 @@ for (const course of selected) {
   };
   await writeFile(`${output}/${course.id}.bin`, binary);
   await writeFile(`${output}/${course.id}.json`, JSON.stringify(metadata));
-  console.log(JSON.stringify(metadata));
+  const meshLighting = await exportMeshLighting(scene, world, course, output);
+  console.log(
+    JSON.stringify({
+      course: course.id,
+      triangles: metadata.triangles,
+      positions: metadata.positions,
+      lights: metadata.lights.length,
+      meshLighting,
+    }),
+  );
 }

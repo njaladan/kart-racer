@@ -159,7 +159,14 @@ export function batchScenery(scenery, animated = []) {
   });
   const meshes = [];
   scenery.traverse((m) => {
-    if (m.isMesh && !protectedGroups.some((g) => g === m || g.getObjectById(m.id))) meshes.push(m);
+    if (
+      m.isMesh &&
+      !m.userData.excludeFromReflectionProbe &&
+      !m.userData.layeredLightSource &&
+      !m.userData.layeredLightEffect &&
+      !protectedGroups.some((g) => g === m || g.getObjectById(m.id))
+    )
+      meshes.push(m);
   });
   const combined = new THREE.Group();
   scenery.add(combined);
@@ -171,7 +178,12 @@ export function batchScenery(scenery, animated = []) {
   // Remove empty source containers left after flattening static scenery.
   const prune = (group) => {
     for (const child of [...group.children]) {
-      if (child.isGroup && !protectedGroups.includes(child) && !child.userData.environmentSource) {
+      if (
+        child.isGroup &&
+        !protectedGroups.includes(child) &&
+        !child.userData.environmentSource &&
+        !child.userData.layeredLightSource
+      ) {
         prune(child);
         if (child.children.length === 0) group.remove(child);
       }

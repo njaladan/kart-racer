@@ -118,6 +118,7 @@ export function buildWindmillWorld({
   const story = buildValleyStory({ scene, scenery, track, kit, textures });
   batchScenery(scenery, [...landmarks.animated, ...life.animated, ...story.animated]);
   return {
+    animated: [...landmarks.animated, ...life.animated, ...story.animated],
     update(time) {
       landmarks.update(time);
       if (lake.material.map) lake.material.map.offset.set(time * 0.006, time * 0.003);

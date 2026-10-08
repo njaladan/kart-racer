@@ -125,7 +125,7 @@ async function captureCourse(browserContext, courseId) {
         return button && !button.disabled;
       },
       undefined,
-      { timeout: 90_000 },
+      { timeout: timeoutMs },
     );
 
     if (course.t != null) {

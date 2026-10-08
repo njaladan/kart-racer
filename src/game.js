@@ -26,6 +26,8 @@ import { createBrowserDiagnostics } from "./testing/browser-diagnostics.js";
 import { enterMultiplayer } from "./ui/multiplayer-lobby.js";
 import { createNetworkRace } from "./multiplayer/network-race.js";
 import { installScannedMaterials } from "./rendering/scanned-materials.js";
+import { installMaterialPolish } from "./rendering/material-polish.js";
+import { loadMeshLightBake, installMeshLightAttributes } from "./rendering/mesh-light-bake.js";
 
 async function startGame() {
   document.getElementById("multiplayer-button").addEventListener("click", () => {
@@ -53,8 +55,17 @@ async function startGame() {
   });
   const { pads, boxes } = createRaceProps({ ...sceneState, course });
   installScannedMaterials(scene, sceneState.fidelityAssets, course.id, landscape.animated);
-  const courseBake = course.staticBake === false ? null : await loadCourseBake(course.id);
+  const [courseBake, meshBake] =
+    course.staticBake === false
+      ? [null, null]
+      : await Promise.all([loadCourseBake(course.id), loadMeshLightBake(course.id)]);
+  landscape.update(0, { motionEnabled: false, racers: [], bake: true });
+  scene.updateMatrixWorld(true);
+  scene.userData.meshLightCoverage = installMeshLightAttributes(scene, meshBake, landscape);
   installCourseBake(scene, courseBake);
+  installMaterialPolish(scene);
+  scene.updateMatrixWorld(true);
+  sceneState.environmentMaps.capture(scene, activeTrack);
   const racers = createRaceGrid(roster);
   if (multiplayer) {
     racers.forEach((racer, index) => {
@@ -278,6 +289,7 @@ async function startGame() {
     bots,
     boxes,
     particles,
+    scene,
     renderer,
     camera,
     gameRenderer,

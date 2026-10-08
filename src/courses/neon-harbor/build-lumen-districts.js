@@ -51,7 +51,8 @@ export function buildLumenDistricts({ THREE, scenery, track, kit, props, materia
     const g = upright(t, offset);
     // Thick podiums tie the city to its quays even where the terrain falls away.
     box(concrete, g, [0, -1.8, 0], [width + 0.5, 3.6, depth + 0.5]);
-    box(facades[index % 3], g, [0, height / 2, 0], [width, height, depth]);
+    const facadeIndex = index % 5 === 3 ? 2 : (index + Math.floor(fraction * 7)) % 3;
+    box(facades[facadeIndex], g, [0, height / 2, 0], [width, height, depth]);
     box(dark, g, [0, height + 0.16, 0], [width + 0.6, 0.32, depth + 0.6]);
     for (const z of [-depth / 2, depth / 2])
       box(
@@ -69,9 +70,24 @@ export function buildLumenDistricts({ THREE, scenery, track, kit, props, materia
       return;
     }
     const face = -side * (width / 2 + 0.05);
-    // Recessed shop portal, fascia, awning, cable conduit and rooftop equipment.
-    box(dark, g, [face, 2.1, 0], [0.2, 3.6, 9.5]);
+    // Recessed shop portal, deep jambs, fascia, awning, cable conduit and
+    // rooftop equipment. The inset alternates with dark upper facade bays so
+    // the street reads in lit and unlit blocks instead of one window grid.
+    box(dark, g, [face, 2.2, 0], [0.48, 4.2, 9.5]);
+    for (const z of [-5, 5]) {
+      box(steel, g, [face - side * 0.28, 2.2, z], [0.85, 4.5, 0.55]);
+      box(concrete, g, [face - side * 0.32, 4.45, z], [1.05, 0.45, 0.7]);
+    }
     shopWindow(g, index, [face - side * 0.12, 2.2, -2.5], (-side * Math.PI) / 2);
+    if (index % 4 === 1) {
+      const bayHeight = Math.max(6, height * 0.31);
+      const bayZ = index % 2 ? 2.6 : -2.6;
+      box(dark, g, [face - side * 0.12, height * 0.58, bayZ], [0.36, bayHeight, 3.4]);
+      box(steel, g, [face - side * 0.3, height * 0.58, bayZ - 1.85], [0.55, bayHeight + 0.6, 0.28]);
+      box(steel, g, [face - side * 0.3, height * 0.58, bayZ + 1.85], [0.55, bayHeight + 0.6, 0.28]);
+      if (index % 3 === 1)
+        box(cyan, g, [face - side * 0.33, height * 0.58, bayZ], [0.09, bayHeight * 0.23, 2.4]);
+    }
     box(steel, g, [face - side * 0.2, 0.3, 0], [1.5, 0.6, 9.8]);
     box(index % 2 ? pink : cyan, g, [face - side * 0.25, 4.5, 0], [0.16, 0.1, 10]);
     box(steel, g, [face - side * 0.95, 4.1, 0], [2.2, 0.25, 10]);

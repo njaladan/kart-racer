@@ -1,4 +1,5 @@
 import * as THREE from "../../vendor/three/three.module.js";
+import { courseWind } from "./wind-field.js";
 
 /** Compose material modifications, preserving existing bake and wind hooks. */
 export function patchMaterial(material, key, patch) {
@@ -231,10 +232,12 @@ export function installFoliageWind(scene, material, { strength = 0.045 } = {}) {
   if (!material?.isMeshStandardMaterial) return;
   const time = { value: 0 };
   (scene.userData.surfaceAnimations ||= []).push(time);
-  patchMaterial(material, "foliage-wind-v1", (shader) => {
+  const direction = new THREE.Vector3(...courseWind(scene.userData.courseTheme));
+  patchMaterial(material, "foliage-wind-v2", (shader) => {
     shader.uniforms.foliageTime = time;
     shader.uniforms.foliageStrength = { value: strength };
-    shader.vertexShader = `uniform float foliageTime,foliageStrength;\n${shader.vertexShader}`;
+    shader.uniforms.foliageDirection = { value: direction };
+    shader.vertexShader = `uniform float foliageTime,foliageStrength;uniform vec3 foliageDirection;\n${shader.vertexShader}`;
     shader.vertexShader = shader.vertexShader.replace(
       "#include <begin_vertex>",
       `#include <begin_vertex>
@@ -245,8 +248,13 @@ export function installFoliageWind(scene, material, { strength = 0.045 } = {}) {
       foliageWorld=modelMatrix*foliageWorld;
       float foliageWave=sin(foliageWorld.x*.16+foliageWorld.z*.11+foliageTime*1.45);
       float foliageAnchor=smoothstep(0.,1.5,max(0.,position.y));
-      transformed.x+=foliageWave*foliageStrength*foliageAnchor;
-      transformed.z+=cos(foliageWorld.z*.15+foliageTime*.9)*foliageStrength*.45*foliageAnchor;`,
+      float foliageGust=.8+sin(foliageTime*.55)*.14+sin(foliageTime*1.1)*.06;
+      mat3 foliageTransform=mat3(modelMatrix);
+      #ifdef USE_INSTANCING
+        foliageTransform=foliageTransform*mat3(instanceMatrix);
+      #endif
+      vec3 foliageWorldSway=foliageDirection*foliageWave*foliageStrength*foliageAnchor*foliageGust;
+      transformed+=inverse(foliageTransform)*foliageWorldSway;`,
     );
   });
 }

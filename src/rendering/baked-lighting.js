@@ -71,9 +71,18 @@ export function installCourseBake(scene, bake) {
     if (!object.isMesh || object.userData.skipBake) return;
     for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
       if (!material?.isMeshStandardMaterial || material.userData.waterUniforms) continue;
-      patchMaterial(material, `offline-course-bake-v2-${volume?.heights.length ?? 0}`, (shader) => {
+      material.defaultAttributeValues ||= {};
+      material.defaultAttributeValues.lightBake = [0, 0, 0, 0];
+      material.defaultAttributeValues.instanceLightBake = [0, 0, 0, 0];
+      patchMaterial(material, `offline-course-bake-v3-${volume?.heights.length ?? 0}`, (shader) => {
         Object.assign(shader.uniforms, uniforms);
-        shader.vertexShader = `varying vec3 vCourseBakeWorld;\n${shader.vertexShader}`;
+        shader.vertexShader = `varying vec3 vCourseBakeWorld;varying vec4 vMeshLightBake;
+          #ifdef USE_INSTANCING
+            attribute vec4 instanceLightBake;
+          #else
+            attribute vec4 lightBake;
+          #endif
+          ${shader.vertexShader}`;
         shader.vertexShader = shader.vertexShader.replace(
           "#include <worldpos_vertex>",
           `#include <worldpos_vertex>
@@ -84,9 +93,14 @@ export function installCourseBake(scene, bake) {
           #ifdef USE_INSTANCING
             bakePosition=instanceMatrix*bakePosition;
           #endif
-          vCourseBakeWorld=(modelMatrix*bakePosition).xyz;`,
+          vCourseBakeWorld=(modelMatrix*bakePosition).xyz;
+          #ifdef USE_INSTANCING
+            vMeshLightBake=instanceLightBake;
+          #else
+            vMeshLightBake=lightBake;
+          #endif`,
         );
-        shader.fragmentShader = `varying vec3 vCourseBakeWorld;
+        shader.fragmentShader = `varying vec3 vCourseBakeWorld;varying vec4 vMeshLightBake;
           uniform sampler2D courseBakeMap,courseHeightMap;
           uniform vec4 courseBakeBounds;
           uniform vec2 courseBakeHeight;
@@ -100,12 +114,16 @@ export function installCourseBake(scene, bake) {
           vec4 courseLight=texture2D(courseBakeMap,bakeUv);
           float encodedHeight=dot(texture2D(courseHeightMap,bakeUv).rg,vec2(256./257.,1./257.));
           float bakeY=mix(courseBakeHeight.x,courseBakeHeight.y,encodedHeight);
-          float nearGround=(1.-smoothstep(1.5,6.,abs(vCourseBakeWorld.y-bakeY)))*insideBake;
+          float hasMeshBake=step(.001,vMeshLightBake.a);
+          reflectedLight.indirectDiffuse*=mix(1.,vMeshLightBake.a,hasMeshBake);
+          reflectedLight.indirectDiffuse+=diffuseColor.rgb*vMeshLightBake.rgb*courseBakeBounce*hasMeshBake;
+          reflectedLight.indirectSpecular*=mix(1.,vMeshLightBake.a,hasMeshBake*roughnessFactor*.35);
+          float nearGround=(1.-smoothstep(1.5,6.,abs(vCourseBakeWorld.y-bakeY)))*insideBake*(1.-hasMeshBake);
           reflectedLight.indirectDiffuse*=mix(1.,courseLight.a,nearGround);
           reflectedLight.indirectDiffuse+=diffuseColor.rgb*courseLight.rgb*courseBakeBounce*nearGround;
           ${
             volume
-              ? `vec3 spillLight=courseSpillAt(bakeUv,vCourseBakeWorld.y)*insideBake*courseSpillStrength;
+              ? `vec3 spillLight=courseSpillAt(bakeUv,vCourseBakeWorld.y)*insideBake*courseSpillStrength*(1.-hasMeshBake);
           reflectedLight.indirectDiffuse+=diffuseColor.rgb*spillLight;
           reflectedLight.indirectSpecular+=spillLight*.12*(1.-roughnessFactor);`
               : ""
