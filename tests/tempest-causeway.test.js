@@ -218,3 +218,31 @@ test("all five drivers complete the windy bridge adventure without wall hits", (
     assert.equal(r.recoveryCount || 0, 0);
   }
 });
+
+test("bridge footings and haven islands reach the seabed below every storm trough", () => {
+  track.setTime(0);
+  const scene = new THREE.Scene(),
+    scenery = new THREE.Group();
+  scene.add(scenery);
+  const kit = createCourseKit(scenery, track);
+  buildTempest({ THREE, scene, scenery, track, kit });
+  scenery.updateWorldMatrix(true, true);
+  const foundations = [],
+    islands = [];
+  scenery.traverse((object) => {
+    if (object.name === "Seabed-anchored foundation") foundations.push(object);
+    if (object.name === "Seabed-anchored haven island") islands.push(object);
+  });
+  assert.equal(foundations.length, 64);
+  assert.equal(islands.length, 4);
+  const seabed = course.theme.groundHeight - 8;
+  for (const object of [...foundations, ...islands]) {
+    const bounds = new THREE.Box3().setFromObject(object);
+    assert.ok(Math.abs(bounds.min.y - seabed) < 1e-5);
+    assert.ok(bounds.max.y > 0);
+    assert.ok(bounds.min.y < -16.8);
+  }
+  // The highest tower must stay planted as the neighboring bridge deck flexes.
+  const top = foundations.map((object) => new THREE.Box3().setFromObject(object).max.y);
+  assert.ok(Math.max(...top) > 30);
+});

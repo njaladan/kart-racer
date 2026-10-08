@@ -41,8 +41,24 @@ export function buildTempest(context) {
   // The water's shader displacement needs a conservative culling bound.
   ocean.geometry.computeBoundingSphere();
   ocean.geometry.boundingSphere.radius += 8;
+  const seabed = track.course.theme.groundHeight - 8;
+  // Upright foundations reach a fixed world-space seabed at every road elevation.
+  function foundation(g, x, z, width, depth) {
+    g.updateWorldMatrix(true, false);
+    const top = g.localToWorld(new THREE.Vector3(x, 0.5, z));
+    const height = top.y - seabed;
+    const footing = box(
+      concrete,
+      scenery,
+      [top.x, seabed + height / 2, top.z],
+      [width, height, depth],
+    );
+    footing.rotation.y = new THREE.Euler().setFromQuaternion(g.quaternion, "YXZ").y;
+    footing.name = "Seabed-anchored foundation";
+    footing.userData.routeStructure = true;
+  }
   function lamp(g, x, y, z) {
-    box(iron, g, [x, y - 1, z], [0.7, 2, 0.7]);
+    box(iron, g, [x, (y - 1.1) / 2, z], [0.7, y + 1.1, 0.7]);
     mesh(sphere, glow, g, [x, y, z], [0.4, 0.6, 0.4]);
     g.updateWorldMatrix(true, false);
     registerLightPool(scene, {
@@ -125,7 +141,10 @@ export function buildTempest(context) {
         tube(g, [side * edge, -2, -5], [side * edge, -8, 5], 0.3, iron);
         tube(g, [side * edge, -8, -5], [side * edge, -8, 5], 0.3, iron);
         for (const z of [-5, 5]) tube(g, [side * edge, -2, z], [side * edge, -8, z], 0.3, iron);
-        if (i % 4 === 0) lamp(g, side * (edge + 2), 4, 0);
+        if (i % 4 === 0) {
+          tube(g, [side * edge, -1.1, 0], [side * (edge + 2), -1.1, 0], 0.35, iron);
+          lamp(g, side * (edge + 2), 4, 0);
+        }
       }
       if (flexing) {
         context.kit.batch(g);
@@ -148,7 +167,7 @@ export function buildTempest(context) {
       for (const side of [-1, 1]) {
         mesh(towerPier, concrete, g, [side * half, height / 2, 0], [4, height, 5]);
         box(iron, g, [side * half, height * 0.55, 0.1], [0.4, height - 4, 5.6]);
-        box(concrete, g, [side * half, -22, 0], [7, 45, 9]);
+        foundation(g, side * half, 0, 7, 9);
         box(copper, g, [side * half, height + 1, 0], [7, 2, 7]);
       }
       box(concrete, g, [0, height - 2, 0], [half * 2 + 4, 3, 5]);
@@ -214,6 +233,36 @@ export function buildTempest(context) {
     for (const x of [-7, 7]) tube(root, [x, 0, -8], [x, 11, -8], 0.16, copper);
   }
   for (const section of [0, 2, 4, 6]) {
+    // Continuous rock closes the haven's underside and roots it below all wave troughs.
+    const positions = [],
+      indices = [];
+    const rows = Math.ceil(
+      ((track.SECTIONS[section].end - track.SECTIONS[section].start) * track.COURSE_LENGTH) / 3,
+    );
+    for (let i = 0; i <= rows; i++) {
+      const t = track.sectorT(section, i / rows);
+      for (const offset of [track.platformEdgeAt(t, -1) - 5, track.platformEdgeAt(t, 1) + 5]) {
+        const p = track.poseAt(t * track.TRACK, offset, -0.4).p;
+        positions.push(p.x, p.y, p.z, p.x, seabed, p.z);
+      }
+      if (i < rows) {
+        const a = i * 4,
+          b = a + 4;
+        indices.push(a, b, a + 2, a + 2, b, b + 2);
+        indices.push(a, a + 1, b, a + 1, b + 1, b);
+        indices.push(a + 2, b + 2, a + 3, a + 3, b + 2, b + 3);
+      }
+    }
+    indices.push(0, 2, 1, 1, 2, 3);
+    const end = rows * 4;
+    indices.push(end, end + 1, end + 2, end + 1, end + 3, end + 2);
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+    geometry.setIndex(indices);
+    geometry.computeVertexNormals();
+    const haven = mesh(geometry, stone);
+    haven.name = "Seabed-anchored haven island";
+    haven.userData.routeStructure = true;
     for (let i = 0; i < 12; i++) {
       const t = track.sectorT(section, (i + 0.5) / 12),
         side = i % 2 ? 1 : -1,
@@ -227,7 +276,9 @@ export function buildTempest(context) {
         [0, -5, 0],
         [16, 5, 16],
       );
-      mesh(rock, stone, g, [0, -21, 0], [13, 21, 14]);
+      g.rotation.set(0, track.yawFor(track.frameAt(t).tangent), 0);
+      const bottom = seabed - g.position.y;
+      mesh(rock, stone, g, [0, (bottom - 5) / 2, 0], [16, (-5 - bottom) / 2 + 2, 16]);
       mesh(rock, concrete, g, [side * 6, -7, -3], [6, 7, 8]);
       if (i % 3 === 0) cottage(g, 0.7 + (i % 2) * 0.25);
       for (let j = 0; j < 3; j++)
@@ -235,7 +286,8 @@ export function buildTempest(context) {
     }
     const g = at(section, 0.6, -48);
     g.rotation.set(0, track.yawFor(track.frameAt(track.sectorT(section, 0.6)).tangent), 0);
-    mesh(rock, stone, g, [0, -23, 0], [24, 24, 24]);
+    const bottom = seabed - g.position.y;
+    mesh(rock, stone, g, [0, bottom / 2, 0], [24, -bottom / 2 + 2, 24]);
     mesh(cylinder, concrete, g, [0, -0.5, 0], [13, 1, 13]);
     mesh(cylinder, white, g, [0, 18, 0], [8, 36, 8]);
     for (const y of [10, 22]) mesh(cylinder, red, g, [0, y, 0], [8.2, 6, 8.2]);
@@ -282,6 +334,7 @@ export function buildTempest(context) {
         right = Math.max(14, surface.rightEdge + 3);
       for (const x of [left, right]) {
         box(concrete, shelter, [x, 8, 0], [2, 16, 3]);
+        foundation(shelter, x, 0, 3, 4);
         lamp(shelter, x, 5, 0);
       }
       box(iron, shelter, [(left + right) / 2, 16, 0], [right - left + 3, 2, 25]);
