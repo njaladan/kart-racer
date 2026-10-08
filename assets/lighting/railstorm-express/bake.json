@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "course": "railstorm-express",
   "lighting": "indirect.png",
   "height": "height.png",
@@ -15,19 +15,21 @@
   ],
   "bounceScale": 0.65,
   "resolution": 768,
-  "samples": 12,
+  "samples": 16,
   "radius": 22.0,
-  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
-  "sourceSceneSha256": "bccd52d1885043c93d8faf757834920c215da7ca04f6b8f7c1c385bea5a9f651",
-  "triangles": 294274,
-  "lights": 30,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Four-point area emitters soften penumbrae and glass/cutouts transmit attenuated light. Colored spill volume samples at authored heights illuminate vertical surfaces.",
+  "sourceSceneSha256": "08da4a661dd1e1df47bf05c4cb7674eb978754a3d4e3324ac400611dcd3ed72b",
+  "triangles": 304322,
+  "lights": 31,
+  "areaLights": 1,
+  "transparentLightTransport": true,
   "outputs": [
     {
       "file": "indirect.png",
       "width": 768,
       "height": 768,
-      "bytes": 494475,
-      "sha256": "a772257192133dff4644ac50955c8278edbc4cd679d8c7c9aed440f6102f843b"
+      "bytes": 504958,
+      "sha256": "67f43581e6ec4a100b09b295457fa5221412b3e78cec56d6f1ebdd9081b66a0c"
     },
     {
       "file": "height.png",
@@ -40,8 +42,8 @@
       "file": "spill.png",
       "width": 512,
       "height": 256,
-      "bytes": 17528,
-      "sha256": "e5a1586086ad61af50b01a4204ee51d96d442a016daaac66e00b51adf04b4902"
+      "bytes": 17744,
+      "sha256": "7c7d45ad25260c1efee7459b9f1d10608b94117d700dd79eeb5750148682f8ed"
     }
   ],
   "lightVolume": {

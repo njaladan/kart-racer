@@ -1,0 +1,215 @@
+{
+  "asset": {
+    "generator": "glTF-Transform v4.5.1",
+    "version": "2.0"
+  },
+  "accessors": [
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 18108,
+      "bufferView": 0,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 3575,
+      "bufferView": 1,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 3575,
+      "bufferView": 1,
+      "byteOffset": 8
+    },
+    {
+      "type": "VEC4",
+      "componentType": 5126,
+      "count": 3575,
+      "bufferView": 1,
+      "byteOffset": 20
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 3575,
+      "max": [
+        0.009921154007315636,
+        0.00977163016796112,
+        0.010076245293021202
+      ],
+      "min": [
+        -0.009921154007315636,
+        -0.00977163016796112,
+        -0.010076245293021202
+      ],
+      "bufferView": 1,
+      "byteOffset": 36
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteOffset": 0,
+      "byteLength": 36216,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 36216,
+      "byteLength": 171600,
+      "byteStride": 48,
+      "target": 34962
+    }
+  ],
+  "samplers": [
+    {
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 0
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 3
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 2
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 1
+        }
+      }
+    }
+  ],
+  "images": [
+    {
+      "extras": {
+        "fidelityKey": "8583e8fe8308e0959070"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/8583e8fe8308e0959070.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "6159022d694d5d4194b5"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/6159022d694d5d4194b5.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "6c1b3d2056ff178a7d47"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/6c1b3d2056ff178a7d47.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "3952f65f0d06a2dcdc25"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/3952f65f0d06a2dcdc25.ktx2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "boombox-near.bin",
+      "byteLength": 207816
+    }
+  ],
+  "materials": [
+    {
+      "name": "BoomBox_Mat",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 3
+        }
+      },
+      "emissiveFactor": [
+        1,
+        1,
+        1
+      ],
+      "emissiveTexture": {
+        "index": 1
+      },
+      "normalTexture": {
+        "index": 2
+      },
+      "occlusionTexture": {
+        "index": 3
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "BoomBox",
+      "primitives": [
+        {
+          "attributes": {
+            "TEXCOORD_0": 1,
+            "NORMAL": 2,
+            "TANGENT": 3,
+            "POSITION": 4
+          },
+          "mode": 4,
+          "material": 0,
+          "indices": 0
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "BoomBox",
+      "rotation": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "mesh": 0
+    }
+  ],
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "scene": 0,
+  "extensionsUsed": [
+    "KHR_texture_basisu"
+  ],
+  "extensionsRequired": [
+    "KHR_texture_basisu"
+  ]
+}

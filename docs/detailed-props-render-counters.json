@@ -1,0 +1,190 @@
+{
+  "viewport": [
+    960,
+    540
+  ],
+  "quality": "High",
+  "method": "Same course camera/progress and simulation time presets in capture-readme-screenshots.mjs; counters include shadows and postprocessing. Effects/bot state can vary; one bounded render frame in final captures. No FPS claims: software Chromium, not target hardware. These views are not worst-case hero close-ups.",
+  "courses": [
+    {
+      "course": "clockwork-citadel",
+      "before": {
+        "drawCalls": 336,
+        "triangles": 278316,
+        "textures": 65,
+        "geometries": 161
+      },
+      "after": {
+        "drawCalls": 337,
+        "triangles": 278376,
+        "textures": 68,
+        "geometries": 158
+      }
+    },
+    {
+      "course": "emberwing-observatory",
+      "before": {
+        "drawCalls": 214,
+        "triangles": 103416,
+        "textures": 43,
+        "geometries": 90
+      },
+      "after": {
+        "drawCalls": 214,
+        "triangles": 103454,
+        "textures": 46,
+        "geometries": 90
+      }
+    },
+    {
+      "course": "frostpeak-festival",
+      "before": {
+        "drawCalls": 833,
+        "triangles": 472675,
+        "textures": 55,
+        "geometries": 213
+      },
+      "after": {
+        "drawCalls": 833,
+        "triangles": 472679,
+        "textures": 58,
+        "geometries": 212
+      }
+    },
+    {
+      "course": "metronome-hall",
+      "before": {
+        "drawCalls": 814,
+        "triangles": 323736,
+        "textures": 36,
+        "geometries": 264
+      },
+      "after": {
+        "drawCalls": 816,
+        "triangles": 327118,
+        "textures": 49,
+        "geometries": 266
+      }
+    },
+    {
+      "course": "neon-harbor",
+      "before": {
+        "drawCalls": 902,
+        "triangles": 336756,
+        "textures": 91,
+        "geometries": 360
+      },
+      "after": {
+        "drawCalls": 902,
+        "triangles": 331254,
+        "textures": 94,
+        "geometries": 366
+      }
+    },
+    {
+      "course": "paper-revel",
+      "before": {
+        "drawCalls": 317,
+        "triangles": 115474,
+        "textures": 36,
+        "geometries": 134
+      },
+      "after": {
+        "drawCalls": 297,
+        "triangles": 110620,
+        "textures": 39,
+        "geometries": 125
+      }
+    },
+    {
+      "course": "pelagic-glasshouse",
+      "before": {
+        "drawCalls": 1494,
+        "triangles": 905871,
+        "textures": 70,
+        "geometries": 283
+      },
+      "after": {
+        "drawCalls": 1395,
+        "triangles": 1023509,
+        "textures": 76,
+        "geometries": 297
+      }
+    },
+    {
+      "course": "pocket-pantry",
+      "before": {
+        "drawCalls": 459,
+        "triangles": 470264,
+        "textures": 45,
+        "geometries": 132
+      },
+      "after": {
+        "drawCalls": 476,
+        "triangles": 516940,
+        "textures": 62,
+        "geometries": 133
+      }
+    },
+    {
+      "course": "railstorm-express",
+      "before": {
+        "drawCalls": 511,
+        "triangles": 208952,
+        "textures": 54,
+        "geometries": 157
+      },
+      "after": {
+        "drawCalls": 554,
+        "triangles": 257067,
+        "textures": 69,
+        "geometries": 166
+      }
+    },
+    {
+      "course": "sunstone-ruins",
+      "before": {
+        "drawCalls": 976,
+        "triangles": 522988,
+        "textures": 92,
+        "geometries": 344
+      },
+      "after": {
+        "drawCalls": 981,
+        "triangles": 527766,
+        "textures": 107,
+        "geometries": 342
+      }
+    },
+    {
+      "course": "tempest-causeway",
+      "before": {
+        "drawCalls": 1118,
+        "triangles": 317902,
+        "textures": 81,
+        "geometries": 205
+      },
+      "after": {
+        "drawCalls": 1112,
+        "triangles": 315490,
+        "textures": 84,
+        "geometries": 201
+      }
+    },
+    {
+      "course": "windmill-wilds",
+      "before": {
+        "drawCalls": 544,
+        "triangles": 467768,
+        "textures": 83,
+        "geometries": 191
+      },
+      "after": {
+        "drawCalls": 544,
+        "triangles": 467796,
+        "textures": 86,
+        "geometries": 190
+      }
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "course": "windmill-wilds",
   "lighting": "indirect.png",
   "height": "height.png",
@@ -15,19 +15,21 @@
   ],
   "bounceScale": 0.65,
   "resolution": 768,
-  "samples": 12,
+  "samples": 16,
   "radius": 22.0,
-  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded.",
-  "sourceSceneSha256": "422e6cf4b6b196ceb15b7ed48f8b20b6bd6007139ee376a43353c5e8ae675980",
-  "triangles": 759436,
-  "lights": 0,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Four-point area emitters soften penumbrae and glass/cutouts transmit attenuated light.",
+  "sourceSceneSha256": "77baa202ca40d9a47c3b37855f9ce565abf1f43e9e9666cdc1a561e6a86bf27c",
+  "triangles": 770368,
+  "lights": 2,
+  "areaLights": 2,
+  "transparentLightTransport": true,
   "outputs": [
     {
       "file": "indirect.png",
       "width": 768,
       "height": 768,
-      "bytes": 451489,
-      "sha256": "ea0bf81d8bac174fe978d44338096d80fd7465268bc630cc7d9191c8d80fa170"
+      "bytes": 463643,
+      "sha256": "6a1875a9ee1df7b51c7379d5cb1cdbd019d8382222a5e10986ed2d738b830e3f"
     },
     {
       "file": "height.png",

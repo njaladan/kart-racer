@@ -20,7 +20,24 @@ function softenAsphalt(map, renderer) {
 
 // Locally bundled 1K CC0 scans and textured Poly Haven props. All network
 // downloads happen during preparation, never while a player is racing.
-export async function loadLivingAssets(renderer) {
+const COURSE_SCANS = {
+  "windmill-wilds": [
+    "grass",
+    "asphalt",
+    "wood",
+    "paving",
+    "needles",
+    "rock",
+    "brick",
+    "roof",
+    "gravel",
+  ],
+  "neon-harbor": ["asphalt", "wood", "paving", "rock", "brick"],
+  "sunstone-ruins": ["asphalt", "sand", "rock", "wood", "paving"],
+  "frostpeak-festival": ["asphalt", "wood", "rock", "paving", "needles"],
+};
+const ADVENTURE_SCANS = ["asphalt", "wood", "rock", "sand", "gravel", "paving"];
+export async function loadLivingAssets(renderer, courseId) {
   const response = await fetch("./assets/living/index.json");
   if (!response.ok) throw new Error("Detailed material index could not load");
   const index = await response.json(),
@@ -41,22 +58,24 @@ export async function loadLivingAssets(renderer) {
   };
   const textures = Object.fromEntries(
     await Promise.all(
-      Object.entries(index.textures).map(async ([name, paths]) => {
-        const [colorMap, normalMap, roughnessMap] = await Promise.all([
-          load(paths.color, true),
-          load(paths.normal),
-          load(paths.roughness),
-        ]);
-        const map = name === "asphalt" ? softenAsphalt(colorMap, renderer) : colorMap;
-        map.name = `ambientCG ${name} 1K scan`;
-        const relief = name === "asphalt" ? 0.09 : 0.38;
-        map.userData.pbr = {
-          normalMap,
-          normalScale: new THREE.Vector2(relief, relief),
-          roughnessMap,
-        };
-        return [name, map];
-      }),
+      Object.entries(index.textures)
+        .filter(([name]) => !courseId || (COURSE_SCANS[courseId] || ADVENTURE_SCANS).includes(name))
+        .map(async ([name, paths]) => {
+          const [colorMap, normalMap, roughnessMap] = await Promise.all([
+            load(paths.color, true),
+            load(paths.normal),
+            load(paths.roughness),
+          ]);
+          const map = name === "asphalt" ? softenAsphalt(colorMap, renderer) : colorMap;
+          map.name = `ambientCG ${name} 1K scan`;
+          const relief = name === "asphalt" ? 0.09 : 0.38;
+          map.userData.pbr = {
+            normalMap,
+            normalScale: new THREE.Vector2(relief, relief),
+            roughnessMap,
+          };
+          return [name, map];
+        }),
     ),
   );
   // Rocky verges and cliffs share the same scan rather than duplicating it.

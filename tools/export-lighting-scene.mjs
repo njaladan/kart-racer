@@ -11,6 +11,8 @@ import { buildCourseWorld } from "../src/rendering/course-runtime.js";
 import { decodeLivingModels } from "../src/rendering/living-assets.js";
 import { COURSES } from "../src/courses/registry.js";
 import { selectCourse } from "../src/track/track.js";
+import { NodeIO } from "@gltf-transform/core";
+import { ALL_EXTENSIONS } from "@gltf-transform/extensions";
 
 const root = resolve(new URL("..", import.meta.url).pathname);
 const require = createRequire(import.meta.url);
@@ -24,6 +26,7 @@ const output = process.env.LIGHTING_SCENE_DIR || "/tmp/turbo-trail-lighting-scen
 await mkdir(output, { recursive: true });
 const wanted = process.argv.slice(2);
 const arrayBuffer = (data) => data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength);
+const modelIO = new NodeIO().registerExtensions(ALL_EXTENSIONS);
 
 async function loadAssets(id) {
   const base = resolve(root, "assets/courses");
@@ -124,6 +127,58 @@ async function loadAssets(id) {
       arrayBuffer(await readFile(`${living}/props.bin`)),
     ),
   );
+  const fidelityFolder = resolve(root, "assets/fidelity");
+  const fidelity = JSON.parse(await readFile(resolve(fidelityFolder, "manifest.json")));
+  for (const hero of fidelity.heroes.filter((entry) => entry.courses.includes(id))) {
+    for (const variant of hero.variants) {
+      // The same geometry/materials as the runtime KTX2 variant; image formats
+      // differ only because the offline solver needs decoded albedo averages.
+      const document = await modelIO.read(resolve(fidelityFolder, variant.offlineFile));
+      const binary = await modelIO.writeBinary(document);
+      const loader = new GLTFLoader();
+      loader.register((parser) => {
+        parser.loadImageSource = async (index) => {
+          const image = parser.json.images[index];
+          const bytes = Buffer.from(await parser.getDependency("bufferView", image.bufferView));
+          const { data, info } = await sharp(bytes)
+            .resize(16, 16)
+            .ensureAlpha()
+            .raw()
+            .toBuffer({ resolveWithObject: true });
+          const average = new THREE.Color(0, 0, 0);
+          for (let p = 0; p < data.length; p += 4)
+            average.add(
+              new THREE.Color().setRGB(
+                data[p] / 255,
+                data[p + 1] / 255,
+                data[p + 2] / 255,
+                THREE.SRGBColorSpace,
+              ),
+            );
+          average.multiplyScalar(1 / (info.width * info.height));
+          const texture = new THREE.Texture();
+          texture.userData.averageLinear = average.toArray();
+          return texture;
+        };
+        return { name: "HERO_LIGHTING_TEXTURES" };
+      });
+      const gltf = await loader.parseAsync(
+        binary.buffer.slice(binary.byteOffset, binary.byteOffset + binary.byteLength),
+        "",
+      );
+      const model = normalizeCourseModel(gltf.scene);
+      model.userData.lodDistances = hero.lodDistances;
+      if (variant === hero.variants[0])
+        model.userData.lods = { mid: `hero:${hero.key}-mid`, far: `hero:${hero.key}-far` };
+      model.traverse((object) => {
+        if (object.isMesh) {
+          object.castShadow = true;
+          object.receiveShadow = true;
+        }
+      });
+      assets.models[variant.name] = model;
+    }
+  }
   return assets;
 }
 
@@ -186,26 +241,48 @@ for (const course of selected) {
   world.update(0);
   scene.updateMatrixWorld(true);
   if (process.env.COURSE_SCENE_STATS) {
-    let meshes = 0, triangles = 0;
+    let meshes = 0,
+      triangles = 0;
     scene.traverse((object) => {
       if (!object.isMesh) return;
       meshes++;
-      triangles += (object.geometry.index?.count || object.geometry.attributes.position.count) / 3
-        * (object.isInstancedMesh ? object.count : 1);
+      triangles +=
+        ((object.geometry.index?.count || object.geometry.attributes.position.count) / 3) *
+        (object.isInstancedMesh ? object.count : 1);
     });
-    console.log("Scene inventory", JSON.stringify({course: course.id, meshes, triangles}));
+    console.log(
+      "Scene inventory",
+      JSON.stringify({
+        course: course.id,
+        meshes,
+        triangles,
+        heroes: scene.userData.downloadedHeroPlacements || [],
+      }),
+    );
     if (process.env.COURSE_SCENE_STATS === "only") continue;
   }
   if (process.env.COURSE_ROUTE_AUDIT) {
     const reports = [];
-    for (const lap of track.branches.some(b => b.lap != null) ? [0, 1, 2] : [0]) {
-      world.update(0, {playerLap: lap, racers: [], motionEnabled: false, running: false});
+    for (const lap of track.branches.some((b) => b.lap != null) ? [0, 1, 2] : [0]) {
+      world.update(0, { playerLap: lap, racers: [], motionEnabled: false, running: false });
       scene.updateMatrixWorld(true);
       reports.push(auditRouteGeometry(scene, track, world.animated, lap));
     }
-    const report = { course: course.id, clearance: scene.userData.sceneryClearance, stations: reports.reduce((n,r)=>n+r.stations,0), hits: reports.flatMap((r,lap)=>r.hits.map(h=>({...h,lap}))) };
+    const report = {
+      course: course.id,
+      clearance: scene.userData.sceneryClearance,
+      stations: reports.reduce((n, r) => n + r.stations, 0),
+      hits: reports.flatMap((r, lap) => r.hits.map((h) => ({ ...h, lap }))),
+    };
     await writeFile(`${output}/${course.id}-audit.json`, JSON.stringify(report, null, 2));
-    console.log("Route audit", course.id, report.stations, "rays", report.hits.length, "intersections");
+    console.log(
+      "Route audit",
+      course.id,
+      report.stations,
+      "rays",
+      report.hits.length,
+      "intersections",
+    );
     if (process.env.COURSE_ROUTE_AUDIT === "only") continue;
   }
   const positions = [],
@@ -292,7 +369,12 @@ for (const course of selected) {
     ],
     bounds: [minX, minZ, maxX - minX, maxZ - minZ],
     heightRange: [
-      Math.min(-12, (course.theme.groundHeight ?? -1.7) - 10, ...controls.map((p) => p[1] - 30), ...track.areaSurfaces.map((area) => area.heightAt(area.center) - 30)),
+      Math.min(
+        -12,
+        (course.theme.groundHeight ?? -1.7) - 10,
+        ...controls.map((p) => p[1] - 30),
+        ...track.areaSurfaces.map((area) => area.heightAt(area.center) - 30),
+      ),
       Math.max(75, ...controls.map((p) => p[1] + 70)),
     ],
     lightVolume: course.theme.lightVolume,
@@ -301,6 +383,7 @@ for (const course of selected) {
       color: pool.color.toArray(),
       intensity: pool.intensity,
       radius: pool.radius,
+      ...(pool.area ? { area: pool.area } : {}),
     })),
   };
   await writeFile(`${output}/${course.id}.bin`, binary);

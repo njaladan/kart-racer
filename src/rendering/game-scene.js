@@ -13,6 +13,7 @@ import { createPostProcessing } from "./postprocessing.js";
 import { createGraphicsQuality } from "./graphics-quality.js";
 import { installSurfaceDetail, installWetPavement } from "./surface-detail.js";
 import { createWetRoadReflections } from "./wet-road-reflections.js";
+import { loadFidelityAssets } from "./fidelity-assets.js";
 
 const SHARED_TEXTURES = [
   "grass",
@@ -173,14 +174,17 @@ export async function createGameScene({ canvas, course, viewport = window }) {
   const textures = Object.fromEntries(
     SHARED_TEXTURES.map((kind) => [kind, sharedAssets[kind] || surfaceTexture(kind, renderer)]),
   );
-  const courseAssets = await loadCourseAssets(renderer, course.id);
+  const [courseAssets, livingAssets, fidelityAssets] = await Promise.all([
+    loadCourseAssets(renderer, course.id),
+    loadLivingAssets(renderer, course.id),
+    loadFidelityAssets(renderer, course.id),
+  ]);
   Object.assign(textures, courseAssets.textures);
-  const livingAssets = await loadLivingAssets(renderer);
   Object.assign(textures, livingAssets.textures);
   // Selected adventure scans take precedence over the shared material fallback.
   for (const [name, texture] of Object.entries(courseAssets.textures))
     if (courseAssets.textures[`${name}Normal`]) textures[name] = texture;
-  Object.assign(courseAssets.models, livingAssets.models);
+  Object.assign(courseAssets.models, livingAssets.models, fidelityAssets.models);
   textures.stone ||= textures.rock;
   textures.cloth ||= textures.fabric;
   textures.canvas ||= textures.fabric;
@@ -209,6 +213,7 @@ export async function createGameScene({ canvas, course, viewport = window }) {
     weather,
     postprocessing,
     lighting,
+    scannedMaterials: fidelityAssets,
   });
   renderer.info.autoReset = false;
 
@@ -229,6 +234,7 @@ export async function createGameScene({ canvas, course, viewport = window }) {
     displayFinish,
     sharedAssets,
     courseAssets,
+    fidelityAssets,
     textures,
     materials,
     createMaterial,

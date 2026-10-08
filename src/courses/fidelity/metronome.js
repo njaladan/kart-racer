@@ -49,7 +49,8 @@ export function metronomeArt(w) {
     const desk = safe(section, 0.35, 82, 18);
     if (desk) {
       box(wood, desk, [0, 1, 0], [36, 2, 23]);
-      asset("radio", desk, [0, 2, 0], 14);
+      if (kit.hasAsset("hero:boombox")) kit.fitAsset("hero:boombox", desk, [0, 2, 0], 14);
+      else asset("radio", desk, [0, 2, 0], 14);
       for (const x of [-22, 22]) asset("speaker", desk, [x, 0, 0], 19);
       asset("lamproundtable", desk, [-14, 2, -4], 10);
       lamp(desk, [-14, 10, -4], "#ffce8c", 35, 45);

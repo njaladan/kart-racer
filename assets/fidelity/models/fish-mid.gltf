@@ -1,0 +1,192 @@
+{
+  "asset": {
+    "generator": "glTF-Transform v4.5.1",
+    "version": "2.0"
+  },
+  "accessors": [
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 5562,
+      "bufferView": 0,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 1078,
+      "bufferView": 1,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 1078,
+      "bufferView": 1,
+      "byteOffset": 8
+    },
+    {
+      "type": "VEC4",
+      "componentType": 5126,
+      "count": 1078,
+      "bufferView": 1,
+      "byteOffset": 20
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 1078,
+      "max": [
+        0.06892314553260803,
+        0.2866283059120178,
+        0.3253729045391083
+      ],
+      "min": [
+        -0.07370281219482422,
+        -0.0008727836539037526,
+        -0.3177383244037628
+      ],
+      "bufferView": 1,
+      "byteOffset": 36
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteOffset": 0,
+      "byteLength": 11124,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 11124,
+      "byteLength": 51744,
+      "byteStride": 48,
+      "target": 34962
+    }
+  ],
+  "samplers": [
+    {
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 0
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 2
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 1
+        }
+      }
+    }
+  ],
+  "images": [
+    {
+      "extras": {
+        "fidelityKey": "3bda014d57ae4b415367"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/3bda014d57ae4b415367.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "2a7e7f2d859f60bee2c7"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/2a7e7f2d859f60bee2c7.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "775d14a83919d13434ff"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/775d14a83919d13434ff.ktx2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "fish-mid.bin",
+      "byteLength": 62868
+    }
+  ],
+  "materials": [
+    {
+      "name": "7288_barramundi fish_col",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 2
+        }
+      },
+      "normalTexture": {
+        "index": 1
+      },
+      "occlusionTexture": {
+        "index": 2
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "barramundi_fish_Hero",
+      "primitives": [
+        {
+          "attributes": {
+            "TEXCOORD_0": 1,
+            "NORMAL": 2,
+            "TANGENT": 3,
+            "POSITION": 4
+          },
+          "mode": 4,
+          "material": 0,
+          "indices": 0
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "BarramundiFish",
+      "rotation": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "mesh": 0
+    }
+  ],
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "scene": 0,
+  "extensionsUsed": [
+    "KHR_texture_basisu"
+  ],
+  "extensionsRequired": [
+    "KHR_texture_basisu"
+  ]
+}

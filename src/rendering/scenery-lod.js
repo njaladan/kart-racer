@@ -6,7 +6,7 @@ export function batchSceneryLods(scene, cellSize = 64) {
   const regions = new Map();
   const sources = [];
   scene.traverse((object) => {
-    if (!object.isLOD || !object.userData.sceneryLod) return;
+    if (!object.isLOD || !object.userData.sceneryLod || object.userData.dynamicScenery) return;
     sources.push(object);
     const p = object.getWorldPosition(new THREE.Vector3());
     const key = `${Math.floor(p.x / cellSize)}:${Math.floor(p.z / cellSize)}:${object.levels.map((level) => level.distance).join(",")}`;

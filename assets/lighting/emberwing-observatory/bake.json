@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "course": "emberwing-observatory",
   "lighting": "indirect.png",
   "height": "height.png",
@@ -15,19 +15,21 @@
   ],
   "bounceScale": 0.65,
   "resolution": 768,
-  "samples": 12,
+  "samples": 16,
   "radius": 22.0,
-  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
-  "sourceSceneSha256": "fac12964421038cda50235e19a5a1e9130e3a44236bd13e80eba9b4e58009b61",
-  "triangles": 275002,
-  "lights": 70,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Four-point area emitters soften penumbrae and glass/cutouts transmit attenuated light. Colored spill volume samples at authored heights illuminate vertical surfaces.",
+  "sourceSceneSha256": "0ff9ba0e422736f6fff7013969664eec82b972076c22092ce3cd8d86aeef2eb1",
+  "triangles": 306572,
+  "lights": 71,
+  "areaLights": 1,
+  "transparentLightTransport": true,
   "outputs": [
     {
       "file": "indirect.png",
       "width": 768,
       "height": 768,
-      "bytes": 486763,
-      "sha256": "245b9f1185099452cc78e6431036033e458a2d4f0d96bce5ff2c45de489f833f"
+      "bytes": 504179,
+      "sha256": "1d14f09fa882b45bfc2a96d363e96bee82f47a6d98d11d4c08e0888d6904a24f"
     },
     {
       "file": "height.png",
@@ -40,8 +42,8 @@
       "file": "spill.png",
       "width": 512,
       "height": 256,
-      "bytes": 22570,
-      "sha256": "4ce0d55f8cd8dd2dc31981d4b6599c6ef521fae46993b7eea19e35a9f7323cd4"
+      "bytes": 22658,
+      "sha256": "631f0b3b7700661a069616f648101105ba8a09605782613a8fd131a30ec9976d"
     }
   ],
   "lightVolume": {

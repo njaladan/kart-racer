@@ -228,6 +228,7 @@ export function surfaceTexture(kind, renderer) {
   }
   ctx.globalAlpha = 1;
   const texture = new THREE.CanvasTexture(canvas);
+  texture.userData.surfaceKind = kind;
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
   texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());

@@ -16,6 +16,7 @@ import { kitchenRoadDetail } from "../courses/adventure/pantry-materials.js";
 import { glasshouseRoad } from "../courses/adventure/pelagic-materials.js";
 import { metalDeckDetail } from "../courses/adventure/architectural-detail.js";
 import { buildCourseEnvironment, composeCourseEnvironment } from "../courses/course-environment.js";
+import { addHeroScenery } from "./hero-scenery.js";
 
 // Shared geometry uses exactly the surface/edge queries used by karts and shells.
 export function buildCourseWorld({
@@ -46,6 +47,7 @@ export function buildCourseWorld({
       experience.update(time, state);
     };
     addDetailedScenery(scene, track, assets);
+    addHeroScenery(scene, track, assets, textures);
     const environment = buildCourseEnvironment({ scene, track, textures, surfaces: [mats.road] });
     return composeCourseEnvironment(world, environment, createSceneryDetailController(scene));
   }
@@ -177,6 +179,18 @@ export function buildCourseWorld({
     templePaving(roadMaterials.paving, { ceremonial: true });
   }
   const groundHeight = course.theme.groundHeight ?? -1.7;
+  for (const [name, surface] of Object.entries(roadMaterials))
+    surface.userData.surfaceKind =
+      {
+        asphalt: "rubber",
+        concrete: "stone",
+        gravel: "stone",
+        paving: "stone",
+        needles: "leaf",
+        grass: "leaf",
+        ice: "ceramic",
+        glass: "ceramic",
+      }[name] || name;
   const conveyorTextures = [];
   const materialNames = [
     ...new Set([
@@ -462,6 +476,7 @@ export function buildCourseWorld({
   const experience = buildExperienceWorld({ scene, track, textures, assets });
   batchScenery(experience.scenery, experience.animated);
   addDetailedScenery(scene, track, assets);
+  addHeroScenery(scene, track, assets, textures);
   const environment = buildCourseEnvironment({
     scene,
     track,

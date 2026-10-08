@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "course": "frostpeak-festival",
   "lighting": "indirect.png",
   "height": "height.png",
@@ -15,19 +15,21 @@
   ],
   "bounceScale": 0.65,
   "resolution": 768,
-  "samples": 12,
+  "samples": 16,
   "radius": 22.0,
-  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded.",
-  "sourceSceneSha256": "cad9c3fa01cb8957907132a5de126f3aab22fe595cdec60299e99fb1f8eb1801",
-  "triangles": 1575764,
-  "lights": 115,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Four-point area emitters soften penumbrae and glass/cutouts transmit attenuated light.",
+  "sourceSceneSha256": "19166ed5a56dee530885b93e703d33f8f87cd37fad216f50bb6b7888f336951a",
+  "triangles": 1594282,
+  "lights": 116,
+  "areaLights": 1,
+  "transparentLightTransport": true,
   "outputs": [
     {
       "file": "indirect.png",
       "width": 768,
       "height": 768,
-      "bytes": 478022,
-      "sha256": "2a97dd3f211fb3580b4f2ec1653afe5f0eb25e5c728c12ade1381f758fb7caea"
+      "bytes": 490906,
+      "sha256": "9f399400d1e81f89079a7957692cc8a7e2eaef58e96d4bfec4e9099238841722"
     },
     {
       "file": "height.png",

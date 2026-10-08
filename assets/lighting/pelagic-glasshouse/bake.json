@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "course": "pelagic-glasshouse",
   "lighting": "indirect.png",
   "height": "height.png",
@@ -15,19 +15,21 @@
   ],
   "bounceScale": 0.65,
   "resolution": 768,
-  "samples": 12,
+  "samples": 16,
   "radius": 22.0,
-  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
-  "sourceSceneSha256": "59206d0880313d18eb0b39fe0348086f20c961f95e62635b4cc0771da19fff8f",
-  "triangles": 357872,
-  "lights": 46,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Four-point area emitters soften penumbrae and glass/cutouts transmit attenuated light. Colored spill volume samples at authored heights illuminate vertical surfaces.",
+  "sourceSceneSha256": "badc9ab99f9782b3884f13da921a8b88c0a26783ddfb25c0fa98eca2eed9266a",
+  "triangles": 368804,
+  "lights": 48,
+  "areaLights": 2,
+  "transparentLightTransport": true,
   "outputs": [
     {
       "file": "indirect.png",
       "width": 768,
       "height": 768,
-      "bytes": 321897,
-      "sha256": "ee2915c8e40b99f5a69426ff43bb856e5fb2015560799661732868112d9b2a5c"
+      "bytes": 340202,
+      "sha256": "215bab00bf7dc4f20535b9b998aad1acf59428ab4a90f87fb4b49c53802f125f"
     },
     {
       "file": "height.png",
@@ -40,8 +42,8 @@
       "file": "spill.png",
       "width": 512,
       "height": 256,
-      "bytes": 24153,
-      "sha256": "214ceb8cebbb60b5a64580f88647c750320aef7d329663c7d603fa827d7bc45b"
+      "bytes": 25910,
+      "sha256": "b2d87f72edf4a58d9443c56eec4d7fb73f89eb1bc5cdfe1776ee53a1798d1ecf"
     }
   ],
   "lightVolume": {

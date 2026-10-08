@@ -1,0 +1,328 @@
+{
+  "asset": {
+    "generator": "glTF-Transform v4.5.1",
+    "version": "2.0"
+  },
+  "accessors": [
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 5724,
+      "bufferView": 0,
+      "byteOffset": 0
+    },
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 13047,
+      "bufferView": 0,
+      "byteOffset": 11448
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 2547,
+      "bufferView": 1,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 2547,
+      "max": [
+        2.6307950019836426,
+        9.506563186645508,
+        2.8524584770202637
+      ],
+      "min": [
+        -3.3200323581695557,
+        -0.0014147758483886719,
+        -1.7042126655578613
+      ],
+      "bufferView": 1,
+      "byteOffset": 12
+    },
+    {
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 2547,
+      "bufferView": 1,
+      "byteOffset": 24
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 6377,
+      "bufferView": 2,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 6377,
+      "max": [
+        1.8916611671447754,
+        12.642533302307129,
+        1.2003434896469116
+      ],
+      "min": [
+        -1.8916611671447754,
+        9.395228385925293,
+        -1.200343370437622
+      ],
+      "bufferView": 2,
+      "byteOffset": 12
+    },
+    {
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 6377,
+      "bufferView": 2,
+      "byteOffset": 24
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteOffset": 0,
+      "byteLength": 37544,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 37544,
+      "byteLength": 81504,
+      "byteStride": 32,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 119048,
+      "byteLength": 204064,
+      "byteStride": 32,
+      "target": 34962
+    }
+  ],
+  "samplers": [
+    {
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 1
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 0
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 4
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 2
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 3
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 5
+        }
+      }
+    }
+  ],
+  "images": [
+    {
+      "name": "camera_camera_Normal",
+      "extras": {
+        "fidelityKey": "73452af7a497855e7f99"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/73452af7a497855e7f99.ktx2"
+    },
+    {
+      "name": "camera_camera_BaseColor",
+      "extras": {
+        "fidelityKey": "b115cb52327d49be62f2"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/b115cb52327d49be62f2.ktx2"
+    },
+    {
+      "name": "camera_tripod_BaseColor",
+      "extras": {
+        "fidelityKey": "025bc1068f0491795fce"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/025bc1068f0491795fce.ktx2"
+    },
+    {
+      "name": "camera_tripod_Normal",
+      "extras": {
+        "fidelityKey": "b8972a6ad9ccf8ba4ee2"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/b8972a6ad9ccf8ba4ee2.ktx2"
+    },
+    {
+      "name": "camera_camera_Roughness",
+      "extras": {
+        "fidelityKey": "e35f1f3db7b351557c68"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/e35f1f3db7b351557c68.ktx2"
+    },
+    {
+      "name": "camera_tripod_Roughness",
+      "extras": {
+        "fidelityKey": "32ab4dc7fd27e01184d1"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/32ab4dc7fd27e01184d1.ktx2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "camera-mid.bin",
+      "byteLength": 323112
+    }
+  ],
+  "materials": [
+    {
+      "name": "camera",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 2
+        }
+      },
+      "normalTexture": {
+        "index": 1
+      }
+    },
+    {
+      "name": "tripod",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 3
+        },
+        "metallicRoughnessTexture": {
+          "index": 5
+        }
+      },
+      "normalTexture": {
+        "index": 4
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "tripod_uv",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 2,
+            "POSITION": 3,
+            "TEXCOORD_0": 4
+          },
+          "mode": 4,
+          "material": 1,
+          "indices": 0
+        }
+      ]
+    },
+    {
+      "name": "camera_uv",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 5,
+            "POSITION": 6,
+            "TEXCOORD_0": 7
+          },
+          "mode": 4,
+          "material": 0,
+          "indices": 1
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "camera",
+      "rotation": [
+        0,
+        -0.7071068286895752,
+        0,
+        0.7071067690849304
+      ],
+      "scale": [
+        0.5700311064720154,
+        0.5700311064720154,
+        0.5700311064720154
+      ],
+      "mesh": 1
+    },
+    {
+      "name": "tripod",
+      "rotation": [
+        0,
+        -0.7071068286895752,
+        0,
+        0.7071067690849304
+      ],
+      "scale": [
+        0.5700311064720154,
+        0.5700311064720154,
+        0.5700311064720154
+      ],
+      "mesh": 0
+    }
+  ],
+  "scenes": [
+    {
+      "name": "Scene",
+      "nodes": [
+        0,
+        1
+      ]
+    }
+  ],
+  "scene": 0,
+  "extensionsUsed": [
+    "KHR_texture_basisu"
+  ],
+  "extensionsRequired": [
+    "KHR_texture_basisu"
+  ]
+}

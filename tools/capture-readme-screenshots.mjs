@@ -32,6 +32,7 @@ const baseUrl = `http://127.0.0.1:${port}`;
 const captureAtSeconds = Number(process.env.SCREENSHOT_CAPTURE_AT_SECONDS || 2);
 const timeoutMs = Number(process.env.SCREENSHOT_CAPTURE_TIMEOUT_MS || 120_000);
 const quality = Number(process.env.SCREENSHOT_CAPTURE_QUALITY || 2);
+const captureFrames = Math.max(1, Number(process.env.SCREENSHOT_CAPTURE_FRAMES || 3));
 
 function loadPlaywright() {
   const candidates = [
@@ -133,19 +134,22 @@ async function captureCourse(browserContext, courseId) {
         undefined,
         { timeout: timeoutMs },
       );
-      const state = await page.evaluate(({ t, seconds }) => {
-        const diagnostics = window.__turboTrailDiagnostics;
-        diagnostics.send({ type: "test-start" });
-        diagnostics.send({ type: "test-freeze", value: true });
-        diagnostics.send({ type: "test-step", seconds: 0.1 });
-        for (let remaining = seconds; remaining > 0; remaining -= 5)
-          diagnostics.send({ type: "test-step", seconds: Math.min(5, remaining) });
-        diagnostics.send({ type: "test-seek", t });
-        const state = diagnostics.state();
-        diagnostics.send({ type: "test-report" });
-        window.captureFramesRemaining = 3;
-        return state;
-      }, course);
+      const state = await page.evaluate(
+        ({ t, seconds, frames }) => {
+          const diagnostics = window.__turboTrailDiagnostics;
+          diagnostics.send({ type: "test-start" });
+          diagnostics.send({ type: "test-freeze", value: true });
+          diagnostics.send({ type: "test-step", seconds: 0.1 });
+          for (let remaining = seconds; remaining > 0; remaining -= 5)
+            diagnostics.send({ type: "test-step", seconds: Math.min(5, remaining) });
+          diagnostics.send({ type: "test-seek", t });
+          const state = diagnostics.state();
+          diagnostics.send({ type: "test-report" });
+          window.captureFramesRemaining = frames;
+          return state;
+        },
+        { ...course, frames: captureFrames },
+      );
       const expectedProgress = course.t * 2400;
       if (Math.abs(state.s - expectedProgress) > 0.5)
         throw new Error(

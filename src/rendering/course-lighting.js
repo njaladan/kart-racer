@@ -1,12 +1,16 @@
 import * as THREE from "../../vendor/three/three.module.js";
 import { sectionAt, trackT } from "../track/track.js";
 
-export function registerLightPool(scene, { position, color, intensity = 2, radius = 14 }) {
+export function registerLightPool(
+  scene,
+  { position, color, intensity = 2, radius = 14, area = null },
+) {
   const pool = {
     position: position?.isVector3 ? position.clone() : new THREE.Vector3(...position),
     color: new THREE.Color(color),
     intensity,
     radius,
+    ...(area ? { area: [...area] } : {}),
   };
   (scene.userData.localLightPools ||= []).push(pool);
   return pool;

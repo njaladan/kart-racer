@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "course": "sunstone-ruins",
   "lighting": "indirect.png",
   "height": "height.png",
@@ -15,19 +15,21 @@
   ],
   "bounceScale": 0.65,
   "resolution": 768,
-  "samples": 12,
+  "samples": 16,
   "radius": 22.0,
-  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
-  "sourceSceneSha256": "aad8d402590983f6c1fb73a72cbdc6e0f92d8598bc447ffa0d63c59665921406",
-  "triangles": 564660,
-  "lights": 18,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Four-point area emitters soften penumbrae and glass/cutouts transmit attenuated light. Colored spill volume samples at authored heights illuminate vertical surfaces.",
+  "sourceSceneSha256": "bb86ac1141f671fb0064bbd42b9502d42ff4bf1e438d3c6a8e5d1545bbe1ca7a",
+  "triangles": 588644,
+  "lights": 20,
+  "areaLights": 2,
+  "transparentLightTransport": true,
   "outputs": [
     {
       "file": "indirect.png",
       "width": 768,
       "height": 768,
-      "bytes": 517575,
-      "sha256": "82257a3d455078786dbb0f0ead75237eeabe8b6fdb4e27daa04c153896e79874"
+      "bytes": 543064,
+      "sha256": "b24991764c26c2bad5525fe5bee3cffdb4f54dbe01cdbbba854134ec0258cb69"
     },
     {
       "file": "height.png",
@@ -40,8 +42,8 @@
       "file": "spill.png",
       "width": 768,
       "height": 384,
-      "bytes": 10553,
-      "sha256": "092f955c2e19914721010c721d536ebfd42d83aca2b2c446421a638770c4ec8b"
+      "bytes": 11272,
+      "sha256": "0a503cd661fb2a1812614084ff583507c3fec226b0a53854b23a4767e3e344e4"
     }
   ],
   "lightVolume": {

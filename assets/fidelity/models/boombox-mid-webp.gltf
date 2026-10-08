@@ -1,0 +1,215 @@
+{
+  "asset": {
+    "generator": "glTF-Transform v4.5.1",
+    "version": "2.0"
+  },
+  "accessors": [
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 8688,
+      "bufferView": 0,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 1814,
+      "bufferView": 1,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 1814,
+      "bufferView": 1,
+      "byteOffset": 8
+    },
+    {
+      "type": "VEC4",
+      "componentType": 5126,
+      "count": 1814,
+      "bufferView": 1,
+      "byteOffset": 20
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 1814,
+      "max": [
+        0.009921154007315636,
+        0.009769418276846409,
+        0.010076245293021202
+      ],
+      "min": [
+        -0.009921154007315636,
+        -0.009770574048161507,
+        -0.010076245293021202
+      ],
+      "bufferView": 1,
+      "byteOffset": 36
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteOffset": 0,
+      "byteLength": 17376,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 17376,
+      "byteLength": 87072,
+      "byteStride": 48,
+      "target": 34962
+    }
+  ],
+  "samplers": [
+    {
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "extensions": {
+        "EXT_texture_webp": {
+          "source": 0
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "EXT_texture_webp": {
+          "source": 3
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "EXT_texture_webp": {
+          "source": 2
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "EXT_texture_webp": {
+          "source": 1
+        }
+      }
+    }
+  ],
+  "images": [
+    {
+      "extras": {
+        "fidelityKey": "8583e8fe8308e0959070"
+      },
+      "mimeType": "image/webp",
+      "uri": "../textures/8583e8fe8308e0959070.webp"
+    },
+    {
+      "extras": {
+        "fidelityKey": "6159022d694d5d4194b5"
+      },
+      "mimeType": "image/webp",
+      "uri": "../textures/6159022d694d5d4194b5.webp"
+    },
+    {
+      "extras": {
+        "fidelityKey": "6c1b3d2056ff178a7d47"
+      },
+      "mimeType": "image/webp",
+      "uri": "../textures/6c1b3d2056ff178a7d47.webp"
+    },
+    {
+      "extras": {
+        "fidelityKey": "3952f65f0d06a2dcdc25"
+      },
+      "mimeType": "image/webp",
+      "uri": "../textures/3952f65f0d06a2dcdc25.webp"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "boombox-mid-webp.bin",
+      "byteLength": 104448
+    }
+  ],
+  "materials": [
+    {
+      "name": "BoomBox_Mat",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 3
+        }
+      },
+      "emissiveFactor": [
+        1,
+        1,
+        1
+      ],
+      "emissiveTexture": {
+        "index": 1
+      },
+      "normalTexture": {
+        "index": 2
+      },
+      "occlusionTexture": {
+        "index": 3
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "BoomBox",
+      "primitives": [
+        {
+          "attributes": {
+            "TEXCOORD_0": 1,
+            "NORMAL": 2,
+            "TANGENT": 3,
+            "POSITION": 4
+          },
+          "mode": 4,
+          "material": 0,
+          "indices": 0
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "BoomBox",
+      "rotation": [
+        0,
+        1,
+        0,
+        0
+      ],
+      "mesh": 0
+    }
+  ],
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "scene": 0,
+  "extensionsUsed": [
+    "EXT_texture_webp"
+  ],
+  "extensionsRequired": [
+    "EXT_texture_webp"
+  ]
+}

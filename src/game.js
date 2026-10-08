@@ -25,6 +25,7 @@ import { installHeightHaze, installFoliageWind } from "./rendering/surface-detai
 import { createBrowserDiagnostics } from "./testing/browser-diagnostics.js";
 import { enterMultiplayer } from "./ui/multiplayer-lobby.js";
 import { createNetworkRace } from "./multiplayer/network-race.js";
+import { installScannedMaterials } from "./rendering/scanned-materials.js";
 
 async function startGame() {
   document.getElementById("multiplayer-button").addEventListener("click", () => {
@@ -51,6 +52,7 @@ async function startGame() {
     sharedAssets,
   });
   const { pads, boxes } = createRaceProps({ ...sceneState, course });
+  installScannedMaterials(scene, sceneState.fidelityAssets, course.id, landscape.animated);
   const courseBake = course.staticBake === false ? null : await loadCourseBake(course.id);
   installCourseBake(scene, courseBake);
   const racers = createRaceGrid(roster);

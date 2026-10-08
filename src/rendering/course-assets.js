@@ -26,16 +26,18 @@ export async function loadCourseAssets(renderer, courseId = "windmill-wilds") {
     data = await dataResponse.arrayBuffer();
   const models = decodeCourseModels(index, data);
   const gltfLoader = new GLTFLoader();
-  await loadModelPack(gltfLoader, "./assets/courses/packs/shared/manifest.json", models, renderer);
-  const courseTextures = courseId
-    ? await loadModelPack(
-        gltfLoader,
-        `./assets/courses/packs/${courseId}/manifest.json`,
-        models,
-        renderer,
-        true,
-      )
-    : {};
+  const [, courseTextures] = await Promise.all([
+    loadModelPack(gltfLoader, "./assets/courses/packs/shared/manifest.json", models, renderer),
+    courseId
+      ? await loadModelPack(
+          gltfLoader,
+          `./assets/courses/packs/${courseId}/manifest.json`,
+          models,
+          renderer,
+          true,
+        )
+      : {},
+  ]);
   const textures = { ...Object.fromEntries(maps), ...courseTextures };
   for (const [name, texture] of Object.entries(textures)) {
     if (textures[`${name}Normal`])

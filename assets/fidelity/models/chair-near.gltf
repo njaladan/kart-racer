@@ -1,0 +1,618 @@
+{
+  "asset": {
+    "generator": "glTF-Transform v4.5.1",
+    "version": "2.0"
+  },
+  "accessors": [
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 31410,
+      "bufferView": 0,
+      "byteOffset": 0
+    },
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 11745,
+      "bufferView": 0,
+      "byteOffset": 62820
+    },
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 4608,
+      "bufferView": 0,
+      "byteOffset": 86312
+    },
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 150,
+      "bufferView": 0,
+      "byteOffset": 95528
+    },
+    {
+      "name": "accessorPositions",
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 6241,
+      "max": [
+        0.41253557801246643,
+        0.6861773133277893,
+        0.293540358543396
+      ],
+      "min": [
+        -0.41402238607406616,
+        0.226641446352005,
+        -0.276451975107193
+      ],
+      "bufferView": 1,
+      "byteOffset": 0
+    },
+    {
+      "name": "accessorNormals",
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 6241,
+      "bufferView": 1,
+      "byteOffset": 12
+    },
+    {
+      "name": "accessorUVs",
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 6241,
+      "bufferView": 1,
+      "byteOffset": 24
+    },
+    {
+      "name": "accessorUV2s",
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 6241,
+      "bufferView": 1,
+      "byteOffset": 32
+    },
+    {
+      "name": "accessorPositions",
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 2399,
+      "max": [
+        0.3903724253177643,
+        0.6404843330383301,
+        0.2655284106731415
+      ],
+      "min": [
+        -0.3916984498500824,
+        0.005148450843989849,
+        -0.2752761244773865
+      ],
+      "bufferView": 2,
+      "byteOffset": 0
+    },
+    {
+      "name": "accessorNormals",
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 2399,
+      "bufferView": 2,
+      "byteOffset": 12
+    },
+    {
+      "name": "accessorUVs",
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 2399,
+      "bufferView": 2,
+      "byteOffset": 24
+    },
+    {
+      "name": "accessorUV2s",
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 2399,
+      "bufferView": 2,
+      "byteOffset": 32
+    },
+    {
+      "name": "accessorPositions",
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 1200,
+      "max": [
+        0.33995118737220764,
+        0.5014813542366028,
+        0.22082293033599854
+      ],
+      "min": [
+        -0.33995118737220764,
+        0.00009419608977623284,
+        -0.23920424282550812
+      ],
+      "bufferView": 3,
+      "byteOffset": 0
+    },
+    {
+      "name": "accessorNormals",
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 1200,
+      "bufferView": 3,
+      "byteOffset": 12
+    },
+    {
+      "name": "accessorUV2s",
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 1200,
+      "bufferView": 3,
+      "byteOffset": 24
+    },
+    {
+      "name": "accessorPositions",
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 33,
+      "max": [
+        0.13618184626102448,
+        0.010055896826088428,
+        0.04677271470427513
+      ],
+      "min": [
+        -0.13588549196720123,
+        0.005801851861178875,
+        -0.11070986837148666
+      ],
+      "bufferView": 4,
+      "byteOffset": 0
+    },
+    {
+      "name": "accessorNormals",
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 33,
+      "bufferView": 4,
+      "byteOffset": 12
+    },
+    {
+      "name": "accessorUVs",
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 33,
+      "bufferView": 4,
+      "byteOffset": 24
+    },
+    {
+      "name": "accessorUV2s",
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 33,
+      "bufferView": 4,
+      "byteOffset": 32
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteOffset": 0,
+      "byteLength": 95828,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 95828,
+      "byteLength": 249640,
+      "byteStride": 40,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 345468,
+      "byteLength": 95960,
+      "byteStride": 40,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 441428,
+      "byteLength": 38400,
+      "byteStride": 32,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 479828,
+      "byteLength": 1320,
+      "byteStride": 40,
+      "target": 34962
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 2
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 0
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 1
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 3
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 4
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 5
+        }
+      }
+    }
+  ],
+  "images": [
+    {
+      "extras": {
+        "fidelityKey": "7909cd802fc398b8999d"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/7909cd802fc398b8999d.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "60e4d748ff54f3fb494a"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/60e4d748ff54f3fb494a.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "d50be445441b0f9b28de"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/d50be445441b0f9b28de.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "54abe07ca01be862e4ad"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/54abe07ca01be862e4ad.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "db1391529d134f8e7a4a"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/db1391529d134f8e7a4a.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "4179927a83ec34edacc4"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/4179927a83ec34edacc4.ktx2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "chair-near.bin",
+      "byteLength": 481148
+    }
+  ],
+  "materials": [
+    {
+      "name": "fabric Mystere Mango Velvet",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.883,
+          0.035,
+          0,
+          1
+        ],
+        "roughnessFactor": 0.8,
+        "metallicFactor": 0,
+        "baseColorTexture": {
+          "index": 0,
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                -3,
+                3
+              ],
+              "scale": [
+                7,
+                7
+              ],
+              "texCoord": 0
+            }
+          }
+        }
+      },
+      "normalTexture": {
+        "index": 1,
+        "scale": 0.6,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              -0.5,
+              0.5
+            ],
+            "scale": [
+              2,
+              2
+            ],
+            "texCoord": 0
+          }
+        }
+      },
+      "occlusionTexture": {
+        "index": 2,
+        "texCoord": 1,
+        "extensions": {
+          "KHR_texture_transform": {
+            "texCoord": 1
+          }
+        }
+      },
+      "extensions": {
+        "KHR_materials_sheen": {
+          "sheenColorFactor": [
+            1,
+            0.329,
+            0.1
+          ],
+          "sheenRoughnessFactor": 0.8
+        }
+      }
+    },
+    {
+      "name": "wood Brown",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.14,
+          0.07,
+          0.01,
+          1
+        ],
+        "baseColorTexture": {
+          "index": 3,
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                -0.8635584,
+                1.12502563
+              ],
+              "rotation": 0.08726647,
+              "scale": [
+                3,
+                3
+              ],
+              "texCoord": 0
+            }
+          }
+        },
+        "metallicRoughnessTexture": {
+          "index": 4,
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                -0.8635584,
+                1.12502563
+              ],
+              "rotation": 0.08726647,
+              "scale": [
+                3,
+                3
+              ],
+              "texCoord": 0
+            }
+          }
+        }
+      },
+      "occlusionTexture": {
+        "index": 2,
+        "texCoord": 1,
+        "extensions": {
+          "KHR_texture_transform": {
+            "texCoord": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "metal",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.28,
+          0.26,
+          0.23,
+          1
+        ],
+        "roughnessFactor": 0.3
+      },
+      "occlusionTexture": {
+        "index": 2,
+        "extensions": {
+          "KHR_texture_transform": {
+            "texCoord": 1
+          }
+        }
+      }
+    },
+    {
+      "name": "label",
+      "pbrMetallicRoughness": {
+        "metallicFactor": 0,
+        "baseColorTexture": {
+          "index": 5,
+          "extensions": {
+            "KHR_texture_transform": {
+              "texCoord": 0
+            }
+          }
+        }
+      },
+      "occlusionTexture": {
+        "index": 2,
+        "texCoord": 1,
+        "extensions": {
+          "KHR_texture_transform": {
+            "texCoord": 1
+          }
+        }
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "SheenChair_fabric",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 4,
+            "NORMAL": 5,
+            "TEXCOORD_0": 6,
+            "TEXCOORD_1": 7
+          },
+          "mode": 4,
+          "material": 0,
+          "indices": 0
+        }
+      ]
+    },
+    {
+      "name": "SheenChair_wood",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 8,
+            "NORMAL": 9,
+            "TEXCOORD_0": 10,
+            "TEXCOORD_1": 11
+          },
+          "mode": 4,
+          "material": 1,
+          "indices": 1
+        }
+      ]
+    },
+    {
+      "name": "SheenChair_metal",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 12,
+            "NORMAL": 13,
+            "TEXCOORD_0": 14
+          },
+          "mode": 4,
+          "material": 2,
+          "indices": 2
+        }
+      ]
+    },
+    {
+      "name": "SheenChair_label",
+      "primitives": [
+        {
+          "attributes": {
+            "POSITION": 15,
+            "NORMAL": 16,
+            "TEXCOORD_0": 17,
+            "TEXCOORD_1": 18
+          },
+          "mode": 4,
+          "material": 3,
+          "indices": 3
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "SheenChair_fabric",
+      "mesh": 0
+    },
+    {
+      "name": "SheenChair_wood",
+      "mesh": 1
+    },
+    {
+      "name": "SheenChair_metal",
+      "mesh": 2
+    },
+    {
+      "name": "SheenChair_label",
+      "translation": [
+        -0.0006629925,
+        0.23622,
+        0.0596007444
+      ],
+      "rotation": [
+        -0.0436193831,
+        0,
+        0,
+        0.999048233
+      ],
+      "mesh": 3
+    }
+  ],
+  "scenes": [
+    {
+      "nodes": [
+        0,
+        1,
+        2,
+        3
+      ]
+    }
+  ],
+  "scene": 0,
+  "extensionsUsed": [
+    "KHR_materials_sheen",
+    "KHR_texture_basisu",
+    "KHR_texture_transform"
+  ],
+  "extensionsRequired": [
+    "KHR_texture_basisu",
+    "KHR_texture_transform"
+  ]
+}

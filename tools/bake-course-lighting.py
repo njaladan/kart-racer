@@ -61,6 +61,28 @@ for course in courses:
     bvh = BVHTree.FromPolygons(vertices.tolist(), faces[useful].tolist(), all_triangles=True, epsilon=.001)
     surface = BVHTree.FromPolygons(vertices.tolist(), ground_faces.tolist(), all_triangles=True, epsilon=.001)
     obstacle_colors = colors[useful]
+    def transmission(origin, direction, distance):
+        """Thin glass/foliage transmits light; opaque walls still occlude it."""
+        value = 1.0
+        for _ in range(8):
+            hit, _, face, travel = bvh.ray_cast(origin, direction, distance)
+            if hit is None: return value
+            opacity = float(obstacle_colors[face, 3])
+            if opacity >= .99: return 0.0
+            value *= 1.0 - opacity
+            if value < .025: return 0.0
+            step = travel + .025
+            distance -= step
+            if distance <= .025: return value
+            origin = origin + direction * step
+        return value
+
+    def area_origins(pool):
+        center = Vector(pool['position'])
+        if not pool.get('area'): return [center]
+        size = pool['area']
+        return [center + Vector((x * size[0], y * size[1], z * size[2]))
+                for x, y, z in [(-.25,-.25,.25),(.25,-.25,-.25),(-.25,.25,-.25),(.25,.25,.25)]]
     light = np.zeros((size, size, 4), dtype=np.float32)
     heights = np.zeros((size, size, 4), dtype=np.float32)
     directions = []
@@ -102,13 +124,15 @@ for course in courses:
                 distance = delta.length
                 if distance >= pool['radius']:
                     continue
-                direction = -delta.normalized() if distance > .001 else Vector((0, 1, 0))
-                obstruction, _, _, hit_distance = bvh.ray_cast(origin, direction, max(.01, distance - .5))
-                if obstruction is not None and hit_distance < distance - .55:
-                    continue
                 falloff = (1 - distance / pool['radius']) ** 2
-                cosine = max(.15, direction.y)
-                bounce += Vector(pool['color']) * (min(5, pool['intensity']) * falloff * cosine * .26)
+                emitters = area_origins(pool)
+                visibility = 0.0
+                for emitter in emitters:
+                    ray = emitter - origin
+                    length = ray.length
+                    direction = ray.normalized() if length > .001 else Vector((0, 1, 0))
+                    visibility += transmission(origin, direction, max(.01, length - .5)) * max(.15, direction.y)
+                bounce += Vector(pool['color']) * (min(5, pool['intensity']) * falloff * visibility / len(emitters) * .26)
             light[row, column] = [min(1, bounce.x), min(1, bounce.y), min(1, bounce.z), ao]
         if row % 128 == 0:
             print(f'{course}: {row}/{size} rows, {time.monotonic()-started:.1f}s', flush=True)
@@ -131,6 +155,7 @@ for course in courses:
         ray_count = 0
         for lamp_index, pool in enumerate(lights):
             position = Vector(pool['position'])
+            emitters = area_origins(pool)
             reach = pool['radius']
             left = max(0, math.floor((position.x - reach - bounds[0]) / step_x))
             right = min(resolution, math.ceil((position.x + reach - bounds[0]) / step_x))
@@ -155,9 +180,16 @@ for course in courses:
                             continue
                         ray_count += 1
                         direction = delta.normalized() if distance > .001 else Vector((0, 1, 0))
-                        obstruction, _, _, _ = bvh.ray_cast(origin, direction, max(.01, distance - .35))
-                        if obstruction is None:
-                            spill[tile_y + row, tile_x + column, :3] += rgb * falloff
+                        visibility = 0.0
+                        for emitter in emitters:
+                            ray = emitter - origin
+                            length = ray.length
+                            if length > .025:
+                                visibility += transmission(origin, ray.normalized(), max(.01, length - .35))
+                            else:
+                                visibility += 1.0
+                        visibility /= len(emitters)
+                        spill[tile_y + row, tile_x + column, :3] += rgb * falloff * visibility
             if lamp_index % 64 == 0:
                 print(f'{course}: spill {lamp_index}/{len(lights)} lamps, {ray_count} rays', flush=True)
         # LDR storage is enough for diffuse night spill; global exposure remains
@@ -167,12 +199,12 @@ for course in courses:
         outputs.append('spill.png')
         volume = {**volume, 'columns': columns, 'rows': rows, 'file': 'spill.png', 'strength': 1}
     result = {
-        'version': 1, 'course': course, 'lighting': 'indirect.png', 'height': 'height.png',
+        'version': 2, 'course': course, 'lighting': 'indirect.png', 'height': 'height.png',
         'bounds': bounds, 'heightRange': metadata['heightRange'], 'bounceScale': .65,
         'resolution': size, 'samples': samples, 'radius': radius,
-        'method': 'Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded.',
+        'method': 'Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Four-point area emitters soften penumbrae and glass/cutouts transmit attenuated light.',
         'sourceSceneSha256': hashlib.sha256(metadata_path.read_bytes() + binary).hexdigest(),
-        'triangles': metadata['triangles'], 'lights': len(lights),
+        'triangles': metadata['triangles'], 'lights': len(lights), 'areaLights': sum(bool(p.get('area')) for p in lights), 'transparentLightTransport': True,
         'outputs': [{ 'file': name, 'width': columns * resolution if name == 'spill.png' else size, 'height': rows * resolution if name == 'spill.png' else size, 'bytes': (destination/name).stat().st_size, 'sha256': hashlib.sha256((destination/name).read_bytes()).hexdigest() } for name in outputs],
     }
     if volume:

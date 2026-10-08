@@ -6,13 +6,21 @@ export const GRAPHICS_TIERS = Object.freeze([
   { name: "Ultra", shadowSize: 2048, shadows: true, effectDensity: 1, targetFps: 60 },
 ]);
 
-export function createGraphicsQuality({ renderer, sun, weather, postprocessing, lighting }) {
+export function createGraphicsQuality({
+  renderer,
+  sun,
+  weather,
+  postprocessing,
+  lighting,
+  scannedMaterials,
+}) {
   let tier = 3;
   let world = null;
   let particles = null;
   function apply(next) {
     tier = Math.max(0, Math.min(3, Math.round(next)));
     const settings = GRAPHICS_TIERS[tier];
+    if (scannedMaterials) scannedMaterials.quality.value = tier >= 2 ? 1 : 0;
     renderer.shadowMap.enabled = settings.shadows;
     if (sun.shadow.mapSize.x !== settings.shadowSize) {
       sun.shadow.mapSize.set(settings.shadowSize, settings.shadowSize);

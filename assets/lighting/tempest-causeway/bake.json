@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "course": "tempest-causeway",
   "lighting": "indirect.png",
   "height": "height.png",
@@ -15,33 +15,35 @@
   ],
   "bounceScale": 0.65,
   "resolution": 768,
-  "samples": 12,
+  "samples": 16,
   "radius": 22.0,
-  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
-  "sourceSceneSha256": "c006c6d430654621ec956ee02da1e8f49d0a9c199a1d644c45e286f4fb45d4d9",
-  "triangles": 217814,
-  "lights": 126,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Four-point area emitters soften penumbrae and glass/cutouts transmit attenuated light. Colored spill volume samples at authored heights illuminate vertical surfaces.",
+  "sourceSceneSha256": "65cd15e50daef0c966119487f7767f042018cc8a9987427662b2e295bd02dc85",
+  "triangles": 232662,
+  "lights": 128,
+  "areaLights": 2,
+  "transparentLightTransport": true,
   "outputs": [
     {
       "file": "indirect.png",
       "width": 768,
       "height": 768,
-      "bytes": 370050,
-      "sha256": "73c8c5eee890edd80f33727e6d0ef3bbd16fd101e2b46f79ef22172d95dbd667"
+      "bytes": 415079,
+      "sha256": "b5d6f54250e9721d92196dc7b5a47fa02528417d55ceca346f01b041d3849bd2"
     },
     {
       "file": "height.png",
       "width": 768,
       "height": 768,
-      "bytes": 203546,
-      "sha256": "fe67a7b53b6491ec6a42cb03393c5454c61628a3e4082d38feca11bf39a279dd"
+      "bytes": 203719,
+      "sha256": "459737a2d1887626ce2f359a076274eae897509a1c3e10a74420287eafcb769d"
     },
     {
       "file": "spill.png",
       "width": 512,
       "height": 256,
-      "bytes": 17565,
-      "sha256": "d05ea8a933e74b6b8fd3502fbf2a0aac62af138a0a8b85eaad1af2d39876dc44"
+      "bytes": 17278,
+      "sha256": "2ed050d93ee04967474fed0882ee456337d4144a085011c86cb13f1287c6996e"
     }
   ],
   "lightVolume": {

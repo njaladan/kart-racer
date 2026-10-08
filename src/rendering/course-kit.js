@@ -5,10 +5,13 @@ import { bakeVertexShade } from "./vertex-shading.js";
 import { sceneryGroundHeight } from "./terrain-height.js";
 import { createAuthoredGeometryLibrary } from "./authored-geometry.js";
 
+// Read-only unit geometry is shared by all authoring kits in a scene.
+const unitBoxGeometry = new THREE.BoxGeometry(1, 1, 1);
+
 // Scenery authors get placement and reusable primitives, never engine globals.
 export function createCourseKit(scenery, track, assets = { models: {} }) {
   reserveSceneryForTrack(scenery, track);
-  const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
+  const boxGeometry = unitBoxGeometry;
   const authoredGeometry = createAuthoredGeometryLibrary(assets.models);
   const material = (color, extra = {}) =>
     new THREE.MeshStandardMaterial({

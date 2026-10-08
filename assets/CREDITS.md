@@ -1,5 +1,9 @@
 # Asset credits
 
+The latest downloaded focal props and shared scanned relief atlases have
+[separate credits and retained source notices](fidelity/CREDITS.md), including
+the CC BY 4.0 refrigerator and CC0 models/scans.
+
 The environment graphics below are licensed under **CC0 1.0 Universal**:
 <https://creativecommons.org/publicdomain/zero/1.0/>. They may be modified and
 redistributed, including in commercial games. Credit is included as a courtesy.

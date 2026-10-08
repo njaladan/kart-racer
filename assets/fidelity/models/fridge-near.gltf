@@ -1,0 +1,907 @@
+{
+  "asset": {
+    "generator": "glTF-Transform v4.5.1",
+    "version": "2.0",
+    "copyright": "2025, CC BY 4.0 International, Eric Chadwick of Darmstadt Graphics Group GmbH. This work is based on \"Commercial Fridge\" (https://sketchfab.com/3d-models/commercial-fridge-2174e1e4f1f24f1a95aa110ee060f473) by Sean Thomas (https://sketchfab.com/foon.) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)"
+  },
+  "accessors": [
+    {
+      "type": "SCALAR",
+      "componentType": 5126,
+      "count": 17,
+      "max": [
+        4.666666507720947
+      ],
+      "min": [
+        0
+      ],
+      "bufferView": 0,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC4",
+      "componentType": 5126,
+      "count": 17,
+      "bufferView": 0,
+      "byteOffset": 68
+    },
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 843,
+      "bufferView": 1,
+      "byteOffset": 0
+    },
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 762,
+      "bufferView": 1,
+      "byteOffset": 1688
+    },
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 30,
+      "bufferView": 1,
+      "byteOffset": 3212
+    },
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 6,
+      "bufferView": 1,
+      "byteOffset": 3272
+    },
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 1707,
+      "bufferView": 1,
+      "byteOffset": 3284
+    },
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 77481,
+      "bufferView": 1,
+      "byteOffset": 6700
+    },
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 66975,
+      "bufferView": 1,
+      "byteOffset": 161664
+    },
+    {
+      "type": "SCALAR",
+      "componentType": 5123,
+      "count": 3501,
+      "bufferView": 1,
+      "byteOffset": 295616
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 434,
+      "bufferView": 2,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 434,
+      "max": [
+        0.3943006992340088,
+        0.45832231640815735,
+        2.1840403079986572
+      ],
+      "min": [
+        -0.46007776260375977,
+        -0.4602578580379486,
+        -5.960464477539063e-8
+      ],
+      "bufferView": 2,
+      "byteOffset": 12
+    },
+    {
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 434,
+      "bufferView": 2,
+      "byteOffset": 24
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 404,
+      "bufferView": 3,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 404,
+      "max": [
+        0.017926573753356934,
+        0.03597920387983322,
+        1.6003060340881348
+      ],
+      "min": [
+        -0.8344517350196838,
+        -0.05279766023159027,
+        0
+      ],
+      "bufferView": 3,
+      "byteOffset": 12
+    },
+    {
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 404,
+      "bufferView": 3,
+      "byteOffset": 24
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 20,
+      "bufferView": 4,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 20,
+      "max": [
+        0.34141165018081665,
+        -0.40388792753219604,
+        1.895334243774414
+      ],
+      "min": [
+        -0.40718865394592285,
+        -0.4374544024467468,
+        0.4208833575248718
+      ],
+      "bufferView": 4,
+      "byteOffset": 12
+    },
+    {
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 20,
+      "bufferView": 4,
+      "byteOffset": 24
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 4,
+      "bufferView": 5,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 4,
+      "max": [
+        0.34316110610961914,
+        -0.4252135753631592,
+        1.8989636898040771
+      ],
+      "min": [
+        -0.4074607491493225,
+        -0.42521369457244873,
+        0.4159911870956421
+      ],
+      "bufferView": 5,
+      "byteOffset": 12
+    },
+    {
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 4,
+      "bufferView": 5,
+      "byteOffset": 24
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 939,
+      "bufferView": 6,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 939,
+      "max": [
+        0.38330066204071045,
+        0.1672300398349762,
+        2.170428514480591
+      ],
+      "min": [
+        -0.4490776062011719,
+        -0.4580133557319641,
+        0.4212585687637329
+      ],
+      "bufferView": 6,
+      "byteOffset": 12
+    },
+    {
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 939,
+      "bufferView": 6,
+      "byteOffset": 24
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 16159,
+      "bufferView": 7,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 16159,
+      "max": [
+        0.5459203124046326,
+        0.5553877353668213,
+        0.04637283831834793
+      ],
+      "min": [
+        -0.14450964331626892,
+        -0.670352041721344,
+        -0.5058751106262207
+      ],
+      "bufferView": 7,
+      "byteOffset": 12
+    },
+    {
+      "type": "VEC4",
+      "componentType": 5126,
+      "count": 16159,
+      "bufferView": 7,
+      "byteOffset": 24
+    },
+    {
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 16159,
+      "bufferView": 7,
+      "byteOffset": 40
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 13344,
+      "bufferView": 8,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 13344,
+      "max": [
+        0.5231950283050537,
+        0.6361402273178101,
+        0.02344006858766079
+      ],
+      "min": [
+        -0.1211596354842186,
+        -0.47566625475883484,
+        -0.48353755474090576
+      ],
+      "bufferView": 8,
+      "byteOffset": 12
+    },
+    {
+      "type": "VEC4",
+      "componentType": 5126,
+      "count": 13344,
+      "bufferView": 8,
+      "byteOffset": 24
+    },
+    {
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 13344,
+      "bufferView": 8,
+      "byteOffset": 40
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 1318,
+      "bufferView": 9,
+      "byteOffset": 0
+    },
+    {
+      "type": "VEC3",
+      "componentType": 5126,
+      "count": 1318,
+      "max": [
+        0.5422762632369995,
+        0.45933714509010315,
+        0.04702896624803543
+      ],
+      "min": [
+        -0.14503416419029236,
+        -0.6432526111602783,
+        -0.4815326929092407
+      ],
+      "bufferView": 9,
+      "byteOffset": 12
+    },
+    {
+      "type": "VEC4",
+      "componentType": 5126,
+      "count": 1318,
+      "bufferView": 9,
+      "byteOffset": 24
+    },
+    {
+      "type": "VEC2",
+      "componentType": 5126,
+      "count": 1318,
+      "bufferView": 9,
+      "byteOffset": 40
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteOffset": 0,
+      "byteLength": 340
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 340,
+      "byteLength": 302620,
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 302960,
+      "byteLength": 13888,
+      "byteStride": 32,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 316848,
+      "byteLength": 12928,
+      "byteStride": 32,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 329776,
+      "byteLength": 640,
+      "byteStride": 32,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 330416,
+      "byteLength": 128,
+      "byteStride": 32,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 330544,
+      "byteLength": 30048,
+      "byteStride": 32,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 360592,
+      "byteLength": 775632,
+      "byteStride": 48,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 1136224,
+      "byteLength": 640512,
+      "byteStride": 48,
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteOffset": 1776736,
+      "byteLength": 63264,
+      "byteStride": 48,
+      "target": 34962
+    }
+  ],
+  "samplers": [
+    {
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 9
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 4
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 6
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 7
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 8
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 5
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 1
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 3
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 0
+        }
+      }
+    },
+    {
+      "sampler": 0,
+      "extensions": {
+        "KHR_texture_basisu": {
+          "source": 2
+        }
+      }
+    }
+  ],
+  "images": [
+    {
+      "extras": {
+        "fidelityKey": "8a2e7b1dfbf5426ac979"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/8a2e7b1dfbf5426ac979.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "112760671001954405c9"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/112760671001954405c9.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "b87cff54f09b9a035225"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/b87cff54f09b9a035225.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "fc36b08ae6eabceae217"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/fc36b08ae6eabceae217.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "287e2e6a824d8908684b"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/287e2e6a824d8908684b.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "7d26034cf77a1a5500b0"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/7d26034cf77a1a5500b0.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "6853bf955ad42e21ac18"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/6853bf955ad42e21ac18.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "78731aed8e1b8610340a"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/78731aed8e1b8610340a.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "2a95f4132055888799f9"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/2a95f4132055888799f9.ktx2"
+    },
+    {
+      "extras": {
+        "fidelityKey": "db7c47f5b84b2c62bf61"
+      },
+      "mimeType": "image/ktx2",
+      "uri": "../textures/db7c47f5b84b2c62bf61.ktx2"
+    }
+  ],
+  "buffers": [
+    {
+      "uri": "fridge-near.bin",
+      "byteLength": 1840000
+    }
+  ],
+  "materials": [
+    {
+      "name": "FridgeCase",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 1
+        }
+      },
+      "occlusionTexture": {
+        "index": 1
+      }
+    },
+    {
+      "name": "FridgeInterior",
+      "pbrMetallicRoughness": {
+        "roughnessFactor": 0.75,
+        "baseColorTexture": {
+          "index": 2
+        },
+        "metallicRoughnessTexture": {
+          "index": 4
+        }
+      },
+      "emissiveFactor": [
+        1,
+        1,
+        1
+      ],
+      "emissiveTexture": {
+        "index": 3
+      },
+      "occlusionTexture": {
+        "index": 4
+      }
+    },
+    {
+      "name": "FridgeGlass",
+      "alphaMode": "BLEND",
+      "doubleSided": true,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          1,
+          1,
+          0.23
+        ],
+        "roughnessFactor": 0.75,
+        "metallicFactor": 0,
+        "metallicRoughnessTexture": {
+          "index": 5
+        }
+      },
+      "extensions": {
+        "KHR_materials_clearcoat": {
+          "clearcoatFactor": 1,
+          "clearcoatRoughnessFactor": 0
+        }
+      }
+    },
+    {
+      "name": "ChampagneGlass",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.01568627543747425,
+          0.0313725508749485,
+          0.01568627543747425,
+          1
+        ],
+        "roughnessFactor": 0.5,
+        "metallicFactor": 0,
+        "metallicRoughnessTexture": {
+          "index": 5
+        }
+      },
+      "normalTexture": {
+        "index": 6,
+        "scale": 0.3
+      }
+    },
+    {
+      "name": "ChampagneFoil",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.8666666746139526,
+          0.6705882549285889,
+          0.4156862795352936,
+          1
+        ],
+        "roughnessFactor": 0.4
+      },
+      "normalTexture": {
+        "index": 7
+      }
+    },
+    {
+      "name": "ChampagneLabel",
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 8
+        },
+        "metallicRoughnessTexture": {
+          "index": 9
+        }
+      },
+      "normalTexture": {
+        "index": 6,
+        "scale": 0.2
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "FridgeCase",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 10,
+            "POSITION": 11,
+            "TEXCOORD_0": 12
+          },
+          "mode": 4,
+          "material": 0,
+          "indices": 2
+        }
+      ]
+    },
+    {
+      "name": "FridgeDoor",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 13,
+            "POSITION": 14,
+            "TEXCOORD_0": 15
+          },
+          "mode": 4,
+          "material": 0,
+          "indices": 3
+        }
+      ]
+    },
+    {
+      "name": "FridgeDoorInner",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 16,
+            "POSITION": 17,
+            "TEXCOORD_0": 18
+          },
+          "mode": 4,
+          "material": 1,
+          "indices": 4
+        }
+      ]
+    },
+    {
+      "name": "FridgeGlass",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 19,
+            "POSITION": 20,
+            "TEXCOORD_0": 21
+          },
+          "mode": 4,
+          "material": 2,
+          "indices": 5
+        }
+      ]
+    },
+    {
+      "name": "FridgeInterior",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 22,
+            "POSITION": 23,
+            "TEXCOORD_0": 24
+          },
+          "mode": 4,
+          "material": 1,
+          "indices": 6
+        }
+      ]
+    },
+    {
+      "name": "ChampagneBottles",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 25,
+            "POSITION": 26,
+            "TANGENT": 27,
+            "TEXCOORD_0": 28
+          },
+          "mode": 4,
+          "material": 3,
+          "indices": 7
+        },
+        {
+          "attributes": {
+            "NORMAL": 29,
+            "POSITION": 30,
+            "TANGENT": 31,
+            "TEXCOORD_0": 32
+          },
+          "mode": 4,
+          "material": 4,
+          "indices": 8
+        },
+        {
+          "attributes": {
+            "NORMAL": 33,
+            "POSITION": 34,
+            "TANGENT": 35,
+            "TEXCOORD_0": 36
+          },
+          "mode": 4,
+          "material": 5,
+          "indices": 9
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "FridgeCase",
+      "rotation": [
+        -0.7071067811865475,
+        0,
+        0,
+        0.7071067811865476
+      ],
+      "mesh": 0,
+      "children": [
+        1,
+        4
+      ]
+    },
+    {
+      "name": "FridgeDoor",
+      "translation": [
+        0.3763740956783294,
+        -0.4285686016082764,
+        0.3573247194290161
+      ],
+      "rotation": [
+        0,
+        0,
+        0,
+        -1
+      ],
+      "mesh": 1,
+      "children": [
+        2,
+        3
+      ]
+    },
+    {
+      "name": "FridgeDoorInner",
+      "translation": [
+        -0.3763740956783294,
+        0.4285686016082764,
+        -0.3573247194290161
+      ],
+      "mesh": 2
+    },
+    {
+      "name": "FridgeGlass",
+      "translation": [
+        -0.3763740956783294,
+        0.4285686016082764,
+        -0.3573247194290161
+      ],
+      "mesh": 3
+    },
+    {
+      "name": "FridgeInterior",
+      "mesh": 4,
+      "children": [
+        5
+      ]
+    },
+    {
+      "name": "ChampagneBottles",
+      "translation": [
+        -0.3279202878475189,
+        -0.20470546185970304,
+        1.0919711589813232
+      ],
+      "rotation": [
+        0.6817057827088218,
+        -0.1878223833227745,
+        -0.18782237511279729,
+        0.6817057529105157
+      ],
+      "mesh": 5
+    }
+  ],
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "scene": 0,
+  "extensionsUsed": [
+    "KHR_materials_clearcoat",
+    "KHR_texture_basisu"
+  ],
+  "extensionsRequired": [
+    "KHR_texture_basisu"
+  ]
+}

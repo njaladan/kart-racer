@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "course": "metronome-hall",
   "lighting": "indirect.png",
   "height": "height.png",
@@ -15,19 +15,21 @@
   ],
   "bounceScale": 0.65,
   "resolution": 768,
-  "samples": 12,
+  "samples": 16,
   "radius": 22.0,
-  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Colored spill volume samples at authored heights illuminate vertical surfaces.",
-  "sourceSceneSha256": "7fc480929732eb747dcb7a45361b8e590c1f6f47038e83a72bf4316514c4c74b",
-  "triangles": 359624,
-  "lights": 74,
+  "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Four-point area emitters soften penumbrae and glass/cutouts transmit attenuated light. Colored spill volume samples at authored heights illuminate vertical surfaces.",
+  "sourceSceneSha256": "c1a60d62b6eb0d9211ab2688441d3ea7f356cc7372f584d01c92c487ac340083",
+  "triangles": 420901,
+  "lights": 76,
+  "areaLights": 2,
+  "transparentLightTransport": true,
   "outputs": [
     {
       "file": "indirect.png",
       "width": 768,
       "height": 768,
-      "bytes": 85174,
-      "sha256": "645b89c2b97bea514a24ee898ebc33a6a21144942e7e756ca1cd5eaaa97cbf77"
+      "bytes": 97182,
+      "sha256": "d52bead1e761ff20b53f075f0a24b2670389592750ccf6a3a3087174be89d1d6"
     },
     {
       "file": "height.png",
@@ -40,8 +42,8 @@
       "file": "spill.png",
       "width": 512,
       "height": 256,
-      "bytes": 38473,
-      "sha256": "df3bd769da91648f10bbe58d7b58c34310dffc2f478d66c3b47194feda27e655"
+      "bytes": 38644,
+      "sha256": "cc50268116ad985e28a08ad93f7920218b57fcff4f128131d788666158f52795"
     }
   ],
   "lightVolume": {
