@@ -6,7 +6,7 @@
       "sourceName": "Avocado",
       "source": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/Avocado/",
       "license": "CC0-1.0",
-      "attribution": "licenses/avocado.md",
+      "attribution": "../CREDITS.md",
       "courses": [
         "pocket-pantry"
       ],
@@ -66,7 +66,7 @@
       "sourceName": "BarramundiFish",
       "source": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/BarramundiFish/",
       "license": "CC0-1.0",
-      "attribution": "licenses/fish.md",
+      "attribution": "../CREDITS.md",
       "courses": [
         "pelagic-glasshouse"
       ],
@@ -126,7 +126,7 @@
       "sourceName": "BoomBox",
       "source": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/BoomBox/",
       "license": "CC0-1.0",
-      "attribution": "licenses/boombox.md",
+      "attribution": "../CREDITS.md",
       "courses": [
         "metronome-hall",
         "neon-harbor"
@@ -187,7 +187,7 @@
       "sourceName": "Lantern",
       "source": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/Lantern/",
       "license": "CC0-1.0",
-      "attribution": "licenses/lantern.md",
+      "attribution": "../CREDITS.md",
       "courses": [
         "windmill-wilds",
         "sunstone-ruins",
@@ -256,7 +256,7 @@
       "sourceName": "AntiqueCamera",
       "source": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/AntiqueCamera/",
       "license": "CC0-1.0",
-      "attribution": "licenses/camera.md",
+      "attribution": "../CREDITS.md",
       "courses": [
         "sunstone-ruins",
         "frostpeak-festival",
@@ -318,7 +318,7 @@
       "sourceName": "WaterBottle",
       "source": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/WaterBottle/",
       "license": "CC0-1.0",
-      "attribution": "licenses/bottle.md",
+      "attribution": "../CREDITS.md",
       "courses": [
         "pocket-pantry",
         "railstorm-express"
@@ -379,7 +379,7 @@
       "sourceName": "SheenChair",
       "source": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/SheenChair/",
       "license": "CC0-1.0",
-      "attribution": "licenses/chair.md",
+      "attribution": "../CREDITS.md",
       "courses": [
         "metronome-hall",
         "clockwork-citadel"
@@ -440,7 +440,7 @@
       "sourceName": "CommercialRefrigerator",
       "source": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/CommercialRefrigerator/",
       "license": "CC-BY-4.0",
-      "attribution": "licenses/fridge.md",
+      "attribution": "../CREDITS.md",
       "courses": [
         "pocket-pantry"
       ],
@@ -631,7 +631,7 @@
       "key": "wood",
       "source": "https://ambientcg.com/view?id=Planks021",
       "license": "CC0-1.0",
-      "evidence": "licenses/wood.json",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/wood_planks/info.json",
@@ -670,7 +670,7 @@
       "key": "stone",
       "source": "https://polyhaven.com/a/concrete_wall_008",
       "license": "CC0-1.0",
-      "evidence": "licenses/stone.json",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/concrete_wall_008/info.json",
@@ -704,7 +704,7 @@
       "key": "metal",
       "source": "https://ambientcg.com/view?id=MetalPlates006",
       "license": "CC0-1.0",
-      "evidence": "licenses/metal.json",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/metalplates006/info.json",
@@ -733,7 +733,7 @@
       "key": "paint",
       "source": "https://ambientcg.com/view?id=PaintedPlaster017",
       "license": "CC0-1.0",
-      "evidence": "licenses/paint.json",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/plaster_painted/info.json",
@@ -767,7 +767,7 @@
       "key": "plaster",
       "source": "https://ambientcg.com/view?id=Plaster003",
       "license": "CC0-1.0",
-      "evidence": "licenses/plaster.json",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/plaster_rough/info.json",
@@ -801,7 +801,7 @@
       "key": "bark",
       "source": "https://ambientcg.com/view?id=Bark014",
       "license": "CC0-1.0",
-      "evidence": "licenses/bark.json",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/Bark014/info.json",
@@ -835,7 +835,7 @@
       "key": "fabric",
       "source": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/SheenChair/",
       "license": "CC0-1.0",
-      "evidence": "licenses/chair.md",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/SheenChair/glTF/chair_fabric_albedo.png",
@@ -854,7 +854,7 @@
       "key": "paper",
       "source": "https://ambientcg.com/view?id=Plaster001",
       "license": "CC0-1.0",
-      "evidence": "licenses/paper.json",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/plaster_modern/info.json",
@@ -888,7 +888,7 @@
       "key": "ceramic",
       "source": "https://ambientcg.com/view?id=PaintedPlaster017",
       "license": "CC0-1.0",
-      "evidence": "licenses/ceramic.json",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/plaster_painted/info.json",
@@ -922,7 +922,7 @@
       "key": "rubber",
       "source": "https://ambientcg.com/view?id=Asphalt031",
       "license": "CC0-1.0",
-      "evidence": "licenses/rubber.json",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/asphalt_light/info.json",
@@ -961,7 +961,7 @@
       "key": "snow",
       "source": "https://ambientcg.com/view?id=Ground055S",
       "license": "CC0-1.0",
-      "evidence": "licenses/snow.json",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/sand/info.json",
@@ -1000,7 +1000,7 @@
       "key": "leaf",
       "source": "https://ambientcg.com/view?id=Grass004",
       "license": "CC0-1.0",
-      "evidence": "licenses/leaf.json",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/grass/info.json",
@@ -1039,7 +1039,7 @@
       "key": "rock",
       "source": "https://ambientcg.com/view?id=Rock035",
       "license": "CC0-1.0",
-      "evidence": "licenses/rock.json",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/Rock035/info.json",
@@ -1073,7 +1073,7 @@
       "key": "sand",
       "source": "https://ambientcg.com/view?id=Ground055S",
       "license": "CC0-1.0",
-      "evidence": "licenses/sand.json",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/sand/info.json",
@@ -1112,7 +1112,7 @@
       "key": "brick",
       "source": "https://ambientcg.com/view?id=Bricks075A",
       "license": "CC0-1.0",
-      "evidence": "licenses/brick.json",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/bricks_yellow/info.json",
@@ -1151,7 +1151,7 @@
       "key": "roof",
       "source": "https://ambientcg.com/view?id=RoofingTiles013A",
       "license": "CC0-1.0",
-      "evidence": "licenses/roof.json",
+      "evidence": "../CREDITS.md",
       "downloads": [
         {
           "url": "https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/shared/roof_tiles_clay/info.json",
@@ -1200,206 +1200,6 @@
     }
   },
   "outputs": [
-    {
-      "file": "licenses/UX3D-mark.txt",
-      "bytes": 490,
-      "sha256": "ac89817ee8989f7fd6fb1830d5d722adb4718cc1c4bfb8aa3fcb5c89c8243d19"
-    },
-    {
-      "file": "licenses/avocado-README.md",
-      "bytes": 969,
-      "sha256": "076b9fbb0bd7ccf39a3dcba838544331dfa71186014c24141929fbcb3e2a507e"
-    },
-    {
-      "file": "licenses/avocado-metadata.json",
-      "bytes": 629,
-      "sha256": "fe72b92d850c2a8ed94c78e77d8bf40c655a695d8e59e3b3a68f0acdcf2f065c"
-    },
-    {
-      "file": "licenses/avocado.md",
-      "bytes": 769,
-      "sha256": "56357fc8277990d763480c4207551cd1f4d58451c6ea5f16d9fdb7d2fa7eb00c"
-    },
-    {
-      "file": "licenses/bark.json",
-      "bytes": 490,
-      "sha256": "2e39492bed54dbe3af6ec7d3648fa5ec0c29c167bcbf30f62fb000f30f4fa52a"
-    },
-    {
-      "file": "licenses/boombox-README.md",
-      "bytes": 1000,
-      "sha256": "4a0ba4006d903b85dea52788053399d835b22ebb3ab4b1e305ccee103d7b2271"
-    },
-    {
-      "file": "licenses/boombox-metadata.json",
-      "bytes": 655,
-      "sha256": "6fdf2571e662907ba51b35ca303d616baca22ae5f8e689bfd2110ef06329236a"
-    },
-    {
-      "file": "licenses/boombox.md",
-      "bytes": 770,
-      "sha256": "0fbb151acb88aadda72f05c54c05429bfae2c8af0b0f1ddc0c636be3a55da4c0"
-    },
-    {
-      "file": "licenses/bottle-README.md",
-      "bytes": 1004,
-      "sha256": "4ddb88bb6b835ab1b658041f1c5391b5b2128be65725d1ef84b1e434d818eb1c"
-    },
-    {
-      "file": "licenses/bottle-metadata.json",
-      "bytes": 645,
-      "sha256": "f7d3aa4783d4e81f135855e0ece0b45bf4e529dca5ba60b3878d3115c2773a35"
-    },
-    {
-      "file": "licenses/bottle.md",
-      "bytes": 774,
-      "sha256": "33cddcace3d46b3dec14275eff753c5879d5c55462a1bdce7981db4a5adb9a6b"
-    },
-    {
-      "file": "licenses/brick.json",
-      "bytes": 189,
-      "sha256": "ca22c309522a24a3b8b6f7b5946a266cc1164e025cd833b0c3216a509cb38e6a"
-    },
-    {
-      "file": "licenses/camera-README.md",
-      "bytes": 1195,
-      "sha256": "f51be0257b41055b46b07e8e281bde03b739680a2520251b879a4c38cce1f0ed"
-    },
-    {
-      "file": "licenses/camera-metadata.json",
-      "bytes": 982,
-      "sha256": "3b49b71ede6a0ee9540a6c953fa1478766ff670bd163b7fe1d213e343076afde"
-    },
-    {
-      "file": "licenses/camera.md",
-      "bytes": 852,
-      "sha256": "ea9b3641260ec5d67804e7b85ed8e7ca6f71bd614bee7275bce41ff00c69c9d7"
-    },
-    {
-      "file": "licenses/ceramic.json",
-      "bytes": 194,
-      "sha256": "da71cff22eb9cd01a721d4e9e882f9d2eb51f0e6ad6b0cb7febf1a8ca69058f1"
-    },
-    {
-      "file": "licenses/chair-README.md",
-      "bytes": 4250,
-      "sha256": "7bbb705e0532711b80a512161da64ab0f2a719412121daf24b8177bdbdbaca7a"
-    },
-    {
-      "file": "licenses/chair-metadata.json",
-      "bytes": 662,
-      "sha256": "a47e16c7cfaad0411769163dafcd4eeba8bd5327772d468e67d0e398a6965b65"
-    },
-    {
-      "file": "licenses/chair.md",
-      "bytes": 773,
-      "sha256": "52912ef39b0f19a2bf816de4fc5a161d058c334a912633f5470cf2c83e9c10c5"
-    },
-    {
-      "file": "licenses/fish-README.md",
-      "bytes": 959,
-      "sha256": "0a872d23709643379fe2a13261d535d110060d73154ad9b2141a90f3a49351c4"
-    },
-    {
-      "file": "licenses/fish-metadata.json",
-      "bytes": 634,
-      "sha256": "db907404aa5f14b0276a8a3b7c0748b4b58788313866246bfab89b9208c9e64e"
-    },
-    {
-      "file": "licenses/fish.md",
-      "bytes": 777,
-      "sha256": "668819801937f5b3c4602ca744ddf06ef104e809b36795954ccb9072581a1f08"
-    },
-    {
-      "file": "licenses/fridge-README.md",
-      "bytes": 17594,
-      "sha256": "d4ea5fa49f6cfabe1bed7a00cf2594573cd04e3eb739abe474f2900dee4baaaf"
-    },
-    {
-      "file": "licenses/fridge-metadata.json",
-      "bytes": 1399,
-      "sha256": "09c60e7c97284196e8ff2e78074b6f9a456f836bb0f916bbd3b51cee24931a57"
-    },
-    {
-      "file": "licenses/fridge.md",
-      "bytes": 939,
-      "sha256": "79a3524e3822b613af53e7800eed7389653607228238fd54cf2018173bc97f97"
-    },
-    {
-      "file": "licenses/lantern-README.md",
-      "bytes": 1080,
-      "sha256": "58a4903ae9c0bbb7d3f6ff1b9263b3b480edb7ca82109afdb06723275835a6c7"
-    },
-    {
-      "file": "licenses/lantern-metadata.json",
-      "bytes": 1006,
-      "sha256": "89f9dfb00347fbfd36ef4592d32d8493abb74ba000cd7c620e491bfc264a81ad"
-    },
-    {
-      "file": "licenses/lantern.md",
-      "bytes": 911,
-      "sha256": "59fcd6131454dd17312ff9671094bfe9139f3b301d0c3e3b1a5a7e4ee1b0c75a"
-    },
-    {
-      "file": "licenses/leaf.json",
-      "bytes": 503,
-      "sha256": "b7868515b14e6aa5b96ec27dae95c297eca69e298b1a8c0b1c17758a28f898e4"
-    },
-    {
-      "file": "licenses/metal.json",
-      "bytes": 574,
-      "sha256": "7f7e45463a2e24ba34d09775cff959fb4714413e0af149c51b4a41feafdb1cdb"
-    },
-    {
-      "file": "licenses/paint.json",
-      "bytes": 194,
-      "sha256": "da71cff22eb9cd01a721d4e9e882f9d2eb51f0e6ad6b0cb7febf1a8ca69058f1"
-    },
-    {
-      "file": "licenses/paper.json",
-      "bytes": 180,
-      "sha256": "c80661217e747fa14a2f7c17334c5912ac89bb8ff50153e7609777040a201b62"
-    },
-    {
-      "file": "licenses/plaster.json",
-      "bytes": 180,
-      "sha256": "e8ca8a847eea678a64f3a5c1622d757de4f105e09786a9b95cf76db8c6adc0d3"
-    },
-    {
-      "file": "licenses/rock.json",
-      "bytes": 490,
-      "sha256": "2e90e8edae09db70c9efb346877bee6545bd86a0b7ba113ce7252df1015210a4"
-    },
-    {
-      "file": "licenses/roof.json",
-      "bytes": 215,
-      "sha256": "bbf2fe15e88bd8ac3ce70210d0942a01b37ef316db60252c182d521c16b56679"
-    },
-    {
-      "file": "licenses/rubber.json",
-      "bytes": 111,
-      "sha256": "04910c70d365a0cb5b099263b2cf10be1bbcc55bd36a67773807a6aa3458831d"
-    },
-    {
-      "file": "licenses/sand.json",
-      "bytes": 189,
-      "sha256": "db777a0d68a11740fc974f78567eb314f8ebe168abecaa0bcf001a05600f54d7"
-    },
-    {
-      "file": "licenses/snow.json",
-      "bytes": 189,
-      "sha256": "db777a0d68a11740fc974f78567eb314f8ebe168abecaa0bcf001a05600f54d7"
-    },
-    {
-      "file": "licenses/stone.json",
-      "bytes": 288,
-      "sha256": "6328ecf98e96fd6411a82232890812aea4a0d8b44c44443601599dbe8ff90cd8"
-    },
-    {
-      "file": "licenses/wood.json",
-      "bytes": 187,
-      "sha256": "cefe1346b3dc0ef7f40fa7fcf1f331952c9275b75b7616031068b992f715e6bf"
-    },
     {
       "file": "materials/brick-height.png",
       "bytes": 175439,

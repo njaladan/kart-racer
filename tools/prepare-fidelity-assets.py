@@ -38,12 +38,10 @@ def hero(item):
     folder=CACHE/name;folder.mkdir(exist_ok=True)
     downloads=[]
     for filename in ['LICENSE.md','README.md','metadata.json']:
-        url=K+name+'/'+filename;data=fetch(url);(folder/filename).write_bytes(data);downloads.append(record(url,data))
-        if filename != 'LICENSE.md': (OUT/'licenses'/(key+'-'+filename)).write_bytes(data)
-    (OUT/'licenses'/(key+'.md')).write_bytes((folder/'LICENSE.md').read_bytes())
+        url=K+name+'/'+filename;data=fetch(url);downloads.append(record(url,data))
     url=K+name+'/glTF-Binary/'+name+'.glb';data=fetch(url);(folder/(name+'.glb')).write_bytes(data);downloads.append(record(url,data))
     print('Downloaded hero',name,len(data),flush=True)
-    return {'key':key,'sourceName':name,'source':K+name+'/','license':'CC-BY-4.0' if name=='CommercialRefrigerator' else 'CC0-1.0','attribution':'licenses/'+key+'.md','courses':courses,'downloads':downloads}
+    return {'key':key,'sourceName':name,'source':K+name+'/','license':'CC-BY-4.0' if name=='CommercialRefrigerator' else 'CC0-1.0','attribution':'../CREDITS.md','courses':courses,'downloads':downloads}
 heroes=list(ThreadPoolExecutor(max_workers=4).map(hero,MODELS.items()))
 
 # Material tiles use actual photographed/artist-authored maps. The generic paint,
@@ -74,7 +72,7 @@ for index,(key,folder,col,nor,rough,height,ao,relief,baseRough) in enumerate(SCA
     if folder:
         url=F+folder+'/info.json';ev=fetch(url);meta=json.loads(ev)
         if meta['license'] not in ['CC0','CC0-1.0']:raise ValueError('Expected CC0 scan')
-        (OUT/'licenses'/(key+'.json')).write_bytes(ev);downloads.append(record(url,ev))
+        downloads.append(record(url,ev))
         def load(filename,default):
             if not filename:return Image.new('RGB',(INNER,INNER),default)
             url=F+folder+'/'+filename
@@ -86,13 +84,13 @@ for index,(key,folder,col,nor,rough,height,ao,relief,baseRough) in enumerate(SCA
         c=load(col,(255,255,255));n=load(nor,(128,128,255));r=load(rough,(200,200,200));h=load(height,(128,128,128));a=load(ao,(255,255,255))
         # ARM source channels are R=AO, G=roughness, B=metalness.
         if rough=='arm.jpg':a=r.getchannel('R').convert('RGB');r=r.getchannel('G').convert('RGB')
-        source=meta['source'];evidence='licenses/'+key+'.json'
+        source=meta['source'];evidence='../CREDITS.md'
     else:
         base=K+'SheenChair/glTF/'
         c=image(base+'chair_fabric_albedo.png').resize((INNER,INNER),Image.Resampling.LANCZOS)
         n=image(base+'chair_fabric_normal.png').resize((INNER,INNER),Image.Resampling.LANCZOS)
         downloads=[record(base+f,fetch(base+f)) for f in ['chair_fabric_albedo.png','chair_fabric_normal.png']]
-        r=Image.new('RGB',(INNER,INNER),(220,220,220));a=Image.new('RGB',(INNER,INNER),(255,255,255));h=Image.new('RGB',(INNER,INNER),(128,128,128));source=K+'SheenChair/';evidence='licenses/chair.md'
+        r=Image.new('RGB',(INNER,INNER),(220,220,220));a=Image.new('RGB',(INNER,INNER),(255,255,255));h=Image.new('RGB',(INNER,INNER),(128,128,128));source=K+'SheenChair/';evidence='../CREDITS.md'
     # Preserve each course's deliberate palette. Actual scan contrast remains
     # as an achromatic detail layer instead of imposing a different base color.
     grey=np.asarray(ImageOps.grayscale(c),dtype=float);grey=np.clip(.92+(grey-grey.mean())/255*.26,.76,1.08)
@@ -108,8 +106,7 @@ for index,(key,folder,col,nor,rough,height,ao,relief,baseRough) in enumerate(SCA
     sources.append({'key':key,'source':source,'license':'CC0-1.0','evidence':evidence,'downloads':downloads,'adaptation': 'Fine plaster relief for '+key if key in ['paper','ceramic','paint'] else 'Achromatic scan detail preserves course palette; snow uses fine sand microstructure' if key=='snow' else 'Achromatic scan detail; original normals/roughness and supplied height/AO retained'})
     print('Prepared scan',key,len(downloads),flush=True)
 for key,im in atlases.items():im.save(OUT/'materials'/(key+'.png'));im.save(OUT/'materials'/(key+'.webp'),quality=95,lossless=key!='color',method=6)
-(OUT/'sources.json').write_text(json.dumps({'heroes':heroes,'materials':materials,'sources':sources},indent=2)+'\n')
-# Additional legal marks in the upstream camera texture are retained, not reused as our branding.
-url=f'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/{REV}/LICENSES/LicenseRef-LegalMark-UX3D.txt'
-(OUT/'licenses/UX3D-mark.txt').write_bytes(fetch(url))
+# The optimizer reads this intermediate inventory and replaces it with the
+# runtime manifest after writing all prepared models and textures.
+(OUT/'manifest.json').write_text(json.dumps({'version':1,'heroes':heroes,'materials':materials,'sources':sources},indent=2)+'\n')
 print('Prepared',len(heroes),'hero assets and',len(materials),'physical material roles',flush=True)

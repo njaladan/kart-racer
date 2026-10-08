@@ -22,7 +22,7 @@ const cache = "/tmp/turbo-fidelity-sources";
 const encoder = resolve(root, "node_modules/basisu/bin/linux/x64_sse/basisu");
 const io = new NodeIO().registerExtensions(ALL_EXTENSIONS);
 const sha = (data) => createHash("sha256").update(data).digest("hex");
-const source = JSON.parse(await readFile(resolve(output, "sources.json")));
+const source = JSON.parse(await readFile(resolve(output, "manifest.json")));
 await MeshoptSimplifier.ready;
 await mkdir(resolve(output, "textures"), { recursive: true });
 const manifest = {
@@ -173,7 +173,7 @@ async function walk(folder) {
   for (const name of await readdir(folder, { withFileTypes: true })) {
     const path = resolve(folder, name.name);
     if (name.isDirectory()) await walk(path);
-    else if (!["manifest.json", "sources.json", "CREDITS.md"].includes(name.name)) {
+    else if (name.name !== "manifest.json") {
       const bytes = await readFile(path);
       manifest.outputs.push({
         file: path.slice(output.length + 1),

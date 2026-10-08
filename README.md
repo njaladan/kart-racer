@@ -90,5 +90,3 @@ Windmill Wilds now has eight connected places: a flower fair, root woodland, ban
 For design and development details, see the [art direction](proposals/art-direction.md), [course proposal](proposals/windmill-wilds.md), and [course authoring contract](src/courses/CONTRACT.md).
 For module ownership and development conventions, see [project architecture](docs/architecture.md).
 For renderer ownership, reusable effect APIs, and visual checks, see [graphics tuning](docs/graphics.md).
-
-Downloaded PBR focal props, broad scanned-material coverage and regenerated area-light bakes are documented in [detailed props and performance](docs/detailed-props.md), with [asset credits](assets/fidelity/CREDITS.md).

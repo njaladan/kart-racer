@@ -1,9 +1,5 @@
 # Asset credits
 
-The latest downloaded focal props and shared scanned relief atlases have
-[separate credits and retained source notices](fidelity/CREDITS.md), including
-the CC BY 4.0 refrigerator and CC0 models/scans.
-
 The environment graphics below are licensed under **CC0 1.0 Universal**:
 <https://creativecommons.org/publicdomain/zero/1.0/>. They may be modified and
 redistributed, including in commercial games. Credit is included as a courtesy.
@@ -63,3 +59,10 @@ is converted to GLB. See the [house notice](courses/packs/railstorm-express/lice
 Clockwork shares the local house file; source revision, original and derivative
 hashes and modifications are in both course manifests. Reproduce with
 `tools/prepare-course-landmarks.py`.
+
+Downloaded focal models and scanned surface maps:
+
+- Commercial Refrigerator by Eric Chadwick (Darmstadt Graphics Group GmbH), based on “Commercial Fridge” by Sean Thomas: [original source](https://sketchfab.com/3d-models/commercial-fridge-2174e1e4f1f24f1a95aa110ee060f473), [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/). Geometry was simplified for three LODs, textures resized to at most 1024 pixels, and the model made static.
+- Avocado, Barramundi Fish, BoomBox and Water Bottle by Microsoft; Lantern by sbtron / Microsoft and Frank Galligan; Antique Camera by Maximillan Kamps / UX3D; Sheen Chair by Eric Chadwick / Wayfair, LLC. These glTF Sample Assets are CC0.
+- The camera retains the UX3D logo included with its source texture. The source notice says: “Use in this model do not change the license of the model. The model license does not confer any usage rights on the Mark beyond that specified in the Guidelines. In particular, there is no right to use the Mark in any other context based on the usage here. UX3D reserves the right to remove the Mark or unilaterally change the terms of use.” See the [source notice](https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/LICENSES/LicenseRef-LegalMark-UX3D.txt).
+- The shared material roles use CC0 ambientCG and Poly Haven scans; fabric uses the CC0 Sheen Chair maps. Source links and file hashes remain in the runtime fidelity manifest.
