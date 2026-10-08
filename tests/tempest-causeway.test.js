@@ -18,7 +18,7 @@ function waveFixture(phase = Math.asin(0.6), speed = 85, offset = 0) {
   const wave = course.bridgeWave;
   const length = (track.SECTIONS[1].end - track.SECTIONS[1].start) * track.COURSE_LENGTH;
   const time =
-    ((phase + (Math.PI * 2 * fraction * length) / wave.wavelength) * wave.period) / (2 * Math.PI);
+    ((phase - (Math.PI * 2 * fraction * length) / wave.wavelength) * wave.period) / (2 * Math.PI);
   track.setTime(time);
   const racer = initializeRacer(createRacerState({ s: t * TRACK, x: offset / 6.25 }));
   racer.vx = (-Math.sin(racer.yaw) * speed) / 3.6;
@@ -61,6 +61,19 @@ test("bridge wind waves travel between pinned towers with matching analytic moti
     assert.ok(Math.abs(projection.height - pose.p.y) < 0.03);
     assert.ok(Math.abs(pose.tangent.dot(pose.right)) < 1e-6);
   }
+});
+
+test("bridge crests travel against increasing race distance", () => {
+  const fraction = (course.bridgeWave.anchors[2] + course.bridgeWave.anchors[3]) / 2;
+  const wave = bridgeWaveAt(track, track.sectorT(1, fraction), 0);
+  // At a bay midpoint the envelope has zero slope, so -velocity / slope
+  // is the crest's signed speed along the course.
+  assert.ok(Math.abs(wave.slope) > 1e-6);
+  assert.ok(
+    Math.abs(
+      -wave.velocity / wave.slope + course.bridgeWave.wavelength / course.bridgeWave.period,
+    ) < 1e-6,
+  );
 });
 
 test("only a timed fresh tap on a rising crest launches a bridge trick", () => {
@@ -146,6 +159,8 @@ test("bridge deck, underside, girders and hangers animate after static batching"
   const experience = buildExperienceWorld({ scene, track });
   batchScenery(experience.scenery, experience.animated);
   const deck = experience.animated.find((m) => m.isMesh);
+  assert.equal(deck.material.roughness, 0.88);
+  assert.equal(deck.material.metalness, 0);
   const skin = world.animated.find((m) => m.name === "Wind-flexed bridge structure");
   const girder = world.animated.find((m) => m.name === "Suspension bridge deck girder");
   const hanger = world.animated.find((m) => m.name === "Flexible suspension hanger");

@@ -419,7 +419,13 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
             0.055,
           ),
         section.halfWidth + 0.5,
-        material(track.course.theme.road, { map: textures.stone, roughness: 0.3, metalness: 0.1 }),
+        material("#69747d", {
+          map: textures.asphalt,
+          bumpMap: textures.asphalt,
+          bumpScale: 0.008,
+          roughness: 0.88,
+          metalness: 0,
+        }),
         Math.ceil(((section.end - section.start) * track.COURSE_LENGTH) / 2),
       );
       animated.push(deck.road);

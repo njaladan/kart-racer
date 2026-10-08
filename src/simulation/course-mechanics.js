@@ -102,12 +102,13 @@ export function bridgeWaveAt(track, t, time) {
   const envelopeSlope = (Math.PI * Math.sin(q * Math.PI * 2)) / bayLength;
   const omega = (Math.PI * 2) / wave.period;
   const k = (Math.PI * 2) / wave.wavelength;
-  const phase = omega * time - k * fraction * length;
+  // Increasing race distance runs into the swell: crests travel toward the kart.
+  const phase = omega * time + k * fraction * length;
   const height = wave.amplitude * envelope * Math.sin(phase);
   const velocity = wave.amplitude * envelope * omega * Math.cos(phase);
   return {
     height,
-    slope: wave.amplitude * (envelopeSlope * Math.sin(phase) - envelope * k * Math.cos(phase)),
+    slope: wave.amplitude * (envelopeSlope * Math.sin(phase) + envelope * k * Math.cos(phase)),
     velocity,
     launch: height > wave.amplitude * 0.35 && velocity > 1.5,
   };
