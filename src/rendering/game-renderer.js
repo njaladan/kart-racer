@@ -1,4 +1,6 @@
 import { clearAreaCamera } from "./area-camera.js";
+import { createSurfaceInteractions } from "./surface-interactions.js";
+import { stormAt } from "../simulation/experience-mechanics.js";
 import { createSunGlare } from "./sun-glare.js";
 import { racerProjection } from "../track/route-branches.js";
 import { createBoostMotion } from "./boost-motion.js";
@@ -50,6 +52,7 @@ export function createGameRenderer({
   totalLaps = 3,
 }) {
   const sunGlare = createSunGlare(scene, theme);
+  const surfaceInteractions = createSurfaceInteractions(scene, activeTrack, [player, ...bots]);
   const cameraLook = new THREE.Vector3();
   const kartUp = new THREE.Vector3(0, 1, 0);
   const kartForward = new THREE.Vector3();
@@ -220,6 +223,11 @@ export function createGameRenderer({
         playerT: trackT(player.s),
         running: frameState.running && !frameState.finished,
         motionEnabled,
+        stormFlash: stormAt(activeTrack.course, frameState.raceTime).flash,
+      });
+      surfaceInteractions.update(frameState.raceTime, {
+        running: frameState.running && !frameState.finished,
+        motionEnabled,
       });
       for (const pad of pads) {
         const pulse = 0.5 + 0.5 * Math.sin(frameState.elapsed * 5 + pad.phase);
@@ -320,10 +328,14 @@ export function createGameRenderer({
       ambientLight.intensity +=
         ((theme.ambientIntensity ?? 1.55) * (enclosed ? 0.85 : 1) - ambientLight.intensity) *
         atmosphereBlend;
-    lighting?.update(dt, player.worldPos, section, [player, ...bots]);
+    lighting?.update(dt, player.worldPos, section, [player, ...bots], frameState.raceTime, {
+      motionEnabled,
+      paused: frameState.paused,
+      stormFlash: stormAt(activeTrack.course, frameState.raceTime).flash,
+    });
     advanceSurfaceDetails(scene, frameState.raceTime);
     getLandscape()?.updateCamera?.(camera.position, graphicsQuality?.getTier() ?? 3);
-    sky?.update(frameState.raceTime, motionEnabled);
+    sky?.update(frameState.raceTime, motionEnabled, activeTrack.course);
     sunGlare.update(frameState.raceTime, camera, immersion > 0.5, graphicsQuality?.getTier() ?? 3);
     weather?.update(frameState.raceTime, camera.position, forest);
     displayFinish?.update(
@@ -474,6 +486,7 @@ export function createGameRenderer({
       driftCamera = 0;
       cameraBank = 0;
       boostMotion.reset();
+      surfaceInteractions.reset();
       boostStrength = boostKick = 0;
       camera.fov = camera.aspect > 1.8 ? 68 : 63;
       camera.updateProjectionMatrix();

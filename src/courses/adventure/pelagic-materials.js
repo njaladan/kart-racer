@@ -77,11 +77,15 @@ export function marineCaustics(material, scene) {
       reefP+=vec2(sin(reefP.y*1.7+waterClock*.3),cos(reefP.x*1.4-waterClock*.25))*.24;
       float reefLight=reefCaustic(reefP);
       float reefDepth=max(0.,-vReef.y);
-      float reefSubmerged=(1.-smoothstep(-.65,0.,vReef.y))*exp(-reefDepth*.018);
+      // Caustics fade quickly below the shallow reef shelves; a broad spatial
+      // shelter mask leaves deeper pockets dark enough to read as depth.
+      float reefSubmerged=(1.-smoothstep(-.65,0.,vReef.y))*exp(-reefDepth*.032);
+      float reefShelterField=.5+.5*sin(vReef.x*.012+sin(vReef.z*.019)*1.7)*sin(vReef.z*.014-vReef.x*.009);
+      float reefShelter=mix(.36,1.,smoothstep(.24,.78,reefShelterField));
       vec3 reefNormal=inverseTransformDirection(normal,viewMatrix);
       float reefFacing=.3+.7*max(0.,reefNormal.y);
-      float reefEnergy=reefLight*reefSubmerged*reefFacing;
-      outgoingLight+=diffuseColor.rgb*vec3(.72,1.,.88)*reefEnergy*.95;
+      float reefEnergy=reefLight*reefSubmerged*reefFacing*reefShelter;
+      outgoingLight+=diffuseColor.rgb*vec3(.72,1.,.88)*reefEnergy*.72;
       #include <opaque_fragment>`,
     );
   });

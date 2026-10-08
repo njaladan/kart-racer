@@ -1,4 +1,5 @@
 import * as THREE from "../../vendor/three/three.module.js";
+import { loadCompressedTexture } from "./compressed-textures.js";
 
 // Keep the road's scanned grain without letting its contrast dominate the frame.
 // Prepare the shared map once rather than adding a shader variant to every road.
@@ -26,16 +27,20 @@ export async function loadLivingAssets(renderer) {
   const index = await response.json(),
     loader = new THREE.TextureLoader(),
     cache = new Map();
-  const load = (path, color = false) => {
+  const load = (path, color = false, compressed = true) => {
     if (!cache.has(path))
       cache.set(
         path,
-        loader.loadAsync(`./assets/living/${path}`).then((map) => {
-          map.colorSpace = color ? THREE.SRGBColorSpace : THREE.NoColorSpace;
-          map.wrapS = map.wrapT = THREE.RepeatWrapping;
-          map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
-          return map;
-        }),
+        compressed
+          ? loadCompressedTexture(renderer, `./assets/living/${path}`, {
+              colorSpace: color ? THREE.SRGBColorSpace : THREE.NoColorSpace,
+            })
+          : loader.loadAsync(`./assets/living/${path}`).then((map) => {
+              map.colorSpace = color ? THREE.SRGBColorSpace : THREE.NoColorSpace;
+              map.wrapS = map.wrapT = THREE.RepeatWrapping;
+              map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+              return map;
+            }),
       );
     return cache.get(path);
   };
@@ -43,7 +48,7 @@ export async function loadLivingAssets(renderer) {
     await Promise.all(
       Object.entries(index.textures).map(async ([name, paths]) => {
         const [colorMap, normalMap, roughnessMap] = await Promise.all([
-          load(paths.color, true),
+          load(paths.color, true, name !== "asphalt"),
           load(paths.normal),
           load(paths.roughness),
         ]);

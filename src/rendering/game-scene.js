@@ -61,9 +61,8 @@ function createMaterials(theme, textures, environment) {
         ...surface(textures.asphalt, theme.terrain === "concrete" ? 0.004 : 0.008),
         ...(theme.terrain === "concrete"
           ? {
-              envMap: environment,
               envMapIntensity: theme.roadReflectionIntensity ?? 0.13,
-              metalness: theme.roadMetalness ?? 0.16,
+              metalness: theme.roadMetalness ?? 0,
             }
           : {}),
       },
@@ -92,7 +91,7 @@ function createMaterials(theme, textures, environment) {
     black: material("#17202a"),
     tire: material("#11151a", 0.9),
     glass: material("#9aeaff", 0.18, {
-      metalness: 0.25,
+      metalness: 0,
       emissive: "#194955",
       emissiveIntensity: 0.22,
     }),
@@ -102,6 +101,7 @@ function createMaterials(theme, textures, environment) {
 /** Create the renderer, lighting, shared assets, and course material palette. */
 export async function createGameScene({ canvas, course, viewport = window }) {
   const scene = new THREE.Scene();
+  scene.userData.courseTheme = course.theme;
   scene.background = new THREE.Color(course.theme.sky);
   scene.fog = new THREE.Fog(course.theme.fog, 165, 480);
 

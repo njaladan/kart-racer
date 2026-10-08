@@ -25,6 +25,7 @@ export function createBrowserDiagnostics({
   bots,
   boxes,
   particles,
+  scene,
   renderer,
   camera,
   gameRenderer,
@@ -92,6 +93,14 @@ export function createBrowserDiagnostics({
           triangles: renderer.info.render.triangles,
           fps: testFrameStats.frames / Math.max(0.01, testFrameStats.total),
           maxFrame: testFrameStats.max,
+          meshLighting: scene?.userData.meshLightCoverage
+            ? {
+                eligible: scene.userData.meshLightCoverage.eligible,
+                matched: scene.userData.meshLightCoverage.matched,
+                coverage: scene.userData.meshLightCoverage.coverage,
+                sourceMismatch: scene.userData.meshLightCoverage.sourceMismatch,
+              }
+            : null,
         },
       },
       windowRef.location.origin,

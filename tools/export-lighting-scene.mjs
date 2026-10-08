@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { auditRouteGeometry } from "./scene-route-audit.mjs";
+import { exportMeshLighting } from "./export-mesh-lighting.mjs";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { resolve } from "node:path";
@@ -183,29 +184,43 @@ for (const course of selected) {
   });
   // Exercise kit import in the same runtime contract used by course authors.
   createCourseKit(new THREE.Group(), track, assets);
-  world.update(0);
+  world.update(0, { motionEnabled: false, racers: [], bake: true });
   scene.updateMatrixWorld(true);
   if (process.env.COURSE_SCENE_STATS) {
-    let meshes = 0, triangles = 0;
+    let meshes = 0,
+      triangles = 0;
     scene.traverse((object) => {
       if (!object.isMesh) return;
       meshes++;
-      triangles += (object.geometry.index?.count || object.geometry.attributes.position.count) / 3
-        * (object.isInstancedMesh ? object.count : 1);
+      triangles +=
+        ((object.geometry.index?.count || object.geometry.attributes.position.count) / 3) *
+        (object.isInstancedMesh ? object.count : 1);
     });
-    console.log("Scene inventory", JSON.stringify({course: course.id, meshes, triangles}));
+    console.log("Scene inventory", JSON.stringify({ course: course.id, meshes, triangles }));
     if (process.env.COURSE_SCENE_STATS === "only") continue;
   }
   if (process.env.COURSE_ROUTE_AUDIT) {
     const reports = [];
-    for (const lap of track.branches.some(b => b.lap != null) ? [0, 1, 2] : [0]) {
-      world.update(0, {playerLap: lap, racers: [], motionEnabled: false, running: false});
+    for (const lap of track.branches.some((b) => b.lap != null) ? [0, 1, 2] : [0]) {
+      world.update(0, { playerLap: lap, racers: [], motionEnabled: false, running: false });
       scene.updateMatrixWorld(true);
       reports.push(auditRouteGeometry(scene, track, world.animated, lap));
     }
-    const report = { course: course.id, clearance: scene.userData.sceneryClearance, stations: reports.reduce((n,r)=>n+r.stations,0), hits: reports.flatMap((r,lap)=>r.hits.map(h=>({...h,lap}))) };
+    const report = {
+      course: course.id,
+      clearance: scene.userData.sceneryClearance,
+      stations: reports.reduce((n, r) => n + r.stations, 0),
+      hits: reports.flatMap((r, lap) => r.hits.map((h) => ({ ...h, lap }))),
+    };
     await writeFile(`${output}/${course.id}-audit.json`, JSON.stringify(report, null, 2));
-    console.log("Route audit", course.id, report.stations, "rays", report.hits.length, "intersections");
+    console.log(
+      "Route audit",
+      course.id,
+      report.stations,
+      "rays",
+      report.hits.length,
+      "intersections",
+    );
     if (process.env.COURSE_ROUTE_AUDIT === "only") continue;
   }
   const positions = [],
@@ -292,7 +307,12 @@ for (const course of selected) {
     ],
     bounds: [minX, minZ, maxX - minX, maxZ - minZ],
     heightRange: [
-      Math.min(-12, (course.theme.groundHeight ?? -1.7) - 10, ...controls.map((p) => p[1] - 30), ...track.areaSurfaces.map((area) => area.heightAt(area.center) - 30)),
+      Math.min(
+        -12,
+        (course.theme.groundHeight ?? -1.7) - 10,
+        ...controls.map((p) => p[1] - 30),
+        ...track.areaSurfaces.map((area) => area.heightAt(area.center) - 30),
+      ),
       Math.max(75, ...controls.map((p) => p[1] + 70)),
     ],
     lightVolume: course.theme.lightVolume,
@@ -305,5 +325,14 @@ for (const course of selected) {
   };
   await writeFile(`${output}/${course.id}.bin`, binary);
   await writeFile(`${output}/${course.id}.json`, JSON.stringify(metadata));
-  console.log(JSON.stringify(metadata));
+  const meshLighting = await exportMeshLighting(scene, world, course, output);
+  console.log(JSON.stringify(meshLighting));
+  console.log(
+    JSON.stringify({
+      course: course.id,
+      triangles: metadata.triangles,
+      positions: metadata.positions,
+      lights: metadata.lights.length,
+    }),
+  );
 }

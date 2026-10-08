@@ -28,14 +28,18 @@ export function buildTempest(context) {
     shader.vertexShader = `uniform float stormTime;\n${shader.vertexShader}`.replace(
       "#include <begin_vertex>",
       `#include <begin_vertex>
-      transformed.z+=sin(position.x*.026+position.y*.035+stormTime*.65)*4.8+sin(position.x*.052-position.y*.031-stormTime*.9)*2.;`,
+      float swellA=sin(position.x*.019+position.y*.031+stormTime*.52+sin(position.y*.011)*.8);
+      float swellB=sin(position.x*.043-position.y*.024-stormTime*.77+sin(position.x*.013)*.6);
+      float swellC=sin(position.x*.081+position.y*.067+stormTime*1.13+sin(position.y*.021+position.x*.018));
+      transformed.z+=swellA*4.6+swellB*2.25+swellC*.58;`,
     );
     shader.fragmentShader = `uniform float stormTime;\n${shader.fragmentShader}`.replace(
       "#include <color_fragment>",
       `#include <color_fragment>
-      float stormCrest=sin(vWaterWorld.x*.026-vWaterWorld.z*.035+stormTime*.65);
-      float foam=smoothstep(.89,.99,stormCrest)*(.4+.6*sin(vWaterWorld.x*.23+vWaterWorld.z*.27)*sin(vWaterWorld.x*.23+vWaterWorld.z*.27));
-      diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.63,.80,.82),foam*.62);`,
+      float stormCrest=sin(vWaterWorld.x*.019+vWaterWorld.z*.031+stormTime*.52+sin(vWaterWorld.z*.011)*.8);
+      float secondaryCrest=sin(vWaterWorld.x*.043-vWaterWorld.z*.024-stormTime*.77+sin(vWaterWorld.x*.013)*.6);
+      float foam=smoothstep(.83,.98,stormCrest)*(.36+.64*pow(max(0.,secondaryCrest),2.));
+      diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.58,.75,.79),foam*.47);`,
     );
   });
   // The water's shader displacement needs a conservative culling bound.

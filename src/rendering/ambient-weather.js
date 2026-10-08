@@ -1,8 +1,10 @@
 import * as THREE from "../../vendor/three/three.module.js";
+import { courseWind, windGust } from "./wind-field.js";
 
 // One bounded weather draw, with small flakes/dust/motes and a clear road center.
 // No sprite downloads or per-particle materials; the point shape is analytic.
 export function addAmbientWeather(scene, theme = {}) {
+  const wind = courseWind(theme);
   const snow = theme.terrain === "snow",
     dust = theme.terrain === "sand",
     storm = theme.atmosphere === "storm";
@@ -77,8 +79,8 @@ export function addAmbientWeather(scene, theme = {}) {
       if (!points.visible) return;
       source.forEach((p, i) => {
         const drift = time * (storm ? 3.5 : snow ? 0.5 : dust ? 0.9 : 0.3);
-        const x = p.x + drift + Math.sin(time * 0.35 + p.phase) * 1.7;
-        const z = p.z + Math.cos(time * 0.27 + p.phase) * 1.5;
+        const x = p.x + drift * wind[0] + Math.sin(time * 0.35 + p.phase) * 1.7 * windGust(time);
+        const z = p.z + drift * wind[2] + Math.cos(time * 0.27 + p.phase) * 1.5 * windGust(time);
         positions[i * 3] = x + Math.round((position.x - x) / 90) * 90;
         positions[i * 3 + 2] = z + Math.round((position.z - z) / 90) * 90;
         const y = (((p.y - time * (storm ? 21 : snow ? 0.8 : city ? 0.12 : -0.09)) % 24) + 24) % 24;

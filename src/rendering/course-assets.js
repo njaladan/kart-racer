@@ -1,18 +1,17 @@
 import * as THREE from "../../vendor/three/three.module.js";
 import { GLTFLoader } from "../../vendor/three/addons/loaders/GLTFLoader.js";
+import { getCompressedTextureLoader, loadCompressedTexture } from "./compressed-textures.js";
 
 // The old compact mesh bundle remains available while the shared and selected
 // course packs move to local, textured glTF models. Nothing is fetched remotely
 // by the running game.
 export async function loadCourseAssets(renderer, courseId = "windmill-wilds") {
-  const loader = new THREE.TextureLoader();
   const names = ["asphalt", "concrete", "metal", "brick", "stone", "sand", "snow", "wood", "bark"];
   const maps = await Promise.all(
     names.map(async (name) => {
-      const map = await loader.loadAsync(`./assets/courses/textures/${name}.webp`);
-      map.colorSpace = THREE.SRGBColorSpace;
-      map.wrapS = map.wrapT = THREE.RepeatWrapping;
-      map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+      const map = await loadCompressedTexture(renderer, `./assets/courses/textures/${name}.webp`, {
+        colorSpace: THREE.SRGBColorSpace,
+      });
       return [name, map];
     }),
   );
@@ -26,6 +25,8 @@ export async function loadCourseAssets(renderer, courseId = "windmill-wilds") {
     data = await dataResponse.arrayBuffer();
   const models = decodeCourseModels(index, data);
   const gltfLoader = new GLTFLoader();
+  const ktx2Loader = getCompressedTextureLoader(renderer);
+  if (ktx2Loader) gltfLoader.setKTX2Loader(ktx2Loader);
   await loadModelPack(gltfLoader, "./assets/courses/packs/shared/manifest.json", models, renderer);
   const courseTextures = courseId
     ? await loadModelPack(
@@ -86,16 +87,13 @@ async function loadModelPack(loader, manifestUrl, models, renderer, optional = f
       models[entry.name] = object;
     }),
   );
-  const textureLoader = new THREE.TextureLoader();
   return Object.fromEntries(
     await Promise.all(
       (manifest.textures || []).map(async (entry) => {
         const fileUrl = new URL(entry.file, new URL(".", new URL(manifestUrl, location.href))).href;
-        const texture = await textureLoader.loadAsync(fileUrl);
-        texture.colorSpace =
-          entry.colorSpace === "linear" ? THREE.NoColorSpace : THREE.SRGBColorSpace;
-        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+        const texture = await loadCompressedTexture(renderer, fileUrl, {
+          colorSpace: entry.colorSpace === "linear" ? THREE.NoColorSpace : THREE.SRGBColorSpace,
+        });
         return [entry.name, texture];
       }),
     ),

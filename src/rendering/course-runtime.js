@@ -1,4 +1,5 @@
 import { groundGeometry } from "./area-surfaces.js";
+import { buildCoursePolish } from "../courses/polish/index.js";
 import { buildAdventureArt } from "../courses/fidelity/index.js";
 import { buildExperienceWorld } from "../courses/experiences/world.js";
 import * as THREE from "../../vendor/three/three.module.js";
@@ -46,6 +47,15 @@ export function buildCourseWorld({
       experience.update(time, state);
     };
     addDetailedScenery(scene, track, assets);
+    const polish = buildCoursePolish({ scene, track, textures, assets });
+    const updateBase = world.update.bind(world);
+    world.update = (time, state) => {
+      updateBase(time, state);
+      polish.update(time, state);
+    };
+    world.setQuality = polish.setQuality;
+    world.updateCamera = polish.updateCamera;
+    world.animated = [...(world.animated || []), ...polish.animated];
     const environment = buildCourseEnvironment({ scene, track, textures, surfaces: [mats.road] });
     return composeCourseEnvironment(world, environment, createSceneryDetailController(scene));
   }
@@ -58,7 +68,7 @@ export function buildCourseWorld({
     stone: material("#e0d0ae", {
       map: course.id === "neon-harbor" ? textures.paving || textures.concrete : textures.stone,
       roughness: course.id === "neon-harbor" ? 0.58 : 0.85,
-      metalness: course.id === "neon-harbor" ? 0.12 : 0,
+      metalness: 0,
     }),
     concrete: material("#b4c4d0", { map: textures.concrete }),
     wood: material("#d2b38d", {
@@ -72,7 +82,7 @@ export function buildCourseWorld({
       normalScale: new THREE.Vector2(0.4, 0.4),
       roughnessMap: textures.frostIceRoughness,
       roughness: 0.65,
-      metalness: 0.12,
+      metalness: 0,
     }),
     grass: mats.grass,
     snow: material("#f3f6ff", { map: textures.frostSnow || textures.snow }),
@@ -100,7 +110,7 @@ export function buildCourseWorld({
       bumpScale: 0.025,
     });
     roadMaterials.paper = material(road, { roughness: 0.8 });
-    roadMaterials.glass = material(road, { roughness: 0.3, metalness: 0.2 });
+    roadMaterials.glass = material(road, { roughness: 0.3, metalness: 0 });
     roadMaterials.metal = material(road, {
       map: textures.metal,
       bumpMap: textures.metalNormal ? undefined : textures.metal,
@@ -469,18 +479,28 @@ export function buildCourseWorld({
     surfaces: Object.values(roadMaterials),
   });
   const art = buildAdventureArt({ scene, track, textures, kit, renderer });
+  const polish = buildCoursePolish({
+    scene,
+    track,
+    textures,
+    assets,
+    baseWorld: world,
+    vehicles: world.vehicles,
+  });
   const detail = createSceneryDetailController(scene);
   return composeCourseEnvironment(
     {
       ...world,
-      animated: [...(world.animated || []), ...(art?.animated || [])],
+      animated: [...(world.animated || []), ...(art?.animated || []), ...polish.animated],
       setQuality(tier) {
         world.setQuality?.(tier);
         art?.setQuality(tier);
+        polish.setQuality(tier);
       },
       updateCamera(position, tier) {
         world.updateCamera?.(position, tier);
         art?.updateCamera(position, tier);
+        polish.updateCamera(position, tier);
       },
       update(time, courseState) {
         for (const belt of conveyorTextures) belt.texture.offset.y = -(time * belt.speed) / 8;
@@ -488,6 +508,7 @@ export function buildCourseWorld({
         world.update?.(time, courseState);
         experience.update(time, courseState);
         art?.update(time, courseState);
+        polish.update(time, courseState);
       },
     },
     environment,

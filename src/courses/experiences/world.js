@@ -7,6 +7,8 @@ import { branchRampHeight } from "../../track/route-branches.js";
 import { carvedSandstone, templePaving } from "../sunstone-ruins/sunstone-materials.js";
 import { metalDeckDetail } from "../adventure/architectural-detail.js";
 import { bakeVertexShade } from "../../rendering/vertex-shading.js";
+import { drumImpact } from "../../rendering/drum-response.js";
+import { patchMaterial } from "../../rendering/surface-detail.js";
 
 /** Authored route surfaces and their scenery are built from authoritative frames. */
 export function buildExperienceWorld({ scene, track, textures = {}, assets = {} }) {
@@ -371,7 +373,42 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
         [0, -2.7, 0],
         [drum.radius, 5.4, drum.radius],
       );
-      mesh(cylinder, head, g, [0, -0.04, 0], [drum.radius - 0.08, 0.08, drum.radius - 0.08]);
+      const headGeometry = new THREE.RingGeometry(0, drum.radius - 0.08, 40, 6);
+      headGeometry.rotateX(-Math.PI / 2);
+      const impactStrength = { value: 0 };
+      const headMaterial = head.clone();
+      patchMaterial(headMaterial, `snare-impact-${drum.radius.toFixed(4)}`, (shader) => {
+        shader.uniforms.snareImpact = impactStrength;
+        shader.vertexShader = `uniform float snareImpact;\n${shader.vertexShader}`.replace(
+          "#include <begin_vertex>",
+          `#include <begin_vertex>\nfloat snareRadius=length(position.xz)/${drum.radius.toFixed(4)};
+          transformed.y-=snareImpact*.17*pow(max(0.,1.-snareRadius*snareRadius),2.);`,
+        );
+        shader.vertexShader = shader.vertexShader.replace(
+          "#include <beginnormal_vertex>",
+          `#include <beginnormal_vertex>
+          float snareNormalRadius2=dot(position.xz,position.xz)/${(drum.radius * drum.radius).toFixed(6)};
+          vec2 snareGradient=.68*snareImpact*max(0.,1.-snareNormalRadius2)*position.xz/${(drum.radius * drum.radius).toFixed(6)};
+          objectNormal=normalize(vec3(-snareGradient.x,1.,-snareGradient.y));`,
+        );
+      });
+      const skin = mesh(headGeometry, headMaterial, g, [0, 0, 0]);
+      skin.name = "Contact-responsive snare drumhead";
+      skin.castShadow = false;
+      skin.userData.skipBake = true;
+      animated.push(skin);
+      let lastImpact = -Infinity;
+      updates.push((time, state) => {
+        if (state?.motionEnabled === false) {
+          lastImpact = -Infinity;
+          impactStrength.value = 0;
+          return;
+        }
+        if (time < lastImpact) lastImpact = -Infinity;
+        const response = drumImpact(state?.racers, drum.index, time, lastImpact);
+        lastImpact = response.impact;
+        impactStrength.value = response.strength;
+      });
       for (const y of [-0.06, -5.3])
         mesh(ring, metal, g, [0, y, 0], [drum.radius, drum.radius, drum.radius]).rotation.x =
           Math.PI / 2;
