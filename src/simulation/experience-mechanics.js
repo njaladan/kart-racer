@@ -84,10 +84,14 @@ export function drumAt(track, surface) {
 /** Actual moving ramps use carriage coordinates, so they travel with the train. */
 export function trainRampAt(track, surface) {
   const definition = track.course.trainRamps;
-  if (!surface || !definition || surface.docked) return null;
+  if (!surface || !definition) return null;
   const lip = surface.spacing - surface.gap / 2;
   const lipDistance = surface.distance + lip - surface.coordinate;
-  if (lipDistance > surface.length - surface.dockLength) return null;
+  // Keep complete moving ramps visible over the boarding dock too. A lip
+  // still inside the dock now can move beyond it before the driver arrives;
+  // hiding that ramp delayed lane alignment until a coupling was unavoidable.
+  if (lipDistance < definition.length || lipDistance > surface.length - surface.dockLength)
+    return null;
   return {
     ...definition,
     start: lip - definition.length,
