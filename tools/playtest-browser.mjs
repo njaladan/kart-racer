@@ -10,6 +10,7 @@ const { chromium } = require(
   process.env.PLAYWRIGHT_MODULE ||
     "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright",
 );
+const captureOverrides = JSON.parse(process.env.PLAYTEST_POINTS_JSON || "{}");
 const output = resolve(process.env.PLAYTEST_OUTPUT || "/tmp/kart-review/browser");
 await mkdir(output, { recursive: true });
 const browser = await chromium.launch({
@@ -111,7 +112,7 @@ try {
           });
     const cdp = await page.context().newCDPSession(page);
     const captures = [];
-    for (const point of points) {
+    for (const point of captureOverrides[course.id] || points) {
       const state = await page.evaluate((point) => {
         window.__turboTrailDiagnostics.send({ type: "test-seek", ...point });
         window.playtestFrames(1);

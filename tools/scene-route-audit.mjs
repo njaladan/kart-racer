@@ -7,7 +7,7 @@ export function auditRouteGeometry(scene, track, animated = [], lap = 0) {
   function visit(o, dynamic = false) {
     dynamic ||= animated.includes(o) || !!o.userData.skipBake;
     if (o.visible === false) return;
-    if (o.name === "Flowing Fresnel water with shoreline foam") return;
+    if (["Flowing Fresnel water with shoreline foam", "Pelagic water surface"].includes(o.name)) return;
     if (o.userData.pathwayEdge) return;
     if (o.isLOD) { visit(o.levels[0].object, dynamic); return; }
     if (o.isMesh && !dynamic && !o.userData.bakeReceiver && !o.userData.routeObstacle && !o.userData.routeStructure) {
