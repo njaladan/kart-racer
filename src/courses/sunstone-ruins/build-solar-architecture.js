@@ -56,6 +56,16 @@ export function buildSolarArchitecture({ THREE, kit, track, palette, animated, m
       ray.rotation.y = a;
       ray.castShadow = false;
     }
+    // Fit the complete suspension before creating an engine. Individual poles
+    // being culled later would leave a floating lens and crossbeam.
+    const surface = track.surfaceAt(sectorT(4, fraction));
+    let post = Math.max(12.8, -surface.leftEdge + 2.8, surface.rightEdge + 2.8);
+    const fits = () =>
+      [-1, 1].every((side) => allows(g, [side * post, 15, 0], [2, 30, 2])) &&
+      allows(g, [0, 26.5, 0], [post * 2 + 2, 1, 2]) &&
+      allows(g, [0, 21, 0], [12, 17, 12]);
+    while (post < 75 && !fits()) post += 3;
+    if (!fits()) continue;
     // Three concentric gimbals suspended above the full camera clearance.
     const engine = new THREE.Group();
     engine.position.y = 19;
@@ -81,13 +91,11 @@ export function buildSolarArchitecture({ THREE, kit, track, palette, animated, m
       }
     });
     for (const side of [-1, 1]) {
-      const t = sectorT(4, fraction),
-        edge = side < 0 ? -track.surfaceAt(t).leftEdge : track.surfaceAt(t).rightEdge,
-        post = Math.max(12.8, edge + 2.8);
       box(dark, g, [side * post, 15, 0], [1.1, 30, 1.1]);
       box(gold, g, [(side * post) / 2, 26.5, 0], [post, 0.55, 1.1]);
       mesh(cylinder, gold, g, [side * post, 20, 0], [1, 0.6, 1]);
     }
+    mesh(cylinder, gold, g, [0, 24, 0], [0.2, 5, 0.2]);
   }
   // The distant monument gains broad terraces, pylons and oblique sun sails.
   const crown = groupAt(sectorT(3, 0.26), -70);

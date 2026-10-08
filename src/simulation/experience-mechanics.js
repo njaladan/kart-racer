@@ -84,10 +84,14 @@ export function drumAt(track, surface) {
 /** Actual moving ramps use carriage coordinates, so they travel with the train. */
 export function trainRampAt(track, surface) {
   const definition = track.course.trainRamps;
-  if (!surface || !definition || surface.docked) return null;
+  if (!surface || !definition) return null;
   const lip = surface.spacing - surface.gap / 2;
   const lipDistance = surface.distance + lip - surface.coordinate;
-  if (lipDistance > surface.length - surface.dockLength) return null;
+  // Keep complete moving ramps visible over the boarding dock too. A lip
+  // still inside the dock now can move beyond it before the driver arrives;
+  // hiding that ramp delayed lane alignment until a coupling was unavoidable.
+  if (lipDistance < definition.length || lipDistance > surface.length - surface.dockLength)
+    return null;
   return {
     ...definition,
     start: lip - definition.length,
@@ -122,6 +126,7 @@ export function routeCarry(track, state, surface, dt) {
 
 /** Continuous snow between the packed run, ice chute and trick ridge. */
 export function mountainHeight(track, position, t) {
+  if (track.mountainSurface) return track.mountainSurface.heightAt(position, t);
   let height = track.poseAt(t * track.TRACK, 0, 0).p.y,
     best = Infinity;
   for (const branch of track.branches) {

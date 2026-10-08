@@ -1,4 +1,5 @@
 import { createRouteBranches } from "./route-branches.js";
+import { installMountainSurface } from "./mountain-surface.js";
 import {
   bridgeRoll,
   createDrumField,
@@ -222,12 +223,20 @@ export function createTrack(course) {
     // Flatten before an expanded route opens, so a bank cannot snap sideways
     // at a verge boundary. Section tilt also blends over the width transition.
     const fade = 12 / lengths.at(-1);
-    const flatten = Math.max(
+    let flatten = Math.max(
       ...[SHORTCUT, ...VERGES].map(
         (patch) =>
           smooth(patch.start - fade, patch.start, t) * (1 - smooth(patch.end, patch.end + fade, t)),
       ),
     );
+    if (course.downhill) {
+      const mountain = SECTIONS[course.downhill.section];
+      flatten = Math.max(
+        flatten,
+        smooth(mountain.start - fade, mountain.start, t) *
+          (1 - smooth(mountain.end, mountain.end + fade, t)),
+      );
+    }
     const a = curve.getTangentAt(wrap01(t - 0.005)),
       b = curve.getTangentAt(wrap01(t + 0.005));
     const section = sectionAt(t);
@@ -366,6 +375,14 @@ export function createTrack(course) {
       bestT = 0;
     const inspect = (index, elevation = global || localElevation) => {
       const i = ((index % SAMPLE_COUNT) + SAMPLE_COUNT) % SAMPLE_COUNT;
+      // The ski face has one floor across its whole width. Its sculpted height
+      // must not pull projection to a different station on the descending road.
+      if (
+        course.downhill &&
+        i / SAMPLE_COUNT >= SECTIONS[course.downhill.section].start &&
+        i / SAMPLE_COUNT < SECTIONS[course.downhill.section].end
+      )
+        elevation = false;
       const a = samples[i],
         b = samples[i + 1],
         dx = b.x - a.x,
@@ -407,7 +424,11 @@ export function createTrack(course) {
     if (global) for (let i = 0; i < SAMPLE_COUNT; i++) inspect(i);
     else {
       for (let i = start - 28; i <= start + 28; i++) inspect(i);
-      if (best > 38 * 38) {
+      const searchWidth =
+        course.downhill && sectionAt(trackT(nearS)) === SECTIONS[course.downhill.section]
+          ? course.downhill.width + 10
+          : 38;
+      if (best > searchWidth * searchWidth) {
         best = Infinity;
         for (let i = 0; i < SAMPLE_COUNT; i++) inspect(i, true);
       }
@@ -485,6 +506,7 @@ export function createTrack(course) {
     sectorT,
   };
   Object.assign(track, createRouteBranches(track));
+  installMountainSurface(track);
   track.drumField = createDrumField(track);
   Object.assign(track, createPathwayQueries(track));
   return track;

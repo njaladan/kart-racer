@@ -1,0 +1,2303 @@
+{
+  "date": "2026-10-08",
+  "method": "Deterministic fixed-step assisted driving in actual six-kart sessions; Chromium render and lifecycle checks; visual inspection of course sections and all alternate routes; real model triangle audits.",
+  "results": [
+    {
+      "course": "windmill-wilds",
+      "browser": {
+        "finished": true,
+        "seconds": 158.80944062243285,
+        "playerRecoveries": 0,
+        "errors": [],
+        "lifecycle": {
+          "paused": true,
+          "resumed": true
+        },
+        "initialViews": 29
+      },
+      "races": [
+        {
+          "seed": 1,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 162.94691738032242,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 153.539349328251,
+              "walls": 3,
+              "recoveries": 0,
+              "mechanisms": 1,
+              "hits": 3,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 151.57772901961383,
+              "walls": 3,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 152.57913036471328,
+              "walls": 2,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 146.97232124644765,
+              "walls": 3,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 0,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 148.63496249225275,
+              "walls": 1,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "jumps": 0
+            }
+          ]
+        },
+        {
+          "seed": 3,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 159.96489700583496,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 142.71220476929366,
+              "walls": 1,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 0,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 151.2036833843207,
+              "walls": 2,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 150.12221316853686,
+              "walls": 2,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 150.75583682793857,
+              "walls": 2,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 152.36505174203924,
+              "walls": 3,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            }
+          ]
+        }
+      ],
+      "branchTrials": [
+        {
+          "id": "firefly-grove",
+          "index": 0,
+          "humanEngine": true,
+          "seconds": 8.675,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "firefly-grove",
+          "index": 1,
+          "humanEngine": false,
+          "seconds": 7.933333333333334,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "firefly-grove",
+          "index": 4,
+          "humanEngine": false,
+          "seconds": 7.95,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        }
+      ],
+      "geometry": [
+        {
+          "lap": 0,
+          "stations": 2832,
+          "unexpectedHits": 0
+        }
+      ]
+    },
+    {
+      "course": "neon-harbor",
+      "browser": {
+        "finished": true,
+        "seconds": 192.79097038085303,
+        "playerRecoveries": 0,
+        "errors": [],
+        "lifecycle": {
+          "paused": true,
+          "resumed": true
+        },
+        "initialViews": 29
+      },
+      "races": [
+        {
+          "seed": 1,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 195.79999999998626,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 177.2141207389929,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 6,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 175.1609465472993,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 171.7809150086268,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 174.23373154985487,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 178.21966604255059,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "jumps": 0
+            }
+          ]
+        },
+        {
+          "seed": 3,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 199.20418945810417,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 175.81588256590229,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 177.1041792257452,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 173.3267373730207,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 174.51727744617628,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 1,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 178.06853833523246,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            }
+          ]
+        }
+      ],
+      "branchTrials": [
+        {
+          "id": "container-rooftops",
+          "index": 0,
+          "humanEngine": true,
+          "seconds": 8.858333333333333,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "container-rooftops",
+          "index": 1,
+          "humanEngine": false,
+          "seconds": 7.908333333333333,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "container-rooftops",
+          "index": 4,
+          "humanEngine": false,
+          "seconds": 7.908333333333333,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        }
+      ],
+      "geometry": [
+        {
+          "lap": 0,
+          "stations": 3408,
+          "unexpectedHits": 0
+        }
+      ]
+    },
+    {
+      "course": "sunstone-ruins",
+      "browser": {
+        "finished": true,
+        "seconds": 185.98363221679338,
+        "playerRecoveries": 0,
+        "errors": [],
+        "lifecycle": {
+          "paused": true,
+          "resumed": true
+        },
+        "initialViews": 34
+      },
+      "races": [
+        {
+          "seed": 1,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 188.89247987180934,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 170.66937477013354,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 167.248771866312,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 168.87670304625158,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 169.98383345909613,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 168.57450473476138,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "jumps": 0
+            }
+          ]
+        },
+        {
+          "seed": 3,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 185.7541732024392,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 173.26480978866124,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 7,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 170.77373364100094,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 6,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 166.96781275824998,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 171.47566536478763,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 6,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 169.97288444642763,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            }
+          ]
+        }
+      ],
+      "branchTrials": [
+        {
+          "id": "sun-ring",
+          "index": 0,
+          "humanEngine": true,
+          "seconds": 5.616666666666666,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "sun-ring",
+          "index": 1,
+          "humanEngine": false,
+          "seconds": 5.366666666666666,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "sun-ring",
+          "index": 4,
+          "humanEngine": false,
+          "seconds": 5.375,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "shadow-ring",
+          "index": 0,
+          "humanEngine": true,
+          "seconds": 5.233333333333333,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "shadow-ring",
+          "index": 1,
+          "humanEngine": false,
+          "seconds": 5.15,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "shadow-ring",
+          "index": 4,
+          "humanEngine": false,
+          "seconds": 5.158333333333333,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        }
+      ],
+      "geometry": [
+        {
+          "lap": 0,
+          "stations": 3350,
+          "unexpectedHits": 0
+        }
+      ],
+      "focusedRechecks": [
+        {
+          "finished": true,
+          "playerRecoveries": 0,
+          "errors": [],
+          "lifecycle": {
+            "paused": true,
+            "resumed": true
+          },
+          "views": 2
+        }
+      ]
+    },
+    {
+      "course": "frostpeak-festival",
+      "browser": {
+        "finished": true,
+        "seconds": 189.10788902858027,
+        "playerRecoveries": 0,
+        "errors": [],
+        "lifecycle": {
+          "paused": true,
+          "resumed": true
+        },
+        "initialViews": 54
+      },
+      "races": [
+        {
+          "seed": 1,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 190.9422214064978,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "tricks": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 172.19905913624459,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "tricks": 12
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 167.8824989236123,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 0,
+              "tricks": 12
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 174.1587820527559,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "tricks": 12
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 172.55219026534414,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "tricks": 12
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 168.6866533785156,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "tricks": 13
+            }
+          ]
+        },
+        {
+          "seed": 3,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 189.3615752844563,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "tricks": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 172.60662896460798,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "tricks": 12
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 175.5188639349563,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 7,
+              "tricks": 12
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 169.18328132392622,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 0,
+              "tricks": 12
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 175.2547970869003,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 7,
+              "tricks": 12
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 177.5791841076828,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "tricks": 13
+            }
+          ]
+        }
+      ],
+      "branchTrials": [
+        {
+          "id": "glacier-chute",
+          "index": 0,
+          "humanEngine": true,
+          "seconds": 7.158333333333333,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "glacier-chute",
+          "index": 1,
+          "humanEngine": false,
+          "seconds": 6.558333333333334,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "glacier-chute",
+          "index": 4,
+          "humanEngine": false,
+          "seconds": 6.575,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "snow-jump-ridge",
+          "index": 0,
+          "humanEngine": true,
+          "seconds": 6.358333333333333,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "snow-jump-ridge",
+          "index": 1,
+          "humanEngine": false,
+          "seconds": 5.833333333333333,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "snow-jump-ridge",
+          "index": 4,
+          "humanEngine": false,
+          "seconds": 5.85,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        }
+      ],
+      "geometry": [
+        {
+          "lap": 0,
+          "stations": 3538,
+          "unexpectedHits": 0
+        }
+      ],
+      "focusedRechecks": [
+        {
+          "finished": true,
+          "playerRecoveries": 0,
+          "errors": [],
+          "lifecycle": {
+            "paused": true,
+            "resumed": true
+          },
+          "views": 2
+        }
+      ]
+    },
+    {
+      "course": "clockwork-citadel",
+      "browser": {
+        "finished": true,
+        "seconds": 209.41671284695894,
+        "playerRecoveries": 0,
+        "errors": [],
+        "lifecycle": {
+          "paused": true,
+          "resumed": true
+        },
+        "initialViews": 34
+      },
+      "races": [
+        {
+          "seed": 1,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 209.46156293946242,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 183.85155496541492,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 186.41368903270308,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 189.24221160915778,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 186.9989873818071,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 185.19354100137994,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "jumps": 0
+            }
+          ]
+        },
+        {
+          "seed": 3,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 207.87578064226065,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 190.07940926958833,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 191.32478480015337,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 188.1053571591022,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 190.35731401798105,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 192.63138227249783,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            }
+          ]
+        }
+      ],
+      "branchTrials": [
+        {
+          "id": "watch-bowl-left",
+          "index": 0,
+          "humanEngine": true,
+          "seconds": 9.783333333333333,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "watch-bowl-left",
+          "index": 1,
+          "humanEngine": false,
+          "seconds": 8.741666666666667,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "watch-bowl-left",
+          "index": 4,
+          "humanEngine": false,
+          "seconds": 8.741666666666667,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "watch-bowl-right",
+          "index": 0,
+          "humanEngine": true,
+          "seconds": 9.783333333333333,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "watch-bowl-right",
+          "index": 1,
+          "humanEngine": false,
+          "seconds": 8.741666666666667,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "watch-bowl-right",
+          "index": 4,
+          "humanEngine": false,
+          "seconds": 8.741666666666667,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        }
+      ],
+      "geometry": [
+        {
+          "lap": 0,
+          "stations": 3547,
+          "unexpectedHits": 0
+        }
+      ]
+    },
+    {
+      "course": "paper-revel",
+      "browser": {
+        "finished": true,
+        "seconds": 187.8517055000176,
+        "playerRecoveries": 0,
+        "errors": [],
+        "lifecycle": {
+          "paused": true,
+          "resumed": true
+        },
+        "initialViews": 39
+      },
+      "races": [
+        {
+          "seed": 1,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 189.37663488458418,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 163.6133424165468,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 165.5034892790528,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 167.55298042208548,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 164.38076037201796,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 0,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 170.2168984934182,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            }
+          ]
+        },
+        {
+          "seed": 3,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 190.94790470526712,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 171.04192975628882,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 173.82695405086176,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 7,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 172.22791083608064,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 174.25340247360205,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 169.8402667584768,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            }
+          ]
+        }
+      ],
+      "branchTrials": [
+        {
+          "id": "paper-valley",
+          "index": 0,
+          "humanEngine": true,
+          "seconds": 8.708333333333334,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "paper-valley",
+          "index": 1,
+          "humanEngine": false,
+          "seconds": 7.783333333333333,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "paper-valley",
+          "index": 4,
+          "humanEngine": false,
+          "seconds": 7.783333333333333,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "paper-bridge",
+          "index": 0,
+          "humanEngine": true,
+          "seconds": 8.908333333333333,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "paper-bridge",
+          "index": 1,
+          "humanEngine": false,
+          "seconds": 7.966666666666667,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "paper-bridge",
+          "index": 4,
+          "humanEngine": false,
+          "seconds": 7.966666666666667,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "paper-bank",
+          "index": 0,
+          "humanEngine": true,
+          "seconds": 9.316666666666666,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "paper-bank",
+          "index": 1,
+          "humanEngine": false,
+          "seconds": 8.458333333333334,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "paper-bank",
+          "index": 4,
+          "humanEngine": false,
+          "seconds": 8.475,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        }
+      ],
+      "geometry": [
+        {
+          "lap": 0,
+          "stations": 2931,
+          "unexpectedHits": 0
+        },
+        {
+          "lap": 1,
+          "stations": 2937,
+          "unexpectedHits": 0
+        },
+        {
+          "lap": 2,
+          "stations": 2949,
+          "unexpectedHits": 0
+        }
+      ]
+    },
+    {
+      "course": "tempest-causeway",
+      "browser": {
+        "finished": true,
+        "seconds": 204.74331772108044,
+        "playerRecoveries": 0,
+        "errors": [],
+        "lifecycle": {
+          "paused": true,
+          "resumed": true
+        },
+        "initialViews": 21
+      },
+      "races": [
+        {
+          "seed": 1,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 204.75463710711128,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "tricks": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 182.1338108106447,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "tricks": 28
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 182.11205797621514,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "tricks": 19
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 182.8501604740193,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "tricks": 18
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 181.28866482756766,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "tricks": 21
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 183.31226857836828,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "tricks": 15
+            }
+          ]
+        },
+        {
+          "seed": 3,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 206.3459141860738,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "tricks": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 187.6039340892626,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 7,
+              "tricks": 33
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 184.24566244025152,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "tricks": 23
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 187.32948965863594,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "tricks": 30
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 183.02660103819238,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "tricks": 18
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 186.75135296383135,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "tricks": 19
+            }
+          ]
+        }
+      ],
+      "branchTrials": [],
+      "geometry": [
+        {
+          "lap": 0,
+          "stations": 3335,
+          "unexpectedHits": 0
+        }
+      ]
+    },
+    {
+      "course": "pocket-pantry",
+      "browser": {
+        "finished": true,
+        "seconds": 185.0002184175026,
+        "playerRecoveries": 0,
+        "errors": [],
+        "lifecycle": {
+          "paused": true,
+          "resumed": true
+        },
+        "initialViews": 21
+      },
+      "races": [
+        {
+          "seed": 1,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 183.36947461530667,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 163.72688757055516,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 164.8585199366219,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 168.5906576787954,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 165.18990703415636,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 161.75416603060015,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 0,
+              "jumps": 0
+            }
+          ]
+        },
+        {
+          "seed": 3,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 183.45949060308155,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 166.21666666667983,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 160.15287300069645,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 0,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 163.53926705555278,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 161.6159689171205,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 167.8987696382481,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "jumps": 0
+            }
+          ]
+        }
+      ],
+      "branchTrials": [],
+      "geometry": [
+        {
+          "lap": 0,
+          "stations": 2970,
+          "unexpectedHits": 0
+        }
+      ]
+    },
+    {
+      "course": "railstorm-express",
+      "browser": {
+        "finished": true,
+        "seconds": 172.41819783491695,
+        "playerRecoveries": 0,
+        "errors": [],
+        "lifecycle": {
+          "paused": true,
+          "resumed": true
+        },
+        "initialViews": 21
+      },
+      "races": [
+        {
+          "seed": 1,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 173.8193823138155,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "tricks": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 155.45953048884863,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "tricks": 7
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 157.24615799289785,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "tricks": 9
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 156.1390329982441,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "tricks": 8
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 157.5541549461196,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "tricks": 6
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 157.4545477052395,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "tricks": 7
+            }
+          ]
+        },
+        {
+          "seed": 3,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 172.41819783491667,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 0,
+              "tricks": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 156.57248543641856,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "tricks": 6
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 153.2885200631787,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "tricks": 7
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 161.56936070713462,
+              "walls": 0,
+              "recoveries": 1,
+              "mechanisms": 0,
+              "hits": 4,
+              "tricks": 7
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 162.28792023483973,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "tricks": 8
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 162.91106785384554,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "tricks": 7
+            }
+          ]
+        }
+      ],
+      "branchTrials": [],
+      "geometry": [
+        {
+          "lap": 0,
+          "stations": 3170,
+          "unexpectedHits": 0
+        }
+      ]
+    },
+    {
+      "course": "metronome-hall",
+      "browser": {
+        "finished": true,
+        "seconds": 196.65455719771376,
+        "playerRecoveries": 0,
+        "errors": [],
+        "lifecycle": {
+          "paused": true,
+          "resumed": true
+        },
+        "initialViews": 18
+      },
+      "races": [
+        {
+          "seed": 1,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 196.6542960257844,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 185.87921614768428,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 180.2171894636137,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 18,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 182.8769946737679,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 2,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 185.6432767243378,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 2,
+              "hits": 5,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 185.15748702131583,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 5,
+              "hits": 1,
+              "jumps": 0
+            }
+          ]
+        },
+        {
+          "seed": 3,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 196.6545570129149,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 0,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 181.3732678226031,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 42,
+              "hits": 3,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 180.38612205012035,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 3,
+              "hits": 3,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 185.67574994676417,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 182.65303723861035,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 1,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 182.76047736982468,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "jumps": 0
+            }
+          ]
+        }
+      ],
+      "branchTrials": [],
+      "geometry": [
+        {
+          "lap": 0,
+          "stations": 3085,
+          "unexpectedHits": 0
+        }
+      ]
+    },
+    {
+      "course": "pelagic-glasshouse",
+      "browser": {
+        "finished": true,
+        "seconds": 187.40770250149725,
+        "playerRecoveries": 0,
+        "errors": [],
+        "lifecycle": {
+          "paused": true,
+          "resumed": true
+        },
+        "initialViews": 23
+      },
+      "races": [
+        {
+          "seed": 1,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 189.2812857749835,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 166.40615827131134,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 166.65148884944753,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 169.07505744874683,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 166.83244171666308,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 170.14662658334123,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            }
+          ]
+        },
+        {
+          "seed": 3,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 187.3991481734762,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 165.9485650735798,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 170.79861584745578,
+              "walls": 1,
+              "recoveries": 0,
+              "mechanisms": 1,
+              "hits": 3,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 163.35738516122854,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 0,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 168.26652792252864,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 170.69974443918335,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 1,
+              "hits": 3,
+              "jumps": 0
+            }
+          ]
+        }
+      ],
+      "branchTrials": [
+        {
+          "id": "lantern-eel-grotto",
+          "index": 0,
+          "humanEngine": true,
+          "seconds": 8.8,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "lantern-eel-grotto",
+          "index": 1,
+          "humanEngine": false,
+          "seconds": 8.075,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        },
+        {
+          "id": "lantern-eel-grotto",
+          "index": 4,
+          "humanEngine": false,
+          "seconds": 8.1,
+          "walls": 0,
+          "recoveries": 0,
+          "invalid": false,
+          "rejoined": true
+        }
+      ],
+      "geometry": [
+        {
+          "lap": 0,
+          "stations": 3251,
+          "unexpectedHits": 0
+        }
+      ]
+    },
+    {
+      "course": "emberwing-observatory",
+      "browser": {
+        "finished": true,
+        "seconds": 200.23036132678703,
+        "playerRecoveries": 0,
+        "errors": [],
+        "lifecycle": {
+          "paused": true,
+          "resumed": true
+        },
+        "initialViews": 24
+      },
+      "races": [
+        {
+          "seed": 1,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 197.0236424826872,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 0,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 184.64189654815573,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 179.4041783235252,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 183.69511987825786,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 3,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 180.2185017168907,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 1,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 186.92377883906758,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            }
+          ]
+        },
+        {
+          "seed": 3,
+          "allSixFinished": true,
+          "invalid": false,
+          "racers": [
+            {
+              "id": "tux",
+              "finished": true,
+              "seconds": 200.11530916279025,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "nolok",
+              "finished": true,
+              "seconds": 184.44461208918747,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "pidgin",
+              "finished": true,
+              "seconds": 184.94082589614516,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 4,
+              "jumps": 0
+            },
+            {
+              "id": "kiki",
+              "finished": true,
+              "seconds": 182.09127508909262,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            },
+            {
+              "id": "konqi",
+              "finished": true,
+              "seconds": 186.9076331903983,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 5,
+              "jumps": 0
+            },
+            {
+              "id": "wilber",
+              "finished": true,
+              "seconds": 183.52003517796712,
+              "walls": 0,
+              "recoveries": 0,
+              "mechanisms": 0,
+              "hits": 2,
+              "jumps": 0
+            }
+          ]
+        }
+      ],
+      "branchTrials": [],
+      "geometry": [
+        {
+          "lap": 0,
+          "stations": 3420,
+          "unexpectedHits": 0
+        }
+      ]
+    }
+  ]
+}

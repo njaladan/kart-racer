@@ -1,5 +1,5 @@
 import { trainCarriages } from "../../simulation/moving-surfaces.js";
-import { trainRampHeight } from "../../simulation/experience-mechanics.js";
+import { trainRampAt, trainRampHeight } from "../../simulation/experience-mechanics.js";
 import { metalDeckDetail } from "./architectural-detail.js";
 
 /** Colored freight roofs and launch faces share the simulation's moving coordinates. */
@@ -231,7 +231,7 @@ export function buildExpressCars(w, materials) {
         lipDistance / track.COURSE_LENGTH;
       const moving = track.movingSurfaceAt(rampEndT - 0.01 / track.COURSE_LENGTH);
       launch.object.visible =
-        !!moving && !moving.docked && rampStart >= 0 && lipDistance <= moving.length;
+        !!trainRampAt(track, moving) && rampStart >= 0 && lipDistance <= moving.length;
       if (launch.object.visible) {
         launch.update(
           (row, col) => {

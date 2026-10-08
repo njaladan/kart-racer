@@ -65,14 +65,17 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
       box(metal, parent, [side * (width / 2 + 1.5), 7.5, 0], [0.24, 15, 0.24]);
   }
   function ribbon(frame, halfWidth, mat, count = 120) {
-    const positions = new Float32Array((count + 1) * 6),
+    const columns = track.mountainSurface ? 14 : 1;
+    const positions = new Float32Array((count + 1) * (columns + 1) * 3),
       uv = [],
       indices = [];
     for (let i = 0; i <= count; i++) {
-      uv.push(0, i / 6, 1, i / 6);
-      if (i < count) {
-        const n = i * 2;
-        indices.push(n, n + 1, n + 2, n + 1, n + 3, n + 2);
+      for (let column = 0; column <= columns; column++) {
+        uv.push(column / columns, i / 6);
+        if (i < count && column < columns) {
+          const n = i * (columns + 1) + column;
+          indices.push(n, n + 1, n + columns + 1, n + 1, n + columns + 2, n + columns + 1);
+        }
       }
     }
     const geo = new THREE.BufferGeometry();
@@ -85,10 +88,10 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
     road.receiveShadow = true;
     const update = () => {
       for (let i = 0; i <= count; i++) {
-        for (let side = 0; side < 2; side++) {
-          const pose = frame(i / count, (side ? 1 : -1) * halfWidth),
+        for (let column = 0; column <= columns; column++) {
+          const pose = frame(i / count, ((column / columns) * 2 - 1) * halfWidth),
             p = pose.p;
-          const n = (i * 2 + side) * 3;
+          const n = (i * (columns + 1) + column) * 3;
           positions[n] = p.x;
           positions[n + 1] = p.y - 0.025;
           positions[n + 2] = p.z;
@@ -153,7 +156,20 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
       box(trim, lip, [0, 0, 0], [branch.halfWidth * 2, 0.08, 0.18]);
     }
     const entrance = groupAt(branch.poseAt(0.035));
-    sign(entrance, branch.label, branch.color, 24);
+    if (track.mountainSurface && branch.theme === "snow") {
+      // Label each run at the outside of the open slope. Upright roadside
+      // supports cannot be pruned out of an overhead sign over the powder.
+      const t = branch.start + (branch.end - branch.start) * 0.035;
+      const side =
+        branch.poseAt(0.3).p.clone().sub(track.frameAt(t).p).dot(track.frameAt(t).right) < 0
+          ? -1
+          : 1;
+      const pose = track.poseAt(t * track.TRACK, side * (track.mountainSurface.widthAt(t) + 16), 0);
+      entrance.position.copy(pose.p);
+      entrance.quaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), track.yawFor(pose.tangent));
+      sign(entrance, branch.label, branch.color, 18);
+      entrance.userData.scenicAssembly = true;
+    } else sign(entrance, branch.label, branch.color, 24);
     const count = Math.max(5, Math.floor(branch.length / 12));
     for (let i = 1; i < count; i++) {
       const q = i / count,
@@ -320,15 +336,14 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
   if (track.course.downhill) {
     const d = track.course.downhill,
       section = track.SECTIONS[d.section];
-    const rows = 100,
-      columns = 30,
+    const rows = 220,
+      columns = 110,
       positions = [],
       uv = [],
       indices = [];
     for (let row = 0; row <= rows; row++) {
       const t = section.start + ((section.end - section.start) * row) / rows;
-      const fade = Math.min(1, row / 8, (rows - row) / 8);
-      const width = track.roadHalfWidth(t) + (d.width - track.roadHalfWidth(t)) * fade;
+      const width = track.mountainSurface.widthAt(t);
       for (let col = 0; col <= columns; col++) {
         const offset = ((col / columns) * 2 - 1) * width;
         const p = track.poseAt(t * track.TRACK, offset, 0).p;
@@ -349,6 +364,29 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
     const mountain = mesh(geo, material("#eef3ff", { map: textures.frostSnow || textures.snow }));
     mountain.name = "Open Dragonback downhill snow face";
     mountain.userData.bakeReceiver = true;
+    mountain.castShadow = false;
+    // A snow face is a solid mountainside, rather than a floating sheet.
+    for (const side of [-1, 1]) {
+      const vertices = [],
+        triangles = [];
+      for (let row = 0; row <= rows; row++) {
+        const t = section.start + ((section.end - section.start) * row) / rows;
+        const p = track.poseAt(t * track.TRACK, side * track.mountainSurface.widthAt(t), 0).p;
+        vertices.push(p.x, p.y - 0.025, p.z, p.x, track.course.theme.groundHeight ?? -1.7, p.z);
+        if (row < rows) {
+          const n = row * 2;
+          triangles.push(n, n + 1, n + 2, n + 1, n + 3, n + 2);
+        }
+      }
+      const skirt = new THREE.BufferGeometry();
+      skirt.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+      skirt.setIndex(triangles);
+      skirt.computeVertexNormals();
+      const face = mesh(skirt, material("#dae5f4", { side: THREE.DoubleSide }));
+      face.name = "Dragonback snow face footing";
+      face.userData.bakeReceiver = true;
+      face.castShadow = false;
+    }
   }
   if (track.course.watchBowl) buildWatchInterior({ track, kit, scenery, animated, updates, sign });
   if (track.drumField) {

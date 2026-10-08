@@ -284,7 +284,7 @@ export function drive(state, input, surface, dt) {
     state.vz = fz * forward + rz * lateral;
   } else {
     // Deliberate flights retain momentum with modest aerial control.
-    if (["drum", "quarterpipe", "train"].includes(state.jumpKind)) {
+    if (["drum", "quarterpipe", "train", "wave"].includes(state.jumpKind)) {
       const turn = -steeringTarget * (state.jumpKind === "train" ? 0.9 : 0.65) * dt;
       const cosine = Math.cos(turn),
         sine = Math.sin(turn),

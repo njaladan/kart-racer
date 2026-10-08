@@ -95,3 +95,42 @@ test("using a launch ramp clears the coupling; missing its lane or crawling fall
     assert.equal(fell, !shouldLand);
   }
 });
+
+test("moving launch ramps remain usable while their carriage lip crosses the boarding dock", () => {
+  const definition = course.movingDecks[0];
+  const entry = track.sectorT(definition.section, definition.startFraction);
+  let chosen;
+  for (let time = 0; time < 20 && !chosen; time += 0.1) {
+    const car = trainCarriages(track, definition, time).find((car) => {
+      const lip = (car.end - entry) * track.COURSE_LENGTH;
+      return lip > 35 && lip < 44;
+    });
+    if (car) chosen = { time, car };
+  }
+  assert.ok(chosen);
+  const { time, car } = chosen,
+    crest = car.end - 0.01 / track.COURSE_LENGTH;
+  track.setTime(time);
+  const surface = track.movingSurfaceAt(crest);
+  assert.ok(surface.docked, "lip is still over the stationary platform");
+  assert.ok(trainRampAt(track, surface), "approaching driver sees the ramp before the dock ends");
+  assert.ok(trainRampHeight(track, crest, car.style.offset) > 1.7);
+  const start = car.end - 14 / track.COURSE_LENGTH;
+  const racer = initializeRacer({ s: start * TRACK, x: 0, isPlayer: true });
+  const pose = track.poseAt(start * TRACK, car.style.offset, 0.065);
+  racer.worldPos.copy(pose.p);
+  racer.yaw = track.yawFor(pose.tangent);
+  racer.vx = pose.tangent.x * 25;
+  racer.vz = pose.tangent.z * 25;
+  racer.speed = 90;
+  let jumped = false,
+    landed = false;
+  for (let step = 1; step <= 120 * 6 && !landed; step++) {
+    advanceRacer(racer, botInput(racer, 0, time + step / 120), 1 / 120, time + step / 120);
+    jumped ||= racer.jumpKind === "train" && !racer.grounded;
+    landed ||= jumped && racer.grounded;
+    assert.equal(racer.falling, false, "boarding coupling never starts a fall");
+  }
+  assert.ok(jumped && landed);
+  assert.equal(racer.recoveryCount || 0, 0);
+});

@@ -23,7 +23,12 @@ export function createFestivalKit({ THREE, scene, scenery, track, textures, kit 
     cone: new THREE.ConeGeometry(1, 1, 7),
   };
   const edgeOffset = (t, side, margin = 0) =>
-    (side < 0 ? track.surfaceAt(t).leftEdge : track.surfaceAt(t).rightEdge) + side * margin;
+    (track.mountainSurface?.containsT(t)
+      ? side * track.mountainSurface.widthAt(t)
+      : side < 0
+        ? track.surfaceAt(t).leftEdge
+        : track.surfaceAt(t).rightEdge) +
+    side * margin;
   const landAt = (t, offset, parent = scenery) => kit.landGroup(t, offset, parent);
   const groundShadow = (g, width, depth = width) => {
     const shadow = createContactShadowMesh({ width, depth, opacity: 0.21 });

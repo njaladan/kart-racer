@@ -46,6 +46,7 @@ test("rendered shoulders match physical support and exposed faces leave the sky 
     const track = createTrack(course),
       scenery = new THREE.Group();
     buildPathwayEdges({ track, kit: createCourseKit(scenery, track, { models: {} }) });
+    if (course.downhill) buildExperienceWorld({ scene: scenery, track, assets: { models: {} } });
     scenery.updateMatrixWorld(true);
     for (const [index] of track.SECTIONS.entries()) {
       if (
@@ -83,5 +84,27 @@ test("rendered shoulders match physical support and exposed faces leave the sky 
       for (let i = 0; i < normals.count; i++)
         assert.ok(Math.abs(normals.getY(i)) < 0.4, `${course.id}: open face is vertical`);
     }
+  }
+});
+
+test("Clockwork's upper terrain shoulder leaves the lower foundry camera passage open", () => {
+  const track = createTrack(COURSES.find((course) => course.id === "clockwork-citadel"));
+  const scenery = new THREE.Group();
+  buildPathwayEdges({ track, kit: createCourseKit(scenery, track, { models: {} }) });
+  scenery.updateMatrixWorld(true);
+  for (const q of [0.42, 0.45, 0.48, 0.51, 0.54]) {
+    const pose = track.poseAt(track.sectorT(0, q) * track.TRACK, 0, 0.065);
+    const forward = pose.tangent.clone().setY(0).normalize();
+    const camera = pose.p.clone().addScaledVector(forward, -8.7);
+    camera.y += 4.7;
+    const target = pose.p.clone();
+    target.y += 0.9;
+    const delta = target.sub(camera);
+    const ray = new THREE.Raycaster(camera, delta.clone().normalize(), 0, delta.length() - 0.1);
+    assert.equal(
+      ray.intersectObject(scenery, true).length,
+      0,
+      `foundry q=${q}: kart stays visible`,
+    );
   }
 });

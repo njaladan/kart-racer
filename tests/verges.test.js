@@ -44,7 +44,11 @@ test("all extra route choices have continuous ground, material costs and authore
         const racer = initializeRacer({ s: t * TRACK, x: offset / 6.25, drift: 0 });
         advanceRacer(racer, {}, 1 / 120, activeTime);
         assert.ok(
-          Math.abs(racer.x * 6.25 - offset) < 0.04,
+          Math.abs(
+            (track.mountainSurface && racer.routeChoice
+              ? track.projectTrack(racer.worldPos, t * TRACK).offset
+              : racer.x * 6.25) - offset,
+          ) < 0.04,
           "stationary kart must not be clamped to the old rail",
         );
       }

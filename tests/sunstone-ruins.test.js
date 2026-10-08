@@ -1,3 +1,4 @@
+import { createRacerState } from "../src/simulation/racer-state.js";
 import test from "node:test";
 import assert from "node:assert/strict";
 import course from "../src/courses/sunstone-ruins.js";
@@ -129,4 +130,47 @@ test("sandfall shader bounds contain flutter and shared time freezes and rewinds
   assert.ok(bounds.max.x >= 3.5 * 1.1 + 0.16);
   assert.ok(bounds.max.z >= 0.18 && bounds.min.z <= -0.18);
   assert.ok(effect.geometry.boundingSphere.containsPoint(bounds.max));
+});
+
+test("both moving ring routes have unfolded surfaces and driveable entry and rejoin curves", () => {
+  const track = selectCourse(course);
+  for (const branch of track.branches) {
+    assert.ok(branch.frameAt(0).tangent.dot(track.frameAt(branch.start).tangent) > 0.995);
+    assert.ok(branch.frameAt(1).tangent.dot(track.frameAt(branch.end).tangent) > 0.995);
+    for (let i = 0; i < branch.count; i++) {
+      const q = i / branch.count,
+        next = (i + 1) / branch.count;
+      assert.ok(Math.abs(branch.frameAt(q).curvature) < 1 / 15, `${branch.id}: broad turn radius`);
+      const a = branch.poseAt(q, -branch.halfWidth).p,
+        b = branch.poseAt(q, branch.halfWidth).p;
+      const c = branch.poseAt(next, -branch.halfWidth).p,
+        d = branch.poseAt(next, branch.halfWidth).p;
+      assert.ok(
+        b.clone().sub(a).cross(c.clone().sub(a)).y > 0,
+        `${branch.id}: first triangle faces up`,
+      );
+      assert.ok(
+        d.clone().sub(b).cross(c.clone().sub(b)).y > 0,
+        `${branch.id}: second triangle faces up`,
+      );
+    }
+    for (const index of [0, 1, 4]) {
+      const q = 0.025,
+        s = (branch.start + (branch.end - branch.start) * q) * TRACK;
+      const r = initializeRacer(createRacerState({ s, x: 0, skill: 0.95 - index * 0.04 }));
+      r.routeChoice = branch.index;
+      r.routeGroup = branch.groupIndex;
+      r.lastSafeRoute = branch.index;
+      r.worldPos.copy(branch.poseAt(q).p);
+      r.renderFrom.copy(r.worldPos);
+      r.yaw = track.yawFor(branch.frameAt(q).tangent);
+      let walls = 0;
+      for (let k = 1; k < 120 * 30 && r.routeChoice; k++)
+        walls += !!advanceRacer(r, botInput(r, index, 10 + k / 120), 1 / 120, 10 + k / 120)
+          .wallImpact;
+      assert.equal(r.routeChoice, 0, `${branch.id}: rejoins main road`);
+      assert.equal(walls, 0, `${branch.id}: no rail impacts`);
+      assert.equal(r.recoveryCount || 0, 0);
+    }
+  }
 });

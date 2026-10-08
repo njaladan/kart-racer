@@ -1,3 +1,4 @@
+import { createRouteClearance } from "../../rendering/route-clearance.js";
 import { worldKit } from "./world-kit.js";
 import { architecturalDetail } from "./architectural-detail.js";
 import { createStormSea } from "./tempest-sea.js";
@@ -17,6 +18,7 @@ export function buildTempest(context) {
     white = mat("#e0d2b9"),
     red = mat("#a7524f"),
     glow = mat("#ffe4a9", "metal", { emissive: "#ffb657", emissiveIntensity: 1.5 });
+  const allows = createRouteClearance(track);
   const sea = createStormSea(scene),
     ocean = sea.ocean;
   scenery.add(ocean);
@@ -321,8 +323,22 @@ export function buildTempest(context) {
       const shelter = at(section, 0.15 + i * 0.17);
       const t = track.sectorT(section, 0.15 + i * 0.17),
         surface = track.surfaceAt(t),
-        left = Math.min(-14, surface.leftEdge - 3),
-        right = Math.max(14, surface.rightEdge + 3);
+        initialLeft = Math.min(-14, surface.leftEdge - 3),
+        initialRight = Math.max(14, surface.rightEdge + 3);
+      let left = initialLeft,
+        right = initialRight;
+      shelter.name = "Supported storm haven shelter";
+      const fits = () =>
+        [left, right].every((x) => allows(shelter, [x, 8, 0], [3, 16, 4])) &&
+        allows(shelter, [(left + right) / 2, 17, 0], [right - left + 4, 4, 26]);
+      for (let attempt = 0; attempt < 12 && !fits(); attempt++) {
+        left -= 3;
+        right += 3;
+      }
+      if (!fits()) {
+        shelter.removeFromParent();
+        continue;
+      }
       for (const x of [left, right]) {
         box(concrete, shelter, [x, 8, 0], [2, 16, 3]);
         foundation(shelter, x, 0, 3, 4);

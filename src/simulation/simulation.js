@@ -237,7 +237,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   const floor = activeTrack.floorAt(projection);
   const overGap =
     !state.grounded &&
-    ["drum", "quarterpipe", "train", "drop"].includes(state.jumpKind) &&
+    ["drum", "quarterpipe", "train", "drop", "wave"].includes(state.jumpKind) &&
     state.worldPos.y >= floor.height - 0.5;
   if (!floor.supported && !overGap) {
     state.falling = true;

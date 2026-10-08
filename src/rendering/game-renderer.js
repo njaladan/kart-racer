@@ -1,4 +1,4 @@
-import { clearAreaCamera } from "./area-camera.js";
+import { clearAreaCamera, clearMountainCamera } from "./area-camera.js";
 import { createSurfaceInteractions } from "./surface-interactions.js";
 import { stormAt } from "../simulation/experience-mechanics.js";
 import { createSunGlare } from "./sun-glare.js";
@@ -443,6 +443,7 @@ export function createGameRenderer({
       camera.position,
       position,
     );
+    clearMountainCamera(activeTrack, camera.position, position, trackT(player.s));
     camera.fov +=
       ((panoramic ? 68 : 63) +
         Math.min(7, player.speed * 0.045) +

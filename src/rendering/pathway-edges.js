@@ -1,3 +1,5 @@
+import { createRouteClearance } from "./route-clearance.js";
+import { cutTerrainPassages } from "./route-cutout.js";
 import * as THREE from "../../vendor/three/three.module.js";
 import { mountainHeight } from "../simulation/experience-mechanics.js";
 import { PATHWAY_KINDS } from "../courses/pathway-edges.js";
@@ -6,6 +8,11 @@ import { PATHWAY_KINDS } from "../courses/pathway-edges.js";
 export function buildPathwayEdges({ track, kit, textures = {} }) {
   if (!track.course.pathwayEdges) return;
   const { mesh, box, material, groupAt } = kit;
+  const clearance = createRouteClearance(track);
+  const roadCells = Math.ceil(track.COURSE_LENGTH / 2);
+  const cellStations = new Map(
+    clearance.corridor.slice(0, roadCells).map((cell, i) => [cell, (i + 0.5) / roadCells]),
+  );
   const materials = new Map();
   const mat = (kind) => {
     if (!materials.has(kind)) {
@@ -96,6 +103,21 @@ export function buildPathwayEdges({ track, kit, textures = {} }) {
     geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
     geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
     geometry.setIndex(indices);
+    if (profile.mode === "soft" && !profile.platform)
+      cutTerrainPassages(
+        geometry,
+        clearance.corridor.slice(0, roadCells),
+        (cell, triangleIndex) => {
+          const station = cellStations.get(cell);
+          if (station == null) return false;
+          const row = Math.floor(geometry.index.getX(triangleIndex) / (columns + 1));
+          const t = section.start + ((section.end - section.start) * row) / count;
+          const gap = Math.abs(t - station);
+          // Keep the slope belonging to this stretch; excavate only a separate
+          // stretch passing beneath it, including stacked turns of this section.
+          return Math.min(gap, 1 - gap) * track.COURSE_LENGTH < 45;
+        },
+      );
     geometry.computeVertexNormals();
     const surface = mesh(geometry, mat(kind));
     surface.name = `${kind} ${profile.mode === "soft" ? "shoulder" : profile.mode === "drop" ? "exposed face" : "structural boundary"}`;
@@ -104,6 +126,8 @@ export function buildPathwayEdges({ track, kit, textures = {} }) {
     surface.castShadow = profile.mode === "wall";
   }
   for (const [index, section] of track.SECTIONS.entries()) {
+    // The continuous mountain face already supplies the entire snow shoulder.
+    if (track.course.downhill?.section === index) continue;
     // Transit and moving train surfaces provide their own exposed sides.
     if (
       track.course.traversals?.some((r) => r.section === index) ||
