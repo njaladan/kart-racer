@@ -67,7 +67,11 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
   const safeGroup = (t, offset, footprint = 1, parent = scenery) => {
     const p = track.poseAt(t * track.TRACK, offset, 0).p,
       s = track.projectTrack(p, 0, true);
-    const edge = s.offset > 0 ? s.rightEdge : -s.leftEdge;
+    const edge = track.mountainSurface?.containsT(s.t)
+      ? track.mountainSurface.widthAt(s.t)
+      : s.offset > 0
+        ? s.rightEdge
+        : -s.leftEdge;
     if (
       (track.branches || []).some(
         (branch) => branch.project(p, t, true).distance < branch.halfWidth + footprint + 2,

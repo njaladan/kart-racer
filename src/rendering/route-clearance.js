@@ -8,10 +8,14 @@ export function createRouteClearance(track) {
   const corridor = Array.from({ length: count }, (_, i) => {
     const bounds = new THREE.Box3();
     for (const t of [i / count, (i + 1) / count]) {
-      for (const side of [-1, 1]) {
-        const offset = track.platformEdgeAt(t, side) + side;
+      const mountain = track.mountainSurface?.containsT(t);
+      const sides = mountain ? [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1] : [-1, 1];
+      for (const side of sides) {
+        const offset = mountain
+          ? side * (track.mountainSurface.widthAt(t) + 1)
+          : track.platformEdgeAt(t, side) + side;
         const p = track.poseAt(t * track.TRACK, offset, 0).p;
-        bounds.expandByPoint(p.clone().add(new THREE.Vector3(0, 0.35, 0)));
+        bounds.expandByPoint(p.clone().add(new THREE.Vector3(0, mountain ? -0.1 : 0.35, 0)));
         bounds.expandByPoint(p.clone().add(new THREE.Vector3(0, 7, 0)));
       }
     }

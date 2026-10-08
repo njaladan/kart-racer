@@ -246,6 +246,10 @@ export function updateRouteChoice(track, state) {
     } else if (branch.dropToMain && Math.abs(surface.offset) > branch.halfWidth) {
       state.routeChoice = 0;
       state.routeGroup = branch.groupIndex;
+      // The ski runs sit in continuous powder. Only the raised launch lip
+      // calls for a drop when crossing sideways off its physical ramp.
+      if (track.mountainSurface && branch.theme === "snow" && !branchRampHeight(branch, surface.q))
+        return;
       state.grounded = false;
       state.jumpKind = "drop";
       state.airTime = 0;

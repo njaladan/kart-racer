@@ -104,6 +104,8 @@ export function buildPathwayEdges({ track, kit, textures = {} }) {
     surface.castShadow = profile.mode === "wall";
   }
   for (const [index, section] of track.SECTIONS.entries()) {
+    // The continuous mountain face already supplies the entire snow shoulder.
+    if (track.course.downhill?.section === index) continue;
     // Transit and moving train surfaces provide their own exposed sides.
     if (
       track.course.traversals?.some((r) => r.section === index) ||

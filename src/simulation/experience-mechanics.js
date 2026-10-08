@@ -122,6 +122,7 @@ export function routeCarry(track, state, surface, dt) {
 
 /** Continuous snow between the packed run, ice chute and trick ridge. */
 export function mountainHeight(track, position, t) {
+  if (track.mountainSurface) return track.mountainSurface.heightAt(position, t);
   let height = track.poseAt(t * track.TRACK, 0, 0).p.y,
     best = Infinity;
   for (const branch of track.branches) {

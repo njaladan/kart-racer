@@ -206,8 +206,7 @@ export function buildCourseWorld({
       const t = THREE.MathUtils.lerp(startT, endT, i / n),
         f = track.frameAt(t);
       for (const edge of [edgeA(t), edgeB(t)]) {
-        const p = f.p.clone().addScaledVector(f.right, edge);
-        p.y += track.rampHeight(t, edge) - track.rampHeight(t, 0);
+        const p = track.poseAt(t * track.TRACK, edge, 0).p;
         if (terrain) {
           const bounds = track.surfaceAt(t);
           const distance = Math.abs(edge) - (edge > 0 ? bounds.rightEdge : -bounds.leftEdge);
@@ -337,12 +336,10 @@ export function buildCourseWorld({
       for (let row = 0; row <= rows; row++) {
         const q = row / rows;
         const t = ramp.t + ((q - 0.5) * ramp.halfLength * 2) / track.COURSE_LENGTH;
-        const frame = track.frameAt(t);
         for (let column = 0; column <= columns; column++) {
           const across = column / columns;
           const offset = center + (across - 0.5) * width;
-          const p = frame.p.clone().addScaledVector(frame.right, offset);
-          p.y += track.rampHeight(t, offset) - track.rampHeight(t, 0) + 0.045;
+          const p = track.poseAt(t * track.TRACK, offset, 0.045).p;
           positions.push(p.x, p.y, p.z);
           uvs.push(across, q * 3);
           if (row < rows && column < columns) {

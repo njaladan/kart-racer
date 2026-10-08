@@ -18,6 +18,20 @@ export function createPathwayQueries(track) {
   function floorAt(surface) {
     if (surface.branchIndex) {
       const branch = track.branches[surface.branchIndex - 1];
+      if (track.mountainSurface && branch.theme === "snow") {
+        const main = track.projectTrack(
+          { x: surface.worldX, y: surface.height, z: surface.worldZ },
+          surface.t * track.TRACK,
+        );
+        const supported =
+          track.mountainSurface.containsT(main.t) &&
+          Math.abs(main.mountainOffset) <= track.mountainSurface.widthAt(main.t);
+        return {
+          supported,
+          outside: !supported,
+          height: surface.offroad ? main.height : surface.height,
+        };
+      }
       if (branch.areaSurface)
         return { supported: !surface.offroad, height: surface.height, outside: surface.offroad };
       return {
@@ -45,14 +59,10 @@ export function createPathwayQueries(track) {
     if (track.course.downhill?.section === track.SECTIONS.indexOf(track.sectionAt(surface.t))) {
       const p = { x: surface.worldX, y: surface.height, z: surface.worldZ };
       const point = track.frameAt(surface.t).p.clone().set(p.x, p.y, p.z);
-      const section = track.SECTIONS[track.course.downhill.section];
-      const q = (surface.t - section.start) / (section.end - section.start);
-      const width =
-        surface.halfWidth +
-        (track.course.downhill.width - surface.halfWidth) * Math.min(1, q / 0.08, (1 - q) / 0.08);
+      const width = track.mountainSurface.widthAt(surface.t);
       return {
-        supported: Math.abs(surface.offset) <= width,
-        outside: Math.abs(surface.offset) > width,
+        supported: Math.abs(surface.mountainOffset ?? surface.offset) <= width,
+        outside: Math.abs(surface.mountainOffset ?? surface.offset) > width,
         height: mountainHeight(track, point, surface.t) + 0.065,
       };
     }
@@ -127,6 +137,7 @@ export function createPathwayQueries(track) {
     coral: 23,
   };
   for (const [index, section] of track.SECTIONS.entries()) {
+    if (index === track.course.downhill?.section) continue;
     for (const side of [-1, 1]) {
       const profile = edgeAt((section.start + section.end) / 2, side);
       if (profile.mode !== "soft") continue;
@@ -184,6 +195,7 @@ export function createPathwayQueries(track) {
     return null;
   }
   const platformEdgeAt = (t, side) => {
+    if (track.mountainSurface?.containsT(t)) return side * track.mountainSurface.widthAt(t);
     const edge = edgeAt(t, side);
     return edge.offset + side * edge.shoulder;
   };

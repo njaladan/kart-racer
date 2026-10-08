@@ -46,6 +46,7 @@ test("rendered shoulders match physical support and exposed faces leave the sky 
     const track = createTrack(course),
       scenery = new THREE.Group();
     buildPathwayEdges({ track, kit: createCourseKit(scenery, track, { models: {} }) });
+    if (course.downhill) buildExperienceWorld({ scene: scenery, track, assets: { models: {} } });
     scenery.updateMatrixWorld(true);
     for (const [index] of track.SECTIONS.entries()) {
       if (
