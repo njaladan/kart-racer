@@ -246,3 +246,37 @@ test("bridge footings and haven islands reach the seabed below every storm troug
   const top = foundations.map((object) => new THREE.Box3().setFromObject(object).max.y);
   assert.ok(Math.max(...top) > 30);
 });
+
+test("boosted wave flights retain aerial steering through the curved bridge", () => {
+  for (const fraction of [0.45, 0.62, 0.81]) {
+    const base = waveFixture(Math.asin(0.6), 135);
+    const t = track.sectorT(1, fraction);
+    const pose = track.poseAt(t * TRACK, 0, 0.065);
+    const racer = base.racer;
+    racer.s = t * TRACK;
+    racer.worldPos.copy(pose.p);
+    racer.renderFrom.copy(pose.p);
+    racer.yaw = track.yawFor(pose.tangent);
+    racer.vx = pose.tangent.x * 37.5;
+    racer.vz = pose.tangent.z * 37.5;
+    racer.grounded = false;
+    racer.jumpKind = "wave";
+    racer.jumpTakeoffSpeed = 11;
+    racer.vy = 11;
+    racer.jumpMaxHeight = 6;
+    racer.boost = 1;
+    let landed = false;
+    for (let step = 1; step <= 120 * 3 && !landed; step++) {
+      advanceRacer(
+        racer,
+        botInput(racer, 0, base.time + step / 120),
+        1 / 120,
+        base.time + step / 120,
+      );
+      landed ||= racer.grounded;
+      assert.equal(racer.falling, false, `curve fraction ${fraction}: flight stays over the deck`);
+    }
+    assert.ok(landed);
+    assert.equal(racer.recoveryCount || 0, 0);
+  }
+});
