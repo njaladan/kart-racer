@@ -39,14 +39,24 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
     motions.push(fn);
   };
   function column(g, x, height = 19) {
-    if (!allows(g, [x, height / 2, 0], [5.2, height + 2, 5.2])) return;
+    if (!allows(g, [x, height / 2, 0], [5.2, height + 2, 5.2])) return false;
     box(dark, g, [x, 0.7, 0], [5.2, 1.4, 5.2]);
     mesh(shaft, stone, g, [x, height / 2, 0], [1.7, height, 1.7]);
     for (const y of [1.6, height - 1.5, height]) box(pale, g, [x, y, 0], [4.5, 0.7, 4.5]);
     for (let y = 4; y < height - 2; y += 4) box(gold, g, [x, y, -1.72], [0.45, 1.3, 0.08]);
+    return true;
   }
   function portal(t, width = 17, height = 23) {
     const g = groupAt(t);
+    g.name = "Supported temple portal";
+    const fits = (w) =>
+      [-1, 1].every((side) => allows(g, [side * w, height / 2, 0], [5.2, height + 2, 5.2])) &&
+      allows(g, [0, height + 3, 0], [w * 2 + 8, 10, 8]);
+    while (width < 70 && !fits(width)) width += 3;
+    if (!fits(width)) {
+      g.removeFromParent();
+      return null;
+    }
     column(g, -width, height);
     column(g, width, height);
     box(stone, g, [0, height + 1, 0], [width * 2 + 6, 3.5, 6]);
@@ -181,19 +191,34 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
   for (let i = 0; i < 22; i++) {
     const t = sectorT(4, (i + 0.5) / 22),
       g = groupAt(t);
-    for (const side of [-1, 1]) {
-      const edge = side < 0 ? -track.surfaceAt(t).leftEdge : track.surfaceAt(t).rightEdge;
-      const width = Math.max(17, edge + 5);
-      if (!allows(g, [side * width, 8.5, 0], [5, 22, 14])) continue;
-      box(shade, g, [side * width, 8.5, 0], [4, 20, 14]);
+    g.name = "Supported sun engine bay";
+    // A bay is built as one structure: a roof must never outlive its walls.
+    const surface = track.surfaceAt(t);
+    const widths = [Math.max(17, -surface.leftEdge + 5), Math.max(17, surface.rightEdge + 5)];
+    const fits = () =>
+      widths.every((width, j) => allows(g, [(j ? 1 : -1) * width, 11.75, 0], [4, 23.5, 14])) &&
+      allows(g, [(widths[1] - widths[0]) / 2, 24, 0], [widths[0] + widths[1] + 4, 3, 15]);
+    for (let attempt = 0; attempt < 16 && !fits(); attempt++) {
+      widths[0] += 3;
+      widths[1] += 3;
+    }
+    if (!fits()) {
+      g.removeFromParent();
+      continue;
+    }
+    for (const [j, side] of [-1, 1].entries()) {
+      const width = widths[j];
+      box(shade, g, [side * width, 11.75, 0], [4, 23.5, 14]);
       box(dark, g, [side * (width - 2.1), 7.5, 0], [0.2, 9, 7]);
       box(coolGlow, g, [side * (width - 2.3), 4, 0], [0.15, 0.2, 11]);
-      if (i % 3 === 0) column(g, side * Math.max(14.5, edge + 3.5), 18);
     }
-    // Central skylight slots admit shafts and actual moving-camera shadows.
-    if (i % 3 !== 1 && allows(g, [0, 24, 0], [38, 3, 15])) box(dark, g, [0, 24, 0], [38, 3, 15]);
-    else for (const side of [-1, 1]) box(stone, g, [side * 14, 24, 0], [9, 3, 15]);
-    if (allows(g, [0, 22, 0], [36, 1.1, 1.4])) box(stone, g, [0, 22, 0], [36, 1.1, 1.4]);
+    const center = (widths[1] - widths[0]) / 2,
+      span = widths[0] + widths[1] + 4;
+    if (i % 3 !== 1) box(dark, g, [center, 24, 0], [span, 3, 15]);
+    else
+      for (const [j, side] of [-1, 1].entries())
+        box(stone, g, [side * (widths[j] - 2.5), 24, 0], [9, 3, 15]);
+    box(stone, g, [center, 22.8, 0], [span, 1.1, 1.4]);
   }
   for (let i = 0; i < 3; i++) {
     const t = sectorT(4, track.course.solarEngine.fractions[i]);
@@ -229,8 +254,9 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
   for (let i = 0; i < 12; i++) {
     const g = groupAt(sectorT(5, (i + 0.5) / 12));
     for (const side of [-1, 1]) {
-      column(g, side * 20, 17 + (i % 3) * 3);
-      box(pale, g, [side * 23, 19, 0], [8, 2, 15]);
+      const height = 17 + (i % 3) * 3;
+      if (!allows(g, [side * 20, height + 1, 0], [8, 2, 15])) continue;
+      if (column(g, side * 20, height)) box(pale, g, [side * 20, height + 1, 0], [8, 2, 15]);
     }
   }
   const sentinel = new THREE.Group();

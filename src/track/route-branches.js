@@ -25,24 +25,32 @@ export function createRouteBranches(track) {
     if (definition.shape === "ring") {
       const a = track.poseAt(start * track.TRACK, 0, 0).p;
       const b = track.poseAt(end * track.TRACK, 0, 0).p;
-      const center = a.clone().add(b).multiplyScalar(0.5);
       const chord = b.clone().sub(a);
-      chord.y = 0;
-      const radius = chord.length() * 0.5;
-      const along = chord.normalize();
+      const length = chord.length();
+      const along = chord.clone().setY(0).normalize();
       const side = new THREE.Vector3(-along.z, 0, along.x).multiplyScalar(definition.side || 1);
-      const lead = Math.min(20, radius * 0.18);
-      controls = [a, a.clone().addScaledVector(along, lead)];
-      for (let i = 0; i <= 6; i++) {
-        const q = 0.22 + (i * 0.56) / 6;
-        const p = center
+      const entry = track.frameAt(start).tangent.clone().multiplyScalar(length);
+      const exitTangent = track.frameAt(end).tangent;
+      const exitLead = along.dot(exitTangent.clone().setY(0).normalize()) < 0.6 ? 2 : 1;
+      const exit = exitTangent.clone().multiplyScalar(length * exitLead);
+      // A broad oval connects tangentially to the main road. The old short
+      // straight leads kinked into a semicircle at a four-metre turn radius,
+      // folding the six-metre-wide ribbon and throwing drivers into its rails.
+      controls = Array.from({ length: 41 }, (_, i) => {
+        const q = i / 40,
+          q2 = q * q,
+          q3 = q2 * q;
+        const p = a
           .clone()
-          .addScaledVector(along, -Math.cos(q * Math.PI) * radius)
-          .addScaledVector(side, Math.sin(q * Math.PI) * radius);
-        p.y = a.y + (b.y - a.y) * q + Math.sin(q * Math.PI) * (definition.rise || 0);
-        controls.push(p);
-      }
-      controls.push(b.clone().addScaledVector(along, -lead), b);
+          .multiplyScalar(2 * q3 - 3 * q2 + 1)
+          .addScaledVector(entry, q3 - 2 * q2 + q)
+          .addScaledVector(b, -2 * q3 + 3 * q2)
+          .addScaledVector(exit, q3 - q2);
+        const arc = Math.sin(q * Math.PI) ** 2;
+        p.addScaledVector(side, arc * length * 0.25);
+        p.y += arc * (definition.rise || 0);
+        return p;
+      });
     }
     if (areaSurface)
       controls = Array.from({ length: 41 }, (_, i) => areaSurface.guideAt(i / 40, definition.side));
