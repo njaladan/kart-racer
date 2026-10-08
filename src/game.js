@@ -332,8 +332,6 @@ async function startGame() {
 
 startGame().catch((error) => {
   console.error(error);
-  document.getElementById("course-description").textContent =
-    "The course could not load. Try again.";
   const button = document.getElementById("start-button");
   const retry = button.cloneNode(false);
   retry.disabled = false;

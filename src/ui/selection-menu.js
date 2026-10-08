@@ -31,7 +31,6 @@ export function createSelectionMenu({ documentRef, locationRef, course, racer, m
   function chooseCourse(entry) {
     selected.course = entry.id;
     get("selected-course-name").textContent = entry.name;
-    get("course-description").textContent = entry.description;
     const image = get("course-preview");
     preview(image, entry);
     image.alt = `${entry.name} driving preview`;

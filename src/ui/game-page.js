@@ -18,7 +18,6 @@ export function createGamePage(documentRef = document, locationRef = location, m
   });
   const courseSelector = selection;
   get("track-name").textContent = course.name.toUpperCase();
-  get("course-description").textContent = course.description;
   const ui = Object.fromEntries(
     Object.entries({
       title: "title-screen",
