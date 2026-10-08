@@ -89,6 +89,53 @@ were regenerated at their existing resolutions/samples and checked against the
 final scene-export hashes. The new effects use original procedural geometry and
 shader shapes; no downloaded particle sheets or scenery assets were added.
 
+## Tempest Atlantic water
+
+Tempest uses four directional Gerstner wave trains with deep-water dispersion,
+analytic normals and horizontal crest compression. Its muted teal palette and
+pale green-white foam follow the established storm coast. Boats and buoys query
+the same spectrum, including inversion of horizontal displacement, and lean with
+the surface. The simulation clock controls all motion, including foam, so pause
+and restart reproduce the same surface.
+
+Whitecaps use the displacement Jacobian and a short analytic crest history.
+Slowly advected patch and cellular bubble textures break up the foam; denser
+coverage merges bubble walls into froth. Coastal foam samples a signed-distance
+map of authored islands, rocks and piers. Those footprints approximate the
+shore silhouette; they do not simulate depth or collisions. This replaces the
+separate animated foam rings. Fine ripples use two rotated slope layers; mipmaps,
+distance fades and increased far roughness reduce distant sparkle.
+
+The design draws on [NVIDIA's geometric water and analytic normals](https://developer.nvidia.com/gpugems/gpugems/part-i-natural-effects/chapter-1-effective-water-simulation-physical-models)
+and the wave-correlated foam, advection and filtering principles in
+[Dynamic Wave Trains (2026)](https://onlinelibrary.wiley.com/doi/10.1111/cgf.70495).
+[Recent hybrid FFT/particle work](https://arxiv.org/abs/2511.02852) also informed the
+research. This implementation uses a bounded analytic spectrum and procedural
+crest history rather than those papers' complete ocean solvers.
+
+Water remains one opaque PBR draw and reuses the existing prefiltered environment.
+There are no additional lights, reflection captures, render targets or simulation
+passes. The grid concentrates vertices over the playable coast and becomes
+coarser offshore. Performance uses 32,768 water triangles; Balanced, High and Ultra
+use 73,728. The two original data textures total about 0.58 MiB including mipmaps:
+a 256px slope/foam atlas and a 512px single-channel coastal distance map. They are
+generated during loading; the coast updates only when a footprint is added.
+The material releases both textures on disposal. Water does not cast shadows or
+enter the static bake.
+
+At 960×540, High, progress 0.24 and race time 18.08, browser counters changed from
+1,098 to 1,081 draws and 308,646 to 352,314 triangles. The denser ocean adds geometry
+while removal of foam rings saves draws and triangles. These are scene counters,
+not a player-device frame-rate measurement; animated rivals and particles also
+contribute small differences between captures.
+
+`npm run check` passes all 218 tests, including surface derivatives, world-space
+buoyancy, culling bounds, quality transitions and coastal uploads. Run
+`node tools/check-tempest-water.mjs` for WebGL validation at all four tiers and
+close, grazing and distant views. GPU readback checks visible motion, identical
+paused frames, exact rewind and the one-draw triangle budget. Software Chromium
+validates correctness; target hardware is still needed for FPS profiling.
+
 ## Ownership and interfaces
 
 - `game-scene.js` owns renderer settings, lights and shared material construction.

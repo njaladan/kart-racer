@@ -1,8 +1,10 @@
 import { worldKit } from "./world-kit.js";
 import { architecturalDetail } from "./architectural-detail.js";
-import { patchMaterial } from "../../rendering/surface-detail.js";
+import { createStormSea } from "./tempest-sea.js";
+import { sampleStormSea } from "./tempest-waves.js";
 import { registerLightPool } from "../../rendering/course-lighting.js";
 import { addGlow } from "../../rendering/visual-effects.js";
+export { stormSeaHeight } from "./tempest-waves.js";
 
 /** Huge exposed bridges form the racing adventure; sheltered islands punctuate it. */
 export function buildTempest(context) {
@@ -15,32 +17,12 @@ export function buildTempest(context) {
     white = mat("#e0d2b9"),
     red = mat("#a7524f"),
     glow = mat("#ffe4a9", "metal", { emissive: "#ffb657", emissiveIntensity: 1.5 });
-  // A single opaque, displaced ocean carries broad moving swells and foam.
-  const ocean = w.water("#275c70", -10, 1700);
-  ocean.geometry.dispose();
-  ocean.geometry = new THREE.PlaneGeometry(1700, 1700, 80, 80);
-  const time = { value: 0 };
+  const sea = createStormSea(scene),
+    ocean = sea.ocean;
+  scenery.add(ocean);
+  scene.userData.tempestSea = sea;
   const towerPier = w.kit.authoredGeometry("blender:storm-pier");
   const seaStack = w.kit.authoredGeometry("blender:sea-stack", rock);
-  (scene.userData.surfaceAnimations ||= []).push(time);
-  patchMaterial(ocean.material, "storm-swells", (shader) => {
-    shader.uniforms.stormTime = time;
-    shader.vertexShader = `uniform float stormTime;\n${shader.vertexShader}`.replace(
-      "#include <begin_vertex>",
-      `#include <begin_vertex>
-      transformed.z+=sin(position.x*.026+position.y*.035+stormTime*.65)*4.8+sin(position.x*.052-position.y*.031-stormTime*.9)*2.;`,
-    );
-    shader.fragmentShader = `uniform float stormTime;\n${shader.fragmentShader}`.replace(
-      "#include <color_fragment>",
-      `#include <color_fragment>
-      float stormCrest=sin(vWaterWorld.x*.026-vWaterWorld.z*.035+stormTime*.65);
-      float foam=smoothstep(.89,.99,stormCrest)*(.4+.6*sin(vWaterWorld.x*.23+vWaterWorld.z*.27)*sin(vWaterWorld.x*.23+vWaterWorld.z*.27));
-      diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.63,.80,.82),foam*.62);`,
-    );
-  });
-  // The water's shader displacement needs a conservative culling bound.
-  ocean.geometry.computeBoundingSphere();
-  ocean.geometry.boundingSphere.radius += 8;
   const seabed = track.course.theme.groundHeight - 8;
   // Upright foundations reach a fixed world-space seabed at every road elevation.
   function foundation(g, x, z, width, depth) {
@@ -56,6 +38,7 @@ export function buildTempest(context) {
     footing.rotation.y = new THREE.Euler().setFromQuaternion(g.quaternion, "YXZ").y;
     footing.name = "Seabed-anchored foundation";
     footing.userData.routeStructure = true;
+    sea.addShore(top.x, top.z, Math.max(width, depth) / 2);
   }
   function lamp(g, x, y, z) {
     box(iron, g, [x, (y - 1.1) / 2, z], [0.7, y + 1.1, 0.7]);
@@ -239,8 +222,14 @@ export function buildTempest(context) {
     const rows = Math.ceil(
       ((track.SECTIONS[section].end - track.SECTIONS[section].start) * track.COURSE_LENGTH) / 3,
     );
+    let previousCoast;
     for (let i = 0; i <= rows; i++) {
       const t = track.sectorT(section, i / rows);
+      const center = track.frameAt(t).p;
+      const radius =
+        Math.max(Math.abs(track.platformEdgeAt(t, -1)), track.platformEdgeAt(t, 1)) + 5;
+      if (previousCoast) sea.addShore(center.x, center.z, radius, previousCoast.x, previousCoast.z);
+      previousCoast = center;
       for (const offset of [track.platformEdgeAt(t, -1) - 5, track.platformEdgeAt(t, 1) + 5]) {
         const p = track.poseAt(t * track.TRACK, offset, -0.4).p;
         positions.push(p.x, p.y, p.z, p.x, seabed, p.z);
@@ -269,6 +258,7 @@ export function buildTempest(context) {
         g = context.kit.safeGroup(t, side * (32 + (i % 3) * 14), 16);
       if (!g) continue;
       g.position.y = track.frameAt(t).p.y;
+      sea.addShore(g.position.x, g.position.z, 14);
       mesh(
         new THREE.SphereGeometry(1, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2),
         stone,
@@ -287,6 +277,7 @@ export function buildTempest(context) {
     const g = at(section, 0.6, -48);
     g.rotation.set(0, track.yawFor(track.frameAt(track.sectorT(section, 0.6)).tangent), 0);
     const bottom = seabed - g.position.y;
+    sea.addShore(g.position.x, g.position.z, 21);
     mesh(rock, stone, g, [0, bottom / 2, 0], [24, -bottom / 2 + 2, 24]);
     mesh(cylinder, concrete, g, [0, -0.5, 0], [13, 1, 13]);
     mesh(cylinder, white, g, [0, 18, 0], [8, 36, 8]);
@@ -349,9 +340,15 @@ export function buildTempest(context) {
     mesh(cylinder, copper, g, [0, 1, 0], [1.6, 3, 1.6]);
     mesh(sphere, red, g, [0, 0.5, 0], [3, 0.8, 3]);
     box(glow, g, [0, 3.2, 0], [0.5, 0.5, 0.5]);
+    const seaSample = {};
     motion(g, (time) => {
-      g.position.y = stormSeaHeight(g.position.x, g.position.z, time) + 1;
-      g.rotation.z = Math.sin(time * 0.8 + i) * 0.15;
+      sampleStormSea(g.position.x, g.position.z, time, seaSample);
+      g.position.y = seaSample.height + 1;
+      const yaw = g.rotation.y,
+        c = Math.cos(yaw),
+        s = Math.sin(yaw);
+      g.rotation.x = Math.atan2(seaSample.nx * s + seaSample.nz * c, seaSample.ny);
+      g.rotation.z = -Math.atan2(seaSample.nx * c - seaSample.nz * s, seaSample.ny);
     });
     if (i % 5 === 0) {
       const boat = new THREE.Group();
@@ -367,6 +364,7 @@ export function buildTempest(context) {
   // Distant sea stacks and splashing whitewater give the water scale.
   for (let i = 0; i < 28; i++) {
     const a = (i * Math.PI) / 14;
+    sea.addShore(Math.sin(a) * 500, Math.cos(a) * 440, 16 + (i % 3) * 6);
     mesh(
       seaStack,
       stone,
@@ -376,17 +374,6 @@ export function buildTempest(context) {
     );
   }
   w.points("#c9e7e7", [1, 3, 5], 180, 0.23);
-  motion(ocean, (seconds) => {
-    time.value = seconds;
-  });
-  return w.finish();
-}
-
-// Matches the displaced plane after its -PI/2 rotation into world X/Z.
-export function stormSeaHeight(x, z, time) {
-  return (
-    -10 +
-    Math.sin(x * 0.026 - z * 0.035 + time * 0.65) * 4.8 +
-    Math.sin(x * 0.052 + z * 0.031 - time * 0.9) * 2
-  );
+  motion(ocean, sea.update);
+  return { ...w.finish(), setQuality: sea.setQuality };
 }
