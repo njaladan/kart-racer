@@ -125,7 +125,9 @@ export function createBrowserDiagnostics({
         testAutodrive = true;
       }
       if (message.type === "test-seek" && running && Number.isFinite(message.t)) {
-        player.s = Math.max(0, Math.min(0.999, message.t)) * TRACK;
+        const branch = activeTrack.branches[(message.branchIndex || 0) - 1];
+        const lap = Math.max(0, Math.min(2, Math.floor(message.lap ?? branch?.lap ?? 0)));
+        player.s = (lap + Math.max(0, Math.min(0.999, message.t))) * TRACK;
         const offset = Number.isFinite(message.offset)
           ? Math.max(-80, Math.min(80, message.offset))
           : 0;
@@ -133,10 +135,9 @@ export function createBrowserDiagnostics({
         player.worldPos.copy(poseAt(player.s, offset, 0.065).p);
         player.renderFrom.copy(player.worldPos);
         resetMotion(player);
-        const branch = activeTrack.branches[(message.branchIndex || 0) - 1];
         if (branch) {
           const q = Number.isFinite(message.q) ? Math.max(0, Math.min(1, message.q)) : 0.5;
-          player.s = (branch.start + (branch.end - branch.start) * q) * TRACK;
+          player.s = (lap + branch.start + (branch.end - branch.start) * q) * TRACK;
           player.routeChoice = branch.index;
           player.routeGroup = branch.groupIndex;
           player.lastSafeRoute = branch.index;
@@ -144,6 +145,7 @@ export function createBrowserDiagnostics({
           player.renderFrom.copy(player.worldPos);
         }
         player.lastSafeS = player.s;
+        player.lap = lap;
         resetRaceProgress(player, TRACK);
         player.yaw = yawFor(racerProjection(activeTrack, player).frame.tangent);
         player.renderYawFrom = player.yaw;
