@@ -25,8 +25,7 @@ export function createSelectionMenu({ documentRef, locationRef, course, racer, m
       image.onerror = null;
       image.src = `./assets/previews/${entry.id}.svg`;
     };
-    const gallery = { "sunstone-ruins": "sunstone-engine-polish", "paper-revel": "paper-crossing" };
-    image.src = `./docs/screenshots/${gallery[entry.id] || entry.id}.jpg`;
+    image.src = `./docs/screenshots/${entry.id}.jpg`;
   }
   function chooseCourse(entry) {
     selected.course = entry.id;
