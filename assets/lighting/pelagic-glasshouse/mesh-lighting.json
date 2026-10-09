@@ -1,0 +1,6698 @@
+{
+  "version": 1,
+  "course": "pelagic-glasshouse",
+  "sourceSceneSha256": "f3cc7eb409ecd0838351736cb2369ddf10a8c191cca9117aec840c71c412d085",
+  "sampleSourceSha256": "aaa1690b2efc4d444198aae2c30c47f0a638b4898b59470ca6b47c66f1e78313",
+  "format": "normalized RGBA8: RGB diffuse bounce and local lamp spill; alpha ambient visibility",
+  "resolution": "per vertex; per instance for InstancedMesh",
+  "samples": 8,
+  "radius": 24.0,
+  "quantization": 0.12,
+  "uniqueQuantizedSamples": 203178,
+  "entries": [
+    {
+      "path": "0/56/0",
+      "name": "Course ground",
+      "signature": "93e790860641c2d2",
+      "kind": "vertices",
+      "count": 4,
+      "byteOffset": 0,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/1",
+      "name": "Course road surface",
+      "signature": "be5d08b80811b5bb",
+      "kind": "vertices",
+      "count": 3602,
+      "byteOffset": 16,
+      "byteLength": 14408
+    },
+    {
+      "path": "0/56/2",
+      "name": "Course road surface",
+      "signature": "b3eb6a30ac6636f1",
+      "kind": "vertices",
+      "count": 3602,
+      "byteOffset": 14424,
+      "byteLength": 14408
+    },
+    {
+      "path": "0/56/3",
+      "name": "Course road surface",
+      "signature": "752ae6f304313e6d",
+      "kind": "vertices",
+      "count": 3602,
+      "byteOffset": 28832,
+      "byteLength": 14408
+    },
+    {
+      "path": "0/56/4",
+      "name": "Course road surface",
+      "signature": "e2d3f887c2f4b24a",
+      "kind": "vertices",
+      "count": 352,
+      "byteOffset": 43240,
+      "byteLength": 1408
+    },
+    {
+      "path": "0/56/5",
+      "name": "planters shoulder",
+      "signature": "b06d46fcb5553538",
+      "kind": "vertices",
+      "count": 2300,
+      "byteOffset": 44648,
+      "byteLength": 9200
+    },
+    {
+      "path": "0/56/6",
+      "name": "reeds shoulder",
+      "signature": "726fa5e745b9188e",
+      "kind": "vertices",
+      "count": 2300,
+      "byteOffset": 53848,
+      "byteLength": 9200
+    },
+    {
+      "path": "0/56/7",
+      "name": "coral shoulder",
+      "signature": "c48482b81628f102",
+      "kind": "vertices",
+      "count": 2155,
+      "byteOffset": 63048,
+      "byteLength": 8620
+    },
+    {
+      "path": "0/56/8",
+      "name": "reefdrop exposed face",
+      "signature": "bcea7c2783199b79",
+      "kind": "vertices",
+      "count": 1293,
+      "byteOffset": 71668,
+      "byteLength": 5172
+    },
+    {
+      "path": "0/56/9",
+      "name": "coral shoulder",
+      "signature": "8e7660b531c0b4e9",
+      "kind": "vertices",
+      "count": 2115,
+      "byteOffset": 76840,
+      "byteLength": 8460
+    },
+    {
+      "path": "0/56/10",
+      "name": "coral shoulder",
+      "signature": "b7869e5a21e1166a",
+      "kind": "vertices",
+      "count": 2115,
+      "byteOffset": 85300,
+      "byteLength": 8460
+    },
+    {
+      "path": "0/56/11",
+      "name": "coral shoulder",
+      "signature": "56b07d81a2955848",
+      "kind": "vertices",
+      "count": 1675,
+      "byteOffset": 93760,
+      "byteLength": 6700
+    },
+    {
+      "path": "0/56/12",
+      "name": "reefdrop exposed face",
+      "signature": "c0fb4d34bb145b68",
+      "kind": "vertices",
+      "count": 1005,
+      "byteOffset": 100460,
+      "byteLength": 4020
+    },
+    {
+      "path": "0/56/13",
+      "name": "coral shoulder",
+      "signature": "8208797abcf997cb",
+      "kind": "vertices",
+      "count": 2130,
+      "byteOffset": 104480,
+      "byteLength": 8520
+    },
+    {
+      "path": "0/56/14",
+      "name": "reefdrop exposed face",
+      "signature": "3bed0b4e29ecfcd2",
+      "kind": "vertices",
+      "count": 1278,
+      "byteOffset": 113000,
+      "byteLength": 5112
+    },
+    {
+      "path": "0/56/15",
+      "name": "planters shoulder",
+      "signature": "01afa298a120f773",
+      "kind": "vertices",
+      "count": 1680,
+      "byteOffset": 118112,
+      "byteLength": 6720
+    },
+    {
+      "path": "0/56/16",
+      "name": "reeds shoulder",
+      "signature": "5ba8ebc086209984",
+      "kind": "vertices",
+      "count": 1680,
+      "byteOffset": 124832,
+      "byteLength": 6720
+    },
+    {
+      "path": "0/56/17",
+      "name": "",
+      "signature": "1cc3160586a6fb54",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 131552,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/18",
+      "name": "",
+      "signature": "7a7430c07aa3c3f1",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 131648,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/19",
+      "name": "",
+      "signature": "a07d7cec15ac221f",
+      "kind": "vertices",
+      "count": 117,
+      "byteOffset": 131744,
+      "byteLength": 468
+    },
+    {
+      "path": "0/56/20",
+      "name": "Regional static scenery batch",
+      "signature": "f496d6150dd995c3",
+      "kind": "vertices",
+      "count": 48,
+      "byteOffset": 132212,
+      "byteLength": 192
+    },
+    {
+      "path": "0/56/21",
+      "name": "Regional imported scenery instances",
+      "signature": "da1adeb297e8c11b",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 132404,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/22",
+      "name": "Regional static scenery batch",
+      "signature": "ac09c823d8b1073a",
+      "kind": "vertices",
+      "count": 48,
+      "byteOffset": 132428,
+      "byteLength": 192
+    },
+    {
+      "path": "0/56/23",
+      "name": "Regional imported scenery instances",
+      "signature": "ad1ef324edc39402",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 132620,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/24",
+      "name": "Regional imported scenery instances",
+      "signature": "2094d6540081b2ca",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 132644,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/25",
+      "name": "Regional imported scenery instances",
+      "signature": "68bbe2fdc8ca9841",
+      "kind": "instances",
+      "count": 9,
+      "byteOffset": 132656,
+      "byteLength": 36
+    },
+    {
+      "path": "0/56/26",
+      "name": "Regional imported scenery instances",
+      "signature": "8bbb396e4116a514",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 132692,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/27",
+      "name": "Regional imported scenery instances",
+      "signature": "c55283b7628be205",
+      "kind": "instances",
+      "count": 9,
+      "byteOffset": 132704,
+      "byteLength": 36
+    },
+    {
+      "path": "0/56/28",
+      "name": "Regional static scenery batch",
+      "signature": "712f330bbfc2c7f3",
+      "kind": "vertices",
+      "count": 48,
+      "byteOffset": 132740,
+      "byteLength": 192
+    },
+    {
+      "path": "0/56/29",
+      "name": "Regional imported scenery instances",
+      "signature": "d7fd434ae883bec7",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 132932,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/30",
+      "name": "Regional imported scenery instances",
+      "signature": "e0093b1960dc524d",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 132956,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/31",
+      "name": "Regional imported scenery instances",
+      "signature": "512c932eae35e537",
+      "kind": "instances",
+      "count": 21,
+      "byteOffset": 132968,
+      "byteLength": 84
+    },
+    {
+      "path": "0/56/32",
+      "name": "Regional imported scenery instances",
+      "signature": "87288ceb8cb4c97f",
+      "kind": "instances",
+      "count": 21,
+      "byteOffset": 133052,
+      "byteLength": 84
+    },
+    {
+      "path": "0/56/33",
+      "name": "Regional imported scenery instances",
+      "signature": "6c637de8d3641ea5",
+      "kind": "instances",
+      "count": 14,
+      "byteOffset": 133136,
+      "byteLength": 56
+    },
+    {
+      "path": "0/56/34",
+      "name": "Regional imported scenery instances",
+      "signature": "1eb674be131dba4f",
+      "kind": "instances",
+      "count": 14,
+      "byteOffset": 133192,
+      "byteLength": 56
+    },
+    {
+      "path": "0/56/35",
+      "name": "Regional imported scenery instances",
+      "signature": "f2eb3b293f5a2132",
+      "kind": "instances",
+      "count": 7,
+      "byteOffset": 133248,
+      "byteLength": 28
+    },
+    {
+      "path": "0/56/36",
+      "name": "Regional imported scenery instances",
+      "signature": "e8b2d2e7c55f2d63",
+      "kind": "instances",
+      "count": 7,
+      "byteOffset": 133276,
+      "byteLength": 28
+    },
+    {
+      "path": "0/56/37",
+      "name": "Regional imported scenery instances",
+      "signature": "eb1fc86455323e0a",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 133304,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/38",
+      "name": "Regional imported scenery instances",
+      "signature": "63986f46d27e2b6c",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 133328,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/39",
+      "name": "Regional imported scenery instances",
+      "signature": "381e45a90467260a",
+      "kind": "instances",
+      "count": 12,
+      "byteOffset": 133352,
+      "byteLength": 48
+    },
+    {
+      "path": "0/56/40",
+      "name": "Regional imported scenery instances",
+      "signature": "7aeb505cfbf3766c",
+      "kind": "instances",
+      "count": 12,
+      "byteOffset": 133400,
+      "byteLength": 48
+    },
+    {
+      "path": "0/56/41",
+      "name": "Regional imported scenery instances",
+      "signature": "a86c4cc92cc9d52c",
+      "kind": "instances",
+      "count": 12,
+      "byteOffset": 133448,
+      "byteLength": 48
+    },
+    {
+      "path": "0/56/42",
+      "name": "Regional imported scenery instances",
+      "signature": "321ead92aab4ce9d",
+      "kind": "instances",
+      "count": 12,
+      "byteOffset": 133496,
+      "byteLength": 48
+    },
+    {
+      "path": "0/56/43",
+      "name": "Regional imported scenery instances",
+      "signature": "62d0ee58a025ba70",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 133544,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/44",
+      "name": "Regional imported scenery instances",
+      "signature": "eae7d2147b0a14bd",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 133556,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/45",
+      "name": "Regional imported scenery instances",
+      "signature": "95f01678e6bf8c2f",
+      "kind": "instances",
+      "count": 15,
+      "byteOffset": 133568,
+      "byteLength": 60
+    },
+    {
+      "path": "0/56/46",
+      "name": "Regional imported scenery instances",
+      "signature": "fb966e9e777c0dc8",
+      "kind": "instances",
+      "count": 15,
+      "byteOffset": 133628,
+      "byteLength": 60
+    },
+    {
+      "path": "0/56/47",
+      "name": "Regional imported scenery instances",
+      "signature": "85c42cd1c6c260dc",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 133688,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/48",
+      "name": "Regional imported scenery instances",
+      "signature": "1b331e8a1b189eaf",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 133700,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/49",
+      "name": "Regional imported scenery instances",
+      "signature": "d443b2dde7849cde",
+      "kind": "instances",
+      "count": 12,
+      "byteOffset": 133712,
+      "byteLength": 48
+    },
+    {
+      "path": "0/56/50",
+      "name": "Regional imported scenery instances",
+      "signature": "1b64174b1f3b3f74",
+      "kind": "instances",
+      "count": 12,
+      "byteOffset": 133760,
+      "byteLength": 48
+    },
+    {
+      "path": "0/56/51",
+      "name": "Regional imported scenery instances",
+      "signature": "531cbc33674447c3",
+      "kind": "instances",
+      "count": 15,
+      "byteOffset": 133808,
+      "byteLength": 60
+    },
+    {
+      "path": "0/56/52",
+      "name": "Regional imported scenery instances",
+      "signature": "2075dd24233cd635",
+      "kind": "instances",
+      "count": 15,
+      "byteOffset": 133868,
+      "byteLength": 60
+    },
+    {
+      "path": "0/56/53",
+      "name": "Regional imported scenery instances",
+      "signature": "de8e87ef37bda7e0",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 133928,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/54",
+      "name": "Regional imported scenery instances",
+      "signature": "36a40d0b2e2265dc",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 133952,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/55",
+      "name": "Regional imported scenery instances",
+      "signature": "feff749d2ec396e9",
+      "kind": "instances",
+      "count": 27,
+      "byteOffset": 133976,
+      "byteLength": 108
+    },
+    {
+      "path": "0/56/56",
+      "name": "Regional imported scenery instances",
+      "signature": "dde158e05c37659f",
+      "kind": "instances",
+      "count": 27,
+      "byteOffset": 134084,
+      "byteLength": 108
+    },
+    {
+      "path": "0/56/57",
+      "name": "Regional imported scenery instances",
+      "signature": "6659352fa75e5a44",
+      "kind": "instances",
+      "count": 27,
+      "byteOffset": 134192,
+      "byteLength": 108
+    },
+    {
+      "path": "0/56/58",
+      "name": "Regional imported scenery instances",
+      "signature": "74a208acc2f4ea94",
+      "kind": "instances",
+      "count": 27,
+      "byteOffset": 134300,
+      "byteLength": 108
+    },
+    {
+      "path": "0/56/59",
+      "name": "Regional imported scenery instances",
+      "signature": "eab2f15a6b6a2569",
+      "kind": "instances",
+      "count": 18,
+      "byteOffset": 134408,
+      "byteLength": 72
+    },
+    {
+      "path": "0/56/60",
+      "name": "Regional imported scenery instances",
+      "signature": "87940bb1175ddca9",
+      "kind": "instances",
+      "count": 18,
+      "byteOffset": 134480,
+      "byteLength": 72
+    },
+    {
+      "path": "0/56/61",
+      "name": "Regional imported scenery instances",
+      "signature": "7afbedf78b71c481",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 134552,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/62",
+      "name": "Regional imported scenery instances",
+      "signature": "68b39997ca5dd4ac",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 134564,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/63",
+      "name": "Regional imported scenery instances",
+      "signature": "38043e2e35c838c9",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 134576,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/64",
+      "name": "Regional imported scenery instances",
+      "signature": "93e5b668d71b52a0",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 134588,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/65",
+      "name": "Regional imported scenery instances",
+      "signature": "57880a63a263511a",
+      "kind": "instances",
+      "count": 12,
+      "byteOffset": 134600,
+      "byteLength": 48
+    },
+    {
+      "path": "0/56/66",
+      "name": "Regional imported scenery instances",
+      "signature": "aedfcb8df0aa4ccc",
+      "kind": "instances",
+      "count": 12,
+      "byteOffset": 134648,
+      "byteLength": 48
+    },
+    {
+      "path": "0/56/67",
+      "name": "Regional imported scenery instances",
+      "signature": "a72ce4dda3581797",
+      "kind": "instances",
+      "count": 9,
+      "byteOffset": 134696,
+      "byteLength": 36
+    },
+    {
+      "path": "0/56/68",
+      "name": "Regional imported scenery instances",
+      "signature": "000485d503b222dc",
+      "kind": "instances",
+      "count": 9,
+      "byteOffset": 134732,
+      "byteLength": 36
+    },
+    {
+      "path": "0/56/69",
+      "name": "Regional imported scenery instances",
+      "signature": "f2abc54a7f8976c1",
+      "kind": "instances",
+      "count": 15,
+      "byteOffset": 134768,
+      "byteLength": 60
+    },
+    {
+      "path": "0/56/70",
+      "name": "Regional imported scenery instances",
+      "signature": "2e4703dbf4e74050",
+      "kind": "instances",
+      "count": 15,
+      "byteOffset": 134828,
+      "byteLength": 60
+    },
+    {
+      "path": "0/56/71",
+      "name": "Regional imported scenery instances",
+      "signature": "70aefeb0a6f5c0b1",
+      "kind": "instances",
+      "count": 9,
+      "byteOffset": 134888,
+      "byteLength": 36
+    },
+    {
+      "path": "0/56/72",
+      "name": "Regional imported scenery instances",
+      "signature": "cfd3bcdc767a0f1f",
+      "kind": "instances",
+      "count": 10,
+      "byteOffset": 134924,
+      "byteLength": 40
+    },
+    {
+      "path": "0/56/73",
+      "name": "Regional imported scenery instances",
+      "signature": "6944c4137c5230de",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 134964,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/74",
+      "name": "Regional imported scenery instances",
+      "signature": "21594797256dc6f9",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 134988,
+      "byteLength": 20
+    },
+    {
+      "path": "0/56/75",
+      "name": "Regional imported scenery instances",
+      "signature": "c9fb1ea8b0c2c73f",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 135008,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/76",
+      "name": "Regional imported scenery instances",
+      "signature": "9713e539e5a95ace",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 135020,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/77",
+      "name": "Regional static scenery batch",
+      "signature": "86b88b0908f0e0fc",
+      "kind": "vertices",
+      "count": 48,
+      "byteOffset": 135032,
+      "byteLength": 192
+    },
+    {
+      "path": "0/56/78",
+      "name": "Regional imported scenery instances",
+      "signature": "75b5931d04bcb10d",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 135224,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/79",
+      "name": "Regional imported scenery instances",
+      "signature": "7b3a6d0d19f8d399",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 135248,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/80",
+      "name": "Regional imported scenery instances",
+      "signature": "b3f700c535126ee5",
+      "kind": "instances",
+      "count": 12,
+      "byteOffset": 135264,
+      "byteLength": 48
+    },
+    {
+      "path": "0/56/81",
+      "name": "Regional static scenery batch",
+      "signature": "5f6e376ce277146c",
+      "kind": "vertices",
+      "count": 48,
+      "byteOffset": 135312,
+      "byteLength": 192
+    },
+    {
+      "path": "0/56/82",
+      "name": "Regional imported scenery instances",
+      "signature": "13ad816c7e405cd1",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 135504,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/83",
+      "name": "Regional imported scenery instances",
+      "signature": "f3fea4c85f5eb748",
+      "kind": "instances",
+      "count": 9,
+      "byteOffset": 135528,
+      "byteLength": 36
+    },
+    {
+      "path": "0/56/84",
+      "name": "Regional imported scenery instances",
+      "signature": "fc00fe0a3c1448f8",
+      "kind": "instances",
+      "count": 9,
+      "byteOffset": 135564,
+      "byteLength": 36
+    },
+    {
+      "path": "0/56/85",
+      "name": "Regional imported scenery instances",
+      "signature": "510b52022741dcd0",
+      "kind": "instances",
+      "count": 9,
+      "byteOffset": 135600,
+      "byteLength": 36
+    },
+    {
+      "path": "0/56/86",
+      "name": "Regional imported scenery instances",
+      "signature": "5324afb6c00c3e81",
+      "kind": "instances",
+      "count": 9,
+      "byteOffset": 135636,
+      "byteLength": 36
+    },
+    {
+      "path": "0/56/87",
+      "name": "Regional imported scenery instances",
+      "signature": "8fa02e7cc9936362",
+      "kind": "instances",
+      "count": 12,
+      "byteOffset": 135672,
+      "byteLength": 48
+    },
+    {
+      "path": "0/56/88",
+      "name": "Regional imported scenery instances",
+      "signature": "dac9d55d09dfe99d",
+      "kind": "instances",
+      "count": 12,
+      "byteOffset": 135720,
+      "byteLength": 48
+    },
+    {
+      "path": "0/56/89",
+      "name": "Regional imported scenery instances",
+      "signature": "de99bca5f37fca79",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 135768,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/90",
+      "name": "Regional imported scenery instances",
+      "signature": "ea04a22be3a69338",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 135792,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/92",
+      "name": "",
+      "signature": "d20cb23a42632a31",
+      "kind": "vertices",
+      "count": 326,
+      "byteOffset": 135816,
+      "byteLength": 1304
+    },
+    {
+      "path": "0/56/93",
+      "name": "",
+      "signature": "19eaefb6d2f1ac3d",
+      "kind": "vertices",
+      "count": 516,
+      "byteOffset": 137120,
+      "byteLength": 2064
+    },
+    {
+      "path": "0/56/94",
+      "name": "",
+      "signature": "11856580383d40d6",
+      "kind": "vertices",
+      "count": 320,
+      "byteOffset": 139184,
+      "byteLength": 1280
+    },
+    {
+      "path": "0/56/95",
+      "name": "",
+      "signature": "752930068770aeae",
+      "kind": "vertices",
+      "count": 516,
+      "byteOffset": 140464,
+      "byteLength": 2064
+    },
+    {
+      "path": "0/56/96",
+      "name": "",
+      "signature": "d4d3bc01f392ce6c",
+      "kind": "vertices",
+      "count": 516,
+      "byteOffset": 142528,
+      "byteLength": 2064
+    },
+    {
+      "path": "0/56/97",
+      "name": "",
+      "signature": "3a2ad7c045e969ad",
+      "kind": "vertices",
+      "count": 252,
+      "byteOffset": 144592,
+      "byteLength": 1008
+    },
+    {
+      "path": "0/56/98",
+      "name": "",
+      "signature": "9334d6866f769df3",
+      "kind": "vertices",
+      "count": 516,
+      "byteOffset": 145600,
+      "byteLength": 2064
+    },
+    {
+      "path": "0/56/99",
+      "name": "",
+      "signature": "a4e944c2603fc0d8",
+      "kind": "vertices",
+      "count": 516,
+      "byteOffset": 147664,
+      "byteLength": 2064
+    },
+    {
+      "path": "0/56/100",
+      "name": "",
+      "signature": "0541c6adbd1fcd51",
+      "kind": "vertices",
+      "count": 322,
+      "byteOffset": 149728,
+      "byteLength": 1288
+    },
+    {
+      "path": "0/56/101",
+      "name": "",
+      "signature": "b8dc9dd1912c682c",
+      "kind": "vertices",
+      "count": 516,
+      "byteOffset": 151016,
+      "byteLength": 2064
+    },
+    {
+      "path": "0/56/103",
+      "name": "",
+      "signature": "24ff852c3a6c6ae9",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 153080,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/105",
+      "name": "",
+      "signature": "04abb15c31684807",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 153176,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/107",
+      "name": "",
+      "signature": "337f5eac33ff382a",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 153272,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/109",
+      "name": "",
+      "signature": "933f6af730fb6ac8",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 153368,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/111",
+      "name": "",
+      "signature": "3323ddcd669cf32b",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 153464,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/112",
+      "name": "",
+      "signature": "7d24fc4927c6899f",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 153560,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/113",
+      "name": "",
+      "signature": "2eacb8f1cb3a9c3b",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 153656,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/114",
+      "name": "",
+      "signature": "5d638bf3ba4d6c88",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 153752,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/115",
+      "name": "",
+      "signature": "161096100d1f002d",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 153848,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/116",
+      "name": "",
+      "signature": "d4371e0915ff3d84",
+      "kind": "vertices",
+      "count": 203,
+      "byteOffset": 153944,
+      "byteLength": 812
+    },
+    {
+      "path": "0/56/117",
+      "name": "",
+      "signature": "39153113a13c715e",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 154756,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/118",
+      "name": "",
+      "signature": "7e60ca05d3887006",
+      "kind": "vertices",
+      "count": 203,
+      "byteOffset": 154852,
+      "byteLength": 812
+    },
+    {
+      "path": "0/56/119",
+      "name": "",
+      "signature": "eff59eafcabc9451",
+      "kind": "vertices",
+      "count": 203,
+      "byteOffset": 155664,
+      "byteLength": 812
+    },
+    {
+      "path": "0/56/120",
+      "name": "",
+      "signature": "44b4b23f5a315057",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 156476,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/121",
+      "name": "",
+      "signature": "af539eeb9154e91e",
+      "kind": "vertices",
+      "count": 4326,
+      "byteOffset": 156572,
+      "byteLength": 17304
+    },
+    {
+      "path": "0/56/122",
+      "name": "",
+      "signature": "ac3beb1d6e2dc902",
+      "kind": "vertices",
+      "count": 4326,
+      "byteOffset": 173876,
+      "byteLength": 17304
+    },
+    {
+      "path": "0/56/123",
+      "name": "",
+      "signature": "91e7282d5447ba3d",
+      "kind": "vertices",
+      "count": 4326,
+      "byteOffset": 191180,
+      "byteLength": 17304
+    },
+    {
+      "path": "0/56/124",
+      "name": "",
+      "signature": "f69e83d11800e264",
+      "kind": "vertices",
+      "count": 4326,
+      "byteOffset": 208484,
+      "byteLength": 17304
+    },
+    {
+      "path": "0/56/125",
+      "name": "",
+      "signature": "1f7e0906660f1f4f",
+      "kind": "vertices",
+      "count": 4326,
+      "byteOffset": 225788,
+      "byteLength": 17304
+    },
+    {
+      "path": "0/56/126",
+      "name": "",
+      "signature": "911c6e078fbc0dcb",
+      "kind": "vertices",
+      "count": 4326,
+      "byteOffset": 243092,
+      "byteLength": 17304
+    },
+    {
+      "path": "0/56/127",
+      "name": "",
+      "signature": "583b2d40a87b2a51",
+      "kind": "vertices",
+      "count": 4326,
+      "byteOffset": 260396,
+      "byteLength": 17304
+    },
+    {
+      "path": "0/56/128",
+      "name": "",
+      "signature": "bd7f5bd69ed9aea3",
+      "kind": "vertices",
+      "count": 4326,
+      "byteOffset": 277700,
+      "byteLength": 17304
+    },
+    {
+      "path": "0/56/129",
+      "name": "",
+      "signature": "b8dd7d7b8b46077c",
+      "kind": "vertices",
+      "count": 4326,
+      "byteOffset": 295004,
+      "byteLength": 17304
+    },
+    {
+      "path": "0/56/130",
+      "name": "",
+      "signature": "0b8faad74d244eb3",
+      "kind": "vertices",
+      "count": 4326,
+      "byteOffset": 312308,
+      "byteLength": 17304
+    },
+    {
+      "path": "0/56/131",
+      "name": "",
+      "signature": "3982a78e79f1478f",
+      "kind": "vertices",
+      "count": 4326,
+      "byteOffset": 329612,
+      "byteLength": 17304
+    },
+    {
+      "path": "0/56/132",
+      "name": "",
+      "signature": "86f4f1d110d5c947",
+      "kind": "vertices",
+      "count": 346,
+      "byteOffset": 346916,
+      "byteLength": 1384
+    },
+    {
+      "path": "0/56/133",
+      "name": "",
+      "signature": "ea55b1a85ce70823",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 348300,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/134",
+      "name": "",
+      "signature": "67479e20154dcbe5",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 348396,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/135",
+      "name": "",
+      "signature": "2bcf287ddcb20dd8",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 348492,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/136",
+      "name": "",
+      "signature": "62a0bca9f03ef330",
+      "kind": "vertices",
+      "count": 76,
+      "byteOffset": 348588,
+      "byteLength": 304
+    },
+    {
+      "path": "0/56/137",
+      "name": "",
+      "signature": "0bea04d7324b13d3",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 348892,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/138",
+      "name": "",
+      "signature": "d81e93ca07cdfa62",
+      "kind": "vertices",
+      "count": 254,
+      "byteOffset": 348988,
+      "byteLength": 1016
+    },
+    {
+      "path": "0/56/139",
+      "name": "",
+      "signature": "9183bd1ade65b67a",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 350004,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/140",
+      "name": "",
+      "signature": "80a0e1288fdea291",
+      "kind": "vertices",
+      "count": 187,
+      "byteOffset": 350100,
+      "byteLength": 748
+    },
+    {
+      "path": "0/56/141",
+      "name": "",
+      "signature": "4cda388e0040a436",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 350848,
+      "byteLength": 96
+    },
+    {
+      "path": "0/56/142",
+      "name": "Regional imported scenery instances",
+      "signature": "eaa76c57db182c85",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 350944,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/143",
+      "name": "Regional static scenery batch",
+      "signature": "707b7f4becc43a07",
+      "kind": "vertices",
+      "count": 1032,
+      "byteOffset": 350956,
+      "byteLength": 4128
+    },
+    {
+      "path": "0/56/144",
+      "name": "Regional static scenery batch",
+      "signature": "4822b96359f44070",
+      "kind": "vertices",
+      "count": 1032,
+      "byteOffset": 355084,
+      "byteLength": 4128
+    },
+    {
+      "path": "0/56/145",
+      "name": "Regional imported scenery instances",
+      "signature": "d913c45e7bf58276",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 359212,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/146",
+      "name": "Regional static scenery batch",
+      "signature": "13e63d82ee796cb0",
+      "kind": "vertices",
+      "count": 9168,
+      "byteOffset": 359236,
+      "byteLength": 36672
+    },
+    {
+      "path": "0/56/147",
+      "name": "Regional static scenery batch",
+      "signature": "7bb209f7b722b7f2",
+      "kind": "vertices",
+      "count": 1032,
+      "byteOffset": 395908,
+      "byteLength": 4128
+    },
+    {
+      "path": "0/56/148",
+      "name": "Regional imported scenery instances",
+      "signature": "7670740d4f3886cc",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 400036,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/149",
+      "name": "Regional static scenery batch",
+      "signature": "9529e86c7b780018",
+      "kind": "vertices",
+      "count": 5358,
+      "byteOffset": 400048,
+      "byteLength": 21432
+    },
+    {
+      "path": "0/56/150",
+      "name": "Regional imported scenery instances",
+      "signature": "1a21a6aea9848ed9",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 421480,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/151",
+      "name": "Regional imported scenery instances",
+      "signature": "05718b0b08980d99",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 421496,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/152",
+      "name": "Regional imported scenery instances",
+      "signature": "8f7b562e0b1daa72",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 421508,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/153",
+      "name": "Regional static scenery batch",
+      "signature": "70238fae1b822083",
+      "kind": "vertices",
+      "count": 1032,
+      "byteOffset": 421532,
+      "byteLength": 4128
+    },
+    {
+      "path": "0/56/154",
+      "name": "Regional static scenery batch",
+      "signature": "4994f5fba63e2a56",
+      "kind": "vertices",
+      "count": 1108,
+      "byteOffset": 425660,
+      "byteLength": 4432
+    },
+    {
+      "path": "0/56/155",
+      "name": "Regional imported scenery instances",
+      "signature": "fe09d5ef39924ab2",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 430092,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/156",
+      "name": "Regional static scenery batch",
+      "signature": "deb816fa31cea9d9",
+      "kind": "vertices",
+      "count": 1032,
+      "byteOffset": 430104,
+      "byteLength": 4128
+    },
+    {
+      "path": "0/56/157",
+      "name": "Regional imported scenery instances",
+      "signature": "e414b9ce99230241",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 434232,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/158",
+      "name": "Regional static scenery batch",
+      "signature": "57dce0b2b68bcf16",
+      "kind": "vertices",
+      "count": 4842,
+      "byteOffset": 434248,
+      "byteLength": 19368
+    },
+    {
+      "path": "0/56/159",
+      "name": "Regional static scenery batch",
+      "signature": "1d20ae1efa55e23c",
+      "kind": "vertices",
+      "count": 1032,
+      "byteOffset": 453616,
+      "byteLength": 4128
+    },
+    {
+      "path": "0/56/160",
+      "name": "Regional imported scenery instances",
+      "signature": "c7e32f1d23681786",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 457744,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/161",
+      "name": "Regional static scenery batch",
+      "signature": "fa4ab75171f0cef6",
+      "kind": "vertices",
+      "count": 4842,
+      "byteOffset": 457768,
+      "byteLength": 19368
+    },
+    {
+      "path": "0/56/162",
+      "name": "Regional static scenery batch",
+      "signature": "e7f55c11cbf66135",
+      "kind": "vertices",
+      "count": 1032,
+      "byteOffset": 477136,
+      "byteLength": 4128
+    },
+    {
+      "path": "0/56/163",
+      "name": "Regional imported scenery instances",
+      "signature": "2b78da415a74c41f",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 481264,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/164",
+      "name": "Regional static scenery batch",
+      "signature": "2835ac007992e844",
+      "kind": "vertices",
+      "count": 9684,
+      "byteOffset": 481288,
+      "byteLength": 38736
+    },
+    {
+      "path": "0/56/165",
+      "name": "Regional imported scenery instances",
+      "signature": "8df08a4fe20c9ebb",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 520024,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/166",
+      "name": "Regional static scenery batch",
+      "signature": "aaf4e2ee022b0e20",
+      "kind": "vertices",
+      "count": 1032,
+      "byteOffset": 520036,
+      "byteLength": 4128
+    },
+    {
+      "path": "0/56/167",
+      "name": "Regional static scenery batch",
+      "signature": "f1119be63ef3e45c",
+      "kind": "vertices",
+      "count": 1032,
+      "byteOffset": 524164,
+      "byteLength": 4128
+    },
+    {
+      "path": "0/56/168",
+      "name": "Regional static scenery batch",
+      "signature": "73ba16c1161fb396",
+      "kind": "vertices",
+      "count": 1032,
+      "byteOffset": 528292,
+      "byteLength": 4128
+    },
+    {
+      "path": "0/56/169",
+      "name": "Regional imported scenery instances",
+      "signature": "ab677ddf3aa162c5",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 532420,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/170",
+      "name": "Regional imported scenery instances",
+      "signature": "4e75c5095a1f2124",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 532432,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/171",
+      "name": "Regional imported scenery instances",
+      "signature": "866aee9e1b4ee06e",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 532456,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/172",
+      "name": "Regional imported scenery instances",
+      "signature": "8fed73e409d46f29",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 532468,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/173",
+      "name": "Regional imported scenery instances",
+      "signature": "9d36a2be4bb4cc0d",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 532484,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/174",
+      "name": "Regional static scenery batch",
+      "signature": "33a4368ea10a5904",
+      "kind": "vertices",
+      "count": 8652,
+      "byteOffset": 532508,
+      "byteLength": 34608
+    },
+    {
+      "path": "0/56/175",
+      "name": "Regional imported scenery instances",
+      "signature": "b817ef3172a58b13",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 567116,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/176",
+      "name": "Regional static scenery batch",
+      "signature": "0815d4288b9ce65f",
+      "kind": "vertices",
+      "count": 1032,
+      "byteOffset": 567140,
+      "byteLength": 4128
+    },
+    {
+      "path": "0/56/177",
+      "name": "Regional static scenery batch",
+      "signature": "abba01e057070489",
+      "kind": "vertices",
+      "count": 1219,
+      "byteOffset": 571268,
+      "byteLength": 4876
+    },
+    {
+      "path": "0/56/178",
+      "name": "Regional imported scenery instances",
+      "signature": "f87fdbf7861fd19f",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 576144,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/179",
+      "name": "Regional static scenery batch",
+      "signature": "f0ad7ee4de9fb944",
+      "kind": "vertices",
+      "count": 890,
+      "byteOffset": 576156,
+      "byteLength": 3560
+    },
+    {
+      "path": "0/56/180",
+      "name": "Regional static scenery batch",
+      "signature": "9cbdcea7f6a5b2c0",
+      "kind": "vertices",
+      "count": 1032,
+      "byteOffset": 579716,
+      "byteLength": 4128
+    },
+    {
+      "path": "0/56/181",
+      "name": "Regional imported scenery instances",
+      "signature": "475d228d19758c67",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 583844,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/182",
+      "name": "Regional static scenery batch",
+      "signature": "289b165738d7b7e9",
+      "kind": "vertices",
+      "count": 9684,
+      "byteOffset": 583868,
+      "byteLength": 38736
+    },
+    {
+      "path": "0/56/183",
+      "name": "Regional imported scenery instances",
+      "signature": "baba5c6cb6eea267",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 622604,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/184",
+      "name": "Regional static scenery batch",
+      "signature": "a572e275aef8cd41",
+      "kind": "vertices",
+      "count": 4842,
+      "byteOffset": 622616,
+      "byteLength": 19368
+    },
+    {
+      "path": "0/56/185",
+      "name": "Regional static scenery batch",
+      "signature": "1f90643532d857ae",
+      "kind": "vertices",
+      "count": 1032,
+      "byteOffset": 641984,
+      "byteLength": 4128
+    },
+    {
+      "path": "0/56/186",
+      "name": "Regional imported scenery instances",
+      "signature": "95034afc7bbf9ce9",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 646112,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/187",
+      "name": "Regional static scenery batch",
+      "signature": "974b5d62a0640607",
+      "kind": "vertices",
+      "count": 4842,
+      "byteOffset": 646124,
+      "byteLength": 19368
+    },
+    {
+      "path": "0/56/188",
+      "name": "Regional imported scenery instances",
+      "signature": "93213f2906d06535",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 665492,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/189",
+      "name": "Regional static scenery batch",
+      "signature": "f6b0499d8a486a9d",
+      "kind": "vertices",
+      "count": 152,
+      "byteOffset": 665504,
+      "byteLength": 608
+    },
+    {
+      "path": "0/56/190",
+      "name": "Regional imported scenery instances",
+      "signature": "88992c4feff6e685",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 666112,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/191",
+      "name": "Regional static scenery batch",
+      "signature": "a4ad75cbd99e1b56",
+      "kind": "vertices",
+      "count": 1032,
+      "byteOffset": 666128,
+      "byteLength": 4128
+    },
+    {
+      "path": "0/56/192",
+      "name": "Regional static scenery batch",
+      "signature": "427a164a0560e367",
+      "kind": "vertices",
+      "count": 1108,
+      "byteOffset": 670256,
+      "byteLength": 4432
+    },
+    {
+      "path": "0/56/193",
+      "name": "Regional imported scenery instances",
+      "signature": "da1c059776bd0bce",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 674688,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/194",
+      "name": "Regional static scenery batch",
+      "signature": "93d2b56ff813967f",
+      "kind": "vertices",
+      "count": 606,
+      "byteOffset": 674700,
+      "byteLength": 2424
+    },
+    {
+      "path": "0/56/195",
+      "name": "Regional static scenery batch",
+      "signature": "6976d490c1c18cbe",
+      "kind": "vertices",
+      "count": 1598,
+      "byteOffset": 677124,
+      "byteLength": 6392
+    },
+    {
+      "path": "0/56/196",
+      "name": "Regional imported scenery instances",
+      "signature": "4c8a67d5bcbe3753",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 683516,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/197",
+      "name": "Regional static scenery batch",
+      "signature": "3c131f275d09ac5e",
+      "kind": "vertices",
+      "count": 1244,
+      "byteOffset": 683532,
+      "byteLength": 4976
+    },
+    {
+      "path": "0/56/198",
+      "name": "Regional static scenery batch",
+      "signature": "7ce41c68e0558125",
+      "kind": "vertices",
+      "count": 1725,
+      "byteOffset": 688508,
+      "byteLength": 6900
+    },
+    {
+      "path": "0/56/199",
+      "name": "Regional imported scenery instances",
+      "signature": "b6009691545dc54c",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 695408,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/200",
+      "name": "Regional static scenery batch",
+      "signature": "71196608072efe38",
+      "kind": "vertices",
+      "count": 872,
+      "byteOffset": 695424,
+      "byteLength": 3488
+    },
+    {
+      "path": "0/56/201",
+      "name": "Regional static scenery batch",
+      "signature": "63d48670820ef2cc",
+      "kind": "vertices",
+      "count": 1150,
+      "byteOffset": 698912,
+      "byteLength": 4600
+    },
+    {
+      "path": "0/56/202",
+      "name": "Regional imported scenery instances",
+      "signature": "9b38616ebe7baf14",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 703512,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/203",
+      "name": "Regional static scenery batch",
+      "signature": "83e8db90703f8998",
+      "kind": "vertices",
+      "count": 1244,
+      "byteOffset": 703528,
+      "byteLength": 4976
+    },
+    {
+      "path": "0/56/204",
+      "name": "Regional static scenery batch",
+      "signature": "f9db727239de1136",
+      "kind": "vertices",
+      "count": 1522,
+      "byteOffset": 708504,
+      "byteLength": 6088
+    },
+    {
+      "path": "0/56/205",
+      "name": "Regional imported scenery instances",
+      "signature": "59b8450c681924c7",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 714592,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/206",
+      "name": "Regional imported scenery instances",
+      "signature": "e40b522822da7fbd",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 714604,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/207",
+      "name": "Regional static scenery batch",
+      "signature": "77dcae7c0bf296e9",
+      "kind": "vertices",
+      "count": 372,
+      "byteOffset": 714620,
+      "byteLength": 1488
+    },
+    {
+      "path": "0/56/208",
+      "name": "Regional imported scenery instances",
+      "signature": "1918f5fdc85dd3cc",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 716108,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/209",
+      "name": "Regional static scenery batch",
+      "signature": "9480764962180eaf",
+      "kind": "vertices",
+      "count": 1523,
+      "byteOffset": 716120,
+      "byteLength": 6092
+    },
+    {
+      "path": "0/56/210",
+      "name": "Regional static scenery batch",
+      "signature": "26a20aaa6bc4618a",
+      "kind": "vertices",
+      "count": 482,
+      "byteOffset": 722212,
+      "byteLength": 1928
+    },
+    {
+      "path": "0/56/211",
+      "name": "Regional imported scenery instances",
+      "signature": "2719715baf6203ec",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 724140,
+      "byteLength": 20
+    },
+    {
+      "path": "0/56/212",
+      "name": "Regional imported scenery instances",
+      "signature": "89c2dca5f3bb95f8",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 724160,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/213",
+      "name": "Regional static scenery batch",
+      "signature": "d101b38e88b3ee23",
+      "kind": "vertices",
+      "count": 390,
+      "byteOffset": 724172,
+      "byteLength": 1560
+    },
+    {
+      "path": "0/56/214",
+      "name": "Regional imported scenery instances",
+      "signature": "a1df403d677dac3f",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 725732,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/215",
+      "name": "Regional static scenery batch",
+      "signature": "344d1a1797b4e14e",
+      "kind": "vertices",
+      "count": 745,
+      "byteOffset": 725744,
+      "byteLength": 2980
+    },
+    {
+      "path": "0/56/216",
+      "name": "Regional static scenery batch",
+      "signature": "a8aa861eb75f4000",
+      "kind": "vertices",
+      "count": 48,
+      "byteOffset": 728724,
+      "byteLength": 192
+    },
+    {
+      "path": "0/56/217",
+      "name": "Regional static scenery batch",
+      "signature": "efd4895dbc18d335",
+      "kind": "vertices",
+      "count": 48,
+      "byteOffset": 728916,
+      "byteLength": 192
+    },
+    {
+      "path": "0/56/218",
+      "name": "Regional static scenery batch",
+      "signature": "7e8c9a8522b59e54",
+      "kind": "vertices",
+      "count": 745,
+      "byteOffset": 729108,
+      "byteLength": 2980
+    },
+    {
+      "path": "0/56/219",
+      "name": "Regional static scenery batch",
+      "signature": "739627299dcd865f",
+      "kind": "vertices",
+      "count": 48,
+      "byteOffset": 732088,
+      "byteLength": 192
+    },
+    {
+      "path": "0/56/220",
+      "name": "Regional imported scenery instances",
+      "signature": "cd1cc54071d5f232",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 732280,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/221",
+      "name": "Regional static scenery batch",
+      "signature": "d1c5dc207a4486fd",
+      "kind": "vertices",
+      "count": 406,
+      "byteOffset": 732296,
+      "byteLength": 1624
+    },
+    {
+      "path": "0/56/222",
+      "name": "Regional static scenery batch",
+      "signature": "0d231a78590fe01a",
+      "kind": "vertices",
+      "count": 48,
+      "byteOffset": 733920,
+      "byteLength": 192
+    },
+    {
+      "path": "0/56/223",
+      "name": "Regional static scenery batch",
+      "signature": "6ce8edc4ea59a2c7",
+      "kind": "vertices",
+      "count": 406,
+      "byteOffset": 734112,
+      "byteLength": 1624
+    },
+    {
+      "path": "0/56/224",
+      "name": "Regional imported scenery instances",
+      "signature": "d551570009add32c",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 735736,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/225",
+      "name": "Regional imported scenery instances",
+      "signature": "c7d5a7da80cbd7e5",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 735752,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/226",
+      "name": "Regional imported scenery instances",
+      "signature": "b9f46ef51d9fcf9e",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 735768,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/227",
+      "name": "Regional static scenery batch",
+      "signature": "8c7c0c47fdd7947e",
+      "kind": "vertices",
+      "count": 406,
+      "byteOffset": 735784,
+      "byteLength": 1624
+    },
+    {
+      "path": "0/56/228",
+      "name": "Regional imported scenery instances",
+      "signature": "1fb40b82ca5dd4ce",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 737408,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/229",
+      "name": "Regional static scenery batch",
+      "signature": "a9496bfddeab9848",
+      "kind": "vertices",
+      "count": 609,
+      "byteOffset": 737432,
+      "byteLength": 2436
+    },
+    {
+      "path": "0/56/230",
+      "name": "Regional static scenery batch",
+      "signature": "1f4f0db12b842713",
+      "kind": "vertices",
+      "count": 609,
+      "byteOffset": 739868,
+      "byteLength": 2436
+    },
+    {
+      "path": "0/56/231",
+      "name": "Regional imported scenery instances",
+      "signature": "c7af02c112915860",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 742304,
+      "byteLength": 20
+    },
+    {
+      "path": "0/56/232",
+      "name": "Regional imported scenery instances",
+      "signature": "939d7491ddcf8ea4",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 742324,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/233",
+      "name": "Regional static scenery batch",
+      "signature": "1282a8df259b43cf",
+      "kind": "vertices",
+      "count": 48,
+      "byteOffset": 742336,
+      "byteLength": 192
+    },
+    {
+      "path": "0/56/234",
+      "name": "Regional static scenery batch",
+      "signature": "453616bf17a42853",
+      "kind": "vertices",
+      "count": 482,
+      "byteOffset": 742528,
+      "byteLength": 1928
+    },
+    {
+      "path": "0/56/235",
+      "name": "Regional static scenery batch",
+      "signature": "bc2f4db47d4cff81",
+      "kind": "vertices",
+      "count": 48,
+      "byteOffset": 744456,
+      "byteLength": 192
+    },
+    {
+      "path": "0/56/236",
+      "name": "Regional imported scenery instances",
+      "signature": "b16d727b37d8f3a5",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 744648,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/237",
+      "name": "Regional imported scenery instances",
+      "signature": "c67ce9b5a587d1bc",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 744660,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/238",
+      "name": "Regional static scenery batch",
+      "signature": "80ec6432bdf910da",
+      "kind": "vertices",
+      "count": 577,
+      "byteOffset": 744684,
+      "byteLength": 2308
+    },
+    {
+      "path": "0/56/239",
+      "name": "Regional static scenery batch",
+      "signature": "e0794614ef240cda",
+      "kind": "vertices",
+      "count": 48,
+      "byteOffset": 746992,
+      "byteLength": 192
+    },
+    {
+      "path": "0/56/240",
+      "name": "Regional static scenery batch",
+      "signature": "651a88bf2d99a3c7",
+      "kind": "vertices",
+      "count": 279,
+      "byteOffset": 747184,
+      "byteLength": 1116
+    },
+    {
+      "path": "0/56/241",
+      "name": "Regional imported scenery instances",
+      "signature": "ad8f47d0becb6feb",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 748300,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/242",
+      "name": "Regional imported scenery instances",
+      "signature": "b3542f19b52d0a46",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 748312,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/243",
+      "name": "Regional imported scenery instances",
+      "signature": "927a3aa0975b0382",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 748324,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/244",
+      "name": "Regional imported scenery instances",
+      "signature": "8e5ec74a3dec7540",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 748336,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/245",
+      "name": "Regional imported scenery instances",
+      "signature": "130d17cfa559fdd5",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 748348,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/246",
+      "name": "Regional imported scenery instances",
+      "signature": "0c94482caef40d62",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 748372,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/247",
+      "name": "Regional imported scenery instances",
+      "signature": "badda4722bcf1e92",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 748384,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/248",
+      "name": "Regional imported scenery instances",
+      "signature": "73b0e6b0f34f1a9f",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 748396,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/249",
+      "name": "Regional imported scenery instances",
+      "signature": "0d35392d3359fbba",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 748408,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/250",
+      "name": "Regional static scenery batch",
+      "signature": "67ebdc0559e842de",
+      "kind": "vertices",
+      "count": 374,
+      "byteOffset": 748432,
+      "byteLength": 1496
+    },
+    {
+      "path": "0/56/251",
+      "name": "Regional static scenery batch",
+      "signature": "cb60b7ecf462fc35",
+      "kind": "vertices",
+      "count": 8652,
+      "byteOffset": 749928,
+      "byteLength": 34608
+    },
+    {
+      "path": "0/56/252",
+      "name": "Regional imported scenery instances",
+      "signature": "48dc0a02a03a8410",
+      "kind": "instances",
+      "count": 9,
+      "byteOffset": 784536,
+      "byteLength": 36
+    },
+    {
+      "path": "0/56/253",
+      "name": "Regional imported scenery instances",
+      "signature": "790b68da5eb430f6",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 784572,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/254",
+      "name": "Regional static scenery batch",
+      "signature": "1894b4997e419d53",
+      "kind": "vertices",
+      "count": 8652,
+      "byteOffset": 784596,
+      "byteLength": 34608
+    },
+    {
+      "path": "0/56/255",
+      "name": "Regional imported scenery instances",
+      "signature": "b41d98617a07435b",
+      "kind": "instances",
+      "count": 9,
+      "byteOffset": 819204,
+      "byteLength": 36
+    },
+    {
+      "path": "0/56/256",
+      "name": "Regional static scenery batch",
+      "signature": "42c14c8a8f32fb5a",
+      "kind": "vertices",
+      "count": 8652,
+      "byteOffset": 819240,
+      "byteLength": 34608
+    },
+    {
+      "path": "0/56/257",
+      "name": "Regional imported scenery instances",
+      "signature": "f66ff19fd4923b01",
+      "kind": "instances",
+      "count": 6,
+      "byteOffset": 853848,
+      "byteLength": 24
+    },
+    {
+      "path": "0/56/258",
+      "name": "Regional imported scenery instances",
+      "signature": "3162e52ac4616271",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 853872,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/259",
+      "name": "Regional static scenery batch",
+      "signature": "bf11fac926b60074",
+      "kind": "vertices",
+      "count": 8652,
+      "byteOffset": 853884,
+      "byteLength": 34608
+    },
+    {
+      "path": "0/56/260",
+      "name": "Regional imported scenery instances",
+      "signature": "d8690007a4b62d21",
+      "kind": "instances",
+      "count": 9,
+      "byteOffset": 888492,
+      "byteLength": 36
+    },
+    {
+      "path": "0/56/261",
+      "name": "Regional imported scenery instances",
+      "signature": "474c006ad1dc968a",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 888528,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/262",
+      "name": "Regional imported scenery instances",
+      "signature": "5fe22edd80b48ab5",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 888540,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/263",
+      "name": "Regional static scenery batch",
+      "signature": "fcd50c5df92ac756",
+      "kind": "vertices",
+      "count": 1184,
+      "byteOffset": 888552,
+      "byteLength": 4736
+    },
+    {
+      "path": "0/56/264",
+      "name": "Regional static scenery batch",
+      "signature": "a79e4511642e586d",
+      "kind": "vertices",
+      "count": 592,
+      "byteOffset": 893288,
+      "byteLength": 2368
+    },
+    {
+      "path": "0/56/265",
+      "name": "Regional static scenery batch",
+      "signature": "2cf2c5abd67b918e",
+      "kind": "vertices",
+      "count": 339,
+      "byteOffset": 895656,
+      "byteLength": 1356
+    },
+    {
+      "path": "0/56/266",
+      "name": "Regional static scenery batch",
+      "signature": "09bb3f5ebc1f52e2",
+      "kind": "vertices",
+      "count": 592,
+      "byteOffset": 897012,
+      "byteLength": 2368
+    },
+    {
+      "path": "0/56/267",
+      "name": "Regional static scenery batch",
+      "signature": "76904d90e7ab0887",
+      "kind": "vertices",
+      "count": 592,
+      "byteOffset": 899380,
+      "byteLength": 2368
+    },
+    {
+      "path": "0/56/268",
+      "name": "Regional static scenery batch",
+      "signature": "53fdc3fda1881a2d",
+      "kind": "vertices",
+      "count": 152,
+      "byteOffset": 901748,
+      "byteLength": 608
+    },
+    {
+      "path": "0/56/269",
+      "name": "Regional static scenery batch",
+      "signature": "327c1e577e5e864c",
+      "kind": "vertices",
+      "count": 1184,
+      "byteOffset": 902356,
+      "byteLength": 4736
+    },
+    {
+      "path": "0/56/270",
+      "name": "Regional static scenery batch",
+      "signature": "f73af44c85244a90",
+      "kind": "vertices",
+      "count": 592,
+      "byteOffset": 907092,
+      "byteLength": 2368
+    },
+    {
+      "path": "0/56/271",
+      "name": "Regional static scenery batch",
+      "signature": "e7ac1e8331035171",
+      "kind": "vertices",
+      "count": 592,
+      "byteOffset": 909460,
+      "byteLength": 2368
+    },
+    {
+      "path": "0/56/272",
+      "name": "Regional imported scenery instances",
+      "signature": "2db444f94a0d2e3b",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 911828,
+      "byteLength": 12
+    },
+    {
+      "path": "0/56/273",
+      "name": "Regional imported scenery instances",
+      "signature": "8bd4bece4291a230",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 911840,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/274",
+      "name": "Regional imported scenery instances",
+      "signature": "a740e8f59440f486",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 911856,
+      "byteLength": 16
+    },
+    {
+      "path": "0/56/275",
+      "name": "Regional static scenery batch",
+      "signature": "2c3a67a8f945845a",
+      "kind": "vertices",
+      "count": 48,
+      "byteOffset": 911872,
+      "byteLength": 192
+    },
+    {
+      "path": "0/56/276",
+      "name": "Regional static scenery batch",
+      "signature": "6bfbc8e459e56293",
+      "kind": "vertices",
+      "count": 1184,
+      "byteOffset": 912064,
+      "byteLength": 4736
+    },
+    {
+      "path": "0/56/277",
+      "name": "Regional static scenery batch",
+      "signature": "ed47d4afec62716d",
+      "kind": "vertices",
+      "count": 592,
+      "byteOffset": 916800,
+      "byteLength": 2368
+    },
+    {
+      "path": "1/0/0/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "5c3fd1655b005ddf",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919168,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/0/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "924675856113bba5",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919188,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/1/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "ea46bb0109a64931",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919204,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/1/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "e3b0f4c1187db710",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919224,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/2/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "98d50737a53d6581",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919240,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/2/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "3c883f8f267e02a3",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919260,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/3/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "686a284458c8c09e",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919276,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/3/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "8089566c17c5adf5",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919296,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/4/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "137471a29d341117",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919312,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/4/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "6944953afe7d9841",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919332,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/5/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "566ab8d74cfe0d6a",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919348,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/5/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "720957fb7f58ccf5",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919368,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/6/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "c5a330d248fe6582",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919384,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/6/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "8702f12a24b5a60b",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919404,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/7/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "47a29d465bc330e3",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919420,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/7/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "4b8b4526363e768f",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919440,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/8/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "03d2908cd80a7982",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919456,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/8/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "41bbdaa0946f2f75",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919476,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/9/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "7230b859a0eb22eb",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919492,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/9/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "548d722543fe1e63",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919512,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/10/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "ba047ba0be217f24",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919528,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/10/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "04d3ee643b49aa50",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919548,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/11/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "da3f4e5a650f5544",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919564,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/11/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "7f51b2029dffdcc6",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919584,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/12/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "563c243ffb8c7959",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919600,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/12/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "693969a7558c6d6b",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919620,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/13/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "e4b7aaf5ea1b34eb",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919636,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/13/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "2aafff9d33238f9d",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919656,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/14/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "a2f6b43b08c85dd3",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919672,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/14/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "9af82faf870bc9ba",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919692,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/15/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "c51d7367ab8783bd",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919708,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/15/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "475fd1a7746bdd4d",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919728,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/16/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "aa2f24b45a59e042",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919744,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/16/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "282b749092356ace",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919764,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/17/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "49ca27441ef2b4d5",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919780,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/17/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "4611fc50cc50878d",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919800,
+      "byteLength": 16
+    },
+    {
+      "path": "1/0/18/0/0",
+      "name": "Regional imported scenery instances",
+      "signature": "56a3d7c642a2dc21",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 919816,
+      "byteLength": 20
+    },
+    {
+      "path": "1/0/18/0/1",
+      "name": "Regional imported scenery instances",
+      "signature": "ac19053accd15170",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 919836,
+      "byteLength": 16
+    },
+    {
+      "path": "1/1/0",
+      "name": "Authored experience driving surface",
+      "signature": "65db8820f885c78c",
+      "kind": "vertices",
+      "count": 324,
+      "byteOffset": 919852,
+      "byteLength": 1296
+    },
+    {
+      "path": "1/1/1",
+      "name": "",
+      "signature": "d1905f9f757f450d",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 921148,
+      "byteLength": 96
+    },
+    {
+      "path": "1/1/2",
+      "name": "",
+      "signature": "17872443abd29bbd",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 921244,
+      "byteLength": 96
+    },
+    {
+      "path": "1/1/3",
+      "name": "",
+      "signature": "b3d77cce8609a25d",
+      "kind": "vertices",
+      "count": 100,
+      "byteOffset": 921340,
+      "byteLength": 400
+    },
+    {
+      "path": "1/1/4",
+      "name": "",
+      "signature": "f932445f8bdef396",
+      "kind": "vertices",
+      "count": 297,
+      "byteOffset": 921740,
+      "byteLength": 1188
+    },
+    {
+      "path": "1/1/5",
+      "name": "",
+      "signature": "a8d98c7015e5fc6f",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 922928,
+      "byteLength": 96
+    },
+    {
+      "path": "1/1/6",
+      "name": "",
+      "signature": "7392e5661b0a325f",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 923024,
+      "byteLength": 96
+    },
+    {
+      "path": "1/1/7",
+      "name": "",
+      "signature": "db0589a67a9270ec",
+      "kind": "vertices",
+      "count": 100,
+      "byteOffset": 923120,
+      "byteLength": 400
+    },
+    {
+      "path": "1/1/8",
+      "name": "",
+      "signature": "0dfcbc0df9832fec",
+      "kind": "vertices",
+      "count": 297,
+      "byteOffset": 923520,
+      "byteLength": 1188
+    },
+    {
+      "path": "1/1/9",
+      "name": "",
+      "signature": "e1b9c7864b65db17",
+      "kind": "vertices",
+      "count": 100,
+      "byteOffset": 924708,
+      "byteLength": 400
+    },
+    {
+      "path": "1/1/10",
+      "name": "",
+      "signature": "e40145a8a8f23f8f",
+      "kind": "vertices",
+      "count": 88,
+      "byteOffset": 925108,
+      "byteLength": 352
+    },
+    {
+      "path": "1/1/11",
+      "name": "LANTERN EEL GROTTO",
+      "signature": "763d57cdd379e735",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 925460,
+      "byteLength": 96
+    },
+    {
+      "path": "1/1/12",
+      "name": "Regional imported scenery instances",
+      "signature": "c7548f417e03c8f2",
+      "kind": "instances",
+      "count": 9,
+      "byteOffset": 925556,
+      "byteLength": 36
+    },
+    {
+      "path": "1/1/13",
+      "name": "Regional imported scenery instances",
+      "signature": "ef2c39beddeec767",
+      "kind": "instances",
+      "count": 8,
+      "byteOffset": 925592,
+      "byteLength": 32
+    },
+    {
+      "path": "1/1/14",
+      "name": "Regional static scenery batch",
+      "signature": "1e7be86d4ade4343",
+      "kind": "vertices",
+      "count": 200,
+      "byteOffset": 925624,
+      "byteLength": 800
+    },
+    {
+      "path": "1/1/15",
+      "name": "Regional imported scenery instances",
+      "signature": "7184d52d4c67962c",
+      "kind": "instances",
+      "count": 23,
+      "byteOffset": 926424,
+      "byteLength": 92
+    },
+    {
+      "path": "1/1/16",
+      "name": "Regional imported scenery instances",
+      "signature": "b4a95193b11d543b",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 926516,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/17",
+      "name": "Regional imported scenery instances",
+      "signature": "93906a33a8bd7a86",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 926528,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/18",
+      "name": "Regional imported scenery instances",
+      "signature": "2e05788fc53ea06c",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 926540,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/19",
+      "name": "Regional imported scenery instances",
+      "signature": "6c3d056cba9712ef",
+      "kind": "instances",
+      "count": 18,
+      "byteOffset": 926552,
+      "byteLength": 72
+    },
+    {
+      "path": "1/1/20",
+      "name": "Regional imported scenery instances",
+      "signature": "bb525e276cf063a8",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 926624,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/21",
+      "name": "Regional imported scenery instances",
+      "signature": "3508c31d660e4d6c",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 926636,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/22",
+      "name": "Regional imported scenery instances",
+      "signature": "ca268117d733554a",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 926648,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/23",
+      "name": "Regional imported scenery instances",
+      "signature": "ac9ae0f6db4366c2",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 926660,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/24",
+      "name": "Regional imported scenery instances",
+      "signature": "dde551f34a790ca9",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 926672,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/25",
+      "name": "Regional imported scenery instances",
+      "signature": "34454dd92b8b1e10",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 926684,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/26",
+      "name": "Regional imported scenery instances",
+      "signature": "a3fa4b32efbb259d",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 926696,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/27",
+      "name": "Regional imported scenery instances",
+      "signature": "fae5f0a32e11ccc1",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 926708,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/28",
+      "name": "Regional imported scenery instances",
+      "signature": "f725e3329b81affc",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 926720,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/29",
+      "name": "Regional imported scenery instances",
+      "signature": "f482f8a1b245d448",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 926732,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/30",
+      "name": "Regional imported scenery instances",
+      "signature": "7fb05ef0786b3d28",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 926744,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/31",
+      "name": "Regional imported scenery instances",
+      "signature": "91066b879c3a928e",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 926756,
+      "byteLength": 20
+    },
+    {
+      "path": "1/1/32",
+      "name": "Regional imported scenery instances",
+      "signature": "6e08b9e44a238c3e",
+      "kind": "instances",
+      "count": 18,
+      "byteOffset": 926776,
+      "byteLength": 72
+    },
+    {
+      "path": "1/1/33",
+      "name": "Regional imported scenery instances",
+      "signature": "e43a71b95d2546d2",
+      "kind": "instances",
+      "count": 38,
+      "byteOffset": 926848,
+      "byteLength": 152
+    },
+    {
+      "path": "1/1/34",
+      "name": "Regional imported scenery instances",
+      "signature": "cb4ec1eb30947688",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 927000,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/35",
+      "name": "Regional static scenery batch",
+      "signature": "ef8aea8008ab1c35",
+      "kind": "vertices",
+      "count": 200,
+      "byteOffset": 927012,
+      "byteLength": 800
+    },
+    {
+      "path": "1/1/36",
+      "name": "Regional imported scenery instances",
+      "signature": "2aa5056d3d64a9cd",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 927812,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/37",
+      "name": "Regional imported scenery instances",
+      "signature": "2cf9537de216dc3e",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 927824,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/38",
+      "name": "Regional imported scenery instances",
+      "signature": "db3a0d34cf5e4925",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 927836,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/39",
+      "name": "Regional imported scenery instances",
+      "signature": "6647a1583e320342",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 927848,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/40",
+      "name": "Regional imported scenery instances",
+      "signature": "d068b184cd7bc7b0",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 927860,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/41",
+      "name": "Regional imported scenery instances",
+      "signature": "794fb6bb511f5146",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 927872,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/42",
+      "name": "Regional imported scenery instances",
+      "signature": "6d297bb19fe35c8f",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 927884,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/43",
+      "name": "Regional imported scenery instances",
+      "signature": "de445e496a4500d6",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 927896,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/44",
+      "name": "Regional imported scenery instances",
+      "signature": "5e5f5d6436cf8590",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 927908,
+      "byteLength": 12
+    },
+    {
+      "path": "1/1/45",
+      "name": "Regional imported scenery instances",
+      "signature": "7aaed3c7b99c7c1a",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 927920,
+      "byteLength": 12
+    },
+    {
+      "path": "2/0/1",
+      "name": "",
+      "signature": "dbf4e5c6f3cabfce",
+      "kind": "vertices",
+      "count": 1890,
+      "byteOffset": 927932,
+      "byteLength": 7560
+    },
+    {
+      "path": "2/0/3",
+      "name": "",
+      "signature": "2f29212e85948529",
+      "kind": "vertices",
+      "count": 1890,
+      "byteOffset": 935492,
+      "byteLength": 7560
+    },
+    {
+      "path": "2/0/5",
+      "name": "",
+      "signature": "40e2241c357f779e",
+      "kind": "vertices",
+      "count": 1890,
+      "byteOffset": 943052,
+      "byteLength": 7560
+    },
+    {
+      "path": "2/0/7",
+      "name": "",
+      "signature": "9697ef5f18e9b6ff",
+      "kind": "vertices",
+      "count": 1890,
+      "byteOffset": 950612,
+      "byteLength": 7560
+    },
+    {
+      "path": "3/0/0/lod0/0/0/0",
+      "name": "LanternPole_Body",
+      "signature": "c0d0f081cabd4a2e",
+      "kind": "vertices",
+      "count": 926,
+      "byteOffset": 958172,
+      "byteLength": 3704
+    },
+    {
+      "path": "3/0/0/lod0/0/0/1",
+      "name": "LanternPole_Chain",
+      "signature": "6cd915367be9165e",
+      "kind": "vertices",
+      "count": 756,
+      "byteOffset": 961876,
+      "byteLength": 3024
+    },
+    {
+      "path": "3/0/0/lod0/0/0/2",
+      "name": "LanternPole_Lantern",
+      "signature": "a92b93d3cad67d04",
+      "kind": "vertices",
+      "count": 2463,
+      "byteOffset": 964900,
+      "byteLength": 9852
+    },
+    {
+      "path": "3/1/0/lod0/0/0/0",
+      "name": "LanternPole_Body",
+      "signature": "045354511954c290",
+      "kind": "vertices",
+      "count": 926,
+      "byteOffset": 974752,
+      "byteLength": 3704
+    },
+    {
+      "path": "3/1/0/lod0/0/0/1",
+      "name": "LanternPole_Chain",
+      "signature": "25a4d12ef112dd2f",
+      "kind": "vertices",
+      "count": 756,
+      "byteOffset": 978456,
+      "byteLength": 3024
+    },
+    {
+      "path": "3/1/0/lod0/0/0/2",
+      "name": "LanternPole_Lantern",
+      "signature": "f1c0353913c1f422",
+      "kind": "vertices",
+      "count": 2463,
+      "byteOffset": 981480,
+      "byteLength": 9852
+    },
+    {
+      "path": "3/2/0",
+      "name": "",
+      "signature": "7758c6c08b1d74c9",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 991332,
+      "byteLength": 96
+    },
+    {
+      "path": "3/2/1",
+      "name": "",
+      "signature": "6a7c1a24c29918f2",
+      "kind": "vertices",
+      "count": 24,
+      "byteOffset": 991428,
+      "byteLength": 96
+    },
+    {
+      "path": "3/2/2",
+      "name": "Regional imported scenery instances",
+      "signature": "960f543de2225670",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 991524,
+      "byteLength": 20
+    },
+    {
+      "path": "3/2/3",
+      "name": "Regional imported scenery instances",
+      "signature": "925f6c3c633d5907",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 991544,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/5",
+      "name": "plant_bushDetailed",
+      "signature": "c6c90596d78a86a7",
+      "kind": "vertices",
+      "count": 232,
+      "byteOffset": 991564,
+      "byteLength": 928
+    },
+    {
+      "path": "6/143/7",
+      "name": "stk_grassAlphapng__",
+      "signature": "f83c5e11a7b77dd4",
+      "kind": "vertices",
+      "count": 64,
+      "byteOffset": 992492,
+      "byteLength": 256
+    },
+    {
+      "path": "6/143/8",
+      "name": "stk_grassAlphapng__",
+      "signature": "f65f7136a70e00db",
+      "kind": "vertices",
+      "count": 64,
+      "byteOffset": 992748,
+      "byteLength": 256
+    },
+    {
+      "path": "6/143/10",
+      "name": "stk_grassAlphapng__",
+      "signature": "c2b322c6c2129791",
+      "kind": "vertices",
+      "count": 64,
+      "byteOffset": 993004,
+      "byteLength": 256
+    },
+    {
+      "path": "6/143/11",
+      "name": "rock_tallB",
+      "signature": "828a389eec6f4922",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 993260,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/12",
+      "name": "stktex_fern_diff_apng__",
+      "signature": "cb98a1c50837b137",
+      "kind": "vertices",
+      "count": 216,
+      "byteOffset": 994468,
+      "byteLength": 864
+    },
+    {
+      "path": "6/143/13",
+      "name": "plant_bushDetailed",
+      "signature": "f7429e2264e93a70",
+      "kind": "vertices",
+      "count": 232,
+      "byteOffset": 995332,
+      "byteLength": 928
+    },
+    {
+      "path": "6/143/14",
+      "name": "Mesh_flower_purpleC",
+      "signature": "d7dd34110ffb7658",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 996260,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/15",
+      "name": "Mesh_flower_purpleC_1",
+      "signature": "19e1ac9f8b6c07da",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 996804,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/16",
+      "name": "Mesh_flower_purpleC_2",
+      "signature": "c2d0556c59b1048d",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 997348,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/18",
+      "name": "rock_tallB",
+      "signature": "d9767fd1d0509d8a",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 997892,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/19",
+      "name": "stktex_fern_diff_apng__",
+      "signature": "8d63a06fd0bed5c8",
+      "kind": "vertices",
+      "count": 216,
+      "byteOffset": 999100,
+      "byteLength": 864
+    },
+    {
+      "path": "6/143/20",
+      "name": "plant_bushDetailed",
+      "signature": "11c04cfbd780609b",
+      "kind": "vertices",
+      "count": 232,
+      "byteOffset": 999964,
+      "byteLength": 928
+    },
+    {
+      "path": "6/143/22",
+      "name": "rock_tallB",
+      "signature": "cd1b5dedd5c02279",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1000892,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/23",
+      "name": "stktex_fern_diff_apng__",
+      "signature": "45b5b0a14297cc68",
+      "kind": "vertices",
+      "count": 216,
+      "byteOffset": 1002100,
+      "byteLength": 864
+    },
+    {
+      "path": "6/143/24",
+      "name": "stk_grassAlphapng__",
+      "signature": "42c390d83edf51c0",
+      "kind": "vertices",
+      "count": 64,
+      "byteOffset": 1002964,
+      "byteLength": 256
+    },
+    {
+      "path": "6/143/25",
+      "name": "plant_bushDetailed",
+      "signature": "c0e533c0465fafed",
+      "kind": "vertices",
+      "count": 232,
+      "byteOffset": 1003220,
+      "byteLength": 928
+    },
+    {
+      "path": "6/143/28",
+      "name": "rock_tallB",
+      "signature": "8ae012cd766a6826",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1004148,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/29",
+      "name": "stktex_fern_diff_apng__",
+      "signature": "f9c22718bf8e33ef",
+      "kind": "vertices",
+      "count": 216,
+      "byteOffset": 1005356,
+      "byteLength": 864
+    },
+    {
+      "path": "6/143/30",
+      "name": "Mesh_flower_purpleC",
+      "signature": "cd2522c7e0dd95b2",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1006220,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/31",
+      "name": "Mesh_flower_purpleC_1",
+      "signature": "1591c3116097e9b5",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1006764,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/32",
+      "name": "Mesh_flower_purpleC_2",
+      "signature": "0d6c06b2666f8a24",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1007308,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/34",
+      "name": "rock_tallB",
+      "signature": "62525bcf96d7d983",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1007852,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/35",
+      "name": "stktex_fern_diff_apng__",
+      "signature": "fb4c82f51d3ad296",
+      "kind": "vertices",
+      "count": 216,
+      "byteOffset": 1009060,
+      "byteLength": 864
+    },
+    {
+      "path": "6/143/36",
+      "name": "plant_bushDetailed",
+      "signature": "3373d77f54e720dd",
+      "kind": "vertices",
+      "count": 232,
+      "byteOffset": 1009924,
+      "byteLength": 928
+    },
+    {
+      "path": "6/143/37",
+      "name": "Mesh_flower_purpleC",
+      "signature": "1f75dcdb3c8f5c4c",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1010852,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/38",
+      "name": "Mesh_flower_purpleC_1",
+      "signature": "c6cd0eb1e41e5f31",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1011396,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/39",
+      "name": "Mesh_flower_purpleC_2",
+      "signature": "ed35d1be71099ad4",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1011940,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/40",
+      "name": "rock_tallB",
+      "signature": "bfb21b438aafbead",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1012484,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/41",
+      "name": "stktex_fern_diff_apng__",
+      "signature": "f8f8529111736d0d",
+      "kind": "vertices",
+      "count": 216,
+      "byteOffset": 1013692,
+      "byteLength": 864
+    },
+    {
+      "path": "6/143/42",
+      "name": "stk_grassAlphapng__",
+      "signature": "9399ed7cb613e7e1",
+      "kind": "vertices",
+      "count": 64,
+      "byteOffset": 1014556,
+      "byteLength": 256
+    },
+    {
+      "path": "6/143/43",
+      "name": "plant_bushDetailed",
+      "signature": "986a511c12d078e8",
+      "kind": "vertices",
+      "count": 232,
+      "byteOffset": 1014812,
+      "byteLength": 928
+    },
+    {
+      "path": "6/143/44",
+      "name": "Mesh_flower_purpleC",
+      "signature": "bbcd52afba670d3f",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1015740,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/45",
+      "name": "Mesh_flower_purpleC_1",
+      "signature": "9fcd6f85c2d9179c",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1016284,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/46",
+      "name": "Mesh_flower_purpleC_2",
+      "signature": "e4fe32ae553d081c",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1016828,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/50",
+      "name": "rock_tallB",
+      "signature": "d6b00fb06bdffc73",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1017372,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/51",
+      "name": "stktex_fern_diff_apng__",
+      "signature": "75766142500f4d04",
+      "kind": "vertices",
+      "count": 216,
+      "byteOffset": 1018580,
+      "byteLength": 864
+    },
+    {
+      "path": "6/143/52",
+      "name": "plant_bushDetailed",
+      "signature": "c1cc0e3553497d52",
+      "kind": "vertices",
+      "count": 232,
+      "byteOffset": 1019444,
+      "byteLength": 928
+    },
+    {
+      "path": "6/143/56",
+      "name": "Mesh_flower_purpleC",
+      "signature": "d506ece4cc5c48e5",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1020372,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/57",
+      "name": "Mesh_flower_purpleC_1",
+      "signature": "68201726b7e6acee",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1020916,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/58",
+      "name": "Mesh_flower_purpleC_2",
+      "signature": "b60e05b12025cd3b",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1021460,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/61",
+      "name": "rock_tallB",
+      "signature": "7b30b98df346a66f",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1022004,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/62",
+      "name": "stktex_fern_diff_apng__",
+      "signature": "825dc35d15bcca49",
+      "kind": "vertices",
+      "count": 216,
+      "byteOffset": 1023212,
+      "byteLength": 864
+    },
+    {
+      "path": "6/143/63",
+      "name": "stk_grassAlphapng__",
+      "signature": "1b993cbc040c39f3",
+      "kind": "vertices",
+      "count": 64,
+      "byteOffset": 1024076,
+      "byteLength": 256
+    },
+    {
+      "path": "6/143/64",
+      "name": "plant_bushDetailed",
+      "signature": "5538deb9141a0823",
+      "kind": "vertices",
+      "count": 232,
+      "byteOffset": 1024332,
+      "byteLength": 928
+    },
+    {
+      "path": "6/143/65",
+      "name": "Mesh_flower_purpleC",
+      "signature": "bfa5b928d4e42360",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1025260,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/66",
+      "name": "Mesh_flower_purpleC_1",
+      "signature": "7f6e35262c340c62",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1025804,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/67",
+      "name": "Mesh_flower_purpleC_2",
+      "signature": "ecdb046147c8dca8",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1026348,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/68",
+      "name": "rock_tallB",
+      "signature": "58334e4548ad0cdf",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1026892,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/69",
+      "name": "stktex_fern_diff_apng__",
+      "signature": "c530457b7af13bb1",
+      "kind": "vertices",
+      "count": 216,
+      "byteOffset": 1028100,
+      "byteLength": 864
+    },
+    {
+      "path": "6/143/70",
+      "name": "plant_bushDetailed",
+      "signature": "42b7ecb56188a607",
+      "kind": "vertices",
+      "count": 232,
+      "byteOffset": 1028964,
+      "byteLength": 928
+    },
+    {
+      "path": "6/143/71",
+      "name": "Mesh_flower_purpleC",
+      "signature": "b58f60b4bdbc4a7f",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1029892,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/72",
+      "name": "Mesh_flower_purpleC_1",
+      "signature": "4a1e056ed5439f19",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1030436,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/73",
+      "name": "Mesh_flower_purpleC_2",
+      "signature": "3dd1a4054b47cb57",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1030980,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/75",
+      "name": "plant_bushDetailed",
+      "signature": "20ff3f8bcbe373ab",
+      "kind": "vertices",
+      "count": 232,
+      "byteOffset": 1031524,
+      "byteLength": 928
+    },
+    {
+      "path": "6/143/77",
+      "name": "rock_tallB",
+      "signature": "d71d832cef60b0af",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1032452,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/78",
+      "name": "stktex_fern_diff_apng__",
+      "signature": "4774dce411258365",
+      "kind": "vertices",
+      "count": 216,
+      "byteOffset": 1033660,
+      "byteLength": 864
+    },
+    {
+      "path": "6/143/79",
+      "name": "stk_grassAlphapng__",
+      "signature": "c846d5004ca9a47d",
+      "kind": "vertices",
+      "count": 64,
+      "byteOffset": 1034524,
+      "byteLength": 256
+    },
+    {
+      "path": "6/143/80",
+      "name": "Mesh_flower_purpleC",
+      "signature": "161ab4a8d74ec893",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1034780,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/81",
+      "name": "Mesh_flower_purpleC_1",
+      "signature": "32830e9af60401d4",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1035324,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/82",
+      "name": "Mesh_flower_purpleC_2",
+      "signature": "7c009d4971b54003",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1035868,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/84",
+      "name": "rock_tallB",
+      "signature": "e1cc1d6c3dd31479",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1036412,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/85",
+      "name": "stktex_fern_diff_apng__",
+      "signature": "0ccc7f1c7afec95b",
+      "kind": "vertices",
+      "count": 216,
+      "byteOffset": 1037620,
+      "byteLength": 864
+    },
+    {
+      "path": "6/143/86",
+      "name": "stk_grassAlphapng__",
+      "signature": "6959a4be80d7fda0",
+      "kind": "vertices",
+      "count": 64,
+      "byteOffset": 1038484,
+      "byteLength": 256
+    },
+    {
+      "path": "6/143/87",
+      "name": "plant_bushDetailed",
+      "signature": "1b4e3c898670408a",
+      "kind": "vertices",
+      "count": 232,
+      "byteOffset": 1038740,
+      "byteLength": 928
+    },
+    {
+      "path": "6/143/88",
+      "name": "Mesh_flower_purpleC",
+      "signature": "0245a967c59b162f",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1039668,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/89",
+      "name": "Mesh_flower_purpleC_1",
+      "signature": "95a9881146fed272",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1040212,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/90",
+      "name": "Mesh_flower_purpleC_2",
+      "signature": "b6f76c4696cfae69",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1040756,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/93",
+      "name": "rock_tallB",
+      "signature": "5c780fcc83c2a421",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1041300,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/94",
+      "name": "stktex_fern_diff_apng__",
+      "signature": "f67e15e78c76df9d",
+      "kind": "vertices",
+      "count": 216,
+      "byteOffset": 1042508,
+      "byteLength": 864
+    },
+    {
+      "path": "6/143/95",
+      "name": "stk_grassAlphapng__",
+      "signature": "83ed848501a22ddf",
+      "kind": "vertices",
+      "count": 64,
+      "byteOffset": 1043372,
+      "byteLength": 256
+    },
+    {
+      "path": "6/143/96",
+      "name": "plant_bushDetailed",
+      "signature": "8065fb42ebc7a84a",
+      "kind": "vertices",
+      "count": 232,
+      "byteOffset": 1043628,
+      "byteLength": 928
+    },
+    {
+      "path": "6/143/101",
+      "name": "rock_tallB",
+      "signature": "7d1dd82b622ce19b",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1044556,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/102",
+      "name": "stktex_fern_diff_apng__",
+      "signature": "17fa593523f9ee5c",
+      "kind": "vertices",
+      "count": 216,
+      "byteOffset": 1045764,
+      "byteLength": 864
+    },
+    {
+      "path": "6/143/103",
+      "name": "stk_grassAlphapng__",
+      "signature": "14c24baa58b2206f",
+      "kind": "vertices",
+      "count": 64,
+      "byteOffset": 1046628,
+      "byteLength": 256
+    },
+    {
+      "path": "6/143/104",
+      "name": "plant_bushDetailed",
+      "signature": "c13f748b5afe24f1",
+      "kind": "vertices",
+      "count": 232,
+      "byteOffset": 1046884,
+      "byteLength": 928
+    },
+    {
+      "path": "6/143/105",
+      "name": "Mesh_flower_purpleC",
+      "signature": "e4dd151dcd4f81b9",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1047812,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/106",
+      "name": "Mesh_flower_purpleC_1",
+      "signature": "bd502217017fb5b6",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1048356,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/107",
+      "name": "Mesh_flower_purpleC_2",
+      "signature": "31e0d7b88cbf64d1",
+      "kind": "vertices",
+      "count": 136,
+      "byteOffset": 1048900,
+      "byteLength": 544
+    },
+    {
+      "path": "6/143/108",
+      "name": "rock_tallB",
+      "signature": "770a5df109688088",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1049444,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/109",
+      "name": "rock_tallB",
+      "signature": "e3be7e1c2c1e2996",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1050652,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/110",
+      "name": "rock_tallB",
+      "signature": "41d03c9247998803",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1051860,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/111",
+      "name": "rock_tallB",
+      "signature": "1d1fe327965f1795",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1053068,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/112",
+      "name": "rock_tallB",
+      "signature": "4fe7bf2de9a2dee6",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1054276,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/113",
+      "name": "rock_tallB",
+      "signature": "efce23184cfa208f",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1055484,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/114",
+      "name": "rock_tallB",
+      "signature": "87c34ec6eb0026fe",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1056692,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/115",
+      "name": "rock_tallB",
+      "signature": "3c6700b2d747dedd",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1057900,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/116",
+      "name": "rock_tallB",
+      "signature": "febe46ad0dde74be",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1059108,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/117",
+      "name": "rock_tallB",
+      "signature": "381b22a53427c3b1",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1060316,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/118",
+      "name": "rock_tallB",
+      "signature": "92f9b512b2f9d24e",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1061524,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/119",
+      "name": "rock_tallB",
+      "signature": "9368ebf6a1b2c216",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1062732,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/120",
+      "name": "rock_tallB",
+      "signature": "cd28a8717adf3c3e",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1063940,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/121",
+      "name": "rock_tallB",
+      "signature": "22f8051c46eef7dd",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1065148,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/122",
+      "name": "rock_tallB",
+      "signature": "b5d4b792a5d0d184",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1066356,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/123",
+      "name": "rock_tallB",
+      "signature": "ffa27827d68428fa",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1067564,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/124",
+      "name": "rock_tallB",
+      "signature": "769b252d546bcc31",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1068772,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/125",
+      "name": "rock_tallB",
+      "signature": "1a6a87180e0228e2",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1069980,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/126",
+      "name": "rock_tallB",
+      "signature": "0857abc615ec1201",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1071188,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/127",
+      "name": "rock_tallB",
+      "signature": "11ca9cb2c2738533",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1072396,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/128",
+      "name": "rock_tallB",
+      "signature": "2571acad1a3dabcb",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1073604,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/129",
+      "name": "rock_tallB",
+      "signature": "6edddfa50bbcf6cd",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1074812,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/130",
+      "name": "rock_tallB",
+      "signature": "06fe30120515a6a7",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1076020,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/131",
+      "name": "rock_tallB",
+      "signature": "7e9264f6bb2ba308",
+      "kind": "vertices",
+      "count": 302,
+      "byteOffset": 1077228,
+      "byteLength": 1208
+    },
+    {
+      "path": "6/143/132",
+      "name": "Regional static scenery batch",
+      "signature": "4f6f8a69a9dfb61b",
+      "kind": "vertices",
+      "count": 604,
+      "byteOffset": 1078436,
+      "byteLength": 2416
+    },
+    {
+      "path": "6/143/133",
+      "name": "Regional static scenery batch",
+      "signature": "98f1493617c9bf85",
+      "kind": "vertices",
+      "count": 432,
+      "byteOffset": 1080852,
+      "byteLength": 1728
+    },
+    {
+      "path": "6/143/134",
+      "name": "Regional static scenery batch",
+      "signature": "aed7ddf23debe153",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1082580,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/135",
+      "name": "Regional static scenery batch",
+      "signature": "d92d60f8fbdf24ad",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1083092,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/136",
+      "name": "Regional static scenery batch",
+      "signature": "578d973c9ba4dc0b",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1084948,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/137",
+      "name": "Regional static scenery batch",
+      "signature": "30d341453b0cd573",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1086036,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/138",
+      "name": "Regional static scenery batch",
+      "signature": "30a808af46d475f9",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1087124,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/139",
+      "name": "Regional static scenery batch",
+      "signature": "efaa814fa9fbcd21",
+      "kind": "vertices",
+      "count": 604,
+      "byteOffset": 1088212,
+      "byteLength": 2416
+    },
+    {
+      "path": "6/143/140",
+      "name": "Regional static scenery batch",
+      "signature": "c2036e68869e76d7",
+      "kind": "vertices",
+      "count": 432,
+      "byteOffset": 1090628,
+      "byteLength": 1728
+    },
+    {
+      "path": "6/143/141",
+      "name": "Regional static scenery batch",
+      "signature": "5a51bee649931003",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1092356,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/142",
+      "name": "Regional static scenery batch",
+      "signature": "e2a69623a7575b2c",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1092868,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/143",
+      "name": "Regional static scenery batch",
+      "signature": "fdfdf3d595242fbe",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1094724,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/144",
+      "name": "Regional static scenery batch",
+      "signature": "e92d6f5a2f880505",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1095812,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/145",
+      "name": "Regional static scenery batch",
+      "signature": "b9f79bf3d7744773",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1096900,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/146",
+      "name": "Regional static scenery batch",
+      "signature": "3c320717af613939",
+      "kind": "vertices",
+      "count": 604,
+      "byteOffset": 1097988,
+      "byteLength": 2416
+    },
+    {
+      "path": "6/143/147",
+      "name": "Regional static scenery batch",
+      "signature": "51f1bbc2c991d0aa",
+      "kind": "vertices",
+      "count": 432,
+      "byteOffset": 1100404,
+      "byteLength": 1728
+    },
+    {
+      "path": "6/143/148",
+      "name": "Regional imported scenery instances",
+      "signature": "645d7ab6eab438e4",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1102132,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/149",
+      "name": "Regional static scenery batch",
+      "signature": "ce0200993b3fb83f",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1102144,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/150",
+      "name": "Regional static scenery batch",
+      "signature": "a70301800ec021b4",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1104000,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/151",
+      "name": "Regional static scenery batch",
+      "signature": "e76d4bd8485312c9",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1105088,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/152",
+      "name": "Regional static scenery batch",
+      "signature": "a294302b23a54774",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1106176,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/153",
+      "name": "Regional static scenery batch",
+      "signature": "19a4dd3f9eb95d65",
+      "kind": "vertices",
+      "count": 604,
+      "byteOffset": 1107264,
+      "byteLength": 2416
+    },
+    {
+      "path": "6/143/154",
+      "name": "Regional static scenery batch",
+      "signature": "aa9c5fcb349a9467",
+      "kind": "vertices",
+      "count": 432,
+      "byteOffset": 1109680,
+      "byteLength": 1728
+    },
+    {
+      "path": "6/143/155",
+      "name": "Regional static scenery batch",
+      "signature": "6cfa161d97528d13",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1111408,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/156",
+      "name": "Regional static scenery batch",
+      "signature": "d33b9554a4b02af8",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1111920,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/157",
+      "name": "Regional static scenery batch",
+      "signature": "bfdbb3665e06ac0a",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1113776,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/158",
+      "name": "Regional static scenery batch",
+      "signature": "40fb6553c1fb65fb",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1114864,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/159",
+      "name": "Regional static scenery batch",
+      "signature": "f6ce72772acef4f3",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1115952,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/160",
+      "name": "Regional imported scenery instances",
+      "signature": "3f9e2ed5f69a05df",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1117040,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/161",
+      "name": "Regional imported scenery instances",
+      "signature": "5a91a364bce0b20d",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1117052,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/162",
+      "name": "Regional imported scenery instances",
+      "signature": "daf25245006b316b",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1117064,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/163",
+      "name": "Regional imported scenery instances",
+      "signature": "2d4a881e741c8678",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1117076,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/164",
+      "name": "Regional imported scenery instances",
+      "signature": "71885198f9825c26",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1117088,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/165",
+      "name": "Regional imported scenery instances",
+      "signature": "5beb05bbad97d1b8",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1117100,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/166",
+      "name": "Regional static scenery batch",
+      "signature": "4315c8b0776a1d8d",
+      "kind": "vertices",
+      "count": 604,
+      "byteOffset": 1117112,
+      "byteLength": 2416
+    },
+    {
+      "path": "6/143/167",
+      "name": "Regional static scenery batch",
+      "signature": "5955e47ec8423495",
+      "kind": "vertices",
+      "count": 432,
+      "byteOffset": 1119528,
+      "byteLength": 1728
+    },
+    {
+      "path": "6/143/168",
+      "name": "Regional static scenery batch",
+      "signature": "57bf984aff7add8e",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1121256,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/169",
+      "name": "Regional static scenery batch",
+      "signature": "2e2964b78a9943d8",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1121768,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/170",
+      "name": "Regional static scenery batch",
+      "signature": "e660da9839cd6e9b",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1123624,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/171",
+      "name": "Regional static scenery batch",
+      "signature": "16f9caa2ebae1608",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1124712,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/172",
+      "name": "Regional static scenery batch",
+      "signature": "7d0d91506cf660a7",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1125800,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/173",
+      "name": "Regional static scenery batch",
+      "signature": "44a550eb18acff6f",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1126888,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/174",
+      "name": "Regional imported scenery instances",
+      "signature": "5dddc607abd7fc1a",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1127400,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/175",
+      "name": "Regional imported scenery instances",
+      "signature": "7d11184f94e5b42c",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1127412,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/176",
+      "name": "Regional imported scenery instances",
+      "signature": "d23d3023cf274b79",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1127424,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/177",
+      "name": "Regional static scenery batch",
+      "signature": "42159188aea9bb64",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1127436,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/178",
+      "name": "Regional static scenery batch",
+      "signature": "437cfa09e1db6c79",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1129292,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/179",
+      "name": "Regional static scenery batch",
+      "signature": "bae98c195502bf2d",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1130380,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/180",
+      "name": "Regional static scenery batch",
+      "signature": "85f971f044acda8c",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1131468,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/181",
+      "name": "Regional static scenery batch",
+      "signature": "f43d83851e27c2b2",
+      "kind": "vertices",
+      "count": 604,
+      "byteOffset": 1132556,
+      "byteLength": 2416
+    },
+    {
+      "path": "6/143/182",
+      "name": "Regional static scenery batch",
+      "signature": "55dc284e04b76cd5",
+      "kind": "vertices",
+      "count": 432,
+      "byteOffset": 1134972,
+      "byteLength": 1728
+    },
+    {
+      "path": "6/143/183",
+      "name": "Regional static scenery batch",
+      "signature": "68754227f4659c14",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1136700,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/184",
+      "name": "Regional static scenery batch",
+      "signature": "bb3f7fdd79e0faaf",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1137212,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/185",
+      "name": "Regional imported scenery instances",
+      "signature": "42fea2438cacc404",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1139068,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/186",
+      "name": "Regional imported scenery instances",
+      "signature": "62c0b5c9e3a770ac",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1139080,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/187",
+      "name": "Regional imported scenery instances",
+      "signature": "09dd591a4324de11",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1139092,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/188",
+      "name": "Regional static scenery batch",
+      "signature": "f4d8d90e65a3d39f",
+      "kind": "vertices",
+      "count": 604,
+      "byteOffset": 1139104,
+      "byteLength": 2416
+    },
+    {
+      "path": "6/143/189",
+      "name": "Regional static scenery batch",
+      "signature": "01c6e0fa58d3cdfb",
+      "kind": "vertices",
+      "count": 432,
+      "byteOffset": 1141520,
+      "byteLength": 1728
+    },
+    {
+      "path": "6/143/190",
+      "name": "Regional static scenery batch",
+      "signature": "179029660d4792ad",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1143248,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/191",
+      "name": "Regional static scenery batch",
+      "signature": "1ee7f4b1ef1fc5df",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1145104,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/192",
+      "name": "Regional static scenery batch",
+      "signature": "30ef3502beb8e4de",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1146192,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/193",
+      "name": "Regional static scenery batch",
+      "signature": "3c5040f404ebee5b",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1147280,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/194",
+      "name": "Regional imported scenery instances",
+      "signature": "6d63de93ebde0be2",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1148368,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/195",
+      "name": "Regional imported scenery instances",
+      "signature": "1b4acb185291f22d",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1148388,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/196",
+      "name": "Regional imported scenery instances",
+      "signature": "9b93767acaa454ea",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1148408,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/197",
+      "name": "Regional imported scenery instances",
+      "signature": "d4a638ebaf28596c",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1148428,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/198",
+      "name": "Regional imported scenery instances",
+      "signature": "b65cfafdecf70127",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1148444,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/199",
+      "name": "Regional imported scenery instances",
+      "signature": "df9105b6ef53d075",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1148460,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/200",
+      "name": "Regional imported scenery instances",
+      "signature": "13f83a5cc39b2231",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1148476,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/201",
+      "name": "Regional static scenery batch",
+      "signature": "2acbaf8f87528888",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1148492,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/202",
+      "name": "Regional imported scenery instances",
+      "signature": "5f224d0cf3b387f9",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1149004,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/203",
+      "name": "Regional imported scenery instances",
+      "signature": "f452d73adeb40be6",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1149016,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/204",
+      "name": "Regional imported scenery instances",
+      "signature": "8916246576ef68d1",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1149028,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/205",
+      "name": "Regional imported scenery instances",
+      "signature": "f82fd84394b74611",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1149040,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/206",
+      "name": "Regional imported scenery instances",
+      "signature": "12cd5a286ea0cd01",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1149052,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/207",
+      "name": "Regional imported scenery instances",
+      "signature": "be66ece44ee88050",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1149064,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/208",
+      "name": "Regional static scenery batch",
+      "signature": "69c052ea3b0a12fc",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1149076,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/209",
+      "name": "Regional imported scenery instances",
+      "signature": "e602e4b37733e548",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1150932,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/210",
+      "name": "Regional imported scenery instances",
+      "signature": "c63a17f9d38c39d9",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1150948,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/211",
+      "name": "Regional imported scenery instances",
+      "signature": "10a9d2c652680bfa",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1150964,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/212",
+      "name": "Regional imported scenery instances",
+      "signature": "54637c07c7db30fb",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1150980,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/213",
+      "name": "Regional imported scenery instances",
+      "signature": "a327ce79b332cb2f",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1151000,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/214",
+      "name": "Regional imported scenery instances",
+      "signature": "04d457a5a6c06717",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1151020,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/215",
+      "name": "Regional imported scenery instances",
+      "signature": "f87848953eff3d86",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1151040,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/216",
+      "name": "Regional static scenery batch",
+      "signature": "fa61f246894a4b42",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1151056,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/217",
+      "name": "Regional imported scenery instances",
+      "signature": "318bd2d913e22043",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1152912,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/218",
+      "name": "Regional imported scenery instances",
+      "signature": "4389205fe00dfa38",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1152928,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/219",
+      "name": "Regional imported scenery instances",
+      "signature": "94e48738883a0ef2",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1152944,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/220",
+      "name": "Regional static scenery batch",
+      "signature": "44b0161a032620c2",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1152960,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/221",
+      "name": "Regional imported scenery instances",
+      "signature": "94349487fdcf5981",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1153472,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/222",
+      "name": "Regional imported scenery instances",
+      "signature": "46beae7a3f53385b",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1153492,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/223",
+      "name": "Regional imported scenery instances",
+      "signature": "d96838a800bb72f8",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1153508,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/224",
+      "name": "Regional imported scenery instances",
+      "signature": "93f0a4a879e77dfb",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1153524,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/225",
+      "name": "Regional imported scenery instances",
+      "signature": "a620d6b9f7ba6157",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1153544,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/226",
+      "name": "Regional imported scenery instances",
+      "signature": "df4f3fef51d33db3",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1153556,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/227",
+      "name": "Regional imported scenery instances",
+      "signature": "35468bc079ce13c4",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1153568,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/228",
+      "name": "Regional imported scenery instances",
+      "signature": "6132e10247deec6d",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1153580,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/229",
+      "name": "Regional imported scenery instances",
+      "signature": "ad2f91140cd4e6f0",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1153600,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/230",
+      "name": "Regional imported scenery instances",
+      "signature": "a70999b8ae742ae3",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1153620,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/231",
+      "name": "Regional imported scenery instances",
+      "signature": "c2f2f083be842191",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1153640,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/232",
+      "name": "Regional imported scenery instances",
+      "signature": "5832f20acfb5a8b3",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1153660,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/233",
+      "name": "Regional imported scenery instances",
+      "signature": "47dc3d7c93858b62",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1153676,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/234",
+      "name": "Regional imported scenery instances",
+      "signature": "d6c551333a8198fa",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1153692,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/235",
+      "name": "Regional static scenery batch",
+      "signature": "7a862497af443721",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1153708,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/236",
+      "name": "Regional static scenery batch",
+      "signature": "c20c3516c3ee178e",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1154796,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/237",
+      "name": "Regional static scenery batch",
+      "signature": "b1ecda1128889dd8",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1155884,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/238",
+      "name": "Regional imported scenery instances",
+      "signature": "a2fcfa3061a849b1",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1156972,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/239",
+      "name": "Regional imported scenery instances",
+      "signature": "4fee61cfd353f098",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1156988,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/240",
+      "name": "Regional imported scenery instances",
+      "signature": "1a0f1ca2677472be",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1157004,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/241",
+      "name": "Regional imported scenery instances",
+      "signature": "9474fb6072c14c89",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1157020,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/242",
+      "name": "Regional static scenery batch",
+      "signature": "a0280cd3d1a20e3f",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1157032,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/243",
+      "name": "Regional static scenery batch",
+      "signature": "14a87515e5c75739",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1158120,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/244",
+      "name": "Regional static scenery batch",
+      "signature": "18595ce5c7b7fad6",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1159208,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/245",
+      "name": "Regional static scenery batch",
+      "signature": "aaafbe6c97725b27",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1160296,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/246",
+      "name": "Regional imported scenery instances",
+      "signature": "49f95ee4d167739d",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1160808,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/247",
+      "name": "Regional imported scenery instances",
+      "signature": "4bff5d918a63b34b",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1160820,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/248",
+      "name": "Regional imported scenery instances",
+      "signature": "c185c6556fa1477e",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1160832,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/249",
+      "name": "Regional imported scenery instances",
+      "signature": "8731ec36519115dc",
+      "kind": "instances",
+      "count": 7,
+      "byteOffset": 1160848,
+      "byteLength": 28
+    },
+    {
+      "path": "6/143/250",
+      "name": "Regional imported scenery instances",
+      "signature": "8b59a324e23554ce",
+      "kind": "instances",
+      "count": 7,
+      "byteOffset": 1160876,
+      "byteLength": 28
+    },
+    {
+      "path": "6/143/251",
+      "name": "Regional imported scenery instances",
+      "signature": "c5331df3a9483ebc",
+      "kind": "instances",
+      "count": 7,
+      "byteOffset": 1160904,
+      "byteLength": 28
+    },
+    {
+      "path": "6/143/252",
+      "name": "Regional static scenery batch",
+      "signature": "e4ec038876edaa2c",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1160932,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/253",
+      "name": "Regional static scenery batch",
+      "signature": "ddddcae88bc1e17a",
+      "kind": "vertices",
+      "count": 604,
+      "byteOffset": 1161444,
+      "byteLength": 2416
+    },
+    {
+      "path": "6/143/254",
+      "name": "Regional static scenery batch",
+      "signature": "59ac657cc15ed1fb",
+      "kind": "vertices",
+      "count": 432,
+      "byteOffset": 1163860,
+      "byteLength": 1728
+    },
+    {
+      "path": "6/143/255",
+      "name": "Regional static scenery batch",
+      "signature": "35fc2f413e43881e",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1165588,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/256",
+      "name": "Regional static scenery batch",
+      "signature": "7d41ec72fb7bf935",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1166100,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/257",
+      "name": "Regional static scenery batch",
+      "signature": "3a6f3e1cdc8fa3b6",
+      "kind": "vertices",
+      "count": 604,
+      "byteOffset": 1167956,
+      "byteLength": 2416
+    },
+    {
+      "path": "6/143/258",
+      "name": "Regional static scenery batch",
+      "signature": "94a39568c4ab6a6b",
+      "kind": "vertices",
+      "count": 432,
+      "byteOffset": 1170372,
+      "byteLength": 1728
+    },
+    {
+      "path": "6/143/259",
+      "name": "Regional static scenery batch",
+      "signature": "04de7e5eced8448a",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1172100,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/260",
+      "name": "Regional static scenery batch",
+      "signature": "b370dfe71d23d66c",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1172612,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/261",
+      "name": "Regional static scenery batch",
+      "signature": "fb2a2b0805b281ab",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1174468,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/262",
+      "name": "Regional static scenery batch",
+      "signature": "2f538f7bbac83d93",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1175556,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/263",
+      "name": "Regional static scenery batch",
+      "signature": "d9703d6e2052d51a",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1176644,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/264",
+      "name": "Regional static scenery batch",
+      "signature": "c78b1ac2286cdbe9",
+      "kind": "vertices",
+      "count": 604,
+      "byteOffset": 1177732,
+      "byteLength": 2416
+    },
+    {
+      "path": "6/143/265",
+      "name": "Regional static scenery batch",
+      "signature": "f6ddfdd8fcce437e",
+      "kind": "vertices",
+      "count": 432,
+      "byteOffset": 1180148,
+      "byteLength": 1728
+    },
+    {
+      "path": "6/143/266",
+      "name": "Regional static scenery batch",
+      "signature": "8b9aefe4e54189ee",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1181876,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/267",
+      "name": "Regional static scenery batch",
+      "signature": "6a57dca60ef16b4a",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1182388,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/268",
+      "name": "Regional static scenery batch",
+      "signature": "008ddea5b24ee647",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1184244,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/269",
+      "name": "Regional static scenery batch",
+      "signature": "3466d9f187ce549c",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1185332,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/270",
+      "name": "Regional static scenery batch",
+      "signature": "3559394eaad6933a",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1186420,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/271",
+      "name": "Regional static scenery batch",
+      "signature": "0b6a2d7bcc201e55",
+      "kind": "vertices",
+      "count": 604,
+      "byteOffset": 1187508,
+      "byteLength": 2416
+    },
+    {
+      "path": "6/143/272",
+      "name": "Regional static scenery batch",
+      "signature": "4f95f739211816aa",
+      "kind": "vertices",
+      "count": 432,
+      "byteOffset": 1189924,
+      "byteLength": 1728
+    },
+    {
+      "path": "6/143/273",
+      "name": "Regional static scenery batch",
+      "signature": "54c3c537f3561aea",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1191652,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/274",
+      "name": "Regional static scenery batch",
+      "signature": "def2816b7dd4eb09",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1192164,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/275",
+      "name": "Regional static scenery batch",
+      "signature": "9c09440c479da427",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1193252,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/276",
+      "name": "Regional static scenery batch",
+      "signature": "d5b8629085b8a53a",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1194340,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/277",
+      "name": "Regional imported scenery instances",
+      "signature": "7a120c29eb5abb40",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1195428,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/278",
+      "name": "Regional imported scenery instances",
+      "signature": "a14cb3f4d5a7cd7b",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1195448,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/279",
+      "name": "Regional imported scenery instances",
+      "signature": "1986fdc530491f69",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1195468,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/280",
+      "name": "Regional imported scenery instances",
+      "signature": "1c2e9fcab3b83318",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1195488,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/281",
+      "name": "Regional imported scenery instances",
+      "signature": "55783f9273c48acb",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1195508,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/282",
+      "name": "Regional imported scenery instances",
+      "signature": "7612d75884b85c0a",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1195524,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/283",
+      "name": "Regional imported scenery instances",
+      "signature": "0653bcbb28cebafe",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1195540,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/284",
+      "name": "Regional static scenery batch",
+      "signature": "d55fa01066d40178",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1195556,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/285",
+      "name": "Regional imported scenery instances",
+      "signature": "87d1a0736e19523b",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1197412,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/286",
+      "name": "Regional imported scenery instances",
+      "signature": "a26729b3804db650",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1197432,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/287",
+      "name": "Regional imported scenery instances",
+      "signature": "a57c9a39a98abe64",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1197452,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/288",
+      "name": "Regional imported scenery instances",
+      "signature": "d7e3b428d34b7b64",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1197472,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/289",
+      "name": "Regional imported scenery instances",
+      "signature": "39ff357ff90e1eae",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1197492,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/290",
+      "name": "Regional imported scenery instances",
+      "signature": "5f105a2d4d2295e1",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1197508,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/291",
+      "name": "Regional imported scenery instances",
+      "signature": "1608eee23b73f564",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1197524,
+      "byteLength": 16
+    },
+    {
+      "path": "6/143/292",
+      "name": "Regional static scenery batch",
+      "signature": "a19cf37b3c9f7fd0",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1197540,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/293",
+      "name": "Regional static scenery batch",
+      "signature": "060eae802f293654",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1198628,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/294",
+      "name": "Regional static scenery batch",
+      "signature": "6db763b6a307b06a",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1199716,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/295",
+      "name": "Regional imported scenery instances",
+      "signature": "f46083d193510de8",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1200804,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/296",
+      "name": "Regional imported scenery instances",
+      "signature": "3a31919bd7645991",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1200824,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/297",
+      "name": "Regional imported scenery instances",
+      "signature": "4e7d322bf3576c36",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1200844,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/298",
+      "name": "Regional imported scenery instances",
+      "signature": "72652a19fcdee221",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1200864,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/299",
+      "name": "Regional imported scenery instances",
+      "signature": "1617980a565cd9fb",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1200884,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/300",
+      "name": "Regional imported scenery instances",
+      "signature": "e640615064910ccc",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1200904,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/301",
+      "name": "Regional imported scenery instances",
+      "signature": "9b2ea1d7278fc95b",
+      "kind": "instances",
+      "count": 5,
+      "byteOffset": 1200924,
+      "byteLength": 20
+    },
+    {
+      "path": "6/143/302",
+      "name": "Regional imported scenery instances",
+      "signature": "4803767d901479e2",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1200944,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/303",
+      "name": "Regional imported scenery instances",
+      "signature": "b9d1396bdbeb052f",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1200956,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/304",
+      "name": "Regional imported scenery instances",
+      "signature": "10a15aa493c3c094",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1200968,
+      "byteLength": 12
+    },
+    {
+      "path": "6/143/305",
+      "name": "Regional static scenery batch",
+      "signature": "25558de473aec455",
+      "kind": "vertices",
+      "count": 604,
+      "byteOffset": 1200980,
+      "byteLength": 2416
+    },
+    {
+      "path": "6/143/306",
+      "name": "Regional static scenery batch",
+      "signature": "9ed87d1217918e46",
+      "kind": "vertices",
+      "count": 432,
+      "byteOffset": 1203396,
+      "byteLength": 1728
+    },
+    {
+      "path": "6/143/307",
+      "name": "Regional static scenery batch",
+      "signature": "39383aedf886665b",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1205124,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/308",
+      "name": "Regional static scenery batch",
+      "signature": "642c998437bbfbc0",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1205636,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/309",
+      "name": "Regional static scenery batch",
+      "signature": "3c3678e64b4c0f1d",
+      "kind": "vertices",
+      "count": 604,
+      "byteOffset": 1207492,
+      "byteLength": 2416
+    },
+    {
+      "path": "6/143/310",
+      "name": "Regional static scenery batch",
+      "signature": "9da60c82ff82b322",
+      "kind": "vertices",
+      "count": 432,
+      "byteOffset": 1209908,
+      "byteLength": 1728
+    },
+    {
+      "path": "6/143/311",
+      "name": "Regional static scenery batch",
+      "signature": "233838e91bafa1ff",
+      "kind": "vertices",
+      "count": 128,
+      "byteOffset": 1211636,
+      "byteLength": 512
+    },
+    {
+      "path": "6/143/312",
+      "name": "Regional static scenery batch",
+      "signature": "211b1c7bd7b67b94",
+      "kind": "vertices",
+      "count": 464,
+      "byteOffset": 1212148,
+      "byteLength": 1856
+    },
+    {
+      "path": "6/143/313",
+      "name": "Regional static scenery batch",
+      "signature": "ba24f4428ba5b331",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1214004,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/314",
+      "name": "Regional static scenery batch",
+      "signature": "b206f6a6ede56558",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1215092,
+      "byteLength": 1088
+    },
+    {
+      "path": "6/143/315",
+      "name": "Regional static scenery batch",
+      "signature": "d8e256c1631f48b0",
+      "kind": "vertices",
+      "count": 272,
+      "byteOffset": 1216180,
+      "byteLength": 1088
+    },
+    {
+      "path": "7/20/1",
+      "name": "",
+      "signature": "b7886fe31f9589b0",
+      "kind": "vertices",
+      "count": 4326,
+      "byteOffset": 1217268,
+      "byteLength": 17304
+    },
+    {
+      "path": "7/20/5",
+      "name": "",
+      "signature": "9f7a48c7dff8b378",
+      "kind": "vertices",
+      "count": 4326,
+      "byteOffset": 1234572,
+      "byteLength": 17304
+    },
+    {
+      "path": "7/20/9",
+      "name": "",
+      "signature": "441b3d6683ba25d1",
+      "kind": "vertices",
+      "count": 4326,
+      "byteOffset": 1251876,
+      "byteLength": 17304
+    },
+    {
+      "path": "7/20/10",
+      "name": "",
+      "signature": "73c2061c971abeb0",
+      "kind": "vertices",
+      "count": 23,
+      "byteOffset": 1269180,
+      "byteLength": 92
+    },
+    {
+      "path": "7/20/14",
+      "name": "",
+      "signature": "f70060f16fdfc590",
+      "kind": "vertices",
+      "count": 228,
+      "byteOffset": 1269272,
+      "byteLength": 912
+    },
+    {
+      "path": "7/20/15",
+      "name": "",
+      "signature": "2a44b297b355485e",
+      "kind": "vertices",
+      "count": 63,
+      "byteOffset": 1270184,
+      "byteLength": 252
+    },
+    {
+      "path": "7/20/16",
+      "name": "",
+      "signature": "67658daeaf114d60",
+      "kind": "vertices",
+      "count": 228,
+      "byteOffset": 1270436,
+      "byteLength": 912
+    },
+    {
+      "path": "7/20/17",
+      "name": "",
+      "signature": "ffc640b74979a963",
+      "kind": "vertices",
+      "count": 63,
+      "byteOffset": 1271348,
+      "byteLength": 252
+    },
+    {
+      "path": "7/20/18",
+      "name": "",
+      "signature": "9cec7f9d062a327a",
+      "kind": "vertices",
+      "count": 228,
+      "byteOffset": 1271600,
+      "byteLength": 912
+    },
+    {
+      "path": "7/20/19",
+      "name": "",
+      "signature": "40eb5237a1e56be9",
+      "kind": "vertices",
+      "count": 228,
+      "byteOffset": 1272512,
+      "byteLength": 912
+    },
+    {
+      "path": "7/20/20",
+      "name": "",
+      "signature": "babd1feacea9c07f",
+      "kind": "vertices",
+      "count": 63,
+      "byteOffset": 1273424,
+      "byteLength": 252
+    },
+    {
+      "path": "7/20/21",
+      "name": "",
+      "signature": "860dca1101454207",
+      "kind": "vertices",
+      "count": 228,
+      "byteOffset": 1273676,
+      "byteLength": 912
+    },
+    {
+      "path": "7/20/22",
+      "name": "",
+      "signature": "65ad51352d9426a6",
+      "kind": "vertices",
+      "count": 63,
+      "byteOffset": 1274588,
+      "byteLength": 252
+    },
+    {
+      "path": "7/20/23",
+      "name": "",
+      "signature": "aa65e72eb34e3c13",
+      "kind": "vertices",
+      "count": 228,
+      "byteOffset": 1274840,
+      "byteLength": 912
+    },
+    {
+      "path": "7/20/24",
+      "name": "",
+      "signature": "2ff835cbc9355fd9",
+      "kind": "vertices",
+      "count": 63,
+      "byteOffset": 1275752,
+      "byteLength": 252
+    },
+    {
+      "path": "7/20/25",
+      "name": "",
+      "signature": "82e179b0a1b2b34f",
+      "kind": "vertices",
+      "count": 228,
+      "byteOffset": 1276004,
+      "byteLength": 912
+    },
+    {
+      "path": "7/20/26",
+      "name": "",
+      "signature": "f9bdd264cd4c5ee8",
+      "kind": "vertices",
+      "count": 63,
+      "byteOffset": 1276916,
+      "byteLength": 252
+    },
+    {
+      "path": "7/20/27",
+      "name": "",
+      "signature": "6d5d5cc19c2a387f",
+      "kind": "vertices",
+      "count": 4326,
+      "byteOffset": 1277168,
+      "byteLength": 17304
+    },
+    {
+      "path": "7/20/29",
+      "name": "Irregular material transition outside driving edge",
+      "signature": "efecf26d5b9ab82e",
+      "kind": "vertices",
+      "count": 321,
+      "byteOffset": 1294472,
+      "byteLength": 1284
+    },
+    {
+      "path": "7/20/30",
+      "name": "Irregular material transition outside driving edge",
+      "signature": "d56472952fee7741",
+      "kind": "vertices",
+      "count": 321,
+      "byteOffset": 1295756,
+      "byteLength": 1284
+    },
+    {
+      "path": "7/20/31",
+      "name": "Irregular material transition outside driving edge",
+      "signature": "2ab2d8196b1b45da",
+      "kind": "vertices",
+      "count": 255,
+      "byteOffset": 1297040,
+      "byteLength": 1020
+    },
+    {
+      "path": "7/20/32",
+      "name": "Irregular material transition outside driving edge",
+      "signature": "b256dae6414587f5",
+      "kind": "vertices",
+      "count": 255,
+      "byteOffset": 1298060,
+      "byteLength": 1020
+    },
+    {
+      "path": "7/20/33",
+      "name": "Regional static scenery batch",
+      "signature": "2c815afc5b2d4ce0",
+      "kind": "vertices",
+      "count": 8675,
+      "byteOffset": 1299080,
+      "byteLength": 34700
+    },
+    {
+      "path": "7/20/34",
+      "name": "Regional static scenery batch",
+      "signature": "87aad5ea1a2b623d",
+      "kind": "vertices",
+      "count": 8698,
+      "byteOffset": 1333780,
+      "byteLength": 34792
+    },
+    {
+      "path": "7/20/35",
+      "name": "Regional static scenery batch",
+      "signature": "cc51781bc6ebc6a6",
+      "kind": "vertices",
+      "count": 8675,
+      "byteOffset": 1368572,
+      "byteLength": 34700
+    },
+    {
+      "path": "7/20/36",
+      "name": "Regional static scenery batch",
+      "signature": "02edb3e1c72ba27a",
+      "kind": "vertices",
+      "count": 4372,
+      "byteOffset": 1403272,
+      "byteLength": 17488
+    },
+    {
+      "path": "7/20/37",
+      "name": "Regional static scenery batch",
+      "signature": "c00455272f82c09d",
+      "kind": "vertices",
+      "count": 8675,
+      "byteOffset": 1420760,
+      "byteLength": 34700
+    },
+    {
+      "path": "7/20/38",
+      "name": "Regional static scenery batch",
+      "signature": "385563568536b97b",
+      "kind": "vertices",
+      "count": 8698,
+      "byteOffset": 1455460,
+      "byteLength": 34792
+    },
+    {
+      "path": "7/20/39",
+      "name": "Regional static scenery batch",
+      "signature": "3f6380a509b02db9",
+      "kind": "vertices",
+      "count": 8675,
+      "byteOffset": 1490252,
+      "byteLength": 34700
+    },
+    {
+      "path": "7/20/40",
+      "name": "Regional static scenery batch",
+      "signature": "70eb58cc671d6ad8",
+      "kind": "vertices",
+      "count": 8698,
+      "byteOffset": 1524952,
+      "byteLength": 34792
+    },
+    {
+      "path": "7/20/41",
+      "name": "Regional static scenery batch",
+      "signature": "ba61047581300eee",
+      "kind": "vertices",
+      "count": 8675,
+      "byteOffset": 1559744,
+      "byteLength": 34700
+    },
+    {
+      "path": "7/20/42",
+      "name": "Regional static scenery batch",
+      "signature": "41bb2d8e8854215e",
+      "kind": "vertices",
+      "count": 8698,
+      "byteOffset": 1594444,
+      "byteLength": 34792
+    },
+    {
+      "path": "7/20/44",
+      "name": "Regional static scenery batch",
+      "signature": "63ed792116e0e79c",
+      "kind": "vertices",
+      "count": 8675,
+      "byteOffset": 1629236,
+      "byteLength": 34700
+    },
+    {
+      "path": "7/20/45",
+      "name": "Regional static scenery batch",
+      "signature": "b1ad70162ac0de64",
+      "kind": "vertices",
+      "count": 4372,
+      "byteOffset": 1663936,
+      "byteLength": 17488
+    },
+    {
+      "path": "7/20/46",
+      "name": "Regional static scenery batch",
+      "signature": "69b9449955d1641f",
+      "kind": "vertices",
+      "count": 8675,
+      "byteOffset": 1681424,
+      "byteLength": 34700
+    },
+    {
+      "path": "7/20/47",
+      "name": "Regional static scenery batch",
+      "signature": "c2c79128ba43f119",
+      "kind": "vertices",
+      "count": 8698,
+      "byteOffset": 1716124,
+      "byteLength": 34792
+    },
+    {
+      "path": "7/20/48",
+      "name": "Regional static scenery batch",
+      "signature": "38b9c3610dbd2cd7",
+      "kind": "vertices",
+      "count": 8675,
+      "byteOffset": 1750916,
+      "byteLength": 34700
+    },
+    {
+      "path": "7/20/49",
+      "name": "Regional static scenery batch",
+      "signature": "cf82aef0bedc372c",
+      "kind": "vertices",
+      "count": 8698,
+      "byteOffset": 1785616,
+      "byteLength": 34792
+    },
+    {
+      "path": "7/20/50",
+      "name": "Regional imported scenery instances",
+      "signature": "2525849f8c7670ce",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 1820408,
+      "byteLength": 12
+    },
+    {
+      "path": "7/20/51",
+      "name": "Regional static scenery batch",
+      "signature": "2ae2b79c6a6b8637",
+      "kind": "vertices",
+      "count": 46,
+      "byteOffset": 1820420,
+      "byteLength": 184
+    },
+    {
+      "path": "7/20/52",
+      "name": "Regional imported scenery instances",
+      "signature": "215c0f04e25df98a",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1820604,
+      "byteLength": 16
+    },
+    {
+      "path": "7/20/53",
+      "name": "Regional static scenery batch",
+      "signature": "f76369d0c74c1a8a",
+      "kind": "vertices",
+      "count": 69,
+      "byteOffset": 1820620,
+      "byteLength": 276
+    },
+    {
+      "path": "7/20/55",
+      "name": "Regional static scenery batch",
+      "signature": "5d982e2b15e9ae57",
+      "kind": "vertices",
+      "count": 8675,
+      "byteOffset": 1820896,
+      "byteLength": 34700
+    },
+    {
+      "path": "7/20/56",
+      "name": "Regional static scenery batch",
+      "signature": "36bef9683cfa243e",
+      "kind": "vertices",
+      "count": 8698,
+      "byteOffset": 1855596,
+      "byteLength": 34792
+    },
+    {
+      "path": "7/20/57",
+      "name": "Regional static scenery batch",
+      "signature": "59d90189488ade66",
+      "kind": "vertices",
+      "count": 8675,
+      "byteOffset": 1890388,
+      "byteLength": 34700
+    },
+    {
+      "path": "7/20/58",
+      "name": "Regional static scenery batch",
+      "signature": "2542e966a6ef4ea2",
+      "kind": "vertices",
+      "count": 8698,
+      "byteOffset": 1925088,
+      "byteLength": 34792
+    },
+    {
+      "path": "7/20/59",
+      "name": "Regional imported scenery instances",
+      "signature": "b6d7a65238c339ae",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1959880,
+      "byteLength": 16
+    },
+    {
+      "path": "7/20/60",
+      "name": "Regional static scenery batch",
+      "signature": "9cf9fa36f92976a8",
+      "kind": "vertices",
+      "count": 46,
+      "byteOffset": 1959896,
+      "byteLength": 184
+    },
+    {
+      "path": "7/20/61",
+      "name": "Regional imported scenery instances",
+      "signature": "d300245a08509f04",
+      "kind": "instances",
+      "count": 4,
+      "byteOffset": 1960080,
+      "byteLength": 16
+    },
+    {
+      "path": "7/20/62",
+      "name": "Regional static scenery batch",
+      "signature": "02c83d027b18b426",
+      "kind": "vertices",
+      "count": 92,
+      "byteOffset": 1960096,
+      "byteLength": 368
+    },
+    {
+      "path": "7/20/64",
+      "name": "Regional static scenery batch",
+      "signature": "4954f0cae6ea3718",
+      "kind": "vertices",
+      "count": 8675,
+      "byteOffset": 1960464,
+      "byteLength": 34700
+    },
+    {
+      "path": "7/20/65",
+      "name": "Regional static scenery batch",
+      "signature": "fbca8f43b576ae99",
+      "kind": "vertices",
+      "count": 8698,
+      "byteOffset": 1995164,
+      "byteLength": 34792
+    },
+    {
+      "path": "7/20/66",
+      "name": "Regional static scenery batch",
+      "signature": "bf02dbf1c74888b3",
+      "kind": "vertices",
+      "count": 1359,
+      "byteOffset": 2029956,
+      "byteLength": 5436
+    },
+    {
+      "path": "7/20/67",
+      "name": "Regional static scenery batch",
+      "signature": "3d308376b41675bc",
+      "kind": "vertices",
+      "count": 456,
+      "byteOffset": 2035392,
+      "byteLength": 1824
+    },
+    {
+      "path": "7/20/68",
+      "name": "Regional static scenery batch",
+      "signature": "9356ee75be262dbf",
+      "kind": "vertices",
+      "count": 126,
+      "byteOffset": 2037216,
+      "byteLength": 504
+    },
+    {
+      "path": "7/20/69",
+      "name": "Regional imported scenery instances",
+      "signature": "3aa59710aee7d36a",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 2037720,
+      "byteLength": 12
+    },
+    {
+      "path": "7/20/70",
+      "name": "Regional static scenery batch",
+      "signature": "eb1b9e8e203de50d",
+      "kind": "vertices",
+      "count": 456,
+      "byteOffset": 2037732,
+      "byteLength": 1824
+    },
+    {
+      "path": "7/20/71",
+      "name": "Regional static scenery batch",
+      "signature": "641bc8e796b9f583",
+      "kind": "vertices",
+      "count": 126,
+      "byteOffset": 2039556,
+      "byteLength": 504
+    },
+    {
+      "path": "7/20/72",
+      "name": "Regional static scenery batch",
+      "signature": "526f4f394842405c",
+      "kind": "vertices",
+      "count": 1359,
+      "byteOffset": 2040060,
+      "byteLength": 5436
+    },
+    {
+      "path": "7/20/73",
+      "name": "Regional static scenery batch",
+      "signature": "af6376a3af3ad9c6",
+      "kind": "vertices",
+      "count": 456,
+      "byteOffset": 2045496,
+      "byteLength": 1824
+    },
+    {
+      "path": "7/20/74",
+      "name": "Regional static scenery batch",
+      "signature": "ef073a541da591df",
+      "kind": "vertices",
+      "count": 126,
+      "byteOffset": 2047320,
+      "byteLength": 504
+    },
+    {
+      "path": "7/20/75",
+      "name": "Regional static scenery batch",
+      "signature": "c28d89a44281ad70",
+      "kind": "vertices",
+      "count": 456,
+      "byteOffset": 2047824,
+      "byteLength": 1824
+    },
+    {
+      "path": "7/20/76",
+      "name": "Regional static scenery batch",
+      "signature": "04f235f633a64781",
+      "kind": "vertices",
+      "count": 126,
+      "byteOffset": 2049648,
+      "byteLength": 504
+    },
+    {
+      "path": "7/20/77",
+      "name": "Regional imported scenery instances",
+      "signature": "717f8574984f5715",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 2050152,
+      "byteLength": 12
+    },
+    {
+      "path": "7/20/78",
+      "name": "Regional static scenery batch",
+      "signature": "6bed586d6b828edf",
+      "kind": "vertices",
+      "count": 1233,
+      "byteOffset": 2050164,
+      "byteLength": 4932
+    },
+    {
+      "path": "7/20/79",
+      "name": "Regional imported scenery instances",
+      "signature": "385b4291eae4301f",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 2055096,
+      "byteLength": 12
+    },
+    {
+      "path": "7/20/80",
+      "name": "Regional static scenery batch",
+      "signature": "5b5fe59c6592eafb",
+      "kind": "vertices",
+      "count": 126,
+      "byteOffset": 2055108,
+      "byteLength": 504
+    },
+    {
+      "path": "7/20/81",
+      "name": "Regional static scenery batch",
+      "signature": "81038664d7ddfe02",
+      "kind": "vertices",
+      "count": 456,
+      "byteOffset": 2055612,
+      "byteLength": 1824
+    },
+    {
+      "path": "7/20/82",
+      "name": "Regional static scenery batch",
+      "signature": "9caf2a18f2e2f961",
+      "kind": "vertices",
+      "count": 126,
+      "byteOffset": 2057436,
+      "byteLength": 504
+    },
+    {
+      "path": "7/20/83",
+      "name": "Regional static scenery batch",
+      "signature": "09690087b613755a",
+      "kind": "vertices",
+      "count": 969,
+      "byteOffset": 2057940,
+      "byteLength": 3876
+    },
+    {
+      "path": "7/20/84",
+      "name": "Regional static scenery batch",
+      "signature": "f96a7dddf6311829",
+      "kind": "vertices",
+      "count": 456,
+      "byteOffset": 2061816,
+      "byteLength": 1824
+    },
+    {
+      "path": "7/20/85",
+      "name": "Regional static scenery batch",
+      "signature": "b22474e0a7bf111d",
+      "kind": "vertices",
+      "count": 126,
+      "byteOffset": 2063640,
+      "byteLength": 504
+    },
+    {
+      "path": "7/20/86",
+      "name": "Regional imported scenery instances",
+      "signature": "ac5019b959628c98",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 2064144,
+      "byteLength": 12
+    },
+    {
+      "path": "7/20/87",
+      "name": "Regional static scenery batch",
+      "signature": "6b889b07a0f52455",
+      "kind": "vertices",
+      "count": 456,
+      "byteOffset": 2064156,
+      "byteLength": 1824
+    },
+    {
+      "path": "7/20/88",
+      "name": "Regional static scenery batch",
+      "signature": "9f2d1fd3376c1a29",
+      "kind": "vertices",
+      "count": 126,
+      "byteOffset": 2065980,
+      "byteLength": 504
+    },
+    {
+      "path": "7/20/89",
+      "name": "Regional static scenery batch",
+      "signature": "195c941bf82ea3aa",
+      "kind": "vertices",
+      "count": 1296,
+      "byteOffset": 2066484,
+      "byteLength": 5184
+    },
+    {
+      "path": "7/20/90",
+      "name": "Regional static scenery batch",
+      "signature": "5c2ebcdef80ce795",
+      "kind": "vertices",
+      "count": 456,
+      "byteOffset": 2071668,
+      "byteLength": 1824
+    },
+    {
+      "path": "7/20/91",
+      "name": "Regional static scenery batch",
+      "signature": "00216d6d40652c69",
+      "kind": "vertices",
+      "count": 126,
+      "byteOffset": 2073492,
+      "byteLength": 504
+    },
+    {
+      "path": "7/20/92",
+      "name": "Regional static scenery batch",
+      "signature": "2071a466dae63c7f",
+      "kind": "vertices",
+      "count": 456,
+      "byteOffset": 2073996,
+      "byteLength": 1824
+    },
+    {
+      "path": "7/20/93",
+      "name": "Regional static scenery batch",
+      "signature": "607211064d6505cb",
+      "kind": "vertices",
+      "count": 456,
+      "byteOffset": 2075820,
+      "byteLength": 1824
+    },
+    {
+      "path": "7/20/94",
+      "name": "Regional static scenery batch",
+      "signature": "f30cfd3677b1492e",
+      "kind": "vertices",
+      "count": 126,
+      "byteOffset": 2077644,
+      "byteLength": 504
+    },
+    {
+      "path": "7/20/95",
+      "name": "Regional imported scenery instances",
+      "signature": "af0dc3a4aa8367a0",
+      "kind": "instances",
+      "count": 3,
+      "byteOffset": 2078148,
+      "byteLength": 12
+    },
+    {
+      "path": "7/20/96",
+      "name": "Regional static scenery batch",
+      "signature": "78910f75d6a6b241",
+      "kind": "vertices",
+      "count": 8652,
+      "byteOffset": 2078160,
+      "byteLength": 34608
+    },
+    {
+      "path": "7/20/97",
+      "name": "Regional static scenery batch",
+      "signature": "ead0add4da3446a6",
+      "kind": "vertices",
+      "count": 654,
+      "byteOffset": 2112768,
+      "byteLength": 2616
+    },
+    {
+      "path": "7/20/98",
+      "name": "Regional static scenery batch",
+      "signature": "1ba1e1a3bae12313",
+      "kind": "vertices",
+      "count": 648,
+      "byteOffset": 2115384,
+      "byteLength": 2592
+    }
+  ],
+  "binary": {
+    "file": "mesh-lighting.bin",
+    "bytes": 2117976,
+    "sha256": "9046021b87748a38fcf28cf2963591cffa5c1826e02e660571da328273f1b01f"
+  },
+  "method": "Normal-relative BVH visibility and diffuse bounce plus ray-tested local lamps; direct sunlight excluded."
+}
