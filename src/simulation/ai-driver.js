@@ -20,13 +20,22 @@ export function botInput(state, index, elapsed, rivals = [], items = {}) {
   const carrySpeed = deck?.speed || 0;
   const trainRamp = trainRampAt(activeTrack, deck);
   const aheadMetres = 12 + (state.speed + carrySpeed * 3.6) * 0.09;
-  const upcoming = activeTrack.branches.find(
+  let upcoming = activeTrack.branches.find(
     (b) =>
       b.required &&
       b.start > trackT(state.s) &&
       (b.start - trackT(state.s)) * activeTrack.COURSE_LENGTH < 45 &&
       (b.lap == null || b.lap === Math.floor(Math.max(0, state.s) / TRACK) % 3),
   );
+  if (upcoming) {
+    const fork = activeTrack.branchGroups[upcoming.groupIndex];
+    if (fork.branches.length === 2 && fork.branches.every((b) => b.required)) {
+      // Preview the same side the shared entry gate will select. Looking down
+      // the opposite street until commitment causes a sudden turn at the fork.
+      const approach = activeTrack.projectTrack(state.worldPos, state.s);
+      upcoming = fork.branches[approach.offset > 0 ? 1 : 0];
+    }
+  }
   const branch = activeTrack.branches[state.routeChoice - 1] || upcoming;
   const currentT = trackT(state.s);
   const aheadT = branch

@@ -31,6 +31,7 @@ test("five drivers launch across the caldera each lap and complete the observato
     assert.ok(r.finished);
     assert.equal(flights, 3);
     assert.equal(hits, 0);
+    assert.equal(r.recoveryCount || 0, 0);
   }
 });
 

@@ -140,6 +140,12 @@ export function buildCourseWorld({
       kitchenRoadDetail(roadMaterials.wood);
       kitchenRoadDetail(roadMaterials.paving, true);
     } else templePaving(roadMaterials.paving);
+    if (course.id === "emberwing-observatory") {
+      for (const surface of [roadMaterials.paving, roadMaterials.stone]) {
+        surface.map = surface.normalMap = surface.roughnessMap = surface.bumpMap = null;
+        surface.userData.skipSurfaceDetail = true;
+      }
+    }
   }
   if (course.theme.wetPavement) {
     for (const name of ["stone", "concrete"]) {
@@ -310,7 +316,7 @@ export function buildCourseWorld({
   ribbon(
     (t) => track.roadHalfWidth(t),
     (t) => track.roadHalfWidth(t) + track.shortcutWidth(t),
-    roadMaterials[course.shortcut.material] || mats.grass,
+    roadMaterials[course.shortcut?.material] || mats.grass,
     0.035,
   );
   for (const v of track.VERGES) {

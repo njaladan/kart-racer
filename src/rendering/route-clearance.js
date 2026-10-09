@@ -7,6 +7,9 @@ export function createRouteClearance(track) {
   const count = Math.ceil(track.COURSE_LENGTH / 2);
   const corridor = Array.from({ length: count }, (_, i) => {
     const bounds = new THREE.Box3();
+    const midpoint = (i + 0.5) / count;
+    if (track.branches.some((b) => b.required && midpoint > b.start && midpoint < b.end))
+      return bounds;
     for (const t of [i / count, (i + 1) / count]) {
       const mountain = track.mountainSurface?.containsT(t);
       const sides = mountain ? [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1] : [-1, 1];

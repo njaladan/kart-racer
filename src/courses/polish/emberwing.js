@@ -16,7 +16,6 @@ export function polishEmberwing(w) {
     edgeRibbon,
   } = w;
   const limestone = mat("#efe8d9", "paving", { roughness: 0.84 });
-  const sunlit = mat("#f8f1df", "stone", { roughness: 0.8 });
   const indigo = mat("#356fa4", "stone", { roughness: 0.48 });
   const shadow = mat("#302f42", "rock", { roughness: 0.96 });
   const basalt = mat("#242535", "rock", { roughness: 0.98 });
@@ -83,107 +82,6 @@ export function polishEmberwing(w) {
     kind: "lava",
     staticBake: false,
   });
-
-  // Village walls step down the cliffs, with shaded lanes and blue accents.
-  for (const [section, fraction, side, tier] of [
-    [0, 0.34, -1, 0],
-    [0, 0.73, 1, 1],
-    [1, 0.25, 1, 0],
-    [4, 0.31, -1, 1],
-    [5, 0.69, 1, 0],
-    [6, 0.42, -1, 1],
-  ]) {
-    const terrace = safe(section, fraction, side * (52 + tier * 19), 14);
-    if (!terrace) continue;
-    terrace.name = "Whitewashed caldera village terrace";
-    const foundation = terrace.position.y + 42 + tier * 13;
-    box(shadow, terrace, [0, -foundation / 2, 0], [17 + tier * 4, foundation, 16]);
-    box(limestone, terrace, [0, 0, 0], [19 + tier * 4, 0.55, 18]);
-    for (let house = 0; house < 3; house++) {
-      const x = (house - 1) * (9 + tier);
-      const width = 7 + (house % 2) * 2;
-      const height = 7 + (house % 3) * 2;
-      box(house % 2 ? sunlit : limestone, terrace, [x, height / 2 + 0.3, -1], [width, height, 8]);
-      box(limestone, terrace, [x, height + 0.55, -1], [width + 0.7, 0.5, 8.7]);
-      const dome = mesh(
-        new THREE.SphereGeometry(1, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2),
-        indigo,
-        terrace,
-        [x, height + 0.85, -1],
-        [width * 0.47, 3.3, 3.4],
-      );
-      dome.rotation.z = (house - 1) * 0.025;
-      for (const dx of [-width * 0.25, width * 0.25]) {
-        box(indigo, terrace, [x + dx, height * 0.56, 3.08], [1.25, 2.4, 0.16]);
-        box(warm, terrace, [x + dx, height * 0.56, 3.2], [0.62, 1.55, 0.1]);
-        box(limestone, terrace, [x + dx, height * 0.56 - 1.35, 3.22], [1.7, 0.22, 0.3]);
-      }
-      if (house === 1) {
-        box(shadow, terrace, [x, 1.7, 3.25], [1.8, 3.4, 0.22]);
-        box(indigo, terrace, [x, 3.8, 3.4], [1.85, 0.55, 0.12]);
-      }
-      source(terrace, [x, height * 0.55, 3.45], "#ffc987", 0.17);
-      if (house === 0) {
-        for (let step = 0; step < 4; step++)
-          box(
-            limestone,
-            terrace,
-            [-width * 0.5 - 1.2, 0.26 - step * 0.32, 4 + step * 1.8],
-            [2.6, 0.44, 2],
-          );
-      }
-    }
-    // A pergola and vine bed bind separate houses into one inhabitable edge.
-    for (const x of [-16, 16]) box(brass, terrace, [x, 6, 7], [0.38, 12, 0.38]);
-    box(brass, terrace, [0, 11.9, 7], [32.5, 0.42, 0.48]);
-    for (let vine = 0; vine < 8; vine++)
-      box(indigo, terrace, [-14 + vine * 4, 11.2 - (vine % 3) * 0.5, 7], [2.7, 0.18, 0.5]);
-    light({
-      parent: terrace,
-      position: [0, 4, 4],
-      color: "#ffd29a",
-      intensity: 6,
-      radius: 18,
-      kind: "practical",
-    });
-  }
-
-  // Crater overlooks are dark, layered silhouettes with a few ember seams.
-  for (const [section, fraction, side] of [
-    [2, 0.5, -1],
-    [3, 0.51, 1],
-  ]) {
-    const rim = safe(section, fraction, side * 78, 16);
-    if (!rim) continue;
-    rim.name = "Cannon crater overlook";
-    for (let i = 0; i < 9; i++) {
-      const x = (i - 4) * 11;
-      const h = 19 + (i % 4) * 12;
-      const cliff = mesh(
-        w.kit.authoredGeometry(
-          `ember:basalt-${i % 3 === 0 ? "near" : "mid"}`,
-          new THREE.IcosahedronGeometry(1, 1),
-        ),
-        basalt,
-        rim,
-        [x, h * 0.5 - 7, -8 - (i % 2) * 6],
-        [12 + (i % 3) * 3, h, 12],
-      );
-      cliff.rotation.y = (i - 4) * 0.13;
-    }
-    const slit = mesh(bevelBox(34, 0.28, 1.1, 0.06), hot, rim, [0, 2, -2]);
-    slit.rotation.y = 0.1;
-    source(rim, [0, 4, -3], "#ff7239", 0.36);
-    light({
-      parent: rim,
-      position: [0, 4, -3],
-      color: "#ff7940",
-      intensity: 10,
-      radius: 31,
-      kind: "lava",
-      staticBake: false,
-    });
-  }
 
   // Observatory instruments add a deliberate fine scale against the cliffs.
   for (const [section, fraction, side] of [

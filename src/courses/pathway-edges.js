@@ -1,6 +1,14 @@
 /** Authored pathway edges in section order. Soft shoulders are explorable;
  * drops have no invisible wall; structural walls occupy selected sides only. */
 export const PATHWAY_KINDS = {
+  pavement: {
+    platform: true,
+    mode: "soft",
+    shoulder: 2,
+    material: "paving",
+    color: "#e9dbc6",
+    height: 0,
+  },
   flowers: { mode: "soft", shoulder: 9, material: "grass", color: "#90bb59", height: 0.8 },
   roots: { mode: "soft", shoulder: 6, material: "needles", color: "#785739", height: 1.3 },
   ferns: { mode: "soft", shoulder: 7, material: "needles", color: "#579373", height: 1.8 },

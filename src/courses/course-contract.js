@@ -211,26 +211,28 @@ export function validateCourseDefinition(course) {
   });
 
   const shortcut = course.shortcut;
-  sectionFraction(
-    course,
-    { section: shortcut?.section, fraction: shortcut?.startFraction },
-    "shortcut.startFraction",
-  );
-  finite(course, shortcut.endFraction, "shortcut.endFraction", {
-    min: 0,
-    max: 1,
-  });
-  if (shortcut.endFraction <= shortcut.startFraction)
-    fail(course, "shortcut", "an endFraction after startFraction");
-  finite(course, shortcut.extraWidth, "shortcut.extraWidth", {
-    min: 0,
-    exclusiveMin: true,
-  });
-  if (shortcut.drag != null)
-    finite(course, shortcut.drag, "shortcut.drag", {
+  if (shortcut != null) {
+    sectionFraction(
+      course,
+      { section: shortcut?.section, fraction: shortcut?.startFraction },
+      "shortcut.startFraction",
+    );
+    finite(course, shortcut.endFraction, "shortcut.endFraction", {
+      min: 0,
+      max: 1,
+    });
+    if (shortcut.endFraction <= shortcut.startFraction)
+      fail(course, "shortcut", "an endFraction after startFraction");
+    finite(course, shortcut.extraWidth, "shortcut.extraWidth", {
       min: 0,
       exclusiveMin: true,
     });
+    if (shortcut.drag != null)
+      finite(course, shortcut.drag, "shortcut.drag", {
+        min: 0,
+        exclusiveMin: true,
+      });
+  }
 
   sectionFraction(course, course.hazard, "hazard");
   for (const field of ["kind", "label"]) {
