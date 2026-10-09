@@ -48,7 +48,7 @@ test("both route identities support the whole curved bowl far beyond their guide
 test("bowl mesh matches authoritative height, leaving the small well and terrain excavation open", () => {
   const scene = new THREE.Scene();
   buildAreaSurfaces(track, createCourseKit(scene, track), {});
-  const floor = scene.getObjectByName("Continuous hemispherical driving bowl");
+  const floor = scene.getObjectByName("Continuous curved driving bowl");
   const ground = new THREE.Mesh(
     groundGeometry(track, 1800),
     new THREE.MeshBasicMaterial({ side: THREE.DoubleSide }),
@@ -173,5 +173,31 @@ test("area-floor gravity points downhill for either vehicle heading", () => {
     const downhill = frame.up.dot(forward);
     if (Math.abs(downhill) > 0.5)
       assert.equal(Math.sign(state.longitudinalSpeed - 20), Math.sign(downhill));
+  }
+});
+
+test("the continuously curved saucer stays below sixty degrees at every radius and heading", () => {
+  for (let ring = 0; ring <= 100; ring++)
+    for (let sector = 0; sector < 48; sector++) {
+      const p = bowl.pointAt((sector * Math.PI) / 24, (bowl.radius * ring) / 100);
+      const f = bowl.frameAt(p, new THREE.Vector3(1, 0, 0));
+      assert.ok(Math.acos(f.up.y) <= Math.PI / 3 + 1e-6);
+    }
+  for (const branch of track.branches) {
+    assert.ok(
+      branch.poseAt(0, 0, 0).p.distanceTo(track.poseAt(branch.start * track.TRACK, 0, 0).p) < 1e-6,
+    );
+    assert.ok(
+      branch.poseAt(1, 0, 0).p.distanceTo(track.poseAt(branch.end * track.TRACK, 0, 0).p) < 1e-6,
+    );
+    for (const q of [0, 1]) {
+      const main = track
+        .frameAt(q ? branch.end : branch.start)
+        .tangent.clone()
+        .setY(0)
+        .normalize();
+      const guide = branch.frameAt(q).tangent.clone().setY(0).normalize();
+      assert.ok(main.dot(guide) > 0.99, "gate has a gentle tangent join");
+    }
   }
 });

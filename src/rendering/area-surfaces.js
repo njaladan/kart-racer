@@ -34,11 +34,11 @@ export function buildAreaSurfaces(track, kit, textures) {
     });
     metalDeckDetail(material);
     const floor = kit.mesh(geometry, material);
-    floor.name = "Continuous hemispherical driving bowl";
+    floor.name = "Continuous curved driving bowl";
     floor.receiveShadow = true;
     floor.userData.bakeReceiver = true;
     // Brass seams emphasize the concavity without fencing off racing lines.
-    const trim = kit.material("#ffe1a0", { metalness: 0.7, roughness: 0.38 });
+    const trim = kit.material("#b9904a", { metalness: 0.5, roughness: 0.55 });
     for (const ratio of [area.innerRadius / area.radius, 0.4, 0.65, 0.84, 1]) {
       const gate = Math.asin(area.gateHalfWidth / area.radius);
       const arcs =

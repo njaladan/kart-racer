@@ -11,17 +11,17 @@ export function createBowlSurface(track, definition, start, end) {
   const innerRadius = radius * (definition.wellRatio ?? 0.16);
   const gateHalfWidth = track.roadHalfWidth(start) + 2;
   const tilt = (b.y - a.y) / (2 * radius);
-  // Most of the floor is a literal lower hemisphere. A smooth collar at the
-  // rim removes its vertical tangent so the approach road joins without a step.
+  // A quartic saucer is continuously curved and meets the road with zero
+  // radial slope. Its analytic maximum derivative is 8*depth/(3*sqrt(3)*R).
+  // Reserve the tilted city's gradient before limiting the radial bank to 60°.
+  const maxSlope = definition.maxSlope ?? Math.tan(Math.PI / 3) * 0.85;
+  const depth = Math.min(
+    radius * (definition.depthRatio ?? 0.36),
+    (Math.max(0, maxSlope - Math.abs(tilt)) * radius * (3 * Math.sqrt(3))) / 8,
+  );
   function profile(r) {
-    const collar = radius * 0.82;
-    if (r <= collar) return -Math.sqrt(radius * radius - r * r);
-    if (r >= radius) return 0;
-    const h = radius - collar,
-      u = (r - collar) / h;
-    const y = -Math.sqrt(radius * radius - collar * collar);
-    const slope = collar / -y;
-    return (2 * u ** 3 - 3 * u ** 2 + 1) * y + (u ** 3 - 2 * u ** 2 + u) * h * slope;
+    const u = Math.min(1, r / radius);
+    return -depth * (1 - u * u) ** 2;
   }
   function heightAt(p) {
     const delta = p.clone().sub(center).setY(0);
@@ -67,9 +67,14 @@ export function createBowlSurface(track, definition, start, end) {
     return { nx: delta.x / r, nz: delta.z / r, penetration: r - radius + bodyRadius };
   }
   function guideAt(q, side) {
-    const angle = Math.PI * q * q * (3 - 2 * q);
-    const r = radius * (1 - 0.4 * Math.sin(Math.PI * q));
-    return pointAt(side * angle, r);
+    // Both lines begin and finish along the gate axis. The transverse arc
+    // opens smoothly, skirts the movement well, and converges on one exit.
+    const p = center
+      .clone()
+      .addScaledVector(along, radius * (2 * q - 1))
+      .addScaledVector(across, side * radius * 0.62 * Math.sin(Math.PI * q) ** 2);
+    p.y = heightAt(p);
+    return p;
   }
   return {
     id: definition.group,
@@ -77,6 +82,8 @@ export function createBowlSurface(track, definition, start, end) {
     radius,
     innerRadius,
     gateHalfWidth,
+    depth,
+    maxSlope,
     along,
     across,
     heightAt,

@@ -11,7 +11,7 @@ export function buildWatchInterior({ track, kit, scenery, animated, updates, sig
   const center = bowl.center;
   const radius = bowl.radius;
   const brass = material("#cfa25d", { metalness: 0.65, roughness: 0.35 });
-  const dark = material("#354457", { metalness: 0.4 });
+  const dark = material("#635340", { metalness: 0.4 });
   const room = new THREE.Group();
   scenery.add(room);
   room.position.copy(center);
@@ -22,22 +22,25 @@ export function buildWatchInterior({ track, kit, scenery, animated, updates, sig
     const angle = (i * Math.PI * 2) / 28;
     const direction = a.clone().sub(center),
       gateAngle = Math.atan2(direction.z, direction.x);
-    const gate = Math.abs(Math.sin(angle - gateAngle)) < 0.16;
+    const gate = Math.abs(Math.sin(angle - gateAngle)) < 0.28;
     const r = radius + 38;
     const bay = new THREE.Group();
     room.add(bay);
     bay.position.set(Math.cos(angle) * r, 0, Math.sin(angle) * r);
     bay.rotation.y = -angle;
-    if (!gate && allows(bay, [0, 20, 0], [8, 90, (r * Math.PI * 2) / 28 + 2])) {
-      const wall = box(dark, bay, [0, 20, 0], [8, 90, (r * Math.PI * 2) / 28 + 2]);
+    const bottom = track.course.theme.groundHeight - center.y;
+    const height = 65 - bottom;
+    const y = (65 + bottom) / 2;
+    if (!gate && allows(bay, [0, y, 0], [8, height, (r * Math.PI * 2) / 28 + 2])) {
+      const wall = box(dark, bay, [0, y, 0], [8, height, (r * Math.PI * 2) / 28 + 2]);
       wall.name = "Watch movement casing";
-      const rib = box(brass, bay, [-4.4, 20, 0], [0.4, 90, 1.2]);
+      const rib = box(brass, bay, [-4.4, y, 0], [0.4, height, 1.2]);
       rib.name = "Watch casing rib";
     }
   }
   const rim = mesh(new THREE.TorusGeometry(radius + 22, 1, 8, 96), brass, room, [0, 63, 0]);
   rim.rotation.x = Math.PI / 2;
-  const top = mesh(new THREE.RingGeometry(radius * 0.35, radius + 25, 96), dark, room, [0, 65, 0]);
+  const top = mesh(new THREE.RingGeometry(radius + 8, radius + 25, 96), dark, room, [0, 65, 0]);
   top.rotation.x = Math.PI / 2;
   top.material.side = THREE.DoubleSide;
   // A dark, recessed shaft gives the open well depth instead of exposing sky
@@ -57,7 +60,7 @@ export function buildWatchInterior({ track, kit, scenery, animated, updates, sig
       .add(new THREE.Vector3(wellPositions.getX(i), 0, wellPositions.getZ(i)));
     wellPositions.setY(
       i,
-      wellPositions.getY(i) > 0 ? bowl.heightAt(p) - center.y - 0.1 : -radius - 46,
+      wellPositions.getY(i) > 0 ? bowl.heightAt(p) - center.y - 0.1 : -bowl.depth - 46,
     );
   }
   wellGeometry.computeVertexNormals();
@@ -66,7 +69,7 @@ export function buildWatchInterior({ track, kit, scenery, animated, updates, sig
   wellWall.name = "Recessed gear well shaft";
   const wellBase = mesh(new THREE.CircleGeometry(bowl.innerRadius, 96), dark, room, [
     0,
-    -radius - 46,
+    -bowl.depth - 46,
     0,
   ]);
   wellBase.rotation.x = -Math.PI / 2;
@@ -99,7 +102,7 @@ export function buildWatchInterior({ track, kit, scenery, animated, updates, sig
       r = bowl.innerRadius * (0.18 + (i % 3) * 0.22);
     const gear = new THREE.Group();
     room.add(gear);
-    gear.position.set(Math.cos(angle) * r, -radius - 10 - (i % 4) * 5, Math.sin(angle) * r);
+    gear.position.set(Math.cos(angle) * r, -bowl.depth - 10 - (i % 4) * 5, Math.sin(angle) * r);
     const size = 3 + (i % 4);
     mesh(gearGeo, brass, gear, [0, 0, 0], [size, size, size]).rotation.x = Math.PI / 2;
     mesh(new THREE.CylinderGeometry(1, 1, 18, 12), dark, gear, [0, -8, 0]);
@@ -125,5 +128,90 @@ export function buildWatchInterior({ track, kit, scenery, animated, updates, sig
   const entry = new THREE.Group();
   scenery.add(entry);
   kit.align(entry, track.poseAt((section.start - 6 / track.COURSE_LENGTH) * track.TRACK));
-  sign(entry, "INSIDE THE WATCH · LEFT OR RIGHT", "#eac68b", 28);
+  sign(entry, "FOLLOW THE GOLD · BOTH LINES REJOIN", "#ffe0a0", 44);
+  buildBowlGuidance(track, kit, scenery);
+  const exit = new THREE.Group();
+  scenery.add(exit);
+  kit.align(exit, track.poseAt((section.end + 30 / track.COURSE_LENGTH) * track.TRACK));
+  sign(exit, "EXIT · CLOCKMAKERS’ TERRACES", "#ffe0a0", 36);
+}
+
+/** Visible flowing lanes are guides; the entire saucer remains driveable. */
+function buildBowlGuidance(track, kit, scenery) {
+  const { mesh, material } = kit;
+  const lane = material("#987544", { metalness: 0.4, roughness: 0.7 });
+  const gold = material("#ffe1a0", {
+    emissive: "#f9bc50",
+    emissiveIntensity: 0.45,
+    roughness: 0.5,
+  });
+  const guides = [];
+  scenery.userData.bowlGuides = guides;
+  for (const branch of track.branches.filter((b) => b.areaSurface)) {
+    function strip(left, right, mat, name) {
+      const positions = [],
+        uv = [],
+        indices = [];
+      const rows = branch.count,
+        columns = 6;
+      for (let i = 0; i <= rows; i++) {
+        const q = i / rows;
+        const spread = 1 + 0.5 * Math.sin(q * Math.PI) ** 2;
+        for (let j = 0; j <= columns; j++) {
+          const offset = THREE.MathUtils.lerp(left, right, j / columns) * spread;
+          const p = branch.poseAt(q, offset, 0.035).p;
+          positions.push(p.x, p.y, p.z);
+          uv.push(j / columns, (q * branch.length) / 8);
+          if (i < rows && j < columns) {
+            const n = i * (columns + 1) + j;
+            indices.push(n, n + 1, n + columns + 1, n + 1, n + columns + 2, n + columns + 1);
+          }
+        }
+      }
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+      geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uv, 2));
+      geometry.setIndex(indices);
+      geometry.computeVertexNormals();
+      const object = mesh(geometry, mat);
+      object.name = name;
+      object.castShadow = false;
+      object.userData.bakeReceiver = true;
+      guides.push(object);
+    }
+    strip(-9.8, 9.8, lane, "Bowl route gently widens and converges");
+    strip(-0.3, 0.3, gold, "Continuous golden bowl guide");
+    for (const side of [-1, 1])
+      strip(side * 8.8 - 0.12, side * 8.8 + 0.12, gold, "Bowl lane edge inlay");
+    for (let i = 1; i < 28; i++) {
+      const q = i / 28;
+      const frame = branch.frameAt(q);
+      const right = new THREE.Vector3(-frame.tangent.z, 0, frame.tangent.x).normalize();
+      const forward = frame.tangent.clone().setY(0).normalize();
+      const positions = [];
+      for (const [x, z] of [
+        [-2.7, -1.8],
+        [0, 0.6],
+        [0, 1.4],
+        [-2.7, -1],
+        [0, 0.6],
+        [2.7, -1.8],
+        [2.7, -1],
+        [0, 1.4],
+      ]) {
+        const p = frame.p.clone().addScaledVector(right, x).addScaledVector(forward, z);
+        p.y = branch.areaSurface.heightAt(p) + 0.07;
+        positions.push(p.x, p.y, p.z);
+      }
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+      geometry.setIndex([0, 1, 2, 0, 2, 3, 4, 5, 6, 4, 6, 7]);
+      geometry.computeVertexNormals();
+      const arrow = mesh(geometry, gold);
+      arrow.material.side = THREE.DoubleSide;
+      arrow.name = "Bowl forward chevron";
+      arrow.castShadow = false;
+      arrow.userData.bakeReceiver = true;
+    }
+  }
 }

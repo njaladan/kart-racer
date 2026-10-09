@@ -1,0 +1,6 @@
+Kenney — Space Kit
+https://kenney.nl/assets/space-kit
+License: CC0 1.0 Universal https://creativecommons.org/publicdomain/zero/1.0/
+Source redistribution: https://github.com/Hidencod/tge-assets/tree/08f0c913f6783cc81f9f6105a7cdda8562b1c192
+Downloaded unchanged. Runtime instances use brass/iron material overrides.
+These source models contain no skeleton or animation clips.

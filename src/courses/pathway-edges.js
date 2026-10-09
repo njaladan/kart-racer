@@ -152,9 +152,9 @@ export const PATHWAY_EDGES = {
   ],
   "clockwork-citadel": [
     { left: "cargo", right: "cargo" },
-    { left: "gearwall", right: "deck" },
     { left: "gears", right: "deck" },
-    { left: "columns", right: "deck" },
+    { left: "gears", right: "deck" },
+    { left: "gears", right: "deck" },
     { left: "gears", right: "deck" },
     { left: "deck", right: "deck" },
     { left: "gears", right: "deck" },
