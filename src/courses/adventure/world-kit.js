@@ -170,6 +170,7 @@ export function worldKit(context) {
           m,
         );
       if (clock) {
+        kit.batch(bob);
         g.name = "Swinging upright clock pendulum";
         const pivot = mesh(cylinder, darkBrass, g, [0, anchorHeight, 0], [1.35, 2.2, 1.35]);
         pivot.rotation.x = Math.PI / 2;

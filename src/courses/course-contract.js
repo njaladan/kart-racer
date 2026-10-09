@@ -46,6 +46,14 @@ function sectionFraction(course, item, path) {
 /** Validate the authored data contract before track construction uses it. */
 export function validateCourseDefinition(course) {
   if (!course || typeof course !== "object") fail(course, "descriptor", "an object");
+  if (course.bellows) {
+    const d = course.bellows;
+    sectionFraction(course, d, "bellows");
+    for (const key of ["period", "windup", "duration", "reach", "halfWidth", "height", "strength"])
+      finite(course, d[key], `bellows.${key}`, { min: 0, exclusiveMin: true });
+    if (d.windup + d.duration >= d.period / 2)
+      fail(course, "bellows.duration", "a windup and puff shorter than half the alternating cycle");
+  }
   for (const field of ["id", "name", "description"]) {
     if (typeof course[field] !== "string" || !course[field].trim()) {
       fail(course, field, "a non-empty string");
