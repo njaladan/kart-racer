@@ -136,9 +136,29 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
     const deckPose = (q, offset) => {
       const pose = branch.poseAt(q, offset);
       pose.p.y -= branchRampHeight(branch, q);
+      if (branch.theme === "santorini-market") {
+        const streets = track.branches.filter((b) => b.group === branch.group);
+        const peer = streets.find((b) => b !== branch);
+        if (peer) {
+          const center = branch.poseAt(q, 0).p;
+          const otherCenter = peer.poseAt(q, 0).p;
+          // A fork has one paved junction. Share its center seam rather than
+          // drawing two overlapping ribbons as the streets diverge/rejoin.
+          if (center.distanceTo(otherCenter) < branch.halfWidth + peer.halfWidth) {
+            const side = streets[0] === branch ? -1 : 1;
+            const outer = branch.poseAt(q, side * branch.halfWidth).p;
+            const seam = center.add(otherCenter).multiplyScalar(0.5);
+            pose.p.copy(outer.lerp(seam, (1 - (side * offset) / branch.halfWidth) / 2));
+          }
+        }
+      }
       return pose;
     };
-    const built = ribbon(deckPose, branch.halfWidth, mat, branch.count);
+    const ribbonCount =
+      branch.theme === "santorini-market"
+        ? Math.max(...track.branches.filter((b) => b.group === branch.group).map((b) => b.count))
+        : branch.count;
+    const built = ribbon(deckPose, branch.halfWidth, mat, ribbonCount);
     branchGroup.add(built.road);
     const trim = glow(branch.color);
     if (branch.ramp) {

@@ -2,7 +2,12 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import course from "../src/courses/emberwing-observatory.js";
 import { selectCourse, TRACK } from "../src/track/track.js";
-import { initializeRacer, advanceRacer, botInput } from "../src/simulation/simulation.js";
+import {
+  initializeRacer,
+  advanceRacer,
+  recoverRacer,
+  botInput,
+} from "../src/simulation/simulation.js";
 import { traversalPose, rangeFor } from "../src/simulation/course-mechanics.js";
 import { createRacerState } from "../src/simulation/racer-state.js";
 import { packRacer, applyRacer } from "../src/multiplayer/protocol.js";
@@ -66,4 +71,100 @@ test("cannon snapshots agree through landing, recovery returns to the lip, and r
   session.begin();
   assert.equal(a.traversalIndex, -1);
   assert.ok(a.worldPos.y < 20);
+});
+
+test("market junctions have a single paved floor instead of overlapping ribbons", async () => {
+  const THREE = await import("../vendor/three/three.module.js");
+  const { buildExperienceWorld } = await import("../src/courses/experiences/world.js");
+  const scene = new THREE.Scene();
+  buildExperienceWorld({ scene, track });
+  scene.updateMatrixWorld(true);
+  const roads = [];
+  scene.traverse((o) => {
+    if (o.name === "Authored experience driving surface") roads.push(o);
+  });
+  assert.equal(roads.length, 2);
+  for (const street of track.branches) {
+    for (let i = 0; i <= 500; i++) {
+      assert.ok(
+        Math.abs(street.frameAt(i / 500).curvature) * street.halfWidth < 0.8,
+        "street bend leaves enough radius for the complete pavement width",
+      );
+    }
+  }
+  const ray = new THREE.Raycaster();
+  ray.far = 5;
+  for (const q of [0.01, 0.04, 0.07, 0.93, 0.96, 0.99]) {
+    for (const offset of [-0.4, 0.4]) {
+      const p = track.branches[0]
+        .poseAt(q, 0)
+        .p.add(track.branches[1].poseAt(q, 0).p)
+        .multiplyScalar(0.5);
+      p.x += offset;
+      ray.set(p.add(new THREE.Vector3(0, 2, 0)), new THREE.Vector3(0, -1, 0));
+      assert.equal(ray.intersectObjects(roads, false).length, 1, `junction q=${q}`);
+    }
+  }
+});
+
+test("Emberwing driving platforms stay separate outside the market junction and cannon flight", () => {
+  const count = 800;
+  const replaced = (t) =>
+    track.branches.some((b) => t > b.start && t < b.end) ||
+    course.traversals.some(
+      (d) =>
+        t > track.sectorT(d.section, d.startFraction) &&
+        t < track.sectorT(d.section, d.endFraction),
+    );
+  const frames = Array.from({ length: count }, (_, i) => track.frameAt(i / count));
+  const widths = frames.map((_, i) =>
+    Math.max(-track.platformEdgeAt(i / count, -1), track.platformEdgeAt(i / count, 1)),
+  );
+  for (let i = 0; i < count; i++) {
+    if (replaced(i / count)) continue;
+    for (let j = i + 1; j < count; j++) {
+      if (replaced(j / count)) continue;
+      if ((Math.min(j - i, count - j + i) / count) * track.COURSE_LENGTH < 45) continue;
+      const a = frames[i].p,
+        b = frames[j].p;
+      assert.ok(
+        Math.hypot(a.x - b.x, a.z - b.z) > widths[i] + widths[j] || Math.abs(a.y - b.y) > 12,
+        `platform overlap at ${i / count} and ${j / count}`,
+      );
+    }
+  }
+  assert.equal(track.SHORTCUT, null);
+});
+
+test("both market streets replay, recover on their chosen floor and rejoin cleanly", () => {
+  for (const branch of track.branches) {
+    const q = 0.2;
+    const pose = branch.poseAt(q);
+    const a = initializeRacer(
+      createRacerState({ s: (branch.start + q * (branch.end - branch.start)) * TRACK, skill: 0.9 }),
+    );
+    a.worldPos.copy(pose.p);
+    a.yaw = track.yawFor(pose.tangent);
+    a.routeChoice = branch.index;
+    a.routeGroup = branch.groupIndex;
+    a.lastSafeRoute = branch.index;
+    a.lastSafeOffset = 0;
+    recoverRacer(a);
+    assert.equal(a.routeChoice, branch.index);
+    assert.ok(a.worldPos.distanceTo(pose.p) < 0.01);
+    const b = createRacerState();
+    applyRacer(b, packRacer(a));
+    let hits = 0;
+    for (let k = 1; k <= 120 * 14 && a.s < branch.end * TRACK + 10; k++) {
+      const input = botInput(a, branch.index, k / 120);
+      hits += !!advanceRacer(a, input, 1 / 120, k / 120).wallImpact;
+      advanceRacer(b, input, 1 / 120, k / 120);
+      assert.ok(a.worldPos.distanceTo(b.worldPos) < 1e-8);
+      assert.equal(a.routeChoice, b.routeChoice);
+    }
+    assert.ok(a.s > branch.end * TRACK);
+    assert.equal(a.routeChoice, 0);
+    assert.equal(a.recoveryCount, 1);
+    assert.equal(hits, 0);
+  }
 });
