@@ -110,7 +110,7 @@ export function buildMetronome(context) {
         });
       }
     }
-  w.pendulums("hammer", "#d8b07a");
+  w.pendulums("clock", "#d8b07a");
   // A colossal pinned drum and comb: the recognisable heart of the music box.
   const drum = at(1, 0.5, 95),
     rotor = new THREE.Group();
