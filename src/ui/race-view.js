@@ -10,7 +10,8 @@ export function createRaceView({ ui, canvas, radar, shell, courseSelector, racer
   }
   return {
     syncItem(racer) {
-      if (racer.isPlayer) renderItemHud(ui, racer.item, racer.itemCount);
+      if (racer.isPlayer)
+        renderItemHud(ui, racer.item, racer.itemCount, racer.itemPreview, racer.itemRoulette > 0);
     },
     showTitle() {
       ui.finish.classList.add("hidden");

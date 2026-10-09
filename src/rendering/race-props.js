@@ -121,32 +121,60 @@ export function createRaceProps({
       pads.push({ g, ...pad, phase: Math.random() * TAU });
     }
   }
-  function itemCubeMaterial() {
+  function itemCubeMaterials() {
     const c = document.createElement("canvas");
     c.width = c.height = 128;
     const x = c.getContext("2d");
-    x.fillStyle = "#4debd2";
+    const rainbow = x.createLinearGradient(0, 128, 128, 0);
+    for (const [stop, color] of [
+      [0, "#73f5e0"],
+      [0.3, "#6abfff"],
+      [0.6, "#d69aff"],
+      [0.8, "#ffb9dd"],
+      [1, "#fff4a8"],
+    ])
+      rainbow.addColorStop(stop, color);
+    x.fillStyle = rainbow;
     x.fillRect(0, 0, 128, 128);
-    x.strokeStyle = "#eaffff";
-    x.lineWidth = 9;
-    x.strokeRect(7, 7, 114, 114);
-    x.fillStyle = "#052c3b";
-    x.font = "900 94px sans-serif";
-    x.textAlign = "center";
-    x.textBaseline = "middle";
-    x.fillText("?", 64, 67);
     const texture = new THREE.CanvasTexture(c);
     texture.colorSpace = THREE.SRGBColorSpace;
-    return new THREE.MeshStandardMaterial({
+    const glass = new THREE.MeshStandardMaterial({
       map: texture,
-      roughness: 0.22,
-      metalness: 0.22,
-      emissive: "#0e9e8b",
+      transparent: true,
+      opacity: 0.42,
+      depthWrite: false,
+      side: THREE.DoubleSide,
+      roughness: 0.12,
+      metalness: 0.15,
+      emissive: "#ffffff",
       emissiveMap: texture,
-      emissiveIntensity: 0.65,
+      emissiveIntensity: 0.3,
     });
+
+    // Separate face markings keep the question marks readable through the glass.
+    const face = document.createElement("canvas");
+    face.width = face.height = 128;
+    const ink = face.getContext("2d");
+    ink.font = "900 94px sans-serif";
+    ink.textAlign = "center";
+    ink.textBaseline = "middle";
+    ink.strokeStyle = "#536ac3";
+    ink.lineWidth = 5;
+    ink.strokeText("?", 64, 67);
+    ink.fillStyle = "#ffffff";
+    ink.fillText("?", 64, 67);
+    const faceTexture = new THREE.CanvasTexture(face);
+    faceTexture.colorSpace = THREE.SRGBColorSpace;
+    const markings = new THREE.MeshBasicMaterial({
+      map: faceTexture,
+      transparent: true,
+      depthWrite: false,
+      alphaTest: 0.05,
+      toneMapped: false,
+    });
+    return { glass, markings };
   }
-  const boxMaterial = itemCubeMaterial();
+  const boxMaterials = itemCubeMaterials();
   function addItemBoxes() {
     // District rows can opt into exact world-space offsets for aprons/verges.
     const defaultOffsets = [-0.58, 0, 0.58];
@@ -156,12 +184,26 @@ export function createRaceProps({
     for (const { row, offset, lane } of rows) {
       let s = row.t * TRACK,
         group = new THREE.Group(),
-        cube = addMesh(new THREE.BoxGeometry(1.65, 1.65, 1.65), boxMaterial, group);
-      cube.castShadow = true;
+        cube = addMesh(new THREE.BoxGeometry(1.65, 1.65, 1.65), boxMaterials.glass, group);
+      cube.castShadow = cube.receiveShadow = false;
+      cube.renderOrder = 1;
+      const markings = addMesh(
+        new THREE.BoxGeometry(1.67, 1.67, 1.67),
+        boxMaterials.markings,
+        group,
+      );
+      markings.castShadow = markings.receiveShadow = false;
+      markings.renderOrder = 2;
       const wire = new THREE.LineSegments(
         new THREE.EdgesGeometry(new THREE.BoxGeometry(1.72, 1.72, 1.72)),
-        new THREE.LineBasicMaterial({ color: "#eaffff" }),
+        new THREE.LineBasicMaterial({
+          color: "#eaffff",
+          transparent: true,
+          opacity: 0.75,
+          depthWrite: false,
+        }),
       );
+      wire.renderOrder = 3;
       group.add(wire);
       addGlow(group, { color: "#65ffe2", size: 3.3, opacity: 0.25 });
       const b = {

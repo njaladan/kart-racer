@@ -106,10 +106,29 @@ export function createRaceFeedback({ player, audio, particles, toast, terrain })
     racerEvent,
     itemUsed,
     getShake: () => shake,
-    collected(who) {
+    collected(who, awarded = true) {
+      const origin = who.worldPos.clone().add(new THREE.Vector3(0, 1.8, 0));
+      for (let n = 0; n < 16; n++) {
+        const angle = (n / 16) * Math.PI * 2;
+        spawnParticle(
+          origin,
+          ["#7bf7ff", "#ff9cf5", "#fff8b0", "#91ffd5"][n % 4],
+          0.48,
+          0.16,
+          new THREE.Vector3(Math.cos(angle) * 3, 1 + Math.random() * 2, Math.sin(angle) * 3),
+        );
+      }
+      if (who !== player) return;
+      if (awarded) notify("ITEM LOTTERY!");
+      audio.play(awarded ? "pickup" : "box-crush");
+    },
+    rolling(who, tick) {
+      if (who === player) audio.play("item-roll", tick);
+    },
+    selected(who) {
       if (who !== player) return;
       notify(`${PICKUP_NAMES[who.item]}!`);
-      audio.play("pickup");
+      audio.play("item-select");
     },
     impact(who, message) {
       if (who === player) notify(message);

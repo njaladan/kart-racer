@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createRaceItems } from "../src/simulation/race-items.js";
+import { createRaceItems, ITEM_ROLL_DURATION } from "../src/simulation/race-items.js";
 import { createRaceGrid } from "../src/simulation/race-grid.js";
 import { RACERS } from "../src/rendering/racer-roster.js";
 import { selectCourse, laneWidth, poseAt } from "../src/track/track.js";
@@ -11,7 +11,10 @@ function setup(boxes = []) {
   const racers = createRaceGrid(RACERS);
   const removed = [],
     used = [],
-    inventories = [];
+    inventories = [],
+    collected = [],
+    rolled = [],
+    selected = [];
   const items = createRaceItems({
     racers,
     boxes,
@@ -20,8 +23,11 @@ function setup(boxes = []) {
     onHit: () => false,
     onUse: (racer, type) => used.push({ racer, type }),
     onInventory: (racer) => inventories.push(racer),
+    onCollect: (racer, awarded) => collected.push({ racer, awarded }),
+    onRoll: (racer, tick) => rolled.push({ racer, tick, preview: racer.itemPreview }),
+    onSelect: (racer) => selected.push(racer),
   });
-  return { racers, items, removed, used, inventories };
+  return { racers, items, removed, used, inventories, collected, rolled, selected };
 }
 
 test("pickups go to one racer, respect held inventory, and respawn on the race clock", () => {
@@ -34,7 +40,8 @@ test("pickups go to one racer, respect held inventory, and respawn on the race c
   box.s = player.s;
   box.x = player.x;
   items.step(0.01, 0);
-  assert.ok(player.item);
+  assert.equal(player.item, null);
+  assert.equal(player.itemRoulette, ITEM_ROLL_DURATION);
   assert.equal(box.active, false);
   const respawn = box.respawn;
   assert.ok(respawn >= 10 && respawn <= 14);
@@ -44,12 +51,102 @@ test("pickups go to one racer, respect held inventory, and respawn on the race c
   assert.equal(box.active, true);
   const item = player.item;
   items.step(0.01, 0);
-  assert.equal(box.active, true);
+  assert.equal(box.active, false);
   assert.equal(player.item, item);
   player.item = null;
   player.finished = true;
+  box.active = true;
   items.step(0.01, 0);
   assert.equal(box.active, true);
+});
+
+test("roulette cycles previews, blocks use, and awards once when the race clock reaches selection", () => {
+  const box = { s: 0, x: 0, active: true, respawn: 0 };
+  const {
+    items,
+    racers: [player, rival],
+    collected,
+    rolled,
+    selected,
+    used,
+  } = setup([box]);
+  box.s = player.s;
+  box.x = player.x;
+  Object.assign(rival, { s: player.s, x: player.x });
+  rival.worldPos.copy(player.worldPos);
+  items.step(0.01, 0);
+  assert.equal(collected.length, 1);
+  assert.equal(collected[0].awarded, true);
+  assert.equal(rival.itemRoulette, 0);
+  items.fire(player);
+  assert.equal(used.length, 0);
+  items.step(0.8, 0.8);
+  assert.equal(player.item, null);
+  assert.ok(rolled.length > 4);
+  assert.ok(rolled.slice(1).every((entry, i) => entry.preview !== rolled[i].preview));
+  box.active = true;
+  items.step(0.01, 0.81);
+  assert.equal(box.active, false);
+  assert.equal(collected.at(-1).awarded, false);
+  assert.ok(player.itemRoulette < 0.8, "another crush does not restart the roll");
+  items.step(0.79, 1.6);
+  assert.ok(player.item);
+  assert.equal(player.itemRoulette, 0);
+  assert.equal(player.itemPreview, null);
+  assert.equal(player.itemCount, player.item === "mushroom" ? 3 : 1);
+  assert.deepEqual(selected, [player]);
+  const ticks = rolled.length;
+  items.step(1, 2.6);
+  assert.equal(selected.length, 1);
+  assert.equal(rolled.length, ticks);
+});
+
+test("crushing with a held item preserves every charge and emits a distinct event", () => {
+  const box = { s: 0, x: 0, active: true, respawn: 0 };
+  const {
+    items,
+    racers: [player],
+    collected,
+    rolled,
+    inventories,
+  } = setup([box]);
+  box.s = player.s;
+  box.x = player.x;
+  items.setItem(player, "mushroom");
+  player.itemCount = 2;
+  items.step(0.01, 0);
+  assert.equal(box.active, false);
+  assert.equal(player.item, "mushroom");
+  assert.equal(player.itemCount, 2);
+  assert.equal(collected[0].awarded, false);
+  assert.equal(rolled.length, 0);
+  assert.equal(inventories.length, 1);
+});
+
+test("reset and finish cancel pending lotteries without awarding or sounding later", () => {
+  const box = { s: 0, x: 0, active: true, respawn: 0 };
+  const {
+    items,
+    racers: [player],
+    selected,
+  } = setup([box]);
+  box.s = player.s;
+  box.x = player.x;
+  items.step(0.01, 0);
+  items.reset();
+  box.active = false;
+  box.respawn = 10;
+  items.step(2, 2);
+  assert.equal(player.item, null);
+  assert.equal(player.itemPreview, null);
+  assert.equal(player.itemRoulette, 0);
+  box.active = true;
+  items.step(0.01, 2);
+  player.finished = true;
+  items.step(2, 4);
+  assert.equal(player.itemRoulette, 0);
+  assert.equal(player.itemCount, 0);
+  assert.equal(selected.length, 0);
 });
 
 test("active effects expire exactly once and restart removes effects and restores pickups", () => {

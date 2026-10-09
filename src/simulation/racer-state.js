@@ -41,6 +41,8 @@ export function createRacerState(configuration = {}) {
     driftBoostTier: 0,
     item: null,
     itemCount: 0,
+    itemRoulette: 0,
+    itemPreview: null,
     cooldown: 0,
     air: 0,
     padCooldown: 0,

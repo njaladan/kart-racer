@@ -1,5 +1,5 @@
 import { stormAt } from "../simulation/experience-mechanics.js";
-/** Original synthesis only: engines, Foley and spatial world noise. No music. */
+/** Original synthesis: engines, Foley, spatial world noise and item jingles. */
 export function createAudioController(audioWindow = window) {
   let context = null,
     master = null,
@@ -174,8 +174,25 @@ export function createAudioController(audioWindow = window) {
   function play(kind, value = 0) {
     switch (kind) {
       case "pickup":
+        noise(0.12, 0.17, 4200);
         tone(660, 0.1, "sine", 0.1, 280);
-        audioWindow.setTimeout(() => tone(990, 0.1, "sine", 0.07, 180), 65);
+        break;
+      case "box-crush":
+        noise(0.16, 0.2, 2400);
+        tone(220, 0.12, "triangle", 0.09, -130);
+        break;
+      case "item-roll": {
+        // An original bouncing arpeggio; each note follows a simulation slot tick.
+        const notes = [659.25, 783.99, 987.77, 1318.51, 987.77, 783.99];
+        tone(notes[value % notes.length], 0.065, "square", 0.045);
+        tone(notes[value % notes.length] / 2, 0.07, "triangle", 0.035);
+        break;
+      }
+      case "item-select":
+        tone(1046.5, 0.28, "triangle", 0.12);
+        tone(1318.51, 0.24, "sine", 0.08);
+        tone(1567.98, 0.32, "sine", 0.07);
+        noise(0.16, 0.06, 5400);
         break;
       case "boost":
         noise(0.45, 0.24, 1200);

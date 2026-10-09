@@ -22,12 +22,13 @@ export function formatOrdinal(value) {
   return `${value}${ordinalSuffix(value)}`;
 }
 
-export function renderItemHud(ui, item, count) {
-  const presentation = ITEM_PRESENTATION[item];
+export function renderItemHud(ui, item, count, preview = null, rolling = false) {
+  const presentation = ITEM_PRESENTATION[rolling ? preview : item];
   ui.itemIcon.textContent = presentation?.icon || "?";
   ui.itemIcon.style.color = presentation?.color || "#197ac4";
-  ui.itemLabel.textContent = presentation?.label(count) || "ITEM";
-  ui.item.style.opacity = item ? "1" : ".85";
+  ui.itemLabel.textContent = rolling ? "ROLLING…" : presentation?.label(count) || "ITEM";
+  ui.item.style.opacity = item || rolling ? "1" : ".85";
+  ui.itemIcon.style.transform = rolling ? "scale(0.9) rotate(-8deg)" : "";
 }
 
 export function renderRaceHud(ui, { rank, lap, totalLaps, progress, drift, speed, time }) {
