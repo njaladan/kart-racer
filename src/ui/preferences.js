@@ -6,6 +6,7 @@ export const DEFAULT_PREFERENCES = Object.freeze({
   master: 0.8,
   effects: 0.8,
   ambience: 0.55,
+  music: 0.6,
 });
 const KEY = "turbo-trail-preferences-v1";
 export function loadPreferences(storage = globalThis.localStorage) {
@@ -16,7 +17,7 @@ export function loadPreferences(storage = globalThis.localStorage) {
     /* Private mode remains playable. */
   }
   const values = { ...DEFAULT_PREFERENCES };
-  for (const key of ["quality", "master", "effects", "ambience"]) {
+  for (const key of ["quality", "master", "effects", "ambience", "music"]) {
     if (Number.isFinite(saved?.[key]))
       values[key] = Math.max(0, Math.min(key === "quality" ? 3 : 1, saved[key]));
   }

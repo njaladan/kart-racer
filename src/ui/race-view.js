@@ -26,6 +26,7 @@ export function createRaceView({ ui, canvas, radar, shell, courseSelector, racer
     begin() {
       audio.start();
       audio.resume();
+      audio.prepareCourse(courseSelector.selected.course);
       shell.classList.add("racing");
       shell.classList.remove("paused");
       showObjects(true);
@@ -36,7 +37,8 @@ export function createRaceView({ ui, canvas, radar, shell, courseSelector, racer
       radar.classList.add("active");
       ui.count.classList.remove("hidden");
       canvas.focus({ preventScroll: true });
-      audio.tone(420, 0.18, "square", 0.08);
+      ui.count.textContent = "3";
+      audio.play("countdown-3");
     },
     finish(rank, time) {
       ui.finalPlace.textContent = formatOrdinal(rank);
@@ -65,7 +67,10 @@ export function createRaceView({ ui, canvas, radar, shell, courseSelector, racer
     countdown(remaining, beep) {
       ui.count.textContent =
         remaining > 2.45 ? "3" : remaining > 1.45 ? "2" : remaining > 0.45 ? "1" : "GO!";
-      if (beep) audio.tone(remaining > 0.45 ? 420 : 840, 0.15, "square", 0.08);
+      if (beep)
+        audio.play(
+          remaining > 1.45 ? "countdown-2" : remaining > 0.45 ? "countdown-1" : "countdown-go",
+        );
       if (remaining <= 0) ui.count.classList.add("hidden");
     },
     bind({ begin, setPaused, showTitle }) {

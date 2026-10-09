@@ -1,5 +1,6 @@
 import { stormAt } from "../simulation/experience-mechanics.js";
-/** Original synthesis: engines, Foley, spatial world noise and item jingles. */
+import { createRecordedAudio } from "./recorded-audio.js";
+/** Race effects, item jingles and spatial ambience, plus licensed music and recorded cues. */
 export function createAudioController(audioWindow = window) {
   let context = null,
     master = null,
@@ -24,7 +25,8 @@ export function createAudioController(audioWindow = window) {
     lastBrakeTime = -Infinity,
     engineInterior = false,
     lastThunder = -1;
-  let volumes = { master: 0.8, effects: 0.8, ambience: 0.55 };
+  let recordings = null;
+  let volumes = { master: 0.8, effects: 0.8, ambience: 0.55, music: 0.6 };
   const target = (param, value, time = 0.08) =>
     param?.setTargetAtTime(value, context.currentTime, time);
   function setVolumes(next) {
@@ -33,6 +35,7 @@ export function createAudioController(audioWindow = window) {
     target(master.gain, volumes.master * 0.28);
     target(effects.gain, volumes.effects);
     target(ambience.gain, volumes.ambience);
+    recordings?.setVolume(volumes.music);
   }
   function noiseLoop(bus, frequency, type = "lowpass") {
     if (!noiseBuffer) return null;
@@ -97,6 +100,16 @@ export function createAudioController(audioWindow = window) {
       }
       wind = noiseLoop(ambience, 600);
       tires = noiseLoop(effects, 1800, "bandpass");
+    }
+    if (audioWindow.fetch && context.decodeAudioData) {
+      recordings = createRecordedAudio({
+        context,
+        master,
+        effects,
+        ambience,
+        fetchAudio: (url) => audioWindow.fetch(url),
+      });
+      recordings.setVolume(volumes.music);
     }
   }
   function tone(
@@ -172,6 +185,10 @@ export function createAudioController(audioWindow = window) {
     };
   }
   function play(kind, value = 0) {
+    if (kind.startsWith("countdown-")) {
+      recordings?.play(kind);
+      return;
+    }
     switch (kind) {
       case "pickup":
         noise(0.12, 0.17, 4200);
@@ -342,6 +359,7 @@ export function createAudioController(audioWindow = window) {
   }
 
   function updateWorld(track, state, time, active, opponents = []) {
+    recordings?.update(track.course.id, active, !!state.underwater);
     if (!context || !wind) return;
     const t = track.trackT(state.s),
       section = track.sectionAt(t),
@@ -365,7 +383,8 @@ export function createAudioController(audioWindow = window) {
       lastWorldBeat = -1;
       lastThunder = stormAt(track.course, time).thunder;
     }
-    if (active && water !== lastWorldUnderwater) noise(0.5, 0.16, water ? 350 : 1100);
+    if (!recordings && active && water !== lastWorldUnderwater)
+      noise(0.5, 0.16, water ? 350 : 1100);
     lastWorldUnderwater = water;
     const scale = state.scale ?? 1;
     if (active && lastWorldScale > 0.6 !== scale > 0.6) {
@@ -479,9 +498,10 @@ export function createAudioController(audioWindow = window) {
       if (beat % 8 === 0) noise(0.7, 0.07, 95, 0, true);
     }
     if (storm && beat % 3 === 0) noise(0.8, 0.15, 2400, -0.4, true);
-    if (water && beat % 3 === 0) noise(0.2, 0.05, 1900, Math.sin(time), true);
+    if (!recordings && water && beat % 3 === 0) noise(0.2, 0.05, 1900, Math.sin(time), true);
   }
   function stopEngine() {
+    recordings?.stop();
     if (context) {
       lastDriftTier = 0;
       lastEngineTime = null;
@@ -498,6 +518,7 @@ export function createAudioController(audioWindow = window) {
     updateEngine,
     updateWorld,
     stopEngine,
+    prepareCourse: (id) => recordings?.prepare(id),
     resume: () => context?.resume(),
     suspend: () => context?.suspend(),
   };
