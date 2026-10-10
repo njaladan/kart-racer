@@ -1,18 +1,9 @@
 import { clone as cloneSkeleton } from "../../../vendor/three/addons/utils/SkeletonUtils.js";
+import { sceneryGroundHeight } from "../../rendering/terrain-height.js";
 
 /** Wildlife and cloth have their own clocks; nothing crosses the race. */
 export function buildWinterLife({ THREE, scene, track, festival, assets }) {
-  const {
-    palette: p,
-    mesh,
-    box,
-    groupAt,
-    landAt,
-    sectorT,
-    edgeOffset,
-    asset,
-    beam,
-  } = festival;
+  const { palette: p, mesh, box, groupAt, landAt, sectorT, edgeOffset, asset, beam } = festival;
   const moving = new THREE.Group();
   moving.name = "Independent winter life";
   scene.add(moving);
@@ -22,20 +13,46 @@ export function buildWinterLife({ THREE, scene, track, festival, assets }) {
   // Moving fabric gives the enclosed streets a domestic, inhabited scale.
   const fabrics = [];
   const clothGeo = new THREE.PlaneGeometry(1, 1, 8, 4);
+  clothGeo.translate(0, -0.5, 0);
   const clothMat = p.red.clone();
   clothMat.side = THREE.DoubleSide;
+  const cyanCloth = p.cyan.clone();
+  cyanCloth.side = THREE.DoubleSide;
+  const spans = (scene.userData.winterBannerSpans = []);
   for (const section of [0, 6, 7])
     for (let i = 0; i < 4; i++) {
       const t = sectorT(section, 0.17 + i * 0.2),
         g = groupAt(t, 0, moving),
         half = track.roadHalfWidth(t) + 3;
       const wire = groupAt(t);
+      wire.name = "Supported winter festival banner span";
+      wire.userData.scenicAssembly = false;
+      wire.updateWorldMatrix(true, false);
+      const posts = [];
+      for (const side of [-1, 1]) {
+        const top = wire.localToWorld(new THREE.Vector3(side * half, 13, 0));
+        const ground = sceneryGroundHeight(track.projectTrack(top, t * track.TRACK));
+        const foot = wire.worldToLocal(new THREE.Vector3(top.x, ground, top.z));
+        const post = beam(wire, foot.toArray(), [side * half, 13.1, 0], 0.28, p.timber);
+        post.name = "Grounded winter banner support";
+        posts.push(post);
+      }
       beam(wire, [-half, 13, 0], [half, 13, 0], 0.045, p.dark);
+      const cloths = [];
       for (let j = -2; j <= 2; j++) {
-        const cloth = mesh(clothGeo, j % 2 ? clothMat : p.cyan, g, [j * 3, 11.6, 0], [1.8, 2.2, 1]);
+        const cloth = mesh(
+          clothGeo,
+          j % 2 ? clothMat : cyanCloth,
+          g,
+          [j * 3, 13, 0],
+          [1.8, 2.2, 1],
+        );
+        cloth.name = "Banner pinned to supported cable";
+        cloths.push(cloth);
         fabrics.push({ mesh: cloth, base: cloth.rotation.x, phase: i + j });
         box(p.timber, wire, [j * 3, 13, 0], [0.35, 0.16, 0.16]);
       }
+      spans.push({ t, half, wire, posts, cloths });
     }
   let fox = null,
     mixer = null;

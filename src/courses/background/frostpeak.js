@@ -1,7 +1,8 @@
 /** Inhabited alpine slopes connect the mountain skyline to the winter festival. */
 export function frostpeakBackground(b) {
-  const { track, mat, mesh, box, group, tube, place, motion } = b;
-  const snow = mat("#cbdde8", "snow"),
+  const { track, mat, mesh, box, rock, group, tube, place, motion } = b;
+  const mountain = mat("#ffffff", "rock"),
+    snow = mat("#e2e8eb", "snow"),
     stone = mat("#8198af", "rock"),
     pine = mat("#5e7c88", "needles"),
     wood = mat("#896e62", "wood"),
@@ -16,8 +17,18 @@ export function frostpeakBackground(b) {
       side,
       "Snowy mountain village beyond the festival",
       (g) => {
-        mesh("ridge", snow, g, [0, 0, -75], [200, 115 + (s % 3) * 20, 130]);
-        mesh("ridge", stone, g, [35, 0, -45], [130, 65, 90]);
+        for (let peak = 0; peak < 2 + (s % 3); peak++) {
+          const h = 76 + ((s * 31 + peak * 43) % 90);
+          const formation = rock(
+            s + peak,
+            mountain,
+            g,
+            [-80 + peak * 57, h / 2 - 3, -88 + (peak % 2) * 27],
+            [90 + ((s + peak) % 3) * 22, h, 90 + (peak % 2) * 25],
+            "snow",
+          );
+          formation.rotation.y = s * 0.47 + peak * 1.83;
+        }
         for (let i = 0; i < 3; i++) {
           const chalet = group(g, [-38 + i * 35, 0, 22 + (i % 2) * 10]);
           box(wood, chalet, [0, 8, 0], [22, 16, 18]);
@@ -41,7 +52,17 @@ export function frostpeakBackground(b) {
       -side,
       "Distant ski lift and alpine beacon ridge",
       (g) => {
-        mesh("ridge", snow, g, [0, 0, -35], [180, 90, 90]);
+        for (let peak = 0; peak < 2; peak++) {
+          const h = 60 + ((s * 23 + peak * 39) % 62);
+          rock(
+            s + peak + 2,
+            mountain,
+            g,
+            [-38 + peak * 72, h / 2, -52 - peak * 25],
+            [110 + peak * 24, h, 95],
+            "snow",
+          ).rotation.y = s * 0.81 + peak;
+        }
         for (const x of [-55, 55]) {
           tube(g, [x, 0, 18], [x, 48, 18], 1.8, iron);
           box(iron, g, [x, 48, 18], [13, 2, 3]);

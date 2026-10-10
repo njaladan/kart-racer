@@ -2,7 +2,7 @@ import { installSurfaceDetail } from "../../rendering/surface-detail.js";
 
 /** Broad sculpted ridge strips, shaped saddles and multiple distant layers. */
 export function buildMountainHorizon({ THREE, scenery, kit, textures }) {
-  const stone = kit.material("#d9e6ef", { map: textures.snow, roughness: 1 });
+  const stone = kit.material("#ffffff", { map: textures.frostSnow || textures.snow, roughness: 1 });
   stone.name = "Alpine ridge snow and weathered blue strata";
   installSurfaceDetail(stone, { kind: "terrain", scale: 0.019, strength: 0.11 });
   function ridgeGeometry(seed, length, depth, height) {
@@ -16,7 +16,10 @@ export function buildMountainHorizon({ THREE, scenery, kit, textures }) {
       const v = z / nz;
       for (let x = 0; x <= nx; x++) {
         const u = x / nx;
-        const spine = 0.53 + Math.sin(u * 13 + seed) * 0.13 + Math.cos(u * 31 + seed * 0.3) * 0.09;
+        const spine =
+          0.5 +
+          Math.sin(u * (9 + (seed % 7)) + seed) * 0.15 +
+          Math.cos(u * (22 + (seed % 13)) + seed * 0.3) * 0.08;
         const cross = Math.max(0, 1 - Math.abs(v - spine) / 0.54);
         const peaks =
           0.36 +
@@ -43,6 +46,21 @@ export function buildMountainHorizon({ THREE, scenery, kit, textures }) {
     geo.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
     geo.setIndex(indices);
     geo.computeVertexNormals();
+    const normals = geo.attributes.normal,
+      p = geo.attributes.position,
+      tint = geo.attributes.color;
+    const exposed = new THREE.Color("#7c898f"),
+      powder = new THREE.Color("#f4f4ea");
+    for (let i = 0; i < p.count; i++) {
+      const stratum = Math.sin(p.getX(i) * 0.065 + p.getZ(i) * 0.043 + seed) * 0.16;
+      const coverage = THREE.MathUtils.smoothstep(
+        normals.getY(i) + (p.getY(i) / height) * 0.5 + stratum,
+        0.5,
+        1.02,
+      );
+      const color = exposed.clone().lerp(powder, coverage);
+      tint.setXYZ(i, color.r, color.g, color.b);
+    }
     return geo;
   }
   // These continuous strips form several authored, irregular mountain chains.

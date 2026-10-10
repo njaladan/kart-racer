@@ -66,16 +66,32 @@ export function backgroundKit(w) {
     object.castShadow = false;
     return object;
   }
-  function rock(variant, mat, parent, position, scale) {
-    const key = `imported-rock:${variant % 4}`;
-    if (!geometries.has(key))
-      geometries.set(
-        key,
-        w.kit.authoredGeometry(
-          `background:rock-${variant % 4}`,
-          new THREE.SphereGeometry(0.5, 18, 12),
-        ),
-      );
+  function rock(variant, mat, parent, position, scale, cover = null) {
+    const key = `imported-rock:${variant % 4}:${cover}`;
+    if (!geometries.has(key)) {
+      const geometry = w.kit
+        .authoredGeometry(`background:rock-${variant % 4}`, new THREE.SphereGeometry(0.5, 18, 12))
+        .clone();
+      if (cover === "snow") {
+        const p = geometry.attributes.position,
+          n = geometry.attributes.normal;
+        const colors = new Float32Array(p.count * 3);
+        const exposed = new THREE.Color("#657786"),
+          snow = new THREE.Color("#f5f4eb");
+        for (let i = 0; i < p.count; i++) {
+          const drift = Math.sin(p.getX(i) * 15 + variant * 2.7) * Math.cos(p.getZ(i) * 13) * 0.12;
+          const amount = THREE.MathUtils.smoothstep(
+            p.getY(i) + n.getY(i) * 0.32 + drift,
+            -0.1,
+            0.32,
+          );
+          const color = exposed.clone().lerp(snow, amount);
+          colors.set(color.toArray(), i * 3);
+        }
+        geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+      }
+      geometries.set(key, geometry);
+    }
     const object = w.mesh(geometries.get(key), mat, parent, position, scale);
     object.castShadow = false;
     object.name = "Downloaded rounded Kenney rock formation";
