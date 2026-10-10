@@ -176,4 +176,11 @@ export function batchStaticMeshes(parent, excluded = []) {
     parent.add(merged);
   }
   // Source geometry remains shared by asset templates and other regional batches.
+  for (const child of parent.children) {
+    if (!child.isMesh || excluded.includes(child)) continue;
+    // Batch members are static in this parent's frame. Moving assemblies still
+    // update their world matrices through the parent transform.
+    child.updateMatrix();
+    child.matrixAutoUpdate = false;
+  }
 }

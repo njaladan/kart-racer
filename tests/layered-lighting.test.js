@@ -165,3 +165,46 @@ test("course probes stay bounded and cover open sectors plus authored interiors"
   assert.ok(mixedProbes.some(({ section }) => section.id === "rootwood"));
   assert.ok(mixedProbes.some(({ section }) => section.id === "sector-6"));
 });
+
+test("moving projections share one transform refresh and invisible effects skip receiver rays", () => {
+  const scene = new THREE.Scene();
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), new THREE.MeshStandardMaterial());
+  floor.rotation.x = -Math.PI / 2;
+  scene.add(floor);
+  const sources = Array.from({ length: 8 }, (_, i) =>
+    registerLayeredLight(scene, {
+      position: [i * 2, 8, 0],
+      radius: 12,
+      pattern: "lattice",
+      amplitude: 1,
+      speed: 1,
+    }),
+  );
+  let updates = 0,
+    rays = 0;
+  const update = scene.updateMatrixWorld.bind(scene);
+  scene.updateMatrixWorld = (...args) => {
+    updates++;
+    return update(...args);
+  };
+  const raycast = floor.raycast.bind(floor);
+  floor.raycast = (...args) => {
+    rays++;
+    return raycast(...args);
+  };
+  updateLayeredLighting(scene, 1, { viewerPosition: new THREE.Vector3(), qualityTier: 3 });
+  assert.equal(updates, 1);
+  assert.equal(rays, 6, "only the six visible projections need receivers");
+  assert.equal(sources.filter((source) => source.patch.visible).length, 6);
+  updates = rays = 0;
+  updateLayeredLighting(scene, 1, { viewerPosition: new THREE.Vector3(), qualityTier: 3 });
+  assert.equal(updates, 0, "unchanged lights reuse cached receivers");
+  assert.equal(rays, 0);
+  updateLayeredLighting(scene, 2, {
+    viewerPosition: new THREE.Vector3(1000, 0, 0),
+    qualityTier: 3,
+  });
+  assert.equal(updates, 0);
+  assert.equal(rays, 0, "distant patterns have no visible pixels to resolve");
+  sources.forEach((source) => assert.equal(source.patch.visible, false));
+});

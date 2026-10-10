@@ -111,22 +111,26 @@ export function installCourseBake(scene, bake) {
           `#include <lights_fragment_end>
           vec2 bakeUv=(vCourseBakeWorld.xz-courseBakeBounds.xy)/courseBakeBounds.zw;
           float insideBake=step(0.,bakeUv.x)*step(0.,bakeUv.y)*step(bakeUv.x,1.)*step(bakeUv.y,1.);
-          vec4 courseLight=texture2D(courseBakeMap,bakeUv);
-          float encodedHeight=dot(texture2D(courseHeightMap,bakeUv).rg,vec2(256./257.,1./257.));
-          float bakeY=mix(courseBakeHeight.x,courseBakeHeight.y,encodedHeight);
           float hasMeshBake=step(.001,vMeshLightBake.a);
           reflectedLight.indirectDiffuse*=mix(1.,vMeshLightBake.a,hasMeshBake);
           reflectedLight.indirectDiffuse+=diffuseColor.rgb*vMeshLightBake.rgb*courseBakeBounce*hasMeshBake;
           reflectedLight.indirectSpecular*=mix(1.,vMeshLightBake.a,hasMeshBake*roughnessFactor*.35);
-          float nearGround=(1.-smoothstep(1.5,6.,abs(vCourseBakeWorld.y-bakeY)))*insideBake*(1.-hasMeshBake);
-          reflectedLight.indirectDiffuse*=mix(1.,courseLight.a,nearGround);
-          reflectedLight.indirectDiffuse+=diffuseColor.rgb*courseLight.rgb*courseBakeBounce*nearGround;
+          // Most scenery already has mesh lighting. Sample the fallback maps
+          // only for uncovered surfaces, retaining exactly the baked result.
+          if(hasMeshBake<.5){
+            vec4 courseLight=texture2D(courseBakeMap,bakeUv);
+            float encodedHeight=dot(texture2D(courseHeightMap,bakeUv).rg,vec2(256./257.,1./257.));
+            float bakeY=mix(courseBakeHeight.x,courseBakeHeight.y,encodedHeight);
+            float nearGround=(1.-smoothstep(1.5,6.,abs(vCourseBakeWorld.y-bakeY)))*insideBake;
+            reflectedLight.indirectDiffuse*=mix(1.,courseLight.a,nearGround);
+            reflectedLight.indirectDiffuse+=diffuseColor.rgb*courseLight.rgb*courseBakeBounce*nearGround;
           ${
             volume
               ? `vec3 spillLight=courseSpillAt(bakeUv,vCourseBakeWorld.y)*insideBake*courseSpillStrength*(1.-hasMeshBake);
           reflectedLight.indirectDiffuse+=diffuseColor.rgb*spillLight;
           reflectedLight.indirectSpecular+=spillLight*.12*(1.-roughnessFactor);`
               : ""
+          }
           }`,
         );
       });

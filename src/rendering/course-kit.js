@@ -179,6 +179,8 @@ export function batchScenery(scenery, animated = []) {
     combined.add(m);
   }
   batchStaticMeshes(combined);
+  combined.updateMatrix();
+  combined.matrixAutoUpdate = false;
   // Remove empty source containers left after flattening static scenery.
   const prune = (group) => {
     for (const child of [...group.children]) {

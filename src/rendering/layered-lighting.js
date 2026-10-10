@@ -214,15 +214,17 @@ function updateRecord(record, time, state) {
     const direction = record.worldTarget
       ? record.worldTarget.clone().sub(record.position).normalize()
       : record.worldDirection;
-    let receiver = record.worldTarget
-      ? { point: record.worldTarget.clone(), normal: direction.clone().negate() }
-      : findReceiver(record, state);
-    record.patch.visible =
-      !!receiver &&
+    const showPattern =
       state.showPattern !== false &&
-      (state.qualityTier == null || state.qualityTier > 0);
-    if (state.viewerPosition && receiver)
-      record.patch.visible &&= record.position.distanceTo(state.viewerPosition) < record.radius * 6;
+      (state.qualityTier == null || state.qualityTier > 0) &&
+      (!state.viewerPosition ||
+        record.position.distanceToSquared(state.viewerPosition) < (record.radius * 6) ** 2);
+    const receiver = !showPattern
+      ? null
+      : record.worldTarget
+        ? { point: record.worldTarget.clone(), normal: direction.clone().negate() }
+        : findReceiver(record, state);
+    record.patch.visible = !!receiver;
     if (receiver) {
       record.patch.position.copy(receiver.point);
       record.patch.position.addScaledVector(receiver.normal, 0.025);
@@ -283,9 +285,11 @@ export function updateLayeredLighting(scene, time = 0, state = {}) {
       )
       .slice(0, MAX_VISIBLE_PATTERN_MESHES),
   );
+  const receiverFrame = { updated: false };
   for (const record of records)
     record.update(time, {
       ...state,
+      receiverFrame,
       showPattern: record.patch ? visiblePatterns.has(record) : false,
     });
 }
@@ -348,7 +352,12 @@ function findReceiver(record, state) {
     0.02,
     record.radius * 4,
   );
-  record.scene.updateMatrixWorld(true);
+  // Several moving lights can need fresh rays in one frame. Refresh receiver
+  // transforms once for the whole lighting update, not once per light.
+  if (!state.receiverFrame?.updated) {
+    record.scene.updateMatrixWorld();
+    if (state.receiverFrame) state.receiverFrame.updated = true;
+  }
   const intersections = raycaster.intersectObjects(
     record.scene.userData.layeredReceiverMeshes || [],
     false,

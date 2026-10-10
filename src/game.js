@@ -28,6 +28,7 @@ import { createNetworkRace } from "./multiplayer/network-race.js";
 import { installScannedMaterials } from "./rendering/scanned-materials.js";
 import { installMaterialPolish } from "./rendering/material-polish.js";
 import { loadMeshLightBake, installMeshLightAttributes } from "./rendering/mesh-light-bake.js";
+import { stabilizeSceneryMaterials } from "./rendering/scenery-performance.js";
 
 async function startGame() {
   document.getElementById("multiplayer-button").addEventListener("click", () => {
@@ -260,6 +261,12 @@ async function startGame() {
     }
   });
   sceneState.graphicsQuality.attachWorld(landscape, particles);
+  scene.userData.sceneryPerformance = {
+    materialVariants: stabilizeSceneryMaterials(scene, [
+      ...landscape.animated,
+      ...racers.map((racer) => racer.kart.root),
+    ]),
+  };
   const loop = createFrameLoop({
     renderer,
     camera,

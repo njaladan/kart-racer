@@ -177,3 +177,46 @@ Frostpeak and Sunstone vistas, and HUD clearance on a narrow touch viewport.
 Drift, boost and land once, then pause and restart. The normal course-rendering
 checks cover finite scene geometry and batching; software-browser frame rates
 are not representative of player hardware.
+
+## Render-work optimizations and profiling
+
+Static scenery materials now retain one shader layout per material instance,
+including separate ordinary/instanced and vertex-attribute layouts. Shader hooks
+and their shared effect uniforms survive the split; animated materials remain
+shared so their changing colors and intensities stay live. Static batch members
+cache their local matrices while moving parents still update world transforms.
+LOD distance checks update their own ancestry instead of the whole course.
+
+Projected light effects resolve receivers only when visible. Moving lights share
+one scene-transform refresh per lighting update, and unchanged sources retain
+cached receivers. Mesh-lit fragments skip unused ground-bake and spill texture
+reads. The sky draws at far depth after opaque scenery, allowing depth testing
+to reject cloud shading behind terrain and buildings. Existing effects, graphics
+tiers, render resolution, shadows, HDR bloom and live reflections are retained.
+
+`node tools/profile-courses.mjs` profiles every course on the local GPU with Ultra,
+bloom and motion enabled and adaptive quality disabled. Requires an installed
+Playwright module and Chrome; `PLAYWRIGHT_MODULE` and `CHROMIUM_PATH` override
+those installations. The tool can also find the desktop's bundled Playwright.
+Optional course IDs restrict the run. Defaults: a 1280x800 CSS viewport, device
+scale 2, the game's existing 1.6 pixel-ratio cap, three course positions, three
+seconds of warmup and five seconds of measurement per position.
+
+Reports go to `/tmp/kart-profile`. `PROFILE_OUTPUT`, `PROFILE_WIDTH`,
+`PROFILE_HEIGHT`, `PROFILE_POINTS` (a JSON array of progress fractions),
+`PROFILE_WARMUP` and `PROFILE_DURATION` customize a run. `PROFILE_TRACE=1`
+saves Chrome CPU profiles. `PROFILE_VISUALS=1` saves deterministic paused views.
+`PROFILE_HEADLESS=0` uses a visible Chrome window.
+
+`PROFILE_COMPARE=1` compares the selected Git base (`PROFILE_BASE_REF`, default
+`HEAD`) against the working files without modifying the checkout. Use a base
+before these optimizations for a meaningful comparison. Normal gameplay exposes
+no profiling context; it is available only with both test and benchmark enabled.
+
+The measured frame cadence and CPU submission times cover fixed race states,
+not a complete driving lap. Other apps, shader compilation, memory pressure and
+thermal throttling affect results. ANGLE/Metal GPU timer queries are omitted:
+they can report command-buffer timings repeatedly across passes and perturb
+frame pacing. Six before/after course views were compared at Retina display
+size; differences above five channel levels affected less than 0.01% of channels.
+These changes reduce redundant work but do not establish 60 fps on an M1 Air.

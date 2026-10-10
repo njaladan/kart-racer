@@ -30,11 +30,11 @@ export function addGradientSky(scene, theme = {}) {
     new THREE.ShaderMaterial({
       side: THREE.BackSide,
       depthWrite: false,
-      depthTest: false,
+      depthTest: true,
       toneMapped: false,
       uniforms,
       vertexShader: `varying vec3 direction;
-      void main(){direction=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+      void main(){direction=position;vec4 p=projectionMatrix*modelViewMatrix*vec4(position,1.);gl_Position=p.xyww;}`,
       fragmentShader: `uniform vec3 zenith,horizon,cloudLight,cloudShade,celestial,sunDirection;
       uniform float time,night,cloudCover,cloudSpeed,celestialAmount,storm,stormFlash; varying vec3 direction;
       float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
@@ -70,7 +70,10 @@ export function addGradientSky(scene, theme = {}) {
     }),
   );
   sky.name = "Layered painted sky, drifting clouds and sun or moon";
-  sky.renderOrder = -1000;
+  // Draw after opaque scenery at the far depth. Early depth testing skips
+  // cloud/noise shading behind terrain and buildings; transparent effects
+  // still draw over the same sky. Its appearance and animation are unchanged.
+  sky.renderOrder = 1000;
   sky.frustumCulled = false;
   sky.onBeforeRender = (_renderer, _scene, camera) => {
     sky.position.copy(camera.position);

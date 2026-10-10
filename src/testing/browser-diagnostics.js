@@ -236,6 +236,7 @@ export function createBrowserDiagnostics({
     // Synchronous test-only transport avoids spending bounded render frames
     // before queued postMessage seeks reach the game. Normal play exposes none.
     windowRef.__turboTrailDiagnostics = {
+      ...(benchmarkMode ? { context: { scene, renderer, camera, gameRenderer } } : {}),
       send(message) {
         receive({ origin: windowRef.location.origin, source: windowRef.parent, data: message });
       },

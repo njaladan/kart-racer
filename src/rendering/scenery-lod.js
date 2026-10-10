@@ -77,8 +77,12 @@ export function createSceneryDetailController(scene) {
     updateCamera(position) {
       camera.position.copy(position);
       camera.matrixWorld.makeTranslation(position.x, position.y, position.z);
-      scene.updateMatrixWorld();
-      for (const lod of lods) lod.update(camera);
+      for (const lod of lods) {
+        // Only a moving LOD's ancestry can affect its distance. Updating the
+        // entire course here repeated the renderer's traversal every frame.
+        lod.updateWorldMatrix(true, false);
+        lod.update(camera);
+      }
     },
   };
 }
