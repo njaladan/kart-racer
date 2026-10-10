@@ -280,6 +280,7 @@ export function buildPortLandmarks({
     }
   box(amber, ship, [0, 16.2, -17], [0.22, 5, 0.22]);
   box(cyan, ship, [0, 18.6, -17], [2.4, 0.1, 0.1]);
+  batch(ship);
   ship.visible = false;
   scenery.add(ship);
   animated.push(ship);
