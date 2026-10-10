@@ -345,6 +345,7 @@ export function createGameRenderer({
       camera.aspect,
     );
     postprocessing?.setBoostMotion(boostStrength, boostKick);
+    postprocessing?.setDesertMirage?.(frameState.raceTime, motionEnabled, section.id !== "temple");
     postprocessing?.setWaterMedium?.(
       Number.isFinite(waterLevel) ? immersion : 0,
       motionEnabled ? frameState.raceTime : 0,

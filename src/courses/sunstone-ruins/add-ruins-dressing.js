@@ -83,20 +83,5 @@ export function addRuinsDressing({
       }
       groundShadow(root, 24, 20);
     }
-    // Smooth terrain with multiple asymmetrical ridges breaks the flat skyline.
-    for (let i = 0; i < 5; i++) {
-      const root = grounded(sectorT(sector, 0.07 + i * 0.2), (i % 2 ? 1 : -1) * 118, 32 + i * 1.7);
-      if (!root) continue;
-      const dune = mesh(
-        duneGeometry,
-        sandShade,
-        root,
-        [0, -0.35, 0],
-        [32 + i * 1.7, 12 + (i % 3) * 4, 27],
-      );
-      dune.rotation.y = i * 0.69 + sector;
-      dune.castShadow = false;
-      dune.userData.bakeReceiver = true;
-    }
   }
 }

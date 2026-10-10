@@ -1,10 +1,16 @@
 import * as THREE from "../../vendor/three/three.module.js";
+import { createDesertMirage, DESERT_MIRAGE_GLSL } from "./desert-mirage.js";
 
 const vertexShader = `varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}`;
 
-/** HDR scene + quarter-size separable bloom. Low tier renders directly. */
+/** HDR scene + quarter-size bloom; desert refraction also runs on Performance. */
 export function createPostProcessing(renderer, theme = {}, wetReflections = null) {
+  const mirage = createDesertMirage(theme);
   const target = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 2 });
+  if (mirage.enabled) {
+    target.depthTexture = new THREE.DepthTexture(1, 1, THREE.UnsignedIntType);
+    target.samples = 0;
+  }
   const bloomA = new THREE.WebGLRenderTarget(1, 1, {
     type: THREE.HalfFloatType,
     depthBuffer: false,
@@ -43,7 +49,9 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
   const grade = new THREE.ShaderMaterial({
     depthTest: false,
     depthWrite: false,
+    defines: mirage.enabled ? { USE_DESERT_MIRAGE: 1 } : {},
     uniforms: {
+      ...mirage.uniforms,
       source: { value: target.texture },
       bloom: { value: bloomA.texture },
       boostBlur: { value: 0 },
@@ -65,6 +73,7 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
     },
     vertexShader,
     fragmentShader: `uniform sampler2D source,bloom;uniform float bloomStrength,boostBlur,waterImmersion,waterTime;uniform vec3 gradeTint;varying vec2 vUv;
+      ${DESERT_MIRAGE_GLSL}
       void main(){
         vec2 sampleUv=vUv;
         if(waterImmersion>.001){
@@ -72,9 +81,16 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
           vec2 waterRipple=vec2(sin(vUv.y*28.+waterTime*1.7),sin(vUv.x*23.-waterTime*1.3));
           sampleUv=clamp(vUv+waterRipple*(waterImmersion*.00035+crossing*.002),vec2(.001),vec2(.999));
         }
+        #ifdef USE_DESERT_MIRAGE
+          float mirageAmount=mirageAmountAt(vUv);
+          sampleUv=refractDesert(sampleUv,mirageAmount);
+        #endif
         vec3 c=texture2D(source,sampleUv).rgb;
+        #ifdef USE_DESERT_MIRAGE
+          c=desertMirageColor(c,sampleUv,mirageAmount);
+        #endif
         // Four extra taps in the existing grade pass; no history or new targets.
-        // The center stays sharp and Performance bypasses this pass entirely.
+        // The center stays sharp; Performance disables boost blur.
         if(boostBlur>.001){
           vec2 radial=vUv-vec2(.5,.54);
           float edge=smoothstep(.18,.6,length(radial));
@@ -99,6 +115,7 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
     renderer.render(fullscreen, camera);
   }
   return {
+    setDesertMirage: mirage.update,
     setWaterMedium(immersion, time) {
       grade.uniforms.waterImmersion.value = immersion;
       grade.uniforms.waterTime.value = time;
@@ -114,7 +131,7 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
       wetReflections?.setQuality(tier);
     },
     render(scene, sceneCamera) {
-      if (quality === 0) {
+      if (quality === 0 && !mirage.enabled) {
         renderer.render(scene, sceneCamera);
         return;
       }
@@ -126,7 +143,9 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
         bloomA.setSize(Math.max(1, Math.ceil(width / 4)), Math.max(1, Math.ceil(height / 4)));
         bloomB.setSize(bloomA.width, bloomA.height);
         extract.uniforms.texel.value.set(1 / width, 1 / height);
+        mirage.bindDepth(target.depthTexture, width, height);
       }
+      if (mirage.enabled) mirage.updateCamera(sceneCamera);
       const toneMapping = renderer.toneMapping;
       renderer.toneMapping = THREE.NoToneMapping;
       wetReflections?.render(renderer, scene, sceneCamera);

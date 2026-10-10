@@ -7,7 +7,6 @@ import { buildTempleAtmosphere } from "./sunstone-ruins/build-temple-atmosphere.
 import { createSandfall } from "./sunstone-ruins/sandfall.js";
 import { createSolarFocus } from "./sunstone-ruins/solar-focus.js";
 import { createRouteClearance } from "../rendering/route-clearance.js";
-import { createDuneGeometry } from "./sunstone-ruins/create-desert-geometry.js";
 import { buildDesertHorizon } from "./sunstone-ruins/build-desert-horizon.js";
 
 /** The road travels through the monument; architecture follows its actual frames. */
@@ -16,21 +15,19 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
   const animated = [],
     motions = [];
   const allows = createRouteClearance(track);
-  const stone = material("#dfb87f", { bumpMap: textures.stone, bumpScale: 0.05 });
-  const pale = material("#ffe0a0", { bumpMap: textures.stone, bumpScale: 0.05 });
-  const shade = material("#957958", { bumpMap: textures.stone, bumpScale: 0.05 });
-  const dark = material("#594737", { bumpMap: textures.stone, bumpScale: 0.05 });
-  const sand = material("#d9ac68", { bumpMap: textures.sand, bumpScale: 0.035 });
-  const paleSand = material("#e8c78b", { bumpMap: textures.sand, bumpScale: 0.035 });
+  const stone = material("#c5b494", { bumpMap: textures.stone, bumpScale: 0.05 });
+  const pale = material("#e4d5b5", { bumpMap: textures.stone, bumpScale: 0.05 });
+  const shade = material("#897c67", { bumpMap: textures.stone, bumpScale: 0.05 });
+  const dark = material("#5f574d", { bumpMap: textures.stone, bumpScale: 0.05 });
+  const sand = material("#d1b688", { bumpMap: textures.sand, bumpScale: 0.035 });
   const gold = material("#dfa744", { metalness: 0.55, roughness: 0.36 });
   const teal = material("#4e9a94", { map: textures.fabric, side: THREE.DoubleSide });
   const glow = material("#ffe4a1", { emissive: "#ffc75a", emissiveIntensity: 1.4 });
   const coolGlow = material("#8ef2db", { emissive: "#39c9be", emissiveIntensity: 0.7 });
-  for (const m of [stone, pale, shade, dark, sand, paleSand])
+  for (const m of [stone, pale, shade, dark, sand])
     installSurfaceDetail(m, { kind: "terrain", strength: 0.18 });
   for (const m of [stone, pale, shade, dark]) carvedSandstone(m, { carved: true });
   const sphere = new THREE.SphereGeometry(1, 12, 8);
-  const dune = createDuneGeometry(THREE);
   const ring = new THREE.TorusGeometry(1, 0.075, 6, 48);
   const rock = new THREE.IcosahedronGeometry(1, 1);
   const mesa = kit.authoredGeometry("blender:sandstone-mesa", rock);
@@ -267,17 +264,6 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
   mesh(sphere, gold, sentinel, [0, 3, 0], [1.1, 1.1, 1.1]);
   box(coolGlow, sentinel, [0, 1.8, -2.16], [2.6, 0.3, 0.1]);
   animated.push(sentinel);
-  for (let i = 0; i < 38; i++) {
-    const t = sectorT(6, (i + 0.5) / 38),
-      side = i % 2 ? 1 : -1;
-    const radius = 27 + (i % 3) * 9;
-    const edge = side > 0 ? track.surfaceAt(t).rightEdge : track.surfaceAt(t).leftEdge;
-    const g = safe(t, edge + side * (radius + 8 + (i % 4) * 14), radius);
-    if (!g) continue;
-    const d = mesh(dune, i % 2 ? sand : paleSand, g, [0, -1, 0], [radius, 12 + (i % 5) * 4, 24]);
-    d.rotation.y = i * 0.73;
-    if (i % 7 === 0) kit.asset("ruins:ruined-house", g, [0, 0, 0], [10, 10, 10]);
-  }
   buildExpeditionLife({
     THREE,
     scene,
