@@ -1,7 +1,8 @@
 # Course music and recorded effects
 
-These are existing online recordings, bundled locally without composition,
-remixing or re-encoding. Music loops indefinitely through Web Audio, preserving
+Music and water effects are existing online recordings, bundled locally without
+remixing or re-encoding. Countdown tones are original synthesized effects.
+Music loops indefinitely through Web Audio, preserving
 the intro/loop start from the original `.music` metadata where supplied.
 Only the current course's music is downloaded by the browser.
 
@@ -37,11 +38,11 @@ Its upstream license permits CC BY-SA 3.0 or later; this distribution uses 3.0.
 
 | Local file | Original recording | Creator | License |
 | --- | --- | --- | --- |
-| `sfx/countdown-3.ogg`, `countdown-2.ogg`, `countdown-1.ogg`, `countdown-go.ogg` | `Female/3.ogg`, `2.ogg`, `1.ogg`, `go.ogg` from [Voiceover Pack](https://kenney.nl/assets/voiceover-pack) | Kenney | [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/) |
+| `sfx/countdown-beep.ogg`, `countdown-start.ogg` | Original arcade starting-light tones: three 880 Hz beeps, followed by a longer 1760 Hz start tone | Turbo Trail contributors | Same license as the game code |
 | `sfx/bubble.wav` | `inventory/bubble3.wav` from [RPG Sound Pack](https://opengameart.org/content/rpg-sound-pack) | artisticdude | CC0 1.0 |
 | `sfx/splash.ogg` | [SuperTuxKart splash](https://github.com/Nomagno/stk-assets/blob/master/sfx/splash.ogg) | The Audio Monkey (2017); minor edits by OzoneOne (2017) | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 
-Countdown and bubble recordings were retrieved through the
+The bubble recording was retrieved through the
 [public sound-effects mirror](https://github.com/Mcamento8/open-game-sfx-index),
 whose [source list](https://github.com/Mcamento8/open-game-sfx-index/blob/main/SOURCES.md)
 identifies the original packs. Splash attribution is preserved in
@@ -49,5 +50,5 @@ identifies the original packs. Splash attribution is preserved in
 [The Audio Monkey sound pack](https://forum.freegamedev.net/viewtopic.php?f=18&t=7425).
 
 The runtime applies volume changes and a temporary underwater low-pass filter;
-the distributed files are unmodified. The original source hashes and repository
-revisions are recorded in [manifest.json](manifest.json).
+the bundled upstream recordings are unmodified. File hashes, synthesis details
+and repository revisions are recorded in [manifest.json](manifest.json).

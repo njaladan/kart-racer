@@ -1,10 +1,10 @@
 import { COURSE_MUSIC } from "./course-music.js";
 
 const effectFiles = {
-  "countdown-3": "countdown-3.ogg",
-  "countdown-2": "countdown-2.ogg",
-  "countdown-1": "countdown-1.ogg",
-  "countdown-go": "countdown-go.ogg",
+  "countdown-3": "countdown-beep.ogg",
+  "countdown-2": "countdown-beep.ogg",
+  "countdown-1": "countdown-beep.ogg",
+  "countdown-go": "countdown-start.ogg",
   splash: "splash.ogg",
   bubble: "bubble.wav",
 };

@@ -87,7 +87,7 @@ Requires Node.js. Tests cover course layouts, physics, race progress, AI, items,
 
 Original procedural artwork and adapted CC0 assets. See [asset credits](assets/CREDITS.md), [course assets](assets/courses/LICENSES.md), and [materials and props](assets/living/LICENSES.md) for sources and licenses. Three.js and font licenses are included under `vendor/`.
 
-Each course has its own looping soundtrack, starting after the recorded 3–2–1–Go countdown. Water entry adds a splash and bubbles, with muffled music and effects until surfacing. Music has its own volume slider and pauses with the race. See [audio credits and licenses](assets/audio/CREDITS.md).
+Each course has its own looping soundtrack, starting after the arcade beep countdown and higher-pitched start tone. Water entry adds a splash and bubbles, with muffled music and effects until surfacing. Music has its own volume slider and pauses with the race. See [audio credits and licenses](assets/audio/CREDITS.md).
 
 Windmill Wilds now has eight connected places: a flower fair, root woodland, banked ridge, reedwater crossing, working mill, cider orchard, willow maze and harvest homecoming. [Course map and elevation](docs/screenshots/windmill-route-plan.png) · [Full design brief](proposals/windmill-wilds.md).
 
