@@ -19,7 +19,7 @@ export function stabilizeSceneryMaterials(scene, animated = []) {
     const replace = (material) => {
       if (!material.isMeshStandardMaterial || moving.has(material)) return material;
       const geometry = object.geometry;
-      const key = `${!!object.isInstancedMesh}:${!!object.isSkinnedMesh}:${geometry.getAttribute("color")?.itemSize === 4}:${!!geometry.getAttribute("tangent")}`;
+      const key = `${!!object.isBatchedMesh}:${!!object.isInstancedMesh}:${!!object.isSkinnedMesh}:${geometry.getAttribute("color")?.itemSize === 4}:${!!geometry.getAttribute("tangent")}`;
       if (!variants.has(material)) variants.set(material, new Map([[key, material]]));
       const layouts = variants.get(material);
       if (!layouts.has(key)) {

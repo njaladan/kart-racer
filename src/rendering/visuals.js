@@ -182,5 +182,6 @@ export function batchStaticMeshes(parent, excluded = []) {
     // update their world matrices through the parent transform.
     child.updateMatrix();
     child.matrixAutoUpdate = false;
+    child.userData.staticScenery = true;
   }
 }

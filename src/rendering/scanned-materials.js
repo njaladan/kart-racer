@@ -111,7 +111,13 @@ export function installScannedMaterials(scene, library, courseId, animated = [])
           #endif
           vScanWorld=(modelMatrix*scanPosition).xyz;
           vec3 scanScale=vec3(length(modelMatrix[0].xyz),length(modelMatrix[1].xyz),length(modelMatrix[2].xyz));
-          vScanCoords=mix(vScanWorld,scanPosition.xyz*scanScale,scanLocal);`,
+          vec3 scanLocalPosition=scanPosition.xyz;
+          #ifdef USE_BATCHING
+            mat4 scanModelMatrix=modelMatrix*batchingMatrix;
+            scanScale=vec3(length(scanModelMatrix[0].xyz),length(scanModelMatrix[1].xyz),length(scanModelMatrix[2].xyz));
+            scanLocalPosition=transformed;
+          #endif
+          vScanCoords=mix(vScanWorld,scanLocalPosition*scanScale,scanLocal);`,
           );
           shader.fragmentShader = `
           varying vec3 vScanWorld,vScanCoords;

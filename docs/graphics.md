@@ -208,6 +208,10 @@ Reports go to `/tmp/kart-profile`. `PROFILE_OUTPUT`, `PROFILE_WIDTH`,
 saves Chrome CPU profiles. `PROFILE_VISUALS=1` saves deterministic paused views.
 `PROFILE_HEADLESS=0` uses a visible Chrome window.
 
+`PROFILE_CHUNKS=1` compares the static multi-draw runtime with chunks
+off and on. See [scenery-performance.md](scenery-performance.md) for the M1
+evidence, compatibility boundaries and validation limits.
+
 `PROFILE_COMPARE=1` compares the selected Git base (`PROFILE_BASE_REF`, default
 `HEAD`) against the working files without modifying the checkout. Use a base
 before these optimizations for a meaningful comparison. Normal gameplay exposes

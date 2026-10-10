@@ -26,10 +26,15 @@ for (const candidate of [
 if (!chromium) throw new Error("Set PLAYWRIGHT_MODULE to an installed Playwright module.");
 const output = resolve(process.env.PROFILE_OUTPUT || "/tmp/kart-profile");
 await mkdir(output, { recursive: true });
-const compare = process.env.PROFILE_COMPARE === "1";
-const stages = compare
-  ? ["before", "after"]
-  : [process.env.PROFILE_BASELINE === "1" ? "before" : "after"];
+const chunkCompare = process.env.PROFILE_CHUNKS === "1";
+const compare = !chunkCompare && process.env.PROFILE_COMPARE === "1";
+const stages = chunkCompare
+  ? process.env.PROFILE_CHUNKS_FIRST === "1"
+    ? ["chunks-on", "chunks-off"]
+    : ["chunks-off", "chunks-on"]
+  : compare
+    ? ["before", "after"]
+    : [process.env.PROFILE_BASELINE === "1" ? "before" : "after"];
 const baseRef = process.env.PROFILE_BASE_REF || "HEAD";
 const originals = new Map();
 if (stages.includes("before")) {
@@ -88,7 +93,7 @@ try {
           );
       }
       await page.goto(
-        `${process.env.PROFILE_URL || "http://127.0.0.1:5173"}/?course=${course.id}&test&benchmark`,
+        `${process.env.PROFILE_URL || "http://127.0.0.1:5173"}/?course=${course.id}&test&benchmark${chunkCompare ? "&sceneryChunks=1" : ""}`,
         { waitUntil: "domcontentloaded", timeout: 120000 },
       );
       await page.waitForFunction(
@@ -98,6 +103,10 @@ try {
         undefined,
         { timeout: 240000, polling: 250 },
       );
+      if (chunkCompare)
+        await page.evaluate((enabled) => {
+          window.__turboTrailDiagnostics.context.scene.userData.sceneryChunks.setEnabled(enabled);
+        }, stage === "chunks-on");
       const hardware = await page.evaluate(() => {
         const { renderer, gameRenderer, scene } = window.__turboTrailDiagnostics.context;
         const gl = renderer.getContext();
@@ -165,6 +174,7 @@ try {
           pixelRatio: renderer.getPixelRatio(),
           meshLighting: scene.userData.meshLightCoverage?.coverage,
           optimizations: scene.userData.sceneryPerformance,
+          chunksEnabled: scene.userData.sceneryChunks?.enabled,
           opaqueWithoutDepth,
         };
       });

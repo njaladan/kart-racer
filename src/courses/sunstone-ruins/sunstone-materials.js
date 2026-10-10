@@ -28,7 +28,11 @@ export function carvedSandstone(material, { scale = 1, carved = false } = {}) {
      sandstonePosition=instanceMatrix*sandstonePosition;
     #endif
     vSunstone=(modelMatrix*sandstonePosition).xyz;
-    vStoneAxis=normalize(mat3(modelMatrix)*objectNormal);`,
+    vec3 stoneAxis=objectNormal;
+    #ifdef USE_BATCHING
+     stoneAxis=mat3(batchingMatrix)*stoneAxis;
+    #endif
+    vStoneAxis=normalize(mat3(modelMatrix)*stoneAxis);`,
     );
     shader.fragmentShader = `varying vec3 vSunstone,vStoneAxis;
     float sandstoneHash(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
