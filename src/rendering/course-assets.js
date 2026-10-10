@@ -105,6 +105,18 @@ async function loadModelPack(loader, manifestUrl, models, renderer, optional = f
 // Imported kits use different authoring scales and pivots. A one metre tall,
 // ground-centred source makes `kit.asset(..., scale)` predictable in metres.
 export function normalizeCourseModel(scene) {
+  scene.traverse((object) => {
+    if (!object.isMesh) return;
+    const materials = Array.isArray(object.material) ? object.material : [object.material];
+    for (const material of materials)
+      if (/windowsSet/i.test(material.name)) {
+        // The upstream cabin windows are overlays on the wall. Keep their
+        // painted panes stable at both chase-camera and distant ridge views.
+        material.polygonOffset = true;
+        material.polygonOffsetFactor = -1;
+        material.polygonOffsetUnits = -2;
+      }
+  });
   scene.updateMatrixWorld(true);
   const bounds = new THREE.Box3().setFromObject(scene);
   const size = bounds.getSize(new THREE.Vector3());

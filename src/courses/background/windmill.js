@@ -1,6 +1,6 @@
 /** Farmland continues beyond the existing orchard and wooded valley. */
 export function windmillBackground(b) {
-  const { track, mat, mesh, box, group, place, motion } = b;
+  const { track, mat, mesh, box, group, place, motion, surfaceY } = b;
   const meadow = mat("#739565", "grass"),
     grain = mat("#c4b473", "grass"),
     wood = mat("#806951", "wood"),
@@ -15,7 +15,7 @@ export function windmillBackground(b) {
       side,
       "Patchwork fields and distant working farm",
       (g) => {
-        mesh("ridge", meadow, g, [0, 0, 0], [165, 34 + (s % 3) * 12, 105]);
+        mesh("ridge", meadow, g, [0, 0, -108], [165, 34 + (s % 3) * 12, 90]);
         for (let i = 0; i < 4; i++) {
           box(i % 2 ? grain : meadow, g, [-48 + i * 30, 0.2, -35], [28, 0.3, 38]);
           box(wood, g, [-48 + i * 30, 0.6, -57], [29, 0.6, 0.8]);
@@ -49,10 +49,10 @@ export function windmillBackground(b) {
       -side,
       "Wooded countryside ridge and circling birds",
       (g) => {
-        mesh("ridge", meadow, g, [0, 0, 0], [180, 48, 100]);
+        const ridge = mesh("ridge", meadow, g, [0, 0, 0], [180, 48, 100]);
         for (let i = 0; i < 8; i++) {
           const x = -65 + i * 18,
-            y = 3 + (i % 3) * 4;
+            y = surfaceY(ridge, x, -20) - 0.15;
           mesh("cylinder", wood, g, [x, y + 5, -20], [1, 10, 1]);
           mesh("sphere", leaves, g, [x, y + 15, -20], [10, 12, 9]);
         }

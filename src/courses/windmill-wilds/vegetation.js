@@ -151,6 +151,9 @@ export function buildWindmillVegetation({ scenery, mats, textures, primitives, r
     map: mats.grass.map,
     roughness: 1,
     vertexColors: true,
+    polygonOffset: true,
+    polygonOffsetFactor: -1,
+    polygonOffsetUnits: -2,
   });
   for (let section = 0; section < SECTIONS.length; section++)
     for (let i = 0; i < 6; i++) {
@@ -177,7 +180,7 @@ export function buildWindmillVegetation({ scenery, mats, textures, primitives, r
           const raised =
             surface.distance > physical + 1 ? 0.55 * Math.max(0, (1 - u * u) * (1 - v * v)) : -0.07;
           p.y = sceneryGroundHeight(surface) + raised;
-          pos.push(p.x, p.y + 0.018, p.z);
+          pos.push(p.x, p.y + 0.08, p.z);
           uv.push(p.x / 6, p.z / 6);
           const soil = Math.max(0, 1 - u * u) * Math.max(0, 1 - v * v);
           col.push(1 - soil * 0.2, 1 - soil * 0.19, 1 - soil * 0.3);

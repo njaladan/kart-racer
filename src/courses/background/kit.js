@@ -77,6 +77,17 @@ export function backgroundKit(w) {
     object.castShadow = false;
     return object;
   }
+  function surfaceY(terrain, x, z) {
+    terrain.updateWorldMatrix(true, false);
+    const parent = terrain.parent;
+    const ray = new THREE.Raycaster(
+      parent.localToWorld(new THREE.Vector3(x, 1000, z)),
+      new THREE.Vector3(0, -1, 0),
+    );
+    const hit = ray.intersectObject(terrain, false)[0];
+    if (!hit) throw new Error("Background prop has no supporting terrain");
+    return parent.worldToLocal(hit.point).y;
+  }
   function place(
     section,
     fraction,
@@ -146,5 +157,5 @@ export function backgroundKit(w) {
     w.kit.batch(combined);
     return w.motion(object, update);
   }
-  return { ...w, mat: material, mesh, box, group, tube, place, motion, sites };
+  return { ...w, mat: material, mesh, box, group, tube, surfaceY, place, motion, sites };
 }

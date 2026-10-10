@@ -1,7 +1,17 @@
+import { sceneryGroundHeight } from "../../rendering/terrain-height.js";
+
 /** Late-stage countryside dressing: authored foliage, rooted verges and a warm mill grove. */
 export function polishWindmill(w) {
   const { THREE } = w;
   const rand = w.seeded(73107);
+  const grounded = (...args) => {
+    const site = w.safe(...args);
+    if (site) {
+      site.position.y = sceneryGroundHeight(w.track.projectTrack(site.position, 0, true));
+      site.userData.groundPlanted = true;
+    }
+    return site;
+  };
   const asset = (name, parent, size, position = [0, 0, 0]) => {
     if (!w.kit.hasAsset(`windmill:${name}`)) return null;
     return w.kit.asset(`windmill:${name}`, parent, position, [size, size, size]);
@@ -17,7 +27,8 @@ export function polishWindmill(w) {
     const fraction = 0.075 + rand() * 0.85;
     const side = i % 2 ? 1 : -1;
     const offset = section === 1 ? 17 + rand() * 24 : 20 + rand() * 29;
-    const g = w.safe(section, fraction, side * offset, 5.2);
+    if (section === 2) continue;
+    const g = grounded(section, fraction, side * offset, 5.2);
     if (!g) continue;
     g.name = `Layered tree silhouette, section ${section}`;
     g.rotation.y = rand() * Math.PI * 2;
@@ -52,7 +63,7 @@ export function polishWindmill(w) {
     for (let i = 0; i < 3; i++) {
       const side = i % 2 ? 1 : -1;
       const fraction = 0.13 + i * 0.31 + rand() * 0.04;
-      const g = w.safe(section, fraction, side * (10.5 + rand() * 5), 2.2);
+      const g = grounded(section, fraction, side * (10.5 + rand() * 5), 2.2);
       if (!g) continue;
       const bush = asset("flower-bush", g, 1 + rand() * 0.38, [-0.85, 0, 0]);
       const fern = asset(
@@ -94,7 +105,7 @@ export function polishWindmill(w) {
   const stone = w.mat("#999980", "rock", { roughness: 1 });
   for (let i = 0; i < 8; i++) {
     const section = i % 3 === 0 ? 3 : i % 2 ? 1 : 5;
-    const g = w.safe(section, 0.13 + rand() * 0.74, (i % 2 ? 1 : -1) * (9 + rand() * 3), 1.2);
+    const g = grounded(section, 0.13 + rand() * 0.74, (i % 2 ? 1 : -1) * (9 + rand() * 3), 1.2);
     if (!g) continue;
     for (let j = 0; j < 3; j++) {
       const r = 0.38 + rand() * 0.42;
@@ -131,7 +142,7 @@ export function polishWindmill(w) {
         staticBake: true,
       });
   } else {
-    const approach = w.safe(4, 0.55, 17, 2);
+    const approach = grounded(4, 0.55, 17, 2);
     if (approach)
       w.light({
         parent: approach,
@@ -161,7 +172,7 @@ export function polishWindmill(w) {
   // Clustered fireflies drift as a shared parent assembly. The layered source
   // and its local light share that parent, so their positions stay in lockstep.
   for (let i = 0; i < 9; i++) {
-    const g = w.safe(1, 0.18 + i * 0.078, (i % 2 ? 1 : -1) * (11 + rand() * 4), 0.75);
+    const g = grounded(1, 0.18 + i * 0.078, (i % 2 ? 1 : -1) * (11 + rand() * 4), 0.75);
     if (!g) continue;
     const lightMount = new THREE.Group();
     lightMount.position.set((rand() - 0.5) * 2, 1.25 + rand() * 2.1, (rand() - 0.5) * 2.5);

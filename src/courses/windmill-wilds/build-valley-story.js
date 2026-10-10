@@ -49,8 +49,9 @@ export function buildValleyStory({ scene, scenery, track, kit, textures }) {
 
   // Broad crop parcels complete the middle-distance valley. Alternating soil
   // and stubble rows read as agriculture without thousands of distant plants.
-  const stubble = material("#d1ba74", { map: textures.grass });
-  const soil = material("#ae9870", { map: textures.needles });
+  const fieldDepth = { polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -2 };
+  const stubble = material("#d1ba74", { map: textures.grass, ...fieldDepth });
+  const soil = material("#ae9870", { map: textures.needles, ...fieldDepth });
   const parcelGeometry = new THREE.PlaneGeometry(48, 4.8);
   const parcelUv = parcelGeometry.getAttribute("uv");
   for (let i = 0; i < parcelUv.count; i++)
@@ -63,7 +64,7 @@ export function buildValleyStory({ scene, scenery, track, kit, textures }) {
       for (let row = 0; row < 12; row++) {
         const strip = mesh(parcelGeometry, row % 3 ? stubble : soil, g, [
           0,
-          0.035,
+          0.12,
           (row - 5.5) * 4.8,
         ]);
         strip.rotation.x = -Math.PI / 2;
