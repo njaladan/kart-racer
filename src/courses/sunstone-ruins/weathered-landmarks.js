@@ -1,12 +1,14 @@
 import { bevelBox } from "../../rendering/visuals.js";
 import { carvedSandstone } from "./sunstone-materials.js";
+import { installDesertMirage } from "../../rendering/desert-mirage.js";
 
 /** Chipped masonry, leaning fragments and collapsed openings form irregular ruin clusters. */
-export function buildWeatheredLandmarks({ THREE, scenery, kit, textures, field }) {
+export function buildWeatheredLandmarks({ THREE, scenery, kit, textures, field, mirage }) {
   const { mesh, material } = kit;
   const stones = ["#b5a58f", "#cabaa0", "#9b9488"].map((color) => {
     const m = material(color, { bumpMap: textures.stone, bumpScale: 0.07, roughness: 1 });
     carvedSandstone(m);
+    installDesertMirage(m, mirage);
     return m;
   });
   const blocks = [0.4, 2.7, 5.3].map((phase) => {
@@ -24,6 +26,9 @@ export function buildWeatheredLandmarks({ THREE, scenery, kit, textures, field }
   });
   const pillar = new THREE.CylinderGeometry(0.8, 1, 1, 7, 4);
   const sites = [
+    // Beyond the starting vista: broad silhouettes reveal the fixed heat warp immediately.
+    [185, -900, "temple", 2.4],
+    [15, -1050, "arch", 2.4],
     [-455, 10, "arch", 1.05],
     [-400, -210, "village", 0.8],
     [-535, -225, "arch", 1.2],

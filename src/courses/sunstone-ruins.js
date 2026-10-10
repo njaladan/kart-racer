@@ -233,7 +233,7 @@ export default withCourseExperience({
     fogFar: 1600,
     cloudCover: 0.18,
     gradeTint: [1, 1, 1.02],
-    desertMirage: { start: 180, end: 700, strength: 1 },
+    desertMirage: { start: 450, end: 800, strength: 1 },
     lightVolume: {
       resolution: 192,
       columns: 3,

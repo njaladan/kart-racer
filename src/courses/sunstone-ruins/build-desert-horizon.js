@@ -1,6 +1,7 @@
 import { createDesertHeightField, createDesertTerrainTile } from "./desert-terrain.js";
 import { buildWeatheredLandmarks } from "./weathered-landmarks.js";
 import { installSurfaceDetail } from "../../rendering/surface-detail.js";
+import { installDesertMirage } from "../../rendering/desert-mirage.js";
 
 /** Continuous wind-shaped sand and a few archaeological sites, with long empty vistas. */
 export function buildDesertHorizon({ THREE, scenery, track, kit, textures }) {
@@ -11,6 +12,8 @@ export function buildDesertHorizon({ THREE, scenery, track, kit, textures }) {
     bumpScale: 0.025,
   });
   installSurfaceDetail(sand, { kind: "terrain", strength: 0.055, scale: 0.013 });
+  const mirage = track.course.theme.desertMirage;
+  installDesertMirage(sand, mirage);
   for (let x = -6; x < 6; x++)
     for (let z = -6; z < 6; z++) {
       const wx = x * 240 + 120,
@@ -22,6 +25,6 @@ export function buildDesertHorizon({ THREE, scenery, track, kit, textures }) {
       tile.userData.bakeReceiver = true;
       tile.userData.desertTerrain = true;
     }
-  buildWeatheredLandmarks({ THREE, scenery, kit, textures, field });
+  buildWeatheredLandmarks({ THREE, scenery, kit, textures, field, mirage });
   return field;
 }

@@ -2,68 +2,69 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import * as THREE from "../vendor/three/three.module.js";
 import course from "../src/courses/sunstone-ruins.js";
-import { createDesertMirage } from "../src/rendering/desert-mirage.js";
+import { installDesertMirage } from "../src/rendering/desert-mirage.js";
+import { installSurfaceDetail } from "../src/rendering/surface-detail.js";
 import { createPostProcessing } from "../src/rendering/postprocessing.js";
+import { selectCourse } from "../src/track/track.js";
+import { createCourseKit, batchScenery } from "../src/rendering/course-kit.js";
+import { buildDesertHorizon } from "../src/courses/sunstone-ruins/build-desert-horizon.js";
 
-test("mirage follows the actual pitched camera horizon and freezes, rewinds and respects reduced motion", () => {
-  const effect = createDesertMirage(course.theme),
-    camera = new THREE.PerspectiveCamera(63, 1.5, 0.1, 1400);
-  camera.position.set(12, 8, 25);
-  camera.lookAt(12, 5, -10);
-  camera.updateMatrixWorld();
-  effect.updateCamera(camera);
-  const horizon = new THREE.Vector3(12, 8, -100).project(camera).y * 0.5 + 0.5;
-  assert.ok(Math.abs(effect.uniforms.mirageHorizon.value - horizon) < 1e-7);
-  for (const time of [0, 12.5, 12.5, 0]) {
-    effect.update(time);
-    assert.equal(effect.uniforms.mirageTime.value, time);
-  }
-  effect.update(23, false);
-  assert.equal(effect.uniforms.mirageMotion.value, 0);
-  assert.equal(
-    effect.uniforms.mirageStrength.value,
-    1,
-    "reduced motion retains the static distance atmosphere",
-  );
-  effect.update(25, true, false);
-  assert.equal(effect.uniforms.mirageStrength.value, 0, "the buried engine remains clear indoors");
+test("backdrop refraction composes with detail and handles world transforms without a camera filter", () => {
+  const material = new THREE.MeshStandardMaterial();
+  installSurfaceDetail(material);
+  installDesertMirage(material, course.theme.desertMirage);
+  const shader = {
+    uniforms: {},
+    vertexShader: THREE.ShaderLib.standard.vertexShader,
+    fragmentShader: THREE.ShaderLib.standard.fragmentShader,
+  };
+  material.onBeforeCompile(shader);
+  assert.match(shader.vertexShader, /vSurfaceWorld/);
+  assert.match(shader.vertexShader, /instanceMatrix\*mvPosition/);
+  assert.match(shader.vertexShader, /batchingMatrix\*mvPosition/);
+  assert.match(shader.vertexShader, /mirageWorld.xz-cameraPosition.xz/);
+  assert.doesNotMatch(shader.vertexShader, /mirageTime|vUv|mirageHorizon/);
+  assert.equal(shader.uniforms.desertMirageRange.value.x, 450);
+  assert.equal(shader.uniforms.desertMirageRange.value.y, 800);
 });
 
-test("desert mirage captures real depth on every quality tier; other Performance courses render directly", () => {
-  for (const desert of [false, true]) {
-    let target = null;
-    const draws = [];
-    const renderer = {
-      toneMapping: THREE.NeutralToneMapping,
-      getDrawingBufferSize: (size) => size.set(640, 360),
-      setRenderTarget: (t) => {
-        target = t;
-      },
-      render: (scene) => draws.push({ target, scene, material: scene.children[0]?.material }),
-    };
-    const post = createPostProcessing(renderer, desert ? course.theme : {}),
-      scene = new THREE.Scene(),
-      camera = new THREE.PerspectiveCamera(63, 16 / 9, 0.1, 1400);
-    for (const tier of [0, 1, 3]) {
-      draws.length = 0;
-      post.setQuality(tier);
-      post.setDesertMirage(5, true);
-      post.render(scene, camera);
-      assert.equal(renderer.toneMapping, THREE.NeutralToneMapping);
-      if (tier === 0 && !desert) {
-        assert.equal(draws.length, 1);
-        assert.equal(draws[0].target, null);
-        continue;
-      }
-      const grade = draws.at(-1).material;
-      assert.equal(draws.at(-1).target, null);
-      if (desert) {
-        assert.ok(draws[0].target.depthTexture);
-        assert.equal(grade.uniforms.mirageDepth.value, draws[0].target.depthTexture);
-        assert.equal(grade.uniforms.mirageTime.value, 5);
-        assert.equal(grade.defines.USE_DESERT_MIRAGE, 1);
-      }
-    }
-    post.dispose();
+test("mirage materials belong exclusively to the backdrop, including after batching", () => {
+  const track = selectCourse(course),
+    scenery = new THREE.Group();
+  const scene = new THREE.Scene();
+  scene.add(scenery);
+  const kit = createCourseKit(scenery, track);
+  const roadMaterial = kit.material("#ffffff");
+  const road = kit.mesh(new THREE.BoxGeometry(10, 1, 2000), roadMaterial);
+  buildDesertHorizon({ THREE, scenery, track, kit, textures: {} });
+  const backdropMaterials = new Set();
+  for (const root of scenery.children) {
+    if (!root.userData.desertTerrain && !root.userData.desertLandmark) continue;
+    root.traverse((object) => {
+      if (object.isMesh) backdropMaterials.add(object.material);
+    });
   }
+  assert.equal(backdropMaterials.size, 4);
+  for (const material of backdropMaterials) {
+    assert.equal(material.userData["desert-backdrop-mirage-v1"], true);
+    assert.equal(material.userData.excludeFromReflectionProbe, true);
+  }
+  assert.equal(road.material.userData["desert-backdrop-mirage-v1"], undefined);
+  batchScenery(scenery);
+  scenery.traverse((object) => {
+    if (object.isMesh && object.material.userData["desert-backdrop-mirage-v1"])
+      assert.ok(backdropMaterials.has(object.material));
+  });
+});
+
+test("Performance renders the desert directly without a distortion capture pass", () => {
+  const draws = [];
+  const renderer = { render: (...args) => draws.push(args) };
+  const post = createPostProcessing(renderer, course.theme);
+  const scene = new THREE.Scene(),
+    camera = new THREE.PerspectiveCamera();
+  post.setQuality(0);
+  post.render(scene, camera);
+  assert.deepEqual(draws, [[scene, camera]]);
+  post.dispose();
 });

@@ -146,8 +146,10 @@ export function createCourseEnvironments(renderer, theme) {
         renderer.toneMapping = THREE.NoToneMapping;
         renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
         scene.traverse((object) => {
+          const materials = Array.isArray(object.material) ? object.material : [object.material];
           if (
             object.userData.excludeFromReflectionProbe ||
+            materials.some((material) => material?.userData.excludeFromReflectionProbe) ||
             object.userData.skipBake ||
             object.userData.isRacer ||
             object.userData.isParticle
@@ -155,7 +157,6 @@ export function createCourseEnvironments(renderer, theme) {
             hidden.push([object, object.visible]);
             object.visible = false;
           }
-          const materials = Array.isArray(object.material) ? object.material : [object.material];
           for (const material of materials) {
             if (!material?.envMap) continue;
             environmentMaterials.push([material, material.envMap]);
