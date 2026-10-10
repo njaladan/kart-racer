@@ -207,9 +207,9 @@ export function polishPelagic(w) {
       });
   }
   patch(glassEdge, "pelagic-edge-fresnel", (shader) => {
-    shader.fragmentShader = `varying vec3 vViewPosition;\n${shader.fragmentShader}`.replace(
-      "#include <color_fragment>",
-      `#include <color_fragment>
+    shader.fragmentShader = shader.fragmentShader.replace(
+      "#include <normal_fragment_maps>",
+      `#include <normal_fragment_maps>
       float edgeFresnel=pow(1.-abs(dot(normalize(normal),normalize(vViewPosition))),3.);
       diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.56,.94,.86),edgeFresnel*.24);`,
     );
