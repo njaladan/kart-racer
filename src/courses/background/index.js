@@ -9,6 +9,7 @@ import { pantryBackground } from "./pantry.js";
 import { railstormBackground } from "./railstorm.js";
 import { metronomeBackground } from "./metronome.js";
 import { pelagicBackground } from "./pelagic.js";
+import { emberwingBackground } from "./emberwing.js";
 
 export const COURSE_BACKGROUNDS = {
   "windmill-wilds": windmillBackground,
@@ -21,6 +22,7 @@ export const COURSE_BACKGROUNDS = {
   "railstorm-express": railstormBackground,
   "metronome-hall": metronomeBackground,
   "pelagic-glasshouse": pelagicBackground,
+  "emberwing-observatory": emberwingBackground,
 };
 
 export function buildCourseBackground(w) {

@@ -123,7 +123,22 @@ export function backgroundKit(w) {
       local.decompose(child.position, child.quaternion, child.scale);
       child.updateMatrix();
     }
-    w.kit.batch(object);
+    // Align local batching cells to this assembly, rather than splitting a
+    // small flock or fleet across four cells at its local origin.
+    const combined = group(object);
+    const origin = new THREE.Vector3(Infinity, Infinity, Infinity);
+    for (const child of meshes) {
+      child.geometry.computeBoundingBox();
+      origin.min(
+        child.geometry.boundingBox.getCenter(new THREE.Vector3()).applyMatrix4(child.matrix),
+      );
+    }
+    combined.position.copy(origin).subScalar(0.01);
+    for (const child of meshes) {
+      child.position.sub(combined.position);
+      combined.add(child);
+    }
+    w.kit.batch(combined);
     return w.motion(object, update);
   }
   return { ...w, mat: material, mesh, box, group, tube, place, motion, sites };
