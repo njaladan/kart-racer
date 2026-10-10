@@ -139,8 +139,8 @@
       "catalogSha256": "e7f9708db553a9db7668bf3a22c2cbc1e59c976c5aa1d8d18f7c00ef8c67078d",
       "attribution": "licenses/CC0.txt",
       "bytes": 54756,
-      "sha256": "b74580dad4b5dc78266ca1459df49085d9e0b4c6f9e0240e5033e069ede3f30a",
-      "modifications": "Two subdivision levels and smooth normals; original silhouette and materials retained. Shared scanned rock shading is applied by the course."
+      "sha256": "a8df1c81f1ffbfed5c56665f94f1223d7bbc839c4c65842728f3eb16a82342ec",
+      "modifications": "Coincident hard-edge vertices welded, two subdivision levels and smooth normals; original silhouette and materials retained. Shared scanned rock shading is applied by the course."
     },
     {
       "name": "background:rock-1",
@@ -154,8 +154,8 @@
       "catalogSha256": "e7f9708db553a9db7668bf3a22c2cbc1e59c976c5aa1d8d18f7c00ef8c67078d",
       "attribution": "licenses/CC0.txt",
       "bytes": 49576,
-      "sha256": "893f29b8e78aeaa12ed0542dcdfd3c6acfd737a6ea279698697206b678f8d74c",
-      "modifications": "Two subdivision levels and smooth normals; original silhouette and materials retained. Shared scanned rock shading is applied by the course."
+      "sha256": "751738cfc27b6949620d71a6f46ab75499805bb05dc8fb97bb2eff8621464db5",
+      "modifications": "Coincident hard-edge vertices welded, two subdivision levels and smooth normals; original silhouette and materials retained. Shared scanned rock shading is applied by the course."
     },
     {
       "name": "background:rock-2",
@@ -168,9 +168,9 @@
       "sourceSha256": "e4fefd8d8d7deab42be61bd222bcd088330012f0025789146b81f25a46095ffd",
       "catalogSha256": "e7f9708db553a9db7668bf3a22c2cbc1e59c976c5aa1d8d18f7c00ef8c67078d",
       "attribution": "licenses/CC0.txt",
-      "bytes": 55648,
-      "sha256": "e2b8376a2c9254c4a7c89dc0cbab09b43b97b1710283da18b83b1a075b7b8c11",
-      "modifications": "Two subdivision levels and smooth normals; original silhouette and materials retained. Shared scanned rock shading is applied by the course."
+      "bytes": 55424,
+      "sha256": "23d61027bd0fb364b617f4137fcca4a35160d42845f8b8414113928cc8e475cf",
+      "modifications": "Coincident hard-edge vertices welded, two subdivision levels and smooth normals; original silhouette and materials retained. Shared scanned rock shading is applied by the course."
     },
     {
       "name": "background:rock-3",
@@ -183,9 +183,9 @@
       "sourceSha256": "4222107db4a47471494bdbf1eb2ad0ff297628afbcb7c392618e5742d831e0d4",
       "catalogSha256": "e7f9708db553a9db7668bf3a22c2cbc1e59c976c5aa1d8d18f7c00ef8c67078d",
       "attribution": "licenses/CC0.txt",
-      "bytes": 51092,
-      "sha256": "3d8aadd72edb38b461bdf2d803b57751a8ec2240bbba2e2b36bb30f194c1eca0",
-      "modifications": "Two subdivision levels and smooth normals; original silhouette and materials retained. Shared scanned rock shading is applied by the course."
+      "bytes": 50904,
+      "sha256": "5a79beb26d4c4187adf47203fe422807774539d6e96901c14b67a91a1ed4be91",
+      "modifications": "Coincident hard-edge vertices welded, two subdivision levels and smooth normals; original silhouette and materials retained. Shared scanned rock shading is applied by the course."
     }
   ],
   "textures": [

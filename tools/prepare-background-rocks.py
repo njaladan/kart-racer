@@ -24,6 +24,7 @@ def sha(data):
 
 def convert():
     import bpy
+    import bmesh
     CACHE.mkdir(parents=True, exist_ok=True)
     for slug in SLUGS:
         bpy.ops.object.select_all(action='SELECT')
@@ -31,6 +32,14 @@ def convert():
         bpy.ops.import_scene.gltf(filepath=str(CACHE / (slug + '.glb')))
         for obj in [o for o in bpy.context.scene.objects if o.type == 'MESH']:
             bpy.context.view_layer.objects.active = obj
+            # glTF duplicates hard-edge vertices. Weld their coincident positions
+            # before subdivision so smoothing rounds a closed rock rather than
+            # shrinking its disconnected individual faces into floating patches.
+            topology = bmesh.new()
+            topology.from_mesh(obj.data)
+            bmesh.ops.remove_doubles(topology, verts=list(topology.verts), dist=0.0001)
+            topology.to_mesh(obj.data)
+            topology.free()
             smooth = obj.modifiers.new('Rounded eroded rock edges', 'SUBSURF')
             smooth.levels = 2
             bpy.ops.object.modifier_apply(modifier=smooth.name)
@@ -75,7 +84,7 @@ else:
                 'sourceSha256': sha((CACHE / (slug + '.glb')).read_bytes()),
                 'catalogSha256': sha(catalog), 'attribution': 'licenses/CC0.txt',
                 'bytes': len(data), 'sha256': sha(data),
-                'modifications': 'Two subdivision levels and smooth normals; original silhouette and materials retained. Shared scanned rock shading is applied by the course.'
+                'modifications': 'Coincident hard-edge vertices welded, two subdivision levels and smooth normals; original silhouette and materials retained. Shared scanned rock shading is applied by the course.'
             })
         (folder / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
         print('Prepared downloaded background rocks for', course, flush=True)
