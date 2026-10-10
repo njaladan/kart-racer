@@ -86,11 +86,13 @@ export function createTrack(course) {
   const MILL_T = sectorT(4, 0.48);
   const CART_T = sectorT(course.hazard.section, course.hazard.fraction);
   const BRIDGE_RANGE = { start: sectorT(3, 0.08), end: sectorT(3, 0.65) };
-  const SHORTCUT = {
-    ...course.shortcut,
-    start: sectorT(course.shortcut.section, course.shortcut.startFraction),
-    end: sectorT(course.shortcut.section, course.shortcut.endFraction),
-  };
+  const SHORTCUT = course.shortcut
+    ? {
+        ...course.shortcut,
+        start: sectorT(course.shortcut.section, course.shortcut.startFraction),
+        end: sectorT(course.shortcut.section, course.shortcut.endFraction),
+      }
+    : null;
   const BOOST_PADS = course.pads.map((p) => ({
     ...p,
     t: sectorT(p.section, p.fraction),
@@ -158,6 +160,7 @@ export function createTrack(course) {
     );
   }
   function shortcutWidth(t) {
+    if (!SHORTCUT) return 0;
     const taper = Math.min(0.018, (SHORTCUT.end - SHORTCUT.start) / 3);
     return (
       SHORTCUT.extraWidth *
@@ -224,10 +227,14 @@ export function createTrack(course) {
     // at a verge boundary. Section tilt also blends over the width transition.
     const fade = 12 / lengths.at(-1);
     let flatten = Math.max(
-      ...[SHORTCUT, ...VERGES].map(
-        (patch) =>
-          smooth(patch.start - fade, patch.start, t) * (1 - smooth(patch.end, patch.end + fade, t)),
-      ),
+      0,
+      ...[SHORTCUT, ...VERGES]
+        .filter(Boolean)
+        .map(
+          (patch) =>
+            smooth(patch.start - fade, patch.start, t) *
+            (1 - smooth(patch.end, patch.end + fade, t)),
+        ),
     );
     if (course.downhill) {
       const mountain = SECTIONS[course.downhill.section];

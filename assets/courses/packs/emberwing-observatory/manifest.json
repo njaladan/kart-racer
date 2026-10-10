@@ -123,10 +123,10 @@
       "license": "CC0-1.0",
       "source": "Original Blender geometry; tools/build-emberwing-geology.py",
       "attribution": "licenses/emberwing-geology.txt",
-      "bytes": 230328,
-      "sha256": "3bde5a7755cd5a563a28cd6d8c17f360a5b482fef4f1f7a1ce030de081210aca",
-      "triangles": 2436,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e"
+      "bytes": 238220,
+      "sha256": "4dbc7e183b791ff2bddd3042897ec51bd82db90adf050b23168787e37ba867f2",
+      "triangles": 2520,
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427"
     },
     {
       "name": "ember:cliff-1-0",
@@ -136,10 +136,10 @@
       "license": "CC0-1.0",
       "source": "Original Blender geometry; tools/build-emberwing-geology.py",
       "attribution": "licenses/emberwing-geology.txt",
-      "bytes": 219800,
-      "sha256": "03cb5b553d26c36a83d73e76eb8d9a439f94cc31f4d06d27172e0d1ac9199ec6",
-      "triangles": 2324,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e"
+      "bytes": 211904,
+      "sha256": "176de5ff91c6922893d554b67f6842560a3bdc60ce0d976045ca74859cb5354c",
+      "triangles": 2240,
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427"
     },
     {
       "name": "ember:cliff-2-0",
@@ -149,10 +149,10 @@
       "license": "CC0-1.0",
       "source": "Original Blender geometry; tools/build-emberwing-geology.py",
       "attribution": "licenses/emberwing-geology.txt",
-      "bytes": 17112,
-      "sha256": "5fb53e15457856be01fe098dee4736d75889dc0569264e6a447c4e588545407a",
+      "bytes": 17116,
+      "sha256": "6b87d68b8c39b908246050a4547e18f7e21f96cf4ac4f1ef890ae1c65536e137",
       "triangles": 168,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e"
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427"
     },
     {
       "name": "ember:cliff-2-1",
@@ -162,10 +162,10 @@
       "license": "CC0-1.0",
       "source": "Original Blender geometry; tools/build-emberwing-geology.py",
       "attribution": "licenses/emberwing-geology.txt",
-      "bytes": 17108,
-      "sha256": "95c62126fbc9b365d792f8a9bd8097392b1c31c4e21e49ee71153509331a52ba",
+      "bytes": 17112,
+      "sha256": "05a2d6e38c2538f13642d7d453637cf5ccbf809d5db19c33ac62369a77588ac7",
       "triangles": 168,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e"
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427"
     },
     {
       "name": "ember:cliff-3-0",
@@ -175,10 +175,10 @@
       "license": "CC0-1.0",
       "source": "Original Blender geometry; tools/build-emberwing-geology.py",
       "attribution": "licenses/emberwing-geology.txt",
-      "bytes": 256640,
-      "sha256": "603b34b9c996d6c8db5d798afe9367074634f1a595d043bc98794dda1d913cca",
+      "bytes": 256636,
+      "sha256": "10033ab0ac1177c915704d3796a3e0a7730327d1c225f3ea1f73f7e7ff907bd1",
       "triangles": 2716,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e"
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427"
     },
     {
       "name": "ember:cliff-4-0",
@@ -189,9 +189,9 @@
       "source": "Original Blender geometry; tools/build-emberwing-geology.py",
       "attribution": "licenses/emberwing-geology.txt",
       "bytes": 261904,
-      "sha256": "c042599237257cd35fc4d75ec24bb3c103d50555a6a7d61a37d45134c903b5d0",
+      "sha256": "9f232f803fbe4df6f780b2936b892ebb2ddf45ba8ed467c53e88d86fbcdcd7e1",
       "triangles": 2772,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e"
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427"
     },
     {
       "name": "ember:cliff-5-0",
@@ -201,10 +201,10 @@
       "license": "CC0-1.0",
       "source": "Original Blender geometry; tools/build-emberwing-geology.py",
       "attribution": "licenses/emberwing-geology.txt",
-      "bytes": 256644,
-      "sha256": "28e91165aaa1a5dc68c2da9be081a17c3b1383e4d824b4324384c5bffdbc98ae",
+      "bytes": 256640,
+      "sha256": "3ea270994e7b68c541e1ce7fbd2b1648a3efc555b51cd93291e8b32f8944d25e",
       "triangles": 2716,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e"
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427"
     },
     {
       "name": "ember:cliff-6-0",
@@ -214,10 +214,10 @@
       "license": "CC0-1.0",
       "source": "Original Blender geometry; tools/build-emberwing-geology.py",
       "attribution": "licenses/emberwing-geology.txt",
-      "bytes": 143460,
-      "sha256": "0e5783d140caab3cd6eb98cf618162d02491a81fb1acc540c740318584bcd22c",
+      "bytes": 143456,
+      "sha256": "6ad6ee16b3179d096a1e4e2f2c24e590082705b159e922613349af89c48ce7a2",
       "triangles": 1512,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e"
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427"
     },
     {
       "name": "ember:cliff-7-0",
@@ -227,10 +227,10 @@
       "license": "CC0-1.0",
       "source": "Original Blender geometry; tools/build-emberwing-geology.py",
       "attribution": "licenses/emberwing-geology.txt",
-      "bytes": 180316,
-      "sha256": "df2a9aca750d4bd6e9467076549754ce63725ee8c0cf42ad798e71347f7ecf62",
+      "bytes": 180312,
+      "sha256": "cf7f801d4e236cfed1c55359e2dbce974cbf0c19c584f84b93e07f039117562e",
       "triangles": 1904,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e"
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427"
     },
     {
       "name": "ember:caldera-0",
@@ -241,9 +241,9 @@
       "source": "Original Blender geometry; tools/build-emberwing-geology.py",
       "attribution": "licenses/emberwing-geology.txt",
       "bytes": 100624,
-      "sha256": "bdf8b620f3d37f22cb1e734b2339ca6cd3f0c87eea5b6f4ffdba7aa4ead7e652",
+      "sha256": "8443beb7ebb5f32240c7488c75c8efe55e46b94505a8203fa171e8d0a4799996",
       "triangles": 1056,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e"
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427"
     },
     {
       "name": "ember:caldera-1",
@@ -254,9 +254,9 @@
       "source": "Original Blender geometry; tools/build-emberwing-geology.py",
       "attribution": "licenses/emberwing-geology.txt",
       "bytes": 100624,
-      "sha256": "7998c3a5a45fe2003ac626839ff3c712a2bb34b572afc10c337b9aaf60b53280",
+      "sha256": "2425fceea491aa8b9b61b412a3e61ddf4266b64a4d2b2b1ae2eec478dba6cd9f",
       "triangles": 1056,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e"
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427"
     },
     {
       "name": "ember:caldera-2",
@@ -267,9 +267,9 @@
       "source": "Original Blender geometry; tools/build-emberwing-geology.py",
       "attribution": "licenses/emberwing-geology.txt",
       "bytes": 100624,
-      "sha256": "2cf0225ede2011b97eba0f876e0dae67cfd9db1c4b05e95ad9b531a60bd2d9f3",
+      "sha256": "ab73547179180300a1fb32c5393a6ff3628d2c05125fd01bff390f7d2f66655e",
       "triangles": 1056,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e"
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427"
     },
     {
       "name": "ember:caldera-3",
@@ -280,9 +280,9 @@
       "source": "Original Blender geometry; tools/build-emberwing-geology.py",
       "attribution": "licenses/emberwing-geology.txt",
       "bytes": 100624,
-      "sha256": "3cc67d501072c07fd99d8ffe7173df8b76e236c194923584bba5f1181505749e",
+      "sha256": "ca926d6e3465b7a248fbfa11c90ce37d22fcf0ec03df4e4305a81f48f630e86e",
       "triangles": 1056,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e"
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427"
     },
     {
       "name": "ember:basalt-near",
@@ -295,7 +295,7 @@
       "bytes": 102656,
       "sha256": "1900e966a1fe0bff40ac6ab3c197d470e1c68f2267f5e7331611e145048110b6",
       "triangles": 1044,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e",
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427",
       "lods": {
         "mid": "ember:basalt-mid",
         "far": "ember:basalt-far"
@@ -317,7 +317,7 @@
       "bytes": 26828,
       "sha256": "6245f8686a102ebf29b6a34d4e72e2112bb38dd131719824e3171bb5315c24b4",
       "triangles": 288,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e"
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427"
     },
     {
       "name": "ember:basalt-far",
@@ -330,7 +330,7 @@
       "bytes": 18332,
       "sha256": "a1a9a2465f21d5d1283fcbdd62c9cc4cf7a7d0d78ca66eae432acb1f62827be9",
       "triangles": 192,
-      "layoutSha256": "b2b7c867f7a0fa72bc1da371806dba59759edf5220f33fe5d95aafca025c7b5e"
+      "layoutSha256": "d11960ff55673c1393127eb1d98e26886675952944d882dd17f9dd71ef323427"
     }
   ],
   "textures": [

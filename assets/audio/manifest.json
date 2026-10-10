@@ -1,0 +1,104 @@
+{
+  "sources": {
+    "stk": {
+      "repository": "https://github.com/Nomagno/stk-assets",
+      "commit": "b917b6c01b55b43208c5eaa1b4d187bbf59457ac"
+    },
+    "sfx": {
+      "repository": "https://github.com/Mcamento8/open-game-sfx-index",
+      "commit": "34bbe8b525b5ceff3804915ea745532af11f6055"
+    }
+  },
+  "files": {
+    "music/Penguin_Party.ogg": {
+      "sha256": "fe05aab7ea6e5e8014f2001e3c8d047f45f6b671300448ff4f433a4ff1b4e3a6",
+      "bytes": 1965165,
+      "duration": 99.0
+    },
+    "music/SkyVibe-HighFrequency.ogg": {
+      "sha256": "73872bdf15eb3871c56289897b3453959671a9ea672a3a71a6fd704bbf3b9947",
+      "bytes": 3071551,
+      "duration": 197.634853
+    },
+    "music/West.ogg": {
+      "sha256": "8eddec2c026dde2b9c2072dcd7613897e7287a7340d0e5c18bf464057020a32a",
+      "bytes": 1538372,
+      "duration": 68.571429
+    },
+    "music/celtic.ogg": {
+      "sha256": "038998a99f1b9283938673da32e043fb9ba97dfbdc392f2b583a2c069be5e892",
+      "bytes": 1027326,
+      "duration": 66.206563
+    },
+    "music/farm.ogg": {
+      "sha256": "32026b705766195a2ca15d4eb121e52c7fe241f178403ab63fe20f95cce176a6",
+      "bytes": 2484344,
+      "duration": 72.827596
+    },
+    "music/garden.ogg": {
+      "sha256": "0c5e451476f81edbc521013a833823a5d5dd33b214d07ab4f09828d8d5dcc61c",
+      "bytes": 3020752,
+      "duration": 124.257347
+    },
+    "music/hacienda.ogg": {
+      "sha256": "d61207be599ad75ccce637508cbaa46f6faf4d210caaec171d700c672b0f099a",
+      "bytes": 1863446,
+      "duration": 106.446213
+    },
+    "music/jumping_to_the_stars_remake.ogg": {
+      "sha256": "c6b7ca2f97b743f3f8b9d621eb4b8cc3f9e43a4678c5235c2ba47bb2deb5b236",
+      "bytes": 1642405,
+      "duration": 85.2
+    },
+    "music/kart_grand_prix.ogg": {
+      "sha256": "3ec59045893c7ad78c10c03f84db5dda9abd0caf093bb085e6145cdd04c67e7d",
+      "bytes": 2089907,
+      "duration": 100.000023
+    },
+    "music/landing_in_gran_paradiso.ogg": {
+      "sha256": "ee9a72c640ba5149caea170e919712f8f6d5576bd65a4f7c8b31b3c957013149",
+      "bytes": 1032769,
+      "duration": 66.461156
+    },
+    "music/ravenbridge_mansion.ogg": {
+      "sha256": "a923d77b4fd77ac22263fe0d18ae7e2c293ccaa240689a58569a3eec86e75e68",
+      "bytes": 1138678,
+      "duration": 73.715011
+    },
+    "music/subsea.ogg": {
+      "sha256": "edb8c9d1e1b4319bd01dda51864705b6751a3ea24303abb3de6c3455a6648493",
+      "bytes": 2924297,
+      "duration": 169.600023
+    },
+    "sfx/bubble.wav": {
+      "sha256": "d6a3d8e0119b902f5d01ceeda42bf34f31da6b53e854742db65f06b805a9c302",
+      "bytes": 193934,
+      "duration": 0.729161
+    },
+    "sfx/countdown-1.ogg": {
+      "sha256": "fb84ff9f243c2dcbbd22e6f1a553f2d39808686df06e4a83a75c557af7f8e802",
+      "bytes": 7348,
+      "duration": 0.49093
+    },
+    "sfx/countdown-2.ogg": {
+      "sha256": "47fc7222f50c56e6c242bfc0b669ee54085383f8afbd057489b09645f5e857e4",
+      "bytes": 8194,
+      "duration": 0.581406
+    },
+    "sfx/countdown-3.ogg": {
+      "sha256": "6a3fec88dd24382bad14882d4cc1c1b32ef9db431cc3e19496ed888ad4ed89d5",
+      "bytes": 8263,
+      "duration": 0.576576
+    },
+    "sfx/countdown-go.ogg": {
+      "sha256": "1ba6aa2cb3710fd7c6e021622b4ef0428a0107c8f2db2e0dda8de8bcbdb56fd3",
+      "bytes": 8283,
+      "duration": 0.596916
+    },
+    "sfx/splash.ogg": {
+      "sha256": "f36cfd23db23e05734346e8180abdaae37103c0e1466820fa7e36d5d41fbebc3",
+      "bytes": 46735,
+      "duration": 2.0
+    }
+  }
+}

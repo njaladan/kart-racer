@@ -2,35 +2,45 @@ import { withCourseExperience } from "./experiences/definitions.js";
 import { PATHWAY_EDGES } from "./pathway-edges.js";
 import { adventure } from "./adventure-definition.js";
 import { buildClockwork } from "./adventure/clockwork-world.js";
+// Streets begin at the terrain datum, then climb through supported city levels.
+// The watch's opposed gates have long radial leads, so both bowl lines join
+// tangentially instead of turning ninety degrees at the lip.
 const points = [
-  [-220, 8, -150],
-  [-140, 8, -170],
+  [-245, 8, -160],
+  [-160, 8, -190],
+  [-60, 10, -180],
+  [55, 16, -170],
+  [170, 25, -130],
+  [235, 32, -65],
+  [235, 36, 0],
+  [170, 38, 0],
+  [130, 40, 0],
+  [85, 44, 95],
+  [0, 49, 160],
+  [-85, 54, 95],
+  [-130, 58, 0],
+  [-170, 60, 0],
+  [-235, 64, 0],
+  [-245, 72, -90],
+  [-180, 86, -145],
+  [-70, 92, -115],
+  [50, 96, -70],
+  [125, 100, -5],
+  [185, 96, 95],
+  [260, 80, 175],
+  [195, 57, 260],
+  [75, 36, 290],
+  [-65, 23, 285],
+  [-180, 12, 230],
+  [-285, 8, 130],
+  [-310, 8, 0],
+  [-290, 8, -95],
 ];
-for (let i = 0; i <= 16; i++) {
-  const a = -Math.PI / 2 + (i * Math.PI) / 8,
-    r = 125 + i * 1.5;
-  points.push([Math.cos(a) * r, 8 + i * 4.9, Math.sin(a) * r]);
-}
-// One outer descent follows the spiral. Keeping its radius well outside the
-// climb removes the old descent/lift/return crossing at the eastern gallery.
-points.push(
-  [140, 90, -190],
-  [255, 82, -135],
-  [305, 68, -30],
-  [310, 50, 100],
-  [240, 32, 220],
-  [110, 20, 280],
-  [-40, 14, 285],
-  [-175, 8, 230],
-  [-285, 8, 125],
-  [-310, 8, -25],
-  [-290, 8, -100],
-);
 const places = [
   [0, "yard", "FOUNDRY YARD", "paving"],
-  [2, "spiral", "THE GREAT SPIRAL", "metal"],
+  [2, "spiral", "FOUNDRY ASCENT", "metal"],
   [7, "gears", "GEAR GALLERY", "metal"],
-  [13, "clock", "CLOCK FACE", "paving"],
+  [13, "clock", "CLOCKMAKERS’ TERRACES", "paving"],
   [19, "crown", "ROOFTOP CROWN", "paving"],
   [21, "descent", "COUNTERWEIGHT DESCENT", "metal"],
   [24, "sweep", "TURBINE SWEEP", "metal"],
@@ -41,11 +51,11 @@ const course = adventure({
   pathwayEdges: PATHWAY_EDGES["clockwork-citadel"],
   name: "Clockwork Citadel",
   description:
-    "Spiral past enormous turning gears, race across the rooftop crown, and boost through a banked turbine sweep back to the foundry.",
+    "Race from golden foundry streets through a curved watch bowl, climb the clockmakers’ terraces and sweep down through a layered brass city.",
   points,
   rounded: false,
   places,
-  palette: ["#b2aed1", "#acabc3", "#727180", "#d3c1ab", "#dbb15e"],
+  palette: ["#94b9cd", "#d4c09a", "#79634b", "#d3c1ab", "#edbb54"],
   targetLength: 2100,
   buildWorld: buildClockwork,
   pads: [
@@ -54,9 +64,9 @@ const course = adventure({
     { section: 6, fraction: 0.65, offset: 0, duration: 0.8 },
   ],
   theme: {
-    sky: "#7081a8",
-    fog: "#c0a6a0",
-    ground: "#525774",
+    sky: "#8bb5ce",
+    fog: "#dcc79f",
+    ground: "#857159",
     road: "#bcb4ad",
     shoulder: "#c49c57",
     hemisphere: "#b8d8f0",
@@ -65,7 +75,7 @@ const course = adventure({
     sun: "#ffcf91",
     sunIntensity: 2.7,
     sunPosition: [-90, 80, -50],
-    groundHeight: -26,
+    groundHeight: 7.8,
     terrain: "stone",
     exposure: 1.1,
     fogFar: 1000,
@@ -76,7 +86,7 @@ const course = adventure({
       resolution: 160,
       columns: 3,
       rows: 2,
-      heights: [-95, -65, -35, 0, 45, 105],
+      heights: [-35, 8, 35, 65, 100, 145],
       strength: 1.2,
     },
   },

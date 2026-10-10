@@ -102,6 +102,45 @@ function harness(callbacks = {}) {
   };
 }
 
+test("authoritative lottery state and distinct box events reach the local player once", () => {
+  const events = [];
+  const h = harness({
+    onCollect: (racer, awarded) => events.push(["collect", racer, awarded]),
+    onRoll: (racer, tick) => events.push(["roll", racer, tick]),
+    onSelect: (racer) => events.push(["select", racer]),
+  });
+  const player = h.authoritative[0];
+  player.itemRoulette = 1.5;
+  player.itemPreview = "star";
+  const first = h.snapshot(1, 0, {
+    events: [
+      { type: "collect", playerId: "0", awarded: true },
+      { type: "roll", playerId: "0", tick: 0 },
+      { type: "collect", playerId: "0", awarded: false },
+    ],
+  });
+  h.receive(first);
+  h.receive(first);
+  assert.equal(h.local[0].itemRoulette, 1.5);
+  assert.equal(h.local[0].itemPreview, "star");
+  assert.deepEqual(
+    events.map((e) => [e[0], e[2]]),
+    [
+      ["collect", true],
+      ["roll", 0],
+      ["collect", false],
+    ],
+  );
+  player.itemRoulette = 0;
+  player.itemPreview = null;
+  player.item = "mushroom";
+  player.itemCount = 3;
+  h.receive(h.snapshot(2, 0, { events: [{ type: "select", playerId: "0" }] }));
+  assert.equal(h.local[0].item, "mushroom");
+  assert.equal(h.local[0].itemCount, 3);
+  assert.deepEqual(events.at(-1), ["select", h.local[0]]);
+});
+
 test("prediction responds before round trip and reconciliation stays continuous with latency, jitter and missed snapshots", () => {
   const h = harness();
   let held = {},

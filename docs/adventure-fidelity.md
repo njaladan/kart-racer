@@ -11,7 +11,7 @@ Observatory. Clockwork and Paper already have dedicated environmental stories.
 | Tempest | Complete imported cottages replace constructed cottage geometry. Eroded scanned sea stacks, distant crags, working sailing ships and rowing boats, grass and cottages, shoreline rings, rotating mist beams, sea-spray glints and sheltered warm motes. |
 | Pantry | Authored kitchen cabinets replace the large constructed banks; imported loaves replace toast geometry. Scanned wood and metal, croissants, strawberries, iced doughnuts, cookies and utensils; food racks, a coffee station and tall kitchen windows; shafts of warm light, drifting flour dust and sugar sparkles. |
 | Railstorm | Complete authored station houses and steam locomotive replace the large constructed buildings and engine; imported firs replace cone trees. Detailed cutout firs and ferns, layered mountain silhouettes, timber stacks, machinery and barrels; a moving background freight train, amber work lights and dust catching the valley light. |
-| Metronome | Imported furniture cabinets replace their constructed counterparts; the distinctive musical mechanism stays. Scanned cherrywood and brass, pleated velvet, gilt balconies, chairs, books, radios and speakers; luminous lamp shafts, drifting dust and gently turning musical notes. |
+| Metronome | Six districts of self-playing instruments, with over 600 placements across strings, percussion, bells, brass, keyboards and workshops. A CC0 museum violin scan and Kenney workshop furniture join cherrywood, brass and velvet assemblies. Bows, mallets, lids, slides and clamps articulate; percussion squashes and stretches; accordion folds use skinned rigs. Clock pendulums keep their brass rods and weighted bobs. One roadside bellows passage alternates visible air puffs that nudge karts sideways. No humanoid performers. |
 | Pelagic | Scanned reef terraces, textured ferns and marine grass, layered reef walls, fish schools and pulsing translucent jellyfish; moving caustics, light shafts, bubbles and bioluminescent glints. |
 | Emberwing | Textured softened basalt, a distant caldera rim, detailed terrace palms and flowering shrubs, scanning satellite dishes and drifting high meteor silhouettes; warm volcanic light and blue observatory fill, embers and terrace motes. |
 
@@ -117,3 +117,18 @@ browser errors. The placed-triangle audit reports zero sampled obstructions
 on every course, including the lap-specific Paper alternatives.
 
 Software Chromium verifies rendering, not integrated-GPU frame-time performance.
+
+## Metronome orchestra expansion
+
+`tools/prepare-metronome-instruments.py` reproduces the pinned CC0 downloads and
+Blender violin conversion. The Metronome manifest records the source and checksum
+of every imported model. Instruments and workshop details merge by material while
+moving parts retain their pivots and five bellows/accordion skins. The complete
+imported scene remains below the existing 1,800 draw-object budget.
+
+The bellows are the only added environmental interaction. Both emitters share
+the simulation clock, warn while inflating, then alternate puffs across one
+passage. Karts in the visible air volume receive sideways acceleration; the
+effect introduces no boost, impact or launch. Hazard motion continues when
+ambient animation is disabled. Snapshot replay and full-course AI navigation
+cover the puff behavior.

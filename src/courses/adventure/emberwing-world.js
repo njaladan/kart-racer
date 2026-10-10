@@ -1,15 +1,14 @@
 import { buildSantorini } from "./santorini.js";
 import { worldKit } from "./world-kit.js";
 import { registerLightPool } from "../../rendering/course-lighting.js";
-import { patchMaterial } from "../../rendering/surface-detail.js";
-import { rangeFor } from "../../simulation/course-mechanics.js";
+import { buildEmberwingCaldera } from "./emberwing-caldera.js";
 import { buildEmberwingGeology } from "./emberwing-geology.js";
 
 /** The observatory watches a living caldera; its missing road is a cannon flight. */
 export function buildEmberwing(context) {
   const w = worldKit(context),
     { THREE, scene, scenery, track, mat, mesh, box, at, motion, sphere, cylinder, torus } = w;
-  const basalt = mat("#605c78", "rock"),
+  const basalt = mat("#252d30", "rock", { map: null }),
     pale = mat("#f0e8da"),
     brass = mat("#c9a477", "metal", { metalness: 0.65, roughness: 0.34 }),
     copper = mat("#bf7c6d", "metal", { metalness: 0.45 }),
@@ -17,35 +16,7 @@ export function buildEmberwing(context) {
     ink = mat("#383c59", "metal"),
     glass = mat("#a6c6d5", "glass", { roughness: 0.2, metalness: 0.25 }),
     glow = mat("#ffe1a8", "stone", { emissive: "#ffb46a", emissiveIntensity: 0.9 });
-  const magma = mat("#d85942", "stone", {
-    emissive: "#eb6c36",
-    emissiveIntensity: 0.6,
-    roughness: 0.6,
-  });
-  patchMaterial(magma, "caldera-crust", (shader) => {
-    const clock = { value: 0 };
-    (scene.userData.surfaceAnimations ||= []).push(clock);
-    shader.uniforms.emberClock = clock;
-    shader.vertexShader = `varying vec3 vCaldera;\n${shader.vertexShader}`.replace(
-      "#include <begin_vertex>",
-      "#include <begin_vertex>\nvCaldera=position;",
-    );
-    shader.fragmentShader =
-      `uniform float emberClock; varying vec3 vCaldera;\n${shader.fragmentShader}`
-        .replace(
-          "#include <color_fragment>",
-          `#include <color_fragment>
-      float crust=sin(vCaldera.x*11.+sin(vCaldera.z*17.+emberClock*.12))*sin(vCaldera.z*14.-emberClock*.16);
-      diffuseColor.rgb*=mix(.12,1.,smoothstep(.1,.55,crust));`,
-        )
-        .replace(
-          "#include <emissivemap_fragment>",
-          "#include <emissivemap_fragment>\ntotalEmissiveRadiance*=smoothstep(.1,.55,crust);",
-        );
-  });
-  // Vertex-authored strata carry the color; the scan contributes fine normals
-  // without multiplying the new cliff relief by an almost-black albedo.
-  buildEmberwingGeology(w, mat("#b5a5ad", "rock", { map: null }));
+  buildEmberwingGeology(w, mat("#51585b", "rock", { map: null }));
   // Rock shoulders remain connected everywhere except the deliberate flight gap.
   for (let section = 0; section < track.SECTIONS.length; section++) {
     if (section === 2) {
@@ -62,76 +33,7 @@ export function buildEmberwing(context) {
         -0.22,
       );
   }
-  const flight = track.course.traversals[0],
-    { start, end } = rangeFor(track, flight),
-    a = track.poseAt(start * track.TRACK, 0).p,
-    b = track.poseAt(end * track.TRACK, 0).p,
-    centre = a.clone().add(b).multiplyScalar(0.5),
-    caldera = new THREE.Group();
-  scenery.add(caldera);
-  const calderaRadius = Math.hypot(a.x - b.x, a.z - b.z) * 0.5 + 22;
-  caldera.name = "Volcanic caldera beneath the cannon flight";
-  caldera.position.set(centre.x, -7, centre.z);
-  mesh(cylinder, magma, caldera, [0, 0, 0], [calderaRadius * 0.72, 2, calderaRadius * 0.72]);
-  for (let i = 0; i < 28; i += 4) {
-    const angle = (i / 28) * Math.PI * 2,
-      vent = mesh(
-        new THREE.ConeGeometry(1, 1, 8),
-        magma,
-        caldera,
-        [Math.cos(angle) * calderaRadius * 0.6, 2, Math.sin(angle) * calderaRadius * 0.6],
-        [3, 10, 3],
-      );
-    motion(vent, (time) => {
-      vent.scale.y = 5 + Math.sin(time * 0.8 + i) * 4;
-    });
-  }
-  registerLightPool(scene, {
-    position: new THREE.Vector3(centre.x, 5, centre.z),
-    color: "#ff9656",
-    intensity: 160,
-    radius: 170,
-  });
-  // Cannon throat is a readable arch on the launch lip, pointed at the landing.
-  const cannon = w.groupAt(start - 3 / track.COURSE_LENGTH),
-    barrel = new THREE.Group();
-  cannon.userData.routeStructure = true;
-  cannon.add(barrel);
-  barrel.position.y = 12;
-  barrel.rotation.x = -0.3;
-  mesh(
-    new THREE.CylinderGeometry(1, 1.1, 1, 24, 1, true),
-    brass,
-    barrel,
-    [0, 0, -4],
-    [12, 20, 12],
-  ).rotation.x = Math.PI / 2;
-  for (const z of [-11, -2, 4]) mesh(torus, copper, barrel, [0, 0, z], [12.4, 12.4, 12.4]);
-  for (const side of [-1, 1]) {
-    box(ink, cannon, [side * 16, 4, 0], [3, 12, 20]);
-    mesh(cylinder, brass, cannon, [side * 16, 6, 0], [4, 1, 4]).rotation.z = Math.PI / 2;
-    box(glow, cannon, [side * 16, 9, -4], [1, 1, 3]);
-  }
-  const flare = mesh(sphere, glow, barrel, [0, 0, -12], [10, 10, 1]);
-  flare.material = glow.clone();
-  flare.material.transparent = true;
-  flare.material.opacity = 0.3;
-  flare.material.depthWrite = false;
-  flare.material.blending = THREE.AdditiveBlending;
-  flare.castShadow = false;
-  motion(flare, (_time, state) => {
-    flare.visible = !!state?.running && state.playerT > start && state.playerT < start + 0.008;
-  });
-  const landing = w.groupAt(end),
-    landingArch = mesh(
-      new THREE.TorusGeometry(1, 0.04, 6, 32, Math.PI),
-      copper,
-      landing,
-      [0, 1, 0],
-      [16, 18, 16],
-    );
-  landingArch.name = "Caldera landing beacon";
-  for (const side of [-1, 1]) box(glow, landing, [side * 15, 1, 0], [1.2, 2, 9]);
+  buildEmberwingCaldera(w);
   // Rotating telescope domes and complete mountings give each terrace purpose.
   function observatory(g, size, phase) {
     const foundation = g.position.y + 48;

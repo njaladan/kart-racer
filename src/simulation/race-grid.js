@@ -46,6 +46,8 @@ export function resetRaceGrid(racers) {
       driftTier: 0,
       item: null,
       itemCount: 0,
+      itemRoulette: 0,
+      itemPreview: null,
       air: 0,
       padCooldown: 0,
       finished: false,

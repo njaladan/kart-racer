@@ -89,10 +89,27 @@ test("audio controller owns its graph and exposes race sound operations", () => 
   audio.stopEngine();
 
   assert.equal(context.oscillators.length, 3);
-  assert.equal(scheduled.length, 1);
-  assert.equal(scheduled[0].delay, 65);
+  assert.equal(scheduled.length, 0, "pickup has no wall-clock callbacks that outlive the race");
   assert.equal(context.resumed, true);
   assert.equal(context.suspended, true);
+});
+
+test("pickup, occupied crush, roulette notes and selection have distinct sound signatures", () => {
+  const audio = createAudioController({ AudioContext: NoisyAudioContext });
+  audio.start();
+  audio.play("pickup");
+  const pickup = createdContext.oscillators.at(-1).frequency.value;
+  audio.play("box-crush");
+  assert.notEqual(createdContext.oscillators.at(-1).frequency.value, pickup);
+  const pitches = [];
+  for (let tick = 0; tick < 3; tick++) {
+    audio.play("item-roll", tick);
+    pitches.push(createdContext.oscillators.at(-2).frequency.value);
+  }
+  assert.equal(new Set(pitches).size, 3);
+  const before = createdContext.oscillators.length;
+  audio.play("item-select");
+  assert.equal(createdContext.oscillators.length - before, 3);
 });
 
 test("audio controller safely no-ops when Web Audio is unavailable", () => {

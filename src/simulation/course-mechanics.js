@@ -93,6 +93,56 @@ export function currentAt(track, t, time) {
   return 0;
 }
 
+/** Alternating roadside bellows: warning, compression and visible jet share one clock. */
+export function bellowsPuffAt(definition, time, side) {
+  const cycle =
+    (((time + (side > 0 ? definition.period / 2 : 0)) % definition.period) + definition.period) %
+    definition.period;
+  const age = cycle - definition.windup;
+  const active = age >= 0 && age < definition.duration;
+  const progress = active ? age / definition.duration : 0;
+  const inflation =
+    cycle < definition.windup
+      ? smooth(cycle / definition.windup)
+      : active
+        ? 1 - smooth(progress)
+        : 0;
+  return { active, progress, inflation, strength: active ? Math.sin(progress * Math.PI) : 0 };
+}
+
+export function bellowsNozzleAt(track, side) {
+  const d = track.course.bellows;
+  const t = track.sectorT(d.section, d.fraction);
+  const offset = track.platformEdgeAt(t, side) + side * 2.5;
+  const pose = track.poseAt(t * track.TRACK, offset, 1.4);
+  return { ...pose, t, offset };
+}
+
+/** Return world acceleration only inside the live, expanding air plume. */
+export function bellowsAirAt(track, position, time) {
+  const d = track.course.bellows;
+  if (!d) return null;
+  for (const side of [-1, 1]) {
+    const puff = bellowsPuffAt(d, time, side);
+    if (!puff.active || puff.strength <= 0) continue;
+    const nozzle = bellowsNozzleAt(track, side);
+    const delta = position.clone().sub(nozzle.p);
+    const distance = delta.dot(nozzle.right) * -side;
+    const front = d.reach * Math.min(1, puff.progress * 3);
+    const width = 0.8 + ((d.halfWidth - 0.8) * Math.max(0, distance)) / d.reach;
+    if (
+      distance < 0 ||
+      distance > front ||
+      Math.abs(delta.dot(nozzle.tangent)) > width ||
+      Math.abs(delta.dot(nozzle.up)) > d.height / 2
+    )
+      continue;
+    const force = -side * d.strength * puff.strength * (1 - distance / (d.reach * 1.6));
+    return { x: nozzle.right.x * force, z: nozzle.right.z * force, side };
+  }
+  return null;
+}
+
 /** Travelling wind waves with zero displacement and slope at each fixed tower. */
 export function bridgeWaveAt(track, t, time) {
   const wave = track.course.bridgeWave;

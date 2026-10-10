@@ -21,6 +21,8 @@ export function createNetworkRace({
   onStep,
   onInventory,
   onCollect,
+  onRoll = () => {},
+  onSelect = () => {},
   onUse,
   onImpact,
   onHit,
@@ -163,7 +165,9 @@ export function createNetworkRace({
     for (const event of message.events) {
       const racer = racers.find((r) => r.playerId === event.playerId);
       if (!racer) continue;
-      if (event.type === "collect") onCollect(racer);
+      if (event.type === "collect") onCollect(racer, event.awarded);
+      if (event.type === "roll") onRoll(racer, event.tick);
+      if (event.type === "select") onSelect(racer);
       if (event.type === "use") onUse(racer, event.item);
       if (event.type === "impact") onImpact(racer, event.message);
       if (event.type === "hit") onHit(racer);

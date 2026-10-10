@@ -41,7 +41,9 @@ const items = createRaceItems({
   createEffect: () => ++nextEffect,
   removeEffect: () => {},
   onHit: (...args) => session.hitRacer(...args),
-  onCollect: (racer) => event("collect", racer),
+  onCollect: (racer, awarded) => event("collect", racer, { awarded }),
+  onRoll: (racer, tick) => event("roll", racer, { tick }),
+  onSelect: (racer) => event("select", racer),
   onUse: (racer, item) => event("use", racer, { item }),
   onImpact: (racer, message) => event("impact", racer, { message }),
 });

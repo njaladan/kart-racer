@@ -20,9 +20,9 @@ export function metronomeArt(w) {
     );
   });
   for (let section = 0; section < track.SECTIONS.length; section++) {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 3; i++) {
       for (const side of [-1, 1]) {
-        const g = safe(section, (i + 0.5) / 5, side * 46, 15);
+        const g = safe(section, (i + 0.5) / 3, side * 46, 15);
         if (!g) continue;
         // Deep pleated curtains and balconies make enclosure tangible.
         box(wood, g, [0, 22, 0], [2, 46, 21]);
@@ -40,13 +40,15 @@ export function metronomeArt(w) {
         box(wood, g, [-side * 8, 17, 0], [15, 2, 22]);
         box(gold, g, [-side * 15, 21, 0], [0.3, 6, 22]);
         for (let j = 0; j < 6; j++) box(gold, g, [-side * 15, 20, j * 3.6 - 9], [0.22, 6, 0.22]);
-        asset("chairrounded", g, [-side * 5, 18, -5], 4);
-        asset("books", g, [-side * 4, 18, 5], 2);
+        if (i === 0) {
+          asset("chairrounded", g, [-side * 5, 18, -5], 4);
+          asset("books", g, [-side * 4, 18, 5], 2);
+        }
         lamp(g, [-side * 6, 33, 0], "#ffcd86", 42, 48);
         if (i % 2 === 0) beam(g, [-side * 9, 40, 0], "#ffdcab", 43, 8, side * 0.3);
       }
     }
-    const desk = safe(section, 0.35, 82, 18);
+    const desk = section === 0 ? safe(section, 0.35, 82, 18) : null;
     if (desk) {
       box(wood, desk, [0, 1, 0], [36, 2, 23]);
       if (kit.hasAsset("hero:boombox")) kit.fitAsset("hero:boombox", desk, [0, 2, 0], 14);
@@ -57,7 +59,7 @@ export function metronomeArt(w) {
     }
   }
   // Floating gilt notes turn slowly above the musical machinery.
-  for (let i = 0; i < 18; i++) {
+  for (let i = 0; i < 10; i++) {
     const g = safe(i % track.SECTIONS.length, 0.15 + (i % 5) * 0.16, i % 2 ? 30 : -30, 4);
     if (!g) continue;
     const note = new THREE.Group();

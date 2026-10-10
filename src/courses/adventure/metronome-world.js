@@ -1,6 +1,7 @@
 import { worldKit } from "./world-kit.js";
 import { registerLightPool } from "../../rendering/course-lighting.js";
 import { kitchenRoadDetail } from "./pantry-materials.js";
+import { buildMetronomeOrchestra } from "./metronome-orchestra.js";
 
 /** Cherrywood, blue velvet and polished brass inside a giant working music box. */
 export function buildMetronome(context) {
@@ -11,8 +12,6 @@ export function buildMetronome(context) {
     gold = mat("#dab477", "metal", { metalness: 0.6, roughness: 0.32 }),
     ivory = mat("#f4e0b9"),
     velvet = mat("#535d85", "fabric"),
-    pink = mat("#c793a6", "fabric"),
-    blue = mat("#829cb3", "fabric"),
     glow = mat("#ffdb9f", "stone", { emissive: "#ffc775", emissiveIntensity: 0.8 });
   kitchenRoadDetail(wood);
   const keyShape = new THREE.Shape();
@@ -110,7 +109,7 @@ export function buildMetronome(context) {
         });
       }
     }
-  w.pendulums("hammer", "#d8b07a");
+  w.pendulums("clock", "#d8b07a");
   // A colossal pinned drum and comb: the recognisable heart of the music box.
   const drum = at(1, 0.5, 95),
     rotor = new THREE.Group();
@@ -171,40 +170,7 @@ export function buildMetronome(context) {
         arm.rotation.y = Math.sin(time + i) * 0.12;
       });
     }
-  // Dollhouse automatons and turning dancers populate the instrument stage.
-  function dancer(g, color, size, phase) {
-    const figure = new THREE.Group();
-    g.add(figure);
-    figure.scale.setScalar(size);
-    mesh(sphere, ivory, figure, [0, 6.1, 0], [0.75, 0.9, 0.75]);
-    mesh(cylinder, color, figure, [0, 4, 0], [0.8, 2.5, 0.8]);
-    mesh(new THREE.ConeGeometry(1, 1, 10), color, figure, [0, 2.8, 0], [2, 1.8, 2]);
-    for (const side of [-1, 1]) {
-      tube(figure, [side * 0.4, 2.1, 0], [side * 0.9, 0.4, 0], 0.18, ivory);
-      tube(figure, [side * 0.6, 4.8, 0], [side * 2.2, 5.8, 0], 0.17, ivory);
-    }
-    motion(figure, (time) => {
-      figure.rotation.y = time * 0.45 + phase;
-      figure.position.y = Math.sin(time * Math.PI + phase) * 0.18;
-    });
-    return figure;
-  }
-  for (const section of [2, 3, 4])
-    for (let i = 0; i < 5; i++) {
-      const g = at(section, 0.08 + i * 0.19, (i % 2 ? 1 : -1) * 28);
-      mesh(cylinder, dark, g, [0, -(g.position.y + 22) / 2, 0], [5, g.position.y + 22, 5]);
-      mesh(cylinder, wood, g, [0, 1, 0], [8, 2, 8]);
-      mesh(cylinder, velvet, g, [0, 2.1, 0], [7.5, 0.2, 7.5]);
-      dancer(g, i % 2 ? pink : blue, 1.5, i * 0.7);
-      for (let j = 0; j < 10; j++)
-        mesh(
-          sphere,
-          gold,
-          g,
-          [Math.cos((j / 10) * Math.PI * 2) * 7, 2.2, Math.sin((j / 10) * Math.PI * 2) * 7],
-          [0.2, 0.2, 0.2],
-        );
-    }
+  buildMetronomeOrchestra(w);
   // Resonator towers rise in the middle distance; their felt hammers breathe.
   for (const section of [2, 3, 4])
     for (let i = 0; i < 5; i++) {

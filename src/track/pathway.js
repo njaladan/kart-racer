@@ -140,7 +140,7 @@ export function createPathwayQueries(track) {
     if (index === track.course.downhill?.section) continue;
     for (const side of [-1, 1]) {
       const profile = edgeAt((section.start + section.end) / 2, side);
-      if (profile.mode !== "soft") continue;
+      if (profile.mode !== "soft" || profile.height === 0) continue;
       const count = Math.floor(
         ((section.end - section.start) * track.COURSE_LENGTH) / (spacing[profile.kind] || 25),
       );

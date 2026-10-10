@@ -7,6 +7,9 @@ import {
   chooseItem,
 } from "./items.js";
 
+export const ITEM_ROLL_DURATION = 1.6;
+const ROLL_ITEMS = ["mushroom", "green", "red", "banana", "star"];
+
 /** Own inventory, pickup respawns, and active item lifetimes. View operations are injected. */
 export function createRaceItems({
   racers,
@@ -16,29 +19,49 @@ export function createRaceItems({
   onHit,
   onInventory = () => {},
   onCollect = () => {},
+  onRoll = () => {},
+  onSelect = () => {},
   onUse = () => {},
   onImpact = () => {},
   onShellTrail = () => {},
 }) {
   const projectiles = [],
     bananas = [];
+  const rolls = new Map();
   function nearestDelta(a, b) {
     let delta = (((a - b) % TRACK) + TRACK) % TRACK;
     if (delta > TRACK / 2) delta -= TRACK;
     return delta;
   }
   function setItem(who, type) {
+    rolls.delete(who);
+    who.itemRoulette = 0;
+    who.itemPreview = null;
     who.item = type;
-    who.itemCount = type === "mushroom" ? 3 : 1;
+    who.itemCount = type === "mushroom" ? 3 : type ? 1 : 0;
     onInventory(who);
   }
   function collect(box, who) {
-    if (who.item || who.finished) return;
+    if (who.finished) return;
     box.active = false;
 
     box.respawn = 10 + Math.random() * 4;
-    setItem(who, chooseItem(who, racers));
-    onCollect(who);
+    const awarded = !who.item && !rolls.has(who);
+    onCollect(who, awarded);
+    if (awarded) {
+      who.itemRoulette = ITEM_ROLL_DURATION;
+      who.itemPreview = ROLL_ITEMS[Math.floor(Math.random() * ROLL_ITEMS.length)];
+      rolls.set(who, { nextTick: 0.12, tick: 0 });
+      onInventory(who);
+    }
+  }
+  function rollTick(who, roll) {
+    const choices = ROLL_ITEMS.filter((type) => type !== who.itemPreview);
+    who.itemPreview = choices[Math.floor(Math.random() * choices.length)];
+    onInventory(who);
+    onRoll(who, roll.tick++);
+    // The slot slows down as it approaches the final selection.
+    roll.nextTick += 0.065 + (1 - who.itemRoulette / ITEM_ROLL_DURATION) ** 2 * 0.16;
   }
   function fireItem(who) {
     const type = consumeItem(who);
@@ -81,6 +104,20 @@ export function createRaceItems({
     onInventory(who);
   }
   function step(dt, raceTime) {
+    for (const [who, roll] of rolls) {
+      if (who.finished) {
+        setItem(who, null);
+        continue;
+      }
+      who.itemRoulette = Math.max(0, who.itemRoulette - dt);
+      if (who.itemRoulette === 0) {
+        setItem(who, chooseItem(who, racers));
+        onSelect(who);
+      } else {
+        roll.nextTick -= dt;
+        while (roll.nextTick <= 0) rollTick(who, roll);
+      }
+    }
     for (const box of boxes) {
       if (!box.active) {
         box.respawn -= dt;
@@ -91,7 +128,6 @@ export function createRaceItems({
         for (const racer of racers) {
           if (
             !racer.finished &&
-            !racer.item &&
             racer.worldPos.distanceTo(poseAt(box.s, laneWidth(box.x), 0.065).p) < 3.3 &&
             Math.abs(nearestDelta(racer.s, box.s)) * WORLD_PER_UNIT < 3 &&
             Math.abs(racer.x - box.x) < 0.26
@@ -153,6 +189,11 @@ export function createRaceItems({
         }
   }
   function reset() {
+    rolls.clear();
+    for (const racer of racers) {
+      racer.itemRoulette = 0;
+      racer.itemPreview = null;
+    }
     for (const box of boxes) {
       box.active = true;
       box.respawn = 0;

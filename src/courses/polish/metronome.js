@@ -1,3 +1,5 @@
+import { clockPendulumBob } from "../adventure/clock-pendulum.js";
+
 /** Music-box architecture and warm practical light for Metronome Hall. */
 export function polishMetronome(w) {
   const { THREE, track, mat, at, safe, mesh, box, motion, light, source, bevelBox } = w;
@@ -7,7 +9,6 @@ export function polishMetronome(w) {
   const darkBrass = mat("#735a45", "metal", { metalness: 0.65, roughness: 0.38 });
   const velvet = mat("#353b5b", "fabric", { roughness: 0.98 });
   const recess = mat("#211f31", "fabric", { roughness: 1 });
-  const warm = mat("#ffd08c", null, { emissive: "#e38a43", emissiveIntensity: 1.45 });
   const ivory = mat("#f1ddbb", null, { roughness: 0.34 });
   const geometry = {
     cylinder: new THREE.CylinderGeometry(1, 1, 1, 14),
@@ -145,7 +146,7 @@ export function polishMetronome(w) {
     mechanism.add(arm);
     arm.position.set(0, 22, 0);
     mesh(geometry.cylinder, brass, arm, [0, -8, 0], [0.45, 16, 0.45]);
-    mesh(geometry.sphere, warm, arm, [0, -17, 0], [2.6, 2.1, 2.1]);
+    clockPendulumBob(w, arm, 2.6, 0.85, brass, darkBrass).position.set(0, -17, 0);
     const collar = mesh(geometry.cylinder, darkBrass, arm, [0, -1, 0], [1.6, 1.2, 1.6]);
     collar.rotation.z = Math.PI / 2;
     const pendulumLamp = source(mechanism, [0, 21, 3], "#ffdaa3", 0.32);

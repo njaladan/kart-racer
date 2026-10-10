@@ -148,5 +148,49 @@ test("Clockwork scenery leaves the driving ribbon clear throughout the lap", () 
     }
   }
   assert.ok(scene.getObjectByName("Clock face facade"));
-  assert.ok(scene.getObjectByName("Rooftop turbine crew"));
+  assert.ok(scene.getObjectByName("Rooftop turbine engine"));
+});
+
+test("homes have grounded footings, open courtyards and scenery has no characters", () => {
+  const scene = new THREE.Scene(),
+    scenery = new THREE.Group();
+  scene.add(scenery);
+  const world = course.buildWorld({
+    THREE,
+    scene,
+    scenery,
+    track,
+    kit: createCourseKit(scenery, track),
+    textures: {},
+  });
+  const homes = scene.userData.clockworkHouseSites;
+  assert.ok(homes.length >= 20);
+  assert.ok(new Set(homes.map((h) => Math.floor(h.base / 20))).size >= 4, "inhabited levels vary");
+  for (let i = 0; i < homes.length; i++) {
+    const home = homes[i];
+    assert.ok(
+      Math.abs(home.bounds.min.y - course.theme.groundHeight) < 1e-6,
+      "footings reach terrain",
+    );
+    for (let j = i + 1; j < homes.length; j++)
+      assert.ok(
+        !home.bounds.clone().expandByScalar(4).intersectsBox(homes[j].bounds),
+        "courtyards stay open",
+      );
+  }
+  let gears = 0,
+    zeppelins = 0,
+    balloons = 0;
+  scenery.traverse((o) => {
+    gears += o.userData.clockworkGear === true;
+    zeppelins += o.name === "Golden passenger zeppelin";
+    balloons += o.name === "Striped hot air balloon";
+    assert.ok(!/robot|crew|worker|character/i.test(o.name));
+  });
+  assert.ok(gears >= 140);
+  assert.equal(zeppelins, 3);
+  assert.equal(balloons, 9);
+  world.update(17);
+  scenery.updateMatrixWorld(true);
+  scenery.traverse((o) => assert.ok(o.matrixWorld.elements.every(Number.isFinite)));
 });

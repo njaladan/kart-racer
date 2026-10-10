@@ -94,6 +94,17 @@ const course = adventure({
     { section: 4, fraction: 0.3, period: 10, radius: 11, amplitude: 24, height: 7, phase: Math.PI },
     { section: 4, fraction: 0.72, period: 10, radius: 11, amplitude: 24, height: 7, phase: 0 },
   ],
+  bellows: {
+    section: 3,
+    fraction: 0.18,
+    period: 8,
+    windup: 1.2,
+    duration: 1.1,
+    reach: 28,
+    halfWidth: 3.5,
+    height: 4,
+    strength: 26,
+  },
 });
 
 export default withCourseExperience(course);

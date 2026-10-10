@@ -209,14 +209,14 @@ export function withCourseExperience(course) {
       break;
     case "clockwork-citadel":
       course.description =
-        "Climb the citadel, enter a giant watch and choose either banked side of its open gear bowl before racing over the rooftop crown.";
+        "Climb golden city terraces, follow either illuminated line through a flowing watch bowl, then race beneath airships and descend to the foundry streets.";
       course.branches = [
         branch(
           "watch-bowl-right",
           "watch-interior",
           2,
-          0.02,
-          0.98,
+          0,
+          1,
           "metal",
           "#d6b56b",
           7,
@@ -230,6 +230,8 @@ export function withCourseExperience(course) {
             shape: "bowl",
             side: 1,
             wellRatio: 0.16,
+            depthRatio: 0.36,
+            maxSlope: Math.tan(Math.PI / 3) * 0.85,
           },
         ),
       ];
@@ -238,8 +240,8 @@ export function withCourseExperience(course) {
           "watch-bowl-left",
           "watch-interior",
           2,
-          0.02,
-          0.98,
+          0,
+          1,
           "metal",
           "#d6b56b",
           7,
@@ -253,29 +255,13 @@ export function withCourseExperience(course) {
             shape: "bowl",
             side: -1,
             wellRatio: 0.16,
+            depthRatio: 0.36,
+            maxSlope: Math.tan(Math.PI / 3) * 0.85,
             required: true,
           },
         ),
       );
       course.branches[1].required = true;
-      {
-        const start = course.sections[2].controlIndex,
-          end = course.sections[3].controlIndex;
-        course.controls[start - 2] = [230, 24, -65];
-        course.controls[start - 1] = [230, 29, 0];
-        for (let i = start; i <= end; i++) {
-          const q = (i - start) / (end - start);
-          course.controls[i] = [
-            180 * Math.cos(q * Math.PI),
-            33 + q * 29,
-            180 * Math.sin(q * Math.PI),
-          ];
-        }
-        course.controls[start + 1] = [150, 34, 0];
-        course.controls[end - 1] = [-150, 61, 0];
-        course.controls[end + 1] = [-230, 67, 0];
-        course.controls[end + 2] = [-230, 72, -65];
-      }
       course.watchBowl = { section: 2 };
       course.sections[2].name = "INSIDE THE WATCH";
       course.sections[2].enclosed = true;
@@ -360,7 +346,7 @@ export function withCourseExperience(course) {
       break;
     case "metronome-hall":
       course.description =
-        "Time your passage through road-blocking metronome hammers, then bounce across differently voiced snare drums suspended over an open abyss.";
+        "Race through a self-playing mechanical orchestra, time the brass clock pendulums, bounce across snare drums, and steer against the bellows' sideways air puffs.";
       course.theme.groundHeight = -150;
       course.pendulums = course.pendulums.filter((d) => d.section !== 2);
       course.drumField = {

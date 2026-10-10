@@ -20,6 +20,18 @@ test("race HUD formatting handles times and ordinal exceptions", () => {
   ]);
 });
 
+test("item slot shows lottery previews then restores the selected item and charge count", () => {
+  const ui = { itemIcon: element(), itemLabel: element(), item: element() };
+  renderItemHud(ui, null, 0, "star", true);
+  assert.equal(ui.itemIcon.textContent, "★");
+  assert.equal(ui.itemLabel.textContent, "ROLLING…");
+  renderItemHud(ui, null, 0, "banana", true);
+  assert.equal(ui.itemIcon.textContent, "🍌");
+  renderItemHud(ui, "mushroom", 3);
+  assert.equal(ui.itemLabel.textContent, "MUSHROOM ×3");
+  assert.equal(ui.itemIcon.style.transform, "");
+});
+
 test("race and item HUD render from explicit race presentation values", () => {
   const ui = {
     place: element(),

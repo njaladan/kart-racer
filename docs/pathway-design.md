@@ -8,7 +8,7 @@ All twelve courses use section-specific environmental edges instead of a continu
 | Neon Harbor | Explorable pavements, market stalls, planters and cargo clusters; exposed quays and ferry deck; a parapet on one side of the bridge. |
 | Sunstone Ruins | Palm groves, broad sand shoulders, column courts and dunes; local canyon/temple walls and open mesa ledges. |
 | Frostpeak Festival | Powder shoulders, pine clusters and chalet courtyards; a glacier face; open carnival and downhill ledges. |
-| Clockwork Citadel | Foundry cargo, exposed metal decks, gear clusters and rooftop edges; the inside tower wall defines the spiral, followed by a continuous banked descent and boosted turbine sweep. |
+| Clockwork Citadel | Grounded foundry streets, open courtyards, supported masonry terraces and exposed brass machinery. The route rises between city levels, crosses a gently curved marked bowl, and returns through a banked descent and turbine sweep. |
 | Paper Revel | Broad paper folds and lantern clusters; layered ribbon crossings and the unfolding fan have exposed edges. |
 | Tempest Causeway | Boulder shelters, open bridge spans, sea drops and a breakwater rock face; suspension cables remain structural scenery. |
 | Pocket Pantry | Crumbs, jars, biscuit clusters, soap and finite counter shoulders; pantry shelves and the basin have exposed lips. |

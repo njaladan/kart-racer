@@ -121,10 +121,14 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
             : branch.material;
     const map = textures[textureName];
     const mat = material(branch.color, {
-      map,
+      map: branch.theme === "santorini-market" ? null : map,
       roughness: branch.material === "glass" ? 0.32 : 0.8,
       metalness: branch.material === "metal" ? 0.4 : 0,
     });
+    if (branch.theme === "santorini-market") {
+      mat.userData.skipSurfaceDetail = true;
+      templePaving(mat);
+    }
     if (branch.theme === "sun-ring") templePaving(mat, { ceremonial: true });
     if (branch.theme === "containers" || branch.theme === "watch") metalDeckDetail(mat);
     // The landing deck stays flat underneath a curved, open launch lip.
@@ -169,14 +173,26 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
       entrance.quaternion.setFromAxisAngle(new THREE.Vector3(0, 1, 0), track.yawFor(pose.tangent));
       sign(entrance, branch.label, branch.color, 18);
       entrance.userData.scenicAssembly = true;
-    } else sign(entrance, branch.label, branch.color, 24);
+    } else if (branch.theme !== "santorini-market") sign(entrance, branch.label, branch.color, 24);
     const count = Math.max(5, Math.floor(branch.length / 12));
     for (let i = 1; i < count; i++) {
       const q = i / count,
         pose = branch.poseAt(q, 0, 0),
         g = groupAt(pose);
       branchGroup.add(g);
-      if (!branch.dropToMain) {
+      if (branch.theme === "santorini-market") {
+        // Keep the merged entry/exit open; low curbs frame separated streets.
+        if (q > 0.23 && q < 0.77)
+          for (const side of [-1, 1]) {
+            const curb = box(
+              mat,
+              g,
+              [side * branch.halfWidth, 0.2, 0],
+              [0.25, 0.4, branch.length / count + 0.1],
+            );
+            curb.userData.routeStructure = true;
+          }
+      } else if (!branch.dropToMain) {
         for (const side of [-1, 1]) {
           const rail = box(
             metal,

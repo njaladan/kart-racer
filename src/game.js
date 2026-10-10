@@ -117,6 +117,8 @@ async function startGame() {
     onHit: (...args) => session.hitRacer(...args),
     onInventory: view.syncItem,
     onCollect: feedback.collected,
+    onRoll: feedback.rolling,
+    onSelect: feedback.selected,
     onUse: feedback.itemUsed,
     onImpact: feedback.impact,
     onShellTrail: (shell) => {
@@ -196,6 +198,8 @@ async function startGame() {
         removeEffect: itemEffects.remove,
         onInventory: view.syncItem,
         onCollect: feedback.collected,
+        onRoll: feedback.rolling,
+        onSelect: feedback.selected,
         onUse: feedback.itemUsed,
         onImpact: feedback.impact,
         onRoom(room) {

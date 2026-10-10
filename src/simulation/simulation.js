@@ -9,6 +9,7 @@ import {
   advanceTraversal,
   currentAt,
   bridgeWaveAt,
+  bellowsAirAt,
 } from "./course-mechanics.js";
 import {
   drive,
@@ -176,6 +177,12 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
   if (state.grounded && current) {
     state.vx += before.horizontalRight.x * current * dt;
     state.vz += before.horizontalRight.z * current * dt;
+  }
+  const bellowsAir =
+    !state.falling && !before.branchIndex && bellowsAirAt(activeTrack, state.worldPos, raceTime);
+  if (bellowsAir) {
+    state.vx += bellowsAir.x * dt;
+    state.vz += bellowsAir.z * dt;
   }
   const ringCarry = routeCarry(activeTrack, state, before, dt);
   const deck = before.movingSurface;
@@ -497,6 +504,7 @@ export function advanceRacer(state, input, dt = FIXED_DT, raceTime = 0, totalLap
     trafficImpact: !!trafficHit && cartImpact,
     conveyorMotion,
     ringCarry,
+    bellowsPuff: !!bellowsAir,
     drumBounce,
     deckBoarded: !!state.movingDeckId && previousDeck !== state.movingDeckId,
     deckLeft: !!previousDeck && previousDeck !== state.movingDeckId,

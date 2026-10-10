@@ -6,44 +6,44 @@
   "bounds": [
     -395,
     -275,
-    790,
-    645
+    740,
+    650
   ],
   "heightRange": [
-    -95.05901641422786,
-    160
+    -24.384029849280815,
+    170
   ],
   "bounceScale": 0.65,
   "resolution": 768,
   "samples": 12,
   "radius": 22.0,
   "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Four-point area emitters soften penumbrae and glass/cutouts transmit attenuated light. Colored spill volume samples at authored heights illuminate vertical surfaces.",
-  "sourceSceneSha256": "a12fb3f51fead25f2f3b6e1a1de7897bd64cacd35823f5d3aa67637e9f3e2096",
-  "triangles": 258630,
-  "lights": 80,
-  "areaLights": 1,
+  "sourceSceneSha256": "8ba76d0eb505966e11668f5a9aa45ec04e6d51bcb7406d1e1b6a3f58e6a0be2b",
+  "triangles": 939033,
+  "lights": 150,
+  "areaLights": 0,
   "transparentLightTransport": true,
   "outputs": [
     {
       "file": "indirect.png",
       "width": 768,
       "height": 768,
-      "bytes": 363301,
-      "sha256": "855b10355adbee86feb25c1af4d60832e6712e814078e440d6beea9a80f18970"
+      "bytes": 420704,
+      "sha256": "abb35ac7ca306d7aaa6376a8e0ca85776209eafe67fd88907d1de99a896eaebe"
     },
     {
       "file": "height.png",
       "width": 768,
       "height": 768,
-      "bytes": 245470,
-      "sha256": "c22f5503c0c800c5a16dc7726d3ddaf0ac2282148a0f5263eba1566782b6d99a"
+      "bytes": 229900,
+      "sha256": "e3e6bc1cc93ab93101474f6052559923d95874dd44360f78328aaec493837b51"
     },
     {
       "file": "spill.png",
       "width": 640,
       "height": 320,
-      "bytes": 10075,
-      "sha256": "a68bd165983b359df509c8b85d35b87d99312da67dbacad61a121f855a63a785"
+      "bytes": 15510,
+      "sha256": "cd7edd1e5539fd9750f7c23674166712ce6b219514843e61f76f229e91714ce2"
     }
   ],
   "lightVolume": {
@@ -51,12 +51,12 @@
     "columns": 4,
     "rows": 2,
     "heights": [
-      -95,
-      -65,
       -35,
-      0,
-      45,
-      105
+      8,
+      35,
+      65,
+      100,
+      145
     ],
     "strength": 1,
     "file": "spill.png"

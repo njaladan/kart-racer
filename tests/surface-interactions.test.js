@@ -45,9 +45,11 @@ test("alternate-route tire contacts follow the selected snow branch floor", () =
   effects.update(1, { running: true, motionEnabled: true });
   assert.equal(effects.trails.count, 2);
   const selectedSurface = racerProjection(track, racer);
-  const mainRoadSurface = track.projectTrack(racer.worldPos, racer.s);
   assert.equal(selectedSurface.branchIndex, branch.index);
-  assert.ok(Math.abs(selectedSurface.height - mainRoadSurface.height) > 1);
+  assert.ok(
+    Math.abs(selectedSurface.height - racer.worldPos.y - 0.065) < 0.001,
+    "the selected floor matches the authored branch pose, including its jump ramp",
+  );
   for (const contact of floorTrailPositions(effects.trails)) {
     const expected = racerProjection(track, racer, contact).height + 0.027;
     assert.ok(Math.abs(contact.y - expected) < 0.002, "contact is lifted above its branch floor");

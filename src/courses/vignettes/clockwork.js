@@ -47,7 +47,7 @@ export function buildClockworkStories(w) {
   tube(bench, [-8, 6.8, 4], [-4, 8.5, 4], 0.15, brass);
   mesh(torus, brass, bench, [-3, 9, 4], [1.6, 1.6, 1.6]);
 
-  const exchange = site("Pneumatic copper message exchange", 2, 0.52, 1, 12, 30);
+  const exchange = site("Pneumatic copper message exchange", 5, 0.5, 1, 12, 30);
   for (let i = 0; i < 3; i++) {
     const x = (i - 1) * 5;
     box(blue, exchange, [x, 2, 0], [3.5, 4, 4]);

@@ -109,6 +109,65 @@
       "triangles": 704,
       "bytes": 33652,
       "sha256": "ea6a4a14c2878e04872b68c4ad416054a72c7653d8f693cd294b6071097696b7"
+    },
+    {
+      "name": "instrument:violin",
+      "file": "models/museum-violin.glb",
+      "type": "gltf",
+      "author": "Virtual Museums of Malopolska; mesh adaptation by Oded Stein",
+      "license": "CC0-1.0",
+      "source": "https://sketchfab.com/3d-models/violin-a784af0713a643b19ffcf65194bc0fbf",
+      "download": "https://raw.githubusercontent.com/odedstein/meshes/835213277571d625722d25880c9c3010c6f45a5a/objects/violin/violin.obj",
+      "sourceSha256": "0e6a01c7cfb52a59d31c01af7e1dfea9d43ecee0684c899716392d7470fa6145",
+      "attribution": "licenses/museum-violin.md",
+      "modifications": "Decimated museum scan, upright orientation, cherrywood material; original bow rig added at runtime",
+      "bytes": 83820,
+      "sha256": "cbc18ef09c341ea150a208964749d661f1efc91e4ab373943fe604098eae9e69"
+    },
+    {
+      "name": "art:workshop-desk",
+      "file": "models/workshop-desk.glb",
+      "type": "gltf",
+      "sourceModel": "furniture-kit/desk",
+      "author": "Kenney",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "license": "CC0-1.0",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/08f0c913f6783cc81f9f6105a7cdda8562b1c192/packs/furniture-kit/desk.glb",
+      "sourceSha256": "0164fe828f028b321730fb8c74502e353583f751be74da1682d42fff7d3c5a42",
+      "catalogSha256": "e7f9708db553a9db7668bf3a22c2cbc1e59c976c5aa1d8d18f7c00ef8c67078d",
+      "attribution": "licenses/CC0.txt",
+      "bytes": 15048,
+      "sha256": "0164fe828f028b321730fb8c74502e353583f751be74da1682d42fff7d3c5a42"
+    },
+    {
+      "name": "art:score-shelves",
+      "file": "models/score-shelves.glb",
+      "type": "gltf",
+      "sourceModel": "furniture-kit/bookcaseopen",
+      "author": "Kenney",
+      "source": "https://kenney.nl/assets/furniture-kit",
+      "license": "CC0-1.0",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/08f0c913f6783cc81f9f6105a7cdda8562b1c192/packs/furniture-kit/bookcaseopen.glb",
+      "sourceSha256": "750702218d68c062b15dfef6ab06a4014d1cfa8bd05f02e57c53b7e13bec157c",
+      "catalogSha256": "e7f9708db553a9db7668bf3a22c2cbc1e59c976c5aa1d8d18f7c00ef8c67078d",
+      "attribution": "licenses/CC0.txt",
+      "bytes": 18020,
+      "sha256": "750702218d68c062b15dfef6ab06a4014d1cfa8bd05f02e57c53b7e13bec157c"
+    },
+    {
+      "name": "art:air-pump",
+      "file": "models/air-pump.glb",
+      "type": "gltf",
+      "sourceModel": "space-kit/machine-generator",
+      "author": "Kenney",
+      "source": "https://kenney.nl/assets/space-kit",
+      "license": "CC0-1.0",
+      "download": "https://raw.githubusercontent.com/Hidencod/tge-assets/08f0c913f6783cc81f9f6105a7cdda8562b1c192/packs/space-kit/machine-generator.glb",
+      "sourceSha256": "98e8ac6aceada3b2483ed1eceb59bff7190ee774edac799350ccc11ad140f7f3",
+      "catalogSha256": "e7f9708db553a9db7668bf3a22c2cbc1e59c976c5aa1d8d18f7c00ef8c67078d",
+      "attribution": "licenses/CC0.txt",
+      "bytes": 28044,
+      "sha256": "98e8ac6aceada3b2483ed1eceb59bff7190ee774edac799350ccc11ad140f7f3"
     }
   ],
   "textures": [
@@ -198,6 +257,6 @@
     }
   ],
   "sources": [],
-  "license": "Original project music-box architecture, automaton dancers, moving pendulums, drum, comb and winding-key art. Shared credited textures retained.",
+  "license": "Original self-playing mechanical orchestra, clock pendulums, music-box drum and bellows. Imported CC0 museum violin and Kenney workshop props; locally bundled credited scans.",
   "artDirection": "Layered authored scenery, scanned PBR surfaces, animated environmental stories and offline occluded light spill."
 }
