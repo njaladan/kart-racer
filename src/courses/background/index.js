@@ -8,6 +8,7 @@ import { tempestBackground } from "./tempest.js";
 import { pantryBackground } from "./pantry.js";
 import { railstormBackground } from "./railstorm.js";
 import { metronomeBackground } from "./metronome.js";
+import { pelagicBackground } from "./pelagic.js";
 
 export const COURSE_BACKGROUNDS = {
   "windmill-wilds": windmillBackground,
@@ -19,6 +20,7 @@ export const COURSE_BACKGROUNDS = {
   "pocket-pantry": pantryBackground,
   "railstorm-express": railstormBackground,
   "metronome-hall": metronomeBackground,
+  "pelagic-glasshouse": pelagicBackground,
 };
 
 export function buildCourseBackground(w) {
