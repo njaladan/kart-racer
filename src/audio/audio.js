@@ -162,6 +162,7 @@ export function createAudioController(audioWindow = window) {
       gain = context.createGain(),
       now = context.currentTime;
     source.buffer = noiseBuffer;
+    source.loop = duration > (noiseBuffer.duration ?? 2);
     filter.type = "bandpass";
     filter.frequency.value = frequency;
     gain.gain.setValueAtTime(volume, now);
@@ -397,14 +398,17 @@ export function createAudioController(audioWindow = window) {
     const beat = Math.floor(
       time * (deck ? Math.max(2.5, deck.speed / 3.2) : id === "metronome-hall" ? 2 : 2.5),
     );
-    if (!active || beat === lastWorldBeat) return;
-    lastWorldBeat = beat;
     const thunder = stormAt(track.course, time).thunder;
-    if (storm && thunder > lastThunder) {
-      noise(3.2, 0.6, 65, 0.3, true);
-      noise(0.45, 0.3, 320, -0.2, true);
+    if (storm && active && thunder > lastThunder) {
+      // A distinct crack and a longer low roll follow the same visible strike.
+      // Check every frame so the ambience beat cannot shift the thunder delay.
+      noise(0.65, 0.65, 260, -0.15);
+      noise(0.22, 0.38, 1400, 0.15);
+      noise(3.2, 0.45, 90, 0.25);
     }
     lastThunder = thunder;
+    if (!active || beat === lastWorldBeat) return;
+    lastWorldBeat = beat;
     const nearby = opponents
       .filter((r) => !r.finished && r.worldPos.distanceTo(state.worldPos) < 32)
       .sort(

@@ -9,6 +9,7 @@ import { metalDeckDetail } from "../adventure/architectural-detail.js";
 import { bakeVertexShade } from "../../rendering/vertex-shading.js";
 import { drumImpact } from "../../rendering/drum-response.js";
 import { patchMaterial } from "../../rendering/surface-detail.js";
+import { createDistantLightning } from "../../rendering/distant-lightning.js";
 
 /** Authored route surfaces and their scenery are built from authoritative frames. */
 export function buildExperienceWorld({ scene, track, textures = {}, assets = {} }) {
@@ -553,20 +554,9 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
       lightning.intensity =
         state?.motionEnabled === false ? 0 : stormAt(track.course, time).flash * 5;
     });
-    const boltGeo = new THREE.BufferGeometry();
-    boltGeo.setFromPoints([
-      new THREE.Vector3(190, 250, -260),
-      new THREE.Vector3(175, 190, -253),
-      new THREE.Vector3(196, 150, -246),
-      new THREE.Vector3(168, 85, -240),
-      new THREE.Vector3(180, 20, -235),
-    ]);
-    const bolt = new THREE.Line(boltGeo, new THREE.LineBasicMaterial({ color: "#e2eeff" }));
-    scene.add(bolt);
-    animated.push(bolt);
-    updates.push((time, state) => {
-      bolt.visible = state?.motionEnabled !== false && stormAt(track.course, time).flash > 0.1;
-    });
+    const strike = createDistantLightning({ THREE, scene, track });
+    animated.push(strike.root);
+    updates.push(strike.update);
   }
   return {
     scenery,

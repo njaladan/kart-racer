@@ -44,10 +44,25 @@ try {
       const { buildDesertHorizon } =
         await import("/src/courses/sunstone-ruins/build-desert-horizon.js");
       const { addGradientSky } = await import("/src/rendering/sky.js");
+      const { GLTFLoader } = await import("/vendor/three/addons/loaders/GLTFLoader.js");
+      const { normalizeCourseModel } = await import("/src/rendering/course-assets.js");
       const course = COURSES.find((c) => c.id === id),
         track = createTrack(course);
+      const manifest = await fetch(`/assets/courses/packs/${id}/manifest.json`).then((r) =>
+        r.json(),
+      );
+      const models = {},
+        loader = new GLTFLoader();
+      await Promise.all(
+        manifest.models
+          .filter((model) => model.name.startsWith("background:"))
+          .map(async (model) => {
+            const gltf = await loader.loadAsync(`/assets/courses/packs/${id}/${model.file}`);
+            models[model.name] = normalizeCourseModel(gltf.scene);
+          }),
+      );
       const scene = new THREE.Scene(),
-        w = createPolishKit({ scene, track });
+        w = createPolishKit({ scene, track, assets: { models } });
       let sites;
       if (id === "sunstone-ruins") {
         buildDesertHorizon({ THREE, scenery: w.scenery, track, kit: w.kit, textures: {} });

@@ -24,7 +24,9 @@ export function buildTempest(context) {
   scenery.add(ocean);
   scene.userData.tempestSea = sea;
   const towerPier = w.kit.authoredGeometry("blender:storm-pier");
-  const seaStack = w.kit.authoredGeometry("blender:sea-stack", rock);
+  const seaStacks = Array.from({ length: 4 }, (_, index) =>
+    w.kit.authoredGeometry(`background:rock-${index}`, new THREE.SphereGeometry(1, 18, 12)),
+  );
   const seabed = track.course.theme.groundHeight - 8;
   // Upright foundations reach a fixed world-space seabed at every road elevation.
   function foundation(g, x, z, width, depth) {
@@ -381,13 +383,16 @@ export function buildTempest(context) {
   for (let i = 0; i < 28; i++) {
     const a = (i * Math.PI) / 14;
     sea.addShore(Math.sin(a) * 500, Math.cos(a) * 440, 16 + (i % 3) * 6);
-    mesh(
-      seaStack,
+    const stack = mesh(
+      seaStacks[i % seaStacks.length],
       stone,
       scenery,
-      [Math.sin(a) * 500, -22, Math.cos(a) * 440],
-      [25 + (i % 3) * 12, 38 + (i % 5) * 8, 25],
+      [Math.sin(a) * 500, -16 + (i % 4) * 3, Math.cos(a) * 440],
+      [25 + (i % 3) * 12, 18 + (i % 5) * 5, 24 + (i % 4) * 7],
     );
+    stack.rotation.y = i * 2.399;
+    stack.name = "Eroded downloaded offshore rock stack";
+    stack.castShadow = false;
   }
   w.points("#c9e7e7", [1, 3, 5], 180, 0.23);
   motion(ocean, sea.update);

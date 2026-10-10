@@ -1,6 +1,6 @@
 /** Offshore refuges and working vessels keep the exposed bridge vistas inhabited. */
 export function tempestBackground(b) {
-  const { track, mat, mesh, box, group, tube, place, motion } = b;
+  const { track, mat, mesh, box, rock: formation, group, tube, place, motion } = b;
   const rock = mat("#6c8493", "rock"),
     plaster = mat("#bcc7c8"),
     roof = mat("#5a6d7d"),
@@ -15,10 +15,18 @@ export function tempestBackground(b) {
       side,
       "Offshore lighthouse refuge and rugged sea stacks",
       (g) => {
-        mesh("ridge", rock, g, [0, -10, 0], [160, 72 + (s % 3) * 18, 110]);
-        for (let i = 0; i < 3; i++)
-          mesh("ridge", rock, g, [-48 + i * 47, -8, -50], [45, 55 + i * 18, 38]).rotation.y =
-            i * 0.7;
+        formation(s, rock, g, [0, 6, 0], [150, 36 + (s % 3) * 8, 105]);
+        for (let i = 0; i < 3; i++) {
+          const height = 22 + ((s * 7 + i * 11) % 35);
+          const stack = formation(
+            s + i + 1,
+            rock,
+            g,
+            [-48 + i * 47, height / 2 - 12, -50],
+            [35 + i * 8, height, 38],
+          );
+          stack.rotation.y = s * 0.49 + i * 1.37;
+        }
         mesh("cylinder", rock, g, [28, 1, 20], [18, 24, 18]);
         mesh("cylinder", plaster, g, [28, 30, 20], [6, 42, 6]);
         mesh("cylinder", roof, g, [28, 48, 20], [7, 2, 7]);

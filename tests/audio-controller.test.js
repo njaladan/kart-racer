@@ -285,3 +285,27 @@ test("blue and orange readiness have distinct rising tones and release whooshes"
   audio.play("turbo-orange");
   assert.ok(createdContext.oscillators.at(-1).frequency.value > blueRelease);
 });
+
+test("Tempest thunder claps once 2.4 seconds after its flash, respects pause and rewinds", () => {
+  const audio = createAudioController({ AudioContext: NoisyAudioContext });
+  audio.start();
+  const context = createdContext;
+  const track = selectCourse(COURSES.find((c) => c.id === "tempest-causeway"));
+  const state = { s: 0, scale: 1, worldPos: track.poseAt(0).p, yaw: 0 };
+  const claps = () =>
+    context.sources.filter((source) => source.connections[0]?.frequency.value === 260).length;
+  audio.updateWorld(track, state, 0, true);
+  const flash = track.course.storm.flashAt;
+  audio.updateWorld(track, state, flash, true);
+  audio.updateWorld(track, state, flash + 2.39, true);
+  assert.equal(claps(), 0);
+  audio.updateWorld(track, state, flash + 2.4, true);
+  assert.equal(claps(), 1);
+  audio.updateWorld(track, state, flash + 2.41, true);
+  assert.equal(claps(), 1);
+  audio.updateWorld(track, state, flash + track.course.storm.period + 2.4, false);
+  assert.equal(claps(), 1);
+  audio.updateWorld(track, state, 0, true);
+  audio.updateWorld(track, state, flash + 2.4, true);
+  assert.equal(claps(), 2);
+});

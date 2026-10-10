@@ -66,6 +66,21 @@ export function backgroundKit(w) {
     object.castShadow = false;
     return object;
   }
+  function rock(variant, mat, parent, position, scale) {
+    const key = `imported-rock:${variant % 4}`;
+    if (!geometries.has(key))
+      geometries.set(
+        key,
+        w.kit.authoredGeometry(
+          `background:rock-${variant % 4}`,
+          new THREE.SphereGeometry(0.5, 18, 12),
+        ),
+      );
+    const object = w.mesh(geometries.get(key), mat, parent, position, scale);
+    object.castShadow = false;
+    object.name = "Downloaded rounded Kenney rock formation";
+    return object;
+  }
   function group(parent, position = [0, 0, 0]) {
     const object = new THREE.Group();
     parent.add(object);
@@ -157,5 +172,5 @@ export function backgroundKit(w) {
     w.kit.batch(combined);
     return w.motion(object, update);
   }
-  return { ...w, mat: material, mesh, box, group, tube, surfaceY, place, motion, sites };
+  return { ...w, mat: material, mesh, box, rock, group, tube, surfaceY, place, motion, sites };
 }
