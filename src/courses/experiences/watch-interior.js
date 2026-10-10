@@ -148,7 +148,7 @@ function buildBowlGuidance(track, kit, scenery) {
   const guides = [];
   scenery.userData.bowlGuides = guides;
   for (const branch of track.branches.filter((b) => b.areaSurface)) {
-    function strip(left, right, mat, name) {
+    function strip(left, right, mat, name, above) {
       const positions = [],
         uv = [],
         indices = [];
@@ -159,7 +159,7 @@ function buildBowlGuidance(track, kit, scenery) {
         const spread = 1 + 0.5 * Math.sin(q * Math.PI) ** 2;
         for (let j = 0; j <= columns; j++) {
           const offset = THREE.MathUtils.lerp(left, right, j / columns) * spread;
-          const p = branch.poseAt(q, offset, 0.035).p;
+          const p = branch.poseAt(q, offset, above).p;
           positions.push(p.x, p.y, p.z);
           uv.push(j / columns, (q * branch.length) / 8);
           if (i < rows && j < columns) {
@@ -179,10 +179,12 @@ function buildBowlGuidance(track, kit, scenery) {
       object.userData.bakeReceiver = true;
       guides.push(object);
     }
-    strip(-9.8, 9.8, lane, "Bowl route gently widens and converges");
-    strip(-0.3, 0.3, gold, "Continuous golden bowl guide");
+    // Each marking layer needs its own clearance. Coplanar lane/guide meshes
+    // fight for depth, and their different tessellation can cross on the curve.
+    strip(-9.8, 9.8, lane, "Bowl route gently widens and converges", 0.035);
+    strip(-0.3, 0.3, gold, "Continuous golden bowl guide", 0.07);
     for (const side of [-1, 1])
-      strip(side * 8.8 - 0.12, side * 8.8 + 0.12, gold, "Bowl lane edge inlay");
+      strip(side * 8.8 - 0.12, side * 8.8 + 0.12, gold, "Bowl lane edge inlay", 0.07);
     for (let i = 1; i < 28; i++) {
       const q = i / 28;
       const frame = branch.frameAt(q);
@@ -200,7 +202,7 @@ function buildBowlGuidance(track, kit, scenery) {
         [0, 1.4],
       ]) {
         const p = frame.p.clone().addScaledVector(right, x).addScaledVector(forward, z);
-        p.y = branch.areaSurface.heightAt(p) + 0.07;
+        p.y = branch.areaSurface.heightAt(p) + 0.105;
         positions.push(p.x, p.y, p.z);
       }
       const geometry = new THREE.BufferGeometry();

@@ -1,17 +1,17 @@
 {
   "version": 1,
   "course": "clockwork-citadel",
-  "sourceSceneSha256": "8ba76d0eb505966e11668f5a9aa45ec04e6d51bcb7406d1e1b6a3f58e6a0be2b",
-  "sampleSourceSha256": "51fbb5306ace48ca557ae81842069d73690715829b91e5e0382a7e313863f707",
+  "sourceSceneSha256": "fa0449c40813fb10e2ed24901e36309b4ce41d202ead58a4b9142df0377417cd",
+  "sampleSourceSha256": "30bfb7787222f6ee91afb68b87545083ab43d0b9af1f4b15116e348752d80323",
   "format": "normalized RGBA8: RGB diffuse bounce and local lamp spill; alpha ambient visibility",
   "resolution": "per vertex; per instance for InstancedMesh",
   "samples": 8,
   "radius": 24.0,
   "quantization": 0.12,
-  "uniqueQuantizedSamples": 253391,
+  "uniqueQuantizedSamples": 253411,
   "entries": [
     {
-      "path": "0/146/0",
+      "path": "0/149/0",
       "name": "Course ground",
       "signature": "1387ca2d360579ae",
       "kind": "vertices",
@@ -20,7 +20,7 @@
       "byteLength": 788
     },
     {
-      "path": "0/146/1",
+      "path": "0/149/1",
       "name": "Course road surface",
       "signature": "eb4124e72c6916fb",
       "kind": "vertices",
@@ -29,7 +29,7 @@
       "byteLength": 14408
     },
     {
-      "path": "0/146/2",
+      "path": "0/149/2",
       "name": "Course road surface",
       "signature": "28d63ded3550e471",
       "kind": "vertices",
@@ -38,7 +38,7 @@
       "byteLength": 14408
     },
     {
-      "path": "0/146/3",
+      "path": "0/149/3",
       "name": "Course road surface",
       "signature": "6501022395ec5d16",
       "kind": "vertices",
@@ -47,7 +47,7 @@
       "byteLength": 14408
     },
     {
-      "path": "0/146/4",
+      "path": "0/149/4",
       "name": "Course road surface",
       "signature": "2102914ef968f66d",
       "kind": "vertices",
@@ -56,7 +56,7 @@
       "byteLength": 264
     },
     {
-      "path": "0/146/5",
+      "path": "0/149/5",
       "name": "gears shoulder",
       "signature": "d73981f0d670699b",
       "kind": "vertices",
@@ -65,7 +65,7 @@
       "byteLength": 8860
     },
     {
-      "path": "0/146/6",
+      "path": "0/149/6",
       "name": "deck exposed face",
       "signature": "4d7989f2423c84ca",
       "kind": "vertices",
@@ -74,7 +74,7 @@
       "byteLength": 5316
     },
     {
-      "path": "0/146/7",
+      "path": "0/149/7",
       "name": "gears shoulder",
       "signature": "a790a892992de032",
       "kind": "vertices",
@@ -83,7 +83,7 @@
       "byteLength": 11280
     },
     {
-      "path": "0/146/8",
+      "path": "0/149/8",
       "name": "deck exposed face",
       "signature": "1a36329c39aa9413",
       "kind": "vertices",
@@ -92,7 +92,7 @@
       "byteLength": 6768
     },
     {
-      "path": "0/146/9",
+      "path": "0/149/9",
       "name": "gears shoulder",
       "signature": "a635269437353d18",
       "kind": "vertices",
@@ -101,7 +101,7 @@
       "byteLength": 4400
     },
     {
-      "path": "0/146/10",
+      "path": "0/149/10",
       "name": "deck exposed face",
       "signature": "5b12e61a28c1c98b",
       "kind": "vertices",
@@ -110,7 +110,7 @@
       "byteLength": 2640
     },
     {
-      "path": "0/146/11",
+      "path": "0/149/11",
       "name": "gears shoulder",
       "signature": "a48e61c8e7ce071e",
       "kind": "vertices",
@@ -119,7 +119,7 @@
       "byteLength": 9620
     },
     {
-      "path": "0/146/12",
+      "path": "0/149/12",
       "name": "deck exposed face",
       "signature": "7ffff37adde5fd95",
       "kind": "vertices",
@@ -128,7 +128,7 @@
       "byteLength": 5772
     },
     {
-      "path": "0/146/13",
+      "path": "0/149/13",
       "name": "cargo shoulder",
       "signature": "4cbe64e454e55653",
       "kind": "vertices",
@@ -137,7 +137,7 @@
       "byteLength": 1540
     },
     {
-      "path": "0/146/14",
+      "path": "0/149/14",
       "name": "cargo shoulder",
       "signature": "06743d3cb15e82e9",
       "kind": "vertices",
@@ -146,7 +146,7 @@
       "byteLength": 1540
     },
     {
-      "path": "0/146/15",
+      "path": "0/149/15",
       "name": "",
       "signature": "74178bd3a252fd9c",
       "kind": "vertices",
@@ -155,7 +155,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/16",
+      "path": "0/149/16",
       "name": "",
       "signature": "63bad78ac345a145",
       "kind": "vertices",
@@ -164,7 +164,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/17",
+      "path": "0/149/17",
       "name": "",
       "signature": "592da14aa9c6dff7",
       "kind": "vertices",
@@ -173,7 +173,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/18",
+      "path": "0/149/18",
       "name": "",
       "signature": "37d015f4ffc3cef0",
       "kind": "vertices",
@@ -182,7 +182,7 @@
       "byteLength": 468
     },
     {
-      "path": "0/146/19",
+      "path": "0/149/19",
       "name": "Regional static scenery batch",
       "signature": "1eee6beeeb8a778c",
       "kind": "vertices",
@@ -191,7 +191,7 @@
       "byteLength": 7320
     },
     {
-      "path": "0/146/20",
+      "path": "0/149/20",
       "name": "Regional static scenery batch",
       "signature": "bfd316a93430153f",
       "kind": "vertices",
@@ -200,7 +200,7 @@
       "byteLength": 8784
     },
     {
-      "path": "0/146/21",
+      "path": "0/149/21",
       "name": "Regional imported scenery instances",
       "signature": "496484b9aa523b58",
       "kind": "instances",
@@ -209,7 +209,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/22",
+      "path": "0/149/22",
       "name": "Regional imported scenery instances",
       "signature": "abcb9f9a57b3a4cc",
       "kind": "instances",
@@ -218,7 +218,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/23",
+      "path": "0/149/23",
       "name": "Regional imported scenery instances",
       "signature": "d8897898dcba4f83",
       "kind": "instances",
@@ -227,7 +227,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/24",
+      "path": "0/149/24",
       "name": "Regional imported scenery instances",
       "signature": "b3e08039a1a6c0e0",
       "kind": "instances",
@@ -236,7 +236,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/25",
+      "path": "0/149/25",
       "name": "Regional static scenery batch",
       "signature": "208de8561cd49f9e",
       "kind": "vertices",
@@ -245,7 +245,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/26",
+      "path": "0/149/26",
       "name": "Regional static scenery batch",
       "signature": "4e13f3cc726c3799",
       "kind": "vertices",
@@ -254,7 +254,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/27",
+      "path": "0/149/27",
       "name": "",
       "signature": "1b3cb9d4e3a5e616",
       "kind": "vertices",
@@ -263,7 +263,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/28",
+      "path": "0/149/28",
       "name": "",
       "signature": "c14e15c3d74316f4",
       "kind": "vertices",
@@ -272,7 +272,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/29",
+      "path": "0/149/29",
       "name": "",
       "signature": "b5d249c3928027d2",
       "kind": "vertices",
@@ -281,7 +281,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/30",
+      "path": "0/149/30",
       "name": "",
       "signature": "c1bb3c8f17f5972a",
       "kind": "vertices",
@@ -290,7 +290,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/31",
+      "path": "0/149/31",
       "name": "",
       "signature": "bfb4226191ef4041",
       "kind": "vertices",
@@ -299,7 +299,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/32",
+      "path": "0/149/32",
       "name": "",
       "signature": "584dcaeeab5be3d4",
       "kind": "vertices",
@@ -308,7 +308,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/33",
+      "path": "0/149/33",
       "name": "",
       "signature": "e3c4895ca9c07673",
       "kind": "vertices",
@@ -317,7 +317,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/34",
+      "path": "0/149/34",
       "name": "",
       "signature": "d2aa576250c3c331",
       "kind": "vertices",
@@ -326,7 +326,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/35",
+      "path": "0/149/35",
       "name": "",
       "signature": "3939254c0ef414f4",
       "kind": "vertices",
@@ -335,7 +335,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/36",
+      "path": "0/149/36",
       "name": "",
       "signature": "c4759ea4280056df",
       "kind": "vertices",
@@ -344,7 +344,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/37",
+      "path": "0/149/37",
       "name": "",
       "signature": "f1f53c08b2c30434",
       "kind": "vertices",
@@ -353,7 +353,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/38",
+      "path": "0/149/38",
       "name": "",
       "signature": "e6a2db809297e5ec",
       "kind": "vertices",
@@ -362,7 +362,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/39",
+      "path": "0/149/39",
       "name": "Connected clockmaker city terrace",
       "signature": "c5a572c14acf970d",
       "kind": "vertices",
@@ -371,7 +371,7 @@
       "byteLength": 560
     },
     {
-      "path": "0/146/40",
+      "path": "0/149/40",
       "name": "City terrace masonry underside",
       "signature": "3eb9fbd45ce35167",
       "kind": "vertices",
@@ -380,7 +380,7 @@
       "byteLength": 560
     },
     {
-      "path": "0/146/41",
+      "path": "0/149/41",
       "name": "Connected clockmaker city terrace",
       "signature": "e06d428c77afe0e5",
       "kind": "vertices",
@@ -389,7 +389,7 @@
       "byteLength": 1336
     },
     {
-      "path": "0/146/42",
+      "path": "0/149/42",
       "name": "City terrace masonry underside",
       "signature": "bcd6385e166b6a6c",
       "kind": "vertices",
@@ -398,7 +398,7 @@
       "byteLength": 1336
     },
     {
-      "path": "0/146/43",
+      "path": "0/149/43",
       "name": "Connected clockmaker city terrace",
       "signature": "86e2bcb3c7cbf54c",
       "kind": "vertices",
@@ -407,7 +407,7 @@
       "byteLength": 1704
     },
     {
-      "path": "0/146/44",
+      "path": "0/149/44",
       "name": "City terrace masonry underside",
       "signature": "40d661879ffb2358",
       "kind": "vertices",
@@ -416,7 +416,7 @@
       "byteLength": 1704
     },
     {
-      "path": "0/146/45",
+      "path": "0/149/45",
       "name": "Connected clockmaker city terrace",
       "signature": "1cf17de7b6a7ec51",
       "kind": "vertices",
@@ -425,7 +425,7 @@
       "byteLength": 664
     },
     {
-      "path": "0/146/46",
+      "path": "0/149/46",
       "name": "City terrace masonry underside",
       "signature": "7f58cd3974641752",
       "kind": "vertices",
@@ -434,7 +434,7 @@
       "byteLength": 664
     },
     {
-      "path": "0/146/47",
+      "path": "0/149/47",
       "name": "Connected clockmaker city terrace",
       "signature": "2b27177c9a843e4e",
       "kind": "vertices",
@@ -443,7 +443,7 @@
       "byteLength": 1104
     },
     {
-      "path": "0/146/48",
+      "path": "0/149/48",
       "name": "City terrace masonry underside",
       "signature": "204518d0e47e9b01",
       "kind": "vertices",
@@ -452,7 +452,7 @@
       "byteLength": 1104
     },
     {
-      "path": "0/146/49",
+      "path": "0/149/49",
       "name": "Connected clockmaker city terrace",
       "signature": "f46e96949d85c95b",
       "kind": "vertices",
@@ -461,7 +461,7 @@
       "byteLength": 1448
     },
     {
-      "path": "0/146/50",
+      "path": "0/149/50",
       "name": "City terrace masonry underside",
       "signature": "722fa5ef3b96593c",
       "kind": "vertices",
@@ -470,7 +470,7 @@
       "byteLength": 1448
     },
     {
-      "path": "0/146/51",
+      "path": "0/149/51",
       "name": "Connected clockmaker city terrace",
       "signature": "2901ae440ee4805a",
       "kind": "vertices",
@@ -479,7 +479,7 @@
       "byteLength": 240
     },
     {
-      "path": "0/146/52",
+      "path": "0/149/52",
       "name": "City terrace masonry underside",
       "signature": "a796dbd877e773a3",
       "kind": "vertices",
@@ -488,7 +488,7 @@
       "byteLength": 240
     },
     {
-      "path": "0/146/53",
+      "path": "0/149/53",
       "name": "roof_3jpg__",
       "signature": "fbe611c1d7c78328",
       "kind": "vertices",
@@ -497,7 +497,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/54",
+      "path": "0/149/54",
       "name": "stk_generic_ironApng__",
       "signature": "9bcd153ef0806a6e",
       "kind": "vertices",
@@ -506,7 +506,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/55",
+      "path": "0/149/55",
       "name": "stktex_generic_WoodApng__",
       "signature": "977960307e9fd7b6",
       "kind": "vertices",
@@ -515,7 +515,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/56",
+      "path": "0/149/56",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "2bd7f57d7b46391d",
       "kind": "vertices",
@@ -524,7 +524,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/57",
+      "path": "0/149/57",
       "name": "stktex_windowsSet_apng__",
       "signature": "7fdab179f3e360b6",
       "kind": "vertices",
@@ -533,7 +533,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/59",
+      "path": "0/149/59",
       "name": "House courtyard pavement",
       "signature": "34421970ccd50515",
       "kind": "vertices",
@@ -542,7 +542,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/60",
+      "path": "0/149/60",
       "name": "roof_3jpg__",
       "signature": "ffe49e0bfbc1526a",
       "kind": "vertices",
@@ -551,7 +551,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/61",
+      "path": "0/149/61",
       "name": "stk_generic_ironApng__",
       "signature": "20eb456cd2c95f54",
       "kind": "vertices",
@@ -560,7 +560,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/62",
+      "path": "0/149/62",
       "name": "stktex_generic_WoodApng__",
       "signature": "134e4b1e17f0f35c",
       "kind": "vertices",
@@ -569,7 +569,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/63",
+      "path": "0/149/63",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "b88aba079f8c28b7",
       "kind": "vertices",
@@ -578,7 +578,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/64",
+      "path": "0/149/64",
       "name": "stktex_windowsSet_apng__",
       "signature": "c39246c392a3ada9",
       "kind": "vertices",
@@ -587,7 +587,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/66",
+      "path": "0/149/66",
       "name": "",
       "signature": "9ec7fc0f420397ed",
       "kind": "vertices",
@@ -596,7 +596,7 @@
       "byteLength": 700
     },
     {
-      "path": "0/146/67",
+      "path": "0/149/67",
       "name": "House courtyard pavement",
       "signature": "c25ee47f178b3fb8",
       "kind": "vertices",
@@ -605,7 +605,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/68",
+      "path": "0/149/68",
       "name": "___",
       "signature": "41788e37096c1b96",
       "kind": "vertices",
@@ -614,7 +614,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/69",
+      "path": "0/149/69",
       "name": "dark-wall-woodpng__",
       "signature": "8fe2a1c4bf87f6f3",
       "kind": "vertices",
@@ -623,7 +623,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/70",
+      "path": "0/149/70",
       "name": "doorjpg__",
       "signature": "55ec9e97dc2bce7c",
       "kind": "vertices",
@@ -632,7 +632,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/71",
+      "path": "0/149/71",
       "name": "roof_3jpg__",
       "signature": "bc1836ead1ae9484",
       "kind": "vertices",
@@ -641,7 +641,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/72",
+      "path": "0/149/72",
       "name": "stk_generic_ironApng__",
       "signature": "cf8ef0fde35f0257",
       "kind": "vertices",
@@ -650,7 +650,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/73",
+      "path": "0/149/73",
       "name": "stktex_generic_WoodApng__",
       "signature": "909dcd17013ee50f",
       "kind": "vertices",
@@ -659,7 +659,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/74",
+      "path": "0/149/74",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "1821e7beef0bb621",
       "kind": "vertices",
@@ -668,7 +668,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/75",
+      "path": "0/149/75",
       "name": "stktex_windowsSet_apng__",
       "signature": "f77b95028e59b3f5",
       "kind": "vertices",
@@ -677,7 +677,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/77",
+      "path": "0/149/77",
       "name": "",
       "signature": "bf43a25ccbee42b1",
       "kind": "vertices",
@@ -686,7 +686,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/78",
+      "path": "0/149/78",
       "name": "House courtyard pavement",
       "signature": "229c3a5b246d33b2",
       "kind": "vertices",
@@ -695,7 +695,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/79",
+      "path": "0/149/79",
       "name": "___",
       "signature": "b6917be949aeef67",
       "kind": "vertices",
@@ -704,7 +704,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/80",
+      "path": "0/149/80",
       "name": "dark-wall-woodpng__",
       "signature": "e088354ec20322ac",
       "kind": "vertices",
@@ -713,7 +713,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/81",
+      "path": "0/149/81",
       "name": "doorjpg__",
       "signature": "cf5ac5c9ca2121eb",
       "kind": "vertices",
@@ -722,7 +722,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/82",
+      "path": "0/149/82",
       "name": "roof_3jpg__",
       "signature": "b4eac8f43391eadc",
       "kind": "vertices",
@@ -731,7 +731,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/83",
+      "path": "0/149/83",
       "name": "stk_generic_ironApng__",
       "signature": "1aa284dff46aec50",
       "kind": "vertices",
@@ -740,7 +740,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/84",
+      "path": "0/149/84",
       "name": "stktex_generic_WoodApng__",
       "signature": "66113c49ac851252",
       "kind": "vertices",
@@ -749,7 +749,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/85",
+      "path": "0/149/85",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "ef56e440ee201dc8",
       "kind": "vertices",
@@ -758,7 +758,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/86",
+      "path": "0/149/86",
       "name": "stktex_windowsSet_apng__",
       "signature": "e2e4779cab7b9cee",
       "kind": "vertices",
@@ -767,7 +767,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/88",
+      "path": "0/149/88",
       "name": "House courtyard pavement",
       "signature": "f15ccae7de7f40e5",
       "kind": "vertices",
@@ -776,7 +776,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/89",
+      "path": "0/149/89",
       "name": "",
       "signature": "3efad589ad797d4f",
       "kind": "vertices",
@@ -785,7 +785,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/90",
+      "path": "0/149/90",
       "name": "",
       "signature": "94756bf90933e98b",
       "kind": "vertices",
@@ -794,7 +794,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/91",
+      "path": "0/149/91",
       "name": "___",
       "signature": "350fa8e9f7685e40",
       "kind": "vertices",
@@ -803,7 +803,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/92",
+      "path": "0/149/92",
       "name": "dark-wall-woodpng__",
       "signature": "359d151a0f6de984",
       "kind": "vertices",
@@ -812,7 +812,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/93",
+      "path": "0/149/93",
       "name": "doorjpg__",
       "signature": "bc61d189f84ce702",
       "kind": "vertices",
@@ -821,7 +821,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/94",
+      "path": "0/149/94",
       "name": "roof_3jpg__",
       "signature": "0b6174d0a6274505",
       "kind": "vertices",
@@ -830,7 +830,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/95",
+      "path": "0/149/95",
       "name": "stk_generic_ironApng__",
       "signature": "1c77a9ef1ed63ceb",
       "kind": "vertices",
@@ -839,7 +839,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/96",
+      "path": "0/149/96",
       "name": "stktex_generic_WoodApng__",
       "signature": "c6bd0b0993063750",
       "kind": "vertices",
@@ -848,7 +848,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/97",
+      "path": "0/149/97",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "71f1351c04bfa461",
       "kind": "vertices",
@@ -857,7 +857,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/98",
+      "path": "0/149/98",
       "name": "stktex_windowsSet_apng__",
       "signature": "ea3c784801eeebe2",
       "kind": "vertices",
@@ -866,7 +866,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/100",
+      "path": "0/149/100",
       "name": "",
       "signature": "8828fc900321cc13",
       "kind": "vertices",
@@ -875,7 +875,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/101",
+      "path": "0/149/101",
       "name": "House courtyard pavement",
       "signature": "6028cf3e5a246c75",
       "kind": "vertices",
@@ -884,7 +884,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/102",
+      "path": "0/149/102",
       "name": "dark-wall-woodpng__",
       "signature": "d72a145810e13742",
       "kind": "vertices",
@@ -893,7 +893,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/103",
+      "path": "0/149/103",
       "name": "doorjpg__",
       "signature": "52cc497352fe665c",
       "kind": "vertices",
@@ -902,7 +902,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/104",
+      "path": "0/149/104",
       "name": "roof_3jpg__",
       "signature": "e12448e676b58bdf",
       "kind": "vertices",
@@ -911,7 +911,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/105",
+      "path": "0/149/105",
       "name": "stk_generic_ironApng__",
       "signature": "9fe0bcf94c4096f1",
       "kind": "vertices",
@@ -920,7 +920,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/106",
+      "path": "0/149/106",
       "name": "stktex_generic_WoodApng__",
       "signature": "fc09dbf309ef239b",
       "kind": "vertices",
@@ -929,7 +929,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/107",
+      "path": "0/149/107",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "ad2021428eb697c7",
       "kind": "vertices",
@@ -938,7 +938,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/108",
+      "path": "0/149/108",
       "name": "stktex_windowsSet_apng__",
       "signature": "79b175fef3e29435",
       "kind": "vertices",
@@ -947,7 +947,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/110",
+      "path": "0/149/110",
       "name": "",
       "signature": "91c7c7ece464ec29",
       "kind": "vertices",
@@ -956,7 +956,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/111",
+      "path": "0/149/111",
       "name": "House courtyard pavement",
       "signature": "8c1a2337ce6a8b1a",
       "kind": "vertices",
@@ -965,7 +965,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/112",
+      "path": "0/149/112",
       "name": "dark-wall-woodpng__",
       "signature": "d3a1e91ade19e916",
       "kind": "vertices",
@@ -974,7 +974,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/113",
+      "path": "0/149/113",
       "name": "doorjpg__",
       "signature": "39d452053f5f228f",
       "kind": "vertices",
@@ -983,7 +983,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/114",
+      "path": "0/149/114",
       "name": "roof_3jpg__",
       "signature": "3820a4ccc1f21d14",
       "kind": "vertices",
@@ -992,7 +992,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/115",
+      "path": "0/149/115",
       "name": "stk_generic_ironApng__",
       "signature": "b0f18687ad05eaa3",
       "kind": "vertices",
@@ -1001,7 +1001,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/116",
+      "path": "0/149/116",
       "name": "stktex_generic_WoodApng__",
       "signature": "7aaab285ef849de3",
       "kind": "vertices",
@@ -1010,7 +1010,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/117",
+      "path": "0/149/117",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "462fc82080e8ab74",
       "kind": "vertices",
@@ -1019,7 +1019,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/118",
+      "path": "0/149/118",
       "name": "stktex_windowsSet_apng__",
       "signature": "af1216c404b51a2e",
       "kind": "vertices",
@@ -1028,7 +1028,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/120",
+      "path": "0/149/120",
       "name": "___",
       "signature": "d6fdc3e3b369d67b",
       "kind": "vertices",
@@ -1037,7 +1037,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/121",
+      "path": "0/149/121",
       "name": "dark-wall-woodpng__",
       "signature": "163c4b30bda9f943",
       "kind": "vertices",
@@ -1046,7 +1046,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/122",
+      "path": "0/149/122",
       "name": "doorjpg__",
       "signature": "07a3aa43933a823c",
       "kind": "vertices",
@@ -1055,7 +1055,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/123",
+      "path": "0/149/123",
       "name": "roof_3jpg__",
       "signature": "719b8ace05c5e64b",
       "kind": "vertices",
@@ -1064,7 +1064,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/124",
+      "path": "0/149/124",
       "name": "stk_generic_ironApng__",
       "signature": "025d6f51520e657f",
       "kind": "vertices",
@@ -1073,7 +1073,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/125",
+      "path": "0/149/125",
       "name": "stktex_generic_WoodApng__",
       "signature": "f83da1c36b4cbf32",
       "kind": "vertices",
@@ -1082,7 +1082,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/126",
+      "path": "0/149/126",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "fcff8442e16ef3b4",
       "kind": "vertices",
@@ -1091,7 +1091,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/127",
+      "path": "0/149/127",
       "name": "stktex_windowsSet_apng__",
       "signature": "2d0fbb86a710a26c",
       "kind": "vertices",
@@ -1100,7 +1100,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/129",
+      "path": "0/149/129",
       "name": "",
       "signature": "e11467c185e80e0c",
       "kind": "vertices",
@@ -1109,7 +1109,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/130",
+      "path": "0/149/130",
       "name": "___",
       "signature": "feee64109e07b3b5",
       "kind": "vertices",
@@ -1118,7 +1118,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/131",
+      "path": "0/149/131",
       "name": "dark-wall-woodpng__",
       "signature": "b5b98e0bd7000e12",
       "kind": "vertices",
@@ -1127,7 +1127,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/132",
+      "path": "0/149/132",
       "name": "doorjpg__",
       "signature": "6db791b04edf532e",
       "kind": "vertices",
@@ -1136,7 +1136,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/133",
+      "path": "0/149/133",
       "name": "roof_3jpg__",
       "signature": "4b642031324c939b",
       "kind": "vertices",
@@ -1145,7 +1145,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/134",
+      "path": "0/149/134",
       "name": "stk_generic_ironApng__",
       "signature": "15cda6a659640be6",
       "kind": "vertices",
@@ -1154,7 +1154,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/135",
+      "path": "0/149/135",
       "name": "stktex_generic_WoodApng__",
       "signature": "c3feeb30b38b250e",
       "kind": "vertices",
@@ -1163,7 +1163,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/136",
+      "path": "0/149/136",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "892abdbd733fd040",
       "kind": "vertices",
@@ -1172,7 +1172,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/137",
+      "path": "0/149/137",
       "name": "stktex_windowsSet_apng__",
       "signature": "d8e87949f348ec78",
       "kind": "vertices",
@@ -1181,7 +1181,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/139",
+      "path": "0/149/139",
       "name": "House courtyard pavement",
       "signature": "49a0268b23a9997f",
       "kind": "vertices",
@@ -1190,7 +1190,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/140",
+      "path": "0/149/140",
       "name": "dark-wall-woodpng__",
       "signature": "87198400df42da4c",
       "kind": "vertices",
@@ -1199,7 +1199,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/141",
+      "path": "0/149/141",
       "name": "doorjpg__",
       "signature": "8b91ebe7e0dd1b53",
       "kind": "vertices",
@@ -1208,7 +1208,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/142",
+      "path": "0/149/142",
       "name": "roof_3jpg__",
       "signature": "7ea7c322df6685e8",
       "kind": "vertices",
@@ -1217,7 +1217,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/143",
+      "path": "0/149/143",
       "name": "stk_generic_ironApng__",
       "signature": "4ce3a109a5fcc1ff",
       "kind": "vertices",
@@ -1226,7 +1226,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/144",
+      "path": "0/149/144",
       "name": "stktex_generic_WoodApng__",
       "signature": "3041c56747ddcb0d",
       "kind": "vertices",
@@ -1235,7 +1235,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/145",
+      "path": "0/149/145",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "ca277ed6bdde91dc",
       "kind": "vertices",
@@ -1244,7 +1244,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/146",
+      "path": "0/149/146",
       "name": "stktex_windowsSet_apng__",
       "signature": "c19e604a1c2710cd",
       "kind": "vertices",
@@ -1253,7 +1253,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/148",
+      "path": "0/149/148",
       "name": "House courtyard pavement",
       "signature": "c6c6466fad88d2c1",
       "kind": "vertices",
@@ -1262,7 +1262,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/149",
+      "path": "0/149/149",
       "name": "___",
       "signature": "9625351ce85c4303",
       "kind": "vertices",
@@ -1271,7 +1271,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/150",
+      "path": "0/149/150",
       "name": "dark-wall-woodpng__",
       "signature": "0cedd047889437e5",
       "kind": "vertices",
@@ -1280,7 +1280,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/151",
+      "path": "0/149/151",
       "name": "doorjpg__",
       "signature": "efd8bcfc9c50f844",
       "kind": "vertices",
@@ -1289,7 +1289,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/152",
+      "path": "0/149/152",
       "name": "roof_3jpg__",
       "signature": "3ebeb111fb593b46",
       "kind": "vertices",
@@ -1298,7 +1298,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/153",
+      "path": "0/149/153",
       "name": "stk_generic_ironApng__",
       "signature": "de130966030bea03",
       "kind": "vertices",
@@ -1307,7 +1307,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/154",
+      "path": "0/149/154",
       "name": "stktex_generic_WoodApng__",
       "signature": "e124307caaa95b0b",
       "kind": "vertices",
@@ -1316,7 +1316,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/155",
+      "path": "0/149/155",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "7b0a82d5952b9ebf",
       "kind": "vertices",
@@ -1325,7 +1325,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/156",
+      "path": "0/149/156",
       "name": "stktex_windowsSet_apng__",
       "signature": "abc88d293ec8dc38",
       "kind": "vertices",
@@ -1334,7 +1334,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/158",
+      "path": "0/149/158",
       "name": "",
       "signature": "a715816e58a53d63",
       "kind": "vertices",
@@ -1343,7 +1343,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/159",
+      "path": "0/149/159",
       "name": "",
       "signature": "f76ed612401e73a8",
       "kind": "vertices",
@@ -1352,7 +1352,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/160",
+      "path": "0/149/160",
       "name": "",
       "signature": "32fb0b28ff0e005e",
       "kind": "vertices",
@@ -1361,7 +1361,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/161",
+      "path": "0/149/161",
       "name": "House courtyard pavement",
       "signature": "c307a242715dad5d",
       "kind": "vertices",
@@ -1370,7 +1370,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/162",
+      "path": "0/149/162",
       "name": "___",
       "signature": "e8a4509b86b6330c",
       "kind": "vertices",
@@ -1379,7 +1379,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/163",
+      "path": "0/149/163",
       "name": "dark-wall-woodpng__",
       "signature": "d939ffa4d68917fc",
       "kind": "vertices",
@@ -1388,7 +1388,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/164",
+      "path": "0/149/164",
       "name": "doorjpg__",
       "signature": "6fef057b8c7899dc",
       "kind": "vertices",
@@ -1397,7 +1397,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/165",
+      "path": "0/149/165",
       "name": "roof_3jpg__",
       "signature": "8953c66e5af6c07b",
       "kind": "vertices",
@@ -1406,7 +1406,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/166",
+      "path": "0/149/166",
       "name": "stk_generic_ironApng__",
       "signature": "b81dff45d69ba876",
       "kind": "vertices",
@@ -1415,7 +1415,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/167",
+      "path": "0/149/167",
       "name": "stktex_generic_WoodApng__",
       "signature": "26cef1fb39ed1503",
       "kind": "vertices",
@@ -1424,7 +1424,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/168",
+      "path": "0/149/168",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "3a654b0ab7c273c2",
       "kind": "vertices",
@@ -1433,7 +1433,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/169",
+      "path": "0/149/169",
       "name": "stktex_windowsSet_apng__",
       "signature": "b679bcd6839a8b00",
       "kind": "vertices",
@@ -1442,7 +1442,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/171",
+      "path": "0/149/171",
       "name": "House courtyard pavement",
       "signature": "aaf199f19397ae30",
       "kind": "vertices",
@@ -1451,7 +1451,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/172",
+      "path": "0/149/172",
       "name": "",
       "signature": "949da30401225ccd",
       "kind": "vertices",
@@ -1460,7 +1460,7 @@
       "byteLength": 700
     },
     {
-      "path": "0/146/173",
+      "path": "0/149/173",
       "name": "___",
       "signature": "211a3adfd1b06db2",
       "kind": "vertices",
@@ -1469,7 +1469,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/174",
+      "path": "0/149/174",
       "name": "dark-wall-woodpng__",
       "signature": "59dbdb68e9789481",
       "kind": "vertices",
@@ -1478,7 +1478,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/175",
+      "path": "0/149/175",
       "name": "doorjpg__",
       "signature": "c7b10bbfbc40d05b",
       "kind": "vertices",
@@ -1487,7 +1487,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/176",
+      "path": "0/149/176",
       "name": "roof_3jpg__",
       "signature": "f4b5c1d2e80efa46",
       "kind": "vertices",
@@ -1496,7 +1496,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/177",
+      "path": "0/149/177",
       "name": "stk_generic_ironApng__",
       "signature": "4fff2b01e1040e99",
       "kind": "vertices",
@@ -1505,7 +1505,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/178",
+      "path": "0/149/178",
       "name": "stktex_generic_WoodApng__",
       "signature": "3fc77f3f953c4290",
       "kind": "vertices",
@@ -1514,7 +1514,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/179",
+      "path": "0/149/179",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "d686dc9eccb1998f",
       "kind": "vertices",
@@ -1523,7 +1523,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/180",
+      "path": "0/149/180",
       "name": "stktex_windowsSet_apng__",
       "signature": "d661d4daecdbd279",
       "kind": "vertices",
@@ -1532,7 +1532,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/182",
+      "path": "0/149/182",
       "name": "House courtyard pavement",
       "signature": "64cf409a2f5374f2",
       "kind": "vertices",
@@ -1541,7 +1541,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/183",
+      "path": "0/149/183",
       "name": "___",
       "signature": "fe56ad404c84245e",
       "kind": "vertices",
@@ -1550,7 +1550,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/184",
+      "path": "0/149/184",
       "name": "dark-wall-woodpng__",
       "signature": "1931c8f7c599615a",
       "kind": "vertices",
@@ -1559,7 +1559,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/185",
+      "path": "0/149/185",
       "name": "doorjpg__",
       "signature": "399936609b5d2ee5",
       "kind": "vertices",
@@ -1568,7 +1568,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/186",
+      "path": "0/149/186",
       "name": "roof_3jpg__",
       "signature": "3cbb41598823a47d",
       "kind": "vertices",
@@ -1577,7 +1577,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/187",
+      "path": "0/149/187",
       "name": "stk_generic_ironApng__",
       "signature": "aa5025b216de2acd",
       "kind": "vertices",
@@ -1586,7 +1586,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/188",
+      "path": "0/149/188",
       "name": "stktex_generic_WoodApng__",
       "signature": "311c72e09d3914cd",
       "kind": "vertices",
@@ -1595,7 +1595,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/189",
+      "path": "0/149/189",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "69ff771df729cf0c",
       "kind": "vertices",
@@ -1604,7 +1604,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/190",
+      "path": "0/149/190",
       "name": "stktex_windowsSet_apng__",
       "signature": "71ada3e1e2f3f72f",
       "kind": "vertices",
@@ -1613,7 +1613,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/192",
+      "path": "0/149/192",
       "name": "House courtyard pavement",
       "signature": "de4757e75deae594",
       "kind": "vertices",
@@ -1622,7 +1622,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/193",
+      "path": "0/149/193",
       "name": "___",
       "signature": "dc5cbec4155dbac6",
       "kind": "vertices",
@@ -1631,7 +1631,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/194",
+      "path": "0/149/194",
       "name": "dark-wall-woodpng__",
       "signature": "d0101d4bf12b812b",
       "kind": "vertices",
@@ -1640,7 +1640,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/195",
+      "path": "0/149/195",
       "name": "doorjpg__",
       "signature": "b73aa964d1477243",
       "kind": "vertices",
@@ -1649,7 +1649,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/196",
+      "path": "0/149/196",
       "name": "roof_3jpg__",
       "signature": "cdfe59f9b6b4e755",
       "kind": "vertices",
@@ -1658,7 +1658,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/197",
+      "path": "0/149/197",
       "name": "stk_generic_ironApng__",
       "signature": "5e87d2b276f0ec1c",
       "kind": "vertices",
@@ -1667,7 +1667,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/198",
+      "path": "0/149/198",
       "name": "stktex_generic_WoodApng__",
       "signature": "cbc9f9e49e026349",
       "kind": "vertices",
@@ -1676,7 +1676,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/199",
+      "path": "0/149/199",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "adfead8def144732",
       "kind": "vertices",
@@ -1685,7 +1685,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/200",
+      "path": "0/149/200",
       "name": "stktex_windowsSet_apng__",
       "signature": "af549b41a494006c",
       "kind": "vertices",
@@ -1694,7 +1694,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/202",
+      "path": "0/149/202",
       "name": "House courtyard pavement",
       "signature": "5d6d161b5dfd81b8",
       "kind": "vertices",
@@ -1703,7 +1703,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/203",
+      "path": "0/149/203",
       "name": "dark-wall-woodpng__",
       "signature": "876db9755d1240db",
       "kind": "vertices",
@@ -1712,7 +1712,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/204",
+      "path": "0/149/204",
       "name": "doorjpg__",
       "signature": "bf0b88daa6d56d8c",
       "kind": "vertices",
@@ -1721,7 +1721,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/205",
+      "path": "0/149/205",
       "name": "roof_3jpg__",
       "signature": "c95476eb50d47f88",
       "kind": "vertices",
@@ -1730,7 +1730,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/206",
+      "path": "0/149/206",
       "name": "stktex_generic_WoodApng__",
       "signature": "96e2e45a4d70e0cb",
       "kind": "vertices",
@@ -1739,7 +1739,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/207",
+      "path": "0/149/207",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "8bc98e7fb4d0025f",
       "kind": "vertices",
@@ -1748,7 +1748,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/208",
+      "path": "0/149/208",
       "name": "stktex_windowsSet_apng__",
       "signature": "958f99c3fa54e330",
       "kind": "vertices",
@@ -1757,7 +1757,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/210",
+      "path": "0/149/210",
       "name": "dark-wall-woodpng__",
       "signature": "e39d9343cc030e95",
       "kind": "vertices",
@@ -1766,7 +1766,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/211",
+      "path": "0/149/211",
       "name": "doorjpg__",
       "signature": "4374180ca3fc0c48",
       "kind": "vertices",
@@ -1775,7 +1775,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/212",
+      "path": "0/149/212",
       "name": "stk_generic_ironApng__",
       "signature": "8f6a9dbe3918c208",
       "kind": "vertices",
@@ -1784,7 +1784,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/213",
+      "path": "0/149/213",
       "name": "House courtyard pavement",
       "signature": "4f7e5e84ffb8e2f9",
       "kind": "vertices",
@@ -1793,7 +1793,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/214",
+      "path": "0/149/214",
       "name": "roof_3jpg__",
       "signature": "b5f66a04e3c56ed6",
       "kind": "vertices",
@@ -1802,7 +1802,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/215",
+      "path": "0/149/215",
       "name": "stk_generic_ironApng__",
       "signature": "be3bc62b151c3cfb",
       "kind": "vertices",
@@ -1811,7 +1811,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/216",
+      "path": "0/149/216",
       "name": "stktex_generic_WoodApng__",
       "signature": "52507e35c8f27441",
       "kind": "vertices",
@@ -1820,7 +1820,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/217",
+      "path": "0/149/217",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "c1577eb814d0087a",
       "kind": "vertices",
@@ -1829,7 +1829,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/218",
+      "path": "0/149/218",
       "name": "stktex_windowsSet_apng__",
       "signature": "ffed368c6d2ba5a8",
       "kind": "vertices",
@@ -1838,7 +1838,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/220",
+      "path": "0/149/220",
       "name": "House courtyard pavement",
       "signature": "dd0174f8ef6f49a1",
       "kind": "vertices",
@@ -1847,7 +1847,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/221",
+      "path": "0/149/221",
       "name": "___",
       "signature": "ca34b03c1496ec2b",
       "kind": "vertices",
@@ -1856,7 +1856,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/222",
+      "path": "0/149/222",
       "name": "dark-wall-woodpng__",
       "signature": "66069043e17727d4",
       "kind": "vertices",
@@ -1865,7 +1865,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/223",
+      "path": "0/149/223",
       "name": "doorjpg__",
       "signature": "74a3a61ccfb6dd4e",
       "kind": "vertices",
@@ -1874,7 +1874,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/224",
+      "path": "0/149/224",
       "name": "roof_3jpg__",
       "signature": "e5be8849e8e15cef",
       "kind": "vertices",
@@ -1883,7 +1883,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/225",
+      "path": "0/149/225",
       "name": "stk_generic_ironApng__",
       "signature": "69d99b820b5af74b",
       "kind": "vertices",
@@ -1892,7 +1892,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/226",
+      "path": "0/149/226",
       "name": "stktex_generic_WoodApng__",
       "signature": "5a110c9c96a759d4",
       "kind": "vertices",
@@ -1901,7 +1901,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/227",
+      "path": "0/149/227",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "493edfa5b655dcb4",
       "kind": "vertices",
@@ -1910,7 +1910,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/228",
+      "path": "0/149/228",
       "name": "stktex_windowsSet_apng__",
       "signature": "23b6ea210b743467",
       "kind": "vertices",
@@ -1919,7 +1919,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/230",
+      "path": "0/149/230",
       "name": "",
       "signature": "e770344c5ab18bda",
       "kind": "vertices",
@@ -1928,7 +1928,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/231",
+      "path": "0/149/231",
       "name": "",
       "signature": "3c9b8dc99caddd53",
       "kind": "vertices",
@@ -1937,7 +1937,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/232",
+      "path": "0/149/232",
       "name": "",
       "signature": "a37f8f5f16b6f4c6",
       "kind": "vertices",
@@ -1946,7 +1946,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/233",
+      "path": "0/149/233",
       "name": "House courtyard pavement",
       "signature": "63a255373da8915a",
       "kind": "vertices",
@@ -1955,7 +1955,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/234",
+      "path": "0/149/234",
       "name": "___",
       "signature": "8f765fed04c469e3",
       "kind": "vertices",
@@ -1964,7 +1964,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/235",
+      "path": "0/149/235",
       "name": "dark-wall-woodpng__",
       "signature": "02188a4e591f8003",
       "kind": "vertices",
@@ -1973,7 +1973,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/236",
+      "path": "0/149/236",
       "name": "doorjpg__",
       "signature": "0f86808d290f914d",
       "kind": "vertices",
@@ -1982,7 +1982,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/237",
+      "path": "0/149/237",
       "name": "roof_3jpg__",
       "signature": "14b2c4f876957d95",
       "kind": "vertices",
@@ -1991,7 +1991,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/238",
+      "path": "0/149/238",
       "name": "stk_generic_ironApng__",
       "signature": "7b51135f60ba27fa",
       "kind": "vertices",
@@ -2000,7 +2000,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/239",
+      "path": "0/149/239",
       "name": "stktex_generic_WoodApng__",
       "signature": "5a59660d7b542b51",
       "kind": "vertices",
@@ -2009,7 +2009,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/240",
+      "path": "0/149/240",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "35b14f8c294c3a64",
       "kind": "vertices",
@@ -2018,7 +2018,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/241",
+      "path": "0/149/241",
       "name": "stktex_windowsSet_apng__",
       "signature": "b72b6610456a0f70",
       "kind": "vertices",
@@ -2027,7 +2027,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/243",
+      "path": "0/149/243",
       "name": "House courtyard pavement",
       "signature": "f57b7a1ce07f246f",
       "kind": "vertices",
@@ -2036,7 +2036,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/244",
+      "path": "0/149/244",
       "name": "dark-wall-woodpng__",
       "signature": "3c624f04808ed5ef",
       "kind": "vertices",
@@ -2045,7 +2045,7 @@
       "byteLength": 216
     },
     {
-      "path": "0/146/245",
+      "path": "0/149/245",
       "name": "doorjpg__",
       "signature": "2352c4c377c4e62c",
       "kind": "vertices",
@@ -2054,7 +2054,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/246",
+      "path": "0/149/246",
       "name": "roof_3jpg__",
       "signature": "2c6b9ee691ffd1ac",
       "kind": "vertices",
@@ -2063,7 +2063,7 @@
       "byteLength": 224
     },
     {
-      "path": "0/146/247",
+      "path": "0/149/247",
       "name": "stk_generic_ironApng__",
       "signature": "9126be1d4f1785de",
       "kind": "vertices",
@@ -2072,7 +2072,7 @@
       "byteLength": 1008
     },
     {
-      "path": "0/146/248",
+      "path": "0/149/248",
       "name": "stktex_generic_WoodApng__",
       "signature": "9494c243884c2f80",
       "kind": "vertices",
@@ -2081,7 +2081,7 @@
       "byteLength": 2248
     },
     {
-      "path": "0/146/249",
+      "path": "0/149/249",
       "name": "stktex_generic_stoneWallApng__",
       "signature": "fd19f17264a81e6c",
       "kind": "vertices",
@@ -2090,7 +2090,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/250",
+      "path": "0/149/250",
       "name": "stktex_windowsSet_apng__",
       "signature": "9863b54e304da6a8",
       "kind": "vertices",
@@ -2099,7 +2099,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/252",
+      "path": "0/149/252",
       "name": "",
       "signature": "00ef60547f32e49b",
       "kind": "vertices",
@@ -2108,7 +2108,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/253",
+      "path": "0/149/253",
       "name": "",
       "signature": "afa1bfebff96998b",
       "kind": "vertices",
@@ -2117,7 +2117,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/254",
+      "path": "0/149/254",
       "name": "",
       "signature": "d9f95c3681d9ee5c",
       "kind": "vertices",
@@ -2126,7 +2126,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/255",
+      "path": "0/149/255",
       "name": "",
       "signature": "6e3d4ff86c6cbde3",
       "kind": "vertices",
@@ -2135,7 +2135,7 @@
       "byteLength": 268
     },
     {
-      "path": "0/146/256",
+      "path": "0/149/256",
       "name": "",
       "signature": "15e142f21272761f",
       "kind": "vertices",
@@ -2144,7 +2144,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/257",
+      "path": "0/149/257",
       "name": "",
       "signature": "8cfe62b95053addf",
       "kind": "vertices",
@@ -2153,7 +2153,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/258",
+      "path": "0/149/258",
       "name": "",
       "signature": "3980bb8231ca25b7",
       "kind": "vertices",
@@ -2162,7 +2162,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/259",
+      "path": "0/149/259",
       "name": "",
       "signature": "38345d96366e2603",
       "kind": "vertices",
@@ -2171,7 +2171,7 @@
       "byteLength": 268
     },
     {
-      "path": "0/146/260",
+      "path": "0/149/260",
       "name": "",
       "signature": "f743a0718b95a94e",
       "kind": "vertices",
@@ -2180,7 +2180,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/261",
+      "path": "0/149/261",
       "name": "",
       "signature": "52b6bd1144240150",
       "kind": "vertices",
@@ -2189,7 +2189,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/262",
+      "path": "0/149/262",
       "name": "",
       "signature": "ed6636a1cb8a63bb",
       "kind": "vertices",
@@ -2198,7 +2198,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/263",
+      "path": "0/149/263",
       "name": "",
       "signature": "08629fb029b14e5a",
       "kind": "vertices",
@@ -2207,7 +2207,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/264",
+      "path": "0/149/264",
       "name": "",
       "signature": "ca2288ebfd1ffe38",
       "kind": "vertices",
@@ -2216,7 +2216,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/265",
+      "path": "0/149/265",
       "name": "",
       "signature": "0b9bc3e7bfa9357c",
       "kind": "vertices",
@@ -2225,7 +2225,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/266",
+      "path": "0/149/266",
       "name": "",
       "signature": "a893fbdc63212792",
       "kind": "vertices",
@@ -2234,7 +2234,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/267",
+      "path": "0/149/267",
       "name": "",
       "signature": "3fa958da5e5d2cbc",
       "kind": "vertices",
@@ -2243,7 +2243,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/268",
+      "path": "0/149/268",
       "name": "",
       "signature": "84168b9d8bf51870",
       "kind": "vertices",
@@ -2252,7 +2252,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/269",
+      "path": "0/149/269",
       "name": "",
       "signature": "4796733e61f5da36",
       "kind": "vertices",
@@ -2261,7 +2261,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/270",
+      "path": "0/149/270",
       "name": "",
       "signature": "588cb7f89cc27b3e",
       "kind": "vertices",
@@ -2270,7 +2270,7 @@
       "byteLength": 268
     },
     {
-      "path": "0/146/271",
+      "path": "0/149/271",
       "name": "",
       "signature": "121546751005e3ff",
       "kind": "vertices",
@@ -2279,7 +2279,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/272",
+      "path": "0/149/272",
       "name": "",
       "signature": "d723fde452782c67",
       "kind": "vertices",
@@ -2288,7 +2288,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/273",
+      "path": "0/149/273",
       "name": "",
       "signature": "4c7e59b22290305a",
       "kind": "vertices",
@@ -2297,7 +2297,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/274",
+      "path": "0/149/274",
       "name": "",
       "signature": "d5be6d41e6ebe349",
       "kind": "vertices",
@@ -2306,7 +2306,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/275",
+      "path": "0/149/275",
       "name": "",
       "signature": "8a4c77b1be8e03b2",
       "kind": "vertices",
@@ -2315,7 +2315,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/276",
+      "path": "0/149/276",
       "name": "",
       "signature": "2a3427acc396af90",
       "kind": "vertices",
@@ -2324,7 +2324,7 @@
       "byteLength": 268
     },
     {
-      "path": "0/146/277",
+      "path": "0/149/277",
       "name": "",
       "signature": "56b0d086e3f0d932",
       "kind": "vertices",
@@ -2333,7 +2333,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/278",
+      "path": "0/149/278",
       "name": "",
       "signature": "79b241d9b90dc4a7",
       "kind": "vertices",
@@ -2342,7 +2342,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/279",
+      "path": "0/149/279",
       "name": "",
       "signature": "35b2babd5ea414b8",
       "kind": "vertices",
@@ -2351,7 +2351,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/280",
+      "path": "0/149/280",
       "name": "",
       "signature": "e58963d7c4f1cb2c",
       "kind": "vertices",
@@ -2360,7 +2360,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/281",
+      "path": "0/149/281",
       "name": "",
       "signature": "e5d44eda5564775e",
       "kind": "vertices",
@@ -2369,7 +2369,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/282",
+      "path": "0/149/282",
       "name": "",
       "signature": "68005fdf0c84429b",
       "kind": "vertices",
@@ -2378,7 +2378,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/283",
+      "path": "0/149/283",
       "name": "",
       "signature": "27d06dde328c3f35",
       "kind": "vertices",
@@ -2387,7 +2387,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/284",
+      "path": "0/149/284",
       "name": "",
       "signature": "2282b2b47eee4e2e",
       "kind": "vertices",
@@ -2396,7 +2396,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/285",
+      "path": "0/149/285",
       "name": "",
       "signature": "9a8e8825a44f1116",
       "kind": "vertices",
@@ -2405,7 +2405,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/286",
+      "path": "0/149/286",
       "name": "",
       "signature": "b2ed4bee9ecf0bc7",
       "kind": "vertices",
@@ -2414,7 +2414,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/287",
+      "path": "0/149/287",
       "name": "",
       "signature": "3c17693f2a15e056",
       "kind": "vertices",
@@ -2423,7 +2423,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/288",
+      "path": "0/149/288",
       "name": "",
       "signature": "a92cb7dc0323b91f",
       "kind": "vertices",
@@ -2432,7 +2432,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/289",
+      "path": "0/149/289",
       "name": "",
       "signature": "8d0044905c57e3ff",
       "kind": "vertices",
@@ -2441,7 +2441,7 @@
       "byteLength": 268
     },
     {
-      "path": "0/146/290",
+      "path": "0/149/290",
       "name": "",
       "signature": "29827c7b8a683f80",
       "kind": "vertices",
@@ -2450,7 +2450,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/291",
+      "path": "0/149/291",
       "name": "",
       "signature": "57ad3f58762a1043",
       "kind": "vertices",
@@ -2459,7 +2459,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/292",
+      "path": "0/149/292",
       "name": "",
       "signature": "8aadfa47127a0e6a",
       "kind": "vertices",
@@ -2468,7 +2468,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/293",
+      "path": "0/149/293",
       "name": "",
       "signature": "5b37db76942f37ff",
       "kind": "vertices",
@@ -2477,7 +2477,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/294",
+      "path": "0/149/294",
       "name": "",
       "signature": "87120279225c6571",
       "kind": "vertices",
@@ -2486,7 +2486,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/295",
+      "path": "0/149/295",
       "name": "",
       "signature": "18a34629a6c68bbb",
       "kind": "vertices",
@@ -2495,7 +2495,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/296",
+      "path": "0/149/296",
       "name": "",
       "signature": "db2fd539726757a1",
       "kind": "vertices",
@@ -2504,7 +2504,7 @@
       "byteLength": 268
     },
     {
-      "path": "0/146/297",
+      "path": "0/149/297",
       "name": "",
       "signature": "aad335fcefee5bec",
       "kind": "vertices",
@@ -2513,7 +2513,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/298",
+      "path": "0/149/298",
       "name": "",
       "signature": "17304352d0a08f06",
       "kind": "vertices",
@@ -2522,7 +2522,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/299",
+      "path": "0/149/299",
       "name": "",
       "signature": "78076b2bd23bc3d9",
       "kind": "vertices",
@@ -2531,7 +2531,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/300",
+      "path": "0/149/300",
       "name": "",
       "signature": "549704252cc7ae9d",
       "kind": "vertices",
@@ -2540,7 +2540,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/301",
+      "path": "0/149/301",
       "name": "",
       "signature": "78a75fc6074081c2",
       "kind": "vertices",
@@ -2549,7 +2549,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/302",
+      "path": "0/149/302",
       "name": "",
       "signature": "f5a2487558971171",
       "kind": "vertices",
@@ -2558,7 +2558,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/303",
+      "path": "0/149/303",
       "name": "",
       "signature": "e65eb3b06dbe8dd1",
       "kind": "vertices",
@@ -2567,7 +2567,7 @@
       "byteLength": 748
     },
     {
-      "path": "0/146/304",
+      "path": "0/149/304",
       "name": "",
       "signature": "111589f7136bf082",
       "kind": "vertices",
@@ -2576,7 +2576,7 @@
       "byteLength": 268
     },
     {
-      "path": "0/146/305",
+      "path": "0/149/305",
       "name": "",
       "signature": "8cb69102a5783a00",
       "kind": "vertices",
@@ -2585,7 +2585,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/306",
+      "path": "0/149/306",
       "name": "",
       "signature": "70f6f9bf1862f9f6",
       "kind": "vertices",
@@ -2594,7 +2594,7 @@
       "byteLength": 304
     },
     {
-      "path": "0/146/307",
+      "path": "0/149/307",
       "name": "",
       "signature": "a4ad23b269058f23",
       "kind": "vertices",
@@ -2603,7 +2603,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/308",
+      "path": "0/149/308",
       "name": "",
       "signature": "2ba75f14671aee69",
       "kind": "vertices",
@@ -2612,7 +2612,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/309",
+      "path": "0/149/309",
       "name": "",
       "signature": "dbb60ac129abbeab",
       "kind": "vertices",
@@ -2621,7 +2621,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/310",
+      "path": "0/149/310",
       "name": "",
       "signature": "6facf0864b8484b3",
       "kind": "vertices",
@@ -2630,7 +2630,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/311",
+      "path": "0/149/311",
       "name": "",
       "signature": "b54a16b795be84d0",
       "kind": "vertices",
@@ -2639,7 +2639,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/312",
+      "path": "0/149/312",
       "name": "",
       "signature": "6ecbf4933ac2ed74",
       "kind": "vertices",
@@ -2648,7 +2648,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/313",
+      "path": "0/149/313",
       "name": "",
       "signature": "4f243ed33a4e6680",
       "kind": "vertices",
@@ -2657,7 +2657,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/314",
+      "path": "0/149/314",
       "name": "",
       "signature": "a2da9d06d09d6669",
       "kind": "vertices",
@@ -2666,7 +2666,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/315",
+      "path": "0/149/315",
       "name": "",
       "signature": "adce5ed81201d36e",
       "kind": "vertices",
@@ -2675,7 +2675,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/316",
+      "path": "0/149/316",
       "name": "",
       "signature": "ec5cdf7a3ce8755d",
       "kind": "vertices",
@@ -2684,7 +2684,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/317",
+      "path": "0/149/317",
       "name": "",
       "signature": "450f715973486f1d",
       "kind": "vertices",
@@ -2693,7 +2693,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/318",
+      "path": "0/149/318",
       "name": "Regional imported scenery instances",
       "signature": "ad75ffe0f2cdafe6",
       "kind": "instances",
@@ -2702,7 +2702,7 @@
       "byteLength": 52
     },
     {
-      "path": "0/146/319",
+      "path": "0/149/319",
       "name": "Regional imported scenery instances",
       "signature": "e4b039e851f7d93e",
       "kind": "instances",
@@ -2711,7 +2711,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/320",
+      "path": "0/149/320",
       "name": "Regional imported scenery instances",
       "signature": "870f990f388d5065",
       "kind": "instances",
@@ -2720,7 +2720,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/321",
+      "path": "0/149/321",
       "name": "Regional imported scenery instances",
       "signature": "e0b1c6f385422540",
       "kind": "instances",
@@ -2729,7 +2729,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/322",
+      "path": "0/149/322",
       "name": "Regional imported scenery instances",
       "signature": "fb6950bf39444224",
       "kind": "instances",
@@ -2738,7 +2738,7 @@
       "byteLength": 36
     },
     {
-      "path": "0/146/323",
+      "path": "0/149/323",
       "name": "Regional static scenery batch",
       "signature": "c399bda2ead0c5bd",
       "kind": "vertices",
@@ -2747,7 +2747,7 @@
       "byteLength": 1496
     },
     {
-      "path": "0/146/324",
+      "path": "0/149/324",
       "name": "Regional imported scenery instances",
       "signature": "3e96eaff0576307b",
       "kind": "instances",
@@ -2756,7 +2756,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/325",
+      "path": "0/149/325",
       "name": "Regional imported scenery instances",
       "signature": "be919eca044fcaf0",
       "kind": "instances",
@@ -2765,7 +2765,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/326",
+      "path": "0/149/326",
       "name": "Regional imported scenery instances",
       "signature": "ebee051711bf3fa0",
       "kind": "instances",
@@ -2774,7 +2774,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/327",
+      "path": "0/149/327",
       "name": "Regional imported scenery instances",
       "signature": "3c1d209f3b3e4bb0",
       "kind": "instances",
@@ -2783,7 +2783,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/328",
+      "path": "0/149/328",
       "name": "Regional imported scenery instances",
       "signature": "d8af12178b6f4974",
       "kind": "instances",
@@ -2792,7 +2792,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/329",
+      "path": "0/149/329",
       "name": "Regional static scenery batch",
       "signature": "b69ca053767ea161",
       "kind": "vertices",
@@ -2801,7 +2801,7 @@
       "byteLength": 608
     },
     {
-      "path": "0/146/330",
+      "path": "0/149/330",
       "name": "Regional static scenery batch",
       "signature": "86dd737c2b22cbbd",
       "kind": "vertices",
@@ -2810,7 +2810,7 @@
       "byteLength": 1560
     },
     {
-      "path": "0/146/331",
+      "path": "0/149/331",
       "name": "Regional imported scenery instances",
       "signature": "c644d269d5571782",
       "kind": "instances",
@@ -2819,7 +2819,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/332",
+      "path": "0/149/332",
       "name": "Regional imported scenery instances",
       "signature": "48d710cac8bd952b",
       "kind": "instances",
@@ -2828,7 +2828,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/333",
+      "path": "0/149/333",
       "name": "Regional imported scenery instances",
       "signature": "939d1f67ff775dfc",
       "kind": "instances",
@@ -2837,7 +2837,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/334",
+      "path": "0/149/334",
       "name": "Regional imported scenery instances",
       "signature": "d66c1c5661e07081",
       "kind": "instances",
@@ -2846,7 +2846,7 @@
       "byteLength": 64
     },
     {
-      "path": "0/146/335",
+      "path": "0/149/335",
       "name": "Regional imported scenery instances",
       "signature": "2a98fa7b4fa4ea00",
       "kind": "instances",
@@ -2855,7 +2855,7 @@
       "byteLength": 56
     },
     {
-      "path": "0/146/336",
+      "path": "0/149/336",
       "name": "Regional imported scenery instances",
       "signature": "1abc708629857655",
       "kind": "instances",
@@ -2864,7 +2864,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/337",
+      "path": "0/149/337",
       "name": "Regional imported scenery instances",
       "signature": "49347cc447d33f30",
       "kind": "instances",
@@ -2873,7 +2873,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/338",
+      "path": "0/149/338",
       "name": "Regional imported scenery instances",
       "signature": "e19a8d29df0c99cd",
       "kind": "instances",
@@ -2882,7 +2882,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/339",
+      "path": "0/149/339",
       "name": "Regional static scenery batch",
       "signature": "4fcba07aa2d3d764",
       "kind": "vertices",
@@ -2891,7 +2891,7 @@
       "byteLength": 1496
     },
     {
-      "path": "0/146/340",
+      "path": "0/149/340",
       "name": "Regional imported scenery instances",
       "signature": "9aeb9fc32ca57825",
       "kind": "instances",
@@ -2900,7 +2900,7 @@
       "byteLength": 48
     },
     {
-      "path": "0/146/341",
+      "path": "0/149/341",
       "name": "Regional imported scenery instances",
       "signature": "84496050e5652ab3",
       "kind": "instances",
@@ -2909,7 +2909,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/342",
+      "path": "0/149/342",
       "name": "Regional static scenery batch",
       "signature": "8a7935b2dfebba45",
       "kind": "vertices",
@@ -2918,7 +2918,7 @@
       "byteLength": 1496
     },
     {
-      "path": "0/146/343",
+      "path": "0/149/343",
       "name": "Regional imported scenery instances",
       "signature": "b967974b19735eaf",
       "kind": "instances",
@@ -2927,7 +2927,7 @@
       "byteLength": 36
     },
     {
-      "path": "0/146/344",
+      "path": "0/149/344",
       "name": "Regional imported scenery instances",
       "signature": "4118832b25b4a1ca",
       "kind": "instances",
@@ -2936,7 +2936,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/345",
+      "path": "0/149/345",
       "name": "Regional static scenery batch",
       "signature": "d2a1c8bd82c2b4d7",
       "kind": "vertices",
@@ -2945,7 +2945,7 @@
       "byteLength": 2104
     },
     {
-      "path": "0/146/346",
+      "path": "0/149/346",
       "name": "Regional imported scenery instances",
       "signature": "64a9dea5ae4a1f3c",
       "kind": "instances",
@@ -2954,7 +2954,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/347",
+      "path": "0/149/347",
       "name": "Regional imported scenery instances",
       "signature": "35837d5800df46eb",
       "kind": "instances",
@@ -2963,7 +2963,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/348",
+      "path": "0/149/348",
       "name": "Regional imported scenery instances",
       "signature": "5c138159e2cc515a",
       "kind": "instances",
@@ -2972,7 +2972,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/349",
+      "path": "0/149/349",
       "name": "Regional imported scenery instances",
       "signature": "90692dcced984524",
       "kind": "instances",
@@ -2981,7 +2981,7 @@
       "byteLength": 28
     },
     {
-      "path": "0/146/350",
+      "path": "0/149/350",
       "name": "Regional imported scenery instances",
       "signature": "c16b7bb6270b19bf",
       "kind": "instances",
@@ -2990,7 +2990,7 @@
       "byteLength": 28
     },
     {
-      "path": "0/146/351",
+      "path": "0/149/351",
       "name": "Regional imported scenery instances",
       "signature": "b8ee530238298063",
       "kind": "instances",
@@ -2999,7 +2999,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/352",
+      "path": "0/149/352",
       "name": "Regional imported scenery instances",
       "signature": "014bb7b7d8d4c08c",
       "kind": "instances",
@@ -3008,7 +3008,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/353",
+      "path": "0/149/353",
       "name": "Regional imported scenery instances",
       "signature": "42d4751a16b5e7b8",
       "kind": "instances",
@@ -3017,7 +3017,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/354",
+      "path": "0/149/354",
       "name": "Regional imported scenery instances",
       "signature": "842f9ff8465771c1",
       "kind": "instances",
@@ -3026,7 +3026,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/355",
+      "path": "0/149/355",
       "name": "Regional imported scenery instances",
       "signature": "7423640e0553bdb9",
       "kind": "instances",
@@ -3035,7 +3035,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/356",
+      "path": "0/149/356",
       "name": "Regional imported scenery instances",
       "signature": "5a75bee97eb71922",
       "kind": "instances",
@@ -3044,7 +3044,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/357",
+      "path": "0/149/357",
       "name": "Regional imported scenery instances",
       "signature": "a2063f38e2b9f367",
       "kind": "instances",
@@ -3053,7 +3053,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/358",
+      "path": "0/149/358",
       "name": "Regional static scenery batch",
       "signature": "2196d45ce7904561",
       "kind": "vertices",
@@ -3062,7 +3062,7 @@
       "byteLength": 2008
     },
     {
-      "path": "0/146/359",
+      "path": "0/149/359",
       "name": "Regional static scenery batch",
       "signature": "f673906296104c4e",
       "kind": "vertices",
@@ -3071,7 +3071,7 @@
       "byteLength": 5532
     },
     {
-      "path": "0/146/360",
+      "path": "0/149/360",
       "name": "Regional imported scenery instances",
       "signature": "0ae6939aa97a8fa5",
       "kind": "instances",
@@ -3080,7 +3080,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/361",
+      "path": "0/149/361",
       "name": "Regional imported scenery instances",
       "signature": "3fa3f03c2181631e",
       "kind": "instances",
@@ -3089,7 +3089,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/362",
+      "path": "0/149/362",
       "name": "Regional imported scenery instances",
       "signature": "a2b4fa6957e07032",
       "kind": "instances",
@@ -3098,7 +3098,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/363",
+      "path": "0/149/363",
       "name": "Regional imported scenery instances",
       "signature": "1c1a85f4de06b2e3",
       "kind": "instances",
@@ -3107,7 +3107,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/364",
+      "path": "0/149/364",
       "name": "Regional imported scenery instances",
       "signature": "3c911e25d4830ee0",
       "kind": "instances",
@@ -3116,7 +3116,7 @@
       "byteLength": 28
     },
     {
-      "path": "0/146/365",
+      "path": "0/149/365",
       "name": "Regional imported scenery instances",
       "signature": "e85b807cd91916ac",
       "kind": "instances",
@@ -3125,7 +3125,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/366",
+      "path": "0/149/366",
       "name": "Regional static scenery batch",
       "signature": "9437ee4ab75cfd96",
       "kind": "vertices",
@@ -3134,7 +3134,7 @@
       "byteLength": 1400
     },
     {
-      "path": "0/146/367",
+      "path": "0/149/367",
       "name": "Regional imported scenery instances",
       "signature": "1249d792b55209dc",
       "kind": "instances",
@@ -3143,7 +3143,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/368",
+      "path": "0/149/368",
       "name": "Regional imported scenery instances",
       "signature": "b6a5eaf07020a77d",
       "kind": "instances",
@@ -3152,7 +3152,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/369",
+      "path": "0/149/369",
       "name": "Regional imported scenery instances",
       "signature": "40c26ba83818c252",
       "kind": "instances",
@@ -3161,7 +3161,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/370",
+      "path": "0/149/370",
       "name": "Regional imported scenery instances",
       "signature": "e57b0e01bc3a3d0d",
       "kind": "instances",
@@ -3170,7 +3170,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/371",
+      "path": "0/149/371",
       "name": "Regional imported scenery instances",
       "signature": "d07a991d9afc51ff",
       "kind": "instances",
@@ -3179,7 +3179,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/372",
+      "path": "0/149/372",
       "name": "Regional static scenery batch",
       "signature": "9d9a97f72aea772f",
       "kind": "vertices",
@@ -3188,7 +3188,7 @@
       "byteLength": 608
     },
     {
-      "path": "0/146/373",
+      "path": "0/149/373",
       "name": "Regional imported scenery instances",
       "signature": "e5680c090a86c68d",
       "kind": "instances",
@@ -3197,7 +3197,7 @@
       "byteLength": 204
     },
     {
-      "path": "0/146/374",
+      "path": "0/149/374",
       "name": "Regional imported scenery instances",
       "signature": "2eb0b036f565c3de",
       "kind": "instances",
@@ -3206,7 +3206,7 @@
       "byteLength": 52
     },
     {
-      "path": "0/146/375",
+      "path": "0/149/375",
       "name": "Regional imported scenery instances",
       "signature": "7ed86d5d38dcd28d",
       "kind": "instances",
@@ -3215,7 +3215,7 @@
       "byteLength": 108
     },
     {
-      "path": "0/146/376",
+      "path": "0/149/376",
       "name": "Regional static scenery batch",
       "signature": "e27842a8bcd9aa44",
       "kind": "vertices",
@@ -3224,7 +3224,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/377",
+      "path": "0/149/377",
       "name": "Regional imported scenery instances",
       "signature": "fff6a624ce83dee2",
       "kind": "instances",
@@ -3233,7 +3233,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/378",
+      "path": "0/149/378",
       "name": "Regional static scenery batch",
       "signature": "dcd69acecc9cdddb",
       "kind": "vertices",
@@ -3242,7 +3242,7 @@
       "byteLength": 1496
     },
     {
-      "path": "0/146/379",
+      "path": "0/149/379",
       "name": "Regional imported scenery instances",
       "signature": "44411dcde0fed3aa",
       "kind": "instances",
@@ -3251,7 +3251,7 @@
       "byteLength": 112
     },
     {
-      "path": "0/146/380",
+      "path": "0/149/380",
       "name": "Regional imported scenery instances",
       "signature": "8dda25364c7f990f",
       "kind": "instances",
@@ -3260,7 +3260,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/381",
+      "path": "0/149/381",
       "name": "Regional imported scenery instances",
       "signature": "3b9fd25fa5ecca83",
       "kind": "instances",
@@ -3269,7 +3269,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/382",
+      "path": "0/149/382",
       "name": "Regional imported scenery instances",
       "signature": "7af79230bbdf9abe",
       "kind": "instances",
@@ -3278,7 +3278,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/383",
+      "path": "0/149/383",
       "name": "Regional imported scenery instances",
       "signature": "92c9cb59de2a98c0",
       "kind": "instances",
@@ -3287,7 +3287,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/384",
+      "path": "0/149/384",
       "name": "Regional imported scenery instances",
       "signature": "6bbdb180c98a015a",
       "kind": "instances",
@@ -3296,7 +3296,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/385",
+      "path": "0/149/385",
       "name": "Regional imported scenery instances",
       "signature": "f703ca98b78e3d4e",
       "kind": "instances",
@@ -3305,7 +3305,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/386",
+      "path": "0/149/386",
       "name": "Regional imported scenery instances",
       "signature": "e928cf5921974894",
       "kind": "instances",
@@ -3314,7 +3314,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/387",
+      "path": "0/149/387",
       "name": "Regional imported scenery instances",
       "signature": "e16563969f7de857",
       "kind": "instances",
@@ -3323,7 +3323,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/388",
+      "path": "0/149/388",
       "name": "Regional static scenery batch",
       "signature": "fd94caf5ba6111a0",
       "kind": "vertices",
@@ -3332,7 +3332,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/389",
+      "path": "0/149/389",
       "name": "Regional static scenery batch",
       "signature": "45038b5fdaebaaf4",
       "kind": "vertices",
@@ -3341,7 +3341,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/390",
+      "path": "0/149/390",
       "name": "Regional imported scenery instances",
       "signature": "cbf461429edbc1f9",
       "kind": "instances",
@@ -3350,7 +3350,7 @@
       "byteLength": 96
     },
     {
-      "path": "0/146/391",
+      "path": "0/149/391",
       "name": "Regional imported scenery instances",
       "signature": "386fbb828476049d",
       "kind": "instances",
@@ -3359,7 +3359,7 @@
       "byteLength": 28
     },
     {
-      "path": "0/146/392",
+      "path": "0/149/392",
       "name": "Regional static scenery batch",
       "signature": "91dda0301193a477",
       "kind": "vertices",
@@ -3368,7 +3368,7 @@
       "byteLength": 608
     },
     {
-      "path": "0/146/393",
+      "path": "0/149/393",
       "name": "Regional static scenery batch",
       "signature": "61c1fa305006814c",
       "kind": "vertices",
@@ -3377,7 +3377,7 @@
       "byteLength": 1356
     },
     {
-      "path": "0/146/394",
+      "path": "0/149/394",
       "name": "Regional imported scenery instances",
       "signature": "23dc700e561b493a",
       "kind": "instances",
@@ -3386,7 +3386,7 @@
       "byteLength": 28
     },
     {
-      "path": "0/146/395",
+      "path": "0/149/395",
       "name": "Regional imported scenery instances",
       "signature": "1e132433ac84aa06",
       "kind": "instances",
@@ -3395,7 +3395,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/396",
+      "path": "0/149/396",
       "name": "Regional static scenery batch",
       "signature": "91662dd56929fe83",
       "kind": "vertices",
@@ -3404,7 +3404,7 @@
       "byteLength": 1496
     },
     {
-      "path": "0/146/397",
+      "path": "0/149/397",
       "name": "Regional imported scenery instances",
       "signature": "c84f20d5d905ab87",
       "kind": "instances",
@@ -3413,7 +3413,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/398",
+      "path": "0/149/398",
       "name": "Regional imported scenery instances",
       "signature": "11c4d94ee239e433",
       "kind": "instances",
@@ -3422,7 +3422,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/399",
+      "path": "0/149/399",
       "name": "Regional imported scenery instances",
       "signature": "ef416f5a353ae200",
       "kind": "instances",
@@ -3431,7 +3431,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/400",
+      "path": "0/149/400",
       "name": "Regional static scenery batch",
       "signature": "4c41cb400651f93a",
       "kind": "vertices",
@@ -3440,7 +3440,7 @@
       "byteLength": 1400
     },
     {
-      "path": "0/146/401",
+      "path": "0/149/401",
       "name": "Regional static scenery batch",
       "signature": "b0682f8b59f4b35e",
       "kind": "vertices",
@@ -3449,7 +3449,7 @@
       "byteLength": 1356
     },
     {
-      "path": "0/146/402",
+      "path": "0/149/402",
       "name": "Regional static scenery batch",
       "signature": "11a459f2c93f62da",
       "kind": "vertices",
@@ -3458,7 +3458,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/403",
+      "path": "0/149/403",
       "name": "Regional static scenery batch",
       "signature": "f47c26f4c2725da3",
       "kind": "vertices",
@@ -3467,7 +3467,7 @@
       "byteLength": 1496
     },
     {
-      "path": "0/146/404",
+      "path": "0/149/404",
       "name": "Regional imported scenery instances",
       "signature": "886948e55ac63c4f",
       "kind": "instances",
@@ -3476,7 +3476,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/405",
+      "path": "0/149/405",
       "name": "Regional imported scenery instances",
       "signature": "98df15d9f8c78470",
       "kind": "instances",
@@ -3485,7 +3485,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/406",
+      "path": "0/149/406",
       "name": "Regional imported scenery instances",
       "signature": "39474d0264fbd6f0",
       "kind": "instances",
@@ -3494,7 +3494,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/407",
+      "path": "0/149/407",
       "name": "Regional imported scenery instances",
       "signature": "a2ddd63a7e0c1646",
       "kind": "instances",
@@ -3503,7 +3503,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/408",
+      "path": "0/149/408",
       "name": "Regional imported scenery instances",
       "signature": "7816c64679164092",
       "kind": "instances",
@@ -3512,7 +3512,7 @@
       "byteLength": 200
     },
     {
-      "path": "0/146/409",
+      "path": "0/149/409",
       "name": "Regional imported scenery instances",
       "signature": "54509aa7e17a577b",
       "kind": "instances",
@@ -3521,7 +3521,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/410",
+      "path": "0/149/410",
       "name": "Regional imported scenery instances",
       "signature": "c0ce4a4ff049a97e",
       "kind": "instances",
@@ -3530,7 +3530,7 @@
       "byteLength": 108
     },
     {
-      "path": "0/146/411",
+      "path": "0/149/411",
       "name": "Regional static scenery batch",
       "signature": "fa31d79d65a539a7",
       "kind": "vertices",
@@ -3539,7 +3539,7 @@
       "byteLength": 8140
     },
     {
-      "path": "0/146/412",
+      "path": "0/149/412",
       "name": "Regional static scenery batch",
       "signature": "17374e7aac6869e9",
       "kind": "vertices",
@@ -3548,7 +3548,7 @@
       "byteLength": 6280
     },
     {
-      "path": "0/146/413",
+      "path": "0/149/413",
       "name": "Regional imported scenery instances",
       "signature": "8c7df6ef7ad9dd46",
       "kind": "instances",
@@ -3557,7 +3557,7 @@
       "byteLength": 112
     },
     {
-      "path": "0/146/414",
+      "path": "0/149/414",
       "name": "Regional imported scenery instances",
       "signature": "dd0b8b235ac9c052",
       "kind": "instances",
@@ -3566,7 +3566,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/415",
+      "path": "0/149/415",
       "name": "Regional imported scenery instances",
       "signature": "2e234dd03a9ab06e",
       "kind": "instances",
@@ -3575,7 +3575,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/416",
+      "path": "0/149/416",
       "name": "Regional imported scenery instances",
       "signature": "5e638960d9d60df7",
       "kind": "instances",
@@ -3584,7 +3584,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/417",
+      "path": "0/149/417",
       "name": "Regional imported scenery instances",
       "signature": "deea312d4c25ca30",
       "kind": "instances",
@@ -3593,7 +3593,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/418",
+      "path": "0/149/418",
       "name": "Regional imported scenery instances",
       "signature": "2a26e005ef28fb38",
       "kind": "instances",
@@ -3602,7 +3602,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/419",
+      "path": "0/149/419",
       "name": "Regional imported scenery instances",
       "signature": "f3d5e5d0ac60fd53",
       "kind": "instances",
@@ -3611,7 +3611,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/420",
+      "path": "0/149/420",
       "name": "Regional static scenery batch",
       "signature": "41c2ae9ba2e029ef",
       "kind": "vertices",
@@ -3620,7 +3620,7 @@
       "byteLength": 1496
     },
     {
-      "path": "0/146/421",
+      "path": "0/149/421",
       "name": "Regional imported scenery instances",
       "signature": "d99a15c2a239eb94",
       "kind": "instances",
@@ -3629,7 +3629,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/422",
+      "path": "0/149/422",
       "name": "Regional imported scenery instances",
       "signature": "8254dbdcfecf63d9",
       "kind": "instances",
@@ -3638,7 +3638,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/423",
+      "path": "0/149/423",
       "name": "Regional imported scenery instances",
       "signature": "a4d839110b7027f5",
       "kind": "instances",
@@ -3647,7 +3647,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/424",
+      "path": "0/149/424",
       "name": "Regional imported scenery instances",
       "signature": "8a68b9aebd2c0253",
       "kind": "instances",
@@ -3656,7 +3656,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/425",
+      "path": "0/149/425",
       "name": "Regional imported scenery instances",
       "signature": "f3ef642641ea604c",
       "kind": "instances",
@@ -3665,7 +3665,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/426",
+      "path": "0/149/426",
       "name": "Regional imported scenery instances",
       "signature": "215009e3369af167",
       "kind": "instances",
@@ -3674,7 +3674,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/427",
+      "path": "0/149/427",
       "name": "Regional static scenery batch",
       "signature": "64e2f21b783920ac",
       "kind": "vertices",
@@ -3683,7 +3683,7 @@
       "byteLength": 1356
     },
     {
-      "path": "0/146/428",
+      "path": "0/149/428",
       "name": "Regional static scenery batch",
       "signature": "bff58ec26d90812a",
       "kind": "vertices",
@@ -3692,7 +3692,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/429",
+      "path": "0/149/429",
       "name": "Regional static scenery batch",
       "signature": "110288b4ad3b787b",
       "kind": "vertices",
@@ -3701,7 +3701,7 @@
       "byteLength": 1496
     },
     {
-      "path": "0/146/430",
+      "path": "0/149/430",
       "name": "Regional imported scenery instances",
       "signature": "c6537a5dbb0cb585",
       "kind": "instances",
@@ -3710,7 +3710,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/431",
+      "path": "0/149/431",
       "name": "Regional imported scenery instances",
       "signature": "aa8339f7c90f83a7",
       "kind": "instances",
@@ -3719,7 +3719,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/432",
+      "path": "0/149/432",
       "name": "Regional imported scenery instances",
       "signature": "2d8937658411ece7",
       "kind": "instances",
@@ -3728,7 +3728,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/433",
+      "path": "0/149/433",
       "name": "Regional imported scenery instances",
       "signature": "76a845d0758ce2e0",
       "kind": "instances",
@@ -3737,7 +3737,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/434",
+      "path": "0/149/434",
       "name": "Regional static scenery batch",
       "signature": "d9ffeabea086212c",
       "kind": "vertices",
@@ -3746,7 +3746,7 @@
       "byteLength": 2104
     },
     {
-      "path": "0/146/435",
+      "path": "0/149/435",
       "name": "Regional static scenery batch",
       "signature": "2258b4a7cbd034a9",
       "kind": "vertices",
@@ -3755,7 +3755,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/436",
+      "path": "0/149/436",
       "name": "Regional static scenery batch",
       "signature": "36037a660356a6a1",
       "kind": "vertices",
@@ -3764,7 +3764,7 @@
       "byteLength": 1496
     },
     {
-      "path": "0/146/437",
+      "path": "0/149/437",
       "name": "Regional imported scenery instances",
       "signature": "cb26e1416ba93758",
       "kind": "instances",
@@ -3773,7 +3773,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/438",
+      "path": "0/149/438",
       "name": "Regional imported scenery instances",
       "signature": "0cca1acdbceb39be",
       "kind": "instances",
@@ -3782,7 +3782,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/439",
+      "path": "0/149/439",
       "name": "Regional imported scenery instances",
       "signature": "cc875c04ebd3a309",
       "kind": "instances",
@@ -3791,7 +3791,7 @@
       "byteLength": 348
     },
     {
-      "path": "0/146/440",
+      "path": "0/149/440",
       "name": "Regional imported scenery instances",
       "signature": "b930092250179543",
       "kind": "instances",
@@ -3800,7 +3800,7 @@
       "byteLength": 172
     },
     {
-      "path": "0/146/441",
+      "path": "0/149/441",
       "name": "Regional imported scenery instances",
       "signature": "fc50088f36e6d591",
       "kind": "instances",
@@ -3809,7 +3809,7 @@
       "byteLength": 44
     },
     {
-      "path": "0/146/442",
+      "path": "0/149/442",
       "name": "Regional static scenery batch",
       "signature": "7c48a3c9f09951a4",
       "kind": "vertices",
@@ -3818,7 +3818,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/443",
+      "path": "0/149/443",
       "name": "Regional imported scenery instances",
       "signature": "9c82e6c0e26360be",
       "kind": "instances",
@@ -3827,7 +3827,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/444",
+      "path": "0/149/444",
       "name": "Regional imported scenery instances",
       "signature": "9497bd72867b83ce",
       "kind": "instances",
@@ -3836,7 +3836,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/445",
+      "path": "0/149/445",
       "name": "Regional imported scenery instances",
       "signature": "c7288e51dbe85af8",
       "kind": "instances",
@@ -3845,7 +3845,7 @@
       "byteLength": 168
     },
     {
-      "path": "0/146/446",
+      "path": "0/149/446",
       "name": "Regional imported scenery instances",
       "signature": "1e3ff2d44aa8bf89",
       "kind": "instances",
@@ -3854,7 +3854,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/447",
+      "path": "0/149/447",
       "name": "Regional static scenery batch",
       "signature": "41d1bbeb9a2da433",
       "kind": "vertices",
@@ -3863,7 +3863,7 @@
       "byteLength": 1496
     },
     {
-      "path": "0/146/448",
+      "path": "0/149/448",
       "name": "Regional imported scenery instances",
       "signature": "db04a1015eb1d400",
       "kind": "instances",
@@ -3872,7 +3872,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/449",
+      "path": "0/149/449",
       "name": "Regional imported scenery instances",
       "signature": "1acb03b167a58402",
       "kind": "instances",
@@ -3881,7 +3881,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/450",
+      "path": "0/149/450",
       "name": "Regional imported scenery instances",
       "signature": "c4fb7d51a7c5c0d1",
       "kind": "instances",
@@ -3890,7 +3890,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/451",
+      "path": "0/149/451",
       "name": "Regional static scenery batch",
       "signature": "ef427c53b304a98f",
       "kind": "vertices",
@@ -3899,7 +3899,7 @@
       "byteLength": 1400
     },
     {
-      "path": "0/146/452",
+      "path": "0/149/452",
       "name": "Regional imported scenery instances",
       "signature": "e073c92479e69b97",
       "kind": "instances",
@@ -3908,7 +3908,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/453",
+      "path": "0/149/453",
       "name": "Regional static scenery batch",
       "signature": "09fd45027ab47159",
       "kind": "vertices",
@@ -3917,7 +3917,7 @@
       "byteLength": 1496
     },
     {
-      "path": "0/146/454",
+      "path": "0/149/454",
       "name": "Regional imported scenery instances",
       "signature": "1a13a4e5d5b9afe5",
       "kind": "instances",
@@ -3926,7 +3926,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/455",
+      "path": "0/149/455",
       "name": "Regional imported scenery instances",
       "signature": "a466c55b441abf08",
       "kind": "instances",
@@ -3935,7 +3935,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/456",
+      "path": "0/149/456",
       "name": "Regional imported scenery instances",
       "signature": "89da5d52fd011907",
       "kind": "instances",
@@ -3944,7 +3944,7 @@
       "byteLength": 56
     },
     {
-      "path": "0/146/457",
+      "path": "0/149/457",
       "name": "Regional imported scenery instances",
       "signature": "91cb7a53cd52013b",
       "kind": "instances",
@@ -3953,7 +3953,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/458",
+      "path": "0/149/458",
       "name": "Regional imported scenery instances",
       "signature": "83fd334f0fff4c63",
       "kind": "instances",
@@ -3962,7 +3962,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/459",
+      "path": "0/149/459",
       "name": "Regional static scenery batch",
       "signature": "55e92df14541c5e0",
       "kind": "vertices",
@@ -3971,7 +3971,7 @@
       "byteLength": 3072
     },
     {
-      "path": "0/146/460",
+      "path": "0/149/460",
       "name": "Regional static scenery batch",
       "signature": "6971734eb21b8d24",
       "kind": "vertices",
@@ -3980,7 +3980,7 @@
       "byteLength": 5532
     },
     {
-      "path": "0/146/461",
+      "path": "0/149/461",
       "name": "Regional imported scenery instances",
       "signature": "0f838f1709c0f7d9",
       "kind": "instances",
@@ -3989,7 +3989,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/462",
+      "path": "0/149/462",
       "name": "Regional imported scenery instances",
       "signature": "f81b3ab5caca18af",
       "kind": "instances",
@@ -3998,7 +3998,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/463",
+      "path": "0/149/463",
       "name": "Regional imported scenery instances",
       "signature": "b5db81a4e7d82c66",
       "kind": "instances",
@@ -4007,7 +4007,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/464",
+      "path": "0/149/464",
       "name": "Regional imported scenery instances",
       "signature": "d53d6ffcddcaaa68",
       "kind": "instances",
@@ -4016,7 +4016,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/465",
+      "path": "0/149/465",
       "name": "Regional imported scenery instances",
       "signature": "8ac1b78ae2325206",
       "kind": "instances",
@@ -4025,7 +4025,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/466",
+      "path": "0/149/466",
       "name": "Regional imported scenery instances",
       "signature": "93b6165e754eaa1c",
       "kind": "instances",
@@ -4034,7 +4034,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/467",
+      "path": "0/149/467",
       "name": "Regional imported scenery instances",
       "signature": "f3cbcf5a2cbcec19",
       "kind": "instances",
@@ -4043,7 +4043,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/468",
+      "path": "0/149/468",
       "name": "Regional imported scenery instances",
       "signature": "f901f5797c71720c",
       "kind": "instances",
@@ -4052,7 +4052,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/469",
+      "path": "0/149/469",
       "name": "Regional static scenery batch",
       "signature": "6036b45a5deee161",
       "kind": "vertices",
@@ -4061,7 +4061,7 @@
       "byteLength": 2976
     },
     {
-      "path": "0/146/470",
+      "path": "0/149/470",
       "name": "Regional imported scenery instances",
       "signature": "75e5feb116d85faf",
       "kind": "instances",
@@ -4070,7 +4070,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/471",
+      "path": "0/149/471",
       "name": "Regional static scenery batch",
       "signature": "7b6409b44894683f",
       "kind": "vertices",
@@ -4079,7 +4079,7 @@
       "byteLength": 5672
     },
     {
-      "path": "0/146/472",
+      "path": "0/149/472",
       "name": "Regional imported scenery instances",
       "signature": "25a63a4a58567921",
       "kind": "instances",
@@ -4088,7 +4088,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/473",
+      "path": "0/149/473",
       "name": "Regional imported scenery instances",
       "signature": "d0ed473952b81a7c",
       "kind": "instances",
@@ -4097,7 +4097,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/474",
+      "path": "0/149/474",
       "name": "Regional imported scenery instances",
       "signature": "07c159d8bef2d271",
       "kind": "instances",
@@ -4106,7 +4106,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/475",
+      "path": "0/149/475",
       "name": "Regional static scenery batch",
       "signature": "31cb75c309ea8779",
       "kind": "vertices",
@@ -4115,7 +4115,7 @@
       "byteLength": 608
     },
     {
-      "path": "0/146/476",
+      "path": "0/149/476",
       "name": "Regional imported scenery instances",
       "signature": "eb014f0bd551b8b5",
       "kind": "instances",
@@ -4124,7 +4124,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/477",
+      "path": "0/149/477",
       "name": "Regional imported scenery instances",
       "signature": "bad350e3d8f402ad",
       "kind": "instances",
@@ -4133,7 +4133,7 @@
       "byteLength": 28
     },
     {
-      "path": "0/146/478",
+      "path": "0/149/478",
       "name": "Regional imported scenery instances",
       "signature": "e4d5357b85cc0c42",
       "kind": "instances",
@@ -4142,7 +4142,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/479",
+      "path": "0/149/479",
       "name": "Regional static scenery batch",
       "signature": "266c1c4c7d1ed06a",
       "kind": "vertices",
@@ -4151,7 +4151,7 @@
       "byteLength": 1400
     },
     {
-      "path": "0/146/480",
+      "path": "0/149/480",
       "name": "Regional imported scenery instances",
       "signature": "f278e98ae5781ec0",
       "kind": "instances",
@@ -4160,7 +4160,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/481",
+      "path": "0/149/481",
       "name": "Regional static scenery batch",
       "signature": "b0cbdcbf7373410d",
       "kind": "vertices",
@@ -4169,7 +4169,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/482",
+      "path": "0/149/482",
       "name": "Regional imported scenery instances",
       "signature": "f7cc7af403e21048",
       "kind": "instances",
@@ -4178,7 +4178,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/483",
+      "path": "0/149/483",
       "name": "Regional imported scenery instances",
       "signature": "90e04c62c10fa0a0",
       "kind": "instances",
@@ -4187,7 +4187,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/484",
+      "path": "0/149/484",
       "name": "Regional static scenery batch",
       "signature": "e161dd632661802e",
       "kind": "vertices",
@@ -4196,7 +4196,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/485",
+      "path": "0/149/485",
       "name": "Regional static scenery batch",
       "signature": "912e0faf4fdcf253",
       "kind": "vertices",
@@ -4205,7 +4205,7 @@
       "byteLength": 5432
     },
     {
-      "path": "0/146/486",
+      "path": "0/149/486",
       "name": "Regional imported scenery instances",
       "signature": "15cbb1c3514ce4e7",
       "kind": "instances",
@@ -4214,7 +4214,7 @@
       "byteLength": 136
     },
     {
-      "path": "0/146/487",
+      "path": "0/149/487",
       "name": "Regional imported scenery instances",
       "signature": "15ffca34d425bb4f",
       "kind": "instances",
@@ -4223,7 +4223,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/488",
+      "path": "0/149/488",
       "name": "Regional static scenery batch",
       "signature": "5b28462dc271b818",
       "kind": "vertices",
@@ -4232,7 +4232,7 @@
       "byteLength": 1496
     },
     {
-      "path": "0/146/489",
+      "path": "0/149/489",
       "name": "Regional static scenery batch",
       "signature": "f580cd535a98708a",
       "kind": "vertices",
@@ -4241,7 +4241,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/490",
+      "path": "0/149/490",
       "name": "Regional static scenery batch",
       "signature": "e074188d196db889",
       "kind": "vertices",
@@ -4250,7 +4250,7 @@
       "byteLength": 360
     },
     {
-      "path": "0/146/491",
+      "path": "0/149/491",
       "name": "Regional imported scenery instances",
       "signature": "d79a3965170a5518",
       "kind": "instances",
@@ -4259,7 +4259,7 @@
       "byteLength": 332
     },
     {
-      "path": "0/146/492",
+      "path": "0/149/492",
       "name": "Regional imported scenery instances",
       "signature": "4dedb9885444dc3b",
       "kind": "instances",
@@ -4268,7 +4268,7 @@
       "byteLength": 108
     },
     {
-      "path": "0/146/493",
+      "path": "0/149/493",
       "name": "Regional imported scenery instances",
       "signature": "49fbf1b700c6e46c",
       "kind": "instances",
@@ -4277,7 +4277,7 @@
       "byteLength": 36
     },
     {
-      "path": "0/146/494",
+      "path": "0/149/494",
       "name": "Regional static scenery batch",
       "signature": "2ca617ff9cea0478",
       "kind": "vertices",
@@ -4286,7 +4286,7 @@
       "byteLength": 1640
     },
     {
-      "path": "0/146/495",
+      "path": "0/149/495",
       "name": "Regional static scenery batch",
       "signature": "fe208636e3f81c7d",
       "kind": "vertices",
@@ -4295,7 +4295,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/496",
+      "path": "0/149/496",
       "name": "Regional static scenery batch",
       "signature": "e0a4dc4ee6448055",
       "kind": "vertices",
@@ -4304,7 +4304,7 @@
       "byteLength": 432
     },
     {
-      "path": "0/146/497",
+      "path": "0/149/497",
       "name": "Regional static scenery batch",
       "signature": "632cdc0420266100",
       "kind": "vertices",
@@ -4313,7 +4313,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/498",
+      "path": "0/149/498",
       "name": "Regional imported scenery instances",
       "signature": "d46c7368416efd5d",
       "kind": "instances",
@@ -4322,7 +4322,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/499",
+      "path": "0/149/499",
       "name": "Regional imported scenery instances",
       "signature": "5aed4693bd89d970",
       "kind": "instances",
@@ -4331,7 +4331,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/500",
+      "path": "0/149/500",
       "name": "Regional imported scenery instances",
       "signature": "95ca7e90012c0961",
       "kind": "instances",
@@ -4340,7 +4340,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/501",
+      "path": "0/149/501",
       "name": "Regional imported scenery instances",
       "signature": "f6408e26d13212c0",
       "kind": "instances",
@@ -4349,7 +4349,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/502",
+      "path": "0/149/502",
       "name": "Regional imported scenery instances",
       "signature": "884c4827785ca367",
       "kind": "instances",
@@ -4358,7 +4358,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/503",
+      "path": "0/149/503",
       "name": "Regional imported scenery instances",
       "signature": "9e69987bf070a0eb",
       "kind": "instances",
@@ -4367,7 +4367,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/505",
+      "path": "0/149/505",
       "name": "Regional static scenery batch",
       "signature": "fcdfa63aa567c859",
       "kind": "vertices",
@@ -4376,7 +4376,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/506",
+      "path": "0/149/506",
       "name": "Regional imported scenery instances",
       "signature": "521317676e987203",
       "kind": "instances",
@@ -4385,7 +4385,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/507",
+      "path": "0/149/507",
       "name": "Regional imported scenery instances",
       "signature": "ffc1b8b837ef5943",
       "kind": "instances",
@@ -4394,7 +4394,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/508",
+      "path": "0/149/508",
       "name": "Regional imported scenery instances",
       "signature": "7023710735bbfcf1",
       "kind": "instances",
@@ -4403,7 +4403,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/509",
+      "path": "0/149/509",
       "name": "Regional static scenery batch",
       "signature": "3a022034a7e3c555",
       "kind": "vertices",
@@ -4412,7 +4412,7 @@
       "byteLength": 448
     },
     {
-      "path": "0/146/510",
+      "path": "0/149/510",
       "name": "Regional static scenery batch",
       "signature": "a3768e2199f13502",
       "kind": "vertices",
@@ -4421,7 +4421,7 @@
       "byteLength": 2016
     },
     {
-      "path": "0/146/511",
+      "path": "0/149/511",
       "name": "Regional static scenery batch",
       "signature": "96b7e0652d45076c",
       "kind": "vertices",
@@ -4430,7 +4430,7 @@
       "byteLength": 4496
     },
     {
-      "path": "0/146/512",
+      "path": "0/149/512",
       "name": "Regional static scenery batch",
       "signature": "19bc039daa39c2cb",
       "kind": "vertices",
@@ -4439,7 +4439,7 @@
       "byteLength": 376
     },
     {
-      "path": "0/146/513",
+      "path": "0/149/513",
       "name": "Regional static scenery batch",
       "signature": "919d074575eb42bb",
       "kind": "vertices",
@@ -4448,7 +4448,7 @@
       "byteLength": 320
     },
     {
-      "path": "0/146/515",
+      "path": "0/149/515",
       "name": "Regional imported scenery instances",
       "signature": "8d6b6fc5a2b46bfa",
       "kind": "instances",
@@ -4457,7 +4457,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/516",
+      "path": "0/149/516",
       "name": "Regional static scenery batch",
       "signature": "1ab5ed80568f30b0",
       "kind": "vertices",
@@ -4466,7 +4466,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/517",
+      "path": "0/149/517",
       "name": "Regional imported scenery instances",
       "signature": "f5f05eccd0907f6b",
       "kind": "instances",
@@ -4475,7 +4475,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/518",
+      "path": "0/149/518",
       "name": "Regional imported scenery instances",
       "signature": "eda10808999666d5",
       "kind": "instances",
@@ -4484,7 +4484,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/519",
+      "path": "0/149/519",
       "name": "Regional imported scenery instances",
       "signature": "09a39ce6d07e9a72",
       "kind": "instances",
@@ -4493,7 +4493,7 @@
       "byteLength": 272
     },
     {
-      "path": "0/146/520",
+      "path": "0/149/520",
       "name": "Regional imported scenery instances",
       "signature": "6c099c32d0b6792e",
       "kind": "instances",
@@ -4502,7 +4502,7 @@
       "byteLength": 148
     },
     {
-      "path": "0/146/521",
+      "path": "0/149/521",
       "name": "Regional imported scenery instances",
       "signature": "b5278c86d681f49e",
       "kind": "instances",
@@ -4511,7 +4511,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/522",
+      "path": "0/149/522",
       "name": "Regional static scenery batch",
       "signature": "09a8376dec9a61a4",
       "kind": "vertices",
@@ -4520,7 +4520,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/523",
+      "path": "0/149/523",
       "name": "Regional static scenery batch",
       "signature": "a395b76a0f0717c7",
       "kind": "vertices",
@@ -4529,7 +4529,7 @@
       "byteLength": 1800
     },
     {
-      "path": "0/146/524",
+      "path": "0/149/524",
       "name": "Regional imported scenery instances",
       "signature": "49c5480473bf11c5",
       "kind": "instances",
@@ -4538,7 +4538,7 @@
       "byteLength": 144
     },
     {
-      "path": "0/146/525",
+      "path": "0/149/525",
       "name": "Regional imported scenery instances",
       "signature": "4071029441a7f4db",
       "kind": "instances",
@@ -4547,7 +4547,7 @@
       "byteLength": 140
     },
     {
-      "path": "0/146/526",
+      "path": "0/149/526",
       "name": "Regional imported scenery instances",
       "signature": "3ecdf797c2815ead",
       "kind": "instances",
@@ -4556,7 +4556,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/527",
+      "path": "0/149/527",
       "name": "Regional static scenery batch",
       "signature": "e67dbea00a2f7624",
       "kind": "vertices",
@@ -4565,7 +4565,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/528",
+      "path": "0/149/528",
       "name": "Regional static scenery batch",
       "signature": "2e2aca3538cb91cd",
       "kind": "vertices",
@@ -4574,7 +4574,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/529",
+      "path": "0/149/529",
       "name": "Regional imported scenery instances",
       "signature": "0cc4382396bbe464",
       "kind": "instances",
@@ -4583,7 +4583,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/530",
+      "path": "0/149/530",
       "name": "Regional static scenery batch",
       "signature": "7f38f1687e170c90",
       "kind": "vertices",
@@ -4592,7 +4592,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/531",
+      "path": "0/149/531",
       "name": "Regional static scenery batch",
       "signature": "521c05dc4e84ab7a",
       "kind": "vertices",
@@ -4601,7 +4601,7 @@
       "byteLength": 432
     },
     {
-      "path": "0/146/532",
+      "path": "0/149/532",
       "name": "Regional static scenery batch",
       "signature": "3e799a2612f80ad6",
       "kind": "vertices",
@@ -4610,7 +4610,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/533",
+      "path": "0/149/533",
       "name": "Regional static scenery batch",
       "signature": "fbd262011c90fb49",
       "kind": "vertices",
@@ -4619,7 +4619,7 @@
       "byteLength": 448
     },
     {
-      "path": "0/146/534",
+      "path": "0/149/534",
       "name": "Regional static scenery batch",
       "signature": "cfe21513f4807f3e",
       "kind": "vertices",
@@ -4628,7 +4628,7 @@
       "byteLength": 2016
     },
     {
-      "path": "0/146/535",
+      "path": "0/149/535",
       "name": "Regional static scenery batch",
       "signature": "cc2e12c63b45973e",
       "kind": "vertices",
@@ -4637,7 +4637,7 @@
       "byteLength": 4496
     },
     {
-      "path": "0/146/536",
+      "path": "0/149/536",
       "name": "Regional static scenery batch",
       "signature": "771b70336541b1d8",
       "kind": "vertices",
@@ -4646,7 +4646,7 @@
       "byteLength": 376
     },
     {
-      "path": "0/146/537",
+      "path": "0/149/537",
       "name": "Regional static scenery batch",
       "signature": "2fda9d5fddb0a21d",
       "kind": "vertices",
@@ -4655,7 +4655,7 @@
       "byteLength": 320
     },
     {
-      "path": "0/146/539",
+      "path": "0/149/539",
       "name": "Regional static scenery batch",
       "signature": "df82a2ce2963952e",
       "kind": "vertices",
@@ -4664,7 +4664,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/540",
+      "path": "0/149/540",
       "name": "Regional imported scenery instances",
       "signature": "98e3978e0aa55300",
       "kind": "instances",
@@ -4673,7 +4673,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/541",
+      "path": "0/149/541",
       "name": "Regional static scenery batch",
       "signature": "214bf5c62c3d386f",
       "kind": "vertices",
@@ -4682,7 +4682,7 @@
       "byteLength": 1800
     },
     {
-      "path": "0/146/542",
+      "path": "0/149/542",
       "name": "Regional imported scenery instances",
       "signature": "9c7aab676c6f1242",
       "kind": "instances",
@@ -4691,7 +4691,7 @@
       "byteLength": 92
     },
     {
-      "path": "0/146/543",
+      "path": "0/149/543",
       "name": "Regional imported scenery instances",
       "signature": "1e45a3bdbb427966",
       "kind": "instances",
@@ -4700,7 +4700,7 @@
       "byteLength": 48
     },
     {
-      "path": "0/146/544",
+      "path": "0/149/544",
       "name": "Regional static scenery batch",
       "signature": "e21e17e76bbf1659",
       "kind": "vertices",
@@ -4709,7 +4709,7 @@
       "byteLength": 3584
     },
     {
-      "path": "0/146/545",
+      "path": "0/149/545",
       "name": "Regional imported scenery instances",
       "signature": "928d60c52ddb500b",
       "kind": "instances",
@@ -4718,7 +4718,7 @@
       "byteLength": 84
     },
     {
-      "path": "0/146/546",
+      "path": "0/149/546",
       "name": "Regional imported scenery instances",
       "signature": "d851b41d4b922f43",
       "kind": "instances",
@@ -4727,7 +4727,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/547",
+      "path": "0/149/547",
       "name": "Regional imported scenery instances",
       "signature": "7827c1c226c8c4c7",
       "kind": "instances",
@@ -4736,7 +4736,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/548",
+      "path": "0/149/548",
       "name": "Regional imported scenery instances",
       "signature": "ef72b4fe355fcf62",
       "kind": "instances",
@@ -4745,7 +4745,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/549",
+      "path": "0/149/549",
       "name": "Regional imported scenery instances",
       "signature": "f3db76faefab1374",
       "kind": "instances",
@@ -4754,7 +4754,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/550",
+      "path": "0/149/550",
       "name": "Regional static scenery batch",
       "signature": "3eb958319ad72cb2",
       "kind": "vertices",
@@ -4763,7 +4763,7 @@
       "byteLength": 1004
     },
     {
-      "path": "0/146/551",
+      "path": "0/149/551",
       "name": "Regional static scenery batch",
       "signature": "c2e36ef1d4930ada",
       "kind": "vertices",
@@ -4772,7 +4772,7 @@
       "byteLength": 400
     },
     {
-      "path": "0/146/552",
+      "path": "0/149/552",
       "name": "Regional imported scenery instances",
       "signature": "5e7457ca031daa4e",
       "kind": "instances",
@@ -4781,7 +4781,7 @@
       "byteLength": 204
     },
     {
-      "path": "0/146/553",
+      "path": "0/149/553",
       "name": "Regional imported scenery instances",
       "signature": "e8b21e7034e8ac8c",
       "kind": "instances",
@@ -4790,7 +4790,7 @@
       "byteLength": 104
     },
     {
-      "path": "0/146/554",
+      "path": "0/149/554",
       "name": "Regional imported scenery instances",
       "signature": "7b9d05f831f3ab1e",
       "kind": "instances",
@@ -4799,7 +4799,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/555",
+      "path": "0/149/555",
       "name": "Regional static scenery batch",
       "signature": "4e65a3544a5a69fa",
       "kind": "vertices",
@@ -4808,7 +4808,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/556",
+      "path": "0/149/556",
       "name": "Regional static scenery batch",
       "signature": "55dffa14f3ea36c5",
       "kind": "vertices",
@@ -4817,7 +4817,7 @@
       "byteLength": 1052
     },
     {
-      "path": "0/146/557",
+      "path": "0/149/557",
       "name": "Regional imported scenery instances",
       "signature": "1712835baaa52710",
       "kind": "instances",
@@ -4826,7 +4826,7 @@
       "byteLength": 16
     },
     {
-      "path": "0/146/558",
+      "path": "0/149/558",
       "name": "Regional imported scenery instances",
       "signature": "8f0b73b77fcec182",
       "kind": "instances",
@@ -4835,7 +4835,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/559",
+      "path": "0/149/559",
       "name": "Regional imported scenery instances",
       "signature": "4d8ec426f22b23bd",
       "kind": "instances",
@@ -4844,7 +4844,7 @@
       "byteLength": 28
     },
     {
-      "path": "0/146/560",
+      "path": "0/149/560",
       "name": "Regional imported scenery instances",
       "signature": "c1db8e493dc5c2e1",
       "kind": "instances",
@@ -4853,7 +4853,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/561",
+      "path": "0/149/561",
       "name": "Regional static scenery batch",
       "signature": "8903d098d2ee1bf5",
       "kind": "vertices",
@@ -4862,7 +4862,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/562",
+      "path": "0/149/562",
       "name": "Regional static scenery batch",
       "signature": "950b5e2b2ad79aa2",
       "kind": "vertices",
@@ -4871,7 +4871,7 @@
       "byteLength": 2016
     },
     {
-      "path": "0/146/563",
+      "path": "0/149/563",
       "name": "Regional static scenery batch",
       "signature": "d7f7b375b5e1ced4",
       "kind": "vertices",
@@ -4880,7 +4880,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/564",
+      "path": "0/149/564",
       "name": "Regional imported scenery instances",
       "signature": "eab9019b03cb2aca",
       "kind": "instances",
@@ -4889,7 +4889,7 @@
       "byteLength": 28
     },
     {
-      "path": "0/146/565",
+      "path": "0/149/565",
       "name": "Regional static scenery batch",
       "signature": "2ff7311fbacde3be",
       "kind": "vertices",
@@ -4898,7 +4898,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/566",
+      "path": "0/149/566",
       "name": "Regional static scenery batch",
       "signature": "7310e43955019a31",
       "kind": "vertices",
@@ -4907,7 +4907,7 @@
       "byteLength": 432
     },
     {
-      "path": "0/146/567",
+      "path": "0/149/567",
       "name": "Regional static scenery batch",
       "signature": "1abbeddf00584084",
       "kind": "vertices",
@@ -4916,7 +4916,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/568",
+      "path": "0/149/568",
       "name": "Regional static scenery batch",
       "signature": "3b81f503cf61f312",
       "kind": "vertices",
@@ -4925,7 +4925,7 @@
       "byteLength": 448
     },
     {
-      "path": "0/146/569",
+      "path": "0/149/569",
       "name": "Regional static scenery batch",
       "signature": "8bd6bf849a217128",
       "kind": "vertices",
@@ -4934,7 +4934,7 @@
       "byteLength": 2016
     },
     {
-      "path": "0/146/570",
+      "path": "0/149/570",
       "name": "Regional static scenery batch",
       "signature": "e418ed1bf956960e",
       "kind": "vertices",
@@ -4943,7 +4943,7 @@
       "byteLength": 4496
     },
     {
-      "path": "0/146/571",
+      "path": "0/149/571",
       "name": "Regional static scenery batch",
       "signature": "62b3e03f244ea81a",
       "kind": "vertices",
@@ -4952,7 +4952,7 @@
       "byteLength": 376
     },
     {
-      "path": "0/146/572",
+      "path": "0/149/572",
       "name": "Regional static scenery batch",
       "signature": "06f68fe5de081763",
       "kind": "vertices",
@@ -4961,7 +4961,7 @@
       "byteLength": 320
     },
     {
-      "path": "0/146/574",
+      "path": "0/149/574",
       "name": "Regional static scenery batch",
       "signature": "e6acbf37ae44a1ff",
       "kind": "vertices",
@@ -4970,7 +4970,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/575",
+      "path": "0/149/575",
       "name": "Regional imported scenery instances",
       "signature": "0bfa5764959921c2",
       "kind": "instances",
@@ -4979,7 +4979,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/576",
+      "path": "0/149/576",
       "name": "Regional static scenery batch",
       "signature": "76427f9a31bd4bb6",
       "kind": "vertices",
@@ -4988,7 +4988,7 @@
       "byteLength": 448
     },
     {
-      "path": "0/146/577",
+      "path": "0/149/577",
       "name": "Regional static scenery batch",
       "signature": "23cf40f2d44f7301",
       "kind": "vertices",
@@ -4997,7 +4997,7 @@
       "byteLength": 4496
     },
     {
-      "path": "0/146/578",
+      "path": "0/149/578",
       "name": "Regional static scenery batch",
       "signature": "a4bb848f44cf4a70",
       "kind": "vertices",
@@ -5006,7 +5006,7 @@
       "byteLength": 376
     },
     {
-      "path": "0/146/579",
+      "path": "0/149/579",
       "name": "Regional static scenery batch",
       "signature": "bd19e2fb86e34ccd",
       "kind": "vertices",
@@ -5015,7 +5015,7 @@
       "byteLength": 320
     },
     {
-      "path": "0/146/581",
+      "path": "0/149/581",
       "name": "Regional static scenery batch",
       "signature": "91b214e42306a7a8",
       "kind": "vertices",
@@ -5024,7 +5024,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/582",
+      "path": "0/149/582",
       "name": "Regional static scenery batch",
       "signature": "e0042e3053e09e95",
       "kind": "vertices",
@@ -5033,7 +5033,7 @@
       "byteLength": 432
     },
     {
-      "path": "0/146/583",
+      "path": "0/149/583",
       "name": "Regional static scenery batch",
       "signature": "3edc0e5fe700750d",
       "kind": "vertices",
@@ -5042,7 +5042,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/584",
+      "path": "0/149/584",
       "name": "Regional static scenery batch",
       "signature": "5adf0d678fe1371e",
       "kind": "vertices",
@@ -5051,7 +5051,7 @@
       "byteLength": 1052
     },
     {
-      "path": "0/146/585",
+      "path": "0/149/585",
       "name": "Regional imported scenery instances",
       "signature": "070a271e355447a6",
       "kind": "instances",
@@ -5060,7 +5060,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/586",
+      "path": "0/149/586",
       "name": "Regional imported scenery instances",
       "signature": "66493d473f074162",
       "kind": "instances",
@@ -5069,7 +5069,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/587",
+      "path": "0/149/587",
       "name": "Regional imported scenery instances",
       "signature": "e1510035866ea5ac",
       "kind": "instances",
@@ -5078,7 +5078,7 @@
       "byteLength": 320
     },
     {
-      "path": "0/146/588",
+      "path": "0/149/588",
       "name": "Regional static scenery batch",
       "signature": "18f9954c020fc94b",
       "kind": "vertices",
@@ -5087,7 +5087,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/589",
+      "path": "0/149/589",
       "name": "Regional static scenery batch",
       "signature": "6c0dbc547484c4e5",
       "kind": "vertices",
@@ -5096,7 +5096,7 @@
       "byteLength": 1800
     },
     {
-      "path": "0/146/590",
+      "path": "0/149/590",
       "name": "Regional imported scenery instances",
       "signature": "7409e325a54e319f",
       "kind": "instances",
@@ -5105,7 +5105,7 @@
       "byteLength": 164
     },
     {
-      "path": "0/146/591",
+      "path": "0/149/591",
       "name": "Regional imported scenery instances",
       "signature": "30fa8d70cc764da6",
       "kind": "instances",
@@ -5114,7 +5114,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/592",
+      "path": "0/149/592",
       "name": "Regional imported scenery instances",
       "signature": "3283e305447fc460",
       "kind": "instances",
@@ -5123,7 +5123,7 @@
       "byteLength": 12
     },
     {
-      "path": "0/146/593",
+      "path": "0/149/593",
       "name": "Regional imported scenery instances",
       "signature": "37a42bcefe1d9c3f",
       "kind": "instances",
@@ -5132,7 +5132,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/594",
+      "path": "0/149/594",
       "name": "Regional imported scenery instances",
       "signature": "fbfcbb9086750037",
       "kind": "instances",
@@ -5141,7 +5141,7 @@
       "byteLength": 140
     },
     {
-      "path": "0/146/595",
+      "path": "0/149/595",
       "name": "Regional static scenery batch",
       "signature": "089d7808d23ce033",
       "kind": "vertices",
@@ -5150,7 +5150,7 @@
       "byteLength": 1052
     },
     {
-      "path": "0/146/596",
+      "path": "0/149/596",
       "name": "Regional imported scenery instances",
       "signature": "8c9384df1bc5816a",
       "kind": "instances",
@@ -5159,7 +5159,7 @@
       "byteLength": 64
     },
     {
-      "path": "0/146/597",
+      "path": "0/149/597",
       "name": "Regional imported scenery instances",
       "signature": "e85ff50110c5b7c6",
       "kind": "instances",
@@ -5168,7 +5168,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/598",
+      "path": "0/149/598",
       "name": "Regional static scenery batch",
       "signature": "5bd9660ebbb95e46",
       "kind": "vertices",
@@ -5177,7 +5177,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/599",
+      "path": "0/149/599",
       "name": "Regional static scenery batch",
       "signature": "8704816b5804bff7",
       "kind": "vertices",
@@ -5186,7 +5186,7 @@
       "byteLength": 432
     },
     {
-      "path": "0/146/600",
+      "path": "0/149/600",
       "name": "Regional static scenery batch",
       "signature": "6fa0318e84c77757",
       "kind": "vertices",
@@ -5195,7 +5195,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/601",
+      "path": "0/149/601",
       "name": "Regional static scenery batch",
       "signature": "157ef3efacc064cc",
       "kind": "vertices",
@@ -5204,7 +5204,7 @@
       "byteLength": 192
     },
     {
-      "path": "0/146/602",
+      "path": "0/149/602",
       "name": "Regional static scenery batch",
       "signature": "f028f39ee630b615",
       "kind": "vertices",
@@ -5213,7 +5213,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/603",
+      "path": "0/149/603",
       "name": "Regional static scenery batch",
       "signature": "becd06b505874ed4",
       "kind": "vertices",
@@ -5222,7 +5222,7 @@
       "byteLength": 432
     },
     {
-      "path": "0/146/604",
+      "path": "0/149/604",
       "name": "Regional static scenery batch",
       "signature": "4bab37b245ba4a1c",
       "kind": "vertices",
@@ -5231,7 +5231,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/605",
+      "path": "0/149/605",
       "name": "Regional static scenery batch",
       "signature": "977de1d8c5cdbaa2",
       "kind": "vertices",
@@ -5240,7 +5240,7 @@
       "byteLength": 448
     },
     {
-      "path": "0/146/606",
+      "path": "0/149/606",
       "name": "Regional static scenery batch",
       "signature": "b84db06a42cfd9c0",
       "kind": "vertices",
@@ -5249,7 +5249,7 @@
       "byteLength": 2016
     },
     {
-      "path": "0/146/607",
+      "path": "0/149/607",
       "name": "Regional static scenery batch",
       "signature": "cbf10a5ef54cf59e",
       "kind": "vertices",
@@ -5258,7 +5258,7 @@
       "byteLength": 4496
     },
     {
-      "path": "0/146/608",
+      "path": "0/149/608",
       "name": "Regional static scenery batch",
       "signature": "80bfab55a9403123",
       "kind": "vertices",
@@ -5267,7 +5267,7 @@
       "byteLength": 376
     },
     {
-      "path": "0/146/609",
+      "path": "0/149/609",
       "name": "Regional static scenery batch",
       "signature": "6266cd82d1981ff8",
       "kind": "vertices",
@@ -5276,7 +5276,7 @@
       "byteLength": 320
     },
     {
-      "path": "0/146/611",
+      "path": "0/149/611",
       "name": "Regional static scenery batch",
       "signature": "48388e6a3b902e6e",
       "kind": "vertices",
@@ -5285,7 +5285,7 @@
       "byteLength": 608
     },
     {
-      "path": "0/146/612",
+      "path": "0/149/612",
       "name": "Regional imported scenery instances",
       "signature": "51d8479b22c07ba7",
       "kind": "instances",
@@ -5294,7 +5294,7 @@
       "byteLength": 144
     },
     {
-      "path": "0/146/613",
+      "path": "0/149/613",
       "name": "Regional imported scenery instances",
       "signature": "743ff43a41d96d5b",
       "kind": "instances",
@@ -5303,7 +5303,7 @@
       "byteLength": 180
     },
     {
-      "path": "0/146/614",
+      "path": "0/149/614",
       "name": "Regional imported scenery instances",
       "signature": "316b5bcc4da158be",
       "kind": "instances",
@@ -5312,7 +5312,7 @@
       "byteLength": 328
     },
     {
-      "path": "0/146/615",
+      "path": "0/149/615",
       "name": "Regional static scenery batch",
       "signature": "2b7e73ffbb4868c1",
       "kind": "vertices",
@@ -5321,7 +5321,7 @@
       "byteLength": 5432
     },
     {
-      "path": "0/146/616",
+      "path": "0/149/616",
       "name": "Regional imported scenery instances",
       "signature": "b35fe3c201e39c6b",
       "kind": "instances",
@@ -5330,7 +5330,7 @@
       "byteLength": 180
     },
     {
-      "path": "0/146/617",
+      "path": "0/149/617",
       "name": "Regional imported scenery instances",
       "signature": "b579a723fc4dd960",
       "kind": "instances",
@@ -5339,7 +5339,7 @@
       "byteLength": 180
     },
     {
-      "path": "0/146/618",
+      "path": "0/149/618",
       "name": "Regional imported scenery instances",
       "signature": "e990837a917f3de4",
       "kind": "instances",
@@ -5348,7 +5348,7 @@
       "byteLength": 220
     },
     {
-      "path": "0/146/619",
+      "path": "0/149/619",
       "name": "Regional imported scenery instances",
       "signature": "e9e748a258db9d21",
       "kind": "instances",
@@ -5357,7 +5357,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/620",
+      "path": "0/149/620",
       "name": "Regional static scenery batch",
       "signature": "6598608f3b495ee5",
       "kind": "vertices",
@@ -5366,7 +5366,7 @@
       "byteLength": 5504
     },
     {
-      "path": "0/146/621",
+      "path": "0/149/621",
       "name": "Regional imported scenery instances",
       "signature": "f77fdca5c2bc7075",
       "kind": "instances",
@@ -5375,7 +5375,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/622",
+      "path": "0/149/622",
       "name": "Regional imported scenery instances",
       "signature": "610cdfddb16862aa",
       "kind": "instances",
@@ -5384,7 +5384,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/623",
+      "path": "0/149/623",
       "name": "Regional static scenery batch",
       "signature": "c1385128703764c0",
       "kind": "vertices",
@@ -5393,7 +5393,7 @@
       "byteLength": 1496
     },
     {
-      "path": "0/146/624",
+      "path": "0/149/624",
       "name": "Regional imported scenery instances",
       "signature": "6b0bba2235df4326",
       "kind": "instances",
@@ -5402,7 +5402,7 @@
       "byteLength": 44
     },
     {
-      "path": "0/146/625",
+      "path": "0/149/625",
       "name": "Regional imported scenery instances",
       "signature": "b429817c929128b6",
       "kind": "instances",
@@ -5411,7 +5411,7 @@
       "byteLength": 48
     },
     {
-      "path": "0/146/626",
+      "path": "0/149/626",
       "name": "Regional imported scenery instances",
       "signature": "0c5a0191b07af63b",
       "kind": "instances",
@@ -5420,7 +5420,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/627",
+      "path": "0/149/627",
       "name": "Regional imported scenery instances",
       "signature": "2767e659f2fdd7db",
       "kind": "instances",
@@ -5429,7 +5429,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/628",
+      "path": "0/149/628",
       "name": "Regional imported scenery instances",
       "signature": "a0e54a47262252dd",
       "kind": "instances",
@@ -5438,7 +5438,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/629",
+      "path": "0/149/629",
       "name": "Regional imported scenery instances",
       "signature": "3ede06489ba46902",
       "kind": "instances",
@@ -5447,7 +5447,7 @@
       "byteLength": 180
     },
     {
-      "path": "0/146/630",
+      "path": "0/149/630",
       "name": "Regional imported scenery instances",
       "signature": "a34690d832c8d9fe",
       "kind": "instances",
@@ -5456,7 +5456,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/631",
+      "path": "0/149/631",
       "name": "Regional imported scenery instances",
       "signature": "f280a1568ce20cac",
       "kind": "instances",
@@ -5465,7 +5465,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/632",
+      "path": "0/149/632",
       "name": "Regional imported scenery instances",
       "signature": "1d42b4073598c52b",
       "kind": "instances",
@@ -5474,7 +5474,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/633",
+      "path": "0/149/633",
       "name": "Regional imported scenery instances",
       "signature": "18e4181309c0abd9",
       "kind": "instances",
@@ -5483,7 +5483,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/634",
+      "path": "0/149/634",
       "name": "Regional imported scenery instances",
       "signature": "0c817e2793f0e999",
       "kind": "instances",
@@ -5492,7 +5492,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/635",
+      "path": "0/149/635",
       "name": "Regional imported scenery instances",
       "signature": "61a5b6cb6607d6ae",
       "kind": "instances",
@@ -5501,7 +5501,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/636",
+      "path": "0/149/636",
       "name": "Regional imported scenery instances",
       "signature": "4b2a6cb118f6d39d",
       "kind": "instances",
@@ -5510,7 +5510,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/637",
+      "path": "0/149/637",
       "name": "Regional imported scenery instances",
       "signature": "f5cee06e70fe29b8",
       "kind": "instances",
@@ -5519,7 +5519,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/638",
+      "path": "0/149/638",
       "name": "Regional static scenery batch",
       "signature": "9ae237ccc4d72315",
       "kind": "vertices",
@@ -5528,7 +5528,7 @@
       "byteLength": 5200
     },
     {
-      "path": "0/146/639",
+      "path": "0/149/639",
       "name": "Regional imported scenery instances",
       "signature": "992331ca18f83f74",
       "kind": "instances",
@@ -5537,7 +5537,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/640",
+      "path": "0/149/640",
       "name": "Regional imported scenery instances",
       "signature": "499031b8da88a957",
       "kind": "instances",
@@ -5546,7 +5546,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/641",
+      "path": "0/149/641",
       "name": "Regional imported scenery instances",
       "signature": "b974acd710b1a475",
       "kind": "instances",
@@ -5555,7 +5555,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/642",
+      "path": "0/149/642",
       "name": "Regional imported scenery instances",
       "signature": "055c5759b55c92eb",
       "kind": "instances",
@@ -5564,7 +5564,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/643",
+      "path": "0/149/643",
       "name": "Regional imported scenery instances",
       "signature": "4119c0bfc647736c",
       "kind": "instances",
@@ -5573,7 +5573,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/644",
+      "path": "0/149/644",
       "name": "Regional imported scenery instances",
       "signature": "a3ea6de8492d153e",
       "kind": "instances",
@@ -5582,7 +5582,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/645",
+      "path": "0/149/645",
       "name": "Regional imported scenery instances",
       "signature": "3cdfd2b0160d2488",
       "kind": "instances",
@@ -5591,7 +5591,7 @@
       "byteLength": 28
     },
     {
-      "path": "0/146/646",
+      "path": "0/149/646",
       "name": "Regional imported scenery instances",
       "signature": "7e945321e572cc15",
       "kind": "instances",
@@ -5600,7 +5600,7 @@
       "byteLength": 28
     },
     {
-      "path": "0/146/647",
+      "path": "0/149/647",
       "name": "Regional imported scenery instances",
       "signature": "c77da50d3bf1be2b",
       "kind": "instances",
@@ -5609,7 +5609,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/648",
+      "path": "0/149/648",
       "name": "Regional imported scenery instances",
       "signature": "3575630e326e7419",
       "kind": "instances",
@@ -5618,7 +5618,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/649",
+      "path": "0/149/649",
       "name": "Regional imported scenery instances",
       "signature": "a92ce251bea65531",
       "kind": "instances",
@@ -5627,7 +5627,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/650",
+      "path": "0/149/650",
       "name": "Regional imported scenery instances",
       "signature": "f4b331b61f615ff1",
       "kind": "instances",
@@ -5636,7 +5636,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/651",
+      "path": "0/149/651",
       "name": "Regional imported scenery instances",
       "signature": "c97f3b204167cbf4",
       "kind": "instances",
@@ -5645,7 +5645,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/652",
+      "path": "0/149/652",
       "name": "Regional static scenery batch",
       "signature": "8408c9186ad2197d",
       "kind": "vertices",
@@ -5654,7 +5654,7 @@
       "byteLength": 4896
     },
     {
-      "path": "0/146/653",
+      "path": "0/149/653",
       "name": "Regional imported scenery instances",
       "signature": "0e853eeef14c1211",
       "kind": "instances",
@@ -5663,7 +5663,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/654",
+      "path": "0/149/654",
       "name": "Regional imported scenery instances",
       "signature": "203cf409ebb75e4e",
       "kind": "instances",
@@ -5672,7 +5672,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/655",
+      "path": "0/149/655",
       "name": "Regional imported scenery instances",
       "signature": "553b25577cdfcbce",
       "kind": "instances",
@@ -5681,7 +5681,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/656",
+      "path": "0/149/656",
       "name": "Regional imported scenery instances",
       "signature": "4e02a0b08cba641d",
       "kind": "instances",
@@ -5690,7 +5690,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/657",
+      "path": "0/149/657",
       "name": "Regional imported scenery instances",
       "signature": "3d5b1c3482810d55",
       "kind": "instances",
@@ -5699,7 +5699,7 @@
       "byteLength": 48
     },
     {
-      "path": "0/146/658",
+      "path": "0/149/658",
       "name": "Regional imported scenery instances",
       "signature": "4cbb8c21d2ec5397",
       "kind": "instances",
@@ -5708,7 +5708,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/659",
+      "path": "0/149/659",
       "name": "Regional imported scenery instances",
       "signature": "f16e7c2ba2a8ef19",
       "kind": "instances",
@@ -5717,7 +5717,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/660",
+      "path": "0/149/660",
       "name": "Regional imported scenery instances",
       "signature": "4359a3bfc394cecb",
       "kind": "instances",
@@ -5726,7 +5726,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/661",
+      "path": "0/149/661",
       "name": "Regional imported scenery instances",
       "signature": "a18ced73d93b951f",
       "kind": "instances",
@@ -5735,7 +5735,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/662",
+      "path": "0/149/662",
       "name": "Regional imported scenery instances",
       "signature": "243670e71ac9e53d",
       "kind": "instances",
@@ -5744,7 +5744,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/663",
+      "path": "0/149/663",
       "name": "Regional imported scenery instances",
       "signature": "b2f7373f93b4439c",
       "kind": "instances",
@@ -5753,7 +5753,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/664",
+      "path": "0/149/664",
       "name": "Regional imported scenery instances",
       "signature": "de8663f17f37b2a2",
       "kind": "instances",
@@ -5762,7 +5762,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/665",
+      "path": "0/149/665",
       "name": "Regional imported scenery instances",
       "signature": "7adb4cbeb2aeb78d",
       "kind": "instances",
@@ -5771,7 +5771,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/666",
+      "path": "0/149/666",
       "name": "Regional imported scenery instances",
       "signature": "cd5e2aec6af9ed23",
       "kind": "instances",
@@ -5780,7 +5780,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/667",
+      "path": "0/149/667",
       "name": "Regional imported scenery instances",
       "signature": "503568004410a997",
       "kind": "instances",
@@ -5789,7 +5789,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/668",
+      "path": "0/149/668",
       "name": "Regional imported scenery instances",
       "signature": "c7ff8682b90eaaa5",
       "kind": "instances",
@@ -5798,7 +5798,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/669",
+      "path": "0/149/669",
       "name": "Regional imported scenery instances",
       "signature": "a5225000b7b44b5f",
       "kind": "instances",
@@ -5807,7 +5807,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/670",
+      "path": "0/149/670",
       "name": "Regional imported scenery instances",
       "signature": "a3f566a3ec4d7c6f",
       "kind": "instances",
@@ -5816,7 +5816,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/671",
+      "path": "0/149/671",
       "name": "Regional imported scenery instances",
       "signature": "e8a259ecb93396d2",
       "kind": "instances",
@@ -5825,7 +5825,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/672",
+      "path": "0/149/672",
       "name": "Regional imported scenery instances",
       "signature": "6df773d4c832fc1a",
       "kind": "instances",
@@ -5834,7 +5834,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/673",
+      "path": "0/149/673",
       "name": "Regional imported scenery instances",
       "signature": "47dbd8b074ddaf52",
       "kind": "instances",
@@ -5843,7 +5843,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/674",
+      "path": "0/149/674",
       "name": "Regional imported scenery instances",
       "signature": "cc8a6d7342e4fcf8",
       "kind": "instances",
@@ -5852,7 +5852,7 @@
       "byteLength": 300
     },
     {
-      "path": "0/146/675",
+      "path": "0/149/675",
       "name": "Regional imported scenery instances",
       "signature": "7b196666a693697e",
       "kind": "instances",
@@ -5861,7 +5861,7 @@
       "byteLength": 28
     },
     {
-      "path": "0/146/676",
+      "path": "0/149/676",
       "name": "Regional static scenery batch",
       "signature": "90da4615c8cf99d2",
       "kind": "vertices",
@@ -5870,7 +5870,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/677",
+      "path": "0/149/677",
       "name": "Regional imported scenery instances",
       "signature": "481439bc00975416",
       "kind": "instances",
@@ -5879,7 +5879,7 @@
       "byteLength": 52
     },
     {
-      "path": "0/146/678",
+      "path": "0/149/678",
       "name": "Regional imported scenery instances",
       "signature": "2b393e205177c7db",
       "kind": "instances",
@@ -5888,7 +5888,7 @@
       "byteLength": 204
     },
     {
-      "path": "0/146/679",
+      "path": "0/149/679",
       "name": "Regional imported scenery instances",
       "signature": "a242082ab8d5638f",
       "kind": "instances",
@@ -5897,7 +5897,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/680",
+      "path": "0/149/680",
       "name": "Regional imported scenery instances",
       "signature": "6da92ed2cda3bfa5",
       "kind": "instances",
@@ -5906,7 +5906,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/681",
+      "path": "0/149/681",
       "name": "Regional imported scenery instances",
       "signature": "38870d4fedb9ddd4",
       "kind": "instances",
@@ -5915,7 +5915,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/682",
+      "path": "0/149/682",
       "name": "Regional imported scenery instances",
       "signature": "49f3159b1b2a7f2e",
       "kind": "instances",
@@ -5924,7 +5924,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/683",
+      "path": "0/149/683",
       "name": "Regional imported scenery instances",
       "signature": "5aabf59a36842ad3",
       "kind": "instances",
@@ -5933,7 +5933,7 @@
       "byteLength": 28
     },
     {
-      "path": "0/146/684",
+      "path": "0/149/684",
       "name": "Regional imported scenery instances",
       "signature": "aecfced393fe94c5",
       "kind": "instances",
@@ -5942,7 +5942,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/685",
+      "path": "0/149/685",
       "name": "Regional imported scenery instances",
       "signature": "08ebee9a2f8bc281",
       "kind": "instances",
@@ -5951,7 +5951,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/686",
+      "path": "0/149/686",
       "name": "Regional imported scenery instances",
       "signature": "791fed82ca763d8f",
       "kind": "instances",
@@ -5960,7 +5960,7 @@
       "byteLength": 124
     },
     {
-      "path": "0/146/687",
+      "path": "0/149/687",
       "name": "Regional static scenery batch",
       "signature": "9ada45a605362666",
       "kind": "vertices",
@@ -5969,7 +5969,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/688",
+      "path": "0/149/688",
       "name": "Regional imported scenery instances",
       "signature": "2f7b6969f30ff426",
       "kind": "instances",
@@ -5978,7 +5978,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/689",
+      "path": "0/149/689",
       "name": "Regional imported scenery instances",
       "signature": "8ce23eb286b5d772",
       "kind": "instances",
@@ -5987,7 +5987,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/690",
+      "path": "0/149/690",
       "name": "Regional imported scenery instances",
       "signature": "b2301e1661edb45e",
       "kind": "instances",
@@ -5996,7 +5996,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/691",
+      "path": "0/149/691",
       "name": "Regional imported scenery instances",
       "signature": "be72c8b603e044be",
       "kind": "instances",
@@ -6005,7 +6005,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/692",
+      "path": "0/149/692",
       "name": "Regional imported scenery instances",
       "signature": "d440f4330c608376",
       "kind": "instances",
@@ -6014,7 +6014,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/693",
+      "path": "0/149/693",
       "name": "Regional imported scenery instances",
       "signature": "27c57a84b6807a47",
       "kind": "instances",
@@ -6023,7 +6023,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/694",
+      "path": "0/149/694",
       "name": "Regional imported scenery instances",
       "signature": "eca6f165e9cc46e2",
       "kind": "instances",
@@ -6032,7 +6032,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/695",
+      "path": "0/149/695",
       "name": "Regional imported scenery instances",
       "signature": "5a0741b5465c882b",
       "kind": "instances",
@@ -6041,7 +6041,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/696",
+      "path": "0/149/696",
       "name": "Regional imported scenery instances",
       "signature": "223b521f168e62c8",
       "kind": "instances",
@@ -6050,7 +6050,7 @@
       "byteLength": 92
     },
     {
-      "path": "0/146/697",
+      "path": "0/149/697",
       "name": "Regional imported scenery instances",
       "signature": "7dc5b9951e63f907",
       "kind": "instances",
@@ -6059,7 +6059,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/698",
+      "path": "0/149/698",
       "name": "Regional imported scenery instances",
       "signature": "8dc5b61eb6e71045",
       "kind": "instances",
@@ -6068,7 +6068,7 @@
       "byteLength": 208
     },
     {
-      "path": "0/146/699",
+      "path": "0/149/699",
       "name": "Regional imported scenery instances",
       "signature": "d6846d770457be5e",
       "kind": "instances",
@@ -6077,7 +6077,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/700",
+      "path": "0/149/700",
       "name": "Regional imported scenery instances",
       "signature": "d705032f15928c73",
       "kind": "instances",
@@ -6086,7 +6086,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/701",
+      "path": "0/149/701",
       "name": "Regional imported scenery instances",
       "signature": "b125e2d7cc077e90",
       "kind": "instances",
@@ -6095,7 +6095,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/702",
+      "path": "0/149/702",
       "name": "Regional imported scenery instances",
       "signature": "177d19bb71d39eff",
       "kind": "instances",
@@ -6104,7 +6104,7 @@
       "byteLength": 120
     },
     {
-      "path": "0/146/703",
+      "path": "0/149/703",
       "name": "Regional static scenery batch",
       "signature": "f27a540f95eba299",
       "kind": "vertices",
@@ -6113,7 +6113,7 @@
       "byteLength": 5200
     },
     {
-      "path": "0/146/704",
+      "path": "0/149/704",
       "name": "Regional imported scenery instances",
       "signature": "f4a544e146df9a87",
       "kind": "instances",
@@ -6122,7 +6122,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/705",
+      "path": "0/149/705",
       "name": "Regional imported scenery instances",
       "signature": "7c36bf1ea7b72359",
       "kind": "instances",
@@ -6131,7 +6131,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/706",
+      "path": "0/149/706",
       "name": "Regional imported scenery instances",
       "signature": "f8e8a484e09c80d9",
       "kind": "instances",
@@ -6140,7 +6140,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/707",
+      "path": "0/149/707",
       "name": "Regional imported scenery instances",
       "signature": "fde9aa324af00e9f",
       "kind": "instances",
@@ -6149,7 +6149,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/708",
+      "path": "0/149/708",
       "name": "Regional imported scenery instances",
       "signature": "f7a65a604033ffc2",
       "kind": "instances",
@@ -6158,7 +6158,7 @@
       "byteLength": 72
     },
     {
-      "path": "0/146/709",
+      "path": "0/149/709",
       "name": "Regional imported scenery instances",
       "signature": "b75b36167a76b488",
       "kind": "instances",
@@ -6167,7 +6167,7 @@
       "byteLength": 140
     },
     {
-      "path": "0/146/710",
+      "path": "0/149/710",
       "name": "Regional imported scenery instances",
       "signature": "3ce77dd81cb82b96",
       "kind": "instances",
@@ -6176,7 +6176,7 @@
       "byteLength": 280
     },
     {
-      "path": "0/146/711",
+      "path": "0/149/711",
       "name": "Regional static scenery batch",
       "signature": "7000e133d362b909",
       "kind": "vertices",
@@ -6185,7 +6185,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/712",
+      "path": "0/149/712",
       "name": "Regional imported scenery instances",
       "signature": "b8e632840c38ef21",
       "kind": "instances",
@@ -6194,7 +6194,7 @@
       "byteLength": 140
     },
     {
-      "path": "0/146/713",
+      "path": "0/149/713",
       "name": "Regional imported scenery instances",
       "signature": "59202f2e24ffde4e",
       "kind": "instances",
@@ -6203,7 +6203,7 @@
       "byteLength": 140
     },
     {
-      "path": "0/146/714",
+      "path": "0/149/714",
       "name": "Regional imported scenery instances",
       "signature": "f7b09683300fade4",
       "kind": "instances",
@@ -6212,7 +6212,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/715",
+      "path": "0/149/715",
       "name": "Regional imported scenery instances",
       "signature": "62c3eae57869c57a",
       "kind": "instances",
@@ -6221,7 +6221,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/716",
+      "path": "0/149/716",
       "name": "Regional imported scenery instances",
       "signature": "1fbf23ec16f1a0b6",
       "kind": "instances",
@@ -6230,7 +6230,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/717",
+      "path": "0/149/717",
       "name": "Regional imported scenery instances",
       "signature": "a426c33bea6e3593",
       "kind": "instances",
@@ -6239,7 +6239,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/718",
+      "path": "0/149/718",
       "name": "Regional imported scenery instances",
       "signature": "22798130c661e23b",
       "kind": "instances",
@@ -6248,7 +6248,7 @@
       "byteLength": 48
     },
     {
-      "path": "0/146/719",
+      "path": "0/149/719",
       "name": "Regional imported scenery instances",
       "signature": "4574251ccfec3967",
       "kind": "instances",
@@ -6257,7 +6257,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/720",
+      "path": "0/149/720",
       "name": "Regional imported scenery instances",
       "signature": "7979c987bceea758",
       "kind": "instances",
@@ -6266,7 +6266,7 @@
       "byteLength": 120
     },
     {
-      "path": "0/146/721",
+      "path": "0/149/721",
       "name": "Regional imported scenery instances",
       "signature": "a023c867f4e2ddc0",
       "kind": "instances",
@@ -6275,7 +6275,7 @@
       "byteLength": 244
     },
     {
-      "path": "0/146/722",
+      "path": "0/149/722",
       "name": "Regional imported scenery instances",
       "signature": "80d3866f7a0d86f3",
       "kind": "instances",
@@ -6284,7 +6284,7 @@
       "byteLength": 120
     },
     {
-      "path": "0/146/723",
+      "path": "0/149/723",
       "name": "Regional imported scenery instances",
       "signature": "526b6705b9fae139",
       "kind": "instances",
@@ -6293,7 +6293,7 @@
       "byteLength": 120
     },
     {
-      "path": "0/146/724",
+      "path": "0/149/724",
       "name": "Regional imported scenery instances",
       "signature": "d3dfd4d85ea3f962",
       "kind": "instances",
@@ -6302,7 +6302,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/725",
+      "path": "0/149/725",
       "name": "Regional imported scenery instances",
       "signature": "4519483065241aa9",
       "kind": "instances",
@@ -6311,7 +6311,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/726",
+      "path": "0/149/726",
       "name": "Regional imported scenery instances",
       "signature": "553ab5b939341a88",
       "kind": "instances",
@@ -6320,7 +6320,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/727",
+      "path": "0/149/727",
       "name": "Regional imported scenery instances",
       "signature": "8112a46c1a7e496c",
       "kind": "instances",
@@ -6329,7 +6329,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/728",
+      "path": "0/149/728",
       "name": "Regional static scenery batch",
       "signature": "05a3f0ed88d10d34",
       "kind": "vertices",
@@ -6338,7 +6338,7 @@
       "byteLength": 5200
     },
     {
-      "path": "0/146/729",
+      "path": "0/149/729",
       "name": "Regional imported scenery instances",
       "signature": "083f6a855d2df6f2",
       "kind": "instances",
@@ -6347,7 +6347,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/730",
+      "path": "0/149/730",
       "name": "Regional imported scenery instances",
       "signature": "0280b091db0c661f",
       "kind": "instances",
@@ -6356,7 +6356,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/731",
+      "path": "0/149/731",
       "name": "Regional imported scenery instances",
       "signature": "6a7a1be783d6c949",
       "kind": "instances",
@@ -6365,7 +6365,7 @@
       "byteLength": 76
     },
     {
-      "path": "0/146/732",
+      "path": "0/149/732",
       "name": "Regional imported scenery instances",
       "signature": "9d50bb39e2a59014",
       "kind": "instances",
@@ -6374,7 +6374,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/733",
+      "path": "0/149/733",
       "name": "Regional imported scenery instances",
       "signature": "8d58074decd1db3a",
       "kind": "instances",
@@ -6383,7 +6383,7 @@
       "byteLength": 164
     },
     {
-      "path": "0/146/734",
+      "path": "0/149/734",
       "name": "Regional static scenery batch",
       "signature": "ea2bb3f674c06917",
       "kind": "vertices",
@@ -6392,7 +6392,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/735",
+      "path": "0/149/735",
       "name": "Regional imported scenery instances",
       "signature": "23e8db165f8656cf",
       "kind": "instances",
@@ -6401,7 +6401,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/736",
+      "path": "0/149/736",
       "name": "Regional imported scenery instances",
       "signature": "76440562c2ac89e2",
       "kind": "instances",
@@ -6410,7 +6410,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/737",
+      "path": "0/149/737",
       "name": "Regional imported scenery instances",
       "signature": "a970626527487861",
       "kind": "instances",
@@ -6419,7 +6419,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/738",
+      "path": "0/149/738",
       "name": "Regional imported scenery instances",
       "signature": "697a1b42f6124bdb",
       "kind": "instances",
@@ -6428,7 +6428,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/739",
+      "path": "0/149/739",
       "name": "Regional static scenery batch",
       "signature": "05e35c5bf2994e2d",
       "kind": "vertices",
@@ -6437,7 +6437,7 @@
       "byteLength": 608
     },
     {
-      "path": "0/146/740",
+      "path": "0/149/740",
       "name": "Regional imported scenery instances",
       "signature": "45155f99bc10171e",
       "kind": "instances",
@@ -6446,7 +6446,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/741",
+      "path": "0/149/741",
       "name": "Regional imported scenery instances",
       "signature": "b638b6058d123182",
       "kind": "instances",
@@ -6455,7 +6455,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/742",
+      "path": "0/149/742",
       "name": "Regional imported scenery instances",
       "signature": "61f9cef4c34d2597",
       "kind": "instances",
@@ -6464,7 +6464,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/743",
+      "path": "0/149/743",
       "name": "Regional imported scenery instances",
       "signature": "2a9581f48691c7c8",
       "kind": "instances",
@@ -6473,7 +6473,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/744",
+      "path": "0/149/744",
       "name": "Regional imported scenery instances",
       "signature": "dfecb72caf5db356",
       "kind": "instances",
@@ -6482,7 +6482,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/745",
+      "path": "0/149/745",
       "name": "Regional imported scenery instances",
       "signature": "9b0d4a384be5ac8f",
       "kind": "instances",
@@ -6491,7 +6491,7 @@
       "byteLength": 68
     },
     {
-      "path": "0/146/746",
+      "path": "0/149/746",
       "name": "Regional imported scenery instances",
       "signature": "05e5bca077e9a864",
       "kind": "instances",
@@ -6500,7 +6500,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/747",
+      "path": "0/149/747",
       "name": "Regional imported scenery instances",
       "signature": "aae5d46c2be28607",
       "kind": "instances",
@@ -6509,7 +6509,7 @@
       "byteLength": 320
     },
     {
-      "path": "0/146/748",
+      "path": "0/149/748",
       "name": "Regional static scenery batch",
       "signature": "860583485227c970",
       "kind": "vertices",
@@ -6518,7 +6518,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/749",
+      "path": "0/149/749",
       "name": "Regional imported scenery instances",
       "signature": "5e3cd37a96ebbb63",
       "kind": "instances",
@@ -6527,7 +6527,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/750",
+      "path": "0/149/750",
       "name": "Regional imported scenery instances",
       "signature": "4284eb2b41da6d4f",
       "kind": "instances",
@@ -6536,7 +6536,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/751",
+      "path": "0/149/751",
       "name": "Regional imported scenery instances",
       "signature": "47fbeee890c79819",
       "kind": "instances",
@@ -6545,7 +6545,7 @@
       "byteLength": 48
     },
     {
-      "path": "0/146/752",
+      "path": "0/149/752",
       "name": "Regional imported scenery instances",
       "signature": "836fe8d05f0c6798",
       "kind": "instances",
@@ -6554,7 +6554,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/753",
+      "path": "0/149/753",
       "name": "Regional imported scenery instances",
       "signature": "5c3e1223e73fa305",
       "kind": "instances",
@@ -6563,7 +6563,7 @@
       "byteLength": 140
     },
     {
-      "path": "0/146/754",
+      "path": "0/149/754",
       "name": "Regional imported scenery instances",
       "signature": "86d362470d559d09",
       "kind": "instances",
@@ -6572,7 +6572,7 @@
       "byteLength": 288
     },
     {
-      "path": "0/146/755",
+      "path": "0/149/755",
       "name": "Regional static scenery batch",
       "signature": "c83f45a0afd99fcc",
       "kind": "vertices",
@@ -6581,7 +6581,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/756",
+      "path": "0/149/756",
       "name": "Regional imported scenery instances",
       "signature": "fd88583f83fac6eb",
       "kind": "instances",
@@ -6590,7 +6590,7 @@
       "byteLength": 140
     },
     {
-      "path": "0/146/757",
+      "path": "0/149/757",
       "name": "Regional imported scenery instances",
       "signature": "7318d8050dceb5bf",
       "kind": "instances",
@@ -6599,7 +6599,7 @@
       "byteLength": 140
     },
     {
-      "path": "0/146/758",
+      "path": "0/149/758",
       "name": "Regional imported scenery instances",
       "signature": "2497456c61031afc",
       "kind": "instances",
@@ -6608,7 +6608,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/759",
+      "path": "0/149/759",
       "name": "Regional imported scenery instances",
       "signature": "56bb6c9249c2e6bc",
       "kind": "instances",
@@ -6617,7 +6617,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/760",
+      "path": "0/149/760",
       "name": "Regional imported scenery instances",
       "signature": "d0bbe6c5170def2e",
       "kind": "instances",
@@ -6626,7 +6626,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/761",
+      "path": "0/149/761",
       "name": "Regional imported scenery instances",
       "signature": "eee57d3f33881d88",
       "kind": "instances",
@@ -6635,7 +6635,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/762",
+      "path": "0/149/762",
       "name": "Regional imported scenery instances",
       "signature": "a85215efeb40dac5",
       "kind": "instances",
@@ -6644,7 +6644,7 @@
       "byteLength": 56
     },
     {
-      "path": "0/146/763",
+      "path": "0/149/763",
       "name": "Regional imported scenery instances",
       "signature": "272d898b335ad0db",
       "kind": "instances",
@@ -6653,7 +6653,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/764",
+      "path": "0/149/764",
       "name": "Regional imported scenery instances",
       "signature": "d79d0a7c42cd7868",
       "kind": "instances",
@@ -6662,7 +6662,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/765",
+      "path": "0/149/765",
       "name": "Regional imported scenery instances",
       "signature": "ee8b1e280deaa46e",
       "kind": "instances",
@@ -6671,7 +6671,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/766",
+      "path": "0/149/766",
       "name": "Regional imported scenery instances",
       "signature": "b08d335b3665e9ab",
       "kind": "instances",
@@ -6680,7 +6680,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/767",
+      "path": "0/149/767",
       "name": "Regional static scenery batch",
       "signature": "095d4954f1f359aa",
       "kind": "vertices",
@@ -6689,7 +6689,7 @@
       "byteLength": 5200
     },
     {
-      "path": "0/146/768",
+      "path": "0/149/768",
       "name": "Regional imported scenery instances",
       "signature": "cbe1f275afc2e7a0",
       "kind": "instances",
@@ -6698,7 +6698,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/769",
+      "path": "0/149/769",
       "name": "Regional imported scenery instances",
       "signature": "4cd80f7179e85dda",
       "kind": "instances",
@@ -6707,7 +6707,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/770",
+      "path": "0/149/770",
       "name": "Regional imported scenery instances",
       "signature": "edf4b16c1b381806",
       "kind": "instances",
@@ -6716,7 +6716,7 @@
       "byteLength": 104
     },
     {
-      "path": "0/146/771",
+      "path": "0/149/771",
       "name": "Regional imported scenery instances",
       "signature": "bb8da86c0d646cf1",
       "kind": "instances",
@@ -6725,7 +6725,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/772",
+      "path": "0/149/772",
       "name": "Regional imported scenery instances",
       "signature": "1ba05c51d9a43277",
       "kind": "instances",
@@ -6734,7 +6734,7 @@
       "byteLength": 328
     },
     {
-      "path": "0/146/773",
+      "path": "0/149/773",
       "name": "Regional static scenery batch",
       "signature": "e377de92d197a112",
       "kind": "vertices",
@@ -6743,7 +6743,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/774",
+      "path": "0/149/774",
       "name": "Regional imported scenery instances",
       "signature": "3021c35ed6568699",
       "kind": "instances",
@@ -6752,7 +6752,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/775",
+      "path": "0/149/775",
       "name": "Regional imported scenery instances",
       "signature": "ca0c419f2006375d",
       "kind": "instances",
@@ -6761,7 +6761,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/776",
+      "path": "0/149/776",
       "name": "Regional imported scenery instances",
       "signature": "84d78cc53c8f186d",
       "kind": "instances",
@@ -6770,7 +6770,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/777",
+      "path": "0/149/777",
       "name": "Regional imported scenery instances",
       "signature": "c0ecaeea552ecda7",
       "kind": "instances",
@@ -6779,7 +6779,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/778",
+      "path": "0/149/778",
       "name": "Regional imported scenery instances",
       "signature": "64e58d2a62fc30ae",
       "kind": "instances",
@@ -6788,7 +6788,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/779",
+      "path": "0/149/779",
       "name": "Regional imported scenery instances",
       "signature": "7650946bf3889e52",
       "kind": "instances",
@@ -6797,7 +6797,7 @@
       "byteLength": 120
     },
     {
-      "path": "0/146/780",
+      "path": "0/149/780",
       "name": "Regional imported scenery instances",
       "signature": "d8855a85175e901b",
       "kind": "instances",
@@ -6806,7 +6806,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/781",
+      "path": "0/149/781",
       "name": "Regional imported scenery instances",
       "signature": "0b6c2d02172b00aa",
       "kind": "instances",
@@ -6815,7 +6815,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/782",
+      "path": "0/149/782",
       "name": "Regional imported scenery instances",
       "signature": "1bcdc3de3fa00cd6",
       "kind": "instances",
@@ -6824,7 +6824,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/783",
+      "path": "0/149/783",
       "name": "Regional imported scenery instances",
       "signature": "e6cf570e2f5f4087",
       "kind": "instances",
@@ -6833,7 +6833,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/784",
+      "path": "0/149/784",
       "name": "Regional imported scenery instances",
       "signature": "691cf262e85ce7cd",
       "kind": "instances",
@@ -6842,7 +6842,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/785",
+      "path": "0/149/785",
       "name": "Regional static scenery batch",
       "signature": "5be4968a6c31287d",
       "kind": "vertices",
@@ -6851,7 +6851,7 @@
       "byteLength": 4896
     },
     {
-      "path": "0/146/786",
+      "path": "0/149/786",
       "name": "Regional imported scenery instances",
       "signature": "73841fa3ac779aac",
       "kind": "instances",
@@ -6860,7 +6860,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/787",
+      "path": "0/149/787",
       "name": "Regional imported scenery instances",
       "signature": "70bdc2d849eae1c9",
       "kind": "instances",
@@ -6869,7 +6869,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/788",
+      "path": "0/149/788",
       "name": "Regional imported scenery instances",
       "signature": "120cca7874b15933",
       "kind": "instances",
@@ -6878,7 +6878,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/789",
+      "path": "0/149/789",
       "name": "Regional imported scenery instances",
       "signature": "f9fb2b7074670841",
       "kind": "instances",
@@ -6887,7 +6887,7 @@
       "byteLength": 120
     },
     {
-      "path": "0/146/790",
+      "path": "0/149/790",
       "name": "Regional imported scenery instances",
       "signature": "7cf0972b01070a59",
       "kind": "instances",
@@ -6896,7 +6896,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/791",
+      "path": "0/149/791",
       "name": "Regional static scenery batch",
       "signature": "cb4a5a5b415b0082",
       "kind": "vertices",
@@ -6905,7 +6905,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/792",
+      "path": "0/149/792",
       "name": "Regional imported scenery instances",
       "signature": "d73da14ae95d2eec",
       "kind": "instances",
@@ -6914,7 +6914,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/793",
+      "path": "0/149/793",
       "name": "Regional imported scenery instances",
       "signature": "5986fe3d6a5aba91",
       "kind": "instances",
@@ -6923,7 +6923,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/794",
+      "path": "0/149/794",
       "name": "Regional imported scenery instances",
       "signature": "3acf8a415f1b645a",
       "kind": "instances",
@@ -6932,7 +6932,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/795",
+      "path": "0/149/795",
       "name": "Regional imported scenery instances",
       "signature": "72d57d76d5a7b483",
       "kind": "instances",
@@ -6941,7 +6941,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/796",
+      "path": "0/149/796",
       "name": "Regional imported scenery instances",
       "signature": "91398be453621536",
       "kind": "instances",
@@ -6950,7 +6950,7 @@
       "byteLength": 320
     },
     {
-      "path": "0/146/797",
+      "path": "0/149/797",
       "name": "Regional imported scenery instances",
       "signature": "0756879f2fd323e9",
       "kind": "instances",
@@ -6959,7 +6959,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/798",
+      "path": "0/149/798",
       "name": "Regional imported scenery instances",
       "signature": "34847adabcded91c",
       "kind": "instances",
@@ -6968,7 +6968,7 @@
       "byteLength": 44
     },
     {
-      "path": "0/146/799",
+      "path": "0/149/799",
       "name": "Regional static scenery batch",
       "signature": "dd006c0d7cbdb753",
       "kind": "vertices",
@@ -6977,7 +6977,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/800",
+      "path": "0/149/800",
       "name": "Regional imported scenery instances",
       "signature": "439bab20a5f1e09d",
       "kind": "instances",
@@ -6986,7 +6986,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/801",
+      "path": "0/149/801",
       "name": "Regional imported scenery instances",
       "signature": "7a97298c861a7b26",
       "kind": "instances",
@@ -6995,7 +6995,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/802",
+      "path": "0/149/802",
       "name": "Regional imported scenery instances",
       "signature": "ee016667dedcd620",
       "kind": "instances",
@@ -7004,7 +7004,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/803",
+      "path": "0/149/803",
       "name": "Regional imported scenery instances",
       "signature": "d41830b97b450da7",
       "kind": "instances",
@@ -7013,7 +7013,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/804",
+      "path": "0/149/804",
       "name": "Regional imported scenery instances",
       "signature": "27562588c0d3d99c",
       "kind": "instances",
@@ -7022,7 +7022,7 @@
       "byteLength": 52
     },
     {
-      "path": "0/146/805",
+      "path": "0/149/805",
       "name": "Regional imported scenery instances",
       "signature": "9b09bb527145268e",
       "kind": "instances",
@@ -7031,7 +7031,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/806",
+      "path": "0/149/806",
       "name": "Regional imported scenery instances",
       "signature": "fbf194c4484080ef",
       "kind": "instances",
@@ -7040,7 +7040,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/807",
+      "path": "0/149/807",
       "name": "Regional imported scenery instances",
       "signature": "315095c4e510ca84",
       "kind": "instances",
@@ -7049,7 +7049,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/808",
+      "path": "0/149/808",
       "name": "Regional imported scenery instances",
       "signature": "bf56dd9bd19117ab",
       "kind": "instances",
@@ -7058,7 +7058,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/809",
+      "path": "0/149/809",
       "name": "Regional imported scenery instances",
       "signature": "a5635862c09fedde",
       "kind": "instances",
@@ -7067,7 +7067,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/810",
+      "path": "0/149/810",
       "name": "Regional imported scenery instances",
       "signature": "f016f895d44b1533",
       "kind": "instances",
@@ -7076,7 +7076,7 @@
       "byteLength": 120
     },
     {
-      "path": "0/146/811",
+      "path": "0/149/811",
       "name": "Regional imported scenery instances",
       "signature": "65b6ae6e11a87f71",
       "kind": "instances",
@@ -7085,7 +7085,7 @@
       "byteLength": 28
     },
     {
-      "path": "0/146/812",
+      "path": "0/149/812",
       "name": "Regional imported scenery instances",
       "signature": "252deccbfc841823",
       "kind": "instances",
@@ -7094,7 +7094,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/813",
+      "path": "0/149/813",
       "name": "Regional imported scenery instances",
       "signature": "3fa28cd33bfe2cb6",
       "kind": "instances",
@@ -7103,7 +7103,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/814",
+      "path": "0/149/814",
       "name": "Regional imported scenery instances",
       "signature": "64cb7e07a9be340a",
       "kind": "instances",
@@ -7112,7 +7112,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/815",
+      "path": "0/149/815",
       "name": "Regional imported scenery instances",
       "signature": "9fe1b24241d43da0",
       "kind": "instances",
@@ -7121,7 +7121,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/816",
+      "path": "0/149/816",
       "name": "Regional imported scenery instances",
       "signature": "4d74729030986562",
       "kind": "instances",
@@ -7130,7 +7130,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/817",
+      "path": "0/149/817",
       "name": "Regional imported scenery instances",
       "signature": "ba81328adb05e32c",
       "kind": "instances",
@@ -7139,7 +7139,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/818",
+      "path": "0/149/818",
       "name": "Regional static scenery batch",
       "signature": "23150802699b1c28",
       "kind": "vertices",
@@ -7148,7 +7148,7 @@
       "byteLength": 5200
     },
     {
-      "path": "0/146/819",
+      "path": "0/149/819",
       "name": "Regional imported scenery instances",
       "signature": "7a4b62da5be103ec",
       "kind": "instances",
@@ -7157,7 +7157,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/820",
+      "path": "0/149/820",
       "name": "Regional imported scenery instances",
       "signature": "b27141b88030a98a",
       "kind": "instances",
@@ -7166,7 +7166,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/821",
+      "path": "0/149/821",
       "name": "Regional imported scenery instances",
       "signature": "d9938e1e34b6e65a",
       "kind": "instances",
@@ -7175,7 +7175,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/822",
+      "path": "0/149/822",
       "name": "Regional imported scenery instances",
       "signature": "210a2e25cfabef1e",
       "kind": "instances",
@@ -7184,7 +7184,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/823",
+      "path": "0/149/823",
       "name": "Regional imported scenery instances",
       "signature": "5e4b5dba4012dfea",
       "kind": "instances",
@@ -7193,7 +7193,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/824",
+      "path": "0/149/824",
       "name": "Regional imported scenery instances",
       "signature": "82f35bd905de9677",
       "kind": "instances",
@@ -7202,7 +7202,7 @@
       "byteLength": 20
     },
     {
-      "path": "0/146/825",
+      "path": "0/149/825",
       "name": "Regional imported scenery instances",
       "signature": "a9bdb749c7d086c7",
       "kind": "instances",
@@ -7211,7 +7211,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/826",
+      "path": "0/149/826",
       "name": "Regional imported scenery instances",
       "signature": "68158f4dda21e9b5",
       "kind": "instances",
@@ -7220,7 +7220,7 @@
       "byteLength": 32
     },
     {
-      "path": "0/146/827",
+      "path": "0/149/827",
       "name": "Regional imported scenery instances",
       "signature": "7523f418bbf782b3",
       "kind": "instances",
@@ -7229,7 +7229,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/828",
+      "path": "0/149/828",
       "name": "Regional imported scenery instances",
       "signature": "06582daf1ff119ca",
       "kind": "instances",
@@ -7238,7 +7238,7 @@
       "byteLength": 220
     },
     {
-      "path": "0/146/829",
+      "path": "0/149/829",
       "name": "Regional imported scenery instances",
       "signature": "ca07b03895ee679a",
       "kind": "instances",
@@ -7247,7 +7247,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/830",
+      "path": "0/149/830",
       "name": "Regional static scenery batch",
       "signature": "ed84d01ed0e48c65",
       "kind": "vertices",
@@ -7256,7 +7256,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/831",
+      "path": "0/149/831",
       "name": "Regional imported scenery instances",
       "signature": "5807969831f71883",
       "kind": "instances",
@@ -7265,7 +7265,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/832",
+      "path": "0/149/832",
       "name": "Regional imported scenery instances",
       "signature": "3b4856ecc25fc45b",
       "kind": "instances",
@@ -7274,7 +7274,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/833",
+      "path": "0/149/833",
       "name": "Regional imported scenery instances",
       "signature": "798489f421fab5af",
       "kind": "instances",
@@ -7283,7 +7283,7 @@
       "byteLength": 160
     },
     {
-      "path": "0/146/834",
+      "path": "0/149/834",
       "name": "Regional imported scenery instances",
       "signature": "fa83faaa734a3afa",
       "kind": "instances",
@@ -7292,7 +7292,7 @@
       "byteLength": 300
     },
     {
-      "path": "0/146/835",
+      "path": "0/149/835",
       "name": "Regional imported scenery instances",
       "signature": "d72f16fe7271cf1a",
       "kind": "instances",
@@ -7301,7 +7301,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/836",
+      "path": "0/149/836",
       "name": "Regional static scenery batch",
       "signature": "e022e05829943a07",
       "kind": "vertices",
@@ -7310,7 +7310,7 @@
       "byteLength": 5164
     },
     {
-      "path": "0/146/837",
+      "path": "0/149/837",
       "name": "Regional imported scenery instances",
       "signature": "0b7a03811cbe281e",
       "kind": "instances",
@@ -7319,7 +7319,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/838",
+      "path": "0/149/838",
       "name": "Regional imported scenery instances",
       "signature": "842a338e9091e602",
       "kind": "instances",
@@ -7328,7 +7328,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/839",
+      "path": "0/149/839",
       "name": "Regional imported scenery instances",
       "signature": "b9fbdd393d18462c",
       "kind": "instances",
@@ -7337,7 +7337,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/840",
+      "path": "0/149/840",
       "name": "Regional imported scenery instances",
       "signature": "5e9253f4c441f477",
       "kind": "instances",
@@ -7346,7 +7346,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/841",
+      "path": "0/149/841",
       "name": "Regional imported scenery instances",
       "signature": "43b3a8e542e8ffc1",
       "kind": "instances",
@@ -7355,7 +7355,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/842",
+      "path": "0/149/842",
       "name": "Regional imported scenery instances",
       "signature": "cdf9b652c4dbfcd0",
       "kind": "instances",
@@ -7364,7 +7364,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/843",
+      "path": "0/149/843",
       "name": "Regional imported scenery instances",
       "signature": "37d9a6cf8727507f",
       "kind": "instances",
@@ -7373,7 +7373,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/844",
+      "path": "0/149/844",
       "name": "Regional imported scenery instances",
       "signature": "c5912945a1df3d2a",
       "kind": "instances",
@@ -7382,7 +7382,7 @@
       "byteLength": 188
     },
     {
-      "path": "0/146/845",
+      "path": "0/149/845",
       "name": "Regional imported scenery instances",
       "signature": "71aa1d89a2cc156a",
       "kind": "instances",
@@ -7391,7 +7391,7 @@
       "byteLength": 80
     },
     {
-      "path": "0/146/846",
+      "path": "0/149/846",
       "name": "Regional static scenery batch",
       "signature": "d3c1df1238ca46b1",
       "kind": "vertices",
@@ -7400,7 +7400,7 @@
       "byteLength": 4896
     },
     {
-      "path": "0/146/847",
+      "path": "0/149/847",
       "name": "Regional imported scenery instances",
       "signature": "2ab36a3893adbb6e",
       "kind": "instances",
@@ -7409,7 +7409,7 @@
       "byteLength": 44
     },
     {
-      "path": "0/146/848",
+      "path": "0/149/848",
       "name": "Regional imported scenery instances",
       "signature": "ff345e813b88b97a",
       "kind": "instances",
@@ -7418,7 +7418,7 @@
       "byteLength": 48
     },
     {
-      "path": "0/146/849",
+      "path": "0/149/849",
       "name": "Regional imported scenery instances",
       "signature": "a78281e80fb4e6c9",
       "kind": "instances",
@@ -7427,7 +7427,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/850",
+      "path": "0/149/850",
       "name": "Regional imported scenery instances",
       "signature": "7ec84c7cdb00e1be",
       "kind": "instances",
@@ -7436,7 +7436,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/851",
+      "path": "0/149/851",
       "name": "Regional imported scenery instances",
       "signature": "8e7f8353919e22c1",
       "kind": "instances",
@@ -7445,7 +7445,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/852",
+      "path": "0/149/852",
       "name": "Regional imported scenery instances",
       "signature": "d68980bfc1a70a7a",
       "kind": "instances",
@@ -7454,7 +7454,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/853",
+      "path": "0/149/853",
       "name": "Regional imported scenery instances",
       "signature": "8135d1cfbae61b1d",
       "kind": "instances",
@@ -7463,7 +7463,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/854",
+      "path": "0/149/854",
       "name": "Regional imported scenery instances",
       "signature": "48df62707e4b7bf5",
       "kind": "instances",
@@ -7472,7 +7472,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/855",
+      "path": "0/149/855",
       "name": "Regional imported scenery instances",
       "signature": "f8ceb46aed187834",
       "kind": "instances",
@@ -7481,7 +7481,7 @@
       "byteLength": 100
     },
     {
-      "path": "0/146/856",
+      "path": "0/149/856",
       "name": "Regional imported scenery instances",
       "signature": "af3a784a9166c68c",
       "kind": "instances",
@@ -7490,7 +7490,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/857",
+      "path": "0/149/857",
       "name": "Regional imported scenery instances",
       "signature": "e190eb3b9489a1a5",
       "kind": "instances",
@@ -7499,7 +7499,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/858",
+      "path": "0/149/858",
       "name": "Regional imported scenery instances",
       "signature": "027597b337119a96",
       "kind": "instances",
@@ -7508,7 +7508,7 @@
       "byteLength": 60
     },
     {
-      "path": "0/146/859",
+      "path": "0/149/859",
       "name": "Regional imported scenery instances",
       "signature": "3ba50abae7a0ef41",
       "kind": "instances",
@@ -7517,7 +7517,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/860",
+      "path": "0/149/860",
       "name": "Regional imported scenery instances",
       "signature": "e11e9ccc9ce989a1",
       "kind": "instances",
@@ -7526,7 +7526,7 @@
       "byteLength": 40
     },
     {
-      "path": "0/146/861",
+      "path": "0/149/861",
       "name": "Regional imported scenery instances",
       "signature": "05fa3086275dbced",
       "kind": "instances",
@@ -7535,7 +7535,7 @@
       "byteLength": 24
     },
     {
-      "path": "0/146/862",
+      "path": "0/149/862",
       "name": "Regional imported scenery instances",
       "signature": "0093886731fd1d6d",
       "kind": "instances",
@@ -7544,7 +7544,7 @@
       "byteLength": 28
     },
     {
-      "path": "0/146/863",
+      "path": "0/149/863",
       "name": "Regional static scenery batch",
       "signature": "f85844ff197bed69",
       "kind": "vertices",
@@ -7553,7 +7553,7 @@
       "byteLength": 3280
     },
     {
-      "path": "0/146/864",
+      "path": "0/149/864",
       "name": "Regional imported scenery instances",
       "signature": "ef824ea564df54ed",
       "kind": "instances",
@@ -8122,7 +8122,7 @@
     {
       "path": "1/1/28",
       "name": "Regional static scenery batch",
-      "signature": "8e688a0156c81d6d",
+      "signature": "90b80fa695c39781",
       "kind": "vertices",
       "count": 4200,
       "byteOffset": 1766540,
@@ -8131,7 +8131,7 @@
     {
       "path": "1/1/29",
       "name": "Regional static scenery batch",
-      "signature": "19b5b72a3dbb2c69",
+      "signature": "04191633b0ed9d3a",
       "kind": "vertices",
       "count": 16,
       "byteOffset": 1783340,
@@ -8140,7 +8140,7 @@
     {
       "path": "1/1/30",
       "name": "Regional static scenery batch",
-      "signature": "9842043c03ba4c7b",
+      "signature": "a1ce3940b6f50793",
       "kind": "vertices",
       "count": 88,
       "byteOffset": 1783404,
@@ -8149,7 +8149,7 @@
     {
       "path": "1/1/31",
       "name": "Regional static scenery batch",
-      "signature": "1b607ac3b4e16b9a",
+      "signature": "7292602e920a4ff9",
       "kind": "vertices",
       "count": 96,
       "byteOffset": 1783756,
@@ -8158,7 +8158,7 @@
     {
       "path": "1/1/32",
       "name": "Regional static scenery batch",
-      "signature": "16c9f0ea9742594e",
+      "signature": "c953c51fa0de8572",
       "kind": "vertices",
       "count": 16,
       "byteOffset": 1784140,
@@ -8167,7 +8167,7 @@
     {
       "path": "1/1/33",
       "name": "Regional static scenery batch",
-      "signature": "2ae887359b575149",
+      "signature": "87d6ecb5e3892227",
       "kind": "vertices",
       "count": 4200,
       "byteOffset": 1784204,
@@ -8176,7 +8176,7 @@
     {
       "path": "1/1/34",
       "name": "Regional static scenery batch",
-      "signature": "1e7c27776719e40d",
+      "signature": "b0f6cb381f66ce52",
       "kind": "vertices",
       "count": 16,
       "byteOffset": 1801004,
@@ -8185,7 +8185,7 @@
     {
       "path": "1/1/35",
       "name": "Regional static scenery batch",
-      "signature": "5d36229c2841ed65",
+      "signature": "28788b0c14e67cb0",
       "kind": "vertices",
       "count": 88,
       "byteOffset": 1801068,
@@ -8194,7 +8194,7 @@
     {
       "path": "1/1/36",
       "name": "Regional static scenery batch",
-      "signature": "fe60a773654b9124",
+      "signature": "bd89562955aa058d",
       "kind": "vertices",
       "count": 96,
       "byteOffset": 1801420,
@@ -8203,7 +8203,7 @@
     {
       "path": "1/1/37",
       "name": "Regional static scenery batch",
-      "signature": "b782122569420637",
+      "signature": "a8bdff0eedd9d7db",
       "kind": "vertices",
       "count": 16,
       "byteOffset": 1801804,
@@ -8887,7 +8887,7 @@
     {
       "path": "6/11/47",
       "name": "Regional imported scenery instances",
-      "signature": "31b0defef690c7d0",
+      "signature": "1eb91d960a28fcb2",
       "kind": "instances",
       "count": 8,
       "byteOffset": 1898672,
@@ -8896,7 +8896,7 @@
     {
       "path": "6/11/48",
       "name": "Regional imported scenery instances",
-      "signature": "b36522a5c62c6807",
+      "signature": "abbfa26678969fe2",
       "kind": "instances",
       "count": 4,
       "byteOffset": 1898704,
@@ -8905,7 +8905,7 @@
     {
       "path": "6/11/49",
       "name": "Regional imported scenery instances",
-      "signature": "10b4ee135d0ec5b0",
+      "signature": "fb3a51157b86e45d",
       "kind": "instances",
       "count": 4,
       "byteOffset": 1898720,
@@ -8914,7 +8914,7 @@
     {
       "path": "6/11/50",
       "name": "Regional imported scenery instances",
-      "signature": "2135277e2dd9384f",
+      "signature": "849474e241c509bf",
       "kind": "instances",
       "count": 4,
       "byteOffset": 1898736,
@@ -8923,7 +8923,7 @@
     {
       "path": "6/11/51",
       "name": "Regional imported scenery instances",
-      "signature": "2a5d97ada11d6895",
+      "signature": "7d3ed5336e7ac640",
       "kind": "instances",
       "count": 3,
       "byteOffset": 1898752,
@@ -8932,7 +8932,7 @@
     {
       "path": "6/11/52",
       "name": "Regional imported scenery instances",
-      "signature": "fd8f2f3791505924",
+      "signature": "2f1d2fedf0099352",
       "kind": "instances",
       "count": 6,
       "byteOffset": 1898764,
@@ -8941,7 +8941,7 @@
     {
       "path": "6/11/53",
       "name": "Regional imported scenery instances",
-      "signature": "f71481005bcbc908",
+      "signature": "a497be9572c750de",
       "kind": "instances",
       "count": 4,
       "byteOffset": 1898788,
@@ -8950,7 +8950,7 @@
     {
       "path": "6/11/54",
       "name": "Regional imported scenery instances",
-      "signature": "1fa09af7f9f3b19b",
+      "signature": "173c5181ac4bbcfc",
       "kind": "instances",
       "count": 3,
       "byteOffset": 1898804,
@@ -9383,7 +9383,7 @@
   "binary": {
     "file": "mesh-lighting.bin",
     "bytes": 1920216,
-    "sha256": "1a5328cbafa31e46c00944d1b17f48c6486bc572aa37fe892a19d048f19b27bd"
+    "sha256": "e06d67b3d044a37dd30e62875373aa755806440f8c89aee05ee861cc4137d557"
   },
   "method": "Normal-relative BVH visibility and diffuse bounce plus ray-tested local lamps; direct sunlight excluded."
 }

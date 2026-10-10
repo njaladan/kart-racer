@@ -5,6 +5,7 @@ import course from "../src/courses/clockwork-citadel.js";
 import { selectCourse } from "../src/track/track.js";
 import { buildAreaSurfaces, groundGeometry } from "../src/rendering/area-surfaces.js";
 import { createCourseKit } from "../src/rendering/course-kit.js";
+import { buildWatchInterior } from "../src/courses/experiences/watch-interior.js";
 import { createRouteClearance } from "../src/rendering/route-clearance.js";
 import { createRacerState } from "../src/simulation/racer-state.js";
 import { initializeRacer, advanceRacer, recoverRacer } from "../src/simulation/simulation.js";
@@ -14,6 +15,46 @@ import { packRacer, applyRacer } from "../src/multiplayer/protocol.js";
 
 const track = selectCourse(course),
   bowl = track.areaSurfaces[0];
+
+test("gold bowl markings stay above the rendered lane and floor on both routes", () => {
+  const scene = new THREE.Scene(),
+    scenery = new THREE.Group();
+  scene.add(scenery);
+  const kit = createCourseKit(scenery, track);
+  buildAreaSurfaces(track, kit, {});
+  buildWatchInterior({ track, kit, scenery, animated: [], updates: [], sign() {} });
+  scene.updateMatrixWorld(true);
+  const floor = scene.getObjectByName("Continuous curved driving bowl"),
+    guides = scenery.userData.bowlGuides,
+    lanes = guides.filter((object) => object.name === "Bowl route gently widens and converges"),
+    markings = guides.filter((object) => !lanes.includes(object)),
+    ray = new THREE.Raycaster(),
+    down = new THREE.Vector3(0, -1, 0),
+    p = new THREE.Vector3(),
+    vertex = new THREE.Vector3();
+  scenery.traverse((object) => {
+    if (object.name === "Bowl forward chevron") markings.push(object);
+  });
+  assert.equal(lanes.length, 2);
+  assert.equal(markings.length, 60);
+  for (const marking of markings) {
+    const { position } = marking.geometry.attributes,
+      index = marking.geometry.index;
+    const receivers =
+      marking.name === "Bowl forward chevron" ? [floor, ...guides] : [floor, ...lanes];
+    // Sample triangle interiors: curved, differently tessellated layers can
+    // intersect even when all their vertices follow the analytic saucer.
+    for (let i = 0; i < index.count; i += 36) {
+      p.set(0, 0, 0);
+      for (let j = 0; j < 3; j++) p.add(vertex.fromBufferAttribute(position, index.getX(i + j)));
+      p.multiplyScalar(1 / 3);
+      ray.set(vertex.copy(p).setY(150), down);
+      const hits = ray.intersectObjects(receivers, false);
+      assert.ok(hits.length, "marking has a receiving surface");
+      assert.ok(p.y - hits[0].point.y > 0.01, `${marking.name} intersects its receiving surface`);
+    }
+  }
+});
 
 test("both route identities support the whole curved bowl far beyond their guide ribbons", () => {
   assert.equal(track.areaSurfaces.length, 1);
