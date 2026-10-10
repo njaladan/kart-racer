@@ -97,6 +97,26 @@ export function backgroundKit(w) {
     object.name = "Downloaded rounded Kenney rock formation";
     return object;
   }
+  function downloaded(name, parent, position, dimensions) {
+    const object = w.assets.models?.[name]
+      ? w.kit.fitAsset(name, parent, position, dimensions)
+      : w.mesh(
+          w.kit.authoredGeometry(name, dimensions),
+          material("#998771", "wood"),
+          parent,
+          position,
+        );
+    object.traverse((part) => {
+      if (!part.isMesh) return;
+      part.castShadow = false;
+      const materials = Array.isArray(part.material) ? part.material : [part.material];
+      for (const m of materials) {
+        m.name = "Background scenery";
+        m.userData.sceneryCellSize = 384;
+      }
+    });
+    return object;
+  }
   function group(parent, position = [0, 0, 0]) {
     const object = new THREE.Group();
     parent.add(object);
@@ -188,5 +208,18 @@ export function backgroundKit(w) {
     w.kit.batch(combined);
     return w.motion(object, update);
   }
-  return { ...w, mat: material, mesh, box, rock, group, tube, surfaceY, place, motion, sites };
+  return {
+    ...w,
+    mat: material,
+    mesh,
+    box,
+    rock,
+    downloaded,
+    group,
+    tube,
+    surfaceY,
+    place,
+    motion,
+    sites,
+  };
 }

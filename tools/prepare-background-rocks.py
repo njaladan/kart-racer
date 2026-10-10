@@ -86,5 +86,21 @@ else:
                 'bytes': len(data), 'sha256': sha(data),
                 'modifications': 'Coincident hard-edge vertices welded, two subdivision levels and smooth normals; original silhouette and materials retained. Shared scanned rock shading is applied by the course.'
             })
+        if course == 'pelagic-glasshouse':
+            pirate = next(p for p in json.loads(catalog)['packs'] if p['id'] == 'pirate-kit')
+            if pirate['license'] != 'CC0-1.0':
+                raise ValueError('Expected CC0 shipwreck')
+            url = BASE + 'packs/pirate-kit/ship-wreck.glb'
+            data = urllib.request.urlopen(url, timeout=30).read()
+            file = 'models/background-ship-wreck.glb'
+            (folder / file).write_bytes(data)
+            manifest['models'] = [m for m in manifest['models'] if m['name'] != 'background:shipwreck']
+            manifest['models'].append({
+                'name': 'background:shipwreck', 'file': file, 'type': 'gltf',
+                'author': 'Kenney', 'license': 'CC0-1.0',
+                'source': 'https://kenney.nl/assets/pirate-kit', 'download': url,
+                'sourceSha256': sha(data), 'catalogSha256': sha(catalog),
+                'attribution': 'licenses/CC0.txt', 'bytes': len(data), 'sha256': sha(data)
+            })
         (folder / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
         print('Prepared downloaded background rocks for', course, flush=True)
