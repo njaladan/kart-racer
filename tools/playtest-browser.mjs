@@ -16,7 +16,14 @@ await mkdir(output, { recursive: true });
 const browser = await chromium.launch({
   executablePath: process.env.CHROMIUM_PATH || "/usr/bin/chromium",
   headless: true,
-  args: ["--no-sandbox", "--disable-dev-shm-usage", "--use-angle=swiftshader"],
+  args: [
+    "--no-sandbox",
+    "--disable-dev-shm-usage",
+    "--use-angle=swiftshader",
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-vulkan=swiftshader",
+  ],
 });
 const reports = [];
 try {

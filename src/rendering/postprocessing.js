@@ -1,17 +1,18 @@
+import { RenderTarget } from "../../vendor/three/three.webgpu.js";
 import * as THREE from "../../vendor/three/three.module.js";
 
-const vertexShader = `varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}`;
+const vertexShader = `varying vec2 vUv;void main(){vUv=vec2(uv.x,1.-uv.y);gl_Position=vec4(position.xy,0.,1.);}`;
 
 /** HDR scene + quarter-size separable bloom. Low tier renders directly. */
 export function createPostProcessing(renderer, theme = {}, wetReflections = null) {
-  const target = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 2 });
-  const bloomA = new THREE.WebGLRenderTarget(1, 1, {
+  const target = new RenderTarget(1, 1, { type: THREE.HalfFloatType, samples: 4 });
+  const bloomA = new RenderTarget(1, 1, {
     type: THREE.HalfFloatType,
     depthBuffer: false,
   });
   const bloomB = bloomA.clone();
   const fullscreen = new THREE.Scene();
-  const camera = new THREE.Camera();
+  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
   const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2));
   quad.frustumCulled = false;
   fullscreen.add(quad);
@@ -22,9 +23,9 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
     uniforms: { source: { value: target.texture }, texel: { value: new THREE.Vector2() } },
     vertexShader,
     fragmentShader: `uniform sampler2D source;uniform vec2 texel;varying vec2 vUv;
-      void main(){vec3 sum=vec3(0.);for(int x=-1;x<=1;x++)for(int y=-1;y<=1;y++){
+      void main(){vec3 sum=vec3(0.);for(int x=-1;x<=1;x++){for(int y=-1;y<=1;y++){
         vec3 c=texture2D(source,vUv+vec2(float(x),float(y))*texel).rgb;
-        float l=max(c.r,max(c.g,c.b));sum+=c*max(l-1.05,0.)/max(l,.0001);}
+        float l=max(c.r,max(c.g,c.b));sum+=c*max(l-1.05,0.)/max(l,.0001);}}
         gl_FragColor=vec4(sum/9.,1.);}`,
   });
   const blur = new THREE.ShaderMaterial({

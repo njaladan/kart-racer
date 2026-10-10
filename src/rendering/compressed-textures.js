@@ -76,7 +76,7 @@ export async function loadCompressedTexture(renderer, url, options = {}) {
   if (!texture) texture = await textureLoader.loadAsync(url);
   texture.colorSpace = colorSpace;
   texture.wrapS = texture.wrapT = wrap;
-  const maxAnisotropy = renderer?.capabilities?.getMaxAnisotropy?.() ?? 1;
+  const maxAnisotropy = renderer?.getMaxAnisotropy?.() ?? 1;
   texture.anisotropy = Math.max(1, Math.min(anisotropy, maxAnisotropy));
   texture.generateMipmaps = texture.mipmaps?.length ? false : true;
   texture.needsUpdate = true;

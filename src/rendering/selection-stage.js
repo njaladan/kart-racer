@@ -1,15 +1,17 @@
+import { PMREMGenerator } from "../../vendor/three/three.webgpu.js";
+import { createWebGPURenderer } from "./webgpu-renderer.js";
 import * as THREE from "../../vendor/three/three.module.js";
 import { createKartBuilder } from "./kart-builder.js";
 import { RACERS } from "./racer-roster.js";
 import { contactShadow } from "./visuals.js";
 
 /** A small showroom, rendered only while visible, using the actual racing models. */
-export function createSelectionStage({ canvas, models, environment, menu }) {
+export async function createSelectionStage({ canvas, models, environment, menu }) {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(34, 1, 0.1, 40);
   camera.position.set(4.7, 3.1, 5.6);
   camera.lookAt(0, 0.8, 0);
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  const renderer = await createWebGPURenderer({ canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.NeutralToneMapping;
@@ -20,7 +22,11 @@ export function createSelectionStage({ canvas, models, environment, menu }) {
   const rim = new THREE.DirectionalLight("#a6b6ff", 2);
   rim.position.set(-3, 3, -4);
   scene.add(rim);
-  scene.environment = environment;
+  const environmentGenerator = new PMREMGenerator(renderer);
+  const previewEnvironment = environmentGenerator.fromEquirectangular(
+    environment.userData.sourceEnvironment,
+  );
+  scene.environment = previewEnvironment.texture;
   const plinth = new THREE.Mesh(
     new THREE.CylinderGeometry(2.5, 2.65, 0.2, 64),
     new THREE.MeshStandardMaterial({ color: "#242d40", metalness: 0.35, roughness: 0.35 }),
@@ -37,7 +43,7 @@ export function createSelectionStage({ canvas, models, environment, menu }) {
   const build = createKartBuilder({
     scene,
     models,
-    textures: { environment },
+    textures: { environment: scene.environment },
     shadowTexture: contactShadow(),
   });
   const karts = new Map();

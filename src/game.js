@@ -1,3 +1,4 @@
+import { promotePointFields } from "./rendering/webgpu-points.js";
 import { createSelectionStage } from "./rendering/selection-stage.js";
 import * as THREE from "../vendor/three/three.module.js";
 import { createAudioController } from "./audio/audio.js";
@@ -67,7 +68,8 @@ async function startGame() {
   installCourseBake(scene, courseBake);
   installMaterialPolish(scene);
   scene.updateMatrixWorld(true);
-  sceneState.environmentMaps.capture(scene, activeTrack);
+  promotePointFields(scene);
+  await sceneState.environmentMaps.capture(scene, activeTrack);
   const racers = createRaceGrid(roster);
   if (multiplayer) {
     racers.forEach((racer, index) => {
@@ -96,7 +98,7 @@ async function startGame() {
     audio.play("ui");
   });
   const particles = new ParticlePool(scene);
-  const selectionStage = createSelectionStage({
+  const selectionStage = await createSelectionStage({
     canvas: document.getElementById("selection-stage"),
     models: courseAssets.models,
     environment: sharedAssets.environment,
@@ -264,7 +266,7 @@ async function startGame() {
   sceneState.graphicsQuality.attachWorld(landscape, particles);
   const animatedScenery = [...landscape.animated, ...racers.map((racer) => racer.kart.root)];
   const materialVariants = stabilizeSceneryMaterials(scene, animatedScenery);
-  const multiDraw = renderer.extensions.has("WEBGL_multi_draw");
+  const multiDraw = false;
   const chunksRequested = new URLSearchParams(location.search).get("sceneryChunks") !== "0";
   const chunkRuntime = createSceneryChunks(scene, animatedScenery, {
     supported: multiDraw && chunksRequested,
@@ -371,6 +373,12 @@ startGame().catch((error) => {
   const retry = button.cloneNode(false);
   retry.disabled = false;
   retry.textContent = "RETRY COURSE";
+  if (/WebGPU/i.test(error.message)) {
+    const message = document.createElement("p");
+    message.textContent = error.message;
+    message.setAttribute("role", "alert");
+    button.parentNode.insertBefore(message, button);
+  }
   retry.addEventListener("click", () => location.reload());
   button.replaceWith(retry);
 });

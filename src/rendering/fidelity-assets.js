@@ -10,7 +10,7 @@ let manifestPromise;
 
 /** One transcoder and URL cache per renderer; LODs share the same GPU textures. */
 export function compressedTextureLoader(renderer) {
-  if (!renderer?.extensions?.has) return null;
+  if (!renderer?.isWebGPURenderer) return null;
   if (!loaders.has(renderer)) {
     const loader = new KTX2Loader()
       .setTranscoderPath("./vendor/three/addons/libs/basis/")
@@ -87,10 +87,7 @@ export async function loadFidelityAssets(renderer, courseId) {
                   "emissiveMap",
                 ])
                   if (material[key])
-                    material[key].anisotropy = Math.min(
-                      8,
-                      renderer.capabilities.getMaxAnisotropy(),
-                    );
+                    material[key].anisotropy = Math.min(8, renderer.getMaxAnisotropy());
             });
             models[variant.name] = model;
           }),
@@ -105,7 +102,7 @@ export async function loadFidelityAssets(renderer, courseId) {
           : await loadImageTexture(`./assets/fidelity/${entry.fallback}`);
         texture.colorSpace =
           entry.colorSpace === "srgb" ? THREE.SRGBColorSpace : THREE.NoColorSpace;
-        texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+        texture.anisotropy = Math.min(8, renderer.getMaxAnisotropy());
         texture.flipY = false;
         return [name, texture];
       }),

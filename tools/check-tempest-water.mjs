@@ -2,7 +2,7 @@
 import { createRequire } from "node:module";
 import { spawn } from "node:child_process";
 
-// Exercise real WebGL programs, repeatable race clocks and all quality tiers.
+// Exercise native WebGPU pipelines, repeatable race clocks and all quality tiers.
 const require = createRequire(import.meta.url);
 let playwright;
 for (const path of [
@@ -45,7 +45,14 @@ try {
   browser = await playwright.chromium.launch({
     executablePath: process.env.CHROMIUM_PATH || "/usr/bin/chromium",
     headless: true,
-    args: ["--no-sandbox", "--disable-dev-shm-usage", "--use-angle=swiftshader"],
+    args: [
+      "--no-sandbox",
+      "--disable-dev-shm-usage",
+      "--use-angle=swiftshader",
+      "--enable-unsafe-webgpu",
+      "--enable-features=Vulkan",
+      "--use-vulkan=swiftshader",
+    ],
   });
   const page = await browser.newPage(),
     errors = [];
@@ -60,12 +67,26 @@ try {
     }),
   );
   await page.goto(`${origin}/__tempest_water_check`);
+  await page.addScriptTag({
+    type: "importmap",
+    content: JSON.stringify({
+      imports: {
+        "three/webgpu": "/vendor/three/three.webgpu.js",
+        "three/tsl": "/vendor/three/three.tsl.js",
+      },
+    }),
+  });
   const report = await page.evaluate(async () => {
     const THREE = await import("/vendor/three/three.module.js");
     const { createStormSea } = await import("/src/courses/adventure/tempest-sea.js");
     const { createCourseEnvironments } = await import("/src/rendering/reflection-environments.js");
     const course = (await import("/src/courses/tempest-causeway.js")).default;
-    const renderer = new THREE.WebGLRenderer({ antialias: false });
+    const { createWebGPURenderer } = await import("/src/rendering/webgpu-renderer.js");
+    const { RenderTarget } = await import("/vendor/three/three.webgpu.js");
+    const renderer = await createWebGPURenderer({ antialias: false });
+    const device = renderer.backend.device;
+    device.pushErrorScope("validation");
+    renderer.info.autoReset = false;
     renderer.setSize(320, 180);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = course.theme.exposure;
@@ -81,18 +102,22 @@ try {
     const sea = createStormSea(scene);
     scene.add(sea.ocean);
     sea.addShore(0, 0, 18);
-    const target = new THREE.WebGLRenderTarget(320, 180);
-    const pixels = new Uint8Array(320 * 180 * 4);
+    const target = new RenderTarget(320, 180);
     const camera = new THREE.PerspectiveCamera(55, 16 / 9, 0.1, 1200),
       results = [];
-    function frame(time) {
+    async function frame(time) {
+      renderer.info.reset();
       sea.update(time);
       renderer.setRenderTarget(target);
       renderer.render(scene, camera);
-      renderer.readRenderTargetPixels(target, 0, 0, 320, 180, pixels);
+      const pixels = await renderer.readRenderTargetPixelsAsync(target, 0, 0, 320, 180);
       let hash = 2166136261;
       for (const value of pixels) hash = Math.imul(hash ^ value, 16777619);
-      return { hash, draws: renderer.info.render.calls, triangles: renderer.info.render.triangles };
+      return {
+        hash,
+        draws: renderer.info.render.drawCalls,
+        triangles: renderer.info.render.triangles,
+      };
     }
     for (const tier of [0, 1, 2, 3]) {
       sea.setQuality(tier);
@@ -103,7 +128,10 @@ try {
       ]) {
         camera.position.set(...position);
         camera.lookAt(0, -10, 0);
-        const frames = [0, 4, 4, 0].map(frame);
+        renderer.setRenderTarget(target);
+        await renderer.compileAsync(scene, camera);
+        const frames = [];
+        for (const time of [0, 4, 4, 0]) frames.push(await frame(time));
         if (
           frames[0].hash === frames[1].hash ||
           frames[1].hash !== frames[2].hash ||
@@ -115,11 +143,10 @@ try {
         results.push({ tier, position, frames });
       }
     }
-    const programs = renderer.info.programs.map((program) => ({
-      runnable: program.diagnostics?.runnable ?? true,
-    }));
-    if (programs.some((program) => !program.runnable))
-      throw new Error("Water shader compilation failed");
+    await device.queue.onSubmittedWorkDone();
+    const validation = await device.popErrorScope();
+    if (validation) throw new Error(validation.message);
+    const programs = { backend: renderer.backend.isWebGPUBackend };
     const textures = renderer.info.memory.textures;
     sea.ocean.geometry.dispose();
     sea.ocean.material.dispose();

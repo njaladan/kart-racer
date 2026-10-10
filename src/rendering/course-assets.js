@@ -66,7 +66,7 @@ async function loadModelPack(loader, manifestUrl, models, renderer, optional = f
       object.userData.animationClips = loaded.animations;
       object.userData.lods = entry.lods || null;
       object.userData.lodDistances = entry.lodDistances || [0, 85, 180];
-      const maxAnisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+      const maxAnisotropy = Math.min(8, renderer.getMaxAnisotropy());
       object.traverse((child) => {
         if (!child.isMesh) return;
         child.castShadow = true;

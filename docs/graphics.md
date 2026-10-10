@@ -3,6 +3,23 @@
 The graphics pass is presentation-only: track surfaces, collision boundaries,
 physics and race progression still use the existing course contract.
 
+## WebGPU rendering
+
+Both canvases use Three.js r180's native WebGPURenderer, initialized before
+loading GPU assets. WebGL fallback is disabled. The locally bundled TSL graph
+adapter translates the existing procedural material expressions and surface
+hooks into WGSL, preserving their race-clock uniforms and shared texture assets.
+Particle point fields use instanced billboards; HDR bloom, PMREM probes, and wet
+road captures use WebGPU render targets. Wet captures use native clipping groups
+and WebGPU texture coordinates. Preview environments are generated on their own
+device. PCF shadows replace the unsupported WebGL soft-PCF mode. Ordinary mesh
+instancing remains enabled; the WebGL multi-draw scenery path is disabled.
+
+Run `tools/check-tempest-water.mjs` with Playwright and Chromium installed to
+check WGSL validation, motion, freeze, rewind, and water geometry budgets across
+all four quality tiers. `PLAYWRIGHT_MODULE` and `CHROMIUM_PATH` select installations.
+The rendering backend and native draw calls appear in browser diagnostics.
+
 ## Neon Harbor and Sunstone fidelity
 
 Neon asphalt has antialiased fissures, darker wet areas and smoother puddle

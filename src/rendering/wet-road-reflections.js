@@ -1,3 +1,8 @@
+import {
+  RenderTarget,
+  ClippingGroup,
+  WebGPUCoordinateSystem,
+} from "../../vendor/three/three.webgpu.js";
 import * as THREE from "../../vendor/three/three.module.js";
 import { patchMaterial } from "./surface-detail.js";
 
@@ -5,10 +10,14 @@ import { patchMaterial } from "./surface-detail.js";
  * Only flat streets qualify; ramps, banks and moving ferry decks use atlas art.
  */
 export function createWetRoadReflections() {
-  const target = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType });
+  const target = new RenderTarget(1, 1, { type: THREE.HalfFloatType });
   const mirror = new THREE.PerspectiveCamera();
+  const captureScene = new THREE.Scene();
+  const clipped = new ClippingGroup();
+  captureScene.add(clipped);
   const clip = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
-  const bias = new THREE.Matrix4().set(0.5, 0, 0, 0.5, 0, 0.5, 0, 0.5, 0, 0, 0.5, 0.5, 0, 0, 0, 1);
+  clipped.clippingPlanes = [clip];
+  const bias = new THREE.Matrix4().set(0.5, 0, 0, 0.5, 0, -0.5, 0, 0.5, 0, 0, 1, 0, 0, 0, 0, 1);
   const uniforms = {
     wetReflectionMap: { value: target.texture },
     wetReflectionMatrix: { value: new THREE.Matrix4() },
@@ -71,6 +80,8 @@ export function createWetRoadReflections() {
       const refresh = !surface.frozen && frame++ % 2 === 0;
       if (resized || Math.abs(capturedHeight - surface.height) > 0.12 || refresh) {
         mirror.copy(camera);
+        mirror.coordinateSystem = WebGPUCoordinateSystem;
+        mirror.updateProjectionMatrix();
         mirror.position.y = 2 * surface.height - camera.position.y;
         camera.getWorldDirection(direction);
         direction.y *= -1;
@@ -83,22 +94,27 @@ export function createWetRoadReflections() {
         matrix.copy(bias).multiply(mirror.projectionMatrix).multiply(mirror.matrixWorldInverse);
         clip.constant = -surface.height - 0.09;
         const previousTarget = renderer.getRenderTarget();
-        const previousClipping = renderer.clippingPlanes;
+        const previousParent = scene.parent;
         const previousShadowUpdate = renderer.shadowMap.autoUpdate;
         const previousXr = renderer.xr.enabled;
         // No recursive reflection or second shadow pass. Always restore renderer state.
         try {
           renderer.xr.enabled = false;
           renderer.shadowMap.autoUpdate = false;
-          renderer.clippingPlanes = [clip];
+          captureScene.background = scene.background;
+          captureScene.environment = scene.environment;
+          captureScene.environmentIntensity = scene.environmentIntensity;
+          captureScene.fog = scene.fog;
+          clipped.add(scene);
           renderer.setRenderTarget(target);
           renderer.clear();
-          renderer.render(scene, mirror);
+          renderer.render(captureScene, mirror);
           capturedHeight = surface.height;
           uniforms.wetReflectionHeight.value = surface.height;
         } finally {
           renderer.setRenderTarget(previousTarget);
-          renderer.clippingPlanes = previousClipping;
+          clipped.remove(scene);
+          previousParent?.add(scene);
           renderer.shadowMap.autoUpdate = previousShadowUpdate;
           renderer.xr.enabled = previousXr;
         }

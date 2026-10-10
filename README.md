@@ -35,7 +35,9 @@ To regenerate these images, see the [screenshot capture guide](docs/screenshot-c
 
 ## Run locally
 
-Requires Node.js 22+ and npm:
+Requires Node.js 22+ and npm, plus a browser and GPU with WebGPU support.
+The game uses native WebGPU for both the race and racer preview. Serve it over
+HTTPS or localhost; an unavailable WebGPU adapter produces a startup message.
 
 ```sh
 npm ci

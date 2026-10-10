@@ -1,3 +1,7 @@
+import {
+  PMREMGenerator,
+  WebGLCubeRenderTarget as CubeRenderTarget,
+} from "../../vendor/three/three.webgpu.js";
 import * as THREE from "../../vendor/three/three.module.js";
 
 function probeEnclosed(section) {
@@ -90,7 +94,7 @@ export function createReflectionPixels(theme = {}, enclosed = false, width = 256
 }
 
 export function createCourseEnvironments(renderer, theme) {
-  const generator = new THREE.PMREMGenerator(renderer);
+  const generator = new PMREMGenerator(renderer);
   const targets = [];
   for (const enclosed of [false, true]) {
     const texture = new THREE.DataTexture(
@@ -103,6 +107,7 @@ export function createCourseEnvironments(renderer, theme) {
     texture.mapping = THREE.EquirectangularReflectionMapping;
     texture.needsUpdate = true;
     targets.push(generator.fromEquirectangular(texture));
+    targets.at(-1).texture.userData.sourceEnvironment = texture;
     texture.dispose();
   }
   const probes = [];
@@ -111,8 +116,8 @@ export function createCourseEnvironments(renderer, theme) {
     exterior: targets[0].texture,
     interior: targets[1].texture,
     /** Capture a small fixed set of sector probes after course scenery is composed. */
-    capture(scene, track) {
-      if (!track?.SECTIONS?.length || !renderer?.isWebGLRenderer) return 0;
+    async capture(scene, track) {
+      if (!track?.SECTIONS?.length || !renderer?.isWebGPURenderer) return 0;
       const candidates = selectCourseProbeSectors(track);
       const previousEnvironment = scene.environment;
       const previousBackground = scene.background;
@@ -132,7 +137,7 @@ export function createCourseEnvironments(renderer, theme) {
       const hidden = [];
       const environmentMaterials = [];
       let fresh = [];
-      const cubeTarget = new THREE.WebGLCubeRenderTarget(64, {
+      const cubeTarget = new CubeRenderTarget(64, {
         type: THREE.HalfFloatType,
         generateMipmaps: true,
         minFilter: THREE.LinearMipmapLinearFilter,
@@ -171,6 +176,10 @@ export function createCourseEnvironments(renderer, theme) {
           const point = pose.p?.clone?.() || new THREE.Vector3(...pose.p);
           point.add(new THREE.Vector3(0, candidate.enclosed ? 4.5 : 20, 0));
           cubeCamera.position.copy(point);
+          renderer.setRenderTarget(cubeTarget);
+          // Compile asynchronously before the six capture draws so startup can
+          // stay responsive while the WebGPU driver prepares its pipelines.
+          for (const view of cubeCamera.children) await renderer.compileAsync(scene, view);
           cubeCamera.update(renderer, scene);
           const target = generator.fromCubemap(cubeTarget.texture);
           fresh.push({

@@ -1,3 +1,4 @@
+import { createWebGPURenderer } from "./webgpu-renderer.js";
 import * as THREE from "../../vendor/three/three.module.js";
 import { surfaceTexture } from "./textures.js";
 import { loadGraphicsAssets } from "./shared-assets.js";
@@ -116,7 +117,7 @@ export async function createGameScene({ canvas, course, viewport = window }) {
     course.theme.cameraFar ?? 750,
   );
   camera.layers.enable(1);
-  const renderer = new THREE.WebGLRenderer({
+  const renderer = await createWebGPURenderer({
     canvas,
     antialias: true,
     alpha: false,
@@ -129,7 +130,7 @@ export async function createGameScene({ canvas, course, viewport = window }) {
   renderer.setPixelRatio(pixelRatio);
   renderer.setSize(viewport.innerWidth, viewport.innerHeight, false);
   renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   // Neutral preserves the painted palette while still compressing bright highlights.
   renderer.toneMapping = THREE.NeutralToneMapping;

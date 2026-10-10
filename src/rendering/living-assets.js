@@ -15,7 +15,7 @@ function softenAsphalt(map, renderer) {
   const softened = new THREE.CanvasTexture(canvas);
   softened.colorSpace = THREE.SRGBColorSpace;
   softened.wrapS = softened.wrapT = THREE.RepeatWrapping;
-  softened.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+  softened.anisotropy = Math.min(8, renderer.getMaxAnisotropy());
   return softened;
 }
 
@@ -55,7 +55,7 @@ export async function loadLivingAssets(renderer, courseId) {
           : loader.loadAsync(`./assets/living/${path}`).then((map) => {
               map.colorSpace = color ? THREE.SRGBColorSpace : THREE.NoColorSpace;
               map.wrapS = map.wrapT = THREE.RepeatWrapping;
-              map.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+              map.anisotropy = Math.min(8, renderer.getMaxAnisotropy());
               return map;
             }),
       );

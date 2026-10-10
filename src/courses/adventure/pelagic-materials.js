@@ -62,12 +62,12 @@ export function marineCaustics(material, scene) {
       vec2 reefHash(vec2 p){return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);}
       float reefCaustic(vec2 p){
         vec2 cell=floor(p),local=fract(p);float nearest=8.,second=8.;
-        for(int x=-1;x<=1;x++)for(int y=-1;y<=1;y++){
+        for(int x=-1;x<=1;x++){for(int y=-1;y<=1;y++){
           vec2 offset=vec2(float(x),float(y)),seed=reefHash(cell+offset);
           vec2 center=.5+.3*sin(waterClock*.65+seed*6.2831853);
           float d=length(offset+center-local);
           if(d<nearest){second=nearest;nearest=d;}else second=min(second,d);
-        }
+        }}
         float edge=second-nearest,aa=max(fwidth(edge),.012);
         return 1.-smoothstep(.018,.065+aa,edge);
       }
