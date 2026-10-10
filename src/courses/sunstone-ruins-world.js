@@ -7,6 +7,8 @@ import { buildTempleAtmosphere } from "./sunstone-ruins/build-temple-atmosphere.
 import { createSandfall } from "./sunstone-ruins/sandfall.js";
 import { createSolarFocus } from "./sunstone-ruins/solar-focus.js";
 import { createRouteClearance } from "../rendering/route-clearance.js";
+import { createDuneGeometry } from "./sunstone-ruins/create-desert-geometry.js";
+import { buildDesertHorizon } from "./sunstone-ruins/build-desert-horizon.js";
 
 /** The road travels through the monument; architecture follows its actual frames. */
 export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazardAt }) {
@@ -28,7 +30,7 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
     installSurfaceDetail(m, { kind: "terrain", strength: 0.18 });
   for (const m of [stone, pale, shade, dark]) carvedSandstone(m, { carved: true });
   const sphere = new THREE.SphereGeometry(1, 12, 8);
-  const dune = new THREE.SphereGeometry(1, 20, 10, 0, Math.PI * 2, 0, Math.PI / 2);
+  const dune = createDuneGeometry(THREE);
   const ring = new THREE.TorusGeometry(1, 0.075, 6, 48);
   const rock = new THREE.IcosahedronGeometry(1, 1);
   const mesa = kit.authoredGeometry("blender:sandstone-mesa", rock);
@@ -287,6 +289,7 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
     animated,
     motions,
   });
+  buildDesertHorizon({ THREE, scenery, track, kit, textures, motions });
   buildSolarArchitecture({
     THREE,
     kit,
@@ -328,8 +331,8 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
   animated.push(dust);
   return {
     animated,
-    update(time) {
-      motions.forEach((fn) => fn(time));
+    update(time, state) {
+      motions.forEach((fn) => fn(time, state));
       align(sentinel, hazardAt(time));
       dust.position.y = -((time * 0.5) % 3);
       dust.position.x = Math.sin(time * 0.4) * 0.4;

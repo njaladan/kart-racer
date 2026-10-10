@@ -1,3 +1,24 @@
+/** Crescent crest, long windward slope and a short, steep slip face. */
+export function duneHeightAt(x, z) {
+  const crest = 0.22 + Math.sin(x * 2.7) * 0.16;
+  const u = z < crest ? (z + 1) / (crest + 1) : (1 - z) / (1 - crest);
+  const profile = Math.pow(Math.sin((Math.max(0, Math.min(1, u)) * Math.PI) / 2), 1.7);
+  const envelope = Math.pow(Math.max(0, 1 - x * x), 0.8);
+  return envelope * profile * (1 + Math.sin(z * 38 + x * 9) * 0.012);
+}
+
+export function createDuneGeometry(THREE, segments = 36) {
+  const geometry = new THREE.PlaneGeometry(2, 2, segments, Math.ceil((segments * 2) / 3));
+  geometry.rotateX(-Math.PI / 2);
+  const positions = geometry.attributes.position;
+  for (let i = 0; i < positions.count; i++)
+    positions.setY(i, duneHeightAt(positions.getX(i), positions.getZ(i)));
+  geometry.computeVertexNormals();
+  geometry.computeBoundingBox();
+  geometry.computeBoundingSphere();
+  return geometry;
+}
+
 /** Sculpted sandstone layers, dunes, palm fronds, fabric, and bird wings. */
 export function createDesertGeometry({ THREE, kit }) {
   const { material } = kit;
@@ -25,19 +46,7 @@ export function createDesertGeometry({ THREE, kit }) {
     return geometry;
   }
   // Give dunes actual wind-sculpted ridges, rather than a repeated oval mound.
-  const duneGeometry = new THREE.PlaneGeometry(2, 2, 18, 14);
-  duneGeometry.rotateX(-Math.PI / 2);
-  const dunePositions = duneGeometry.attributes.position;
-  for (let i = 0; i < dunePositions.count; i++) {
-    const x = dunePositions.getX(i),
-      z = dunePositions.getZ(i);
-    const mound = Math.max(0, 1 - x * x) * Math.max(0, 1 - z * z);
-    dunePositions.setY(
-      i,
-      mound * (0.6 + 0.18 * Math.sin(x * 4 + z * 2)) + 0.035 * Math.sin(z * 22 + x * 6) * mound,
-    );
-  }
-  duneGeometry.computeVertexNormals();
+  const duneGeometry = createDuneGeometry(THREE);
   // A gently arched strip rounds the palm silhouette at chase-camera range.
   // Three vertices across each section give the leaf a soft central ridge.
   const frondGeometry = new THREE.BufferGeometry();

@@ -3,6 +3,7 @@ import { createContactShadowMesh, addGlow } from "../../rendering/visual-effects
 import { placeRock } from "./ruins-assets.js";
 import { addRuinsDressing } from "./add-ruins-dressing.js";
 import { carvedSandstone, sunShaft } from "./sunstone-materials.js";
+import { createDuneGeometry } from "./create-desert-geometry.js";
 
 /** Authored foreground/midground/horizon clusters, lit interiors and wildlife. */
 export function buildExpeditionLife({
@@ -29,7 +30,7 @@ export function buildExpeditionLife({
   const cylinder = new THREE.CylinderGeometry(1, 1, 1, 12),
     sphere = new THREE.SphereGeometry(1, 12, 8);
   const cone = new THREE.ConeGeometry(1, 1, 8),
-    dune = new THREE.SphereGeometry(1, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2);
+    dune = createDuneGeometry(THREE);
   const safe = (t, offset, footprint = 4) => kit.safeGroup(t, offset, footprint);
   const motion = (object, fn) => {
     animated.push(object);
@@ -85,28 +86,6 @@ export function buildExpeditionLife({
       rug.rotation.x = -Math.PI / 2;
     }
   }
-  // Distant dunes and broken watchtowers fill the entire expedition's skyline.
-  for (let section = 0; section < 8; section++)
-    for (let i = 0; i < 6; i++) {
-      const t = sectorT(section, (i + 0.5) / 6),
-        side = i % 2 ? 1 : -1,
-        g = safe(t, side * (135 + (i % 3) * 38), 60 + (i % 3) * 14);
-      if (!g) continue;
-      const hill = mesh(
-        dune,
-        i % 2 ? silt : sand,
-        g,
-        [0, -2, 0],
-        [60 + (i % 3) * 14, 24 + (i % 4) * 8, 48],
-      );
-      hill.rotation.y = i * 0.9 + section;
-      hill.castShadow = false;
-      hill.userData.bakeReceiver = true;
-      if (i % 3 === 0) {
-        const ruin = kit.asset("ruins:ruined-house", g, [0, 16, 0], [22, 22, 22]);
-        ruin.rotation.y = 0.35 + i;
-      }
-    }
   // Mesa is now a sculpted landscape with buttresses, textured eroded shelves,
   // trailing grasses and archaeological fragments visible from the kart camera.
   for (let i = 0; i < 22; i++) {

@@ -229,8 +229,8 @@ export default withCourseExperience({
     environmentIntensity: 0.35,
     rimColor: "#91b4d1",
     rimIntensity: 0.3,
-    cameraFar: 1050,
-    fogFar: 900,
+    cameraFar: 1800,
+    fogFar: 1450,
     lightVolume: {
       resolution: 192,
       columns: 3,
