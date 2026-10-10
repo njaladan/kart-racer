@@ -27,7 +27,8 @@ try {
   const results = await page.evaluate(async () => {
     const THREE = await import("/vendor/three/three.module.js");
     const { createPostProcessing } = await import("/src/rendering/postprocessing.js");
-    const { installDesertMirage } = await import("/src/rendering/desert-mirage.js");
+    const { createDesertMirageClock, installDesertMirage } =
+      await import("/src/rendering/desert-mirage.js");
     const renderer = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: true });
     const width = 512,
       height = 320;
@@ -46,12 +47,13 @@ try {
     backdrop.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
     const plain = new THREE.MeshBasicMaterial({ vertexColors: true });
     const distorted = new THREE.MeshBasicMaterial({ vertexColors: true });
-    installDesertMirage(distorted);
+    const clock = createDesertMirageClock();
+    installDesertMirage(distorted, {}, clock);
     const far = new THREE.Mesh(backdrop, distorted);
     far.position.z = -950;
     scene.add(far);
     const nearMaterial = new THREE.MeshBasicMaterial({ color: "#d56542" });
-    installDesertMirage(nearMaterial);
+    installDesertMirage(nearMaterial, {}, clock);
     const near = new THREE.Mesh(new THREE.PlaneGeometry(10, 8, 10, 8), nearMaterial);
     near.position.set(-8, -4, -20);
     scene.add(near);
@@ -64,7 +66,8 @@ try {
     scene.add(road);
     const effect = createPostProcessing(renderer, { gradeTint: [1, 1, 1] });
     effect.setOptions({ bloom: false });
-    function pixels() {
+    function pixels(time = 0, motionEnabled = true) {
+      clock.update(time, { motionEnabled });
       effect.render(scene, camera);
       const data = new Uint8Array(width * height * 4);
       const gl = renderer.getContext();
@@ -91,24 +94,35 @@ try {
       far.material = plain;
       const original = pixels();
       far.material = distorted;
-      const a = pixels(),
-        frozen = pixels();
+      const a = pixels(1.4),
+        frozen = pixels(1.4),
+        animated = pixels(2.8);
       // Rotate the camera around its viewing axis and undo that rotation in pixels.
       // A screen-fixed filter would produce a different wave pattern on the same objects.
       camera.rotation.z = Math.PI;
-      const turned = pixels();
+      const turned = pixels(1.4);
       camera.rotation.z = 0;
+      const reducedA = pixels(20, false),
+        reducedB = pixels(40, false);
       const farRect = [280, 80, 490, 240];
       const report = {
         tier,
         farChanged: difference(original, a, farRect),
+        farAnimated: difference(a, animated, farRect),
         nearChanged: difference(original, a, [145, 100, 190, 145]),
+        nearAnimated: difference(a, animated, [145, 100, 190, 145]),
         distantCourseChanged: difference(original, a, [115, 205, 145, 225]),
+        courseAnimated: difference(a, animated, [115, 205, 145, 225]),
         frozen: difference(a, frozen, farRect),
+        reducedMotion: difference(reducedA, reducedB, farRect),
         cameraTurnDrift: difference(a, turned, farRect, true),
       };
       if (
         report.farChanged < 10 ||
+        report.farAnimated < 3 ||
+        report.nearAnimated > 0.1 ||
+        report.courseAnimated > 0.1 ||
+        report.reducedMotion !== 0 ||
         report.nearChanged > 0.1 ||
         report.distantCourseChanged > 0.1 ||
         report.frozen !== 0 ||
