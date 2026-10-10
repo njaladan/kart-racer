@@ -66,7 +66,8 @@ export function batchStaticMeshes(parent, excluded = []) {
     const materialKey = Array.isArray(child.material)
       ? child.material.map((material) => material.id).join("+")
       : child.material.id;
-    const key = `${materialKey}:${Math.floor(center.x / 96)}:${Math.floor(center.z / 96)}:${channels}:${child.castShadow}:${child.receiveShadow}:${!!child.userData.routeObstacle}:${!!child.userData.routeStructure}`;
+    const cellSize = child.material.userData?.sceneryCellSize ?? 96;
+    const key = `${materialKey}:${Math.floor(center.x / cellSize)}:${Math.floor(center.z / cellSize)}:${channels}:${child.castShadow}:${child.receiveShadow}:${!!child.userData.routeObstacle}:${!!child.userData.routeStructure}`;
     if (!batches.has(key)) batches.set(key, []);
     batches.get(key).push(child);
   }

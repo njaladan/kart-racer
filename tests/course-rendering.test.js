@@ -82,6 +82,28 @@ test("singletons, excluded meshes and instances retain colors after a scenery ma
   }
 });
 
+test("coarse background batches reduce draws and retain bounds without changing nearby scenery cells", () => {
+  for (const [cellSize, expectedDraws] of [
+    [96, 2],
+    [384, 1],
+  ]) {
+    const group = new THREE.Group(),
+      geometry = new THREE.BoxGeometry(),
+      material = new THREE.MeshStandardMaterial({ vertexColors: true });
+    if (cellSize !== 96) material.userData.sceneryCellSize = cellSize;
+    for (const x of [180, 185, 190, 260, 270, 280]) {
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.x = x;
+      group.add(mesh);
+    }
+    batchStaticMeshes(group);
+    assert.equal(group.children.length, expectedDraws);
+    const bounds = new THREE.Box3().setFromObject(group);
+    assert.equal(bounds.min.x, 179.5);
+    assert.equal(bounds.max.x, 280.5);
+  }
+});
+
 test("all asset-backed scenery assembles and stays finite while each hazard moves", async () => {
   for (const course of COURSES) {
     const track = selectCourse(course),
@@ -122,12 +144,14 @@ test("all asset-backed scenery assembles and stays finite while each hazard move
       sharedAssets: {},
     });
     let meshes = 0,
+      backgroundMeshes = 0,
       instanced = 0;
     scene.traverse((object) => {
       if (!object.isMesh) return;
       meshes++;
       if (object.isInstancedMesh) instanced++;
       const materials = Array.isArray(object.material) ? object.material : [object.material];
+      if (materials.every((material) => material.name === "Background scenery")) backgroundMeshes++;
       if (materials.some((material) => material.vertexColors)) {
         const colors = object.geometry.getAttribute("color");
         assert.ok(colors, `${course.id}: ${object.name} material needs vertex colors`);
@@ -143,7 +167,14 @@ test("all asset-backed scenery assembles and stays finite while each hazard move
     // full-scene object count. Repeated foliage and architectural pieces must
     // still collapse into instances, and the total remains bounded per course.
     assert.ok(instanced > 25, `${course.id}: repeated scenery uses instancing`);
-    assert.ok(meshes < 1800, `${course.id}: ${meshes} course scenery draw objects`);
+    assert.ok(
+      meshes - backgroundMeshes < 1800,
+      `${course.id}: ${meshes - backgroundMeshes} existing course scenery draw objects`,
+    );
+    assert.ok(
+      backgroundMeshes < 220,
+      `${course.id}: ${backgroundMeshes} additional shadowless background draw objects`,
+    );
     for (const time of [0, 30, 31, 35, 40, 42]) world.update(time);
     scene.updateMatrixWorld(true);
     scene.traverse((object) => assert.ok(object.matrixWorld.elements.every(Number.isFinite)));

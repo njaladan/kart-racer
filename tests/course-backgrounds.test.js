@@ -7,6 +7,12 @@ import { createPolishKit } from "../src/rendering/course-polish-kit.js";
 import { createRouteClearance } from "../src/rendering/route-clearance.js";
 import { COURSE_BACKGROUNDS, buildCourseBackground } from "../src/courses/background/index.js";
 
+test("all twelve courses have authored backgrounds or the retained continuous desert", () => {
+  assert.equal(COURSES.length, 12);
+  for (const course of COURSES)
+    assert.ok(COURSE_BACKGROUNDS[course.id] || course.id === "sunstone-ruins", course.id);
+});
+
 for (const course of COURSES.filter((course) => COURSE_BACKGROUNDS[course.id])) {
   test(`${course.name} backgrounds fill both sides, clear all routes and stay bounded through animation`, () => {
     const track = createTrack(course),

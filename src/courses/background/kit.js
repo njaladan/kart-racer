@@ -6,8 +6,13 @@ export function backgroundKit(w) {
   const allows = createRouteClearance(track);
   const geometries = new Map();
   const sites = [];
-  const material = (color, kind = null, extra = {}) =>
-    w.mat(color, kind, { name: "Background scenery", roughness: 0.95, ...extra });
+  const material = (color, kind = null, extra = {}) => {
+    const m = w.mat(color, kind, { name: "Background scenery", roughness: 0.95, ...extra });
+    // Coarse, shadowless distant shapes need fewer spatial draws than nearby
+    // storefronts and foliage. Their cell size does not affect those worlds.
+    m.userData.sceneryCellSize = 384;
+    return m;
+  };
   function geometry(kind) {
     if (!geometries.has(kind)) {
       const shapes = {

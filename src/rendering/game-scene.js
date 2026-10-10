@@ -104,7 +104,10 @@ export async function createGameScene({ canvas, course, viewport = window }) {
   const scene = new THREE.Scene();
   scene.userData.courseTheme = course.theme;
   scene.background = new THREE.Color(course.theme.sky);
-  scene.fog = new THREE.Fog(course.theme.fog, 165, 480);
+  const fogFar =
+    course.theme.fogFar ??
+    (course.theme.terrain === "concrete" ? 520 : course.theme.terrain === "sand" ? 670 : 720);
+  scene.fog = new THREE.Fog(course.theme.fog, 165, fogFar);
 
   const camera = new THREE.PerspectiveCamera(
     63,
