@@ -174,6 +174,7 @@ export function buildMetronome(context) {
   // Resonator towers rise in the middle distance; their felt hammers breathe.
   for (const section of [2, 3, 4])
     for (let i = 0; i < 5; i++) {
+      if (section === 4 && i === 0) continue; // Give the violin solo its own opening.
       const g = at(section, (i + 0.5) / 5, (i % 2 ? 1 : -1) * 62);
       box(dark, g, [0, -(g.position.y + 22) / 2, 0], [29, g.position.y + 22, 24]);
       box(dark, g, [0, 2, 0], [29, 4, 24]);

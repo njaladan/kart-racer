@@ -80,24 +80,51 @@ test("puffs nudge velocity without a boost, hit or launch and replay through a s
   }
 });
 
-test("the orchestra stays dense, batched and finite with rigs and hazard motion", () => {
+test("the orchestra has two deliberate scenes, finite motion and no scattered instruments", () => {
   const scene = new THREE.Scene(),
     scenery = new THREE.Group();
   scene.add(scenery);
   const kit = createCourseKit(scenery, track);
   const world = buildMetronome({ THREE, scene, scenery, track, kit });
-  assert.ok(scenery.userData.orchestraPlacements > 600);
-  const families = new Set(),
+  const compositions = [],
     skins = [],
-    puffs = [];
+    puffs = [],
+    mallets = [];
+  let bow;
   scenery.traverse((o) => {
-    if (o.userData.instrumentFamily) families.add(o.userData.instrumentFamily);
+    if (o.userData.composition) compositions.push(o);
+    if (o.name === "Mechanical violin bow") bow = o;
+    if (o.name === "Pivoted percussion mallet") mallets.push(o);
     if (o.isSkinnedMesh) skins.push(o);
     if (o.name === "Visible sideways bellows puff") puffs.push(o);
-    assert.ok(!/dancer|automaton|figure/i.test(o.name));
+    assert.ok(
+      !/dancer|automaton|figure|orchestra district|self-playing (flute|tuba|piano)/i.test(o.name),
+    );
   });
-  assert.ok(families.size >= 25);
-  assert.equal(skins.length, 5);
+  assert.equal(compositions.filter((o) => o.userData.composition === "violin-solo").length, 1);
+  assert.equal(
+    compositions.filter((o) => o.userData.composition === "drum-accompaniment").length,
+    3,
+  );
+  assert.equal(mallets.length, 6);
+  assert.ok(bow);
+  const violin = scenery.getObjectByName("Colossal self-playing violin");
+  assert.ok(new THREE.Box3().setFromObject(violin).getSize(new THREE.Vector3()).y > 60);
+  for (const g of compositions.filter((o) => o.userData.composition === "drum-accompaniment")) {
+    const drum = track.drumField.drums[g.userData.companionDrumIndex];
+    assert.ok(
+      Math.abs(
+        drum.t - track.sectorT(g.userData.scenerySite.section, g.userData.scenerySite.fraction),
+      ) < 1e-8,
+    );
+  }
+  world.update(0, { motionEnabled: true });
+  const bowStart = bow.position.x;
+  const malletStart = mallets[0].rotation.z;
+  world.update(0.5, { motionEnabled: true });
+  assert.notEqual(bow.position.x, bowStart);
+  assert.notEqual(mallets[0].rotation.z, malletStart);
+  assert.equal(skins.length, 2);
   assert.equal(puffs.length, 2);
   batchScenery(scenery, world.animated);
   const identities = [];
@@ -106,6 +133,17 @@ test("the orchestra stays dense, batched and finite with rigs and hazard motion"
     world.update(time, { motionEnabled: false });
     scene.updateMatrixWorld(true);
     scene.traverse((o) => assert.ok(o.matrixWorld.elements.every(Number.isFinite)));
+    scene.traverse((o) => {
+      if (o.name !== "Swinging upright clock pendulum") return;
+      const rod = o.getObjectByName("Clock pendulum suspension rod");
+      const pivot = o.getObjectByName("Clock pendulum fixed pivot");
+      const bob = o.getObjectByName("Upright clock pendulum bob");
+      assert.ok(Math.abs(bob.position.distanceTo(pivot.position) - rod.scale.y) < 1e-8);
+      assert.ok(
+        rod.position.distanceTo(bob.position.clone().add(pivot.position).multiplyScalar(0.5)) <
+          1e-8,
+      );
+    });
     const puff = bellowsPuffAt(d, time, -1);
     assert.equal(
       puffs[0].visible,

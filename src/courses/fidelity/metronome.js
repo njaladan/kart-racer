@@ -22,6 +22,7 @@ export function metronomeArt(w) {
   for (let section = 0; section < track.SECTIONS.length; section++) {
     for (let i = 0; i < 3; i++) {
       for (const side of [-1, 1]) {
+        if (section === 4 && i === 0 && side === -1) continue;
         const g = safe(section, (i + 0.5) / 3, side * 46, 15);
         if (!g) continue;
         // Deep pleated curtains and balconies make enclosure tangible.

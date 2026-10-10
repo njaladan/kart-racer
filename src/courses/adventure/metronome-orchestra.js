@@ -1,143 +1,173 @@
-import { instrumentLibrary } from "./instrument-library.js";
 import { bellowsRig } from "./bellows-rig.js";
 import { bellowsNozzleAt, bellowsPuffAt } from "../../simulation/course-mechanics.js";
+import { registerLightPool } from "../../rendering/course-lighting.js";
 
-const ENSEMBLES = [
-  ["violin", "flute", "tuning-fork", "metronome", "case", "clarinet", "zither"],
-  ["snare", "bass-drum", "timpani", "bongo", "cymbal", "tambourine", "xylophone", "marimba"],
-  ["bell", "glockenspiel", "chimes", "triangle", "metronome", "gong"],
-  ["tuba", "trumpet", "trombone", "french-horn", "saxophone", "accordion", "organ"],
-  ["violin", "cello", "harp", "zither", "piano", "case"],
-  ["piano", "harp", "organ", "timpani", "cello", "trumpet", "accordion", "chimes"],
-];
-
+/** Two composed performances, with open stretches between them. */
 export function buildMetronomeOrchestra(w) {
-  const { track, kit, mesh, box, safe, motion, sphere, tube } = w;
-  const library = instrumentLibrary(w);
-  const { place, materials: m, group } = library;
-  let placements = 0;
-  // Six different districts, each with eight densely dressed pairs of stages.
-  // Their reserved envelopes include the full bow, mallet and lid travel.
-  for (let section = 0; section < 6; section++) {
-    const families = ENSEMBLES[section];
-    for (let bay = 0; bay < 8; bay++)
-      for (const side of [-1, 1]) {
-        const g = safe(section, 0.07 + bay * 0.12, side * 29, 13, 34);
-        if (!g) continue;
-        g.name = `Mechanical orchestra district ${section + 1}, stage ${bay + 1}`;
-        box(m.wood, g, [0, 1.3, 0], [25, 2.6, 20]);
-        box(m.velvet, g, [0, 2.65, 0], [24.5, 0.12, 19.5]);
-        box(m.brass, g, [-side * 12.3, 2.45, 0], [0.35, 0.35, 20]);
-        for (const x of [-10.5, 10.5])
-          for (const z of [-8, 8]) {
-            const foundation = g.position.y - track.course.theme.groundHeight;
-            box(m.ebony, g, [x, -foundation / 2, z], [1.2, foundation, 1.2]);
-          }
-        for (let row = 0; row < 2; row++)
-          for (let column = 0; column < 3; column++) {
-            const i = row * 3 + column;
-            const kind = families[(bay * 3 + i + (side > 0 ? 2 : 0)) % families.length];
-            const perform = bay % 2 === 0 && i === (bay + (side > 0 ? 1 : 0)) % 6;
-            const instrument = place(
-              kind,
-              g,
-              [(column - 1) * 7.5, 2.75 + row * 0.9, row * 8 - 4],
-              kind === "flute" || kind === "clarinet" ? 1.7 : 1.25 + (bay % 3) * 0.12,
-              perform,
-              section * 0.7 + bay * 0.48 + side,
-            );
-            instrument.rotation.y = side * 0.22 + (column - 1) * 0.15;
-            placements++;
-          }
-        const clamp = section === 0 || section === 5 ? workshop(g, bay, side) : null;
-        // A high shelf supplies foreground/middle/background layers rather than
-        // placing every prop on the same floor.
-        if (bay % 2 === 0) {
-          box(m.wood, g, [0, 14, 7.5], [23, 0.65, 4]);
-          for (const x of [-10, 10]) box(m.brass, g, [x, 8, 8], [0.28, 12, 0.3]);
-          for (let i = 0; i < 4; i++) {
-            place(families[(bay + i) % families.length], g, [-8.5 + i * 5.7, 14.4, 7.5], 0.72);
-            placements++;
-          }
-        }
-        // Merge each stage's still instruments by material before regional
-        // batching. The independent performers retain their articulated rigs.
-        library.flatten(g, [...library.performers, ...(clamp ? [clamp] : [])]);
-      }
+  const { THREE, mat } = w;
+  const m = {
+    wood: mat("#a76032", "wood", { roughness: 0.42 }),
+    brass: mat("#edc17d", "metal", { metalness: 0.65, roughness: 0.25 }),
+    silver: mat("#bccbd6", "metal", { metalness: 0.65, roughness: 0.3 }),
+    ebony: mat("#252535", null, { roughness: 0.34 }),
+    ivory: mat("#fff0d0", null, { roughness: 0.6 }),
+    velvet: mat("#384f79", "fabric"),
+    leather: mat("#67485b", "fabric", { roughness: 0.88 }),
+  };
+  const group = (parent, position = [0, 0, 0]) => {
+    const g = new THREE.Group();
+    g.position.set(...position);
+    parent.add(g);
+    return g;
+  };
+  buildViolinSolo(w, m, group);
+  buildDrumAccompaniment(w, m, group);
+  buildBellowsPassage(w, m, { group });
+}
+
+function pedestal(w, m, g, width, depth, height = 3) {
+  const { track, box } = w;
+  box(m.wood, g, [0, height / 2, 0], [width, height, depth]);
+  box(m.velvet, g, [0, height + 0.05, 0], [width - 0.5, 0.1, depth - 0.5]);
+  const foundation = g.position.y - track.course.theme.groundHeight;
+  for (const x of [-width * 0.36, width * 0.36])
+    for (const z of [-depth * 0.36, depth * 0.36])
+      box(m.ebony, g, [x, -foundation / 2, z], [1.5, foundation, 1.5]);
+}
+
+function buildViolinSolo(w, m, group) {
+  const { THREE, kit, safe, mesh, box, tube, sphere, motion, scene } = w;
+  // The whole bow stroke and the leaning neck fit inside this reserved envelope.
+  // The preceding straight reveals the solo before racers reach its plinth.
+  const g = safe(4, 0.17, -64, 46, 88);
+  if (!g) return;
+  g.name = "Giant violin solo";
+  g.userData.composition = "violin-solo";
+  pedestal(w, m, g, 58, 30, 4);
+  const violin = group(g, [0, 4.15, 0]);
+  violin.scale.setScalar(11);
+  violin.rotation.set(0, Math.PI + 0.8, -0.1);
+  violin.name = "Colossal self-playing violin";
+  if (kit.hasAsset("instrument:violin"))
+    kit.asset("instrument:violin", violin, [0, 0, 0], [6, 6, 6]);
+  else {
+    for (const [y, r] of [
+      [1.2, 1.1],
+      [2.5, 0.8],
+    ])
+      mesh(sphere, m.wood, violin, [0, y, 0], [r, r, 0.25]);
+    box(m.wood, violin, [0, 4.2, 0], [0.3, 3.5, 0.25]);
+    mesh(sphere, m.wood, violin, [0, 5.8, 0], [0.3, 0.3, 0.25]);
   }
-  function workshop(g, bay, side) {
-    const desk = group(g, [side * 7, 3, -8]);
-    if (kit.hasAsset("art:workshop-desk"))
-      kit.fitAsset("art:workshop-desk", desk, [0, 0, 0], [8, 3.2, 3]);
-    else box(m.wood, desk, [0, 2, 0], [8, 1, 3]);
-    place("case", desk, [-1.2, 3.3, 0], 0.7, bay % 2 === 0, bay);
-    place("tuning-fork", desk, [2.8, 3.3, 0], 0.45);
-    if (bay % 2 === 0 && kit.hasAsset("art:score-shelves"))
-      kit.fitAsset("art:score-shelves", g, [side * 10, 2.8, 7.7], [4.5, 9, 2.5]);
-    // A jointed clamp and a swivelling polishing brush work without a performer.
-    const clamp = group(desk, [-3, 3.5, 0.7]);
-    tube(clamp, [0, 0, 0], [0, 1.8, 0], 0.12, m.brass);
-    const elbow = group(clamp, [0, 1.8, 0]);
-    tube(elbow, [0, 0, 0], [1.7, 0, 0], 0.1, m.brass);
-    mesh(sphere, m.ebony, elbow, [1.7, 0, 0], [0.3, 0.2, 0.2]);
-    if (bay % 2 === 0)
-      motion(clamp, (time, state) => {
+  box(m.ebony, violin, [0, 3.8, -0.48], [0.3, 3, 0.1]);
+  box(m.wood, violin, [0, 1.45, -0.56], [0.75, 0.15, 0.18]);
+  for (const side of [-1, 1]) {
+    tube(violin, [side * 0.8, 0, 0.2], [side * 0.8, 0.85, 0.2], 0.08, m.brass);
+    mesh(sphere, m.velvet, violin, [side * 0.8, 0.85, 0.2], [0.16, 0.16, 0.16]);
+  }
+  const strings = group(violin);
+  strings.name = "Resonating violin strings";
+  for (let i = 0; i < 4; i++)
+    tube(
+      strings,
+      [(i - 1.5) * 0.075, 0.6, -0.59],
+      [(i - 1.5) * 0.075, 5.45, -0.59],
+      0.01,
+      m.silver,
+    );
+  kit.batch(strings);
+  // A brass slide carriage carries the bow; the stroke follows this fixed rail.
+  for (const x of [-2.9, -1.1]) tube(violin, [x, 0, 0.3], [x, 1.8, -0.65], 0.07, m.brass);
+  tube(violin, [-2.9, 1.8, -0.65], [-1.1, 1.8, -0.65], 0.08, m.brass);
+  const bow = group(violin, [0, 2.04, -0.65]);
+  bow.name = "Mechanical violin bow";
+  box(m.wood, bow, [0, 0, 0], [5.2, 0.075, 0.085]);
+  box(m.ivory, bow, [0, -0.12, 0.06], [4.6, 0.025, 0.035]);
+  box(m.ebony, bow, [-2, 0, 0], [0.4, 0.25, 0.25]);
+  box(m.brass, bow, [-2, -0.22, 0], [0.3, 0.2, 0.3]);
+  kit.batch(bow);
+  motion(bow, (time, state) => {
+    const clock = state?.motionEnabled === false ? 0 : time;
+    bow.position.x = Math.sin(clock * Math.PI * 0.5) * 0.85;
+  });
+  motion(strings, (time, state) => {
+    const clock = state?.motionEnabled === false ? 0 : time;
+    strings.position.x = Math.sin(clock * 38) * Math.abs(Math.cos(clock * Math.PI * 0.5)) * 0.009;
+  });
+  kit.batch(violin, [bow, strings]);
+  const lamp = mesh(sphere, matLamp(w), g, [0, 4.9, 12], [0.7, 0.7, 0.7]);
+  g.updateWorldMatrix(true, true);
+  registerLightPool(scene, {
+    position: lamp.getWorldPosition(new THREE.Vector3()),
+    color: "#ffd6a4",
+    intensity: 38,
+    radius: 75,
+  });
+}
+
+function matLamp(w) {
+  return w.mat("#ffe3b4", null, { emissive: "#ffc775", emissiveIntensity: 1.2 });
+}
+
+function buildDrumAccompaniment(w, m, group) {
+  const { THREE, track, safe, mesh, tube, sphere, kit, motion } = w;
+  const field = track.drumField;
+  if (!field) return;
+  // An opening, middle and closing accent follow the actual bounce path.
+  // Their mallets hit separate drums, leaving the player's drumheads clear.
+  const indices = [0, Math.floor(field.drums.length / 2), field.drums.length - 1];
+  for (const [accent, index] of indices.entries()) {
+    const drum = field.drums[index];
+    const section = track.SECTIONS[field.section];
+    const fraction = (drum.t - section.start) / (section.end - section.start);
+    const side = accent % 2 ? 1 : -1;
+    const g = safe(field.section, fraction, side * 28, 10, 15);
+    if (!g) continue;
+    g.name = `Mallet accompaniment for bounce drum ${index + 1}`;
+    g.userData.composition = "drum-accompaniment";
+    g.userData.companionDrumIndex = index;
+    pedestal(w, m, g, 18, 16, 1);
+    mesh(new THREE.CylinderGeometry(1, 1, 1, 24, 1, true), m.wood, g, [0, 3, 0], [5.4, 4, 5.4]);
+    for (const y of [1.2, 4.9]) {
+      const rim = mesh(new THREE.TorusGeometry(5.4, 0.16, 8, 32), m.brass, g, [0, y, 0]);
+      rim.rotation.x = Math.PI / 2;
+    }
+    for (let i = 0; i < 12; i++) {
+      const angle = (i * Math.PI) / 6;
+      tube(
+        g,
+        [Math.cos(angle) * 5.45, 1.3, Math.sin(angle) * 5.45],
+        [Math.cos(angle) * 5.45, 4.7, Math.sin(angle) * 5.45],
+        0.08,
+        m.silver,
+      );
+    }
+    const headGeometry = new THREE.CircleGeometry(5.2, 32);
+    headGeometry.rotateX(-Math.PI / 2);
+    const head = mesh(headGeometry, m.ivory, g, [0, 5.04, 0]);
+    head.name = "Mallet-responsive side drumhead";
+    for (const hand of [-1, 1]) {
+      tube(g, [hand * 7, 1, 0], [hand * 7, 7.1, 0], 0.22, m.brass);
+      mesh(sphere, m.ebony, g, [hand * 7, 7.1, 0], [0.5, 0.5, 0.5]);
+      const mallet = group(g, [hand * 7, 7.1, 0]);
+      mallet.name = "Pivoted percussion mallet";
+      tube(mallet, [0, 0, 0], [-hand * 7, 0, 0], 0.16, m.wood);
+      mesh(sphere, m.velvet, mallet, [-hand * 7, 0, 0], [0.65, 0.65, 0.65]);
+      kit.batch(mallet);
+      motion(mallet, (time, state) => {
         const clock = state?.motionEnabled === false ? 0 : time;
-        clamp.rotation.y = Math.sin(clock * Math.PI * 0.5 + bay) * 0.35;
-        elbow.rotation.z = Math.sin(clock * Math.PI + bay) * 0.18;
+        const strike =
+          Math.max(0, Math.sin(clock * Math.PI + accent * 0.6 + (hand > 0 ? Math.PI : 0))) ** 8;
+        mallet.rotation.z = -hand * (0.4 - strike * 0.615);
       });
-    kit.batch(elbow);
-    // Scores remain scenery: no key sequence, trigger or new shortcut.
-    for (let sheet = 0; sheet < 4; sheet++) {
-      const paper = box(m.ivory, desk, [-0.4 + sheet * 0.7, 3.28, 0], [0.7, 0.035, 1]);
-      paper.rotation.y = sheet * 0.14;
-      for (let line = 0; line < 5; line++)
-        box(m.ebony, desk, [-0.4 + sheet * 0.7, 3.31, -0.3 + line * 0.12], [0.6, 0.008, 0.015]);
     }
-    return bay % 2 === 0 ? clamp : null;
-  }
-  // Hero silhouettes rise above the smaller ensembles, on complete plinths.
-  for (const [section, fraction, side, kind, size] of [
-    [0, 0.42, -1, "metronome", 6],
-    [1, 0.67, 1, "timpani", 7],
-    [2, 0.46, -1, "gong", 7],
-    [3, 0.65, 1, "tuba", 6],
-    [4, 0.62, -1, "harp", 7],
-    [5, 0.55, 1, "piano", 7],
-  ]) {
-    const g = safe(section, fraction, side * 70, 27, 60);
-    if (!g) continue;
-    box(m.wood, g, [0, 2.5, 0], [54, 5, 32]);
-    place(kind, g, [0, 5, 0], size, true, section * 0.6);
-    for (const x of [-22, 22]) {
-      const h = g.position.y - track.course.theme.groundHeight;
-      box(m.ebony, g, [x, -h / 2, 0], [3, h, 22]);
-    }
-    placements++;
-  }
-  // Flexible accordion folds, with separate rigid cases, are real skinned rigs.
-  for (const section of [0, 3, 5]) {
-    const g = safe(section, 0.82, -43, 8, 16);
-    if (!g) continue;
-    const assembly = group(g, [0, 8, 0]);
-    const rig = bellowsRig(w, assembly, m.leather, 9, 8, 5);
-    const left = box(m.wood, assembly, [-5.5, 0, 0], [2, 8.5, 5.5]);
-    const right = box(m.wood, assembly, [5.5, 0, 0], [2, 8.5, 5.5]);
-    for (let i = 0; i < 16; i++)
-      box(m.ivory, right, [0, 0.42 - i * 0.056, -0.52], [0.8, 0.05, 0.12]);
-    kit.batch(right);
-    motion(assembly, (time, state) => {
+    motion(head, (time, state) => {
       const clock = state?.motionEnabled === false ? 0 : time;
-      const amount = 0.72 + (1 + Math.sin(clock * Math.PI * 0.5 + section)) * 0.24;
-      rig.compress(amount);
-      left.position.x = -4.5 * amount - 1;
-      right.position.x = 4.5 * amount + 1;
+      const hit = Math.abs(Math.sin(clock * Math.PI + accent * 0.6)) ** 16;
+      head.position.y = 5.04 - hit * 0.08;
     });
-    box(m.wood, g, [0, 2.8, 0], [16, 5.6, 9]);
-    placements++;
+    kit.batch(g, w.animated);
   }
-  buildBellowsPassage(w, m, library);
-  w.scenery.userData.orchestraPlacements = placements;
 }
 
 function buildBellowsPassage(w, m, library) {

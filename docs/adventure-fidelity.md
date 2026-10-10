@@ -11,7 +11,7 @@ Observatory. Clockwork and Paper already have dedicated environmental stories.
 | Tempest | Complete imported cottages replace constructed cottage geometry. Eroded scanned sea stacks, distant crags, working sailing ships and rowing boats, grass and cottages, shoreline rings, rotating mist beams, sea-spray glints and sheltered warm motes. |
 | Pantry | Authored kitchen cabinets replace the large constructed banks; imported loaves replace toast geometry. Scanned wood and metal, croissants, strawberries, iced doughnuts, cookies and utensils; food racks, a coffee station and tall kitchen windows; shafts of warm light, drifting flour dust and sugar sparkles. |
 | Railstorm | Complete authored station houses and steam locomotive replace the large constructed buildings and engine; imported firs replace cone trees. Detailed cutout firs and ferns, layered mountain silhouettes, timber stacks, machinery and barrels; a moving background freight train, amber work lights and dust catching the valley light. |
-| Metronome | Six districts of self-playing instruments, with over 600 placements across strings, percussion, bells, brass, keyboards and workshops. A CC0 museum violin scan and Kenney workshop furniture join cherrywood, brass and velvet assemblies. Bows, mallets, lids, slides and clamps articulate; percussion squashes and stretches; accordion folds use skinned rigs. Clock pendulums keep their brass rods and weighted bobs. One roadside bellows passage alternates visible air puffs that nudge karts sideways. No humanoid performers. |
+| Metronome | A giant self-bowing violin is revealed through an opening in Hammer Gallery. Three mechanical mallet drums accompany the actual bounce-drum path. The remaining stretches use music-box architecture, velvet and warm brass light rather than repeated instrument racks. Clock bobs travel fixed-length arcs and rise at each end of the swing; the existing bellows passage keeps its alternating sideways puffs. |
 | Pelagic | Scanned reef terraces, textured ferns and marine grass, layered reef walls, fish schools and pulsing translucent jellyfish; moving caustics, light shafts, bubbles and bioluminescent glints. |
 | Emberwing | Textured softened basalt, a distant caldera rim, detailed terrace palms and flowering shrubs, scanning satellite dishes and drifting high meteor silhouettes; warm volcanic light and blue observatory fill, embers and terrace motes. |
 
@@ -118,15 +118,23 @@ on every course, including the lap-specific Paper alternatives.
 
 Software Chromium verifies rendering, not integrated-GPU frame-time performance.
 
-## Metronome orchestra expansion
+## Metronome performances
 
-`tools/prepare-metronome-instruments.py` reproduces the pinned CC0 downloads and
-Blender violin conversion. The Metronome manifest records the source and checksum
-of every imported model. Instruments and workshop details merge by material while
-moving parts retain their pivots and five bellows/accordion skins. The complete
-imported scene remains below the existing 1,800 draw-object budget.
+The instrument racks, repeating mini stages, scattered hero props and workshop
+furniture have been removed. Two authored performances give the course a rhythm
+of clear space and distinct landmarks: a 66m violin with a carriage-driven bow,
+and three mallet drums placed at the opening, middle and closing accents of the
+bounce path. The violin replaces a nearby curtain bay and resonator tower to keep
+its silhouette readable. Its CC0 museum scan and the bellows air-pump model remain
+locally bundled; `tools/prepare-metronome-instruments.py` reproduces their pinned
+sources. No humanoid performers are used.
 
-The bellows are the only added environmental interaction. Both emitters share
+Clock pendulums swing from fixed pivots on 34m rods. The shared simulation clock
+controls angular motion, lateral offset and the bob's rise, so the collision
+volume follows the rendered swing. The complete scene remains under the existing
+1,800 draw-object budget.
+
+The bellows remain the only added environmental interaction. Both emitters share
 the simulation clock, warn while inflating, then alternate puffs across one
 passage. Karts in the visible air volume receive sideways acceleration; the
 effect introduces no boost, impact or launch. Hazard motion continues when

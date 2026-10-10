@@ -57,9 +57,7 @@ manifest['models'].append({
 })
 catalog = fetch(KIT_URL + 'catalog.json', 'kenney-catalog.json')
 entries = {m['id']: (p, m) for p in json.loads(catalog)['packs'] for m in p['models']}
-for source, alias in [('furniture-kit/desk', 'workshop-desk'),
-                      ('furniture-kit/bookcaseopen', 'score-shelves'),
-                      ('space-kit/machine-generator', 'air-pump')]:
+for source, alias in [('space-kit/machine-generator', 'air-pump')]:
     pack, model = entries[source]
     assert pack['license'] == 'CC0-1.0'
     data = fetch(KIT_URL + model['file'], alias + '.glb')
@@ -72,6 +70,6 @@ for source, alias in [('furniture-kit/desk', 'workshop-desk'),
         'catalogSha256': digest(catalog), 'attribution': 'licenses/CC0.txt',
         'bytes': len(data), 'sha256': digest(data),
     })
-manifest['license'] = 'Original self-playing mechanical orchestra, clock pendulums, music-box drum and bellows. Imported CC0 museum violin and Kenney workshop props; locally bundled credited scans.'
+manifest['license'] = 'Original clock pendulums, music-box mechanism, giant violin bow, mallet accompaniment and bellows. Imported CC0 museum violin and Kenney air-pump; locally bundled credited scans.'
 (PACK / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
-print('Prepared museum violin and three Kenney workshop models.')
+print('Prepared museum violin and Kenney air-pump.')
