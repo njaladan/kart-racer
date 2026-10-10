@@ -3,12 +3,12 @@ import { carvedSandstone } from "./sunstone-materials.js";
 import { installDesertMirage } from "../../rendering/desert-mirage.js";
 
 /** Chipped masonry, leaning fragments and collapsed openings form irregular ruin clusters. */
-export function buildWeatheredLandmarks({ THREE, scenery, kit, textures, field, mirage }) {
+export function buildWeatheredLandmarks({ THREE, scenery, kit, textures, field, mirage, clock }) {
   const { mesh, material } = kit;
   const stones = ["#b5a58f", "#cabaa0", "#9b9488"].map((color) => {
     const m = material(color, { bumpMap: textures.stone, bumpScale: 0.07, roughness: 1 });
     carvedSandstone(m);
-    installDesertMirage(m, mirage);
+    installDesertMirage(m, mirage, clock);
     return m;
   });
   const blocks = [0.4, 2.7, 5.3].map((phase) => {
