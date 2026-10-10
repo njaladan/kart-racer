@@ -1,9 +1,8 @@
-/** Assemble bounded wildlife particles and animate fabric, crowds, boats, and machinery. */
+/** Assemble bounded wildlife particles and animate fabric, boats, and machinery. */
 export function createLifeAnimation({
   THREE,
   animate,
   animated,
-  arms,
   birds,
   boats,
   butterflies,
@@ -82,25 +81,6 @@ export function createLifeAnimation({
   }
   const motes = driftingParticles(1, 60, "#bce6bb", 0.12, "Pine hollow drifting motes");
   const petals = driftingParticles(5, 80, "#ffcabd", 0.19, "Orchard drifting blossom");
-  // Crowd arms share a few moving batches, rather than one draw per limb.
-  const cheering = new THREE.Group();
-  scene.add(cheering);
-  for (const arm of arms) arm.g.rotation.z = arm.side * 1.9;
-  scene.updateMatrixWorld(true);
-  for (const arm of arms) {
-    for (const limb of [...arm.g.children]) {
-      limb.matrixWorld.decompose(limb.position, limb.quaternion, limb.scale);
-      cheering.add(limb);
-    }
-    animated.splice(animated.indexOf(arm.g), 1);
-    arm.g.removeFromParent();
-  }
-  kit.batch(cheering);
-  animated.push(cheering);
-  const cheerMotion = cheering.children.map((m) => ({
-    mesh: m,
-    base: m.geometry.attributes.position.array.slice(),
-  }));
   // Merge each moving assembly while preserving its animated transform.
   for (const b of boats) kit.batch(b.g);
   if (wheel) kit.batch(wheel);
@@ -118,16 +98,6 @@ export function createLifeAnimation({
           a[i + 1] = f.rest[i + 1];
         }
         f.geo.attributes.position.needsUpdate = true;
-      }
-      for (const { mesh: m, base } of cheerMotion) {
-        const p = m.geometry.attributes.position;
-        for (let i = 0; i < p.count; i++) {
-          const j = i * 3,
-            wave = Math.sin(time * 4 + base[j] * 0.35 + base[j + 2] * 0.8);
-          p.array[j + 1] = base[j + 1] + wave * 0.14;
-          p.array[j + 2] = base[j + 2] + wave * 0.09;
-        }
-        p.needsUpdate = true;
       }
       for (const b of boats) {
         b.g.position.y = b.baseY + Math.sin(time * 1.1 + b.phase) * 0.14;

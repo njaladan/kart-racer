@@ -31,11 +31,10 @@ export function buildWorld(context) {
   });
   const groomer = buildGroomer({ ...context, festival });
   const wonders = buildMountainWonders({ ...context, festival });
-  const town = buildFestivalTown({ ...context, festival });
+  buildFestivalTown({ ...context, festival });
   const life = buildWinterLife({
     ...context,
     festival,
-    town,
     assets: context.assets || { models: {} },
   });
   const sky = buildFestivalSky({ ...context, festival });

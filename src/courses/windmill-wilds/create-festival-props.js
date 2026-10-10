@@ -1,8 +1,7 @@
-/** Reusable festival props, visitor poses, flags, and produce crates. */
+/** Reusable festival flags, market stalls and produce crates. */
 export function createFestivalProps({
   THREE,
   animate,
-  arms,
   flags,
   groundShadow,
   random,
@@ -12,8 +11,8 @@ export function createFestivalProps({
   geometry,
 }) {
   const { box, mesh } = kit;
-  const { butter, coral, cream, dark, fruit, mint, navy, skin, wood } = palette;
-  const { cone, cylinder, disc, sphere } = geometry;
+  const { butter, coral, cream, dark, fruit, mint, wood } = palette;
+  const { cone, cylinder, sphere } = geometry;
   function beam(parent, a, b, thickness = 0.15, mat = wood) {
     const start = new THREE.Vector3(...a),
       end = new THREE.Vector3(...b);
@@ -95,28 +94,6 @@ export function createFestivalProps({
     for (const side of [-1, 1]) beam(g, [side * 3, 3.9, 2.5], [side * 4.5, 0.1, 3.4], 0.025, dark);
     flag(g, 0, 5.35, 0, color, 2);
   }
-  function visitor(parent, x, y, z, index) {
-    const g = new THREE.Group();
-    g.position.set(x, y, z);
-    parent.add(g);
-    const color = [coral, mint, navy, butter][index % 4];
-    mesh(sphere, color, g, [0, 0.7, 0], [0.33, 0.48, 0.28]);
-    for (const side of [-1, 1]) box(dark, g, [side * 0.13, 0.2, 0], [0.17, 0.42, 0.18]);
-    mesh(sphere, skin, g, [0, 1.34, 0], [0.26, 0.28, 0.26]);
-    mesh(disc, color, g, [0, 1.55, 0], [0.37, 0.08, 0.34]);
-    mesh(sphere, color, g, [0, 1.61, 0], [0.24, 0.15, 0.24]);
-    for (const side of [-1, 1]) {
-      const arm = new THREE.Group();
-      arm.position.set(side * 0.3, 1.02, 0);
-      g.add(arm);
-      box(color, arm, [side * 0.1, -0.14, 0], [0.16, 0.4, 0.18]);
-      mesh(sphere, skin, arm, [side * 0.1, -0.4, 0], [0.12, 0.12, 0.12]);
-      if (index % 3 === 0) {
-        animate(arm);
-        arms.push({ g: arm, side, phase: index * 0.7 });
-      } else arm.rotation.z = side * 0.18;
-    }
-  }
 
-  return { beam, flag, pennantLine, crate, tent, visitor };
+  return { beam, flag, pennantLine, crate, tent };
 }

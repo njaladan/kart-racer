@@ -2,7 +2,7 @@ import { createLifeAnimation } from "./windmill-wilds/create-life-animation.js";
 import { buildForestAndRidge } from "./windmill-wilds/build-forest-and-ridge.js";
 import { createFestivalProps } from "./windmill-wilds/create-festival-props.js";
 // Original countryside dressing. Static parts are batched by the countryside world builder;
-// wind, animals, visitors, boats and machinery share the race animation clock.
+// wind, animals, boats and machinery share the race animation clock.
 import { createContactShadowMesh } from "../rendering/visual-effects.js";
 import { sceneryGroundHeight } from "../rendering/terrain-height.js";
 
@@ -16,7 +16,6 @@ export default function buildWindmillLife(context) {
   };
   const animated = [],
     flags = [],
-    arms = [],
     butterflies = [],
     boats = [],
     birds = [];
@@ -26,8 +25,7 @@ export default function buildWindmillLife(context) {
     coral = material("#ec785b"),
     butter = material("#edc765");
   const mint = material("#82bb9a"),
-    navy = material("#537f9c"),
-    skin = material("#eac297");
+    navy = material("#537f9c");
   const leaf = material("#669766", { map: textures.leaves ?? null });
   const grass = material("#7eae59"),
     deep = material("#386859");
@@ -117,15 +115,13 @@ export default function buildWindmillLife(context) {
     leaf,
     mint,
     navy,
-    skin,
     steel,
     wood,
   };
   const geometry = { cone, crown, cylinder, disc, leafGeometry, sphere };
-  const { beam, flag, pennantLine, crate, tent, visitor } = createFestivalProps({
+  const { beam, flag, pennantLine, crate, tent } = createFestivalProps({
     THREE,
     animate,
-    arms,
     flags,
     groundShadow,
     random,
@@ -149,8 +145,6 @@ export default function buildWindmillLife(context) {
     g.name = "Festival viewing terrace";
     for (let row = 0; row < 3; row++) {
       box(wood, g, [0, 0.35 + row * 0.55, row * 1.3], [11, 0.3, 1.2]);
-      for (let col = 0; col < 9; col++)
-        visitor(g, -4.3 + col * 1.05, 0.55 + row * 0.55, row * 1.3, col + row * 3);
     }
     for (const x of [-5.5, 5.5]) box(wood, g, [x, 2.8, 3.6], [0.13, 5.6, 0.13]);
     pennantLine(g, [-5.5, 5.5, 3.6], [5.5, 5.5, 3.6], 12);
@@ -337,7 +331,6 @@ export default function buildWindmillLife(context) {
     THREE,
     animate,
     animated,
-    arms,
     birds,
     boats,
     butterflies,
