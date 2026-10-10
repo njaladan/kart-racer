@@ -5,6 +5,7 @@ import { frostpeakBackground } from "./frostpeak.js";
 import { clockworkBackground } from "./clockwork.js";
 import { paperBackground } from "./paper.js";
 import { tempestBackground } from "./tempest.js";
+import { pantryBackground } from "./pantry.js";
 
 export const COURSE_BACKGROUNDS = {
   "windmill-wilds": windmillBackground,
@@ -13,6 +14,7 @@ export const COURSE_BACKGROUNDS = {
   "clockwork-citadel": clockworkBackground,
   "paper-revel": paperBackground,
   "tempest-causeway": tempestBackground,
+  "pocket-pantry": pantryBackground,
 };
 
 export function buildCourseBackground(w) {
