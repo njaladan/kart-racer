@@ -4,6 +4,7 @@ import { neonBackground } from "./neon.js";
 import { frostpeakBackground } from "./frostpeak.js";
 import { clockworkBackground } from "./clockwork.js";
 import { paperBackground } from "./paper.js";
+import { tempestBackground } from "./tempest.js";
 
 export const COURSE_BACKGROUNDS = {
   "windmill-wilds": windmillBackground,
@@ -11,6 +12,7 @@ export const COURSE_BACKGROUNDS = {
   "frostpeak-festival": frostpeakBackground,
   "clockwork-citadel": clockworkBackground,
   "paper-revel": paperBackground,
+  "tempest-causeway": tempestBackground,
 };
 
 export function buildCourseBackground(w) {
