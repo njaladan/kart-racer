@@ -4,7 +4,6 @@ import * as THREE from "../vendor/three/three.module.js";
 import { COURSES } from "../src/courses/registry.js";
 import { selectCourse } from "../src/track/track.js";
 import { createCourseKit, batchScenery } from "../src/rendering/course-kit.js";
-import { createRouteClearance } from "../src/rendering/route-clearance.js";
 import { buildAdventureArt } from "../src/courses/fidelity/index.js";
 import { createSunGlare } from "../src/rendering/sun-glare.js";
 
@@ -20,7 +19,7 @@ test("flat imported props fit a bounded footprint instead of scaling their width
   assert.ok(size.y < 1 && size.z < 3, "authored proportions survive fitting");
 });
 
-test("Santorini terraces and complete observatory mountings clear every road floor", () => {
+test("Santorini's connected terraces stay below the road and retaining faces reach the ground", () => {
   const course = COURSES.find((c) => c.id === "emberwing-observatory"),
     track = selectCourse(course);
   const scene = new THREE.Scene(),
@@ -28,23 +27,37 @@ test("Santorini terraces and complete observatory mountings clear every road flo
   scene.add(scenery);
   const kit = createCourseKit(scenery, track);
   course.buildWorld({ THREE, scene, scenery, track, kit, textures: {} });
-  const allows = createRouteClearance(track),
-    identity = new THREE.Group();
-  let terraces = 0;
+  let terraces = 0,
+    retainingFaces = 0,
+    frontages = 0;
   scenery.traverse((object) => {
-    if (object.name !== "Whitewashed caldera terrace") return;
-    terraces++;
-    const bounds = new THREE.Box3().setFromObject(object);
-    assert.ok(
-      allows(
-        identity,
-        bounds.getCenter(new THREE.Vector3()).toArray(),
-        bounds.getSize(new THREE.Vector3()).toArray(),
-      ),
-    );
-    assert.ok(Math.abs(bounds.min.y + 46) < 0.01, "retaining walls reach the caldera ground");
+    if (object.name === "Connected whitewashed town terrace") {
+      terraces++;
+      const positions = object.geometry.attributes.position,
+        uv = object.geometry.attributes.uv;
+      for (let i = 0; i < positions.count; i++) {
+        const p = new THREE.Vector3().fromBufferAttribute(positions, i);
+        const t = (uv.getY(i) * 8) / track.COURSE_LENGTH;
+        const road = track.poseAt(t * track.TRACK, uv.getX(i) * 8, 0).p;
+        assert.ok(
+          Math.abs(p.y - road.y + 1.08) < 0.001,
+          "terrace follows the street below its floor",
+        );
+      }
+    }
+    if (object.name === "Continuous terraced island retaining face") {
+      retainingFaces++;
+      const bounds = new THREE.Box3().setFromObject(object);
+      assert.ok(
+        Math.abs(bounds.min.y - course.theme.groundHeight) < 0.01,
+        "retaining walls reach the caldera ground",
+      );
+    }
+    if (object.name === "Inhabited Cycladic street block") frontages++;
   });
-  assert.ok(terraces > 40, "clearance preserves the inhabited town");
+  assert.equal(terraces, 7, "all town sections have connected terraces");
+  assert.equal(retainingFaces, terraces);
+  assert.ok(frontages > 40, "clearance preserves the inhabited town");
 });
 
 test("all Pelagic fish and jellyfish animation envelopes stay underwater", () => {

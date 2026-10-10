@@ -5,6 +5,21 @@ import { selectCourse, TRACK } from "../src/track/track.js";
 import { initializeRacer, advanceRacer, botInput } from "../src/simulation/simulation.js";
 import { pendulumAt, mechanismContact } from "../src/simulation/course-mechanics.js";
 const track = selectCourse(course);
+test("clock bobs swing on fixed-length arcs and agree with the rendered rods", () => {
+  for (const d of course.pendulums) {
+    const station = track.poseAt(track.sectorT(d.section, d.fraction) * TRACK, 0, 0);
+    const pivot = station.p.clone().addScaledVector(station.up, d.length + d.radius - 1.75);
+    for (let step = 0; step <= 40; step++) {
+      const pose = pendulumAt(track, d, (step * d.period) / 40);
+      const bob = pose.p.clone().addScaledVector(pose.up, d.radius - 2);
+      assert.ok(Math.abs(bob.distanceTo(pivot) - d.length) < 1e-8);
+    }
+    const bottomTime = (-d.phase * d.period) / (2 * Math.PI);
+    const bottom = pendulumAt(track, d, bottomTime);
+    const apex = pendulumAt(track, d, bottomTime + d.period / 4);
+    assert.ok(apex.p.y > bottom.p.y + 5, "the bob rises toward the turning point");
+  }
+});
 test("all beat hazards repeat on the shared clock and require a timed passage", () => {
   for (const d of course.pendulums)
     for (const time of [0, 0.15, 0.5, 1.2]) {

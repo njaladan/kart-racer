@@ -1,7 +1,7 @@
 import { createScenerySite } from "../../rendering/scenery-sites.js";
 import { importedRockGeometry } from "../fidelity/imported-rock.js";
 import { createWaterMaterial, installSurfaceDetail } from "../../rendering/surface-detail.js";
-import { pendulumAt } from "../../simulation/course-mechanics.js";
+import { pendulumAt, pendulumAngleAt } from "../../simulation/course-mechanics.js";
 import { clockPendulumBob } from "./clock-pendulum.js";
 export function worldKit(context) {
   const { THREE, scene, scenery, track, kit, textures = {} } = context;
@@ -149,7 +149,7 @@ export function worldKit(context) {
   function pendulums(style, color) {
     for (const [i, d] of (track.course.pendulums || []).entries()) {
       const clock = style === "clock";
-      const anchorHeight = clock ? 30 : 21;
+      const anchorHeight = clock ? (d.length ? d.length + d.radius - 1.75 : 30) : 21;
       const g = at(d.section, d.fraction),
         m = mat(color, "metal", { metalness: 0.55, roughness: 0.32 }),
         darkBrass = clock ? mat("#725038", "metal", { metalness: 0.7, roughness: 0.36 }) : m,
@@ -172,7 +172,9 @@ export function worldKit(context) {
       if (clock) {
         kit.batch(bob);
         g.name = "Swinging upright clock pendulum";
+        rod.name = "Clock pendulum suspension rod";
         const pivot = mesh(cylinder, darkBrass, g, [0, anchorHeight, 0], [1.35, 2.2, 1.35]);
+        pivot.name = "Clock pendulum fixed pivot";
         pivot.rotation.x = Math.PI / 2;
         mesh(torus, m, g, [0, anchorHeight, 1.2], [1.3, 1.3, 1.3]);
       }
@@ -184,17 +186,25 @@ export function worldKit(context) {
         anchorHeight,
       );
       motion(g, (time) => {
-        const pose = pendulumAt(track, d, time);
         g.updateWorldMatrix(true, false);
-        const local = g.worldToLocal(pose.p.clone());
-        // The circular clock face extends up from the same low crossing band.
-        local.y += clock ? d.radius - 2 : d.height ? d.height / 2 - 2 : 0.85;
+        let local;
+        if (clock && d.length) {
+          const angle = pendulumAngleAt(d, time);
+          local = new THREE.Vector3(
+            d.length * Math.sin(angle),
+            anchorHeight - d.length * Math.cos(angle),
+            0,
+          );
+        } else {
+          local = g.worldToLocal(pendulumAt(track, d, time).p.clone());
+          local.y += clock ? d.radius - 2 : d.height ? d.height / 2 - 2 : 0.85;
+        }
         bob.position.copy(local);
         const anchor = new THREE.Vector3(0, anchorHeight, 0),
           direction = local.clone().sub(anchor);
         if (clock) bob.rotation.z = Math.atan2(direction.x, -direction.y);
         rod.position.copy(anchor).add(local).multiplyScalar(0.5);
-        rod.scale.y = direction.length();
+        rod.scale.y = clock && d.length ? d.length : direction.length();
         rod.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.normalize());
       });
       for (const side of [-1, 1]) box(m, g, [side * 8, 0.08, 0], [0.25, 0.05, 9]);

@@ -46,6 +46,13 @@ function sectionFraction(course, item, path) {
 /** Validate the authored data contract before track construction uses it. */
 export function validateCourseDefinition(course) {
   if (!course || typeof course !== "object") fail(course, "descriptor", "an object");
+  for (const [index, pendulum] of (course.pendulums || []).entries()) {
+    if (pendulum.length != null)
+      finite(course, pendulum.length, `pendulums[${index}].length`, {
+        min: pendulum.amplitude || 4.4,
+        exclusiveMin: true,
+      });
+  }
   if (course.bellows) {
     const d = course.bellows;
     sectionFraction(course, d, "bellows");

@@ -43,7 +43,8 @@ Basalt detail levels contain 1,044 / 288 / 192 triangles, switch at 110 / 240 m,
 and share the existing regional instancing system. Static cliffs and crater
 quadrants are separately culled and receive the existing spatial batching.
 
-The complete static scene export grew from 234,582 to 275,002 triangles because
+In the original geology pass, the complete static scene export grew from
+234,582 to 275,002 triangles because
 the reusable outcrop appears multiple times. Matching switchback and flight
 captures submitted fewer draw calls, with similar triangle counts. These are
 software-browser observations of particular views, including actors and render
@@ -55,3 +56,40 @@ the actual track queries and audits the imported geology alone. Existing tests
 verify three-lap AI completion, cannon snapshots/recovery, finite scenery,
 asset hashes and lighting outputs. Driving-camera captures showed no browser or
 shader errors; human driving feel remains a playtest judgment.
+
+
+## Santorini town and caldera update
+
+The course now runs through connected whitewashed neighborhoods, blue and coral
+market streets, observatory courts, fountain gardens, a vineyard and fishing
+quays. Laundry, flowering pots, olives, bobbing boats and working nets animate
+without villagers. The old shortcut is removed. Both market streets are regular
+routes, with a shared pavement seam at their entry and rejoin. Their curves leave
+room for the entire driving width instead of folding the inside edge.
+
+The cannon retains its authoritative flight across the caldera. Doors, recoil
+and smoke derive from shared racer departure times. Black basalt surrounds lava
+bubbles, rising blobs and returning splashes. The landing has banners and
+windsocks. A narrow optional fountain quarterpipe leaves ordinary driving lanes
+alongside it. Sea shading uses quiet turquoise bands and white wave curls.
+
+Final verification:
+
+- Five AI drivers finish three laps with three cannon launches each, no wall
+  impacts and no recoveries.
+- Both market streets preserve snapshots and recovery, then rejoin the main road.
+- Junction ray checks find one paved floor; separated driving platforms do not
+  overlap. Curve radius checks cover both complete street widths.
+- The complete scenery audit checks 3,467 rays with zero intersections.
+- Blender geology matches the current route. Ground and mesh lighting were
+  regenerated after the final street geometry.
+- High-quality normal-camera captures cover the fork, cannon flight and harbor,
+  with no browser or shader errors. These are software-rendered visual checks,
+  not hardware performance measurements.
+- ESLint and changed-file formatting pass. Focused Emberwing, geology and scenery
+  checks pass. Two full-suite baseline failures reproduced at `4488fe3` (Neon
+  Harbor draw budget and Frostpeak tire-contact floor separation). Subsequent
+  upstream commit `665e9e0` updates those checks; its changes are retained.
+
+Current full-scene inventory: 1,076 mesh objects and approximately 1.91 million
+instanced triangles. This includes the dense town and all shared scenery.

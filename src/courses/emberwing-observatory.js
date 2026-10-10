@@ -118,16 +118,10 @@ export default adventure({
     halfWidth: 4.4,
     required: true,
     theme: "santorini-market",
-    points: [
-      [0, 0],
-      [0.07, 0],
-      [0.28, side * 11],
-      [0.42, side * 13],
-      [0.58, side * 13],
-      [0.72, side * 11],
-      [0.93, 0],
-      [1, 0],
-    ],
+    points: Array.from({ length: 25 }, (_, i) => {
+      const q = i / 24;
+      return [q, side * 13 * Math.sin(Math.PI * q) ** 2];
+    }),
   })),
   fountainJump: { section: 4, fraction: 0.42, basinLength: 10, basinHalfWidth: 4.4 },
   ambientSources: [

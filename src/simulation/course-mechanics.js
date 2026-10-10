@@ -43,7 +43,12 @@ export function underwaterAt(track, t) {
   const { start, end } = rangeFor(track, definition);
   return t >= start && t <= end;
 }
+export function pendulumAngleAt(definition, time) {
+  const phase = (time * 2 * Math.PI) / definition.period + (definition.phase || 0);
+  return Math.asin((definition.amplitude || 4.4) / definition.length) * Math.sin(phase);
+}
 export function pendulumOffsetAt(definition, time) {
+  if (definition.length) return definition.length * Math.sin(pendulumAngleAt(definition, time));
   const phase = (time * 2 * Math.PI) / definition.period + (definition.phase || 0);
   return Math.sin(phase) * (definition.amplitude || 4.4);
 }
@@ -51,8 +56,16 @@ export function pendulumAt(track, definition, time) {
   const t = track.sectorT(definition.section, definition.fraction);
   const phase = (time * 2 * Math.PI) / definition.period + (definition.phase || 0);
   const offset = pendulumOffsetAt(definition, time);
+  const lift = definition.length
+    ? definition.length * (1 - Math.cos(pendulumAngleAt(definition, time)))
+    : 0;
+  const pose = definition.length
+    ? track.poseAt(t * track.TRACK, 0, 0)
+    : track.poseAt(t * track.TRACK, offset, 0.25);
+  if (definition.length)
+    pose.p.addScaledVector(pose.right, offset).addScaledVector(pose.up, 0.25 + lift);
   return {
-    ...track.poseAt(t * track.TRACK, offset, 0.25),
+    ...pose,
     t,
     offset,
     warning: Math.abs(Math.cos(phase)) > 0.85,

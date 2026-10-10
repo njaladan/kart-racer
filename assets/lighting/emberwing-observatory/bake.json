@@ -18,7 +18,7 @@
   "samples": 12,
   "radius": 22.0,
   "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Four-point area emitters soften penumbrae and glass/cutouts transmit attenuated light. Colored spill volume samples at authored heights illuminate vertical surfaces.",
-  "sourceSceneSha256": "1ad0ef47d2a9eded808ff12619fddd598414e159780250ec85ef1176a381d83f",
+  "sourceSceneSha256": "9f9809b0238c518fa7b99fc8b2f8a22b272b08c5cc4ac7268931af48ded20825",
   "triangles": 1808994,
   "lights": 40,
   "areaLights": 1,
@@ -28,22 +28,22 @@
       "file": "indirect.png",
       "width": 768,
       "height": 768,
-      "bytes": 510826,
-      "sha256": "2c629608fc17a558f18a00643b24b962f26c976fe111498c9d8bd0d3c40c8c1b"
+      "bytes": 511312,
+      "sha256": "7f9aba7622365079418d2a7579a6819282b4ddab24c9651179875eac34bdb862"
     },
     {
       "file": "height.png",
       "width": 768,
       "height": 768,
-      "bytes": 377582,
-      "sha256": "bbbfa8eb3e751ce00075ecdca2da1243ff4dae4c7db1fc2511b25b8da5fc9813"
+      "bytes": 377687,
+      "sha256": "ed318610d648bb6be5aa79becfcf1d82b94258588ad3df7ebe586509332b8707"
     },
     {
       "file": "spill.png",
       "width": 512,
       "height": 256,
-      "bytes": 23717,
-      "sha256": "fed10638f21d4539d45740958e03aca83d73f9e25fefb125d7f5efa8d035c297"
+      "bytes": 23734,
+      "sha256": "ee2ea0ec9957c1b8515bf7cfec0bdddcea0169ed15a7b318bae5fb87cead3747"
     }
   ],
   "lightVolume": {
