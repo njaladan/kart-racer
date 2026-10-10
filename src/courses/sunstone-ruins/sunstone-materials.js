@@ -117,7 +117,10 @@ export function templePaving(material, { ceremonial = false } = {}) {
 }
 
 /** Depth-tested sunlight shafts; a few planes replace a volumetric march. */
-export function sunShaft(THREE, { width = 4, height = 19, length = 12, color = "#ffe0a0" } = {}) {
+export function sunShaft(
+  THREE,
+  { width = 4, height = 19, length = 12, color = "#ffe0a0", direction = null } = {},
+) {
   const geometry = new THREE.PlaneGeometry(width, height, 1, 1);
   const material = new THREE.ShaderMaterial({
     transparent: true,
@@ -136,6 +139,7 @@ export function sunShaft(THREE, { width = 4, height = 19, length = 12, color = "
     plane.castShadow = false;
     group.add(plane);
   }
-  group.rotation.z = -0.3;
+  if (direction) group.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction);
+  else group.rotation.z = -0.3;
   return group;
 }

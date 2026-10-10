@@ -18,8 +18,8 @@
   "samples": 12,
   "radius": 22.0,
   "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Four-point area emitters soften penumbrae and glass/cutouts transmit attenuated light. Colored spill volume samples at authored heights illuminate vertical surfaces.",
-  "sourceSceneSha256": "3455a954db0b754dca3a36f21343a17c28a79a9530216cbb754341cceb536cf1",
-  "triangles": 611196,
+  "sourceSceneSha256": "25681a313ef7bb826daf53747c1ce3dcc32f4c1a882ee908700a8c9373800d4a",
+  "triangles": 918304,
   "lights": 28,
   "areaLights": 2,
   "transparentLightTransport": true,
@@ -28,22 +28,57 @@
       "file": "indirect.png",
       "width": 768,
       "height": 768,
-      "bytes": 522866,
-      "sha256": "3a04ac1f18e3d7d51c3417d81cdb7354540839596747ad1549839d5bd19d260d"
+      "bytes": 452942,
+      "sha256": "3929b305ceaf651d0af06c5b5200e96110746447ce870fa554a9a2ff9e78451f"
     },
     {
       "file": "height.png",
       "width": 768,
       "height": 768,
-      "bytes": 570455,
-      "sha256": "1b5218c722c57ce0c6557f7aa3880ed693a59c8d7a3265d930d021edab4cf8e1"
+      "bytes": 795115,
+      "sha256": "6af408eb2a8de243b91f41dec3ece884e5d9112e031b1c6caf00ea7c04938cfe"
     },
     {
       "file": "spill.png",
       "width": 768,
       "height": 384,
-      "bytes": 11625,
-      "sha256": "2c04a71f1f82e569a9d414236f0fd4d48d09fce369568f056374accda7be4cef"
+      "bytes": 10809,
+      "sha256": "4c5c1053916e131bc906ba4fcb5ce57ce53b5a962443b9f54d9e6bebd625ff25"
+    },
+    {
+      "file": "architecture-gi.png",
+      "width": 2048,
+      "height": 2048,
+      "bytes": 2897307,
+      "sha256": "af21c53e609b4d5611bcf9feafaab5824ec3379b342b7a5ae7718c7441c22500"
+    },
+    {
+      "file": "ground-gi.png",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 1662482,
+      "sha256": "7dd64755202381abe19cf537e76b3681e3b34520f1ea2ab2c16408f8a086843a"
+    },
+    {
+      "file": "ground-gi-height.png",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 1235181,
+      "sha256": "a4796f101a765499e9b75f310d029be25ec9654b6dab0a595b1381ab350a2cb9"
+    },
+    {
+      "file": "temple-gi.png",
+      "width": 512,
+      "height": 512,
+      "bytes": 434037,
+      "sha256": "ab8da407f960d20930d649e84ef6a73401ab9e2538865f33cb46839e068970fe"
+    },
+    {
+      "file": "temple-gi-height.png",
+      "width": 512,
+      "height": 512,
+      "bytes": 203839,
+      "sha256": "45df46b417a4f16ab0181d86f0a5ae1c181b774b9ac07e6f8602e1ebbfcab40d"
     }
   ],
   "lightVolume": {
@@ -60,5 +95,53 @@
     ],
     "strength": 1,
     "file": "spill.png"
+  },
+  "globalIllumination": {
+    "version": 1,
+    "method": "Cycles path-traced diffuse illumination, 4 diffuse bounces; direct sun removed and stored as visibility in alpha.",
+    "samples": 128,
+    "diffuseBounces": 4,
+    "scale": 2.0,
+    "sourceSceneSha256": "25681a313ef7bb826daf53747c1ce3dcc32f4c1a882ee908700a8c9373800d4a",
+    "sunDirection": [
+      -0.7504314662236418,
+      0.6003451729789134,
+      0.27647475071397326
+    ],
+    "architecture": {
+      "resolution": 2048,
+      "charts": 4350,
+      "texelsPerMetre": 2.1257640000000007,
+      "padding": 4,
+      "file": "architecture-gi.png"
+    },
+    "ground": {
+      "file": "ground-gi.png",
+      "height": "ground-gi-height.png",
+      "bounds": [
+        -445,
+        -338.9,
+        756.2,
+        692.3
+      ],
+      "resolution": 1024
+    },
+    "temple": {
+      "file": "temple-gi.png",
+      "height": "temple-gi-height.png",
+      "bounds": [
+        -180.06713696929847,
+        -30.77035104915515,
+        177.87922093008694,
+        237.0213853383072
+      ],
+      "resolution": 512
+    },
+    "probes": {
+      "metadata": "probe-lighting.json",
+      "count": 1710,
+      "metadataSha256": "abe6ae662ece8a8ce094a8537f609d6e687d0599f2e59d7aa7245315fa3a0eea"
+    },
+    "runtimeTextureBytes": 27262976
   }
 }

@@ -8,6 +8,7 @@ import { createSandfall } from "./sunstone-ruins/sandfall.js";
 import { createSolarFocus } from "./sunstone-ruins/solar-focus.js";
 import { createRouteClearance } from "../rendering/route-clearance.js";
 import { buildDesertHorizon } from "./sunstone-ruins/build-desert-horizon.js";
+import { prepareSurfaceLightmap } from "../rendering/surface-lightmap.js";
 
 /** The road travels through the monument; architecture follows its actual frames. */
 export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazardAt }) {
@@ -27,6 +28,7 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
   for (const m of [stone, pale, shade, dark, sand])
     installSurfaceDetail(m, { kind: "terrain", strength: 0.18 });
   for (const m of [stone, pale, shade, dark]) carvedSandstone(m, { carved: true });
+  for (const m of [stone, pale, shade, dark]) m.userData.surfaceLightmap = true;
   const sphere = new THREE.SphereGeometry(1, 12, 8);
   const ring = new THREE.TorusGeometry(1, 0.075, 6, 48);
   const rock = new THREE.IcosahedronGeometry(1, 1);
@@ -40,7 +42,8 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
   function column(g, x, height = 19) {
     if (!allows(g, [x, height / 2, 0], [5.2, height + 2, 5.2])) return false;
     box(dark, g, [x, 0.7, 0], [5.2, 1.4, 5.2]);
-    mesh(shaft, stone, g, [x, height / 2, 0], [1.7, height, 1.7]);
+    mesh(shaft, stone, g, [x, height / 2, 0], [1.7, height, 1.7]).userData.lightmapArchitecture =
+      true;
     for (const y of [1.6, height - 1.5, height]) box(pale, g, [x, y, 0], [4.5, 0.7, 4.5]);
     for (let y = 4; y < height - 2; y += 4) box(gold, g, [x, y, -1.72], [0.45, 1.3, 0.08]);
     return true;
@@ -223,11 +226,13 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
     const t = sectorT(4, track.course.solarEngine.fractions[i]);
     const g = groupAt(t),
       lens = mesh(ring, gold, g, [0, 18, 0], [6, 6, 6]);
+    lens.userData.probeT = t;
     pulse(lens, (time) => {
       lens.rotation.z = time * 0.35 + i * 2;
     });
     for (const side of [-1, 1]) mesh(sphere, glow, g, [side * 12, 7, 0], [0.8, 0.8, 0.8]);
     const pad = groupAt(t);
+    pad.userData.probeT = t;
     box(gold, pad, [0, 0.13, 0], [3.9, 0.1, 5.5]);
     for (let j = 0; j < 3; j++) {
       const stripe = box(glow, pad, [0, 0.2, -1.7 + j * 1.6], [2.3, 0.08, 0.2]);
@@ -259,6 +264,7 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
     }
   }
   const sentinel = new THREE.Group();
+  sentinel.userData.probeT = sectorT(5, 0.64);
   scenery.add(sentinel);
   box(shade, sentinel, [0, 1, 0], [2.7, 2, 4.3]);
   mesh(sphere, gold, sentinel, [0, 3, 0], [1.1, 1.1, 1.1]);
@@ -284,7 +290,7 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
     animated,
     motions,
   });
-  buildTempleAtmosphere({
+  const templeShafts = buildTempleAtmosphere({
     THREE,
     scene,
     track,
@@ -295,6 +301,13 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
   });
   // Bounded points: drifting sandfall grains and dune motes, no sprite storm.
   const grains = [];
+  for (const { top, direction, height } of templeShafts)
+    for (let i = 0; i < 12; i++) {
+      const p = top.clone().addScaledVector(direction, (-height * (i + 0.5)) / 12);
+      p.x += Math.sin(i * 2.4) * 1.8;
+      p.z += Math.cos(i * 1.7) * 1.8;
+      grains.push(p.x, p.y, p.z);
+    }
   for (let i = 0; i < 160; i++) {
     const t = sectorT(i < 96 ? 1 : 6, ((i % 80) + 0.5) / 80),
       side = i % 2 ? 1 : -1;
@@ -315,6 +328,7 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
   );
   scenery.add(dust);
   animated.push(dust);
+  prepareSurfaceLightmap(scene, animated);
   return {
     animated,
     update(time, state) {
