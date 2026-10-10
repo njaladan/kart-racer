@@ -11,6 +11,7 @@ import { polishRailstorm } from "./railstorm.js";
 import { polishTempest } from "./tempest.js";
 import { polishPelagic } from "./pelagic.js";
 import { polishEmberwing } from "./emberwing.js";
+import { buildCourseBackground } from "../background/index.js";
 
 export const COURSE_POLISH = Object.freeze({
   "windmill-wilds": polishWindmill,
@@ -30,5 +31,6 @@ export const COURSE_POLISH = Object.freeze({
 export function buildCoursePolish(context) {
   const kit = createPolishKit(context);
   COURSE_POLISH[context.track.course.id]?.(kit);
+  buildCourseBackground(kit);
   return kit.finish();
 }
