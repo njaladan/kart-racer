@@ -2,7 +2,7 @@ import { registerLightPool } from "../../rendering/course-lighting.js";
 import { createContactShadowMesh, addGlow } from "../../rendering/visual-effects.js";
 import { placeRock } from "./ruins-assets.js";
 import { addRuinsDressing } from "./add-ruins-dressing.js";
-import { carvedSandstone, sunShaft } from "./sunstone-materials.js";
+import { carvedSandstone } from "./sunstone-materials.js";
 import { createDuneGeometry } from "./create-desert-geometry.js";
 
 /** Authored foreground/midground/horizon clusters, lit interiors and wildlife. */
@@ -180,12 +180,6 @@ export function buildExpeditionLife({
       intensity: 35,
       radius: 19,
     });
-    if (i % 2 === 0) {
-      const shaft = sunShaft(THREE, { width: 4, height: 20, color: "#ffd088" });
-      shaft.position.set(2, 10, 0);
-      g.add(shaft);
-      animated.push(shaft);
-    }
     for (const side of [-1, 1]) {
       const edge = side < 0 ? -track.surfaceAt(t).leftEdge : track.surfaceAt(t).rightEdge;
       mesh(cylinder, cool, g, [side * Math.max(16, edge + 3), 9, 0], [0.28, 18, 0.28]);

@@ -289,9 +289,12 @@ for (const course of selected) {
   const positions = [],
     indices = [],
     colors = [],
-    receivers = [];
+    receivers = [],
+    surfaceUvs = [],
+    worldNormals = [];
   const temporary = new THREE.Vector3(),
-    instance = new THREE.Matrix4();
+    instance = new THREE.Matrix4(),
+    normalMatrix = new THREE.Matrix3();
   function visit(object, skip = false) {
     skip ||= !!object.userData.skipBake || (world.animated || []).includes(object);
     if (skip) return;
@@ -315,9 +318,19 @@ for (const course of selected) {
             matrix.multiply(instance);
           }
           const offset = positions.length / 3;
+          normalMatrix.getNormalMatrix(matrix);
           for (let i = 0; i < position.count; i++) {
             temporary.fromBufferAttribute(position, i).applyMatrix4(matrix);
             positions.push(temporary.x, temporary.y, temporary.z);
+            const lightUv = geometry.attributes.surfaceLightUv;
+            surfaceUvs.push(lightUv?.getX(i) ?? 0, lightUv?.getY(i) ?? 0);
+            if (geometry.attributes.normal)
+              temporary
+                .fromBufferAttribute(geometry.attributes.normal, i)
+                .applyMatrix3(normalMatrix)
+                .normalize();
+            else temporary.set(0, 1, 0);
+            worldNormals.push(temporary.x, temporary.y, temporary.z);
           }
           for (const group of groups) {
             const material = materialList[group.materialIndex] || materialList[0];
@@ -337,7 +350,9 @@ for (const course of selected) {
               );
               indices.push(...vertex.map((v) => v + offset));
               colors.push(...color.toArray(), coverage);
-              receivers.push(receiver ? 1 : 0);
+              receivers.push(
+                geometry.attributes.surfaceLightUv?.getZ(vertex[0]) > 0 ? 2 : receiver ? 1 : 0,
+              );
             }
           }
         }
@@ -356,6 +371,8 @@ for (const course of selected) {
     new Uint32Array(indices),
     new Float32Array(colors),
     new Uint8Array(receivers),
+    new Float32Array(surfaceUvs),
+    new Float32Array(worldNormals),
   ];
   const binary = Buffer.concat(streams.map((stream) => Buffer.from(stream.buffer)));
   const metadata = {
@@ -387,6 +404,53 @@ for (const course of selected) {
       ...(pool.area ? { area: pool.area } : {}),
     })),
   };
+  if (scene.userData.surfaceLightmap) {
+    metadata.surfaceLightmap = scene.userData.surfaceLightmap;
+    metadata.surfaceUvOffset = streams.slice(0, 4).reduce((n, stream) => n + stream.byteLength, 0);
+    metadata.normalOffset = metadata.surfaceUvOffset + streams[4].byteLength;
+    const stations = [];
+    for (let t = 0; t < 1;) {
+      const halfWidth = track.roadHalfWidth(t);
+      stations.push({
+        t,
+        halfWidth,
+        positions: [1.3, 3.8].flatMap((height) =>
+          [-0.65, 0, 0.65].map((lane) =>
+            track.poseAt(t * track.TRACK, lane * halfWidth, height).p.toArray(),
+          ),
+        ),
+      });
+      t += (track.sectionAt(t).id === "temple" ? 4 : 12) / track.COURSE_LENGTH;
+    }
+    const templePoints = Array.from(
+      { length: 65 },
+      (_, i) => track.frameAt(track.sectorT(4, i / 64)).p,
+    );
+    const left = Math.min(...templePoints.map((p) => p.x)) - 35;
+    const bottom = Math.min(...templePoints.map((p) => p.z)) - 35;
+    metadata.globalIllumination = {
+      sun: {
+        direction: new THREE.Vector3(...course.theme.sunPosition).normalize().toArray(),
+        color: new THREE.Color(course.theme.sun).toArray(),
+        intensity: course.theme.sunIntensity,
+      },
+      sky: {
+        top: new THREE.Color(course.theme.hemisphere)
+          .multiplyScalar(course.theme.ambientIntensity / Math.PI)
+          .toArray(),
+        bottom: new THREE.Color(course.theme.ambientGround)
+          .multiplyScalar(course.theme.ambientIntensity / Math.PI)
+          .toArray(),
+      },
+      templeBounds: [
+        left,
+        bottom,
+        Math.max(...templePoints.map((p) => p.x)) + 35 - left,
+        Math.max(...templePoints.map((p) => p.z)) + 35 - bottom,
+      ],
+      stations,
+    };
+  }
   await writeFile(`${output}/${course.id}.bin`, binary);
   await writeFile(`${output}/${course.id}.json`, JSON.stringify(metadata));
   const meshLighting = await exportMeshLighting(scene, world, course, output);

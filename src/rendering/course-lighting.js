@@ -1,6 +1,10 @@
 import * as THREE from "../../vendor/three/three.module.js";
-import { sectionAt, trackT } from "../track/track.js";
+import { sectionAt, trackT, frameAt, activeTrack } from "../track/track.js";
 import { updateLayeredLighting } from "./layered-lighting.js";
+import {
+  updateRacerProbeLighting,
+  updateMovingProbeLighting,
+} from "./baked-global-illumination.js";
 
 export function registerLightPool(
   scene,
@@ -92,12 +96,28 @@ export function createCourseLighting(scene, { theme, ambientLight, sun, environm
         for (const material of kart.litMaterials || []) {
           if (material.envMap !== racerEnvironment) material.envMap = racerEnvironment;
           const baseline = material.userData.baseKartColor;
-          if (baseline) material.color.copy(baseline).multiplyScalar(state.renderShade);
+          if (baseline)
+            material.color
+              .copy(baseline)
+              .multiplyScalar(scene.userData.bakedProbes ? 1 : state.renderShade);
           material.envMapIntensity =
             (theme.terrain === "concrete" ? 0.65 : 0.55) * (1 - enclosure * 0.15);
         }
+        if (scene.userData.bakedProbes) {
+          updateRacerProbeLighting(
+            kart,
+            scene.userData.bakedProbes,
+            trackT(state.s),
+            ((state.x || 0) * 6.25) / Math.max(1, racerSection.halfWidth),
+            state.grounded === false
+              ? 1.3 + Math.max(0, racerPosition.y - frameAt(trackT(state.s)).p.y)
+              : 1.3,
+          );
+        }
       }
       nearby.length = 0;
+      if (scene.userData.bakedProbes)
+        updateMovingProbeLighting(scene, scene.userData.bakedProbes, activeTrack);
       updateLayeredLighting(scene, time, {
         ...state,
         viewerPosition: position,
@@ -106,6 +126,7 @@ export function createCourseLighting(scene, { theme, ambientLight, sun, environm
       const layered = scene.userData.layeredLights || [];
       const layeredPools = new Set(layered.map((record) => record.pool).filter(Boolean));
       for (const pool of scene.userData.localLightPools || []) {
+        if (scene.userData.bakedProbes) continue;
         if (layeredPools.has(pool)) continue;
         const distance = pool.position.distanceToSquared(position);
         if (distance < (pool.radius * 1.25) ** 2)
@@ -120,6 +141,9 @@ export function createCourseLighting(scene, { theme, ambientLight, sun, environm
           });
       }
       for (const record of layered) {
+        // Static lamp illumination is already in the probe volume. Only
+        // separately authored moving/non-baked sources use live racer slots.
+        if (scene.userData.bakedProbes && record.staticBake) continue;
         const distance = record.position.distanceToSquared(position);
         if (record.currentIntensity > 0 && distance < (record.radius * 1.25) ** 2)
           nearby.push({

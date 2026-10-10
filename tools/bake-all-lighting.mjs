@@ -50,4 +50,16 @@ await Promise.all(
     }
   }),
 );
-console.log(`Regenerated ground and mesh lighting for ${courses.length} courses.`);
+if (courses.includes("sunstone-ruins"))
+  await run(process.env.BLENDER_PATH || "blender", [
+    "-b",
+    "-t",
+    String(Math.min(8, availableParallelism())),
+    "--python-exit-code",
+    "1",
+    "--python",
+    "tools/bake-sunstone-gi.py",
+  ]);
+console.log(
+  `Regenerated lighting for ${courses.length} courses, including Sunstone GI when selected.`,
+);

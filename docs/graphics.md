@@ -172,6 +172,10 @@ the race clock when paused.
 
 ## Useful visual checks
 
+Sunstone's path-traced lightmaps and directional probes are described in
+[sunstone-lighting.md](sunstone-lighting.md), including bake regeneration and
+the deterministic before/after check.
+
 Check a daylight course and Neon Harbor for colour/highlight balance, the opening
 Frostpeak and Sunstone vistas, and HUD clearance on a narrow touch viewport.
 Drift, boost and land once, then pause and restart. The normal course-rendering

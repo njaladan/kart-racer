@@ -9,6 +9,7 @@ export function buildTempleAtmosphere({ THREE, scene, track, kit, palette, anima
   const leaf = material("#526339", { roughness: 0.97, side: THREE.DoubleSide });
   const rock = new THREE.IcosahedronGeometry(1, 0);
   const leafGeometry = new THREE.SphereGeometry(1, 4, 2);
+  const shafts = [];
   for (const sector of [3, 4, 5]) {
     for (let i = 0; i < 9; i++) {
       const t = sectorT(sector, (i + 0.5) / 9);
@@ -77,9 +78,17 @@ export function buildTempleAtmosphere({ THREE, scene, track, kit, palette, anima
   // Only open roof slots get shafts, so the effect has a visible physical source.
   for (const fraction of [1.5 / 22, 7.5 / 22, 13.5 / 22, 19.5 / 22]) {
     const g = groupAt(sectorT(4, fraction));
-    const shaft = sunShaft(THREE, { width: 6, height: 23, length: 7 });
-    shaft.position.y = 12;
+    g.updateWorldMatrix(true, false);
+    const direction = new THREE.Vector3(...track.course.theme.sunPosition).normalize();
+    const localDirection = direction
+      .clone()
+      .applyQuaternion(g.getWorldQuaternion(new THREE.Quaternion()).invert());
+    const height = 23 / Math.max(0.25, localDirection.y);
+    const shaft = sunShaft(THREE, { width: 6, height, length: 7, direction: localDirection });
+    shaft.position.set(0, 23, 0).addScaledVector(localDirection, -height / 2);
     g.add(shaft);
     animated.push(shaft);
+    shafts.push({ top: g.localToWorld(new THREE.Vector3(0, 23, 0)), direction, height });
   }
+  return shafts;
 }

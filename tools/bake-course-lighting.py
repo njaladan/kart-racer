@@ -51,7 +51,7 @@ for course in courses:
     colors = np.frombuffer(binary, '<f4', metadata['triangles'] * 4, metadata['offsets'][2]).reshape(-1, 4)
     receivers = np.frombuffer(binary, 'u1', metadata['triangles'], metadata['offsets'][3])
     bounds = metadata['bounds']
-    ground_faces = faces[receivers.astype(bool)]
+    ground_faces = faces[receivers == 1]
     if not len(ground_faces):
         raise RuntimeError(f'{course}: missing marked bakeReceiver terrain')
     # Restrict obstacles to the useful bake volume; the distant background does
