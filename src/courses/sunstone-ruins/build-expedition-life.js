@@ -22,7 +22,7 @@ export function buildExpeditionLife({
   const cloth = material("#b75740", { map: textures.fabric, side: THREE.DoubleSide });
   const leaf = material("#92ac6d", { map: textures.leaves, side: THREE.DoubleSide });
   const cool = material("#697c91", { bumpMap: textures.stone, bumpScale: 0.045 });
-  const silt = material("#b9a180", { bumpMap: textures.sand, bumpScale: 0.04 });
+  const silt = material("#c5a358", { bumpMap: textures.sand, bumpScale: 0.04 });
   carvedSandstone(stone, { carved: true });
   carvedSandstone(pale, { carved: true });
   carvedSandstone(dark, { carved: true });

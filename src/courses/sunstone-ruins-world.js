@@ -19,7 +19,7 @@ export function buildWorld({ THREE, scene, scenery, track, kit, textures, hazard
   const pale = material("#e4d5b5", { bumpMap: textures.stone, bumpScale: 0.05 });
   const shade = material("#897c67", { bumpMap: textures.stone, bumpScale: 0.05 });
   const dark = material("#5f574d", { bumpMap: textures.stone, bumpScale: 0.05 });
-  const sand = material("#d1b688", { bumpMap: textures.sand, bumpScale: 0.035 });
+  const sand = material("#dfbf73", { bumpMap: textures.sand, bumpScale: 0.035 });
   const gold = material("#dfa744", { metalness: 0.55, roughness: 0.36 });
   const teal = material("#4e9a94", { map: textures.fabric, side: THREE.DoubleSide });
   const glow = material("#ffe4a1", { emissive: "#ffc75a", emissiveIntensity: 1.4 });
