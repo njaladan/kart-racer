@@ -42,16 +42,19 @@ export async function buildCity(scene,map,progress) {
  const wtc=geo(-74.01338,40.7130);
  for(let index=0;index<map.buildings.length;index++) {
   const b=map.buildings[index];
-  if(Math.hypot(b.cx-wtc.x,b.cz-wtc.z)<38&&b.h>300){b.special='wtc';continue;}
+  if(Math.hypot(b.cx-wtc.x,b.cz-wtc.z)<38&&b.h>300){b.special='wtc';b.h=429;continue;}
   const key=`${Math.floor(b.cx/420)},${Math.floor(b.cz/420)}`;
   if(!chunks.has(key))chunks.set(key,{p:[],n:[],uv:[],c:[]});const chunk=chunks.get(key),color=palette[Math.floor(rand(b.id)*palette.length)];
   const push=(x,y,z,nx,ny,nz,u,v,roof=false)=>{chunk.p.push(x,y,z);chunk.n.push(nx,ny,nz);chunk.uv.push(u,v);chunk.c.push(color.r*(roof?.83:1),color.g*(roof?.83:1),color.b*(roof?.83:1));};
   for(const ring of b.rings)for(let i=0;i<ring.length;i++) {
    const a=ring[i],d=ring[(i+1)%ring.length],dx=d[0]-a[0],dz=d[1]-a[1],l=Math.hypot(dx,dz);if(!l)continue;
-   for(const [x,y,z,u,v] of [[a[0],0,a[1],0,0],[d[0],0,d[1],l/3,0],[d[0],b.h,d[1],l/3,b.h/3.3],[a[0],0,a[1],0,0],[d[0],b.h,d[1],l/3,b.h/3.3],[a[0],b.h,a[1],0,b.h/3.3]])push(x,y,z,dz/l,0,-dx/l,u,v);
+   const area=ring.reduce((sum,p,j)=>{const q=ring[(j+1)%ring.length];return sum+p[0]*q[1]-q[0]*p[1];},0);
+   const sign=area>0?1:-1, a0=[a[0],0,a[1],0,0],a1=[a[0],b.h,a[1],0,b.h/3.3],d0=[d[0],0,d[1],l/3,0],d1=[d[0],b.h,d[1],l/3,b.h/3.3];
+   const order=sign>0?[a0,d1,d0,a0,a1,d1]:[a0,d0,d1,a0,d1,a1];
+   for(const [x,y,z,u,v] of order)push(x,y,z,sign*dz/l,0,-sign*dx/l,u,v);
   }
   const contours=b.rings.map(r=>r.map(p=>new THREE.Vector2(p[0],p[1]))),flat=b.rings.flat();
-  for(const face of THREE.ShapeUtils.triangulateShape(contours[0],contours.slice(1)))for(const i of face)push(flat[i][0],b.h,flat[i][1],0,1,0,0,-1,true);
+  for(const face of THREE.ShapeUtils.triangulateShape(contours[0],contours.slice(1)))for(const i of [...face].reverse())push(flat[i][0],b.h,flat[i][1],0,1,0,0,-1,true);
   if(index%3500===0){progress?.(index/map.buildings.length);await new Promise(r=>setTimeout(r,0));}
  }
  for(const c of chunks.values()) {const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(c.p,3));g.setAttribute('normal',new THREE.Float32BufferAttribute(c.n,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(c.uv,2));g.setAttribute('color',new THREE.Float32BufferAttribute(c.c,3));g.computeBoundingSphere();root.add(new THREE.Mesh(g,mat));}

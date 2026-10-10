@@ -1,3 +1,4 @@
+import {mergeGeometries} from '../vendor/BufferGeometryUtils.js';
 import * as THREE from '../vendor/three.module.js';
 const materials={
  body:new THREE.MeshStandardMaterial({color:0x87949f,roughness:.8}),
@@ -34,6 +35,8 @@ export function makeBird(scale=1) {
  }
  const feet=new THREE.Group();body.add(feet);
  for(const side of [-1,1]) {ellipsoid(feet,'foot',[side*.18,-.50,.04],[.038,.16,.038]);for(let i=-1;i<=1;i++){const toe=ellipsoid(feet,'foot',[side*.18+i*.06,-.64,-.11],[.026,.025,.16]);toe.rotation.y=i*.3;}}
+ // Merge static feathers within each animated joint, keeping the model light for a flock.
+ for(const parent of [body,head,tail,feet,...wings]){const groups=new Map();for(const child of [...parent.children])if(child.isMesh){child.updateMatrix();if(!groups.has(child.material))groups.set(child.material,[]);groups.get(child.material).push(child);}for(const [material,children]of groups){if(children.length<2)continue;const copies=children.map(m=>m.geometry.clone().applyMatrix4(m.matrix));const geometry=mergeGeometries(copies);copies.forEach(g=>g.dispose());children.forEach(m=>parent.remove(m));parent.add(new THREE.Mesh(geometry,material));}}
  bird.userData.animate=(time,flying,speed=0,peck=0)=> {
   const flap=flying?Math.sin(time*(speed>35?8:11))*.33:0;
   wings[0].rotation.z=flying?.12+flap:1.20;wings[1].rotation.z=flying?-.12-flap:-1.20;

@@ -1,6 +1,6 @@
 import * as THREE from '../vendor/three.module.js';
 export const ORIGIN = [-74, 40.72];
-export function geo(lon, lat, y = 0) { return new THREE.Vector3((lon + 74) * 84360, y, -(lat - 40.72) * 110540); }
+export function geo(lon, lat, y = 0) { return new THREE.Vector3((lon + 74) * (111320*Math.cos(40.72*Math.PI/180)), y, -(lat - 40.72) * 110540); }
 export function inRing(x,z,ring) {
   let inside=false;
   for(let i=0,j=ring.length-1;i<ring.length;j=i++) {
@@ -34,5 +34,6 @@ export async function loadGeography() {
     }return found;
   }
   function onLand(x,z) {return map.land.some(p=>inRing(x,z,p.rings[0])&&!p.rings.slice(1).some(r=>inRing(x,z,r)));}
-  return {...map,buildings,buildingAt,onLand,surface:(x,z)=>buildingAt(x,z)?.h||0};
+  function addPlatform(ring,h,id){const xs=ring.map(p=>p[0]),zs=ring.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),z0=Math.min(...zs),z1=Math.max(...zs);const b={id,h,rings:[ring],x0,x1,z0,z1,cx:(x0+x1)/2,cz:(z0+z1)/2};for(let x=Math.floor(x0/80);x<=Math.floor(x1/80);x++)for(let z=Math.floor(z0/80);z<=Math.floor(z1/80);z++){const k=`${x},${z}`;if(!cells.has(k))cells.set(k,[]);cells.get(k).push(b);}}
+  return {...map,buildings,addPlatform,buildingAt,onLand,surface:(x,z)=>buildingAt(x,z)?.h||0};
 }
