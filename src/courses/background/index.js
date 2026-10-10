@@ -2,11 +2,13 @@ import { backgroundKit } from "./kit.js";
 import { windmillBackground } from "./windmill.js";
 import { neonBackground } from "./neon.js";
 import { frostpeakBackground } from "./frostpeak.js";
+import { clockworkBackground } from "./clockwork.js";
 
 export const COURSE_BACKGROUNDS = {
   "windmill-wilds": windmillBackground,
   "neon-harbor": neonBackground,
   "frostpeak-festival": frostpeakBackground,
+  "clockwork-citadel": clockworkBackground,
 };
 
 export function buildCourseBackground(w) {
