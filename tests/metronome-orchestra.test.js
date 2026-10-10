@@ -117,6 +117,7 @@ test("the orchestra has two deliberate scenes, finite motion and no scattered in
         drum.t - track.sectorT(g.userData.scenerySite.section, g.userData.scenerySite.fraction),
       ) < 1e-8,
     );
+    assert.ok(g.position.distanceTo(drum.p) < 22, "accompaniment stays beside the bounce path");
   }
   world.update(0, { motionEnabled: true });
   const bowStart = bow.position.x;
@@ -124,6 +125,11 @@ test("the orchestra has two deliberate scenes, finite motion and no scattered in
   world.update(0.5, { motionEnabled: true });
   assert.notEqual(bow.position.x, bowStart);
   assert.notEqual(mallets[0].rotation.z, malletStart);
+  scene.updateMatrixWorld(true);
+  const tip = mallets[0].localToWorld(new THREE.Vector3(7, 0, 0));
+  const struckHead = mallets[0].parent.getObjectByName("Mallet-responsive side drumhead");
+  const headPosition = struckHead.getWorldPosition(new THREE.Vector3());
+  assert.ok(Math.abs(tip.y - 0.65 - headPosition.y) < 0.03, "the felt mallet touches the drumhead");
   assert.equal(skins.length, 2);
   assert.equal(puffs.length, 2);
   batchScenery(scenery, world.animated);

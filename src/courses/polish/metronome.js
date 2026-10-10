@@ -26,6 +26,7 @@ export function polishMetronome(w) {
       const fraction = 0.18 + bay * 0.31;
       for (const side of [-1, 1]) {
         if (section === 4 && bay === 0 && side === -1) continue;
+        if (section === 2 && side === (bay % 2 ? 1 : -1)) continue;
         const g = safe(section, fraction, side * 33, 10);
         if (!g) continue;
         g.name = "Metronome velvet resonant chamber";

@@ -110,7 +110,7 @@ function matLamp(w) {
 }
 
 function buildDrumAccompaniment(w, m, group) {
-  const { THREE, track, safe, mesh, tube, sphere, kit, motion } = w;
+  const { THREE, track, at, mesh, tube, sphere, kit, motion } = w;
   const field = track.drumField;
   if (!field) return;
   // An opening, middle and closing accent follow the actual bounce path.
@@ -121,8 +121,14 @@ function buildDrumAccompaniment(w, m, group) {
     const section = track.SECTIONS[field.section];
     const fraction = (drum.t - section.start) / (section.end - section.start);
     const side = accent % 2 ? 1 : -1;
-    const g = safe(field.section, fraction, side * 28, 10, 15);
-    if (!g) continue;
+    // The generic scenery corridor still reserves the former wide road here.
+    // Place against the actual drum footprint: the plinth stops outside its rim,
+    // and the side drumhead is four metres above the player's bounce surface.
+    const g = at(field.section, fraction, drum.offset + side * (drum.radius + 9.8));
+    g.position.y = drum.p.y - 1;
+    g.rotation.set(0, track.yawFor(track.frameAt(drum.t).tangent), 0);
+    g.userData.scenicAssembly = false;
+    g.userData.scenerySite = { section: field.section, fraction };
     g.name = `Mallet accompaniment for bounce drum ${index + 1}`;
     g.userData.composition = "drum-accompaniment";
     g.userData.companionDrumIndex = index;
