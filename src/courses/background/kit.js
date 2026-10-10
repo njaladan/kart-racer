@@ -111,6 +111,18 @@ export function backgroundKit(w) {
   }
   // Static children of moving groups are instanced locally before world batching.
   function motion(object, update) {
+    object.updateWorldMatrix(true, true);
+    const inverse = object.matrixWorld.clone().invert();
+    const meshes = [];
+    object.traverse((child) => {
+      if (child.isMesh) meshes.push(child);
+    });
+    for (const child of meshes) {
+      const local = inverse.clone().multiply(child.matrixWorld);
+      object.add(child);
+      local.decompose(child.position, child.quaternion, child.scale);
+      child.updateMatrix();
+    }
     w.kit.batch(object);
     return w.motion(object, update);
   }
