@@ -7,6 +7,7 @@ import { paperBackground } from "./paper.js";
 import { tempestBackground } from "./tempest.js";
 import { pantryBackground } from "./pantry.js";
 import { railstormBackground } from "./railstorm.js";
+import { metronomeBackground } from "./metronome.js";
 
 export const COURSE_BACKGROUNDS = {
   "windmill-wilds": windmillBackground,
@@ -17,6 +18,7 @@ export const COURSE_BACKGROUNDS = {
   "tempest-causeway": tempestBackground,
   "pocket-pantry": pantryBackground,
   "railstorm-express": railstormBackground,
+  "metronome-hall": metronomeBackground,
 };
 
 export function buildCourseBackground(w) {
