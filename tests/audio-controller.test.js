@@ -157,6 +157,52 @@ class NoisyAudioContext extends FakeAudioContext {
   }
 }
 
+test("music leaves headroom for driving, boost and item cues; volume controls stay independent", async () => {
+  class RecordedAudioContext extends NoisyAudioContext {
+    async decodeAudioData() {
+      return { duration: 120 };
+    }
+  }
+  const audio = createAudioController({
+    AudioContext: RecordedAudioContext,
+    fetch: async () => ({ ok: true, arrayBuffer: async () => new ArrayBuffer(1) }),
+  });
+  audio.start();
+  await audio.prepareCourse("windmill-wilds");
+  const track = selectCourse(COURSES.find((course) => course.id === "windmill-wilds"));
+  const state = { s: 0, speed: 60, grounded: true, worldPos: track.poseAt(0, 0, 0).p, yaw: 0 };
+  audio.updateWorld(track, state, 0, true);
+  await new Promise((resolve) => setImmediate(resolve));
+  audio.updateEngine(state.speed, true, state);
+
+  const context = createdContext;
+  const engine = context.filters[1].connections[0];
+  const effects = engine.connections[0];
+  const music = context.sources.find((source) => source.buffer?.duration === 120);
+  const musicGain = music.connections[0].connections[0];
+  assert.ok(music.started && musicGain.gain.value > 0, "course music still plays");
+  assert.ok(engine.gain.value >= musicGain.gain.value / 2, "driving survives the music mix");
+  assert.ok(effects.gain.value >= musicGain.gain.value * 4, "gameplay cues have headroom");
+  for (const kind of ["boost", "pickup", "item-roll", "item-select"]) {
+    const before = context.oscillators.length;
+    audio.play(kind);
+    const cue = context.oscillators[before];
+    assert.ok(cue.started, kind);
+    assert.equal(cue.connections[0].connections[0], effects, `${kind} uses the effects bus`);
+  }
+
+  audio.setVolumes({ music: 0 });
+  assert.equal(musicGain.gain.value, 0);
+  assert.ok(effects.gain.value > 0);
+  audio.setVolumes({ music: 1, effects: 0 });
+  assert.ok(musicGain.gain.value > 0);
+  assert.equal(effects.gain.value, 0);
+  audio.setVolumes({ effects: 0.8 });
+  audio.stopEngine();
+  assert.equal(engine.gain.value, 0);
+  assert.equal(music.stopped, true);
+});
+
 test("transient noise caps concurrent voices and releases every spatial panner", () => {
   const audio = createAudioController({ AudioContext: NoisyAudioContext });
   audio.start();

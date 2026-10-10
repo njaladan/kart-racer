@@ -46,7 +46,8 @@ export function createRecordedAudio({ context, master, effects, ambience, fetchA
   function setVolume(value) {
     volume = value;
     gain.gain.setTargetAtTime(
-      wanted ? volume * (COURSE_MUSIC[courseId]?.gain ?? 1) * (underwater ? 0.8 : 1) : 0,
+      // Recordings are mastered much louder than the procedural engines and item cues.
+      wanted ? volume * 0.25 * (COURSE_MUSIC[courseId]?.gain ?? 1) * (underwater ? 0.8 : 1) : 0,
       context.currentTime,
       0.18,
     );

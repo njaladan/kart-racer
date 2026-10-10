@@ -33,7 +33,8 @@ export function createAudioController(audioWindow = window) {
     volumes = { ...volumes, ...next };
     if (!context) return;
     target(master.gain, volumes.master * 0.28);
-    target(effects.gain, volumes.effects);
+    // Keep short gameplay cues above the recorded soundtrack at the same slider level.
+    target(effects.gain, volumes.effects * 1.5);
     target(ambience.gain, volumes.ambience);
     recordings?.setVolume(volumes.music);
   }
@@ -85,7 +86,7 @@ export function createAudioController(audioWindow = window) {
     const harmonicGain = context.createGain();
     harmonicOscillator.type = "triangle";
     harmonicOscillator.frequency.value = 124;
-    harmonicGain.gain.value = 0.006;
+    harmonicGain.gain.value = 0.18;
     harmonicOscillator.connect(harmonicGain);
     harmonicGain.connect(engineGain);
     harmonicOscillator.start();
@@ -191,8 +192,8 @@ export function createAudioController(audioWindow = window) {
     }
     switch (kind) {
       case "pickup":
-        noise(0.12, 0.17, 4200);
-        tone(660, 0.1, "sine", 0.1, 280);
+        noise(0.12, 0.22, 4200);
+        tone(660, 0.1, "sine", 0.14, 280);
         break;
       case "box-crush":
         noise(0.16, 0.2, 2400);
@@ -201,8 +202,8 @@ export function createAudioController(audioWindow = window) {
       case "item-roll": {
         // An original bouncing arpeggio; each note follows a simulation slot tick.
         const notes = [659.25, 783.99, 987.77, 1318.51, 987.77, 783.99];
-        tone(notes[value % notes.length], 0.065, "square", 0.045);
-        tone(notes[value % notes.length] / 2, 0.07, "triangle", 0.035);
+        tone(notes[value % notes.length], 0.065, "square", 0.065);
+        tone(notes[value % notes.length] / 2, 0.07, "triangle", 0.045);
         break;
       }
       case "item-select":
@@ -212,14 +213,14 @@ export function createAudioController(audioWindow = window) {
         noise(0.16, 0.06, 5400);
         break;
       case "boost":
-        noise(0.45, 0.24, 1200);
-        tone(95, 0.32, "sawtooth", 0.065, 420);
+        noise(0.45, 0.32, 1200);
+        tone(95, 0.32, "sawtooth", 0.13, 420);
         break;
       case "turbo-blue":
       case "turbo-orange": {
         const orange = kind === "turbo-orange";
-        noise(orange ? 0.5 : 0.3, 0.22, orange ? 1800 : 1300);
-        tone(orange ? 160 : 120, 0.28, "triangle", 0.085, orange ? 640 : 420);
+        noise(orange ? 0.5 : 0.3, 0.3, orange ? 1800 : 1300);
+        tone(orange ? 160 : 120, 0.28, "triangle", 0.12, orange ? 640 : 420);
         break;
       }
       case "shell":
@@ -317,7 +318,7 @@ export function createAudioController(audioWindow = window) {
         : (300 + speed * 7 + (state.boost > 0 ? 280 : 0)) * (engineInterior ? 0.68 : 1),
     );
     target(effectsFilter.frequency, state.underwater ? 700 : 22000, 0.25);
-    target(engineGain.gain, active ? 0.022 + speed / 9000 : 0);
+    target(engineGain.gain, active ? 0.08 + speed / 1800 : 0);
     target(harmonicOscillator.frequency, 104 + speed * 1.4);
     if (tires) {
       const profiles = {
