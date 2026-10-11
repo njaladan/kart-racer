@@ -1,5 +1,7 @@
 # Turbo Trail
 
+Coding agents: read [AGENTS.md](AGENTS.md) before making changes.
+
 A browser kart racer built with Three.js. Start at the back and race five fast rivals over three laps, drift into mini-turbos, launch off ramps, and use items to take the lead. Rivals plan corners, pass slower karts, seek boosts and pickups, perform ramp tricks, and time their weapons.
 
 Twelve playable courses include moving hazards, boost pads, and shortcuts: **Windmill Wilds**, **Neon Harbor**, **Sunstone Ruins**, **Frostpeak Festival**, **Clockwork Citadel**, **Paper Revel**, **Tempest Causeway**, **Pocket Pantry**, **Railstorm Express**, **Metronome Hall**, **Pelagic Glasshouse**, and **Emberwing Observatory**. Supports keyboard, touch and gamepad controls.
