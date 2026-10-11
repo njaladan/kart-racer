@@ -272,7 +272,6 @@ export function buildPantry(context) {
     }
   }
   const kettle = at(0, 0.48, 31);
-  kettle.userData.environmentSource = "breakfast-kettle";
   mesh(sphere, teal, kettle, [0, 10, 0], [12, 10, 12]);
   mesh(cylinder, cream, kettle, [0, 20, 0], [5, 2, 5]);
   mesh(torus, dark, kettle, [0, 21, 0], [10, 10, 10]);
@@ -417,7 +416,6 @@ export function buildPantry(context) {
   }
   // The dish rack and sink are monumental but keep the racing surface visible.
   const sink = at(4, 0.45, 48);
-  sink.userData.environmentSource = "soap-basin";
   box(silver, sink, [0, -1.5, 0], [65, 3, 85]);
   for (const side of [-1, 1]) box(porcelain, sink, [side * 32, 4, 0], [3, 10, 88]);
   for (const z of [-42, 42]) box(porcelain, sink, [0, 4, z], [65, 10, 3]);
@@ -467,6 +465,5 @@ export function buildPantry(context) {
     );
     arch.name = "Toast-rack gateway";
   }
-  w.points("#fff0df", [0, 2, 5, 6], 85, 0.25);
   return w.finish();
 }

@@ -251,6 +251,5 @@ export function buildClockwork(context) {
     update();
     motion(instances, update);
   }
-  w.points("#ffd47d", [0, 1, 2, 3, 4, 5, 6, 7], 360, 0.2);
   return w.finish();
 }

@@ -4,7 +4,6 @@ import * as THREE from "../vendor/three/three.module.js";
 import { COURSES } from "../src/courses/registry.js";
 import { selectCourse } from "../src/track/track.js";
 import { createCourseKit, batchScenery } from "../src/rendering/course-kit.js";
-import { buildAdventureArt } from "../src/courses/fidelity/index.js";
 
 test("flat imported props fit a bounded footprint instead of scaling their width by height", () => {
   const track = selectCourse(COURSES.find((c) => c.id === "pocket-pantry"));
@@ -67,13 +66,8 @@ test("all Pelagic fish and jellyfish animation envelopes stay underwater", () =>
   scene.add(scenery);
   const kit = createCourseKit(scenery, track);
   const world = course.buildWorld({ THREE, scene, scenery, track, kit, textures: {} });
-  const fish = new THREE.Group();
-  fish.add(new THREE.Mesh(new THREE.BoxGeometry(1, 1, 2), new THREE.MeshStandardMaterial()));
-  const importedKit = createCourseKit(scenery, track, { models: { "art:fish": fish } });
-  const art = buildAdventureArt({ scene, track, kit: importedKit, textures: {} });
   for (const time of [0, 3, 8, 17, 35, 64]) {
     world.update(time);
-    art.update(time);
     scene.updateMatrixWorld(true);
     let wildlife = 0;
     scene.traverse((object) => {
@@ -87,7 +81,7 @@ test("all Pelagic fish and jellyfish animation envelopes stay underwater", () =>
       assert.ok(bounds.max.y <= -1, `${object.name} surfaced at ${time}: ${bounds.max.y}`);
       wildlife++;
     });
-    assert.ok(wildlife >= 20);
+    assert.equal(wildlife, 19, "the base world retains twelve fish schools and seven jellyfish");
   }
 });
 

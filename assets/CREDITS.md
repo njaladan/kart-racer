@@ -21,7 +21,7 @@ The sky gradient, signs, flames, and remaining procedural
 graphics are original Turbo Trail artwork. Three.js and fonts retain their
 existing licenses under `vendor/`.
 
-The living-world upgrade adds ten downloaded 1K ambientCG PBR material sets and three textured Poly Haven props. See [their credits, source and conversion details](living/LICENSES.md) and `living/manifest.json`. These are served locally and retain separate normal and roughness maps.
+The living-world upgrade adds ten downloaded 1K ambientCG PBR material sets. See [their credits, source and conversion details](living/LICENSES.md) and `living/manifest.json`. These are served locally and retain separate normal and roughness maps.
 
 ## Racers
 
@@ -57,11 +57,6 @@ Clockwork shares the local house file; source revision, original and derivative
 hashes and modifications are in both course manifests. Reproduce with
 `tools/prepare-course-landmarks.py`.
 
-Downloaded focal models and scanned surface maps:
-
-- Commercial Refrigerator by Eric Chadwick (Darmstadt Graphics Group GmbH), based on “Commercial Fridge” by Sean Thomas: [original source](https://sketchfab.com/3d-models/commercial-fridge-2174e1e4f1f24f1a95aa110ee060f473), [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/). Geometry was simplified for three LODs, textures resized to at most 1024 pixels, and the model made static.
-- Avocado, Barramundi Fish, BoomBox and Water Bottle by Microsoft; Lantern by sbtron / Microsoft and Frank Galligan; Antique Camera by Maximillan Kamps / UX3D; Sheen Chair by Eric Chadwick / Wayfair, LLC. These glTF Sample Assets are CC0.
-- The camera retains the UX3D logo included with its source texture. The source notice says: “Use in this model do not change the license of the model. The model license does not confer any usage rights on the Mark beyond that specified in the Guidelines. In particular, there is no right to use the Mark in any other context based on the usage here. UX3D reserves the right to remove the Mark or unilaterally change the terms of use.” See the [source notice](https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/LICENSES/LicenseRef-LegalMark-UX3D.txt).
-- The shared material roles use CC0 ambientCG and Poly Haven scans; fabric uses the CC0 Sheen Chair maps. Source links and file hashes remain in the runtime fidelity manifest.
+Shared scanned material roles use CC0 ambientCG and Poly Haven scans; fabric uses CC0 Sheen Chair maps by Eric Chadwick / Wayfair, LLC from the pinned glTF Sample Assets distribution. Source links and file hashes remain in the fidelity manifest.
 
 Clockwork Citadel also uses Kenney’s CC0 Space Kit chimney, generator and pipe models, obtained from the pinned [tge-assets distribution](https://github.com/Hidencod/tge-assets/tree/08f0c913f6783cc81f9f6105a7cdda8562b1c192). Source URLs, revision and SHA-256 hashes are in its manifest; see the [machinery notice](courses/packs/clockwork-citadel/licenses/kenney-machinery.txt). These models have no skeletons or animation clips. City gears, pistons, zeppelin propellers and aircraft motion use race-clock procedural animation.

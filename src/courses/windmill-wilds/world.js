@@ -1,8 +1,6 @@
 import * as THREE from "../../../vendor/three/three.module.js";
 import { surfaceTexture } from "../../rendering/textures.js";
-import { bakeVertexShade } from "../../rendering/vertex-shading.js";
 import { createCourseKit, batchScenery } from "../../rendering/course-kit.js";
-import { TRACK, SECTIONS, poseAt } from "../../track/track.js";
 import buildWindmillLife from "../windmill-wilds-world.js";
 import { buildWindmillTerrain } from "./terrain.js";
 import { buildWindmillVegetation } from "./vegetation.js";
@@ -55,34 +53,11 @@ export function buildWindmillWorld({
     fruit = mat("#e66941"),
     rock = mat("#a2ae9c");
   const bark = mats.trunk;
-  const boxGeo = new THREE.BoxGeometry(1, 1, 1);
   const sphereGeo = new THREE.SphereGeometry(1, 12, 8);
   const coneGeo = new THREE.ConeGeometry(1, 1, 12);
   const cylinderGeo = new THREE.CylinderGeometry(1, 1, 1, 10);
-  const mesh = (geo, material, parent = scenery, p = [0, 0, 0], scale = [1, 1, 1]) => {
-    if (Array.isArray(material) || material.vertexColors) bakeVertexShade(geo);
-    const m = new THREE.Mesh(geo, material);
-    m.position.set(...p);
-    m.scale.set(...scale);
-    m.castShadow = true;
-    m.receiveShadow = true;
-    parent.add(m);
-    return m;
-  };
-  const box = (material, parent, p, scale) => mesh(boxGeo, material, parent, p, scale);
-  const align = (group, frame) => {
-    group.position.copy(frame.p);
-    group.quaternion.setFromRotationMatrix(
-      new THREE.Matrix4().makeBasis(frame.right, frame.up, frame.tangent.clone().negate()),
-    );
-  };
-  const groupAt = (t, offset = 0, parent = scenery) => {
-    const g = new THREE.Group();
-    align(g, poseAt(t * TRACK, offset, 0));
-    parent.add(g);
-    return g;
-  };
-  const sectorT = (i, f) => THREE.MathUtils.lerp(SECTIONS[i].start, SECTIONS[i].end, f);
+  const kit = createCourseKit(scenery, track, assets);
+  const { mesh, box, align, groupAt, sectorT } = kit;
   const palette = {
     wood,
     darkWood,
@@ -101,7 +76,6 @@ export function buildWindmillWorld({
     bark,
   };
   const primitives = { mesh, box, mat, align, groupAt, sectorT, sphereGeo, coneGeo, cylinderGeo };
-  const kit = createCourseKit(scenery, track, assets);
   const options = { scene, scenery, mats, textures, palette, primitives, kit, track };
   const { lake } = buildWindmillTerrain(options);
   buildPathwayEdges({ track, kit, textures });

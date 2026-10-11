@@ -213,6 +213,5 @@ export function buildMetronome(context) {
     for (const side of [-1, 1]) box(gold, g, [side * 23, 45, 0], [1, 92, 18]);
     g.rotation.y = -a;
   }
-  w.points("#ffe4b0", [0, 2, 3, 4, 5], 85, 0.2);
   return w.finish();
 }

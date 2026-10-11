@@ -1,5 +1,6 @@
+import { createBackgroundContext } from "./background-context.js";
+import { buildCourseBackground } from "../courses/background/index.js";
 import { groundGeometry } from "./area-surfaces.js";
-import { buildAdventureArt } from "../courses/fidelity/index.js";
 import { buildExperienceWorld } from "../courses/experiences/world.js";
 import * as THREE from "../../vendor/three/three.module.js";
 import { createCourseKit, batchScenery } from "./course-kit.js";
@@ -8,50 +9,36 @@ import { buildWindmillWorld } from "../courses/windmill-wilds/world.js";
 import { installWetPavement } from "./surface-detail.js";
 import { createRailGeometry } from "./course-rails.js";
 import { buildPathwayEdges } from "./pathway-edges.js";
-import { addDetailedScenery } from "./detailed-scenery.js";
 import { TERRAIN_VERGE_WIDTH } from "./terrain-height.js";
 import { createSceneryDetailController } from "./scenery-lod.js";
 import { templePaving } from "../courses/sunstone-ruins/sunstone-materials.js";
 import { kitchenRoadDetail } from "../courses/adventure/pantry-materials.js";
 import { glasshouseRoad } from "../courses/adventure/pelagic-materials.js";
 import { metalDeckDetail } from "../courses/adventure/architectural-detail.js";
-import { buildCourseEnvironment, composeCourseEnvironment } from "../courses/course-environment.js";
-import { addHeroScenery } from "./hero-scenery.js";
-import { buildCoursePolish } from "../courses/polish/index.js";
 
 // Shared geometry uses exactly the surface/edge queries used by karts and shells.
 export function buildCourseWorld({ scene, renderer, materials: mats, textures, track, assets }) {
   const course = track.course;
-  if (course.id === "windmill-wilds") {
-    const world = buildWindmillWorld({
-      scene,
-      renderer,
-      materials: mats,
-      textures,
-      track,
-      assets,
-    });
+  function compose(world) {
     const experience = buildExperienceWorld({ scene, track, textures, assets });
     batchScenery(experience.scenery, experience.animated);
-    const updateWorld = world.update?.bind(world);
-    world.update = (time, state) => {
-      updateWorld?.(time, state);
-      experience.update(time, state);
+    const context = createBackgroundContext({ scene, track, textures, assets });
+    buildCourseBackground(context);
+    const controllers = [world, experience, context.finish(), createSceneryDetailController(scene)];
+    return {
+      ...world,
+      animated: controllers.flatMap((controller) => controller.animated || []),
+      update: (time, state) =>
+        controllers.forEach((controller) => controller.update?.(time, state)),
+      setQuality: (tier) => controllers.forEach((controller) => controller.setQuality?.(tier)),
+      updateCamera: (position, tier) =>
+        controllers.forEach((controller) => controller.updateCamera?.(position, tier)),
     };
-    addDetailedScenery(scene, track, assets);
-    addHeroScenery(scene, track, assets, textures);
-    const polish = buildCoursePolish({ scene, track, textures, assets, baseWorld: world });
-    const updateBase = world.update.bind(world);
-    world.update = (time, state = {}) => {
-      updateBase(time, state);
-      polish.update(time, state);
-    };
-    world.setQuality = polish.setQuality;
-    world.updateCamera = polish.updateCamera;
-    world.animated = [...(world.animated || []), ...polish.animated];
-    const environment = buildCourseEnvironment({ scene, track, textures, surfaces: [mats.road] });
-    return composeCourseEnvironment(world, environment, createSceneryDetailController(scene));
   }
+  if (course.id === "windmill-wilds")
+    return compose(
+      buildWindmillWorld({ scene, renderer, materials: mats, textures, track, assets }),
+    );
   const scenery = new THREE.Group();
   scene.add(scenery);
   const kit = createCourseKit(scenery, track, assets);
@@ -477,43 +464,12 @@ export function buildCourseWorld({ scene, renderer, materials: mats, textures, t
       trafficAt,
     }) || {};
   batchScenery(scenery, world.animated || []);
-  const experience = buildExperienceWorld({ scene, track, textures, assets });
-  batchScenery(experience.scenery, experience.animated);
-  addDetailedScenery(scene, track, assets);
-  addHeroScenery(scene, track, assets, textures);
-  const environment = buildCourseEnvironment({
-    scene,
-    track,
-    textures,
-    surfaces: Object.values(roadMaterials),
-  });
-  const art = buildAdventureArt({ scene, track, textures, kit, renderer });
-  const polish = buildCoursePolish({ scene, track, textures, assets, baseWorld: world });
-  const detail = createSceneryDetailController(scene);
-  return composeCourseEnvironment(
-    {
-      ...world,
-      animated: [...(world.animated || []), ...(art?.animated || []), ...polish.animated],
-      setQuality(tier) {
-        world.setQuality?.(tier);
-        art?.setQuality(tier);
-        polish.setQuality(tier);
-      },
-      updateCamera(position, tier) {
-        world.updateCamera?.(position, tier);
-        art?.updateCamera(position, tier);
-        polish.updateCamera(position, tier);
-      },
-      update(time, courseState) {
-        for (const belt of conveyorTextures) belt.texture.offset.y = -(time * belt.speed) / 8;
-        warningMaterial.emissiveIntensity = cartAt(time).warning ? 1.5 + Math.sin(time * 12) : 0;
-        world.update?.(time, courseState);
-        experience.update(time, courseState);
-        art?.update(time, courseState);
-        polish.update(time, courseState);
-      },
+  return compose({
+    ...world,
+    update(time, courseState) {
+      for (const belt of conveyorTextures) belt.texture.offset.y = -(time * belt.speed) / 8;
+      warningMaterial.emissiveIntensity = cartAt(time).warning ? 1.5 + Math.sin(time * 12) : 0;
+      world.update?.(time, courseState);
     },
-    environment,
-    detail,
-  );
+  });
 }

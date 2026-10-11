@@ -7,6 +7,7 @@ import { createAuthoredGeometryLibrary } from "./authored-geometry.js";
 
 // Read-only unit geometry is shared by all authoring kits in a scene.
 const unitBoxGeometry = new THREE.BoxGeometry(1, 1, 1);
+const unitTubeGeometry = new THREE.CylinderGeometry(1, 1, 1, 12);
 
 // Scenery authors get placement and reusable primitives, never engine globals.
 export function createCourseKit(scenery, track, assets = { models: {} }) {
@@ -40,6 +41,20 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
   };
   const box = (mat, parent = scenery, position = [0, 0, 0], scale = [1, 1, 1]) =>
     mesh(boxGeometry, mat, parent, position, scale);
+  const tube = (parent, start, end, radius, mat) => {
+    const a = new THREE.Vector3(...start),
+      b = new THREE.Vector3(...end),
+      d = b.clone().sub(a);
+    const object = mesh(
+      unitTubeGeometry,
+      mat,
+      parent,
+      a.clone().add(b).multiplyScalar(0.5).toArray(),
+      [radius, d.length(), radius],
+    );
+    object.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize());
+    return object;
+  };
   const align = (group, frame) => {
     group.position.copy(frame.p);
     group.quaternion.setFromRotationMatrix(
@@ -139,6 +154,7 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
   };
   return {
     material,
+    tube,
     mesh,
     box,
     align,
@@ -184,12 +200,7 @@ export function batchScenery(scenery, animated = []) {
   // Remove empty source containers left after flattening static scenery.
   const prune = (group) => {
     for (const child of [...group.children]) {
-      if (
-        child.isGroup &&
-        !protectedGroups.includes(child) &&
-        !child.userData.environmentSource &&
-        !child.userData.layeredLightSource
-      ) {
+      if (child.isGroup && !protectedGroups.includes(child) && !child.userData.layeredLightSource) {
         prune(child);
         if (child.children.length === 0) group.remove(child);
       }

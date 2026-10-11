@@ -66,7 +66,7 @@ rotors clear every route floor. Railstorm gantries, musical arches and pantry
 gates place supports outside the full platform width. Hall and freight gantry
 posts extend to ground; coastal trusses include connected lower chords. Sunstone canyon walls
 follow the widened platform and trim faces that touch another road elevation.
-Fish, jellyfish and marine particles have bounded underwater animation envelopes.
+Fish and jellyfish have bounded underwater animation envelopes.
 
 `COURSE_ROUTE_AUDIT=only node tools/export-lighting-scene.mjs` exercises the actual
 placed scene triangles along five main-road lanes and three alternate-road
@@ -77,17 +77,7 @@ triangle/box intersection checks against the complete corridor.
 
 Static art uses the existing regional batching/instancing. Repeated meshes inside
 moving assemblies can be batched in local coordinates; the outer assembly keeps
-its animation. Fir LODs use the existing distance controller. Ambient sprites
-share two GPU particle draws per course, with 40/60/80/100% density across the four
-quality settings. Motion is deterministic on the race clock and reduced-motion
-mode resets it. Light beams are simple soft additive meshes; no per-beam shadow
-map or ray marcher is required. Existing Ultra planar wet-road reflections and
-postprocessing remain available.
-
-All twelve courses receive denser localized environmental fields with a bounded
-1160-point native budget and quality scaling. Cinders and workshop sparks attach
-to visible braziers/forge bowls and grinding machines; flame sheets and nearby
-light pools flicker together. Marine fields fade below the water ceiling.
+its animation. Fir LODs use the existing distance controller. Distant backgrounds retain deterministic race-clock animation. The extra fidelity props, ambient sprite fields, soft art beams, local environmental emitters, and polish/vignette passes have been removed to simplify rebuilding. Driving surfaces and base course landmarks remain.
 
 ## Incidental pulled-code repairs
 

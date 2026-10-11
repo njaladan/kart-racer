@@ -1,11 +1,11 @@
 import { createScenerySite } from "../../rendering/scenery-sites.js";
 import { importedRockGeometry } from "../fidelity/imported-rock.js";
-import { createWaterMaterial, installSurfaceDetail } from "../../rendering/surface-detail.js";
+import { installSurfaceDetail } from "../../rendering/surface-detail.js";
 import { pendulumAt, pendulumAngleAt } from "../../simulation/course-mechanics.js";
 import { clockPendulumBob } from "./clock-pendulum.js";
 export function worldKit(context) {
   const { THREE, scene, scenery, track, kit, textures = {} } = context;
-  const { material, mesh, box, groupAt, sectorT, align } = kit;
+  const { material, mesh, box, groupAt, sectorT, align, tube } = kit;
   const animated = [],
     updates = [];
   const mat = (color, kind = "stone", extra = {}) => {
@@ -26,8 +26,7 @@ export function worldKit(context) {
   const cylinder = new THREE.CylinderGeometry(1, 1, 1, 12),
     sphere = new THREE.SphereGeometry(1, 16, 10),
     rock = importedRockGeometry(context.assets) || new THREE.IcosahedronGeometry(1, 1),
-    torus = new THREE.TorusGeometry(1, 0.065, 6, 48),
-    arch = new THREE.TorusGeometry(1, 0.05, 6, 24, Math.PI);
+    torus = new THREE.TorusGeometry(1, 0.065, 6, 48);
   const motion = (object, update) => {
     animated.push(object);
     updates.push(update);
@@ -35,18 +34,6 @@ export function worldKit(context) {
   };
   const at = (section, fraction, offset = 0) => groupAt(sectorT(section, fraction), offset);
   const safe = createScenerySite(kit, track, scenery);
-  function tube(parent, start, end, radius, material) {
-    const a = new THREE.Vector3(...start),
-      b = new THREE.Vector3(...end),
-      d = b.clone().sub(a);
-    const m = mesh(cylinder, material, parent, a.clone().add(b).multiplyScalar(0.5).toArray(), [
-      radius,
-      d.length(),
-      radius,
-    ]);
-    m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize());
-    return m;
-  }
   function sweep(section, start, end, left, right, material, above = 0.06) {
     const a = sectorT(section, start),
       b = sectorT(section, end),
@@ -107,44 +94,6 @@ export function worldKit(context) {
       );
       r.rotation.y = i * 0.71;
     }
-  }
-  function archway(section, fraction, color, radius = 18) {
-    const g = at(section, fraction);
-    mesh(arch, mat(color, "metal"), g, [0, 1, 0], [radius, radius, radius]);
-    return g;
-  }
-  function water(color, y = 0, size = 1500) {
-    const m = createWaterMaterial({ scene, color, roughness: 0.22, shoreRadius: 110, foam: true });
-    const p = mesh(new THREE.PlaneGeometry(size, size, 20, 20), m, scenery, [0, y, 0]);
-    p.rotation.x = -Math.PI / 2;
-    p.castShadow = false;
-    return p;
-  }
-  function points(color, sections, count = 160, size = 0.25) {
-    const positions = [];
-    for (let i = 0; i < count; i++) {
-      const t = sectorT(sections[i % sections.length], (((i * 17) % count) + 0.5) / count),
-        p = track.poseAt(t * track.TRACK, (i % 2 ? 1 : -1) * (13 + (i % 17)), 2 + (i % 12)).p;
-      positions.push(p.x, p.y, p.z);
-    }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-    const p = new THREE.Points(
-      geo,
-      new THREE.PointsMaterial({
-        color,
-        size,
-        transparent: true,
-        opacity: 0.55,
-        depthWrite: false,
-      }),
-    );
-    scenery.add(p);
-    motion(p, (time) => {
-      p.position.y = Math.sin(time * 0.4) * 1.3;
-      p.position.x = Math.sin(time * 0.2) * 0.5;
-    });
-    return p;
   }
   function pendulums(style, color) {
     for (const [i, d] of (track.course.pendulums || []).entries()) {
@@ -238,9 +187,6 @@ export function worldKit(context) {
     motion,
     ridge,
     portal,
-    archway,
-    water,
-    points,
     pendulums,
     finish,
     cylinder,

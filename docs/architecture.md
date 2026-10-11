@@ -42,6 +42,8 @@ Descriptors and public scenery entry points remain under `src/courses/<id>.js` a
 
 Builders share their course palette, reusable geometry, and the course kit through named options. Animated objects are registered for batching exclusions, and every update uses the race clock. Shared track queries remain the source of truth for surfaces, collision edges, progress, and scenery placement. See [the course contract](../src/courses/CONTRACT.md) and [graphics tuning](graphics.md).
 
+Course worlds are composed with gameplay surfaces from `experiences/world.js`, distant scenery from `background/index.js`, and the shared scenery detail controller. `course-kit.js` owns placement and primitives; `background-context.js` supplies cached materials and race-clock animation. Extra polish, vignettes, local particle layers, and generic imported hero/prop dressing have been removed.
+
 ## Styles
 
 `style.css` declares stylesheet order. `styles/` separates foundations/fonts, screens, race HUD/radar, responsive driving controls, selection controls, and touch HUD clearance. Later files override earlier ones, so preserve cascade order when changing these boundaries. CSS is included in the formatter checks.
@@ -50,4 +52,4 @@ Builders share their course palette, reusable geometry, and the course kit throu
 
 Run `npm ci`, then `npm run check` for ESLint, Prettier, and Node regression tests. Unused bindings are lint errors. These checks include race lifecycle, item cleanup, fixed-step timing, browser-message guards, scene construction/batching, driving behavior, and asset integrity.
 
-Use `npm start` and `tests/browser.html` for browser checks. The existing test protocol supports deterministic stepping, item use, pause/resume, ramps, and telemetry. `?test&benchmark` additionally permits freezing automatic simulation while rendering continues. Verify all four courses, restart and return-to-title transitions, and narrow/landscape touch layouts after composition changes.
+Use `npm start` and `tests/browser.html` for browser checks. The existing test protocol supports deterministic stepping, item use, pause/resume, ramps, and telemetry. `?test&benchmark` additionally permits freezing automatic simulation while rendering continues. Verify all twelve courses, restart and return-to-title transitions, and narrow/landscape touch layouts after composition changes.

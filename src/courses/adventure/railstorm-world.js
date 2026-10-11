@@ -75,7 +75,6 @@ export function buildRailstorm(context) {
   }
   // The locomotive leads a separate visible parallel track during the chase.
   const locomotive = new THREE.Group();
-  locomotive.userData.environmentSource = "express-boiler";
   scenery.add(locomotive);
   if (context.kit.hasAsset("art:steam-engine")) {
     context.kit.asset("art:steam-engine", locomotive, [0, 0, 0], [18, 18, 18]);
@@ -213,6 +212,5 @@ export function buildRailstorm(context) {
       }
       tube(g, [-17, 24, 0], [17, 24, 0], 0.3, iron);
     }
-  w.points("#c1d3c7", [1, 5, 6], 90, 0.22);
   return { ...w.finish(), vehicles };
 }

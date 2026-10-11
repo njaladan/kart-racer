@@ -1,4 +1,3 @@
-import { createAssetInstances } from "../../rendering/asset-instances.js";
 import { worldKit } from "./world-kit.js";
 import { registerLightPool } from "../../rendering/course-lighting.js";
 import { glasshouseWater, marineCaustics } from "./pelagic-materials.js";
@@ -163,18 +162,9 @@ export function buildPelagic(context) {
     g.position.y = Math.min(g.position.y, -16);
     group.name = "Submerged fish school";
     g.add(group);
-    const fishPlacements = [];
     for (let i = 0; i < 12; i++) {
       const x = (i % 4) * 2.5,
         y = 5 + Math.floor(i / 4) * 2;
-      if (context.kit.hasAsset("hero:fish")) {
-        fishPlacements.push({
-          position: [x, y, (-i % 3) * 3],
-          scale: [0.8, 0.8, 0.8],
-          rotationY: Math.PI / 2,
-        });
-        continue;
-      }
       if (context.kit.hasAsset("art:fish")) {
         context.kit.asset("art:fish", group, [x, y, (-i % 3) * 3], [1.3, 1.3, 1.3]);
         continue;
@@ -195,8 +185,6 @@ export function buildPelagic(context) {
       );
       mesh(sphere, ivory, group, [x + 0.75, y + 0.15, (-i % 3) * 3 + 0.3], [0.12, 0.12, 0.12]);
     }
-    if (fishPlacements.length)
-      group.add(createAssetInstances(context.assets.models, "hero:fish", fishPlacements));
     context.kit.batch(group);
     motion(group, (time) => {
       group.position.x = Math.sin(time * 0.21 + school) * 12;
@@ -269,10 +257,5 @@ export function buildPelagic(context) {
       mesh(w.rock, sand, g, [0, -31, 0], [22, 33, 22]);
     }
   }
-  const bubbles = w.points("#d4f9ef", [1, 2, 3, 4], 140, 0.23);
-  motion(bubbles, (time) => {
-    bubbles.position.y = ((time * 0.6) % 8) - 4;
-    bubbles.position.x = Math.sin(time * 0.5) * 1.2;
-  });
   return w.finish();
 }

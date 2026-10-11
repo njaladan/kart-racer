@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""Download pinned PBR hero props and scan maps, retaining provenance and licenses.
+"""Download pinned PBR scan maps, retaining provenance and licenses.
 Python 3, Pillow, numpy; run before optimize-fidelity-assets.mjs. No runtime downloads.
 """
 from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor
 import hashlib, io, json, urllib.request
 import numpy as np
 from PIL import Image, ImageOps
@@ -13,7 +12,7 @@ CACHE = Path('/tmp/turbo-fidelity-sources')
 REV = 'edc7c9e67c639d230715049ee31f9a96a6babbbe'
 K = f'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/{REV}/Models/'
 F = 'https://raw.githubusercontent.com/rawprogress/fable-cities/aea8b1035030952555395de0c1de14ba693a1427/public/assets/'
-for p in [OUT/'models', OUT/'licenses', OUT/'materials', CACHE]: p.mkdir(parents=True, exist_ok=True)
+for p in [OUT/'licenses', OUT/'materials', CACHE]: p.mkdir(parents=True, exist_ok=True)
 
 def sha(data): return hashlib.sha256(data).hexdigest()
 def fetch(url):
@@ -22,27 +21,6 @@ def fetch(url):
     return path.read_bytes()
 def record(url, data): return {'url':url,'bytes':len(data),'sha256':sha(data)}
 def image(url): return Image.open(io.BytesIO(fetch(url))).convert('RGB')
-
-MODELS = {
- 'Avocado': ('avocado', ['pocket-pantry']),
- 'BarramundiFish': ('fish', ['pelagic-glasshouse']),
- 'BoomBox': ('boombox', ['metronome-hall', 'neon-harbor']),
- 'Lantern': ('lantern', ['windmill-wilds','sunstone-ruins','frostpeak-festival','clockwork-citadel','paper-revel','tempest-causeway','railstorm-express','metronome-hall','pelagic-glasshouse','emberwing-observatory']),
- 'AntiqueCamera': ('camera', ['sunstone-ruins','frostpeak-festival','emberwing-observatory']),
- 'WaterBottle': ('bottle', ['pocket-pantry','railstorm-express']),
- 'SheenChair': ('chair', ['metronome-hall','clockwork-citadel']),
- 'CommercialRefrigerator': ('fridge', ['pocket-pantry']),
-}
-def hero(item):
-    name,(key,courses)=item
-    folder=CACHE/name;folder.mkdir(exist_ok=True)
-    downloads=[]
-    for filename in ['LICENSE.md','README.md','metadata.json']:
-        url=K+name+'/'+filename;data=fetch(url);downloads.append(record(url,data))
-    url=K+name+'/glTF-Binary/'+name+'.glb';data=fetch(url);(folder/(name+'.glb')).write_bytes(data);downloads.append(record(url,data))
-    print('Downloaded hero',name,len(data),flush=True)
-    return {'key':key,'sourceName':name,'source':K+name+'/','license':'CC-BY-4.0' if name=='CommercialRefrigerator' else 'CC0-1.0','attribution':'../CREDITS.md','courses':courses,'downloads':downloads}
-heroes=list(ThreadPoolExecutor(max_workers=4).map(hero,MODELS.items()))
 
 # Material tiles use actual photographed/artist-authored maps. The generic paint,
 # ceramic and paper roles adapt the fine plaster scan rather than inventing noise.
@@ -107,6 +85,6 @@ for index,(key,folder,col,nor,rough,height,ao,relief,baseRough) in enumerate(SCA
     print('Prepared scan',key,len(downloads),flush=True)
 for key,im in atlases.items():im.save(OUT/'materials'/(key+'.png'));im.save(OUT/'materials'/(key+'.webp'),quality=95,lossless=key!='color',method=6)
 # The optimizer reads this intermediate inventory and replaces it with the
-# runtime manifest after writing all prepared models and textures.
-(OUT/'manifest.json').write_text(json.dumps({'version':1,'heroes':heroes,'materials':materials,'sources':sources},indent=2)+'\n')
-print('Prepared',len(heroes),'hero assets and',len(materials),'physical material roles',flush=True)
+# runtime manifest after writing prepared material textures.
+(OUT/'manifest.json').write_text(json.dumps({'version':1,'materials':materials,'sources':sources},indent=2)+'\n')
+print('Prepared',len(materials),'physical material roles',flush=True)

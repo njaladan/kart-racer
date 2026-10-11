@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import * as THREE from "../vendor/three/three.module.js";
 import { COURSES } from "../src/courses/registry.js";
 import { createTrack } from "../src/track/track-builder.js";
-import { createPolishKit } from "../src/rendering/course-polish-kit.js";
+import { createBackgroundContext } from "../src/rendering/background-context.js";
 import { createRouteClearance } from "../src/rendering/route-clearance.js";
 import { COURSE_BACKGROUNDS, buildCourseBackground } from "../src/courses/background/index.js";
 
@@ -17,7 +17,7 @@ for (const course of COURSES.filter((course) => COURSE_BACKGROUNDS[course.id])) 
   test(`${course.name} backgrounds fill both sides, clear all routes and stay bounded through animation`, () => {
     const track = createTrack(course),
       scene = new THREE.Scene();
-    const w = createPolishKit({ scene, track });
+    const w = createBackgroundContext({ scene, track });
     buildCourseBackground(w);
     const sites = scene.userData.courseBackground;
     const allows = createRouteClearance(track),

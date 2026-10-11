@@ -80,7 +80,7 @@ Steam follows the actual kettle/kiosk; soap particles stay over the sink; train
 exhaust follows the moving locomotive; sea and caldera emissions start at their
 actual water/magma levels. New source anchors survive static batching. Six worlds
 also gain original animated roadside stories, with whole-route motion-envelope
-clearance. No course music or new downloaded assets. See `docs/environment-effects.md`
+clearance. No course music or new downloaded assets. The additional environment layer has since been removed
 for the course-by-course changes and reproducible screenshot-free browser check.
 
 Sixteen focused Node checks pass, including all twelve scenes, resources, source

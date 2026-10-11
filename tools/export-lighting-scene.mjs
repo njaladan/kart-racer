@@ -8,11 +8,8 @@ import { GLTFLoader } from "../vendor/three/addons/loaders/GLTFLoader.js";
 import { decodeCourseModels, normalizeCourseModel } from "../src/rendering/course-assets.js";
 import { createCourseKit } from "../src/rendering/course-kit.js";
 import { buildCourseWorld } from "../src/rendering/course-runtime.js";
-import { decodeLivingModels } from "../src/rendering/living-assets.js";
 import { COURSES } from "../src/courses/registry.js";
 import { selectCourse } from "../src/track/track.js";
-import { NodeIO } from "@gltf-transform/core";
-import { ALL_EXTENSIONS } from "@gltf-transform/extensions";
 import { exportMeshLighting } from "./export-mesh-lighting.mjs";
 
 const root = resolve(new URL("..", import.meta.url).pathname);
@@ -27,7 +24,6 @@ const output = process.env.LIGHTING_SCENE_DIR || "/tmp/turbo-trail-lighting-scen
 await mkdir(output, { recursive: true });
 const wanted = process.argv.slice(2);
 const arrayBuffer = (data) => data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength);
-const modelIO = new NodeIO().registerExtensions(ALL_EXTENSIONS);
 
 async function loadAssets(id) {
   const base = resolve(root, "assets/courses");
@@ -118,66 +114,6 @@ async function loadAssets(id) {
         }
       });
       assets.models[entry.name] = model;
-    }
-  }
-  const living = resolve(root, "assets/living");
-  Object.assign(
-    assets.models,
-    decodeLivingModels(
-      JSON.parse(await readFile(`${living}/index.json`)),
-      arrayBuffer(await readFile(`${living}/props.bin`)),
-    ),
-  );
-  const fidelityFolder = resolve(root, "assets/fidelity");
-  const fidelity = JSON.parse(await readFile(resolve(fidelityFolder, "manifest.json")));
-  for (const hero of fidelity.heroes.filter((entry) => entry.courses.includes(id))) {
-    for (const variant of hero.variants) {
-      // The same geometry/materials as the runtime KTX2 variant; image formats
-      // differ only because the offline solver needs decoded albedo averages.
-      const document = await modelIO.read(resolve(fidelityFolder, variant.offlineFile));
-      const binary = await modelIO.writeBinary(document);
-      const loader = new GLTFLoader();
-      loader.register((parser) => {
-        parser.loadImageSource = async (index) => {
-          const image = parser.json.images[index];
-          const bytes = Buffer.from(await parser.getDependency("bufferView", image.bufferView));
-          const { data, info } = await sharp(bytes)
-            .resize(16, 16)
-            .ensureAlpha()
-            .raw()
-            .toBuffer({ resolveWithObject: true });
-          const average = new THREE.Color(0, 0, 0);
-          for (let p = 0; p < data.length; p += 4)
-            average.add(
-              new THREE.Color().setRGB(
-                data[p] / 255,
-                data[p + 1] / 255,
-                data[p + 2] / 255,
-                THREE.SRGBColorSpace,
-              ),
-            );
-          average.multiplyScalar(1 / (info.width * info.height));
-          const texture = new THREE.Texture();
-          texture.userData.averageLinear = average.toArray();
-          return texture;
-        };
-        return { name: "HERO_LIGHTING_TEXTURES" };
-      });
-      const gltf = await loader.parseAsync(
-        binary.buffer.slice(binary.byteOffset, binary.byteOffset + binary.byteLength),
-        "",
-      );
-      const model = normalizeCourseModel(gltf.scene);
-      model.userData.lodDistances = hero.lodDistances;
-      if (variant === hero.variants[0])
-        model.userData.lods = { mid: `hero:${hero.key}-mid`, far: `hero:${hero.key}-far` };
-      model.traverse((object) => {
-        if (object.isMesh) {
-          object.castShadow = true;
-          object.receiveShadow = true;
-        }
-      });
-      assets.models[variant.name] = model;
     }
   }
   return assets;

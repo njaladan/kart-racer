@@ -1,4 +1,4 @@
-# Downloaded living-world materials and props
+# Downloaded living-world materials
 
 All bundled source assets are **CC0 1.0 Universal**, redistributable and editable:
 https://creativecommons.org/publicdomain/zero/1.0/
@@ -10,7 +10,7 @@ explicitly identifies its normal maps as OpenGL Y+.
 
 `manifest.json` records exact source/evidence URLs, downloaded bytes and hashes,
 and every bundled output's hash. The original sources are cached outside this
-repository. Reproduce with `python3 tools/prepare-living-assets.py` (Pillow/numpy).
+repository. Reproduce with `python3 tools/prepare-living-assets.py` (Pillow).
 
 | Runtime material | Downloaded source |
 | --- | --- |
@@ -30,18 +30,4 @@ These retain photographic detail at **1024×1024** for color, with separate
 contrast and brightness adjustments for the game's existing arcade palette;
 normal and roughness data remain untinted. Normal maps use lossless WebP.
 
-| Textured prop | Source / author |
-| --- | --- |
-| Painted wooden bench | https://polyhaven.com/a/painted_wooden_bench — Kirill Sannikov |
-| Street lamp 02 | https://polyhaven.com/a/street_lamp_02 — Josh Dean |
-| Planter box 01 | https://polyhaven.com/a/planter_box_01 — James Ray Cock |
-
-The props retain their downloaded geometry, UVs, material assignments and
-color/normal/packed ARM textures. Node transforms are baked and each prop is
-rooted at Y=0, centered in X/Z, with source scale retained. Packed ARM uses the
-source's roughness G and metalness B channels. Mesh streams are little-endian
-Float32 position XYZ, normal XYZ, UV (stride 8); index.json records primitive
-ranges and materials. This dependency-free conversion does not change licensing.
-
-The separate existing `assets/courses/` Kenney/ambientCG bundle and `assets/`
-reflection/nature bundle keep their original credit files.
+The separate existing `assets/courses/` bundle keeps its own credit files.

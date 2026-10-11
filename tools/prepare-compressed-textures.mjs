@@ -12,7 +12,6 @@ const sourceRoots = [
   "assets/courses/textures",
   "assets/courses/packs",
   "assets/living/textures",
-  "assets/living/props",
 ];
 const looseSources = ["assets/grass.webp", "assets/asphalt.webp"];
 const basisu = process.env.BASISU || "basisu";

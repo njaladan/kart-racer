@@ -394,7 +394,6 @@ export function buildTempest(context) {
     stack.name = "Eroded downloaded offshore rock stack";
     stack.castShadow = false;
   }
-  w.points("#c9e7e7", [1, 3, 5], 180, 0.23);
   motion(ocean, sea.update);
   return { ...w.finish(), setQuality: sea.setQuality };
 }

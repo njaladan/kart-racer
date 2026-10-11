@@ -272,6 +272,5 @@ export function buildPaper(context) {
       spinner.rotation.z = time * 0.8 + i;
     });
   }
-  w.points("#ffd694", [0, 3, 6], 120, 0.16);
   return w.finish();
 }

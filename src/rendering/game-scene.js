@@ -180,14 +180,13 @@ export async function createGameScene({ canvas, course, viewport = window }) {
   const [courseAssets, livingAssets, fidelityAssets] = await Promise.all([
     loadCourseAssets(renderer, course.id),
     loadLivingAssets(renderer, course.id),
-    loadFidelityAssets(renderer, course.id),
+    loadFidelityAssets(renderer),
   ]);
   Object.assign(textures, courseAssets.textures);
   Object.assign(textures, livingAssets.textures);
   // Selected adventure scans take precedence over the shared material fallback.
   for (const [name, texture] of Object.entries(courseAssets.textures))
     if (courseAssets.textures[`${name}Normal`]) textures[name] = texture;
-  Object.assign(courseAssets.models, livingAssets.models, fidelityAssets.models);
   textures.stone ||= textures.rock;
   textures.cloth ||= textures.fabric;
   textures.canvas ||= textures.fabric;

@@ -39,7 +39,7 @@ try {
       const THREE = await import("/vendor/three/three.module.js");
       const { COURSES } = await import("/src/courses/registry.js");
       const { createTrack } = await import("/src/track/track-builder.js");
-      const { createPolishKit } = await import("/src/rendering/course-polish-kit.js");
+      const { createBackgroundContext } = await import("/src/rendering/background-context.js");
       const { buildCourseBackground } = await import("/src/courses/background/index.js");
       const { buildDesertHorizon } =
         await import("/src/courses/sunstone-ruins/build-desert-horizon.js");
@@ -62,7 +62,7 @@ try {
           }),
       );
       const scene = new THREE.Scene(),
-        w = createPolishKit({ scene, track, assets: { models } });
+        w = createBackgroundContext({ scene, track, assets: { models } });
       let sites;
       if (id === "sunstone-ruins") {
         buildDesertHorizon({ THREE, scenery: w.scenery, track, kit: w.kit, textures: {} });

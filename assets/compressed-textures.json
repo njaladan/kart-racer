@@ -762,78 +762,6 @@
       "sourceBytes": 26034,
       "bytes": 28175
     },
-    "assets/living/props/painted_wooden_bench-painted_wooden_bench_arm_1k.webp": {
-      "file": "./assets/compressed/living/props/painted_wooden_bench-painted_wooden_bench_arm_1k.webp.ktx2",
-      "channel": "linear",
-      "sourceSha256": "ad9bf921b6c0650c4f87f9ecbc1edbe0a80aedf322fbbff17bfa4bfb04186410",
-      "sha256": "1ef0720613b1f1c98b3728a9dc882b9abaa419ab55cf37289e37ca01b28c79d7",
-      "sourceBytes": 31240,
-      "bytes": 69781
-    },
-    "assets/living/props/painted_wooden_bench-painted_wooden_bench_diff_1k.webp": {
-      "file": "./assets/compressed/living/props/painted_wooden_bench-painted_wooden_bench_diff_1k.webp.ktx2",
-      "channel": "color",
-      "sourceSha256": "79366e79c2e347791bf54cc7b31d6a98fe99363e1ab4110c58629aa9577269db",
-      "sha256": "34ff6088f950c0092ae895603a084107b2737b4be98b87ecb434860793cb287f",
-      "sourceBytes": 25728,
-      "bytes": 72646
-    },
-    "assets/living/props/painted_wooden_bench-painted_wooden_bench_nor_gl_1k.webp": {
-      "file": "./assets/compressed/living/props/painted_wooden_bench-painted_wooden_bench_nor_gl_1k.webp.ktx2",
-      "channel": "normal",
-      "sourceSha256": "016c714b629c81e697b444dcfd6c9fb0d2b27ae78da012bafe9093c4d69fa22d",
-      "sha256": "743a0ddb63e6ce80495530cf7dd07ee75da983cb6b5e7b24cdc26309961a5c9d",
-      "sourceBytes": 351820,
-      "bytes": 68309
-    },
-    "assets/living/props/planter_box_01-planter_box_01_arm_1k.webp": {
-      "file": "./assets/compressed/living/props/planter_box_01-planter_box_01_arm_1k.webp.ktx2",
-      "channel": "linear",
-      "sourceSha256": "1898e27af00e511c28bf107c3a6d04f242f5a385138b01375f2f15c5bf9b0384",
-      "sha256": "e40ef7a6150ca45c659a88c0f2d8fc11b9b6373ba5eb1a0cf827049510ee9708",
-      "sourceBytes": 57306,
-      "bytes": 104437
-    },
-    "assets/living/props/planter_box_01-planter_box_01_diff_1k.webp": {
-      "file": "./assets/compressed/living/props/planter_box_01-planter_box_01_diff_1k.webp.ktx2",
-      "channel": "color",
-      "sourceSha256": "f14b9084e8005c5e44388b0c83daa84cac49c8856c127bc323fef3653265911a",
-      "sha256": "d11f07cd283fccb1ee17e5bca3c3f59986964a93d08ab7d1250a42622bae072b",
-      "sourceBytes": 43584,
-      "bytes": 93515
-    },
-    "assets/living/props/planter_box_01-planter_box_01_nor_gl_1k.webp": {
-      "file": "./assets/compressed/living/props/planter_box_01-planter_box_01_nor_gl_1k.webp.ktx2",
-      "channel": "normal",
-      "sourceSha256": "43219023a437ccd32bc84a30a8e65d6deaa777f4d87e4bf2491aae8aa04a5d76",
-      "sha256": "3b0c80822135aaa6c325ee54ed2f651a32695f5939c04fc09e595ef20ac7b58d",
-      "sourceBytes": 332686,
-      "bytes": 77994
-    },
-    "assets/living/props/street_lamp_02-street_lamp_02_arm_1k.webp": {
-      "file": "./assets/compressed/living/props/street_lamp_02-street_lamp_02_arm_1k.webp.ktx2",
-      "channel": "linear",
-      "sourceSha256": "be1f7f69ac5f035444fecb39e590715de667c69cc839a01da8aa9fac410fd690",
-      "sha256": "0428811cadc4860d5d088f75a82148f4ca60dbf97817c34e815cf8a09709fe39",
-      "sourceBytes": 55448,
-      "bytes": 103054
-    },
-    "assets/living/props/street_lamp_02-street_lamp_02_diff_1k.webp": {
-      "file": "./assets/compressed/living/props/street_lamp_02-street_lamp_02_diff_1k.webp.ktx2",
-      "channel": "color",
-      "sourceSha256": "eccc9729bcdb4efb068551ee78991325d959a564390865f93c7414f5c86f7db1",
-      "sha256": "e7b703fe53751557ab23ad6b21f76124bbececaa8f4fb1d5825edd81ca983d72",
-      "sourceBytes": 16492,
-      "bytes": 47087
-    },
-    "assets/living/props/street_lamp_02-street_lamp_02_nor_gl_1k.webp": {
-      "file": "./assets/compressed/living/props/street_lamp_02-street_lamp_02_nor_gl_1k.webp.ktx2",
-      "channel": "normal",
-      "sourceSha256": "36a83cfa6efffc335a3b4cdb6dab7c2ce323399a39c898cb3fbbfe0783262a2c",
-      "sha256": "7654cf461b1905db5e60291687108192682b6f208254c4f5d52538002bfd8234",
-      "sourceBytes": 184282,
-      "bytes": 20192
-    },
     "assets/living/textures/asphalt-color.webp": {
       "file": "./assets/compressed/living/textures/asphalt-color.webp.ktx2",
       "channel": "color",
@@ -1076,8 +1004,8 @@
     }
   },
   "summary": {
-    "count": 134,
-    "sourceBytes": 21149893,
-    "compressedBytes": 11764638
+    "count": 125,
+    "sourceBytes": 20051307,
+    "compressedBytes": 11107623
   }
 }

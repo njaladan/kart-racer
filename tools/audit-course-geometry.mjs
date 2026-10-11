@@ -6,7 +6,6 @@ import { COURSES } from "../src/courses/registry.js";
 import { selectCourse } from "../src/track/track.js";
 import { buildCourseWorld } from "../src/rendering/course-runtime.js";
 import { normalizeCourseModel, decodeCourseModels } from "../src/rendering/course-assets.js";
-import { decodeLivingModels } from "../src/rendering/living-assets.js";
 import { auditRouteGeometry } from "./scene-route-audit.mjs";
 const root = new URL("../", import.meta.url);
 const json = (p) => JSON.parse(readFileSync(new URL(p, root)));
@@ -16,7 +15,6 @@ const binary = (p) => {
 };
 const models = {
   ...decodeCourseModels(json("assets/courses/models.json"), binary("assets/courses/models.bin")),
-  ...decodeLivingModels(json("assets/living/index.json"), binary("assets/living/props.bin")),
 };
 const loader = new GLTFLoader();
 loader.register((parser) => {

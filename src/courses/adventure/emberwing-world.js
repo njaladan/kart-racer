@@ -118,6 +118,5 @@ export function buildEmberwing(context) {
     g.position.set(Math.cos(angle) * 430, -22, Math.sin(angle) * 430);
     mesh(w.rock, basalt, g, [0, 30, 0], [60, 60 + (i % 3) * 20, 60]);
   }
-  w.points("#ffbd73", [1, 2, 3, 4], 130, 0.22);
   return w.finish();
 }
