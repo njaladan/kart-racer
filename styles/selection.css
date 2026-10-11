@@ -22,18 +22,6 @@
   outline: 3px solid #d5fa51;
   outline-offset: 3px;
 }
-@media (max-height: 760px) {
-  .title-card h1 {
-    font-size: clamp(40px, 8vh, 72px);
-  }
-  .title-card {
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
-  .title-card .controls-help {
-    margin-top: 14px;
-  }
-}
 
 .secondary-button {
   display: block;
@@ -54,17 +42,6 @@
   }
   .course-picker select {
     padding: 8px 12px;
-  }
-  .title-card h1 {
-    font-size: clamp(38px, 10vh, 54px);
-    margin: 10px 0;
-  }
-  .title-card p {
-    margin-bottom: 8px;
-    font-size: 11px;
-  }
-  .title-foot {
-    margin-top: 8px;
   }
 }
 

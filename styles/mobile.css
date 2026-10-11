@@ -7,22 +7,11 @@
   .topline {
     top: 18px;
   }
-  .title-card {
-    left: 8%;
-    width: 84%;
-    top: 52%;
-  }
   h1 {
     font-size: clamp(72px, 18vw, 110px);
   }
-  .title-card p {
-    font-size: 12px;
-  }
   .track-tag {
     font-size: 8px;
-  }
-  .corner-note {
-    display: none;
   }
   .place-box {
     left: max(16px, env(safe-area-inset-left));
@@ -36,9 +25,6 @@
   .place-box small {
     font-size: 23px;
     margin-top: 9px;
-  }
-  .place-box > span {
-    font-size: 11px;
   }
   .lap-box {
     top: max(76px, calc(env(safe-area-inset-top) + 64px));
@@ -58,9 +44,6 @@
   }
   .speed-box strong {
     font-size: 31px;
-  }
-  .speed-box > span {
-    font-size: 9px;
   }
   .race-time {
     font-size: 9px;
@@ -87,10 +70,6 @@
     font-size: 20px;
   }
   .bottomline {
-    font-size: 7px;
-  }
-  .title-foot {
-    gap: 10px;
     font-size: 7px;
   }
   .primary-button {
@@ -250,9 +229,6 @@
   color: #e0e7e8 !important;
   margin: 17px 0 0 !important;
 }
-.title-foot {
-  margin-top: 20px;
-}
 .race-actions {
   display: none;
   position: absolute;
@@ -330,16 +306,7 @@
     height: 84px;
   }
 }
-.mobile-help {
-  display: none;
-}
 @media (pointer: coarse), (max-width: 700px) {
-  .mobile-help {
-    display: block;
-  }
-  .desktop-help {
-    display: none;
-  }
   .race-actions {
     top: max(12px, env(safe-area-inset-top));
     right: max(12px, env(safe-area-inset-right));
@@ -358,9 +325,6 @@
   #touch-controls .touch-drive button {
     font-size: 10px;
   }
-  .title-card {
-    transform: translateY(-50%);
-  }
   .controls-help {
     font-size: 8px !important;
   }
@@ -372,19 +336,9 @@
   .bottomline {
     bottom: 10px;
   }
-  .title-card {
-    top: 49%;
-    width: min(470px, 64vw);
-  }
   h1 {
     font-size: clamp(62px, 14vh, 90px);
     margin: 12px 0;
-  }
-  .title-card p {
-    margin-bottom: 12px;
-  }
-  .title-foot {
-    margin-top: 12px;
   }
   .primary-button {
     padding: 13px 16px;

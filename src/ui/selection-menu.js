@@ -19,19 +19,11 @@ export function createSelectionMenu({ documentRef, locationRef, course, racer, m
   const prefs = loadPreferences();
   const courseGrid = get("course-grid"),
     racerGrid = get("racer-grid");
-  function preview(image, entry) {
-    // Reuse the local driving gallery; illustrated art remains an offline fallback.
-    image.onerror = () => {
-      image.onerror = null;
-      image.src = `./assets/previews/${entry.id}.svg`;
-    };
-    image.src = `./docs/screenshots/${entry.id}.jpg`;
-  }
   function chooseCourse(entry) {
     selected.course = entry.id;
     get("selected-course-name").textContent = entry.name;
     const image = get("course-preview");
-    preview(image, entry);
+    image.src = `./docs/screenshots/${entry.id}.jpg`;
     image.alt = `${entry.name} driving preview`;
     get("course-number").textContent =
       `${String(COURSES.indexOf(entry) + 1).padStart(2, "0")} / ${String(COURSES.length).padStart(2, "0")}`;
@@ -53,7 +45,7 @@ export function createSelectionMenu({ documentRef, locationRef, course, racer, m
     b.className = "course-tile";
     b.dataset.id = entry.id;
     const image = documentRef.createElement("img");
-    preview(image, entry);
+    image.src = `./docs/screenshots/${entry.id}.jpg`;
     image.alt = "";
     image.loading = "lazy";
     const title = documentRef.createElement("span");

@@ -20,15 +20,7 @@ import { addHeroScenery } from "./hero-scenery.js";
 import { buildCoursePolish } from "../courses/polish/index.js";
 
 // Shared geometry uses exactly the surface/edge queries used by karts and shells.
-export function buildCourseWorld({
-  scene,
-  renderer,
-  materials: mats,
-  textures,
-  track,
-  assets,
-  sharedAssets: commonAssets,
-}) {
+export function buildCourseWorld({ scene, renderer, materials: mats, textures, track, assets }) {
   const course = track.course;
   if (course.id === "windmill-wilds") {
     const world = buildWindmillWorld({
@@ -37,7 +29,6 @@ export function buildCourseWorld({
       materials: mats,
       textures,
       track,
-      nature: commonAssets?.nature,
       assets,
     });
     const experience = buildExperienceWorld({ scene, track, textures, assets });

@@ -8,13 +8,10 @@ redistributed, including in commercial games. Credit is included as a courtesy.
 | --- | --- | --- |
 | `asphalt.webp` | Lennart Demes / [ambientCG Asphalt010](https://ambientcg.com/view?id=Asphalt010) | Resized to 256 × 256, reduced contrast, cool gray palette, WebP |
 | `grass.webp` | Lennart Demes / [ambientCG Grass004](https://ambientcg.com/view?id=Grass004) | Resized to 256 × 256, sunny green palette, WebP |
-| `sky-reflections.webp` | Greg Zaal (original), Jarod Guest (sky edits) / [Poly Haven Kloofendal 48d Partly Cloudy (Pure Sky)](https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky) | Tonemapped HDR to a 256 × 128 WebP reflection map |
-| `nature.bin`, `nature.json` | [Kenney Nature Kit](https://kenney.nl/assets/nature-kit): `tree_default`, `tree_oak`, `tree_pineSmallB` | Geometry normalized to 4.5 m, materials combined into linear vertex colors, baked underside shading; oak also supplies a pink blossom variant |
 
 Sources were retrieved through public GitHub distributions:
 
-- Textures and HDRI: [rawprogress/fable-cities](https://github.com/rawprogress/fable-cities/tree/main/public/assets/shared), with matching upstream source attribution.
-- Models: [Hidencod/tge-assets](https://github.com/Hidencod/tge-assets), distributed under CC0 with Kenney attribution.
+- Textures: [rawprogress/fable-cities](https://github.com/rawprogress/fable-cities/tree/main/public/assets/shared), with matching upstream source attribution.
 
 The environment source and runtime hashes are recorded in `manifest.json`.
 `tools/prepare-assets.py` reproduces that local asset set. Source downloads stay out of the browser's runtime network

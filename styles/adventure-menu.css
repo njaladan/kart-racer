@@ -77,13 +77,6 @@
   margin: 12px 0;
   text-transform: uppercase;
 }
-.feature-copy p {
-  font-size: 12px;
-  max-width: 420px;
-  line-height: 1.5;
-  color: #e6e7df;
-  margin: 0;
-}
 .course-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -151,6 +144,7 @@ select:focus-visible {
   min-height: 300px;
 }
 #selection-stage {
+  display: block;
   width: 58%;
   height: 310px;
   touch-action: pan-y;

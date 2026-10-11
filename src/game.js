@@ -53,7 +53,6 @@ async function startGame() {
     materials: sceneState.materials,
     track: activeTrack,
     assets: courseAssets,
-    sharedAssets,
   });
   const { pads, boxes } = createRaceProps({ ...sceneState, course });
   installScannedMaterials(scene, sceneState.fidelityAssets, course.id, landscape.animated);

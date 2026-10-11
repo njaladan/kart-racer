@@ -1,7 +1,6 @@
 import { clearAreaCamera, clearMountainCamera } from "./area-camera.js";
 import { createSurfaceInteractions } from "./surface-interactions.js";
 import { stormAt } from "../simulation/experience-mechanics.js";
-import { createSunGlare } from "./sun-glare.js";
 import { racerProjection } from "../track/route-branches.js";
 import { createBoostMotion } from "./boost-motion.js";
 import * as THREE from "../../vendor/three/three.module.js";
@@ -51,7 +50,6 @@ export function createGameRenderer({
   getLandscape,
   totalLaps = 3,
 }) {
-  const sunGlare = createSunGlare(scene, theme);
   const surfaceInteractions = createSurfaceInteractions(scene, activeTrack, [player, ...bots]);
   const cameraLook = new THREE.Vector3();
   const kartUp = new THREE.Vector3(0, 1, 0);
@@ -336,7 +334,6 @@ export function createGameRenderer({
     advanceSurfaceDetails(scene, frameState.raceTime);
     getLandscape()?.updateCamera?.(camera.position, graphicsQuality?.getTier() ?? 3);
     sky?.update(frameState.raceTime, motionEnabled, activeTrack.course);
-    sunGlare.update(frameState.raceTime, camera, immersion > 0.5, graphicsQuality?.getTier() ?? 3);
     weather?.update(frameState.raceTime, camera.position, forest);
     displayFinish?.update(
       frameState.raceTime,

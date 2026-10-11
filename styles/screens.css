@@ -19,13 +19,6 @@
   visibility: hidden;
   pointer-events: none;
 }
-.title-card {
-  position: absolute;
-  left: 11%;
-  top: 50%;
-  transform: translateY(-46%);
-  width: min(470px, 42vw);
-}
 .eyebrow {
   display: flex;
   align-items: center;
@@ -56,7 +49,6 @@ h2 em {
   font-style: normal;
   color: var(--lime);
 }
-.title-card p,
 .pause-card p,
 .finish-card p {
   color: #c0c8ce;
@@ -89,25 +81,6 @@ h2 em {
 .primary-button:hover {
   transform: translateY(-3px);
   background: #e3ff85;
-}
-.title-foot {
-  display: flex;
-  gap: 17px;
-  margin-top: 30px;
-  color: #e0e2dc;
-  font-family: "DM Mono", monospace;
-  font-size: 8px;
-  letter-spacing: 0.08em;
-}
-.corner-note {
-  position: absolute;
-  right: 5.2%;
-  bottom: 70px;
-  font-family: "DM Mono", monospace;
-  font-size: 8px;
-  letter-spacing: 0.2em;
-  color: #fff9;
-  writing-mode: vertical-rl;
 }
 .finish-card,
 .pause-card {

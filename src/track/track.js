@@ -9,7 +9,6 @@ export {
   yawFor,
   createTrack,
 } from "./track-builder.js";
-export const TARGET_LENGTH = 1500;
 export let activeTrack;
 export let VERGES, vergeWidth, vergeAt;
 export let WORLD_PER_UNIT,

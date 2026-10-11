@@ -87,9 +87,7 @@ postprocessing remain available.
 All twelve courses receive denser localized environmental fields with a bounded
 1160-point native budget and quality scaling. Cinders and workshop sparks attach
 to visible braziers/forge bowls and grinding machines; flame sheets and nearby
-light pools flicker together. Marine fields fade below the water ceiling. Daylight
-solar halos require an on-screen sun and an unobstructed scene ray, then fade
-behind walls or underwater; indoor and storm courses suppress them.
+light pools flicker together. Marine fields fade below the water ceiling.
 
 ## Incidental pulled-code repairs
 

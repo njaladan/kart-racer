@@ -186,16 +186,6 @@ export function bridgeWaveAt(track, t, time) {
     launch: height > wave.amplitude * 0.35 && velocity > 1.5,
   };
 }
-export function liftPhase(definition, time) {
-  const period = definition.period || 10,
-    hold = definition.hold || 1,
-    duration = definition.duration;
-  const phase = ((time % period) + period) % period;
-  if (phase < hold) return 0;
-  if (phase < hold + duration) return smooth((phase - hold) / duration);
-  if (phase < hold * 2 + duration) return 1;
-  return 1 - smooth((phase - hold * 2 - duration) / (period - hold * 2 - duration));
-}
 export function traversalPose(track, definition, q, offset = 0) {
   const { start, end } = rangeFor(track, definition);
   const t = start + (end - start) * q,
