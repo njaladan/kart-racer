@@ -48,6 +48,7 @@ test("real textured racers preserve proportions, grounded bounds and independent
     models,
     textures: {},
     shadowTexture: null,
+    theme: { kartPresentation: true },
   });
   for (const racer of RACERS) {
     const first = build(racer.color, racer.name, true, racer.id);

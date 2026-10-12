@@ -29,6 +29,26 @@ export function createKartBuilder({ scene, models, textures, shadowTexture, them
           material.envMap = textures.environment;
           material.envMapIntensity = theme.terrain === "concrete" ? 0.18 : 0.28;
         }
+        if (theme.kartPresentation && material.isMeshStandardMaterial) {
+          // The detailed imported models keep their authored colors; distinguish
+          // soft cloth/rubber from smoother painted panels and wheel hardware.
+          const role = `${part.name} ${material.name}`;
+          if (/tire|tyre|rubber/i.test(role)) {
+            material.roughness = 0.93;
+            material.metalness = 0;
+          } else if (/rim|axle|exhaust/i.test(role)) {
+            material.roughness = 0.38;
+            material.metalness = Math.max(material.metalness, 0.35);
+          } else if (/wheel/i.test(role)) {
+            // Some imported wheels share one painted atlas for tire and hub.
+            // Keep those surfaces mostly matte instead of making the rubber metal.
+            material.roughness = 0.82;
+            material.metalness = 0.02;
+          } else {
+            material.roughness = Math.max(0.42, Math.min(0.78, material.roughness));
+            material.envMapIntensity = 0.38;
+          }
+        }
         material.userData.baseKartColor = material.color.clone();
         litMaterials.push(material);
         return material;

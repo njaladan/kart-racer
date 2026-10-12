@@ -7,6 +7,7 @@ import { buildWindmillVegetation } from "./vegetation.js";
 import { buildWindmillLandmarks } from "./landmarks.js";
 import { buildPathwayEdges } from "../../rendering/pathway-edges.js";
 import { buildValleyStory } from "./build-valley-story.js";
+import { buildMeadowGrass } from "./meadow-grass.js";
 
 /** Compose countryside terrain, vegetation, landmarks, and animated life. */
 export function buildWindmillWorld({
@@ -91,9 +92,12 @@ export function buildWindmillWorld({
   });
   const story = buildValleyStory({ scene, scenery, track, kit, textures });
   batchScenery(scenery, [...landmarks.animated, ...life.animated, ...story.animated]);
+  const meadow = buildMeadowGrass({ scene, scenery, track });
   return {
     animated: [...landmarks.animated, ...life.animated, ...story.animated],
-    update(time) {
+    setQuality: (tier) => meadow.setQuality(tier),
+    update(time, state) {
+      meadow.update(time, state);
       landmarks.update(time);
       if (lake.material.map) lake.material.map.offset.set(time * 0.006, time * 0.003);
       life.update(time);

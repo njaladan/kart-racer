@@ -13,7 +13,7 @@ const repoRoot = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const screenshotDir = resolve(repoRoot, process.env.SCREENSHOT_CAPTURE_DIR || "docs/screenshots");
 const captureOverrides = JSON.parse(process.env.SCREENSHOT_CAPTURE_POINTS_JSON || "{}");
 const courseCaptures = [
-  { id: "windmill-wilds", racer: "tux", t: 0.61, seconds: 24 },
+  { id: "windmill-wilds", racer: "tux", t: 0.045, seconds: 12 },
   { id: "neon-harbor", racer: "kiki", t: 0.15, seconds: 12 },
   { id: "sunstone-ruins", racer: "nolok", t: 0.655, seconds: 12 },
   { id: "frostpeak-festival", racer: "konqi", t: 0.58, seconds: 22 },

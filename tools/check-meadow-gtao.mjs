@@ -46,7 +46,13 @@ try {
   page.on("console", (message) => {
     if (message.type() === "error") errors.push(message.text());
   });
-  await page.goto(origin);
+  await page.route("**/__meadow_gtao_check", (route) =>
+    route.fulfill({
+      contentType: "text/html",
+      body: "<!doctype html><title>Meadow GTAO check</title>",
+    }),
+  );
+  await page.goto(`${origin}/__meadow_gtao_check`);
   const result = await page.evaluate(async () => {
     const THREE = await import("/vendor/three/three.module.js");
     const { createPostProcessing } = await import("/src/rendering/postprocessing.js");
@@ -146,6 +152,119 @@ try {
   );
   assert.equal(result.remainingTextures, 0, "all postprocessing textures are released");
   console.log(JSON.stringify(result, null, 2));
+  if (process.argv.includes("--level")) {
+    const level = await browser.newPage({ viewport: { width: 960, height: 540 } });
+    level.on("pageerror", (error) => errors.push(error.message));
+    level.on("console", (message) => {
+      if (message.type() === "error") errors.push(message.text());
+    });
+    await level.addInitScript(() => {
+      localStorage.setItem(
+        "turbo-trail-preferences-v1",
+        JSON.stringify({ quality: 2, adaptive: false }),
+      );
+      const nativeRequest = window.requestAnimationFrame.bind(window);
+      window.requestAnimationFrame = (callback) =>
+        nativeRequest((time) => {
+          if (!window.meadowStopFrames) callback(time);
+        });
+    });
+    await level.goto(`${origin}/?course=windmill-wilds&racer=tux&test&benchmark`, {
+      waitUntil: "domcontentloaded",
+    });
+    await level.waitForFunction(() => window.__turboTrailDiagnostics?.context, undefined, {
+      timeout: 120000,
+    });
+    const integration = await level.evaluate(() => {
+      window.meadowStopFrames = true;
+      const diagnostics = window.__turboTrailDiagnostics;
+      const { scene, renderer, camera, gameRenderer } = diagnostics.context;
+      renderer.setPixelRatio(1);
+      renderer.setSize(320, 180, false);
+      diagnostics.send({ type: "test-start" });
+      diagnostics.send({ type: "test-freeze", value: true });
+      diagnostics.send({ type: "test-step", seconds: 0.1 });
+      diagnostics.send({ type: "test-seek", t: 0.045 });
+      const controls = [];
+      const grass = [];
+      scene.traverse((object) => {
+        if (object.userData.meadowGrass) grass.push(object);
+      });
+      const gl = renderer.getContext();
+      let renderWidth = 320,
+        renderHeight = 180;
+      function frame(tier, ao = true) {
+        const quality = document.querySelector("#option-quality");
+        quality.value = String(tier);
+        quality.dispatchEvent(new Event("input"));
+        const occlusion = document.querySelector("#option-ambientOcclusion");
+        occlusion.checked = ao;
+        occlusion.dispatchEvent(new Event("input"));
+        // Preferences restore the viewport-sized drawing buffer. Keep this
+        // correctness check small enough for software rendering after each change.
+        renderer.setSize(renderWidth, renderHeight, false);
+        camera.aspect = renderWidth / renderHeight;
+        camera.updateProjectionMatrix();
+        gameRenderer.render(0);
+        gl.finish();
+        const pixels = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
+        gl.readPixels(
+          0,
+          0,
+          gl.drawingBufferWidth,
+          gl.drawingBufferHeight,
+          gl.RGBA,
+          gl.UNSIGNED_BYTE,
+          pixels,
+        );
+        let sum = 0;
+        for (let i = 0; i < pixels.length; i += 4) sum += pixels[i] + pixels[i + 1] + pixels[i + 2];
+        const result = {
+          tier,
+          ao,
+          sum,
+          error: gl.getError(),
+          draws: renderer.info.render.calls,
+          triangles: renderer.info.render.triangles,
+          textures: renderer.info.memory.textures,
+          blades: grass.reduce((n, object) => n + object.count, 0),
+        };
+        controls.push(result);
+        return result;
+      }
+      for (const tier of [0, 1, 2, 3]) frame(tier);
+      const off = frame(2, false),
+        on = frame(2),
+        repeat = frame(2);
+      renderWidth = 360;
+      renderHeight = 220;
+      frame(3);
+      diagnostics.send({ type: "test-seek", t: 0.61 });
+      frame(2);
+      diagnostics.send({ type: "test-seek", t: 0.97 });
+      frame(1);
+      return {
+        controls,
+        enabledDarkens: on.sum < off.sum,
+        pausedStable: on.sum === repeat.sum,
+        aoDraws: on.draws - off.draws,
+        meshCoverage: scene.userData.meshLightCoverage?.coverage,
+        meshSourceMismatch: scene.userData.meshLightCoverage?.sourceMismatch,
+        bakeResolution: scene.userData.courseBake?.resolution,
+        programs: renderer.info.programs.every(
+          (program) => program.diagnostics?.runnable !== false,
+        ),
+      };
+    });
+    assert.deepEqual(errors, []);
+    assert.ok(integration.programs && integration.controls.every(({ error }) => error === 0));
+    assert.ok(integration.enabledDarkens && integration.pausedStable);
+    assert.equal(integration.aoDraws, 2);
+    assert.equal(integration.bakeResolution, 1024);
+    assert.equal(integration.meshSourceMismatch, false);
+    assert.ok(integration.controls[0].blades < integration.controls[3].blades);
+    console.log(JSON.stringify({ integration }, null, 2));
+  }
 } finally {
   await browser?.close();
   server?.kill();

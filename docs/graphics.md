@@ -22,6 +22,62 @@ Run `node tools/check-meadow-gtao.mjs` for real WebGL checks of contact shading,
 sky preservation, resize, quality switches, draw count and disposal. Software
 Chromium verifies correctness; GPU frame-time cost requires player hardware.
 
+## Meadow vegetation, materials and lighting bake
+
+Blossom Common, Cider Orchard and Harvest Homecoming have regional opaque
+grass-blade instances with shaded roots, varied placement, distance taper and
+race-clock wind. One additional instanced draw supplies small daisies with
+modeled stems, petals and pollen centers. Plants are grounded against the
+rendered embankments and excluded from the driving surfaces and branch routes.
+They receive live sun shadows and sample the static ground-lighting atlas, but
+do not cast their own shadows or enter the offline obstruction bake. This keeps
+grass movement independent of a static bake and bounds shadow submission cost.
+
+The four tiers retain 35%, 55%, 80% and 100% of each grass region respectively.
+Performance/Balanced taper from 35 to 60 metres; High/Ultra from 55 to 85 metres.
+Fine grass is actual geometry, with no transparent grass-card overdraw.
+The scanned earth path retains small relief and tire ruts with lower albedo
+contrast. Grass textures have quieter contrast and normals. A softer sky,
+warm sun and greener ground fill replace the old blue shadow tint. Windmill's
+existing imported racers retain their proportions and colors, with separate
+roughness for tires, wheel hardware and painted/cloth surfaces.
+
+The regenerated bake uses 1024px ground atlases and 48 hemisphere samples,
+plus 32 samples for each static mesh receiver. The previous settings were
+768px/12 samples and 8 mesh samples. This is offline BVH ambient visibility and
+local diffuse bounce, not the four-bounce Cycles solver used by Sunstone.
+Direct sunlight remains live, avoiding duplicate sun shadows. At the meadow
+capture, matching mesh-bake coverage improves from 71.4% to 92.4%; unmatched
+objects still use the spatial ground fallback. Ground and mesh manifests share
+the exported scene digest, and output hashes are validated by the lighting tests.
+
+Regenerate this course with:
+
+```sh
+LIGHTING_BAKE_SIZE=1024 LIGHTING_BAKE_SAMPLES=48 MESH_LIGHT_BAKE_SAMPLES=32 \
+  node tools/bake-all-lighting.mjs windmill-wilds
+```
+
+Run `node tools/check-meadow-gtao.mjs --level` to also exercise the actual meadow
+at all four tiers, AO on/off, paused frames, resize and later course sectors.
+`tests/meadow-graphics.test.js` checks plant clearance, grounding, density,
+wind clocks, baked-light binding and preference persistence.
+The complete suite retains an existing Metronome orchestra failure at
+`tests/metronome-orchestra.test.js:132` (mallet/drumhead contact), reproduced on
+the original `df899fe` commit. Meadow checks, lint and formatting pass.
+
+The views below use the same 960×540 chase camera at progress 0.045 and race
+time 12.08 seconds, High, with adaptive quality disabled. Random rival/item
+events can differ; these are appearance comparisons, not GPU benchmarks.
+At this view, rendered work changes from 632 to 686 draws (+8.5%) and
+493,857 to 589,379 triangles (+19.3%), including the existing sun shadows and
+postprocessing. Loaded texture count changes from 219 to 223. Those counts
+describe the added geometry/passes; they do not measure frame time on a player GPU.
+
+| Before | After |
+| --- | --- |
+| ![Original meadow](screenshots/windmill-meadow-before.jpg) | ![Upgraded meadow](screenshots/windmill-meadow.jpg) |
+
 The graphics pass is presentation-only: track surfaces, collision boundaries,
 physics and race progression still use the existing course contract.
 

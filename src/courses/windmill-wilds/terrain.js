@@ -1,4 +1,5 @@
 import * as THREE from "../../../vendor/three/three.module.js";
+import { createMeadowSoil, softenMeadowTurf } from "./meadow-surfaces.js";
 import { createWaterMaterial, installSurfaceDetail } from "../../rendering/surface-detail.js";
 import {
   TRACK,
@@ -23,6 +24,7 @@ export function buildWindmillTerrain({ scene, scenery, textures, mats, palette, 
   ground.rotation.x = -Math.PI / 2;
   ground.castShadow = false;
   ground.userData.bakeReceiver = true;
+  softenMeadowTurf(mats.grass);
   installSurfaceDetail(mats.grass, { kind: "terrain", scale: 0.045, strength: 0.16 });
   installSurfaceDetail(mats.road, { kind: "road", scale: 0.05, strength: 0.09 });
   const groundUV = ground.geometry.attributes.uv;
@@ -102,7 +104,7 @@ export function buildWindmillTerrain({ scene, scenery, textures, mats, palette, 
     (t) => -roadHalfWidth(t),
     (t) => roadHalfWidth(t),
     [
-      mat("#d4bd91", textures.gravel),
+      createMeadowSoil(textures.gravel),
       wood,
       stone,
       mat("#afba89", textures.needles),
@@ -132,7 +134,7 @@ export function buildWindmillTerrain({ scene, scenery, textures, mats, palette, 
       v.end,
     );
   // Tire-worn earth has two subtle wheel ruts. Timber has actual cross planks.
-  const rut = mat("#b29e7a", textures.gravel);
+  const rut = createMeadowSoil(textures.gravel, "#b6a68a");
   for (const section of SECTIONS) {
     if (section.material !== "earth" && section.material !== "needles") continue;
     for (const side of [-1, 1])
