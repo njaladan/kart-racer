@@ -1,6 +1,6 @@
 /** Farmland continues beyond the existing orchard and wooded valley. */
 export function windmillBackground(b) {
-  const { track, mat, mesh, box, group, place, motion, surfaceY } = b;
+  const { track, mat, mesh, box, group, place, motion, surfaceY, kit } = b;
   const meadow = mat("#739565", "grass"),
     grain = mat("#c4b473", "grass"),
     wood = mat("#806951", "wood"),
@@ -53,8 +53,14 @@ export function windmillBackground(b) {
         for (let i = 0; i < 8; i++) {
           const x = -65 + i * 18,
             y = surfaceY(ridge, x, -20) - 0.15;
-          mesh("cylinder", wood, g, [x, y + 5, -20], [1, 10, 1]);
-          mesh("sphere", leaves, g, [x, y + 15, -20], [10, 12, 9]);
+          const name = ["round", "branching", "soft-pine", "plump"][i % 4];
+          if (kit.hasAsset(`meadow:tree-${name}`)) {
+            const height = 10 + (i % 3) * 2;
+            kit.asset(`meadow:tree-${name}`, g, [x, y, -20], [height, height, height]);
+          } else {
+            mesh("cylinder", wood, g, [x, y + 5, -20], [1, 10, 1]);
+            mesh("sphere", leaves, g, [x, y + 15, -20], [10, 12, 9]);
+          }
         }
         const flock = group(g, [0, 75, 0]);
         for (let i = 0; i < 3; i++) {

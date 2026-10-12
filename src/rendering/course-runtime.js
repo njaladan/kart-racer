@@ -6,6 +6,7 @@ import * as THREE from "../../vendor/three/three.module.js";
 import { createCourseKit, batchScenery } from "./course-kit.js";
 import { cartAt, trafficAt } from "../simulation/hazards.js";
 import { buildWindmillWorld } from "../courses/windmill-wilds/world.js";
+import { prepareWindmillTreeAssets } from "../courses/windmill-wilds/tree-palette.js";
 import { installWetPavement } from "./surface-detail.js";
 import { createRailGeometry } from "./course-rails.js";
 import { buildPathwayEdges } from "./pathway-edges.js";
@@ -19,6 +20,7 @@ import { metalDeckDetail } from "../courses/adventure/architectural-detail.js";
 // Shared geometry uses exactly the surface/edge queries used by karts and shells.
 export function buildCourseWorld({ scene, renderer, materials: mats, textures, track, assets }) {
   const course = track.course;
+  if (course.id === "windmill-wilds") assets = prepareWindmillTreeAssets(assets);
   function compose(world) {
     const experience = buildExperienceWorld({ scene, track, textures, assets });
     batchScenery(experience.scenery, experience.animated);

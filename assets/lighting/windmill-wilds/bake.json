@@ -18,8 +18,8 @@
   "samples": 48,
   "radius": 22.0,
   "method": "Offline BVH cosine hemisphere visibility, local diffuse color bounce and occluded authored lamp pools; direct sunlight excluded. Four-point area emitters soften penumbrae and glass/cutouts transmit attenuated light.",
-  "sourceSceneSha256": "fe45ed98ce93d740185de286e8a373c9ba84ad084601d53cbe390af7a2af58da",
-  "triangles": 690648,
+  "sourceSceneSha256": "17f2163e6fa2d57cad4d4b87702794d3190632ce755c097f9aecbabb7bf97e13",
+  "triangles": 620228,
   "lights": 0,
   "areaLights": 0,
   "transparentLightTransport": true,
@@ -28,8 +28,8 @@
       "file": "indirect.png",
       "width": 1024,
       "height": 1024,
-      "bytes": 778801,
-      "sha256": "38a08ff2caedd882b83d622d2a8f983cbaea8238e9744718ce845a959bc83789"
+      "bytes": 767568,
+      "sha256": "2de0c419ef7ef501c5b20a8777fe380325ed3413999c26ca509a8455525c38a4"
     },
     {
       "file": "height.png",

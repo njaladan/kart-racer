@@ -1,15 +1,13 @@
-/** Understory, spatially varied canopy, limestone outcrops, overlook, and birds. */
+/** Understory, limestone outcrops, overlook, and birds; groves own tree placement. */
 export function buildForestAndRidge({
   THREE,
   asset,
   animate,
   birds,
-  groundShadow,
   random,
   roadside,
   rockModels,
   scene,
-  treeModels,
   kit,
   palette,
   geometry,
@@ -41,50 +39,6 @@ export function buildForestAndRidge({
       mushroom.rotation.y = random() * Math.PI * 2;
     }
     if (i % 4 === 0) asset("plant-bushdetailed", g, [-1.1, 0.05, 0.4], [1.35, 1.35, 1.35]);
-  }
-  // A layered pine canopy frames the turns; oak and broadleaf trees open the
-  // meadow and orchard instead of leaving the skyline empty.
-  let treeIndex = 0;
-  function tree(section, fraction, side, clearance, size, species) {
-    const g = roadside(section, fraction, side, clearance, size * 0.38);
-    if (!g) return;
-    const model =
-      species ?? treeModels[(treeIndex * 7 + Math.floor(fraction * 31)) % treeModels.length];
-    treeIndex++;
-    const height = size * (model.includes("detailed") ? 1.08 : 1);
-    g.rotation.y += (treeIndex * 2.399) % (Math.PI * 2);
-    const width = height * (0.94 + Math.sin(treeIndex * 1.7) * 0.06);
-    asset(model, g, [0, 0, 0], [width, height, width]);
-    if (section !== 1 && treeIndex % 2 === 0) groundShadow(g, width * 0.9);
-  }
-  for (let i = 0; i < 18; i++) {
-    const f = 0.04 + i * 0.052;
-    for (const side of [-1, 1]) {
-      tree(
-        1,
-        f,
-        side,
-        7 + (i % 4) * 2.7,
-        13 + (i % 5) * 1.9,
-        i % 4 === 0
-          ? "tree-pinedefaultb"
-          : i % 4 === 1
-            ? "tree-pinetalla-detailed"
-            : "tree-pinetallb-detailed",
-      );
-      if (i % 3 === 0)
-        tree(1, f + 0.013, side, 20 + (i % 3) * 3, 10 + (i % 4) * 1.7, "tree-pinedefaultb");
-    }
-  }
-  for (let i = 0; i < 20; i++) {
-    const f = 0.05 + i * 0.045,
-      side = i % 2 ? 1 : -1;
-    tree(5, f, side, 8 + (i % 3) * 3, 9 + (i % 4) * 1.25, i % 3 ? "tree-oak" : "tree-default");
-  }
-  for (let i = 0; i < 10; i++) {
-    const f = 0.08 + i * 0.09,
-      side = i % 2 ? -1 : 1;
-    tree(0, f, side, 15 + (i % 3) * 4, 10 + (i % 3) * 1.5, i % 2 ? "tree-oak" : "tree-default");
   }
   for (let i = 0; i < 16; i++) {
     const f = 0.08 + i * 0.052,

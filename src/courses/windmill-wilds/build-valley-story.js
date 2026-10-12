@@ -112,7 +112,7 @@ export function buildValleyStory({ scene, scenery, track, kit, textures }) {
     g.name = "Ancient root cathedral";
     for (const side of [-1, 1]) {
       const tree = place(1, f, side, 7, 4);
-      if (tree) imported("windmill:oak", tree, [0, 0, 0], 31);
+      if (tree) imported("windmill:oak", tree, [0, 0, 0], 22);
       branch(
         g,
         [

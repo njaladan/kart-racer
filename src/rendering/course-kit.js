@@ -99,7 +99,7 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
     return s.distance > edge + footprint + 1 ? landGroup(t, offset, parent) : null;
   };
   const asset = (name, parent = scenery, position = [0, 0, 0], scale = [1, 1, 1]) => {
-    const model = assets.models[name];
+    const model = assets.models?.[name];
     if (parent !== scenery && parent.userData.scenicAssembly == null) {
       parent.userData.scenicAssembly = true;
       parent.userData.groundPlanted = true;
@@ -111,9 +111,11 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
         mid: `${inferred}-mid`,
         far: `${inferred}-far`,
       };
-      const variants = [model, assets.models[lodNames.mid], assets.models[lodNames.far]].filter(
-        Boolean,
-      );
+      const variants = (
+        model.userData.fixedDetail
+          ? [model]
+          : [model, assets.models[lodNames.mid], assets.models[lodNames.far]]
+      ).filter(Boolean);
       let instance;
       if (variants.length > 1) {
         instance = new THREE.LOD();
@@ -165,7 +167,7 @@ export function createCourseKit(scenery, track, assets = { models: {} }) {
     asset,
     fitAsset,
     authoredGeometry,
-    hasAsset: (name) => !!assets.models[name],
+    hasAsset: (name) => !!assets.models?.[name],
     batch: batchStaticMeshes,
   };
 }

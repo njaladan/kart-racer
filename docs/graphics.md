@@ -76,7 +76,52 @@ describe the added geometry/passes; they do not measure frame time on a player G
 
 | Before | After |
 | --- | --- |
-| ![Original meadow](screenshots/windmill-meadow-before.jpg) | ![Upgraded meadow](screenshots/windmill-meadow.jpg) |
+| ![Original meadow](screenshots/windmill-meadow-before.jpg) | ![Initial meadow upgrade](screenshots/windmill-trees-before.jpg) |
+
+## Fixed low-poly trees and grove layout
+
+Windmill uses seven tree silhouettes from Kenney's Nature Kit and Kay Lousberg's
+KayKit Forest Nature Pack. Each tree has 50–978 triangles, opaque vertex colors
+and retained source normals. The source palettes are harmonized to spring greens;
+no leaf-card textures, billboards, impostors or decimated distance variants are
+used by these trees. See the [source notice](../assets/courses/packs/windmill-wilds/licenses/meadow-tree-sources.md)
+for the two creators, CC0 evidence, pinned revisions and reproduction script.
+
+`tree-groves.js` owns the main tree layout, replacing two overlapping roadside
+scatter builders. Eight small meadow groves frame clear grass and festival
+views, with varied heights and golden-angle clustering. Orchard trees are
+smaller; the forest uses sheltering conifers. The forest fork has staggered,
+mixed tree shapes instead of matching giant canopies at every boardwalk segment.
+Landmark and distant-hill trees use the same palette. Placement checks use each
+model's complete horizontal footprint, road/verge widths and branch clearance.
+
+The tree assets set `fixedDetail`, so the kit ignores even the old implicit
+`-far` aliases. Tree geometry and instance counts stay the same across distances
+and quality tiers. Regional instancing and ordinary frustum culling limit work
+without changing a visible tree's model. The shared tree material skips scanned
+surface overlays and distance-dependent material filtering. Renderer shadow
+settings still follow the normal graphics tiers.
+
+The 1024px/48-sample ground and 32-sample mesh bakes are regenerated for the new
+canopies. The exporter now includes vertex colors in triangle albedo, preserving
+green canopy and brown trunk bounce. Source hashes match both bake manifests.
+At the same meadow view as above, this pass changes draws from 686 to 610,
+triangles from 589,379 to 602,553, and loaded textures from 223 to 217. The
+slight increase in visible triangles reflects retaining solid models at range;
+opaque foliage, fewer draws and fewer textures change costs in different ways.
+These are render counters, not a player-device FPS measurement.
+
+`tests/meadow-trees.test.js` checks sources/hashes, the geometry budget, plant
+grounding, full-footprint route clearance, batching and stable meshes from 0 to
+1200m across all four tiers. The real-game `--level` WebGL check additionally
+checks that tree geometry/instance counts stay fixed at meadow, orchard and
+harvest views. The full route geometry audit samples 2832 positions and finds
+zero intersections. Tree, Windmill, background, lighting and WebGL checks pass;
+the previously documented orchestra test remains the sole unrelated suite failure.
+
+| Previous trees | Fixed low-poly groves |
+| --- | --- |
+| ![Previous meadow trees](screenshots/windmill-trees-before.jpg) | ![New meadow groves](screenshots/windmill-meadow.jpg) |
 
 The graphics pass is presentation-only: track surfaces, collision boundaries,
 physics and race progression still use the existing course contract.

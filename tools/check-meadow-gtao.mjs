@@ -187,9 +187,13 @@ try {
       diagnostics.send({ type: "test-seek", t: 0.045 });
       const controls = [];
       const grass = [];
+      const fixedTrees = [];
       scene.traverse((object) => {
         if (object.userData.meadowGrass) grass.push(object);
+        if (object.isMesh && object.material?.name === "Fixed meadow tree palette")
+          fixedTrees.push({ object, geometry: object.geometry, count: object.count });
       });
+      let stableTrees = true;
       const gl = renderer.getContext();
       let renderWidth = 320,
         renderHeight = 180;
@@ -207,6 +211,11 @@ try {
         camera.updateProjectionMatrix();
         gameRenderer.render(0);
         gl.finish();
+        for (const { object, geometry, count } of fixedTrees) {
+          if (object.geometry !== geometry || object.count !== count) stableTrees = false;
+          for (let ancestor = object; ancestor; ancestor = ancestor.parent)
+            if (ancestor.isLOD) stableTrees = false;
+        }
         const pixels = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
         gl.readPixels(
           0,
@@ -251,6 +260,8 @@ try {
         meshCoverage: scene.userData.meshLightCoverage?.coverage,
         meshSourceMismatch: scene.userData.meshLightCoverage?.sourceMismatch,
         bakeResolution: scene.userData.courseBake?.resolution,
+        fixedTreeDrawObjects: fixedTrees.length,
+        stableTrees,
         programs: renderer.info.programs.every(
           (program) => program.diagnostics?.runnable !== false,
         ),
@@ -262,6 +273,7 @@ try {
     assert.equal(integration.aoDraws, 2);
     assert.equal(integration.bakeResolution, 1024);
     assert.equal(integration.meshSourceMismatch, false);
+    assert.ok(integration.fixedTreeDrawObjects > 0 && integration.stableTrees);
     assert.ok(integration.controls[0].blades < integration.controls[3].blades);
     console.log(JSON.stringify({ integration }, null, 2));
   }

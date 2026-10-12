@@ -8,6 +8,8 @@ import { buildWindmillLandmarks } from "./landmarks.js";
 import { buildPathwayEdges } from "../../rendering/pathway-edges.js";
 import { buildValleyStory } from "./build-valley-story.js";
 import { buildMeadowGrass } from "./meadow-grass.js";
+import { prepareWindmillTreeAssets } from "./tree-palette.js";
+import { buildWindmillTreeGroves } from "./tree-groves.js";
 
 /** Compose countryside terrain, vegetation, landmarks, and animated life. */
 export function buildWindmillWorld({
@@ -18,6 +20,7 @@ export function buildWindmillWorld({
   track,
   assets = { models: {} },
 }) {
+  assets = prepareWindmillTreeAssets(assets);
   const scenery = new THREE.Group();
   scene.add(scenery);
   let seed = 8127;
@@ -81,6 +84,7 @@ export function buildWindmillWorld({
   const { lake } = buildWindmillTerrain(options);
   buildPathwayEdges({ track, kit, textures });
   buildWindmillVegetation({ ...options, random });
+  buildWindmillTreeGroves({ scene, scenery, track, kit, assets });
   const landmarks = buildWindmillLandmarks(options);
   const life = buildWindmillLife({
     THREE,

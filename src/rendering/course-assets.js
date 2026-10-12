@@ -63,6 +63,7 @@ async function loadModelPack(loader, manifestUrl, models, renderer, optional = f
       const loaded = await loader.loadAsync(fileUrl);
       const object = normalizeCourseModel(loaded.scene);
       object.userData.assetName = entry.name;
+      object.userData.fixedDetail = entry.fixedDetail === true;
       object.userData.animationClips = loaded.animations;
       object.userData.lods = entry.lods || null;
       object.userData.lodDistances = entry.lodDistances || [0, 85, 180];

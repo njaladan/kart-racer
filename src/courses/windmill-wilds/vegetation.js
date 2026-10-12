@@ -2,58 +2,12 @@ import * as THREE from "../../../vendor/three/three.module.js";
 import { sceneryGroundHeight } from "../../rendering/terrain-height.js";
 import { TRACK, SECTIONS, poseAt, projectTrack, surfaceAt } from "../../track/track.js";
 
-/** Authored branch/cutout foliage in layered stands, rather than solid toy crowns. */
+/** Low understory, distant valley terrain and landscaped planting beds. */
 export function buildWindmillVegetation({ scenery, mats, textures, primitives, random, kit }) {
   const { sectorT } = primitives;
   const asset = (name, parent, size = 1) =>
     kit.asset(`windmill:${name}`, parent, [0, 0, 0], [size, size, size]);
   const planted = (t, offset, footprint) => kit.safeGroup(t, offset, footprint, scenery);
-  const trees = ["oak", "orchard", "willow"];
-  function tree(section, fraction, side, clearance, height, species) {
-    const t = sectorT(section, fraction),
-      s = surfaceAt(t);
-    const edge = side > 0 ? s.rightEdge : -s.leftEdge;
-    const g = planted(t, side * (edge + clearance), height * (species === "fir" ? 0.16 : 0.3));
-    if (!g) return;
-    g.name = `Authored ${species} canopy, sector ${section}`;
-    g.rotation.y += random() * Math.PI * 2;
-    const m = asset(species, g, height);
-    m.scale.x *= 0.9 + random() * 0.2;
-    m.scale.z *= 0.9 + random() * 0.2;
-  }
-  // Staggered depth: close silhouettes, irregular middle stands, economical
-  // far cutouts. Clearings expose the next bend and the landmark silhouettes.
-  for (let i = 0; i < 84; i++) {
-    const f = 0.025 + random() * 0.95;
-    const side = i % 2 ? 1 : -1;
-    const layer = i % 3;
-    tree(1, f, side, [9, 23, 42][layer] + random() * 8, 13 + random() * 8, "fir");
-  }
-  for (const section of [0, 5])
-    for (let i = 0; i < (section === 0 ? 32 : 62); i++) {
-      const side = i % 2 ? 1 : -1;
-      const f = 0.035 + random() * 0.93;
-      const species = section === 5 ? (i % 4 ? "orchard" : "oak") : trees[i % 3];
-      tree(
-        section,
-        f,
-        side,
-        8 + (i % 3) * 13 + random() * 5,
-        section === 5 ? 7 + random() * 3.2 : 9 + random() * 5,
-        species,
-      );
-    }
-  for (const section of [2, 3, 4])
-    for (let i = 0; i < 16; i++)
-      tree(
-        section,
-        0.04 + random() * 0.92,
-        i % 2 ? 1 : -1,
-        12 + random() * 24,
-        9 + random() * 6,
-        section === 3 ? "willow" : i % 2 ? "oak" : "fir",
-      );
-
   // Garden islands repeat a small authored kit with shared textures. Ground
   // coverage is clustered along readable views, keeping the racing edge open.
   for (let section = 0; section < SECTIONS.length; section++)

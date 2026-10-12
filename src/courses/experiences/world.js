@@ -254,7 +254,22 @@ export function buildExperienceWorld({ scene, track, textures = {}, assets = {} 
       if (branch.theme === "grove") {
         for (const side of [-1, 1]) {
           const roots = Math.max(0, pose.p.y - (track.course.theme.groundHeight ?? -1.7));
-          if (kit.hasAsset("windmill:oak"))
+          if (kit.hasAsset("meadow:tree-round")) {
+            // Stagger small forest-fork groves instead of pairing an identical
+            // giant canopy at every boardwalk segment.
+            if ((i + (side > 0 ? 1 : 0)) % 3 !== 1) {
+              const name = ["round", "branching", "soft-pine", "plump", "slender"][
+                (i * 3 + (side > 0 ? 1 : 0)) % 5
+              ];
+              const height = 11.5 + (i % 4) * 1.4;
+              kit.asset(
+                `meadow:tree-${name}`,
+                g,
+                [side * (15 + (i % 3) * 2), -roots, (i % 2 ? 1 : -1) * 2],
+                [height, height, height],
+              );
+            }
+          } else if (kit.hasAsset("windmill:oak"))
             kit.asset("windmill:oak", g, [side * 15, -roots, 0], [18, 18, 18]);
           else {
             mesh(cylinder, wood, g, [side * 15, 6 - roots, 0], [1.2, 12, 1.2]);

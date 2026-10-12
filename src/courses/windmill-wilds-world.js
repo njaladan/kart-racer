@@ -52,11 +52,6 @@ export default function buildWindmillLife(context) {
   const fernMat = deep.clone();
   fernMat.side = THREE.DoubleSide;
   const mappedAssets = {
-    "tree-pinedefaultb": "fir",
-    "tree-pinetalla-detailed": "fir",
-    "tree-pinetallb-detailed": "fir",
-    "tree-oak": "oak",
-    "tree-default": "orchard",
     "plant-bushdetailed": "flower-bush",
     "flower-yellowb": "flower-bush",
   };
@@ -67,13 +62,6 @@ export default function buildWindmillLife(context) {
       position,
       scale,
     );
-  const treeModels = [
-    "tree-pinedefaultb",
-    "tree-pinetalla-detailed",
-    "tree-pinetallb-detailed",
-    "tree-oak",
-    "tree-default",
-  ];
   const rockModels = ["rock-largeb", "rock-larged", "rock-largee", "rock-tallb"];
 
   function ground(t, offset, radius = 1, parent = scenery) {
@@ -196,12 +184,10 @@ export default function buildWindmillLife(context) {
     THREE,
     animate,
     birds,
-    groundShadow,
     random,
     roadside,
     rockModels,
     scene,
-    treeModels,
     kit,
     palette,
     geometry,

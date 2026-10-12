@@ -7,6 +7,7 @@ import { normalizeCourseModel, decodeCourseModels } from "../src/rendering/cours
 import { buildWindmillWorld } from "../src/courses/windmill-wilds/world.js";
 import { selectCourse } from "../src/track/track.js";
 import course from "../src/courses/windmill-wilds.js";
+import { prepareWindmillTreeAssets } from "../src/courses/windmill-wilds/tree-palette.js";
 
 async function loadArt() {
   const base = new URL("../assets/courses/packs/windmill-wilds/", import.meta.url);
@@ -33,19 +34,28 @@ async function loadArt() {
   return { models };
 }
 
-test("Windmill authored scenery retains real UVs, cutout leaves and baked architectural AO", async () => {
-  const { models } = await loadArt();
+test("Windmill keeps fixed opaque trees and UV-painted architecture with baked AO", async () => {
+  const { models } = prepareWindmillTreeAssets(await loadArt());
   for (const name of ["fir", "oak", "orchard", "farmhouse", "cottage", "boat", "stone-wall"])
     assert.ok(models[`windmill:${name}`], `${name} missing`);
-  let cutouts = 0,
-    occluded = 0;
-  for (const name of ["fir", "oak", "orchard", "farmhouse"])
+  for (const name of ["fir", "oak", "orchard", "willow"]) {
+    assert.equal(models[`windmill:${name}`].userData.fixedDetail, true);
+    models[`windmill:${name}`].traverse((part) => {
+      assert.equal(part.isLOD, undefined);
+      if (!part.isMesh) return;
+      assert.ok(part.geometry.getAttribute("color")?.count > 0);
+      assert.equal(part.material.map, null);
+      assert.equal(part.material.transparent, false);
+      assert.equal(part.material.alphaTest, 0);
+    });
+  }
+  let occluded = 0;
+  for (const name of ["farmhouse", "cottage", "boat", "stone-wall"])
     models[`windmill:${name}`].traverse((m) => {
       if (!m.isMesh) return;
       const uv = m.geometry.getAttribute("uv");
       assert.ok(uv && uv.count > 0);
       assert.ok(Array.from(uv.array).every(Number.isFinite));
-      if (m.material.alphaTest > 0.4) cutouts++;
       if (name === "farmhouse") {
         const c = m.geometry.getAttribute("color");
         // GLTFLoader preserves normalized U16 color buffers; inspect through
@@ -54,7 +64,6 @@ test("Windmill authored scenery retains real UVs, cutout leaves and baked archit
           occluded++;
       }
     });
-  assert.ok(cutouts >= 3, "foliage must use alpha-tested authored silhouettes");
   assert.ok(occluded > 0, "farmhouse needs the real offline obstruction bake");
 });
 

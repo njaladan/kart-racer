@@ -106,6 +106,7 @@ async function loadAssets(id) {
       const model = normalizeCourseModel(gltf.scene);
       model.userData.animationClips = gltf.animations;
       model.userData.lods = entry.lods || null;
+      model.userData.fixedDetail = entry.fixedDetail === true;
       model.userData.lodDistances = entry.lodDistances || [0, 85, 180];
       model.traverse((object) => {
         if (object.isMesh) {
@@ -285,7 +286,21 @@ for (const course of selected) {
                 geometry.index ? geometry.index.getX(i + j) : i + j,
               );
               indices.push(...vertex.map((v) => v + offset));
-              colors.push(...color.toArray(), coverage);
+              const vertexColors = material.vertexColors && geometry.getAttribute("color");
+              const faceColor = color.clone();
+              if (vertexColors) {
+                const average = new THREE.Color(0, 0, 0);
+                for (const v of vertex)
+                  average.add(
+                    new THREE.Color(
+                      vertexColors.getX(v),
+                      vertexColors.getY(v),
+                      vertexColors.getZ(v),
+                    ),
+                  );
+                faceColor.multiply(average.multiplyScalar(1 / 3));
+              }
+              colors.push(...faceColor.toArray(), coverage);
               receivers.push(
                 geometry.attributes.surfaceLightUv?.getZ(vertex[0]) > 0 ? 2 : receiver ? 1 : 0,
               );
