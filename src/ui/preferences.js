@@ -2,6 +2,7 @@ export const DEFAULT_PREFERENCES = Object.freeze({
   quality: 2,
   adaptive: true,
   bloom: true,
+  ambientOcclusion: true,
   motion: true,
   master: 0.8,
   effects: 0.8,
@@ -22,7 +23,7 @@ export function loadPreferences(storage = globalThis.localStorage) {
       values[key] = Math.max(0, Math.min(key === "quality" ? 3 : 1, saved[key]));
   }
   values.quality = Math.round(values.quality);
-  for (const key of ["adaptive", "bloom", "motion"])
+  for (const key of ["adaptive", "bloom", "ambientOcclusion", "motion"])
     if (typeof saved?.[key] === "boolean") values[key] = saved[key];
   return values;
 }

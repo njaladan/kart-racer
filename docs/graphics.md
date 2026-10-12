@@ -1,5 +1,27 @@
 # Graphics tuning
 
+## Windmill contact shading
+
+Windmill Wilds enables Three.js r180 GTAO on High and Ultra. The vendored
+`GTAOShader` and `PoissonDenoiseShader` are covered by `vendor/three/LICENSE`;
+their only import change points at the bundled Three.js module.
+The main HDR target resolves its multisampled depth to a texture. Normals are
+reconstructed from that depth, avoiding an additional scenery/normal draw pass.
+Two half-resolution fullscreen passes calculate and denoise AO; their longest
+axis is capped at 640 pixels on High and 960 on Ultra. Depth-aware upsampling
+reduces silhouette halos, the radius is 1.15 world metres, and the contribution
+fades out from 35 to 75 metres. The restrained 0.4 blend supplements baked
+visibility without heavily darkening already shaded scenery. Bloom is added
+after AO so highlight glow retains its intensity.
+
+The meadow contact-shading checkbox disables the effect independently of bloom.
+Performance and Balanced release the AO targets, noise and depth texture.
+Other courses retain their existing postprocessing. The effect has no temporal
+history, and fixed cameras/race clocks produce repeatable paused frames.
+Run `node tools/check-meadow-gtao.mjs` for real WebGL checks of contact shading,
+sky preservation, resize, quality switches, draw count and disposal. Software
+Chromium verifies correctness; GPU frame-time cost requires player hardware.
+
 The graphics pass is presentation-only: track surfaces, collision boundaries,
 physics and race progression still use the existing course contract.
 

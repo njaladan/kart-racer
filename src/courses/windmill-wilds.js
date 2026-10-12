@@ -221,6 +221,7 @@ export default withCourseExperience({
     { section: 5, fraction: 0.5, offset: 25, kind: "birds", range: 85, volume: 0.045 },
   ],
   theme: {
+    gtao: { radius: 1.15, thickness: 0.65, strength: 0.4 },
     sky: "#49b8ef",
     fog: "#bce3ec",
     ground: "#c6ff9e",

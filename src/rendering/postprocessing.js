@@ -1,4 +1,5 @@
 import * as THREE from "../../vendor/three/three.module.js";
+import { createGroundTruthAO } from "./ground-truth-ao.js";
 
 const vertexShader = `varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}`;
 
@@ -46,6 +47,11 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
     uniforms: {
       source: { value: target.texture },
       bloom: { value: bloomA.texture },
+      ambientOcclusion: { value: null },
+      sceneDepth: { value: null },
+      aoSize: { value: new THREE.Vector2(1, 1) },
+      aoStrength: { value: 0 },
+      cameraNearFar: { value: new THREE.Vector2(0.1, 750) },
       boostBlur: { value: 0 },
       waterImmersion: { value: 0 },
       waterTime: { value: 0 },
@@ -64,7 +70,26 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
       },
     },
     vertexShader,
-    fragmentShader: `uniform sampler2D source,bloom;uniform float bloomStrength,boostBlur,waterImmersion,waterTime;uniform vec3 gradeTint;varying vec2 vUv;
+    fragmentShader: `uniform sampler2D source,bloom,ambientOcclusion,sceneDepth;
+      uniform float bloomStrength,boostBlur,waterImmersion,waterTime,aoStrength;
+      uniform vec2 aoSize,cameraNearFar;uniform vec3 gradeTint;varying vec2 vUv;
+      #include <packing>
+      float contactAO(vec2 uv){
+        float depth=texture2D(sceneDepth,uv).r;
+        if(depth>=1.)return 1.;
+        float viewDepth=-perspectiveDepthToViewZ(depth,cameraNearFar.x,cameraNearFar.y);
+        vec2 pixel=uv*aoSize-.5,base=floor(pixel),blend=fract(pixel);
+        float sum=0.,weight=0.;
+        for(int x=0;x<2;x++)for(int y=0;y<2;y++){
+          vec2 corner=vec2(float(x),float(y));
+          vec4 sampleAO=texture2D(ambientOcclusion,(base+corner+.5)/aoSize);
+          vec2 bilinear=mix(1.-blend,blend,corner);
+          float w=bilinear.x*bilinear.y*exp(-abs(sampleAO.a-viewDepth)*8.);
+          sum+=sampleAO.r*w;weight+=w;
+        }
+        float visibility=weight>.0001?sum/weight:1.;
+        return mix(1.,visibility,aoStrength*(1.-smoothstep(35.,75.,viewDepth)));
+      }
       void main(){
         vec2 sampleUv=vUv;
         if(waterImmersion>.001){
@@ -82,6 +107,7 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
           c=c*.4;
           for(int i=1;i<=4;i++) c+=texture2D(source,clamp(vUv-stepUv*float(i),vec2(0.),vec2(1.))).rgb*.15;
         }
+        if(aoStrength>.001)c*=contactAO(sampleUv);
         c+=texture2D(bloom,sampleUv).rgb*bloomStrength;
         c*=gradeTint*mix(vec3(1.),vec3(.9,1.,1.025),waterImmersion);gl_FragColor=vec4(c,1.);
         #include <tonemapping_fragment>
@@ -90,6 +116,20 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
   });
   let quality = 3;
   let bloomEnabled = true;
+  let aoEnabled = true;
+  let ao = null;
+  function releaseAO() {
+    ao?.dispose();
+    ao = null;
+    if (target.depthTexture) {
+      target.depthTexture.dispose();
+      target.depthTexture = null;
+      target.dispose();
+    }
+    grade.uniforms.aoStrength.value = 0;
+    grade.uniforms.ambientOcclusion.value = null;
+    grade.uniforms.sceneDepth.value = null;
+  }
   const size = new THREE.Vector2();
   let width = 0,
     height = 0;
@@ -108,9 +148,12 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
     },
     setOptions(preferences) {
       bloomEnabled = preferences.bloom;
+      aoEnabled = preferences.ambientOcclusion !== false;
+      if (!aoEnabled) releaseAO();
     },
     setQuality(tier) {
       quality = tier;
+      if (quality < 2) releaseAO();
       wetReflections?.setQuality(tier);
     },
     render(scene, sceneCamera) {
@@ -128,10 +171,23 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
         extract.uniforms.texel.value.set(1 / width, 1 / height);
       }
       const toneMapping = renderer.toneMapping;
+      if (theme.gtao && quality >= 2 && aoEnabled && !ao) {
+        target.depthTexture = new THREE.DepthTexture(width, height, THREE.UnsignedIntType);
+        target.dispose();
+        ao = createGroundTruthAO(target.depthTexture, theme.gtao);
+        grade.uniforms.ambientOcclusion.value = ao.texture;
+        grade.uniforms.sceneDepth.value = target.depthTexture;
+      }
       renderer.toneMapping = THREE.NoToneMapping;
       wetReflections?.render(renderer, scene, sceneCamera);
       renderer.setRenderTarget(target);
       renderer.render(scene, sceneCamera);
+      if (ao) {
+        ao.render(renderer, sceneCamera, width, height, quality);
+        grade.uniforms.aoSize.value.copy(ao.size);
+        grade.uniforms.cameraNearFar.value.set(sceneCamera.near, sceneCamera.far);
+        grade.uniforms.aoStrength.value = theme.gtao.strength ?? 0.4;
+      }
       if (quality >= 2 && bloomEnabled) {
         draw(extract, bloomA);
         blur.uniforms.source.value = bloomA.texture;
@@ -146,6 +202,7 @@ export function createPostProcessing(renderer, theme = {}, wetReflections = null
       draw(grade, null);
     },
     dispose() {
+      releaseAO();
       wetReflections?.dispose();
       target.dispose();
       bloomA.dispose();

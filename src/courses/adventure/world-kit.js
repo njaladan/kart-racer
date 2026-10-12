@@ -4,7 +4,7 @@ import { installSurfaceDetail } from "../../rendering/surface-detail.js";
 import { pendulumAt, pendulumAngleAt } from "../../simulation/course-mechanics.js";
 import { clockPendulumBob } from "./clock-pendulum.js";
 export function worldKit(context) {
-  const { THREE, scene, scenery, track, kit, textures = {} } = context;
+  const { THREE, scenery, track, kit, textures = {} } = context;
   const { material, mesh, box, groupAt, sectorT, align, tube } = kit;
   const animated = [],
     updates = [];
