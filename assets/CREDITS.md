@@ -60,3 +60,11 @@ hashes and modifications are in both course manifests. Reproduce with
 Shared scanned material roles use CC0 ambientCG and Poly Haven scans; fabric uses CC0 Sheen Chair maps by Eric Chadwick / Wayfair, LLC from the pinned glTF Sample Assets distribution. Source links and file hashes remain in the fidelity manifest.
 
 Clockwork Citadel also uses Kenney’s CC0 Space Kit chimney, generator and pipe models, obtained from the pinned [tge-assets distribution](https://github.com/Hidencod/tge-assets/tree/08f0c913f6783cc81f9f6105a7cdda8562b1c192). Source URLs, revision and SHA-256 hashes are in its manifest; see the [machinery notice](courses/packs/clockwork-citadel/licenses/kenney-machinery.txt). These models have no skeletons or animation clips. City gears, pistons, zeppelin propellers and aircraft motion use race-clock procedural animation.
+
+Windmill's fixed low-poly tree palette combines four trees from **Kay Lousberg's
+KayKit Forest Nature Pack** and three from **Kenney's Nature Kit**, both CC0.
+Original shapes and normals are retained; source colors are sampled into opaque
+vertex colors and greens are harmonized for the meadow. See the
+[tree source notice](courses/packs/windmill-wilds/licenses/meadow-tree-sources.md)
+and course manifest for pinned downloads, license evidence and hashes.
+Reproduce with `python3 tools/prepare-meadow-trees.py`.

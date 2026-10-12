@@ -489,6 +489,178 @@
       "triangles": 2444,
       "bytes": 280888,
       "sha256": "b0fd807678c64952b9d030be5888cfcc99423f0b5627a0bd020f229a17fef528"
+    },
+    {
+      "name": "meadow:tree-round",
+      "file": "models/meadow-tree-round.glb",
+      "type": "gltf",
+      "author": "Kay Lousberg",
+      "source": "https://kaylousberg.itch.io/kaykit-forest",
+      "license": "CC0-1.0",
+      "licenseEvidence": "licenses/meadow-tree-sources.md",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/GeorgeQLe/assets-kaykit-3d-environments/d5e6c73284e9385a389ac7181dec3d0dc9e9021d/assets/kaykit/forest-nature-pack-1.0/Assets/gltf/Color1/Tree_1_A_Color1.gltf",
+          "sha256": "9d972eba9d61fc563cb7c3248f1be057190859ce2554ad2032df27c3d09e06c6"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/GeorgeQLe/assets-kaykit-3d-environments/d5e6c73284e9385a389ac7181dec3d0dc9e9021d/assets/kaykit/forest-nature-pack-1.0/Assets/gltf/Color1/Tree_1_A_Color1.bin",
+          "sha256": "96e74161a6673316335777e133d065bcd23b3535da52fb7ee8a1e0b4fade97bb"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/GeorgeQLe/assets-kaykit-3d-environments/d5e6c73284e9385a389ac7181dec3d0dc9e9021d/assets/kaykit/forest-nature-pack-1.0/Assets/gltf/Color1/forest_texture.png",
+          "sha256": "4e116d40a273b72af075f2a1f1250fa6bc3330643aadef0c969a654c8cdc8549"
+        }
+      ],
+      "sha256": "4637b93d72b93f5df3b8bc883b1e1e0e3a97dd99e7c7c128fb9f6f25ec232b47",
+      "bytes": 20604,
+      "triangles": 530,
+      "fixedDetail": true,
+      "modifications": "Original low-poly silhouette and normals retained. Original material/UV palette sampled to opaque vertex colors; greens harmonized; UV textures removed. No LODs, billboards, or decimation."
+    },
+    {
+      "name": "meadow:tree-tiered",
+      "file": "models/meadow-tree-tiered.glb",
+      "type": "gltf",
+      "author": "Kay Lousberg",
+      "source": "https://kaylousberg.itch.io/kaykit-forest",
+      "license": "CC0-1.0",
+      "licenseEvidence": "licenses/meadow-tree-sources.md",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/GeorgeQLe/assets-kaykit-3d-environments/d5e6c73284e9385a389ac7181dec3d0dc9e9021d/assets/kaykit/forest-nature-pack-1.0/Assets/gltf/Color1/Tree_2_A_Color1.gltf",
+          "sha256": "793570b93cd350b935bc88c766317675890f102d157965d2aca3d8daef5ee49b"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/GeorgeQLe/assets-kaykit-3d-environments/d5e6c73284e9385a389ac7181dec3d0dc9e9021d/assets/kaykit/forest-nature-pack-1.0/Assets/gltf/Color1/Tree_2_A_Color1.bin",
+          "sha256": "fd413ad809ff30939faf1190194654892066aba94f67ec6f96ce257fa5b34e35"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/GeorgeQLe/assets-kaykit-3d-environments/d5e6c73284e9385a389ac7181dec3d0dc9e9021d/assets/kaykit/forest-nature-pack-1.0/Assets/gltf/Color1/forest_texture.png",
+          "sha256": "4e116d40a273b72af075f2a1f1250fa6bc3330643aadef0c969a654c8cdc8549"
+        }
+      ],
+      "sha256": "3d19a812a74d059b449df12fc6789101a820a94da1825f74710c083e000702f4",
+      "bytes": 10116,
+      "triangles": 336,
+      "fixedDetail": true,
+      "modifications": "Original low-poly silhouette and normals retained. Original material/UV palette sampled to opaque vertex colors; greens harmonized; UV textures removed. No LODs, billboards, or decimation."
+    },
+    {
+      "name": "meadow:tree-branching",
+      "file": "models/meadow-tree-branching.glb",
+      "type": "gltf",
+      "author": "Kay Lousberg",
+      "source": "https://kaylousberg.itch.io/kaykit-forest",
+      "license": "CC0-1.0",
+      "licenseEvidence": "licenses/meadow-tree-sources.md",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/GeorgeQLe/assets-kaykit-3d-environments/d5e6c73284e9385a389ac7181dec3d0dc9e9021d/assets/kaykit/forest-nature-pack-1.0/Assets/gltf/Color1/Tree_3_A_Color1.gltf",
+          "sha256": "a5140f21978004544844df4c2969625724c2c263e74f798716ea9e115216a230"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/GeorgeQLe/assets-kaykit-3d-environments/d5e6c73284e9385a389ac7181dec3d0dc9e9021d/assets/kaykit/forest-nature-pack-1.0/Assets/gltf/Color1/Tree_3_A_Color1.bin",
+          "sha256": "11787f3510d73b650ff8395016de4a5a3b5365a64bbc592d26fe5a41e57e33cb"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/GeorgeQLe/assets-kaykit-3d-environments/d5e6c73284e9385a389ac7181dec3d0dc9e9021d/assets/kaykit/forest-nature-pack-1.0/Assets/gltf/Color1/forest_texture.png",
+          "sha256": "4e116d40a273b72af075f2a1f1250fa6bc3330643aadef0c969a654c8cdc8549"
+        }
+      ],
+      "sha256": "442f4927f68ad79cdbbfe78cfa62d45bc87a52b3b6885dfc254e48258d4f167b",
+      "bytes": 34280,
+      "triangles": 978,
+      "fixedDetail": true,
+      "modifications": "Original low-poly silhouette and normals retained. Original material/UV palette sampled to opaque vertex colors; greens harmonized; UV textures removed. No LODs, billboards, or decimation."
+    },
+    {
+      "name": "meadow:tree-slender",
+      "file": "models/meadow-tree-slender.glb",
+      "type": "gltf",
+      "author": "Kay Lousberg",
+      "source": "https://kaylousberg.itch.io/kaykit-forest",
+      "license": "CC0-1.0",
+      "licenseEvidence": "licenses/meadow-tree-sources.md",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/GeorgeQLe/assets-kaykit-3d-environments/d5e6c73284e9385a389ac7181dec3d0dc9e9021d/assets/kaykit/forest-nature-pack-1.0/Assets/gltf/Color1/Tree_4_A_Color1.gltf",
+          "sha256": "14f8f50af9f9cf8d2bb488cae15613f9e2ed6ce0002d2aa11721a2efc2ba3010"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/GeorgeQLe/assets-kaykit-3d-environments/d5e6c73284e9385a389ac7181dec3d0dc9e9021d/assets/kaykit/forest-nature-pack-1.0/Assets/gltf/Color1/Tree_4_A_Color1.bin",
+          "sha256": "56907fa6c064137d1b3fca6bb3c7666457935350258d4bdb7507e95226a25100"
+        },
+        {
+          "url": "https://raw.githubusercontent.com/GeorgeQLe/assets-kaykit-3d-environments/d5e6c73284e9385a389ac7181dec3d0dc9e9021d/assets/kaykit/forest-nature-pack-1.0/Assets/gltf/Color1/forest_texture.png",
+          "sha256": "4e116d40a273b72af075f2a1f1250fa6bc3330643aadef0c969a654c8cdc8549"
+        }
+      ],
+      "sha256": "777cc059e9f36476740cbc264c9d3d1985932ca5d1fa15ea8d2efbf4edf563b0",
+      "bytes": 14992,
+      "triangles": 404,
+      "fixedDetail": true,
+      "modifications": "Original low-poly silhouette and normals retained. Original material/UV palette sampled to opaque vertex colors; greens harmonized; UV textures removed. No LODs, billboards, or decimation."
+    },
+    {
+      "name": "meadow:tree-plump",
+      "file": "models/meadow-tree-plump.glb",
+      "type": "gltf",
+      "author": "Kenney",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "license": "CC0-1.0",
+      "licenseEvidence": "licenses/meadow-tree-sources.md",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/Hidencod/tge-assets/08f0c913f6783cc81f9f6105a7cdda8562b1c192/packs/nature-kit/tree-fat.glb",
+          "sha256": "84b262c5dda3a91ac6c95f9d8b23a0ebbb1951d678c0e1375d3e32623cc43ee2"
+        }
+      ],
+      "sha256": "a717d793046a2f5d6485e7b3a99c25efee892aa8dec341afd22f984ac38788e4",
+      "bytes": 5148,
+      "triangles": 50,
+      "fixedDetail": true,
+      "modifications": "Original low-poly silhouette and normals retained. Original material/UV palette sampled to opaque vertex colors; greens harmonized; UV textures removed. No LODs, billboards, or decimation."
+    },
+    {
+      "name": "meadow:tree-soft-pine",
+      "file": "models/meadow-tree-soft-pine.glb",
+      "type": "gltf",
+      "author": "Kenney",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "license": "CC0-1.0",
+      "licenseEvidence": "licenses/meadow-tree-sources.md",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/Hidencod/tge-assets/08f0c913f6783cc81f9f6105a7cdda8562b1c192/packs/nature-kit/tree-pinerounda.glb",
+          "sha256": "7dc9711f31585eafdcb965d0649c30af5e19f2def1955f7a915081d30759ef8e"
+        }
+      ],
+      "sha256": "61cb2dccc31c035d9e6c8d4fdd563c43dcab63bba2d3ed947295f97019f92f3e",
+      "bytes": 13808,
+      "triangles": 204,
+      "fixedDetail": true,
+      "modifications": "Original low-poly silhouette and normals retained. Original material/UV palette sampled to opaque vertex colors; greens harmonized; UV textures removed. No LODs, billboards, or decimation."
+    },
+    {
+      "name": "meadow:tree-spruce",
+      "file": "models/meadow-tree-spruce.glb",
+      "type": "gltf",
+      "author": "Kenney",
+      "source": "https://kenney.nl/assets/nature-kit",
+      "license": "CC0-1.0",
+      "licenseEvidence": "licenses/meadow-tree-sources.md",
+      "downloads": [
+        {
+          "url": "https://raw.githubusercontent.com/Hidencod/tge-assets/08f0c913f6783cc81f9f6105a7cdda8562b1c192/packs/nature-kit/tree-pineroundc.glb",
+          "sha256": "29080a4935bae6b4ab29066f22c99c58f88b23ce4e2f79b4dcbb5e76de73f69d"
+        }
+      ],
+      "sha256": "9938041901e8d294ec02d5eeb7f2745c3519e3ebd64c412d27a0de1faaf9dadd",
+      "bytes": 14732,
+      "triangles": 206,
+      "fixedDetail": true,
+      "modifications": "Original low-poly silhouette and normals retained. Original material/UV palette sampled to opaque vertex colors; greens harmonized; UV textures removed. No LODs, billboards, or decimation."
     }
   ],
   "fidelitySource": {
