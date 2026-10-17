@@ -13,10 +13,20 @@ test("living meadow grass stays off driving surfaces, follows terrain and has a 
   scene.add(scenery);
   const track = selectCourse(course);
   const meadow = buildMeadowGrass({ scene, scenery, track });
-  assert.ok(meadow.locations.length > 1000 && meadow.locations.length < 8000);
-  assert.ok(meadow.meshes.length < 100, "regional instances keep grass draw objects bounded");
+  assert.ok(
+    meadow.locations.length > 12000 && meadow.locations.length < 35000,
+    `dense valley coverage stays within its instance budget (${meadow.locations.length})`,
+  );
+  assert.ok(meadow.meshes.length < 160, "regional instances keep grass draw objects bounded");
+  const sections = new Set();
+  const lake = track.poseAt(track.sectorT(3, 0.38) * track.TRACK, 39, 0).p;
   for (const p of meadow.locations) {
     const surface = track.projectTrack(p, 0, true);
+    sections.add(track.SECTIONS.findIndex((s) => surface.t >= s.start && surface.t < s.end));
+    assert.ok(
+      ((p.x - lake.x) / 66) ** 2 + ((p.z - lake.z) / 54) ** 2 >= 1,
+      "open water stays clear",
+    );
     const edge = surface.offset > 0 ? surface.rightEdge : -surface.leftEdge;
     assert.ok(
       surface.distance >= edge + 0.7 - 1e-5,
@@ -26,6 +36,8 @@ test("living meadow grass stays off driving surfaces, follows terrain and has a 
     for (const branch of track.branches)
       assert.ok(branch.project(p, 0, true).distance >= branch.halfWidth + 1);
   }
+  for (const section of [0, 1, 2, 4, 5, 6, 7])
+    assert.ok(sections.has(section), `living grass reaches section ${section}`);
   for (const mesh of meadow.meshes) {
     assert.equal(mesh.castShadow, false);
     assert.equal(mesh.userData.skipBake, true);

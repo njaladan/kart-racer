@@ -13,16 +13,16 @@ export function buildMeadowGrass({ scene, scenery, track }) {
   const positions = [],
     colors = [],
     indices = [];
-  for (let blade = 0; blade < 12; blade++) {
+  for (let blade = 0; blade < 24; blade++) {
     const angle = random() * Math.PI * 2;
-    const height = 0.25 + random() * 0.45;
-    const width = 0.028 + random() * 0.032;
-    const x = Math.cos(angle) * random() * 0.55;
-    const z = Math.sin(angle) * random() * 0.55;
+    const height = 0.55 + random() * 0.65;
+    const width = 0.045 + random() * 0.055;
+    const x = Math.cos(angle) * random() * 0.8;
+    const z = Math.sin(angle) * random() * 0.8;
     const dx = Math.cos(angle) * width;
     const dz = Math.sin(angle) * width;
-    const leanX = Math.sin(angle) * 0.16;
-    const leanZ = Math.cos(angle) * 0.16;
+    const leanX = Math.sin(angle) * 0.32;
+    const leanZ = Math.cos(angle) * 0.32;
     const offset = positions.length / 3;
     positions.push(
       x - dx,
@@ -41,7 +41,7 @@ export function buildMeadowGrass({ scene, scenery, track }) {
       height,
       z + leanZ,
     );
-    colors.push(0.48, 0.58, 0.35, 0.48, 0.58, 0.35, 0.82, 0.9, 0.7, 0.82, 0.9, 0.7, 1, 1, 0.9);
+    colors.push(0.28, 0.43, 0.17, 0.28, 0.43, 0.17, 0.7, 0.88, 0.42, 0.7, 0.88, 0.42, 1, 1, 0.67);
     indices.push(
       offset,
       offset + 1,
@@ -59,23 +59,32 @@ export function buildMeadowGrass({ scene, scenery, track }) {
   geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
   geometry.setIndex(indices);
   geometry.computeVertexNormals();
+  // Upward-biased normals give broad, soft lighting instead of glittering slivers.
+  const normals = geometry.getAttribute("normal");
+  const normal = new THREE.Vector3();
+  for (let i = 0; i < normals.count; i++) {
+    normal.fromBufferAttribute(normals, i);
+    normal.y = Math.abs(normal.y) + 1.6;
+    normal.normalize();
+    normals.setXYZ(i, normal.x, normal.y, normal.z);
+  }
   const material = new THREE.MeshStandardMaterial({
-    color: "#70994f",
+    color: "#88ba48",
     roughness: 1,
     vertexColors: true,
     side: THREE.DoubleSide,
   });
-  material.name = "Meadow grass: shaded roots and sunlit tips";
+  material.name = "Wind-swept meadow: emerald roots and golden-green tips";
   material.userData.skipSurfaceDetail = true;
   const uniforms = {
     meadowTime: { value: 0 },
     meadowWind: { value: new THREE.Vector3(...courseWind(track.course.theme)) },
-    meadowRange: { value: new THREE.Vector2(55, 85) },
+    meadowRange: { value: new THREE.Vector2(70, 110) },
     meadowBakeMap: { value: null },
     meadowBakeBounds: { value: new THREE.Vector4() },
     meadowBakeEnabled: { value: 0 },
   };
-  patchMaterial(material, "meadow-blade-wind-and-baked-light-v1", (shader) => {
+  patchMaterial(material, "meadow-blade-wind-and-baked-light-v2", (shader) => {
     Object.assign(shader.uniforms, uniforms);
     shader.vertexShader = `uniform float meadowTime;uniform vec3 meadowWind;
       uniform vec2 meadowRange;varying vec3 vMeadowWorld;varying float vMeadowTip;\n${shader.vertexShader}`;
@@ -90,10 +99,18 @@ export function buildMeadowGrass({ scene, scenery, track }) {
       meadowRoot=modelMatrix*meadowRoot;
       float meadowDistance=length(cameraPosition-meadowRoot.xyz);
       float meadowFade=1.-smoothstep(meadowRange.x,meadowRange.y,meadowDistance);
-      float meadowPhase=dot(meadowRoot.xz,vec2(.21,.17));
-      float meadowSway=sin(meadowTime*1.8+meadowPhase)*.07+sin(meadowTime*.63+meadowPhase*.7)*.045;
-      transformed.xz+=meadowWind.xz*meadowSway*position.y*position.y;
-      transformed.y*=meadowFade;
+      float meadowPhase=dot(meadowRoot.xz,meadowWind.xz)*.12;
+      float meadowWave=sin(meadowPhase-meadowTime*1.65);
+      float meadowGust=smoothstep(-.35,.95,meadowWave);
+      float meadowSway=.12+meadowGust*.32+sin(meadowTime*3.1+meadowRoot.x*.7+position.x*2.)*.055;
+      // Convert the shared world wind into each randomly rotated tuft's space.
+      vec2 meadowLocalWind=meadowWind.xz;
+      #ifdef USE_INSTANCING
+        meadowLocalWind=vec2(dot(normalize(instanceMatrix[0].xz),meadowWind.xz),
+          dot(normalize(instanceMatrix[2].xz),meadowWind.xz));
+      #endif
+      transformed.xz+=meadowLocalWind*meadowSway*position.y*position.y;
+      transformed*=meadowFade;
       vMeadowTip=clamp(position.y,0.,1.);`,
     );
     shader.vertexShader = shader.vertexShader.replace(
@@ -108,7 +125,7 @@ export function buildMeadowGrass({ scene, scenery, track }) {
     );
     shader.fragmentShader = `varying vec3 vMeadowWorld;varying float vMeadowTip;
       uniform sampler2D meadowBakeMap;uniform vec4 meadowBakeBounds;
-      uniform float meadowBakeEnabled;\n${shader.fragmentShader}`;
+      uniform float meadowBakeEnabled;uniform float meadowTime;uniform vec3 meadowWind;\n${shader.fragmentShader}`;
     shader.fragmentShader = shader.fragmentShader.replace(
       "#include <lights_fragment_end>",
       `
@@ -119,8 +136,9 @@ export function buildMeadowGrass({ scene, scenery, track }) {
         reflectedLight.indirectDiffuse*=meadowLight.a;
         reflectedLight.indirectDiffuse+=diffuseColor.rgb*meadowLight.rgb*.65;
       }
-      // Thin blades transmit a little sky light; the vertex gradient keeps roots dark.
-      reflectedLight.indirectDiffuse+=diffuseColor.rgb*vMeadowTip*.12;`,
+      // Soft leaf transmission keeps the sunlit tips luminous on both sides.
+      float meadowLightWave=sin(dot(vMeadowWorld.xz,meadowWind.xz)*.12-meadowTime*1.65);
+      reflectedLight.indirectDiffuse+=diffuseColor.rgb*vMeadowTip*(.22+meadowLightWave*.045);`,
     );
   });
   const cells = new Map();
@@ -129,20 +147,24 @@ export function buildMeadowGrass({ scene, scenery, track }) {
   const up = new THREE.Vector3(0, 1, 0);
   const scale = new THREE.Vector3();
   const locations = [];
-  // Dense foreground in Blossom Common, with matching meadow at the finish.
-  for (const sectionIndex of [0, 5, 7]) {
+  const lake = track.poseAt(track.sectorT(3, 0.38) * track.TRACK, 39, 0).p;
+  // A continuous meadow around the valley, with shorter undergrowth in the woods.
+  // Keep the timber crossing and its open water free of terrestrial plants.
+  for (const sectionIndex of [0, 1, 2, 4, 5, 6, 7]) {
     const section = track.SECTIONS[sectionIndex];
     const length = (section.end - section.start) * track.COURSE_LENGTH;
-    const stations = Math.ceil(length / (sectionIndex === 0 ? 1.7 : 2.7));
+    const stations = Math.ceil(length / 1.9);
+    const rows = sectionIndex === 1 ? 12 : sectionIndex === 4 ? 14 : 22;
     for (let station = 0; station < stations; station++)
       for (const side of [-1, 1])
-        for (let row = 0; row < 11; row++) {
+        for (let row = 0; row < rows; row++) {
           const t = track.sectorT(sectionIndex, (station + random()) / stations);
           const surface = track.surfaceAt(t);
           const edge = side > 0 ? surface.rightEdge : -surface.leftEdge;
-          const offset = side * (edge + 1.85 + row * 2.25 + random() * 1.7);
+          const offset = side * (edge + 1.85 + row * 1.35 + random() * 1.1);
           const pose = track.poseAt(t * track.TRACK, offset, 0);
-          let near = track.projectTrack(pose.p, t * track.TRACK, true);
+          if (((pose.p.x - lake.x) / 66) ** 2 + ((pose.p.z - lake.z) / 54) ** 2 < 1) continue;
+          let near = track.projectTrack(pose.p, t * track.TRACK);
           const physical = near.offset > 0 ? near.rightEdge : -near.leftEdge;
           if (near.distance < physical + 0.7) continue;
           if (
@@ -155,20 +177,33 @@ export function buildMeadowGrass({ scene, scenery, track }) {
           // Lowering a plant from road height can select a different nearby
           // embankment. Resolve the planted position, not just the road pose.
           for (let step = 0; step < 4; step++) {
-            near = track.projectTrack(pose.p, t * track.TRACK, true);
+            near = track.projectTrack(pose.p, near.t * track.TRACK);
             const height = sceneryGroundHeight(near) - 0.025;
             if (Math.abs(height - pose.p.y) < 0.000001) break;
             pose.p.y = height;
           }
+          near = track.projectTrack(pose.p, t * track.TRACK, true);
+          // Tight folds can alternate between two banks; omit unstable roots.
+          if (Math.abs(pose.p.y - sceneryGroundHeight(near) + 0.025) > 0.000001) continue;
           const finalEdge = near.offset > 0 ? near.rightEdge : -near.leftEdge;
-          if (near.distance < finalEdge + 1.1) continue;
-          const key = `${Math.floor(pose.p.x / 32)},${Math.floor(pose.p.z / 32)}`;
+          if (near.distance < finalEdge + 1.1 || Math.abs(near.offset) < finalEdge + 1.1) continue;
+          if (
+            (track.branches || []).some(
+              (branch) => branch.project(pose.p, near.t, true).distance < branch.halfWidth + 1.5,
+            )
+          )
+            continue;
+          const key = `${Math.floor(pose.p.x / 48)},${Math.floor(pose.p.z / 48)}`;
           if (!cells.has(key)) cells.set(key, []);
           rotation.setFromAxisAngle(up, random() * Math.PI * 2);
-          const size = 0.65 + random() * 0.75;
-          scale.set(size, size * (row === 0 ? 0.55 : 1), size);
+          const size = 0.85 + random() * 0.45;
+          const height = row === 0 ? 0.55 : sectionIndex === 1 ? 0.7 : 1;
+          scale.set(size, size * height, size);
           matrix.compose(pose.p, rotation, scale);
-          cells.get(key).push({ matrix: matrix.clone(), tint: 0.82 + random() * 0.3 });
+          const patch = Math.sin(pose.p.x * 0.035 + Math.sin(pose.p.z * 0.04) * 1.8);
+          cells
+            .get(key)
+            .push({ matrix: matrix.clone(), tint: 0.94 + patch * 0.1 + random() * 0.08 });
           locations.push(pose.p.clone());
         }
   }
@@ -194,8 +229,8 @@ export function buildMeadowGrass({ scene, scenery, track }) {
     mesh.computeBoundingBox();
     mesh.computeBoundingSphere();
     // Account for wind displacement in the frustum bounds.
-    mesh.boundingBox.expandByScalar(0.25);
-    mesh.boundingSphere.radius += 0.25;
+    mesh.boundingBox.expandByScalar(1.1);
+    mesh.boundingSphere.radius += 1.1;
     scenery.add(mesh);
     meshes.push(mesh);
   }
@@ -239,7 +274,7 @@ export function buildMeadowGrass({ scene, scenery, track }) {
   flowerMaterial.color.set("#ffffff");
   flowerMaterial.onBeforeCompile = material.onBeforeCompile;
   flowerMaterial.customProgramCacheKey = material.customProgramCacheKey;
-  const flowerLocations = locations.filter((_p, i) => i % 17 === 0);
+  const flowerLocations = locations.filter((_p, i) => i % 61 === 0);
   const flowers = new THREE.InstancedMesh(flowerGeometry, flowerMaterial, flowerLocations.length);
   flowers.name = "Meadow daisies with stems, petals and pollen centers";
   flowers.userData.skipBake = true;
@@ -271,9 +306,9 @@ export function buildMeadowGrass({ scene, scenery, track }) {
       }
     },
     setQuality(tier) {
-      const density = [0.35, 0.55, 0.8, 1][tier];
+      const density = [0.3, 0.5, 0.75, 1][tier];
       for (const mesh of meshes) mesh.count = Math.ceil(mesh.userData.fullCount * density);
-      uniforms.meadowRange.value.set(tier < 2 ? 35 : 55, tier < 2 ? 60 : 85);
+      uniforms.meadowRange.value.set(tier < 2 ? 40 : 70, tier < 2 ? 65 : 110);
     },
   };
 }
